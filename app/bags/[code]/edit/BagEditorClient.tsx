@@ -13,8 +13,8 @@ type Link = {
   id: string;
   url: string;
   kind: string;
-  label: string | null;
   metadata: any;
+  created_at: string;
 };
 
 type Item = {

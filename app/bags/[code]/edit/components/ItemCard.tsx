@@ -8,8 +8,8 @@ type Link = {
   id: string;
   url: string;
   kind: string;
-  label: string | null;
   metadata: any;
+  created_at: string;
 };
 
 type Item = {
@@ -294,7 +294,7 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
                         rel="noopener noreferrer"
                         className="text-sm text-blue-600 hover:text-blue-700 hover:underline truncate block"
                       >
-                        {link.label || link.url}
+                        {link.url}
                       </a>
                       <span className="text-xs text-gray-500 capitalize">{link.kind}</span>
                     </div>

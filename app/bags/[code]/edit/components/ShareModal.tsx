@@ -211,7 +211,7 @@ export default function ShareModal({
           )}
 
           {/* Native Share (mobile) */}
-          {typeof navigator !== 'undefined' && navigator.share && isPublic && (
+          {typeof navigator !== 'undefined' && typeof navigator.share === 'function' && isPublic && (
             <button
               onClick={handleNativeShare}
               className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
