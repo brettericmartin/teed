@@ -81,8 +81,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Check ownership
-    const bag = item.bags as { owner_id: string };
-    if (bag.owner_id !== user.id) {
+    const bags = item.bags as any;
+    const bag = Array.isArray(bags) ? bags[0] : bags;
+    if (bag?.owner_id !== user.id) {
       return NextResponse.json(
         { error: 'You do not have permission to upload photos for this item' },
         { status: 403 }
