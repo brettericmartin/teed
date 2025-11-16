@@ -47,36 +47,85 @@ Assume we are on a recent Next.js version (13+ with app router).
 
 ---
 
-## Core Data Model (MVP)
+## Current Database Schema vs. MVP Spec
 
-Design the schema around these tables (names can be adjusted if needed, but keep semantics):
+**Last Updated:** 2025-11-15
 
-- **users**
+### Current State
+
+The Supabase database contains **12 tables** with a more complex design than the original MVP spec. It includes:
+
+**Core Tables (with differences from MVP):**
+- `profiles` (users) ✓
+- `bags` (containers) ⚠️ Missing `code` field, missing `updated_at`
+- `bag_items` (items) ⚠️ Catalog-based design vs free-form
+- `share_links` (invite codes) ⚠️ Missing `max_uses`, `uses`, `expires_at`
+- `links` ❌ **COMPLETELY MISSING** (general-purpose links table)
+
+**Extended Tables (beyond MVP):**
+- `catalog_items` - Product catalog with verified items
+- `categories` - Product categories
+- `affiliate_links` - Affiliate tracking (NOT the general links table)
+- `media_assets` - Centralized media storage
+- `analytics_events` - Event tracking
+- `follows` - Social following system
+- `price_cache` - Merchant pricing cache
+- `bag_tags` - Tagging system
+
+### Critical Gaps
+
+1. **MISSING: General-purpose links table** ❌
+   - Core MVP feature missing
+   - Users cannot attach retail, review, or video links to bags/items
+   - Only affiliate links tied to catalog items exist
+
+2. **MISSING: `code` field on bags** ⚠️
+   - Cannot create simple shareable URLs like `/c/camping-kit`
+   - `share_links.slug` exists but is a separate entity
+
+3. **MISSING: Usage tracking on share_links** ⚠️
+   - No `max_uses`, `uses`, or `expires_at` fields
+   - Cannot create limited-use or expiring share links
+
+4. **Different: Items are catalog-first** ⚠️
+   - Items reference `catalog_items` with override fields
+   - Not the free-form model in MVP spec
+   - May be intentional design choice
+
+See `schema_analysis.md` for full details.
+
+---
+
+## MVP Data Model Specification
+
+This is the target MVP schema. Compare with current state above.
+
+- **users** (implemented as `profiles`)
   - Sourced from Supabase Auth (`auth.users`).
-  - We'll mirror minimal profile data in `public.users` linked by `auth_user_id`.
+  - We'll mirror minimal profile data in `public.profiles`.
 
-- **containers**
+- **containers** (implemented as `bags`)
   - `id` (uuid, PK)
   - `owner_id` (uuid → users.id)
-  - `name` (text)
+  - `name` (text) [currently `title`]
   - `description` (text, nullable)
-  - `code` (text, unique, short human/LLM-friendly identifier)
+  - `code` (text, unique, short human/LLM-friendly identifier) ⚠️ **MISSING**
   - `is_public` (boolean, default false)
   - `created_at` (timestamptz)
-  - `updated_at` (timestamptz)
+  - `updated_at` (timestamptz) ⚠️ **MISSING**
 
-- **items**
+- **items** (implemented as `bag_items`)
   - `id` (uuid, PK)
   - `container_id` (uuid → containers.id)
-  - `name` (text)
-  - `brand` (text, nullable)
-  - `category` (text, nullable)
-  - `notes` (text, nullable)
-  - `image_url` (text, nullable)
-  - `sort_order` (integer, default 0)
-  - `created_at` (timestamptz)
+  - `name` (text) ⚠️ Currently uses `catalog_item_id` + `custom_name`
+  - `brand` (text, nullable) ⚠️ Currently in catalog
+  - `category` (text, nullable) ⚠️ Currently in catalog
+  - `notes` (text, nullable) ✓
+  - `image_url` (text, nullable) ⚠️ Currently `custom_photo_id`
+  - `sort_order` (integer, default 0) ✓ Currently `sort_index`
+  - `created_at` (timestamptz) ✓
 
-- **links**
+- **links** ❌ **COMPLETELY MISSING - CRITICAL**
   - `id` (uuid, PK)
   - `container_id` (uuid, nullable) – link tied to a container
   - `item_id` (uuid, nullable) – or to a specific item
@@ -86,19 +135,23 @@ Design the schema around these tables (names can be adjusted if needed, but keep
   - `metadata` (jsonb, nullable) – optional scraped title, price, favicon, etc.
   - `created_at` (timestamptz)
 
-- **invite_codes** (or `share_codes`)
+- **invite_codes** (implemented as `share_links`)
   - `id` (uuid, PK)
-  - `code` (text, unique)
-  - `container_id` (uuid → containers.id)
-  - `max_uses` (integer, nullable)
-  - `uses` (integer, default 0)
-  - `expires_at` (timestamptz, nullable)
-  - `created_at` (timestamptz)
+  - `code` (text, unique) ✓ Currently `slug`
+  - `container_id` (uuid → containers.id) ✓ Currently `bag_id`
+  - `max_uses` (integer, nullable) ⚠️ **MISSING**
+  - `uses` (integer, default 0) ⚠️ **MISSING**
+  - `expires_at` (timestamptz, nullable) ⚠️ **MISSING**
+  - `created_at` (timestamptz) ✓
 
-Guidelines:
+### Schema Guidelines
 
 - Keep constraints simple and robust (foreign keys, `ON DELETE CASCADE` where appropriate).
 - Use Supabase Row Level Security so users only see/edit their own containers/items.
+- **Priority fixes needed:**
+  1. Create the general-purpose `links` table
+  2. Add `code` field to `bags` table
+  3. Add usage tracking to `share_links`
 
 ---
 
