@@ -37,11 +37,10 @@ export async function POST(request: NextRequest) {
       cx: searchEngineId,
       q: query.trim(),
       searchType: 'image',
-      num: '8', // Get 8 results for picker
+      num: '10', // Get 10 results to pick from
       imgSize: 'medium', // Medium size images
       imgType: 'photo', // Only photos, not clipart
       safe: 'active', // Family-safe results
-      fileType: 'jpg,png', // Only JPG/PNG
     });
 
     const response = await fetch(

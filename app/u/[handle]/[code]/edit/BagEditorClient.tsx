@@ -2,13 +2,14 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Loader2, Share2, Trash2, Camera, ChevronLeft, Package } from 'lucide-react';
+import { ArrowLeft, Loader2, Share2, Trash2, Camera, ChevronLeft, Package, Images } from 'lucide-react';
 import ItemList from './components/ItemList';
 import QuickAddItem from './components/QuickAddItem';
 import AddItemForm from './components/AddItemForm';
 import ShareModal from './components/ShareModal';
 import PhotoUploadModal from './components/PhotoUploadModal';
 import ProductReviewModal, { IdentifiedProduct } from './components/ProductReviewModal';
+import BatchPhotoSelector from './components/BatchPhotoSelector';
 import { Button } from '@/components/ui/Button';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
@@ -32,6 +33,8 @@ type Item = {
   custom_photo_id: string | null;
   photo_url: string | null;
   promo_codes: string | null;
+  is_featured: boolean;
+  featured_position: number | null;
   links: Link[];
 };
 
@@ -64,6 +67,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [showShareModal, setShowShareModal] = useState(false);
   const [showPhotoUpload, setShowPhotoUpload] = useState(false);
   const [showProductReview, setShowProductReview] = useState(false);
+  const [showBatchPhotoSelector, setShowBatchPhotoSelector] = useState(false);
   const [identifiedProducts, setIdentifiedProducts] = useState<{
     products: IdentifiedProduct[];
     totalConfidence: number;
@@ -182,21 +186,21 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       }
 
       const updatedItem = await response.json();
+
+      // Preserve photo_url since API doesn't return it
+      const preservedPhotoUrl =
+        updates.custom_photo_id !== undefined && 'photo_url' in updates
+          ? (updates as any).photo_url
+          : null;
+
       setBag((prev) => ({
         ...prev,
         items: prev.items.map((item) => {
           if (item.id === itemId) {
-            // Preserve photo_url if updating custom_photo_id
-            // (API doesn't return photo_url, only custom_photo_id)
-            const preservedPhotoUrl =
-              updates.custom_photo_id !== undefined && 'photo_url' in updates
-                ? (updates as any).photo_url
-                : item.photo_url;
-
             return {
               ...item,
               ...updatedItem,
-              photo_url: preservedPhotoUrl
+              photo_url: preservedPhotoUrl || item.photo_url,
             };
           }
           return item;
@@ -363,35 +367,85 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     }
   };
 
+  // Batch photo application handler
+  const handleApplyBatchPhotos = async (selections: Array<{ itemId: string; imageUrl: string }>) => {
+    try {
+      // Apply photos in parallel
+      await Promise.all(
+        selections.map(async ({ itemId, imageUrl }) => {
+          try {
+            // Download the image through our proxy to avoid CORS
+            const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(imageUrl)}`;
+            const imageResponse = await fetch(proxyUrl);
+
+            if (!imageResponse.ok) {
+              throw new Error('Failed to download image');
+            }
+
+            const imageBlob = await imageResponse.blob();
+
+            // Upload to our storage
+            const formData = new FormData();
+            formData.append('file', imageBlob, 'product.jpg');
+            formData.append('itemId', itemId);
+
+            const uploadResponse = await fetch('/api/media/upload', {
+              method: 'POST',
+              body: formData,
+            });
+
+            if (!uploadResponse.ok) {
+              throw new Error('Failed to upload image');
+            }
+
+            const uploadData = await uploadResponse.json();
+
+            // Update item with photo
+            await fetch(`/api/items/${itemId}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                custom_photo_id: uploadData.mediaAssetId,
+              }),
+            });
+
+            // Update local state
+            setBag((prev) => ({
+              ...prev,
+              items: prev.items.map((item) =>
+                item.id === itemId
+                  ? { ...item, custom_photo_id: uploadData.mediaAssetId, photo_url: uploadData.url }
+                  : item
+              ),
+            }));
+          } catch (error) {
+            console.error(`Failed to apply photo for item ${itemId}:`, error);
+            throw error;
+          }
+        })
+      );
+
+      alert(`Successfully added ${selections.length} photos!`);
+    } catch (error: any) {
+      console.error('Error applying batch photos:', error);
+      throw new Error(error.message || 'Failed to apply some photos');
+    }
+  };
+
   return (
     <div className="min-h-screen">
       {/* Header */}
       <header className="bg-[var(--surface)] border-b border-[var(--border-subtle)] sticky top-16 z-10">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          {/* Breadcrumbs */}
-          <Breadcrumbs
-            items={[
-              { label: 'My Bags', href: '/dashboard', icon: <Package className="w-4 h-4" /> },
-              { label: bag.title || 'Untitled Bag', href: `/u/${ownerHandle}/${bag.code}` },
-              { label: 'Edit' },
-            ]}
-          />
-
+          {/* Breadcrumbs and Actions */}
           <div className="flex items-center justify-between mb-4 gap-2">
-            {/* Save Status */}
-            <div className="text-xs text-[var(--text-secondary)] min-w-0 flex-1">
-              {isSaving ? (
-                <span className="flex items-center">
-                  <Loader2 className="animate-spin mr-2 h-3 w-3 flex-shrink-0" />
-                  <span className="hidden sm:inline">Saving...</span>
-                </span>
-              ) : lastSaved ? (
-                <span className="truncate block">
-                  <span className="hidden sm:inline">Saved </span>
-                  {formatLastSaved()}
-                </span>
-              ) : null}
-            </div>
+            <Breadcrumbs
+              items={[
+                { label: 'My Bags', href: '/dashboard', icon: <Package className="w-4 h-4" /> },
+                { label: bag.title || 'Untitled Bag', href: `/u/${ownerHandle}/${bag.code}` },
+                { label: 'Edit' },
+              ]}
+            />
 
             <div className="flex items-center gap-2 flex-shrink-0">
               {/* Share Button */}
@@ -416,6 +470,21 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 <span className="hidden sm:inline">Delete</span>
               </Button>
             </div>
+          </div>
+
+          {/* Save Status */}
+          <div className="text-xs text-[var(--text-secondary)] mb-4">
+            {isSaving ? (
+              <span className="flex items-center">
+                <Loader2 className="animate-spin mr-2 h-3 w-3 flex-shrink-0" />
+                <span className="hidden sm:inline">Saving...</span>
+              </span>
+            ) : lastSaved ? (
+              <span className="truncate block">
+                <span className="hidden sm:inline">Saved </span>
+                {formatLastSaved()}
+              </span>
+            ) : null}
           </div>
 
           {/* Editable Title */}
@@ -538,6 +607,20 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             )}
           </Button>
 
+          {/* Batch Photo Finder Button */}
+          {bag.items.length > 0 && (
+            <Button
+              onClick={() => setShowBatchPhotoSelector(true)}
+              variant="secondary"
+              className="w-full py-3"
+            >
+              <Images className="w-5 h-5 mr-2" />
+              {bag.items.filter(item => !item.photo_url).length > 0
+                ? `Find Photos for ${bag.items.filter(item => !item.photo_url).length} Items (AI)`
+                : `Find/Replace Photos for ${bag.items.length} Items (AI)`}
+            </Button>
+          )}
+
           {/* Manual Form (Hidden by default) */}
           {showManualForm && (
             <div className="space-y-3">
@@ -627,6 +710,20 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           onAddSelected={handleAddSelectedProducts}
         />
       )}
+
+      {/* Batch Photo Selector Modal */}
+      <BatchPhotoSelector
+        isOpen={showBatchPhotoSelector}
+        onClose={() => setShowBatchPhotoSelector(false)}
+        items={bag.items.map(item => ({
+          id: item.id,
+          custom_name: item.custom_name || 'Unnamed Item',
+          brand: item.brand,
+          custom_description: item.custom_description,
+          currentPhotoUrl: item.photo_url,
+        }))}
+        onApplyPhotos={handleApplyBatchPhotos}
+      />
     </div>
   );
 }

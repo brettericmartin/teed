@@ -7,6 +7,14 @@ import { Plus, Package, User, Settings } from 'lucide-react';
 import NewBagModal from './components/NewBagModal';
 import { Button } from '@/components/ui/Button';
 
+type BagItem = {
+  id: string;
+  custom_name: string | null;
+  photo_url: string | null;
+  is_featured: boolean;
+  featured_position: number | null;
+};
+
 type Bag = {
   id: string;
   code: string;
@@ -16,6 +24,7 @@ type Bag = {
   background_image: string | null;
   created_at: string;
   updated_at: string | null;
+  items?: BagItem[];
 };
 
 type DashboardClientProps = {
@@ -141,23 +150,54 @@ export default function DashboardClient({
                 onClick={() => router.push(`/u/${userHandle}/${bag.code}/edit`)}
                 className="bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden hover:shadow-[var(--shadow-3)] transition-all cursor-pointer group"
               >
-                {/* Cover Image or Placeholder */}
+                {/* Cover Image or Featured Items Grid */}
                 <div className="h-40 bg-gradient-to-br from-[var(--teed-green-6)] to-[var(--sky-6)] relative overflow-hidden">
-                  {bag.background_image ? (
-                    <img
-                      src={bag.background_image}
-                      alt={bag.title}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Package className="w-16 h-16 text-[var(--evergreen-12)] opacity-20" />
-                    </div>
-                  )}
+                  {(() => {
+                    const featuredItems = bag.items?.filter(item => item.is_featured && item.photo_url)
+                      .sort((a, b) => (a.featured_position || 0) - (b.featured_position || 0))
+                      .slice(0, 8) || [];
+
+                    if (featuredItems.length > 0) {
+                      // Show grid of featured items
+                      return (
+                        <div className="grid grid-cols-4 gap-1 p-2 h-full">
+                          {featuredItems.map((item, index) => (
+                            <div key={item.id} className="relative bg-white rounded overflow-hidden">
+                              <img
+                                src={item.photo_url!}
+                                alt={item.custom_name || 'Item'}
+                                className="w-full h-full object-contain"
+                              />
+                            </div>
+                          ))}
+                          {/* Fill empty slots with placeholders if less than 8 items */}
+                          {Array.from({ length: Math.max(0, 8 - featuredItems.length) }).map((_, i) => (
+                            <div key={`placeholder-${i}`} className="bg-white/20 rounded"></div>
+                          ))}
+                        </div>
+                      );
+                    } else if (bag.background_image) {
+                      // Show background image if no featured items
+                      return (
+                        <img
+                          src={bag.background_image}
+                          alt={bag.title}
+                          className="w-full h-full object-cover"
+                        />
+                      );
+                    } else {
+                      // Show placeholder icon
+                      return (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <Package className="w-16 h-16 text-[var(--evergreen-12)] opacity-20" />
+                        </div>
+                      );
+                    }
+                  })()}
                   {/* Privacy Badge */}
                   <div className="absolute top-3 right-3">
                     {bag.is_public ? (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/90 text-[var(--evergreen-12)] backdrop-blur-sm">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/90 text-[var(--evergreen-12)] backdrop-blur-sm shadow-sm">
                         Public
                       </span>
                     ) : (

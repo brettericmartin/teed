@@ -15,6 +15,8 @@ import { createServerSupabase } from '@/lib/serverSupabase';
  *   sort_index?: number
  *   custom_photo_id?: string | null
  *   promo_codes?: string | null
+ *   is_featured?: boolean
+ *   featured_position?: number | null
  * }
  *
  * Returns: Updated item object
@@ -93,6 +95,14 @@ export async function PUT(
 
     if (body.promo_codes !== undefined) {
       updates.promo_codes = body.promo_codes?.trim() || null;
+    }
+
+    if (body.is_featured !== undefined) {
+      updates.is_featured = Boolean(body.is_featured);
+    }
+
+    if (body.featured_position !== undefined) {
+      updates.featured_position = body.featured_position ? Number(body.featured_position) : null;
     }
 
     // Update the item

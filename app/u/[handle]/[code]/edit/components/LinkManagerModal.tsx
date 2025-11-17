@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 
 interface Link {
@@ -28,7 +28,6 @@ export default function LinkManagerModal({
   links,
   onLinksChange,
 }: LinkManagerModalProps) {
-  const [isAddingLink, setIsAddingLink] = useState(false);
   const [newUrl, setNewUrl] = useState('');
   const [newKind, setNewKind] = useState('product');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,6 +35,17 @@ export default function LinkManagerModal({
   const [editingLinkId, setEditingLinkId] = useState<string | null>(null);
   const [editUrl, setEditUrl] = useState('');
   const [editKind, setEditKind] = useState('');
+  const urlInputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-focus the URL input when modal opens
+  useEffect(() => {
+    if (isOpen && urlInputRef.current) {
+      // Small delay to ensure modal is rendered
+      setTimeout(() => {
+        urlInputRef.current?.focus();
+      }, 100);
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -81,7 +91,10 @@ export default function LinkManagerModal({
       onLinksChange([...links, newLink]);
       setNewUrl('');
       setNewKind('product');
-      setIsAddingLink(false);
+      // Re-focus the input after adding
+      setTimeout(() => {
+        urlInputRef.current?.focus();
+      }, 0);
     } catch (err: any) {
       setError(err.message || 'Failed to add link');
     } finally {
@@ -305,68 +318,51 @@ export default function LinkManagerModal({
             )}
           </div>
 
-          {/* Add Link Form */}
-          {isAddingLink ? (
-            <div className="border-t border-gray-200 pt-6 space-y-4">
-              <h3 className="font-medium text-gray-900">Add New Link</h3>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  URL
-                </label>
-                <input
-                  type="url"
-                  value={newUrl}
-                  onChange={(e) => setNewUrl(e.target.value)}
-                  placeholder="https://example.com/product"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Type
-                </label>
-                <select
-                  value={newKind}
-                  onChange={(e) => setNewKind(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  {linkKindOptions.map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={handleAddLink}
-                  disabled={isSubmitting}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? 'Adding...' : 'Add Link'}
-                </button>
-                <button
-                  onClick={() => {
-                    setIsAddingLink(false);
-                    setNewUrl('');
-                    setNewKind('product');
-                    setError('');
-                  }}
-                  disabled={isSubmitting}
-                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Cancel
-                </button>
-              </div>
+          {/* Add Link Form - Always visible */}
+          <div className="border-t border-gray-200 pt-6 space-y-4">
+            <h3 className="font-medium text-gray-900">Add New Link</h3>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                URL
+              </label>
+              <input
+                ref={urlInputRef}
+                type="url"
+                value={newUrl}
+                onChange={(e) => setNewUrl(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && newUrl.trim()) {
+                    handleAddLink();
+                  }
+                }}
+                placeholder="https://example.com/product"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
             </div>
-          ) : (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Type
+              </label>
+              <select
+                value={newKind}
+                onChange={(e) => setNewKind(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                {linkKindOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
             <button
-              onClick={() => setIsAddingLink(true)}
-              className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-gray-400 hover:text-gray-700 transition-colors"
+              onClick={handleAddLink}
+              disabled={isSubmitting || !newUrl.trim()}
+              className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              + Add Link
+              {isSubmitting ? 'Adding...' : 'Add Link'}
             </button>
-          )}
+          </div>
         </div>
       </div>
     </div>

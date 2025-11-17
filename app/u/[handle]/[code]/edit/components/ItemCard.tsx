@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, Edit2, Trash2, X, Check, Link as LinkIcon, Copy, CheckCheck } from 'lucide-react';
+import { ChevronDown, Edit2, Trash2, X, Check, Link as LinkIcon, Copy, CheckCheck, Star } from 'lucide-react';
 import LinkManagerModal from './LinkManagerModal';
 import ItemPhotoUpload from './ItemPhotoUpload';
 
@@ -25,6 +25,8 @@ type Item = {
   custom_photo_id: string | null;
   photo_url: string | null;
   promo_codes: string | null;
+  is_featured: boolean;
+  featured_position: number | null;
   links: Link[];
 };
 
@@ -159,18 +161,24 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
                     {item.custom_description}
                   </p>
                 )}
-                <div className="mt-2 flex items-center gap-4 text-xs text-[var(--text-secondary)]">
-                  <span>Qty: {item.quantity}</span>
-                  {itemLinks.length > 0 && (
-                    <button
-                      onClick={() => setIsLinkModalOpen(true)}
-                      className="flex items-center py-1.5 px-2 -ml-2 rounded hover:bg-[var(--surface-hover)] hover:text-[var(--teed-green-9)] transition-colors min-h-[36px]"
+                {itemLinks.length > 0 && (
+                  <div className="mt-2 flex items-center gap-1.5 text-xs">
+                    <a
+                      href={itemLinks[0].url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[var(--teed-green-9)] hover:text-[var(--teed-green-10)] hover:underline truncate max-w-[200px]"
+                      onClick={(e) => e.stopPropagation()}
                     >
-                      <LinkIcon className="w-3 h-3 mr-1" />
-                      {itemLinks.length} {itemLinks.length === 1 ? 'link' : 'links'}
-                    </button>
-                  )}
-                </div>
+                      {itemLinks[0].url}
+                    </a>
+                    {itemLinks.length > 1 && (
+                      <span className="text-[var(--text-tertiary)] whitespace-nowrap">
+                        +{itemLinks.length - 1} more
+                      </span>
+                    )}
+                  </div>
+                )}
               </>
             )}
           </div>
@@ -198,6 +206,37 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
               </>
             ) : (
               <>
+                <button
+                  onClick={() => {
+                    onUpdate(item.id, { is_featured: !item.is_featured });
+                  }}
+                  className={`p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg transition-all ${
+                    item.is_featured
+                      ? 'text-[var(--amber-9)] bg-[var(--amber-3)] hover:bg-[var(--amber-4)] hover:text-[var(--amber-10)]'
+                      : 'text-[var(--text-tertiary)] hover:text-[var(--amber-9)] hover:bg-[var(--amber-2)]'
+                  }`}
+                  title={item.is_featured ? 'Remove from featured' : 'Add to featured'}
+                  aria-label={item.is_featured ? 'Remove from featured' : 'Add to featured'}
+                >
+                  <Star className={`w-5 h-5 transition-all ${item.is_featured ? 'fill-current scale-110' : ''}`} />
+                </button>
+                <button
+                  onClick={() => setIsLinkModalOpen(true)}
+                  className={`p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg transition-colors relative ${
+                    itemLinks.length > 0
+                      ? 'text-[var(--teed-green-9)] hover:text-[var(--teed-green-10)] hover:bg-[var(--teed-green-2)]'
+                      : 'text-[var(--text-tertiary)] hover:text-[var(--teed-green-9)] hover:bg-[var(--teed-green-2)]'
+                  }`}
+                  title={itemLinks.length > 0 ? `Manage links (${itemLinks.length})` : 'Add links'}
+                  aria-label={itemLinks.length > 0 ? `Manage ${itemLinks.length} links` : 'Add links'}
+                >
+                  <LinkIcon className="w-5 h-5" />
+                  {itemLinks.length > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-[var(--teed-green-9)] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
+                      {itemLinks.length}
+                    </span>
+                  )}
+                </button>
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
                   className="p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] rounded-lg transition-colors"
@@ -285,17 +324,9 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
           )}
 
           {/* Links */}
-          <div>
-            <div className="flex items-center justify-between mb-2 gap-2">
-              <h4 className="text-sm font-medium text-[var(--text-primary)]">Links</h4>
-              <button
-                onClick={() => setIsLinkModalOpen(true)}
-                className="text-xs px-2 py-1.5 min-h-[36px] rounded hover:bg-[var(--teed-green-2)] text-[var(--teed-green-9)] hover:text-[var(--teed-green-10)] transition-colors font-medium"
-              >
-                {itemLinks.length > 0 ? 'Manage Links' : '+ Add Link'}
-              </button>
-            </div>
-            {itemLinks.length > 0 ? (
+          {itemLinks.length > 0 && (
+            <div>
+              <h4 className="text-sm font-medium text-[var(--text-primary)] mb-2">Links</h4>
               <div className="space-y-2">
                 {itemLinks.slice(0, 3).map((link) => (
                   <div
@@ -324,10 +355,8 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
                   </button>
                 )}
               </div>
-            ) : (
-              <p className="text-sm text-[var(--text-secondary)] italic">No links yet</p>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       )}
 

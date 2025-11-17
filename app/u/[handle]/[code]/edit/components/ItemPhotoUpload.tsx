@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, ChangeEvent } from 'react';
+import { useState, useRef, ChangeEvent, useEffect } from 'react';
 import ImageCropModal from './ImageCropModal';
 
 type ItemPhotoUploadProps = {
@@ -28,10 +28,26 @@ export default function ItemPhotoUpload({
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
   const [imageSuggestions, setImageSuggestions] = useState<string[]>([]);
   const [showImagePicker, setShowImagePicker] = useState(false);
+  const [showPhotoMenu, setShowPhotoMenu] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const MAX_SIZE_MB = 2;
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowPhotoMenu(false);
+      }
+    };
+
+    if (showPhotoMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showPhotoMenu]);
 
   const handleFileSelect = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -221,77 +237,170 @@ export default function ItemPhotoUpload({
 
       {/* Preview or Upload Options */}
       {preview ? (
-        <div className="relative">
-          <img
-            src={preview}
-            alt="Item photo"
-            className="w-full h-32 object-contain bg-[var(--surface)] rounded-lg border-2 border-[var(--border-subtle)]"
-          />
-          <div className="absolute top-2 right-2 flex gap-2">
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isUploading}
-              className="p-1.5 bg-[var(--surface)] rounded-full shadow-[var(--shadow-2)] hover:bg-[var(--surface-hover)] transition-colors disabled:opacity-50"
-              title="Change photo"
-            >
-              <svg className="w-4 h-4 text-[var(--text-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
-            </button>
-            <button
-              onClick={handleRemovePhoto}
-              disabled={isUploading}
-              className="p-1.5 bg-[var(--surface)] rounded-full shadow-[var(--shadow-2)] hover:bg-[var(--copper-2)] transition-colors disabled:opacity-50"
-              title="Remove photo"
-            >
-              <svg className="w-4 h-4 text-[var(--copper-9)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                />
-              </svg>
-            </button>
-          </div>
-          {isUploading && (
-            <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center">
-              <div className="flex items-center gap-2 text-white">
-                <svg
-                  className="animate-spin h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
+        <>
+          <div className="relative">
+            <img
+              src={preview}
+              alt="Item photo"
+              className="w-full h-32 object-contain bg-[var(--surface)] rounded-lg border-2 border-[var(--border-subtle)]"
+            />
+            <div className="absolute top-2 right-2 flex gap-2">
+              {/* Camera button with dropdown menu */}
+              <div className="relative" ref={menuRef}>
+                <button
+                  onClick={() => setShowPhotoMenu(!showPhotoMenu)}
+                  disabled={isUploading}
+                  className="p-1.5 bg-[var(--surface)] rounded-full shadow-[var(--shadow-2)] hover:bg-[var(--surface-hover)] transition-colors disabled:opacity-50"
+                  title="Change photo"
                 >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
+                  <svg className="w-4 h-4 text-[var(--text-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                </button>
+
+                {/* Dropdown menu */}
+                {showPhotoMenu && (
+                  <div className="absolute top-full right-0 mt-1 w-48 bg-[var(--surface)] border border-[var(--border-subtle)] rounded-lg shadow-[var(--shadow-4)] z-10">
+                    <button
+                      onClick={() => {
+                        setShowPhotoMenu(false);
+                        handleFindProductImage();
+                      }}
+                      disabled={isFindingImage}
+                      className="w-full px-4 py-2.5 text-left text-sm hover:bg-[var(--teed-green-2)] hover:text-[var(--teed-green-11)] transition-colors flex items-center gap-2 disabled:opacity-50"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                      <span>{isFindingImage ? 'Searching...' : 'Search with AI'}</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowPhotoMenu(false);
+                        fileInputRef.current?.click();
+                      }}
+                      className="w-full px-4 py-2.5 text-left text-sm hover:bg-[var(--surface-hover)] transition-colors flex items-center gap-2 border-t border-[var(--border-subtle)]"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                      </svg>
+                      <span>Upload from Device</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              <button
+                onClick={handleRemovePhoto}
+                disabled={isUploading}
+                className="p-1.5 bg-[var(--surface)] rounded-full shadow-[var(--shadow-2)] hover:bg-[var(--copper-2)] transition-colors disabled:opacity-50"
+                title="Remove photo"
+              >
+                <svg className="w-4 h-4 text-[var(--copper-9)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                   />
                 </svg>
-                <span className="text-sm font-medium">Uploading...</span>
+              </button>
+            </div>
+            {isUploading && (
+              <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center">
+                <div className="flex items-center gap-2 text-white">
+                  <svg
+                    className="animate-spin h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                  <span className="text-sm font-medium">Uploading...</span>
+                </div>
               </div>
+            )}
+          </div>
+
+          {/* Show image picker below current photo if searching/found images */}
+          {showImagePicker && (
+            <div className="mt-3 space-y-3 border-t border-[var(--border-subtle)] pt-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h5 className="text-sm font-medium text-[var(--text-primary)]">Choose New Photo</h5>
+                  <p className="text-xs text-[var(--text-secondary)] mt-0.5">Select from AI-found product images</p>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowImagePicker(false);
+                    setImageSuggestions([]);
+                  }}
+                  className="px-3 py-1.5 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] rounded transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+
+              {/* Image Grid - 4 columns like batch selector */}
+              <div className="grid grid-cols-4 gap-3">
+                {imageSuggestions.map((imageUrl, index) => (
+                  <button
+                    key={index}
+                    onClick={() => !isUploading && handleSelectGoogleImage(imageUrl)}
+                    disabled={isUploading}
+                    className="relative aspect-square rounded-lg overflow-hidden border-4 border-[var(--border-subtle)] hover:border-[var(--teed-green-6)] transition-all hover:scale-105 bg-[var(--sky-2)] disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <img
+                      src={`/api/proxy-image?url=${encodeURIComponent(imageUrl)}`}
+                      alt={`Option ${index + 1}`}
+                      className="w-full h-full object-contain"
+                      loading="lazy"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%23f0f0f0" width="200" height="200"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="14" fill="%23999"%3EUnavailable%3C/text%3E%3C/svg%3E';
+                      }}
+                    />
+                    {isUploading && (
+                      <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+                        <svg className="animate-spin h-6 w-6 text-white" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                        </svg>
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              <p className="text-xs text-[var(--text-tertiary)] text-center">
+                Found {imageSuggestions.length} product images
+              </p>
             </div>
           )}
-        </div>
+        </>
       ) : showImagePicker ? (
         <div className="space-y-3">
           <div className="flex items-center justify-between mb-3">
@@ -320,10 +429,10 @@ export default function ItemPhotoUpload({
               >
                 <div className="w-full h-full flex items-center justify-center p-2">
                   <img
-                    src={imageUrl}
+                    src={`/api/proxy-image?url=${encodeURIComponent(imageUrl)}`}
                     alt={`Product option ${index + 1}`}
                     className="max-w-full max-h-full object-contain"
-                    onLoad={() => console.log('Image loaded:', imageUrl)}
+                    loading="lazy"
                     onError={(e) => {
                       console.error('Image failed to load:', imageUrl);
                       const target = e.target as HTMLImageElement;
