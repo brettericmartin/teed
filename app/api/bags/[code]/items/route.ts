@@ -9,6 +9,7 @@ import { createServerSupabase } from '@/lib/serverSupabase';
  * {
  *   custom_name: string (required)
  *   custom_description?: string
+ *   brand?: string
  *   notes?: string
  *   quantity?: number (default: 1)
  *   catalog_item_id?: uuid
@@ -55,6 +56,7 @@ export async function POST(
     const {
       custom_name,
       custom_description,
+      brand,
       notes,
       quantity = 1,
       catalog_item_id,
@@ -87,6 +89,7 @@ export async function POST(
         bag_id: bag.id,
         custom_name: custom_name.trim(),
         custom_description: custom_description?.trim() || null,
+        brand: brand?.trim() || null,
         notes: notes?.trim() || null,
         quantity: quantity || 1,
         catalog_item_id: catalog_item_id || null,

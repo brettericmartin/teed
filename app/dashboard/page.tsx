@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { createServerSupabase } from '@/lib/serverSupabase';
+import Navigation from '@/components/Navigation';
 import DashboardClient from './DashboardClient';
 
 export default async function DashboardPage() {
@@ -27,17 +28,33 @@ export default async function DashboardPage() {
   }
 
   // Get profile
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('handle, display_name')
     .eq('id', user.id)
     .single();
 
+  if (profileError) {
+    console.error('Error fetching profile:', profileError);
+  }
+
+  // If no profile exists, we have a problem - user signed up but profile wasn't created
+  if (!profile) {
+    console.error('No profile found for user:', user.id, user.email);
+  }
+
   return (
-    <DashboardClient
-      initialBags={bags || []}
-      userHandle={profile?.handle || ''}
-      displayName={profile?.display_name || ''}
-    />
+    <>
+      <Navigation
+        userHandle={profile?.handle || ''}
+        displayName={profile?.display_name || ''}
+        isAuthenticated={true}
+      />
+      <DashboardClient
+        initialBags={bags || []}
+        userHandle={profile?.handle || ''}
+        displayName={profile?.display_name || ''}
+      />
+    </>
   );
 }

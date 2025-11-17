@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate a unique code from title
+    // Generate a unique code from title (scoped to user)
     // Convert to lowercase, replace spaces/special chars with hyphens
     let baseCode = title
       .toLowerCase()
@@ -62,48 +62,59 @@ export async function POST(request: NextRequest) {
       baseCode = 'bag';
     }
 
-    // Try to insert with generated code, add suffix if collision
+    // Check for existing codes within this user's bags
     let code = baseCode;
-    let attempts = 0;
-    let bag = null;
+    let suffix = 2;
 
-    while (attempts < 10 && !bag) {
-      const { data, error } = await supabase
+    while (true) {
+      const { data: existingBag } = await supabase
         .from('bags')
-        .insert({
-          owner_id: user.id,
-          title: title.trim(),
-          description: description?.trim() || null,
-          is_public,
-          code,
-        })
-        .select()
-        .single();
+        .select('id')
+        .eq('owner_id', user.id)
+        .eq('code', code)
+        .maybeSingle();
 
-      if (error) {
-        // Check if it's a unique constraint violation on code
-        if (error.code === '23505' && error.message.includes('code')) {
-          // Code collision, try with a suffix
-          attempts++;
-          const randomSuffix = Math.floor(Math.random() * 1000);
-          code = `${baseCode}-${randomSuffix}`;
-          continue;
-        }
+      if (!existingBag) {
+        // Code is unique for this user
+        break;
+      }
 
-        // Other error
-        console.error('Error creating bag:', error);
+      // Code exists, try with suffix
+      code = `${baseCode}-${suffix}`;
+      suffix++;
+
+      if (suffix > 100) {
         return NextResponse.json(
-          { error: 'Failed to create bag', details: error.message },
+          { error: 'Failed to generate unique code' },
           { status: 500 }
         );
       }
+    }
 
-      bag = data;
+    // Insert the bag with the unique code
+    const { data: bag, error } = await supabase
+      .from('bags')
+      .insert({
+        owner_id: user.id,
+        title: title.trim(),
+        description: description?.trim() || null,
+        is_public,
+        code,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error creating bag:', error);
+      return NextResponse.json(
+        { error: 'Failed to create bag', details: error.message },
+        { status: 500 }
+      );
     }
 
     if (!bag) {
       return NextResponse.json(
-        { error: 'Failed to generate unique code after multiple attempts' },
+        { error: 'Failed to create bag' },
         { status: 500 }
       );
     }

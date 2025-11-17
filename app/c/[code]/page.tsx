@@ -1,6 +1,5 @@
 import { notFound, redirect } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
-import PublicBagView from './PublicBagView';
 
 // Public Supabase client (no auth required for public bags)
 const supabase = createClient(
@@ -12,32 +11,18 @@ interface PageProps {
   params: Promise<{ code: string }>;
 }
 
-export default async function PublicBagPage({ params }: PageProps) {
+// Legacy route - redirects to new username-scoped URL
+export default async function LegacyPublicBagPage({ params }: PageProps) {
   const { code } = await params;
 
-  // Fetch the bag with all items and links
+  // Fetch the bag to get owner's handle
   const { data: bag, error } = await supabase
     .from('bags')
     .select(`
-      *,
+      code,
+      is_public,
       owner:profiles!owner_id (
-        handle,
-        display_name
-      ),
-      items:bag_items (
-        id,
-        custom_name,
-        custom_description,
-        notes,
-        quantity,
-        sort_index,
-        links (
-          id,
-          url,
-          kind,
-          label,
-          metadata
-        )
+        handle
       )
     `)
     .eq('code', code)
@@ -45,19 +30,10 @@ export default async function PublicBagPage({ params }: PageProps) {
     .single();
 
   // If bag doesn't exist or is private, show 404
-  if (error || !bag) {
+  if (error || !bag || !bag.owner?.handle) {
     notFound();
   }
 
-  // Sort items by sort_index
-  const sortedItems = bag.items?.sort((a: any, b: any) => a.sort_index - b.sort_index) || [];
-
-  return (
-    <PublicBagView
-      bag={bag}
-      items={sortedItems}
-      ownerHandle={bag.owner?.handle || 'user'}
-      ownerName={bag.owner?.display_name || 'User'}
-    />
-  );
+  // Redirect to new username-scoped URL
+  redirect(`/u/${bag.owner.handle}/${code}`);
 }

@@ -6,6 +6,10 @@
       "headers": {
         "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2bGptZmRyb296ZXh6b2RxdXBnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyMDQyNDUsImV4cCI6MjA3Nzc4MDI0NX0.u8_1p6C0d_ACgxys_-PuI07hn4UbtlrHzBh8ODITn5w"
       }
+    },
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp"
     }
   }
 }

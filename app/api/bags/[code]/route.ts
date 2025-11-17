@@ -20,6 +20,7 @@ import { createServerSupabase } from '@/lib/serverSupabase';
  *     id: uuid
  *     custom_name: string | null
  *     custom_description: string | null
+ *     brand: string | null
  *     quantity: number
  *     sort_index: number
  *     notes: string | null

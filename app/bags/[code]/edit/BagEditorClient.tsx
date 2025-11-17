@@ -2,12 +2,14 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { ArrowLeft, Loader2, Share2, Trash2, Camera, ChevronLeft } from 'lucide-react';
 import ItemList from './components/ItemList';
 import QuickAddItem from './components/QuickAddItem';
 import AddItemForm from './components/AddItemForm';
 import ShareModal from './components/ShareModal';
 import PhotoUploadModal from './components/PhotoUploadModal';
 import ProductReviewModal, { IdentifiedProduct } from './components/ProductReviewModal';
+import { Button } from '@/components/ui/Button';
 
 type Link = {
   id: string;
@@ -21,6 +23,7 @@ type Item = {
   id: string;
   bag_id: string;
   custom_name: string | null;
+  brand: string | null;
   custom_description: string | null;
   notes: string | null;
   quantity: number;
@@ -278,11 +281,12 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               custom_name: product.name,
-              custom_description: product.brand
-                ? `${product.brand} - ${product.category}`
+              brand: product.brand || null,
+              custom_description: product.specifications
+                ? product.specifications.join(' | ')
                 : product.category,
-              notes: product.specifications
-                ? product.specifications.join(', ')
+              notes: product.estimatedPrice
+                ? `Est. price: ${product.estimatedPrice}`
                 : undefined,
               quantity: 1,
             }),
@@ -358,49 +362,24 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <header className="bg-[var(--surface)] border-b border-[var(--border-subtle)] sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between mb-4">
             <button
               onClick={() => router.push('/dashboard')}
-              className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors"
+              className="inline-flex items-center text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
             >
-              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
+              <ArrowLeft className="w-4 h-4 mr-1" />
               Back to Dashboard
             </button>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               {/* Save Status */}
-              <div className="text-xs text-gray-500">
+              <div className="text-xs text-[var(--text-secondary)]">
                 {isSaving ? (
                   <span className="flex items-center">
-                    <svg
-                      className="animate-spin -ml-1 mr-2 h-3 w-3"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      />
-                    </svg>
+                    <Loader2 className="animate-spin mr-2 h-3 w-3" />
                     Saving...
                   </span>
                 ) : lastSaved ? (
@@ -409,20 +388,24 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
               </div>
 
               {/* Share Button */}
-              <button
+              <Button
                 onClick={() => setShowShareModal(true)}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+                variant="secondary"
+                size="sm"
               >
+                <Share2 className="w-4 h-4 mr-2" />
                 Share
-              </button>
+              </Button>
 
               {/* Delete Bag Button */}
-              <button
+              <Button
                 onClick={handleDeleteBag}
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors"
+                variant="destructive"
+                size="sm"
               >
+                <Trash2 className="w-4 h-4 mr-2" />
                 Delete
-              </button>
+              </Button>
             </div>
           </div>
 
@@ -432,7 +415,7 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Bag Title"
-            className="text-2xl font-bold text-gray-900 w-full border-0 border-b-2 border-transparent hover:border-gray-200 focus:border-blue-500 focus:outline-none bg-transparent px-0 py-1 transition-colors"
+            className="text-2xl font-bold text-[var(--text-primary)] w-full border-0 border-b-2 border-transparent hover:border-[var(--border-subtle)] focus:border-[var(--teed-green-8)] focus:outline-none bg-transparent px-0 py-1 transition-colors placeholder:text-[var(--input-placeholder)]"
           />
 
           {/* Editable Description */}
@@ -441,7 +424,7 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Add a description..."
             rows={2}
-            className="mt-2 text-sm text-gray-600 w-full border-0 border-b-2 border-transparent hover:border-gray-200 focus:border-blue-500 focus:outline-none bg-transparent px-0 py-1 resize-none transition-colors"
+            className="mt-2 text-sm text-[var(--text-secondary)] w-full border-0 border-b-2 border-transparent hover:border-[var(--border-subtle)] focus:border-[var(--teed-green-8)] focus:outline-none bg-transparent px-0 py-1 resize-none transition-colors placeholder:text-[var(--input-placeholder)]"
           />
 
           {/* Privacy Toggle */}
@@ -452,19 +435,19 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
               aria-checked={isPublic}
               onClick={() => setIsPublic(!isPublic)}
               className={`${
-                isPublic ? 'bg-green-600' : 'bg-gray-200'
-              } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
+                isPublic ? 'bg-[var(--teed-green-8)]' : 'bg-[var(--grey-5)]'
+              } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2`}
             >
               <span
                 className={`${
                   isPublic ? 'translate-x-6' : 'translate-x-1'
-                } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                } inline-block h-4 w-4 transform rounded-full bg-white transition-transform shadow-sm`}
               />
             </button>
-            <span className="text-sm text-gray-700">
+            <span className="text-sm text-[var(--text-primary)]">
               {isPublic ? 'Public' : 'Private'}
             </span>
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-[var(--text-secondary)]">
               {isPublic ? 'Anyone with the link can view' : 'Only you can view'}
             </span>
           </div>
@@ -492,42 +475,36 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
           )}
 
           {/* Photo Upload Button (Secondary) */}
-          <button
+          <Button
             onClick={() => setShowPhotoUpload(true)}
             disabled={isIdentifying}
-            className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            variant="ai"
+            className="w-full py-3"
           >
-            <span className="inline-flex items-center justify-center">
-              {isIdentifying ? (
-                <>
-                  <svg className="animate-spin h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                  Identifying Products...
-                </>
-              ) : (
-                <>
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  Add from Photo (AI)
-                </>
-              )}
-            </span>
-          </button>
+            {isIdentifying ? (
+              <>
+                <Loader2 className="animate-spin h-5 w-5 mr-2" />
+                Identifying Products...
+              </>
+            ) : (
+              <>
+                <Camera className="w-5 h-5 mr-2" />
+                Add from Photo (AI)
+              </>
+            )}
+          </Button>
 
           {/* Manual Form (Hidden by default) */}
           {showManualForm && (
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium text-gray-700">Manual Entry</h3>
+                <h3 className="text-sm font-medium text-[var(--text-primary)]">Manual Entry</h3>
                 <button
                   onClick={() => setShowManualForm(false)}
-                  className="text-xs text-gray-500 hover:text-gray-700"
+                  className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] inline-flex items-center gap-1"
                 >
-                  ← Back to quick add
+                  <ChevronLeft className="w-3 h-3" />
+                  Back to quick add
                 </button>
               </div>
               <AddItemForm
@@ -553,7 +530,7 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
         ) : (
           <div className="text-center py-12">
             <svg
-              className="mx-auto h-12 w-12 text-gray-400"
+              className="mx-auto h-12 w-12 text-[var(--text-tertiary)]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -565,8 +542,8 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
                 d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
               />
             </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No items yet</h3>
-            <p className="mt-1 text-sm text-gray-500">
+            <h3 className="mt-2 text-sm font-medium text-[var(--text-primary)]">No items yet</h3>
+            <p className="mt-1 text-sm text-[var(--text-secondary)]">
               Get started by adding your first item.
             </p>
           </div>
@@ -580,6 +557,7 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
         bagCode={bag.code}
         bagTitle={bag.title}
         isPublic={isPublic}
+        onTogglePublic={() => setIsPublic(!isPublic)}
       />
 
       {/* Photo Upload Modal */}

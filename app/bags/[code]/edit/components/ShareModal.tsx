@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { X, Copy, Check, ExternalLink, Download } from 'lucide-react';
+import { X, Copy, Check, ExternalLink, Download, AlertTriangle, Eye } from 'lucide-react';
 import QRCode from 'qrcode';
 
 interface ShareModalProps {
@@ -10,6 +10,7 @@ interface ShareModalProps {
   bagCode: string;
   bagTitle: string;
   isPublic: boolean;
+  onTogglePublic?: () => void;
 }
 
 export default function ShareModal({
@@ -18,6 +19,7 @@ export default function ShareModal({
   bagCode,
   bagTitle,
   isPublic,
+  onTogglePublic,
 }: ShareModalProps) {
   const [copied, setCopied] = useState(false);
   const [shareUrl, setShareUrl] = useState('');
@@ -103,43 +105,48 @@ export default function ShareModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-lg w-full">
+    <div className="fixed inset-0 bg-[var(--overlay-bg)] flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+      <div className="bg-[var(--modal-bg)] rounded-[var(--radius-2xl)] shadow-[var(--shadow-6)] max-w-lg w-full border border-[var(--modal-border)]">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">Share Bag</h2>
+        <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-[var(--border-subtle)] gap-2">
+          <div className="flex-1 min-w-0">
+            <h2 className="text-xl font-semibold text-[var(--text-primary)] truncate">Share Bag</h2>
+            <p className="text-xs text-[var(--text-secondary)] mt-1 truncate">
+              Code: <span className="font-mono font-semibold">{bagCode}</span>
+            </p>
+          </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors rounded-lg p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-[var(--surface-hover)] flex-shrink-0"
+            aria-label="Close"
           >
             <X className="w-6 h-6" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6">
+        <div className="px-4 sm:px-6 py-6 space-y-6">
           {/* Privacy Warning */}
           {!isPublic && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <div className="flex">
-                <svg
-                  className="w-5 h-5 text-yellow-600 flex-shrink-0"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <div className="ml-3">
-                  <h3 className="text-sm font-medium text-yellow-800">
+            <div className="bg-[var(--sand-2)] border border-[var(--sand-6)] rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="w-5 h-5 text-[var(--sand-11)] flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <h3 className="text-sm font-medium text-[var(--text-primary)]">
                     This bag is private
                   </h3>
-                  <p className="mt-1 text-sm text-yellow-700">
-                    Only you can view this bag. Toggle privacy to public to share it with others.
+                  <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                    Only you can view this bag. Make it public to share with others.
                   </p>
+                  {onTogglePublic && (
+                    <button
+                      onClick={onTogglePublic}
+                      className="mt-3 inline-flex items-center gap-2 px-3 py-2.5 min-h-[44px] bg-[var(--button-secondary-bg)] hover:bg-[var(--button-secondary-bg-hover)] text-[var(--button-secondary-text)] text-sm font-medium rounded-lg transition-colors"
+                    >
+                      <Eye className="w-4 h-4" />
+                      Make Public
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -147,37 +154,38 @@ export default function ShareModal({
 
           {/* Share URL */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
               Public Link
             </label>
             <div className="flex items-center gap-2">
-              <div className="flex-1 px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-700 overflow-x-auto whitespace-nowrap">
+              <div className="flex-1 px-3 py-2 bg-[var(--sky-2)] border border-[var(--border-subtle)] rounded-lg text-sm text-[var(--text-primary)] overflow-x-auto whitespace-nowrap font-mono">
                 {shareUrl}
               </div>
               <button
                 onClick={handleCopy}
-                className={`p-2 rounded-lg transition-all ${
+                className={`p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg transition-all flex-shrink-0 ${
                   copied
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                    ? 'bg-[var(--teed-green-3)] text-[var(--teed-green-11)]'
+                    : 'bg-[var(--button-secondary-bg)] text-[var(--button-secondary-text)] hover:bg-[var(--button-secondary-bg-hover)]'
                 }`}
                 title={copied ? 'Copied!' : 'Copy link'}
+                aria-label={copied ? 'Copied!' : 'Copy link'}
               >
                 {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
               </button>
             </div>
             {copied && (
-              <p className="mt-1 text-xs text-green-600">Link copied to clipboard!</p>
+              <p className="mt-1 text-xs text-[var(--teed-green-11)]">Link copied to clipboard!</p>
             )}
           </div>
 
           {/* QR Code */}
           {isPublic && shareUrl && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                 QR Code
               </label>
-              <div className="flex flex-col items-center gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex flex-col items-center gap-3 p-4 bg-[var(--sky-1)] rounded-lg border border-[var(--border-subtle)]">
                 <canvas
                   ref={canvasRef}
                   className="border-4 border-white shadow-sm rounded-lg"
@@ -185,12 +193,12 @@ export default function ShareModal({
                 <button
                   onClick={handleDownloadQR}
                   disabled={!qrCodeDataUrl}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center justify-center gap-2 px-4 py-3 min-h-[48px] bg-[var(--button-secondary-bg)] hover:bg-[var(--button-secondary-bg-hover)] text-[var(--button-secondary-text)] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Download className="w-4 h-4" />
                   Download QR
                 </button>
-                <p className="text-xs text-gray-500 text-center">
+                <p className="text-xs text-[var(--text-secondary)] text-center">
                   Scan this code to instantly open the bag
                 </p>
               </div>
@@ -203,7 +211,7 @@ export default function ShareModal({
               href={shareUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
+              className="flex items-center justify-center gap-2 px-4 py-3 min-h-[48px] bg-[var(--sky-2)] hover:bg-[var(--sky-3)] text-[var(--text-primary)] rounded-lg transition-colors"
             >
               <ExternalLink className="w-4 h-4" />
               Preview Public View
@@ -214,15 +222,15 @@ export default function ShareModal({
           {typeof navigator !== 'undefined' && typeof navigator.share === 'function' && isPublic && (
             <button
               onClick={handleNativeShare}
-              className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+              className="w-full px-4 py-3 min-h-[48px] bg-[var(--button-secondary-bg)] hover:bg-[var(--button-secondary-bg-hover)] text-[var(--button-secondary-text)] rounded-lg transition-colors"
             >
               Share via...
             </button>
           )}
 
           {/* Share Info */}
-          <div className="text-sm text-gray-600">
-            <p className="font-medium mb-2">When you share this bag:</p>
+          <div className="text-sm text-[var(--text-secondary)]">
+            <p className="font-medium mb-2 text-[var(--text-primary)]">When you share this bag:</p>
             <ul className="space-y-1 ml-4 list-disc list-outside">
               <li>Anyone with the link can view all items and links</li>
               <li>Your username will be visible</li>
@@ -233,10 +241,10 @@ export default function ShareModal({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 bg-gray-50 rounded-b-lg flex justify-end">
+        <div className="px-4 sm:px-6 py-4 bg-[var(--sky-1)] border-t border-[var(--border-subtle)] rounded-b-[var(--radius-2xl)] flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-gray-700 hover:text-gray-900 transition-colors"
+            className="px-4 py-3 min-h-[48px] text-[var(--text-primary)] hover:text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] rounded-lg transition-colors font-medium"
           >
             Close
           </button>

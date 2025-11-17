@@ -2,7 +2,10 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Plus, Package, User, Settings } from 'lucide-react';
 import NewBagModal from './components/NewBagModal';
+import { Button } from '@/components/ui/Button';
 
 type Bag = {
   id: string;
@@ -50,7 +53,7 @@ export default function DashboardClient({
       setShowNewBagModal(false);
 
       // Redirect to bag editor
-      router.push(`/bags/${newBag.code}/edit`);
+      router.push(`/u/${userHandle}/${newBag.code}/edit`);
     } catch (error) {
       console.error('Error creating bag:', error);
       alert('Failed to create bag. Please try again.');
@@ -69,34 +72,41 @@ export default function DashboardClient({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen pt-16">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200">
+      <header className="bg-[var(--surface)] border-b border-[var(--border-subtle)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">My Bags</h1>
-              <p className="text-sm text-gray-600 mt-1">@{userHandle}</p>
+              <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
+                My Bags
+              </h1>
+              <div className="flex items-center gap-3 mt-1.5">
+                <Link
+                  href={`/u/${userHandle}`}
+                  className="inline-flex items-center gap-1.5 py-1.5 px-2 -ml-2 rounded text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors group min-h-[36px]"
+                >
+                  <User className="w-4 h-4" />
+                  <span className="group-hover:underline">@{userHandle}</span>
+                </Link>
+                <Link
+                  href="/settings"
+                  className="inline-flex items-center gap-1.5 py-1.5 px-2 -ml-2 rounded text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors group min-h-[36px]"
+                >
+                  <Settings className="w-4 h-4" />
+                  <span className="group-hover:underline">Settings</span>
+                </Link>
+              </div>
             </div>
-            <button
+            <Button
+              variant="create"
               onClick={() => setShowNewBagModal(true)}
-              className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+              className="w-full sm:w-auto min-h-[48px]"
             >
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-              Create New Bag
-            </button>
+              <Plus className="w-5 h-5 sm:mr-2" />
+              <span className="hidden sm:inline">Create New Bag</span>
+              <span className="sm:hidden">New Bag</span>
+            </Button>
           </div>
         </div>
       </header>
@@ -105,30 +115,22 @@ export default function DashboardClient({
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {bags.length === 0 ? (
           // Empty State
-          <div className="text-center py-16">
-            <svg
-              className="mx-auto h-16 w-16 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-              />
-            </svg>
-            <h3 className="mt-4 text-lg font-medium text-gray-900">No bags yet</h3>
-            <p className="mt-2 text-sm text-gray-500">
+          <div className="text-center py-20">
+            <div className="bg-[var(--sky-3)] w-20 h-20 rounded-full mx-auto flex items-center justify-center">
+              <Package className="h-10 w-10 text-[var(--evergreen-10)]" />
+            </div>
+            <h3 className="mt-6 text-xl font-semibold text-[var(--text-primary)]">No bags yet</h3>
+            <p className="mt-2 text-base text-[var(--text-secondary)]">
               Get started by creating your first bag.
             </p>
-            <button
-              onClick={() => setShowNewBagModal(true)}
-              className="mt-6 inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
-            >
-              Create Your First Bag
-            </button>
+            <div className="mt-8">
+              <Button
+                variant="create"
+                onClick={() => setShowNewBagModal(true)}
+              >
+                Create Your First Bag
+              </Button>
+            </div>
           </div>
         ) : (
           // Bags Grid
@@ -136,11 +138,11 @@ export default function DashboardClient({
             {bags.map((bag) => (
               <div
                 key={bag.id}
-                onClick={() => router.push(`/bags/${bag.code}/edit`)}
-                className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow cursor-pointer group"
+                onClick={() => router.push(`/u/${userHandle}/${bag.code}/edit`)}
+                className="bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden hover:shadow-[var(--shadow-3)] transition-all cursor-pointer group"
               >
                 {/* Cover Image or Placeholder */}
-                <div className="h-40 bg-gradient-to-br from-blue-500 to-purple-600 relative overflow-hidden">
+                <div className="h-40 bg-gradient-to-br from-[var(--teed-green-6)] to-[var(--sky-6)] relative overflow-hidden">
                   {bag.background_image ? (
                     <img
                       src={bag.background_image}
@@ -149,29 +151,17 @@ export default function DashboardClient({
                     />
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <svg
-                        className="w-16 h-16 text-white opacity-40"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={1.5}
-                          d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                        />
-                      </svg>
+                      <Package className="w-16 h-16 text-[var(--evergreen-12)] opacity-20" />
                     </div>
                   )}
                   {/* Privacy Badge */}
                   <div className="absolute top-3 right-3">
                     {bag.is_public ? (
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/90 text-[var(--evergreen-12)] backdrop-blur-sm">
                         Public
                       </span>
                     ) : (
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/70 text-[var(--text-secondary)] backdrop-blur-sm">
                         Private
                       </span>
                     )}
@@ -179,17 +169,17 @@ export default function DashboardClient({
                 </div>
 
                 {/* Bag Info */}
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-1">
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--teed-green-9)] transition-colors line-clamp-1">
                     {bag.title}
                   </h3>
                   {bag.description && (
-                    <p className="mt-1 text-sm text-gray-600 line-clamp-2">
+                    <p className="mt-2 text-sm text-[var(--text-secondary)] line-clamp-2">
                       {bag.description}
                     </p>
                   )}
-                  <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
-                    <span>/{bag.code}</span>
+                  <div className="mt-4 flex items-center justify-between text-xs text-[var(--text-tertiary)]">
+                    <span className="font-medium">/{bag.code}</span>
                     <span>{formatDate(bag.created_at)}</span>
                   </div>
                 </div>

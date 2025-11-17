@@ -1,26 +1,456 @@
+/* Import Google Fonts - Inter for body, using system fonts for headings */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
 @import "tailwindcss";
 
+/* ============================================
+   TEED DESIGN SYSTEM - DESIGN TOKENS
+   ============================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ============================================
+     REFERENCE TOKENS - Raw Color Values
+     ============================================ */
+
+  /* Teed Green Scale (Earthy Sage) - 12 steps */
+  --teed-green-1: #F8FBF8;
+  --teed-green-2: #F0F6F0;
+  --teed-green-3: #E3EFE4;
+  --teed-green-4: #D4E7D6;
+  --teed-green-5: #C3DEC5;
+  --teed-green-6: #B0D4B3;
+  --teed-green-7: #9BBF9E;
+  --teed-green-8: #8BAA7E; /* Primary - More earthy */
+  --teed-green-9: #7A9770;
+  --teed-green-10: #688561;
+  --teed-green-11: #567352;
+  --teed-green-12: #3D5240;
+
+  /* Deep Evergreen Scale - 12 steps */
+  --evergreen-1: #FAFBFA;
+  --evergreen-2: #F4F6F5;
+  --evergreen-3: #E8EEEA;
+  --evergreen-4: #D9E3DC;
+  --evergreen-5: #C7D6CB;
+  --evergreen-6: #B1C5B7;
+  --evergreen-7: #96B09D;
+  --evergreen-8: #73937E;
+  --evergreen-9: #4F7159;
+  --evergreen-10: #3D5947;
+  --evergreen-11: #2A4434;
+  --evergreen-12: #1F3A2E; /* Primary - Deep Evergreen */
+
+  /* Warm Sand Scale - 12 steps */
+  --sand-1: #FEFDFB;
+  --sand-2: #FCF9F4;
+  --sand-3: #F9F3E9;
+  --sand-4: #F5ECDB;
+  --sand-5: #F0E3C9;
+  --sand-6: #E9D8B3;
+  --sand-7: #E0CA98;
+  --sand-8: #D9B47C; /* Primary - Warm Sand */
+  --sand-9: #C9A26A;
+  --sand-10: #B89158;
+  --sand-11: #9A7747;
+  --sand-12: #7A5E38;
+
+  /* Stone Grey Scale - 12 steps */
+  --grey-1: #FAFBFB;
+  --grey-2: #F5F6F7;
+  --grey-3: #EBEDEF;
+  --grey-4: #DFE2E5;
+  --grey-5: #D0D5D9;
+  --grey-6: #BEC5CB;
+  --grey-7: #A8B1B9;
+  --grey-8: #868996; /* Primary - Stone Grey */
+  --grey-9: #6F7683;
+  --grey-10: #5A606C;
+  --grey-11: #464B55;
+  --grey-12: #32363E;
+
+  /* Sky Tint Scale - 12 steps */
+  --sky-1: #FAFDFC;
+  --sky-2: #F4FAF9;
+  --sky-3: #E8F5F2;
+  --sky-4: #D9EEE9;
+  --sky-5: #C7E5DD;
+  --sky-6: #B1D9CE;
+  --sky-7: #96CABBB;
+  --sky-8: #CFE8E1; /* Primary - Sky Tint */
+  --sky-9: #A8D8CB;
+  --sky-10: #8BC9B8;
+  --sky-11: #6DB9A6;
+  --sky-12: #4F9B89;
+
+  /* Copper Scale - 12 steps */
+  --copper-1: #FEF8F5;
+  --copper-2: #FDF2EB;
+  --copper-3: #FAE7D9;
+  --copper-4: #F7DAC4;
+  --copper-5: #F3CBA9;
+  --copper-6: #EDB889;
+  --copper-7: #E49F63;
+  --copper-8: #C2784A; /* Primary - Copper Highlight */
+  --copper-9: #B46A3F;
+  --copper-10: #A55C35;
+  --copper-11: #8B4D2C;
+  --copper-12: #6E3D23;
+
+  /* Base Colors */
+  --base-background: #F9F5EE;
+  --base-white: #FFFFFF;
+  --base-off-white: #FEFDFB;
+
+  /* ============================================
+     SEMANTIC TOKENS - Purpose-driven mappings
+     ============================================ */
+
+  /* Background & Surface */
+  --background: var(--base-background);
+  --surface: var(--base-white);
+  --surface-elevated: var(--base-off-white);
+  --surface-hover: var(--teed-green-2);
+  --surface-active: var(--teed-green-3);
+
+  /* Text Colors */
+  --text-primary: var(--evergreen-12);
+  --text-secondary: var(--grey-8);
+  --text-tertiary: var(--grey-7);
+  --text-on-primary: var(--base-white);
+  --text-on-accent: var(--evergreen-12);
+
+  /* Border Colors */
+  --border-subtle: rgba(31, 58, 46, 0.12);
+  --border-default: rgba(31, 58, 46, 0.15);
+  --border-strong: rgba(31, 58, 46, 0.24);
+  --border-hover: rgba(31, 58, 46, 0.18);
+
+  /* ============================================
+     COMPONENT TOKENS - Specific component uses
+     ============================================ */
+
+  /* Button - AI/Smart Actions */
+  --button-ai-bg: var(--teed-green-8);
+  --button-ai-bg-hover: var(--teed-green-9);
+  --button-ai-bg-active: var(--teed-green-10);
+  --button-ai-text: var(--base-white);
+  --button-ai-border: var(--teed-green-9);
+
+  /* Button - Create/Add Actions */
+  --button-create-bg: var(--evergreen-12);
+  --button-create-bg-hover: var(--evergreen-11);
+  --button-create-bg-active: var(--evergreen-10);
+  --button-create-text: var(--base-white);
+  --button-create-border: var(--evergreen-12);
+
+  /* Button - Destructive/Remove Actions */
+  --button-destructive-bg: var(--copper-8);
+  --button-destructive-bg-hover: var(--copper-9);
+  --button-destructive-bg-active: var(--copper-10);
+  --button-destructive-text: var(--base-white);
+  --button-destructive-border: var(--copper-8);
+
+  /* Button - Secondary/Neutral Actions */
+  --button-secondary-bg: var(--teed-green-3);
+  --button-secondary-bg-hover: var(--teed-green-4);
+  --button-secondary-bg-active: var(--teed-green-5);
+  --button-secondary-text: var(--evergreen-12);
+  --button-secondary-border: transparent;
+
+  /* Button - Ghost */
+  --button-ghost-bg: transparent;
+  --button-ghost-bg-hover: var(--sky-3);
+  --button-ghost-bg-active: var(--sky-4);
+  --button-ghost-text: var(--evergreen-12);
+  --button-ghost-border: var(--border-default);
+
+  /* Button - Outline */
+  --button-outline-bg: var(--base-white);
+  --button-outline-bg-hover: var(--teed-green-2);
+  --button-outline-bg-active: var(--teed-green-3);
+  --button-outline-text: var(--evergreen-12);
+  --button-outline-border: var(--border-strong);
+
+  /* Input Colors */
+  --input-bg: var(--base-white);
+  --input-bg-disabled: var(--grey-2);
+  --input-border: var(--border-default);
+  --input-border-hover: var(--border-hover);
+  --input-border-focus: var(--teed-green-8);
+  --input-text: var(--text-primary);
+  --input-placeholder: var(--text-secondary);
+
+  /* Focus Ring */
+  --focus-ring: var(--teed-green-8);
+  --focus-ring-offset: 2px;
+
+  /* Overlay & Modal */
+  --overlay-bg: rgba(31, 58, 46, 0.4);
+  --modal-bg: var(--base-white);
+  --modal-border: var(--border-subtle);
+
+  /* Semantic States */
+  --success-bg: var(--teed-green-3);
+  --success-border: var(--teed-green-8);
+  --success-text: var(--teed-green-11);
+
+  --warning-bg: var(--sand-3);
+  --warning-border: var(--sand-8);
+  --warning-text: var(--sand-11);
+
+  --error-bg: var(--copper-2);
+  --error-border: var(--copper-8);
+  --error-text: var(--copper-11);
+
+  /* ============================================
+     SPACING SYSTEM - 8pt Grid
+     ============================================ */
+  --space-1: 4px;   /* 0.25rem */
+  --space-2: 8px;   /* 0.5rem */
+  --space-3: 12px;  /* 0.75rem */
+  --space-4: 16px;  /* 1rem */
+  --space-5: 20px;  /* 1.25rem */
+  --space-6: 24px;  /* 1.5rem */
+  --space-7: 32px;  /* 2rem */
+  --space-8: 40px;  /* 2.5rem */
+  --space-9: 48px;  /* 3rem */
+  --space-10: 64px; /* 4rem */
+  --space-11: 80px; /* 5rem */
+  --space-12: 96px; /* 6rem */
+
+  /* ============================================
+     SHADOW/ELEVATION SYSTEM - 6 levels
+     ============================================ */
+  --shadow-1: inset 0 1px 2px rgba(31, 58, 46, 0.04);
+  --shadow-2: 0 1px 3px rgba(31, 58, 46, 0.08);
+  --shadow-3: 0 2px 8px rgba(31, 58, 46, 0.1);
+  --shadow-4: 0 4px 16px rgba(31, 58, 46, 0.12);
+  --shadow-5: 0 8px 24px rgba(31, 58, 46, 0.15);
+  --shadow-6: 0 16px 48px rgba(31, 58, 46, 0.2);
+
+  /* ============================================
+     BORDER RADIUS SYSTEM
+     ============================================ */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* ============================================
+     TYPOGRAPHY SYSTEM
+     ============================================ */
+
+  /* Font Families */
+  --font-heading: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Font Sizes */
+  --font-size-1: 12px;  /* 0.75rem */
+  --font-size-2: 14px;  /* 0.875rem */
+  --font-size-3: 16px;  /* 1rem */
+  --font-size-4: 18px;  /* 1.125rem */
+  --font-size-5: 20px;  /* 1.25rem */
+  --font-size-6: 24px;  /* 1.5rem */
+  --font-size-7: 28px;  /* 1.75rem */
+  --font-size-8: 32px;  /* 2rem */
+  --font-size-9: 36px;  /* 2.25rem */
+  --font-size-10: 48px; /* 3rem */
+  --font-size-11: 60px; /* 3.75rem */
+
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  /* ============================================
+     TRANSITIONS & ANIMATIONS
+     ============================================ */
+  --transition-fast: 100ms;
+  --transition-base: 150ms;
+  --transition-slow: 300ms;
+  --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ============================================
+   TAILWIND THEME INTEGRATION
+   ============================================ */
 @theme inline {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-foreground: var(--text-primary);
+  --color-card: var(--surface);
+  --color-border: var(--border-default);
+  --color-primary: var(--evergreen-12);
+  --color-secondary: var(--teed-green-8);
+  --font-sans: var(--font-body);
+
+  /* Expose Teed colors to Tailwind */
+  --color-teed-green: var(--teed-green-8);
+  --color-evergreen: var(--evergreen-12);
+  --color-warm-sand: var(--sand-8);
+  --color-stone-grey: var(--grey-8);
+  --color-sky-tint: var(--sky-8);
+  --color-copper: var(--copper-8);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* ============================================
+   BASE STYLES
+   ============================================ */
 
 body {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--font-size-3);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  line-height: var(--line-height-tight);
+  margin: 0;
+}
+
+h1 {
+  font-size: var(--font-size-9);
+}
+
+h2 {
+  font-size: var(--font-size-7);
+}
+
+h3 {
+  font-size: var(--font-size-6);
+}
+
+h4 {
+  font-size: var(--font-size-5);
+}
+
+h5 {
+  font-size: var(--font-size-4);
+}
+
+h6 {
+  font-size: var(--font-size-3);
+}
+
+p {
+  margin: 0;
+  color: var(--text-primary);
+}
+
+/* Button reset */
+button {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Input reset */
+input, textarea, select {
+  font-family: var(--font-body);
+  color: var(--text-primary);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--input-placeholder);
+}
+
+/* Smooth transitions for interactive elements */
+button, a, input, textarea, select {
+  transition-property: background-color, border-color, color, transform, box-shadow;
+  transition-timing-function: var(--transition-timing);
+  transition-duration: var(--transition-base);
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--grey-7);
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--grey-9);
+}
+
+/* Selection styling */
+::selection {
+  background: var(--sky-4);
+  color: var(--text-primary);
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-2);
+}
+
+.card-elevated {
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-3);
+}
+
+.modal {
+  background: var(--modal-bg);
+  border: 1px solid var(--modal-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-6);
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+.bg-surface {
+  background-color: var(--surface);
+}
+
+.bg-elevated {
+  background-color: var(--surface-elevated);
 }

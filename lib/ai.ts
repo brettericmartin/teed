@@ -116,7 +116,7 @@ export function validateAndCompressImage(base64Image: string): {
  */
 export async function identifyProductsInImage(
   imageBase64: string,
-  context?: { bagType?: string; expectedCategories?: string[] }
+  context?: { bagType?: string; expectedCategories?: string[]; focusCategories?: string[] }
 ): Promise<VisionAnalysisResult> {
   const startTime = Date.now();
 
@@ -130,11 +130,20 @@ export async function identifyProductsInImage(
   const systemPrompt = `You are an expert product identifier with deep knowledge of specific product models, brands, and SKUs.
 
 CRITICAL REQUIREMENTS:
-1. BE HYPER-SPECIFIC - Never use generic names like "Driver", "Golf Bag", "Tent"
-2. Include EXACT model names like "TaylorMade SIM2 Max Driver", "Callaway Rogue ST Triple Diamond Fairway Wood"
-3. Include model numbers/SKUs when visible (e.g., "M2 2017", "Apex DCB 21")
-4. For products where you're unsure, provide alternatives with reasoning
-5. SPECIFICITY IS EVERYTHING - generic names are useless
+1. IDENTIFY EVERY PRODUCT VISIBLE - If there are 20+ items, list them ALL. No limits.
+2. BE HYPER-SPECIFIC - Never use generic names like "Driver", "Golf Bag", "Tent"
+3. Include EXACT model names like "TaylorMade SIM2 Max Driver", "Callaway Rogue ST Triple Diamond Fairway Wood"
+4. Include model numbers/SKUs when visible (e.g., "M2 2017", "Apex DCB 21")
+5. For products where you're unsure, provide alternatives with reasoning
+6. SPECIFICITY IS EVERYTHING - generic names are useless
+
+DETAIL FORMATTING STANDARDS (use pipe separator):
+- Golf: "Loft | Shaft | Flex" (e.g., "10.5° | Fujikura Ventus | Stiff")
+- Makeup: "Shade | Finish | Size" (e.g., "Ruby Woo | Matte | 3g")
+- Fashion: "Size | Color | Material" (e.g., "Medium | Black | 100% Cotton")
+- Tech: "Storage | Key Feature | Connectivity" (e.g., "256GB | A17 Pro | USB-C")
+- Outdoor: "Weight | Rating | Capacity" (e.g., "12.6oz | 20°F | 2-person")
+*Adapt format if specific details aren't visible - don't guess, just omit.*
 
 GOOD EXAMPLES:
 ✅ "TaylorMade Stealth 2 Plus Driver" NOT "Driver"
@@ -175,8 +184,23 @@ Return your response as valid JSON with this exact structure:
 
 If you cannot identify the SPECIFIC model, include alternatives. Confidence should be 0-100.`;
 
-  const userPrompt = context?.bagType
-    ? `Identify all products in this image with MAXIMUM SPECIFICITY. Include exact model names, not generic descriptions.
+  let userPrompt = '';
+
+  if (context?.focusCategories && context.focusCategories.length > 0) {
+    // Video/category filtering mode
+    userPrompt = `Identify ONLY products in these categories: ${context.focusCategories.join(', ')}.
+
+IGNORE all other items (furniture, backgrounds, unrelated objects).
+FIND EVERY product that matches the focus categories - list them ALL.
+
+For each matching product:
+- Read any visible text/logos carefully
+- Identify specific brand and model
+- Include detailed specifications using the format standards
+- Never use generic names`;
+  } else if (context?.bagType) {
+    // Bag context mode
+    userPrompt = `Identify ALL products in this image with MAXIMUM SPECIFICITY. Include exact model names, not generic descriptions.
 
 Context: This is for a ${context.bagType} bag.${
         context.expectedCategories
@@ -188,14 +212,19 @@ For each product:
 - Read any visible text/logos carefully
 - Identify specific model/version
 - If unsure between models, provide alternatives
-- Never settle for generic names`
-    : `Identify all products visible in this image with MAXIMUM SPECIFICITY.
+- Never settle for generic names
+- Find EVERY product visible - no matter how many`;
+  } else {
+    // Default mode
+    userPrompt = `Identify ALL products visible in this image with MAXIMUM SPECIFICITY.
 
 Requirements:
+- Find EVERY product in the image, even if there are 20+ items
 - Include exact model names and numbers
 - Read all visible text on products
 - If you can't determine the exact model, provide your best alternatives
 - Never use generic names like "club" or "bag" - be specific`;
+  }
 
   try {
     // Best Practice: Use retry logic for reliability
@@ -224,7 +253,7 @@ Requirements:
             ],
           },
         ],
-        max_tokens: 2500, // Increased for detailed product names, models, and alternatives
+        max_tokens: 4096, // Maximized to find ALL products in image, even 20+ items
         temperature: 0.2, // Very low for maximum consistency and specificity
         response_format: { type: 'json_object' }, // Best practice: Force JSON output
       });
@@ -642,5 +671,6 @@ What items should be included? Prioritize essential items first.`;
     };
   }
 }
+
 
 

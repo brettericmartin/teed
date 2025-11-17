@@ -13,6 +13,7 @@ type EnrichmentRequest = {
 
 type ProductSuggestion = {
   custom_name: string;
+  brand: string;
   custom_description: string;
   notes: string;
   category: string;
@@ -79,16 +80,17 @@ Your job is to:
 3. Determine if clarification questions are needed
 4. Generate clarification questions if confidence is low
 
-Product verticals and their key details:
-- Makeup/Beauty: Brand, product type, shade/color, finish, price
-- Golf Equipment: Brand, model, loft, shaft specs, flex
-- Fashion/Clothing: Brand, item type, size, color, material, price
-- Tech/EDC: Brand, model, storage/capacity, key specs
-- Outdoor/Camping: Brand, weight, temperature rating, material, capacity
+Product verticals and their SMART DEFAULT formatting:
+- Golf: custom_description = "Loft | Shaft | Flex" (e.g., "10.5° | Fujikura Ventus | Stiff")
+- Makeup: custom_description = "Shade | Finish | Size" (e.g., "Ruby Woo | Matte | 3g")
+- Fashion: custom_description = "Size | Color | Material" (e.g., "Medium | Black | 100% Cotton")
+- Tech: custom_description = "Storage | Key Feature | Connectivity" (e.g., "256GB | A17 Pro | USB-C")
+- Outdoor: custom_description = "Weight | Rating | Capacity" (e.g., "12.6oz | 20°F | 2-person")
 
 Format enriched details as:
-- custom_name: Brand + Product Name (2-6 words, concise)
-- custom_description: "Spec 1 | Spec 2 | Spec 3" (use | separator, 3-5 specs)
+- brand: Brand name ONLY (e.g., "TaylorMade", "MAC", "Patagonia") - REQUIRED
+- custom_name: Product Name without brand (2-6 words, concise, e.g., "Stealth 2 Plus Driver")
+- custom_description: Formatted specs using pipe separator (adapt to available info, don't guess)
 - notes: Why this matters, use case, or helpful context (1-2 sentences)
 
 Confidence scoring:
@@ -100,10 +102,11 @@ Return ONLY valid JSON in this exact format:
 {
   "suggestions": [
     {
-      "custom_name": "Product Name",
-      "custom_description": "Spec 1 | Spec 2 | Spec 3",
-      "notes": "Context and use case",
-      "category": "Vertical Name",
+      "brand": "TaylorMade",
+      "custom_name": "Stealth 2 Plus Driver",
+      "custom_description": "10.5° | Fujikura Ventus | Stiff",
+      "notes": "Tour-proven distance with low spin for workability",
+      "category": "Golf Equipment",
       "confidence": 0.85
     }
   ],

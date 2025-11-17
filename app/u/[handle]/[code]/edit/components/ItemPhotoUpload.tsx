@@ -1,0 +1,424 @@
+'use client';
+
+import { useState, useRef, ChangeEvent } from 'react';
+import ImageCropModal from './ImageCropModal';
+
+type ItemPhotoUploadProps = {
+  itemId: string;
+  currentPhotoUrl?: string | null;
+  onPhotoUploaded: (mediaAssetId: string, photoUrl: string) => void;
+  onPhotoRemoved?: () => void;
+  itemName: string;
+  itemDescription?: string | null;
+};
+
+export default function ItemPhotoUpload({
+  itemId,
+  currentPhotoUrl,
+  onPhotoUploaded,
+  onPhotoRemoved,
+  itemName,
+  itemDescription,
+}: ItemPhotoUploadProps) {
+  const [isUploading, setIsUploading] = useState(false);
+  const [isFindingImage, setIsFindingImage] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(currentPhotoUrl || null);
+  const [isCropModalOpen, setIsCropModalOpen] = useState(false);
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+  const [imageSuggestions, setImageSuggestions] = useState<string[]>([]);
+  const [showImagePicker, setShowImagePicker] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const MAX_SIZE_MB = 2;
+  const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
+  const handleFileSelect = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setError(null);
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Please select an image file');
+      return;
+    }
+
+    // Validate file size
+    if (file.size > MAX_SIZE_BYTES) {
+      setError(`Image too large. Maximum size is ${MAX_SIZE_MB}MB`);
+      return;
+    }
+
+    // Show crop modal for manual upload
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setSelectedImageUrl(event.target?.result as string);
+      setIsCropModalOpen(true);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleFindProductImage = async () => {
+    setIsFindingImage(true);
+    setError(null);
+    setImageSuggestions([]);
+
+    try {
+      // Build search query from item details
+      const searchQuery = [itemName, itemDescription]
+        .filter(Boolean)
+        .join(' ');
+
+      console.log('Searching for images with query:', searchQuery);
+
+      // Use Google Custom Search to find product images
+      const response = await fetch('/api/ai/find-product-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: searchQuery }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to find product images');
+      }
+
+      const data = await response.json();
+      console.log('Found images:', data.images);
+
+      if (data.images && data.images.length > 0) {
+        setImageSuggestions(data.images);
+        setShowImagePicker(true);
+      } else {
+        setError('No product images found. Try uploading your own.');
+      }
+    } catch (err: any) {
+      console.error('Find image error:', err);
+      setError(err.message || 'Failed to find product images');
+    } finally {
+      setIsFindingImage(false);
+    }
+  };
+
+  const handleSelectGoogleImage = async (imageUrl: string) => {
+    setIsUploading(true);
+    setError(null);
+
+    try {
+      console.log('Uploading image from URL:', imageUrl);
+
+      // Use server-side endpoint to bypass CORS
+      const uploadResponse = await fetch('/api/media/upload-from-url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          imageUrl,
+          itemId,
+          filename: `${itemName.replace(/[^a-z0-9]/gi, '-')}.jpg`,
+        }),
+      });
+
+      if (!uploadResponse.ok) {
+        const errorData = await uploadResponse.json();
+        throw new Error(errorData.error || 'Failed to upload image');
+      }
+
+      const uploadData = await uploadResponse.json();
+      console.log('Image uploaded successfully:', uploadData);
+
+      onPhotoUploaded(uploadData.mediaAssetId, uploadData.url);
+      setPreview(uploadData.url);
+      setShowImagePicker(false);
+      setImageSuggestions([]);
+    } catch (err: any) {
+      console.error('Upload error:', err);
+      setError(err.message || 'Failed to upload image');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleCropComplete = async (croppedImage: Blob) => {
+    setIsCropModalOpen(false);
+
+    // Show preview of cropped image
+    const croppedImageUrl = URL.createObjectURL(croppedImage);
+    setPreview(croppedImageUrl);
+
+    // Upload the cropped image
+    await uploadPhoto(croppedImage);
+  };
+
+  const handleCropCancel = () => {
+    setIsCropModalOpen(false);
+    setSelectedImageUrl(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const uploadPhoto = async (file: File | Blob) => {
+    setIsUploading(true);
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      // Convert Blob to File if needed
+      const fileToUpload = file instanceof File
+        ? file
+        : new File([file], `cropped-${Date.now()}.jpg`, { type: 'image/jpeg' });
+
+      formData.append('file', fileToUpload);
+      formData.append('itemId', itemId);
+
+      const response = await fetch('/api/media/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to upload photo');
+      }
+
+      const data = await response.json();
+
+      // Call parent callback with media asset ID and URL
+      onPhotoUploaded(data.mediaAssetId, data.url);
+
+      setPreview(data.url);
+    } catch (err: any) {
+      console.error('Photo upload error:', err);
+      setError(err.message || 'Failed to upload photo');
+      setPreview(currentPhotoUrl || null);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleRemovePhoto = () => {
+    setPreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+    if (onPhotoRemoved) {
+      onPhotoRemoved();
+    }
+  };
+
+  return (
+    <div className="space-y-2">
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileSelect}
+        className="hidden"
+        disabled={isUploading || isFindingImage}
+      />
+
+      {/* Preview or Upload Options */}
+      {preview ? (
+        <div className="relative">
+          <img
+            src={preview}
+            alt="Item photo"
+            className="w-full h-32 object-contain bg-[var(--surface)] rounded-lg border-2 border-[var(--border-subtle)]"
+          />
+          <div className="absolute top-2 right-2 flex gap-2">
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isUploading}
+              className="p-1.5 bg-[var(--surface)] rounded-full shadow-[var(--shadow-2)] hover:bg-[var(--surface-hover)] transition-colors disabled:opacity-50"
+              title="Change photo"
+            >
+              <svg className="w-4 h-4 text-[var(--text-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+            </button>
+            <button
+              onClick={handleRemovePhoto}
+              disabled={isUploading}
+              className="p-1.5 bg-[var(--surface)] rounded-full shadow-[var(--shadow-2)] hover:bg-[var(--copper-2)] transition-colors disabled:opacity-50"
+              title="Remove photo"
+            >
+              <svg className="w-4 h-4 text-[var(--copper-9)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+            </button>
+          </div>
+          {isUploading && (
+            <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center">
+              <div className="flex items-center gap-2 text-white">
+                <svg
+                  className="animate-spin h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
+                </svg>
+                <span className="text-sm font-medium">Uploading...</span>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : showImagePicker ? (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h5 className="text-sm font-medium text-[var(--text-primary)]">Choose Product Image</h5>
+              <p className="text-xs text-[var(--text-secondary)] mt-0.5">Select the best match for your item</p>
+            </div>
+            <button
+              onClick={() => {
+                setShowImagePicker(false);
+                setImageSuggestions([]);
+              }}
+              className="px-3 py-1.5 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] rounded transition-colors"
+            >
+              ← Back
+            </button>
+          </div>
+
+          {/* Image Gallery */}
+          <div className="grid grid-cols-2 gap-3 max-h-[700px] overflow-y-auto p-1">
+            {imageSuggestions.map((imageUrl, index) => (
+              <div
+                key={index}
+                className="relative border-2 border-[var(--border-subtle)] rounded-lg hover:border-[var(--teed-green-8)] hover:shadow-[var(--shadow-3)] transition-all bg-[var(--surface)] overflow-hidden cursor-pointer h-64"
+                onClick={() => !isUploading && handleSelectGoogleImage(imageUrl)}
+              >
+                <div className="w-full h-full flex items-center justify-center p-2">
+                  <img
+                    src={imageUrl}
+                    alt={`Product option ${index + 1}`}
+                    className="max-w-full max-h-full object-contain"
+                    onLoad={() => console.log('Image loaded:', imageUrl)}
+                    onError={(e) => {
+                      console.error('Image failed to load:', imageUrl);
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%23f0f0f0" width="200" height="200"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="14" fill="%23999"%3EImage unavailable%3C/text%3E%3C/svg%3E';
+                    }}
+                  />
+                </div>
+
+                {/* Loading overlay */}
+                {isUploading && (
+                  <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+                    <div className="flex flex-col items-center gap-2">
+                      <svg className="animate-spin h-8 w-8 text-white" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                      <span className="text-xs text-white font-medium">Uploading...</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Helper text */}
+          <p className="text-xs text-[var(--text-tertiary)] text-center mt-2">
+            Found {imageSuggestions.length} product images
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-2">
+          {/* Find Product Image */}
+          <button
+            onClick={handleFindProductImage}
+            disabled={isUploading || isFindingImage}
+            className="h-32 border-2 border-dashed border-[var(--teed-green-7)] bg-[var(--teed-green-2)] rounded-lg hover:border-[var(--teed-green-8)] hover:bg-[var(--teed-green-3)] transition-colors flex flex-col items-center justify-center gap-2 text-[var(--teed-green-11)] disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+            <span className="text-sm font-medium">
+              {isFindingImage ? 'Searching...' : 'Find Product Image'}
+            </span>
+            <span className="text-xs">Search Google</span>
+          </button>
+
+          {/* Upload Your Own */}
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isUploading || isFindingImage}
+            className="h-32 border-2 border-dashed border-[var(--border-subtle)] rounded-lg hover:border-[var(--border)] hover:bg-[var(--surface-hover)] transition-colors flex flex-col items-center justify-center gap-2 text-[var(--text-secondary)] disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+            <span className="text-sm font-medium">
+              {isUploading ? 'Uploading...' : 'Upload Your Own'}
+            </span>
+            <span className="text-xs">With cropping</span>
+          </button>
+        </div>
+      )}
+
+      {/* Error message */}
+      {error && (
+        <div className="bg-[var(--copper-2)] border border-[var(--copper-6)] rounded p-2">
+          <p className="text-xs text-[var(--copper-11)]">{error}</p>
+        </div>
+      )}
+
+      {/* Crop Modal */}
+      {selectedImageUrl && (
+        <ImageCropModal
+          isOpen={isCropModalOpen}
+          imageUrl={selectedImageUrl}
+          onClose={handleCropCancel}
+          onCropComplete={handleCropComplete}
+        />
+      )}
+    </div>
+  );
+}

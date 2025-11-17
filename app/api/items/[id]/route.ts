@@ -9,6 +9,7 @@ import { createServerSupabase } from '@/lib/serverSupabase';
  * {
  *   custom_name?: string
  *   custom_description?: string
+ *   brand?: string | null
  *   notes?: string
  *   quantity?: number
  *   sort_index?: number
@@ -68,6 +69,10 @@ export async function PUT(
 
     if (body.custom_description !== undefined) {
       updates.custom_description = body.custom_description?.trim() || null;
+    }
+
+    if (body.brand !== undefined) {
+      updates.brand = body.brand?.trim() || null;
     }
 
     if (body.notes !== undefined) {

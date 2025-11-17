@@ -56,16 +56,19 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-8">
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="bg-[var(--surface)] rounded-[var(--radius-2xl)] shadow-[var(--shadow-6)] border border-[var(--border-subtle)] max-w-md w-full p-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Teed</h1>
-          <p className="text-gray-600 mt-2">Sign in to continue</p>
+          <h1 className="text-[var(--font-size-9)] font-semibold text-[var(--text-primary)]">Teed</h1>
+          <p className="text-sm text-[var(--text-secondary)] mt-1">Curations, Made Shareable</p>
+          <h2 className="mt-6 text-[var(--font-size-6)] font-semibold text-[var(--text-primary)]">
+            Sign in to continue
+          </h2>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="email" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
               Email
             </label>
             <input
@@ -75,12 +78,12 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               disabled={isLoading}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+              className="w-full px-4 py-3 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-[var(--radius-md)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:outline-none focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent disabled:bg-[var(--input-bg-disabled)] transition-all"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="password" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
               Password
             </label>
             <input
@@ -90,31 +93,43 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               disabled={isLoading}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+              className="w-full px-4 py-3 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-[var(--radius-md)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:outline-none focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent disabled:bg-[var(--input-bg-disabled)] transition-all"
             />
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-              <p className="text-sm text-red-600">{error}</p>
+            <div className="bg-[var(--copper-2)] border border-[var(--copper-6)] rounded-[var(--radius-md)] p-4">
+              <p className="text-sm text-[var(--copper-11)]">{error}</p>
             </div>
           )}
 
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-[var(--button-create-bg)] hover:bg-[var(--button-create-bg-hover)] active:bg-[var(--button-create-bg-active)] text-[var(--button-create-text)] font-medium py-3 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md active:scale-[0.98]"
           >
             {isLoading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
-        <div className="mt-6 pt-6 border-t border-gray-200">
-          <p className="text-sm text-gray-600 text-center">
+        <div className="mt-6 pt-6 border-t border-[var(--border-subtle)]">
+          <p className="text-sm text-[var(--text-secondary)] text-center">
             Test credentials are pre-filled
           </p>
-          <p className="text-xs text-gray-500 text-center mt-1">
+          <p className="text-xs text-[var(--text-tertiary)] text-center mt-1">
             test@teed-test.com / test-password
+          </p>
+        </div>
+
+        <div className="mt-6 text-center">
+          <p className="text-sm text-[var(--text-secondary)]">
+            Don't have an account?{' '}
+            <a
+              href="/signup"
+              className="font-medium text-[var(--teed-green-9)] hover:text-[var(--teed-green-10)] transition-colors"
+            >
+              Sign up
+            </a>
           </p>
         </div>
       </div>
