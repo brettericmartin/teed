@@ -21,7 +21,9 @@ export default function SortableItemCard({ item, onDelete, onUpdate, bagCode }: 
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: item.id });
+  } = useSortable({
+    id: item.id
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
