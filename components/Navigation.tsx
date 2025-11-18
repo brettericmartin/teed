@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { User, Settings, LogOut, ChevronDown, Heart, Compass, LayoutDashboard } from 'lucide-react';
+import { User, Settings, LogOut, ChevronDown, Compass, LayoutDashboard } from 'lucide-react';
 
 interface NavigationProps {
   userHandle?: string;
@@ -97,17 +97,6 @@ export default function Navigation({ userHandle, displayName, isAuthenticated }:
                   <span>Dashboard</span>
                 </Link>
                 <Link
-                  href="/feed"
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    pathname === '/feed'
-                      ? 'bg-[var(--surface-hover)] text-[var(--text-primary)]'
-                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]'
-                  }`}
-                >
-                  <Heart className="w-4 h-4" />
-                  <span>Feed</span>
-                </Link>
-                <Link
                   href="/discover"
                   className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     pathname === '/discover'
@@ -178,13 +167,6 @@ export default function Navigation({ userHandle, displayName, isAuthenticated }:
                       >
                         <LayoutDashboard className="w-4 h-4 text-[var(--text-secondary)]" />
                         Dashboard
-                      </Link>
-                      <Link
-                        href="/feed"
-                        className="flex items-center gap-3 px-4 py-3 min-h-[48px] text-sm text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors"
-                      >
-                        <Heart className="w-4 h-4 text-[var(--text-secondary)]" />
-                        Feed
                       </Link>
                       <Link
                         href="/discover"

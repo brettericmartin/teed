@@ -1,13 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
 
-// GET /api/discover - Get all public bags for discovery
+// GET /api/discover - Get all public bags for discovery with filters
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createServerSupabase();
+    const { searchParams } = new URL(request.url);
 
-    // Fetch all public bags with featured items and owner info
-    const { data: bags, error: bagsError } = await supabase
+    // Get filter parameters
+    const following = searchParams.get('following') === 'true';
+    const category = searchParams.get('category');
+    const search = searchParams.get('search');
+
+    // Check authentication for "following" filter
+    let followingIds: string[] = [];
+    if (following) {
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser();
+
+      if (authError || !user) {
+        return NextResponse.json({ error: 'Must be logged in to filter by following' }, { status: 401 });
+      }
+
+      // Get list of users the current user follows
+      const { data: follows } = await supabase
+        .from('follows')
+        .select('following_id')
+        .eq('follower_id', user.id);
+
+      followingIds = follows?.map(f => f.following_id) || [];
+
+      if (followingIds.length === 0) {
+        return NextResponse.json({ bags: [] }, { status: 200 });
+      }
+    }
+
+    // Build query
+    let query = supabase
       .from('bags')
       .select(`
         *,
@@ -25,7 +56,23 @@ export async function GET(request: NextRequest) {
           avatar_url
         )
       `)
-      .eq('is_public', true)
+      .eq('is_public', true);
+
+    // Apply filters
+    if (following && followingIds.length > 0) {
+      query = query.in('owner_id', followingIds);
+    }
+
+    if (category) {
+      query = query.eq('category', category);
+    }
+
+    if (search) {
+      query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
+    }
+
+    // Fetch bags
+    const { data: bags, error: bagsError } = await query
       .order('created_at', { ascending: false })
       .limit(100);
 
