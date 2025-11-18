@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { User, Settings, LogOut, ChevronDown } from 'lucide-react';
+import { User, Settings, LogOut, ChevronDown, Heart, Compass, LayoutDashboard } from 'lucide-react';
 
 interface NavigationProps {
   userHandle?: string;
@@ -62,24 +62,65 @@ export default function Navigation({ userHandle, displayName, isAuthenticated }:
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Left: Logo */}
-          <Link
-            href={isAuthenticated ? "/dashboard" : "/"}
-            className="flex items-center gap-2 group transition-opacity hover:opacity-80 -ml-2 py-2 pl-2 pr-3 rounded-lg"
-          >
-            <img
-              src="/teed-logo.svg"
-              alt="Teed logo"
-              className="w-8 h-12 object-contain"
-            />
-            <div className="flex flex-col">
-              <span className="text-2xl font-bold text-[var(--text-primary)] leading-none">
-                Teed
-              </span>
-              <span className="text-[11px] text-[var(--text-tertiary)] leading-none mt-1 hidden sm:block">
-                Curations, Made Shareable
-              </span>
-            </div>
-          </Link>
+          <div className="flex items-center gap-1 sm:gap-2">
+            <Link
+              href={isAuthenticated ? "/dashboard" : "/"}
+              className="flex items-center gap-2 group transition-opacity hover:opacity-80 -ml-2 py-2 pl-2 pr-3 rounded-lg"
+            >
+              <img
+                src="/teed-logo.svg"
+                alt="Teed logo"
+                className="w-8 h-12 object-contain"
+              />
+              <div className="flex flex-col">
+                <span className="text-2xl font-bold text-[var(--text-primary)] leading-none">
+                  Teed
+                </span>
+                <span className="text-[11px] text-[var(--text-tertiary)] leading-none mt-1 hidden lg:block">
+                  Curations, Made Shareable
+                </span>
+              </div>
+            </Link>
+
+            {/* Navigation Links (when authenticated) */}
+            {isAuthenticated && (
+              <nav className="hidden md:flex items-center gap-1 ml-4">
+                <Link
+                  href="/dashboard"
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    pathname === '/dashboard'
+                      ? 'bg-[var(--surface-hover)] text-[var(--text-primary)]'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]'
+                  }`}
+                >
+                  <LayoutDashboard className="w-4 h-4" />
+                  <span>Dashboard</span>
+                </Link>
+                <Link
+                  href="/feed"
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    pathname === '/feed'
+                      ? 'bg-[var(--surface-hover)] text-[var(--text-primary)]'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]'
+                  }`}
+                >
+                  <Heart className="w-4 h-4" />
+                  <span>Feed</span>
+                </Link>
+                <Link
+                  href="/discover"
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    pathname === '/discover'
+                      ? 'bg-[var(--surface-hover)] text-[var(--text-primary)]'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]'
+                  }`}
+                >
+                  <Compass className="w-4 h-4" />
+                  <span>Discover</span>
+                </Link>
+              </nav>
+            )}
+          </div>
 
           {/* Right: Profile Menu (when authenticated) */}
           {isAuthenticated && userHandle && (
@@ -129,6 +170,31 @@ export default function Navigation({ userHandle, displayName, isAuthenticated }:
 
                   {/* Menu Items */}
                   <div className="py-1">
+                    {/* Mobile-only navigation items */}
+                    <div className="md:hidden border-b border-[var(--border-subtle)] pb-1 mb-1">
+                      <Link
+                        href="/dashboard"
+                        className="flex items-center gap-3 px-4 py-3 min-h-[48px] text-sm text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors"
+                      >
+                        <LayoutDashboard className="w-4 h-4 text-[var(--text-secondary)]" />
+                        Dashboard
+                      </Link>
+                      <Link
+                        href="/feed"
+                        className="flex items-center gap-3 px-4 py-3 min-h-[48px] text-sm text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors"
+                      >
+                        <Heart className="w-4 h-4 text-[var(--text-secondary)]" />
+                        Feed
+                      </Link>
+                      <Link
+                        href="/discover"
+                        className="flex items-center gap-3 px-4 py-3 min-h-[48px] text-sm text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors"
+                      >
+                        <Compass className="w-4 h-4 text-[var(--text-secondary)]" />
+                        Discover
+                      </Link>
+                    </div>
+
                     <Link
                       href={`/u/${userHandle}`}
                       className="flex items-center gap-3 px-4 py-3 min-h-[48px] text-sm text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors"

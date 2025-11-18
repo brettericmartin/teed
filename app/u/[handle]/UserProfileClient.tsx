@@ -1,7 +1,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Package } from 'lucide-react';
+import { Package, UserPlus, UserMinus } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 type Bag = {
   id: string;
@@ -30,6 +31,76 @@ type UserProfileClientProps = {
 
 export default function UserProfileClient({ profile, bags }: UserProfileClientProps) {
   const router = useRouter();
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isOwnProfile, setIsOwnProfile] = useState(false);
+
+  useEffect(() => {
+    checkFollowStatus();
+  }, [profile.id]);
+
+  const checkFollowStatus = async () => {
+    try {
+      // Check if user is authenticated and if this is their own profile
+      const sessionResponse = await fetch('/api/auth/session');
+      if (!sessionResponse.ok) {
+        setIsAuthenticated(false);
+        return;
+      }
+
+      const sessionData = await sessionResponse.json();
+      setIsAuthenticated(!!sessionData.user);
+      setIsOwnProfile(sessionData.user?.id === profile.id);
+
+      // Only check follow status if authenticated and not own profile
+      if (sessionData.user && sessionData.user.id !== profile.id) {
+        const response = await fetch(`/api/follows/${profile.id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setIsFollowing(data.isFollowing);
+        }
+      }
+    } catch (error) {
+      console.error('Error checking follow status:', error);
+    }
+  };
+
+  const handleFollowToggle = async () => {
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      if (isFollowing) {
+        // Unfollow
+        const response = await fetch(`/api/follows/${profile.id}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          setIsFollowing(false);
+        }
+      } else {
+        // Follow
+        const response = await fetch('/api/follows', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ following_id: profile.id }),
+        });
+
+        if (response.ok) {
+          setIsFollowing(true);
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling follow:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -65,12 +136,44 @@ export default function UserProfileClient({ profile, bags }: UserProfileClientPr
 
             {/* Profile Info */}
             <div className="flex-1">
-              <h1 className="text-3xl font-bold text-[var(--text-primary)]">
-                {profile.display_name}
-              </h1>
-              <p className="text-lg text-[var(--text-secondary)] mt-1">
-                @{profile.handle}
-              </p>
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <h1 className="text-3xl font-bold text-[var(--text-primary)]">
+                    {profile.display_name}
+                  </h1>
+                  <p className="text-lg text-[var(--text-secondary)] mt-1">
+                    @{profile.handle}
+                  </p>
+                </div>
+
+                {/* Follow Button */}
+                {isAuthenticated && !isOwnProfile && (
+                  <button
+                    onClick={handleFollowToggle}
+                    disabled={isLoading}
+                    className={`flex items-center gap-2 px-6 py-2.5 rounded-lg font-medium transition-all min-h-[44px] ${
+                      isFollowing
+                        ? 'bg-[var(--surface-hover)] text-[var(--text-primary)] border border-[var(--border-subtle)] hover:bg-[var(--sand-3)] hover:border-[var(--sand-7)]'
+                        : 'bg-[var(--button-primary-bg)] text-[var(--button-primary-text)] hover:bg-[var(--button-primary-bg-hover)]'
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  >
+                    {isLoading ? (
+                      <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                    ) : isFollowing ? (
+                      <>
+                        <UserMinus className="w-5 h-5" />
+                        <span>Unfollow</span>
+                      </>
+                    ) : (
+                      <>
+                        <UserPlus className="w-5 h-5" />
+                        <span>Follow</span>
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
+
               {profile.bio && (
                 <p className="text-base text-[var(--text-secondary)] mt-4 max-w-2xl">
                   {profile.bio}
