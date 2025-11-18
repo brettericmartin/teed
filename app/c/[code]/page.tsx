@@ -11,6 +11,14 @@ interface PageProps {
   params: Promise<{ code: string }>;
 }
 
+type BagWithOwner = {
+  code: string;
+  is_public: boolean;
+  owner: {
+    handle: string;
+  } | null;
+};
+
 // Legacy route - redirects to new username-scoped URL
 export default async function LegacyPublicBagPage({ params }: PageProps) {
   const { code } = await params;
@@ -27,7 +35,7 @@ export default async function LegacyPublicBagPage({ params }: PageProps) {
     `)
     .eq('code', code)
     .eq('is_public', true)
-    .single();
+    .single() as { data: BagWithOwner | null; error: any };
 
   // If bag doesn't exist or is private, show 404
   if (error || !bag || !bag.owner?.handle) {
