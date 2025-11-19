@@ -565,3 +565,115 @@ button, a, input, textarea, select {
 .animation-delay-3000 {
   animation-delay: 3s;
 }
+
+/* ============================================
+   MOBILE-FIRST UTILITIES
+   ============================================ */
+
+/* Touch Target Utilities - Ensure minimum 44x44px for accessibility */
+.min-touch {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.min-touch-lg {
+  min-height: 48px;
+  min-width: 48px;
+}
+
+.min-touch-xl {
+  min-height: 56px;
+  min-width: 56px;
+}
+
+/* iOS Safe Area Support - Handle notches and home indicators */
+@supports (padding: env(safe-area-inset-top)) {
+  .pb-safe {
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+
+  .pt-safe {
+    padding-top: max(16px, env(safe-area-inset-top));
+  }
+
+  .px-safe {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+}
+
+/* Mobile Text Utilities - Prevent iOS zoom on focus */
+.text-mobile-input {
+  font-size: max(16px, 1rem);
+}
+
+/* Active/Touch Feedback - Visual feedback for mobile interactions */
+.active-scale {
+  transition: transform var(--transition-fast) var(--transition-timing);
+}
+
+.active-scale:active {
+  transform: scale(0.97);
+}
+
+.active-opacity {
+  transition: opacity var(--transition-fast) var(--transition-timing);
+}
+
+.active-opacity:active {
+  opacity: 0.7;
+}
+
+/* Mobile-Optimized Scrolling */
+.scroll-smooth-mobile {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Prevent text size adjustment on orientation change */
+html {
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Disable pull-to-refresh on Chrome mobile */
+body {
+  overscroll-behavior-y: contain;
+}
+
+/* ============================================
+   ACCESSIBILITY UTILITIES
+   ============================================ */
+
+/* Screen reader only - hide visually but keep for screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus visible - show focus only for keyboard navigation */
+.focus-ring {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
