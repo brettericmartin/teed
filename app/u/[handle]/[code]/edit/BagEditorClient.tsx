@@ -10,6 +10,7 @@ import ShareModal from './components/ShareModal';
 import PhotoUploadModal from './components/PhotoUploadModal';
 import ProductReviewModal, { IdentifiedProduct } from './components/ProductReviewModal';
 import BatchPhotoSelector from './components/BatchPhotoSelector';
+import ItemSelectionModal from './components/ItemSelectionModal';
 import EnrichmentPreview from './components/EnrichmentPreview';
 import { Button } from '@/components/ui/Button';
 
@@ -68,7 +69,9 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [showShareModal, setShowShareModal] = useState(false);
   const [showPhotoUpload, setShowPhotoUpload] = useState(false);
   const [showProductReview, setShowProductReview] = useState(false);
+  const [showItemSelection, setShowItemSelection] = useState(false);
   const [showBatchPhotoSelector, setShowBatchPhotoSelector] = useState(false);
+  const [selectedItemsForPhotos, setSelectedItemsForPhotos] = useState<typeof bag.items>([]);
   const [identifiedProducts, setIdentifiedProducts] = useState<{
     products: IdentifiedProduct[];
     totalConfidence: number;
@@ -699,7 +702,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           {/* Batch Photo Finder Button */}
           {bag.items.length > 0 && (
             <Button
-              onClick={() => setShowBatchPhotoSelector(true)}
+              onClick={() => setShowItemSelection(true)}
               variant="secondary"
               className="w-full py-3"
             >
@@ -822,11 +825,34 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         />
       )}
 
+      {/* Item Selection Modal */}
+      <ItemSelectionModal
+        isOpen={showItemSelection}
+        onClose={() => setShowItemSelection(false)}
+        items={bag.items.map(item => ({
+          id: item.id,
+          custom_name: item.custom_name || 'Unnamed Item',
+          brand: item.brand,
+          custom_description: item.custom_description,
+          currentPhotoUrl: item.photo_url,
+        }))}
+        onConfirm={(selectedItems) => {
+          setSelectedItemsForPhotos(selectedItems as typeof bag.items);
+          setShowItemSelection(false);
+          setShowBatchPhotoSelector(true);
+        }}
+        title="Select Items for Photo Search"
+        description="Choose which items you want to search for photos"
+      />
+
       {/* Batch Photo Selector Modal */}
       <BatchPhotoSelector
         isOpen={showBatchPhotoSelector}
-        onClose={() => setShowBatchPhotoSelector(false)}
-        items={bag.items.map(item => ({
+        onClose={() => {
+          setShowBatchPhotoSelector(false);
+          setSelectedItemsForPhotos([]);
+        }}
+        items={selectedItemsForPhotos.map(item => ({
           id: item.id,
           custom_name: item.custom_name || 'Unnamed Item',
           brand: item.brand,
