@@ -72,7 +72,10 @@ export default function BatchPhotoSelector({
 
           if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to find image');
+            const errorMessage = errorData.details
+              ? `${errorData.error}: ${errorData.details}`
+              : errorData.error || 'Failed to find image';
+            throw new Error(errorMessage);
           }
 
           const data = await response.json();
@@ -144,7 +147,10 @@ export default function BatchPhotoSelector({
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to find image');
+        const errorMessage = errorData.details
+          ? `${errorData.error}: ${errorData.details}`
+          : errorData.error || 'Failed to find image';
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();

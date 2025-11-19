@@ -24,12 +24,19 @@ export async function POST(request: NextRequest) {
     const searchEngineId = process.env.GOOGLE_SEARCH_ENGINE_ID;
 
     if (!apiKey || !searchEngineId) {
-      console.error('Google Custom Search API not configured');
+      console.error('Google Custom Search API not configured', {
+        hasApiKey: !!apiKey,
+        hasSearchEngineId: !!searchEngineId,
+        apiKeyLength: apiKey?.length || 0,
+        searchEngineIdLength: searchEngineId?.length || 0,
+      });
       return NextResponse.json(
         { error: 'Image search is not configured. Please contact support.' },
         { status: 503 }
       );
     }
+
+    console.log('Starting image search for query:', query);
 
     // Use Google Custom Search API to find product images
     const searchParams = new URLSearchParams({
@@ -48,8 +55,13 @@ export async function POST(request: NextRequest) {
     );
 
     if (!response.ok) {
-      const error = await response.json();
-      console.error('Google Image Search error:', error);
+      const error = await response.json().catch(() => ({ message: 'Unknown error' }));
+      console.error('Google Image Search error:', {
+        status: response.status,
+        statusText: response.statusText,
+        error,
+        query: query.trim(),
+      });
 
       // Handle quota exceeded
       if (response.status === 429) {
@@ -59,8 +71,19 @@ export async function POST(request: NextRequest) {
         );
       }
 
+      // Handle invalid API key
+      if (response.status === 400 && error.error?.message?.includes('API key')) {
+        return NextResponse.json(
+          { error: 'Google API key is invalid. Please check configuration.' },
+          { status: 503 }
+        );
+      }
+
       return NextResponse.json(
-        { error: 'Failed to search for images' },
+        {
+          error: 'Failed to search for images',
+          details: error.error?.message || 'Unknown error',
+        },
         { status: response.status }
       );
     }
@@ -69,6 +92,7 @@ export async function POST(request: NextRequest) {
 
     // Extract image URLs
     if (!data.items || data.items.length === 0) {
+      console.log('No images found for query:', query);
       return NextResponse.json({
         images: [],
         message: 'No images found for this product',
@@ -77,6 +101,7 @@ export async function POST(request: NextRequest) {
 
     // Return array of image URLs
     const images = data.items.map((item: any) => item.link);
+    console.log(`Found ${images.length} images for query:`, query);
 
     return NextResponse.json({
       images,
