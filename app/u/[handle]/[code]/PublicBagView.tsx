@@ -169,15 +169,15 @@ export default function PublicBagView({
             <p className="text-[var(--text-secondary)] text-lg mt-6">No items in this bag yet</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {items.map((item) => (
               <div
                 key={item.id}
                 onClick={() => setSelectedItem(item)}
-                className="bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] p-6 hover:shadow-[var(--shadow-3)] transition-all cursor-pointer"
+                className="bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] p-4 md:p-6 hover:shadow-[var(--shadow-3)] transition-all cursor-pointer active:scale-[0.98]"
               >
                 <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-lg font-semibold text-[var(--text-primary)] flex-1">
+                  <h3 className="text-base md:text-lg font-semibold text-[var(--text-primary)] flex-1 leading-tight">
                     {item.custom_name}
                   </h3>
                   {item.quantity > 1 && (
