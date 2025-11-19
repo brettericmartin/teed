@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Plus, Package, User, Settings } from 'lucide-react';
+import { Plus, Package, User, Settings, Eye, Layers } from 'lucide-react';
 import NewBagModal from './components/NewBagModal';
 import { Button } from '@/components/ui/Button';
 
@@ -148,33 +148,61 @@ export default function DashboardClient({
               <div
                 key={bag.id}
                 onClick={() => router.push(`/u/${userHandle}/${bag.code}/edit`)}
-                className="bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden hover:shadow-[var(--shadow-3)] transition-all cursor-pointer group"
+                className="bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden hover:shadow-[var(--shadow-5)] hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
               >
-                {/* Cover Image or Featured Items Grid */}
-                <div className="h-40 bg-gradient-to-br from-[var(--teed-green-6)] to-[var(--sky-6)] relative overflow-hidden">
+                {/* Cover Image or Featured Items Grid - Hero + Grid Layout */}
+                <div className="h-[200px] bg-gradient-to-br from-[var(--teed-green-6)] to-[var(--sky-6)] relative overflow-hidden border-b border-[var(--border-subtle)]">
                   {(() => {
                     const featuredItems = bag.items?.filter(item => item.is_featured && item.photo_url)
                       .sort((a, b) => (a.featured_position || 0) - (b.featured_position || 0))
-                      .slice(0, 8) || [];
+                      .slice(0, 7) || [];
 
                     if (featuredItems.length > 0) {
-                      // Show grid of featured items
+                      // Show Hero + Grid layout (1 hero + 6 supporting images)
                       return (
-                        <div className="grid grid-cols-4 gap-1 p-2 h-full">
-                          {featuredItems.map((item, index) => (
-                            <div key={item.id} className="relative bg-white rounded overflow-hidden">
-                              <img
-                                src={item.photo_url!}
-                                alt={item.custom_name || 'Item'}
-                                className="w-full h-full object-contain"
-                              />
+                        <>
+                          <div className="grid grid-cols-4 grid-rows-3 gap-1.5 p-2 h-full">
+                            {/* Hero image - position 1 (2x2 space) */}
+                            {featuredItems[0] && (
+                              <div className="col-span-2 row-span-2 relative bg-white rounded-lg overflow-hidden shadow-sm">
+                                <img
+                                  src={featuredItems[0].photo_url!}
+                                  alt={featuredItems[0].custom_name || 'Featured item'}
+                                  className="w-full h-full object-cover"
+                                  loading="lazy"
+                                />
+                              </div>
+                            )}
+
+                            {/* Remaining 6 images in grid */}
+                            {featuredItems.slice(1, 7).map((item) => (
+                              <div key={item.id} className="relative bg-white rounded overflow-hidden shadow-sm">
+                                <img
+                                  src={item.photo_url!}
+                                  alt={item.custom_name || 'Item'}
+                                  className="w-full h-full object-contain"
+                                  loading="lazy"
+                                />
+                              </div>
+                            ))}
+
+                            {/* Fill empty slots with placeholders */}
+                            {Array.from({ length: Math.max(0, 7 - featuredItems.length) }).map((_, i) => (
+                              <div key={`placeholder-${i}`} className={`bg-white/20 rounded ${i === 0 ? 'col-span-2 row-span-2 rounded-lg' : ''}`}></div>
+                            ))}
+                          </div>
+
+                          {/* Hover overlay with description */}
+                          {bag.description && (
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                              <div className="absolute bottom-3 left-3 right-3">
+                                <p className="text-white text-sm font-medium line-clamp-3 drop-shadow-lg">
+                                  {bag.description}
+                                </p>
+                              </div>
                             </div>
-                          ))}
-                          {/* Fill empty slots with placeholders if less than 8 items */}
-                          {Array.from({ length: Math.max(0, 8 - featuredItems.length) }).map((_, i) => (
-                            <div key={`placeholder-${i}`} className="bg-white/20 rounded"></div>
-                          ))}
-                        </div>
+                          )}
+                        </>
                       );
                     } else if (bag.background_image) {
                       // Show background image if no featured items
@@ -183,6 +211,7 @@ export default function DashboardClient({
                           src={bag.background_image}
                           alt={bag.title}
                           className="w-full h-full object-cover"
+                          loading="lazy"
                         />
                       );
                     } else {
@@ -194,32 +223,47 @@ export default function DashboardClient({
                       );
                     }
                   })()}
-                  {/* Privacy Badge */}
+
+                  {/* Category Badge (top-left) */}
+                  {bag.category && (
+                    <div className="absolute top-3 left-3">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-[var(--teed-green-9)] text-white shadow-sm">
+                        <Layers className="w-3 h-3" />
+                        {bag.category}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Privacy Badge (top-right) */}
                   <div className="absolute top-3 right-3">
                     {bag.is_public ? (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/90 text-[var(--evergreen-12)] backdrop-blur-sm shadow-sm">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-white/90 text-[var(--evergreen-12)] backdrop-blur-sm shadow-sm">
+                        <Eye className="w-3 h-3" />
                         Public
                       </span>
                     ) : (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/70 text-[var(--text-secondary)] backdrop-blur-sm">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-white/70 text-[var(--text-secondary)] backdrop-blur-sm">
                         Private
                       </span>
                     )}
                   </div>
                 </div>
 
-                {/* Bag Info */}
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--teed-green-9)] transition-colors line-clamp-1">
+                {/* Bag Info - Compressed */}
+                <div className="p-4">
+                  <h3 className="text-xl font-semibold text-[var(--text-primary)] group-hover:text-[var(--teed-green-9)] transition-colors line-clamp-1 mb-2">
                     {bag.title}
                   </h3>
-                  {bag.description && (
-                    <p className="mt-2 text-sm text-[var(--text-secondary)] line-clamp-2">
-                      {bag.description}
-                    </p>
-                  )}
-                  <div className="mt-4 flex items-center justify-between text-xs text-[var(--text-tertiary)]">
-                    <span className="font-medium">/{bag.code}</span>
+
+                  {/* Icon-based metadata */}
+                  <div className="flex items-center justify-between text-xs text-[var(--text-tertiary)]">
+                    <div className="flex items-center gap-3">
+                      <span className="flex items-center gap-1">
+                        <Package className="w-3.5 h-3.5" />
+                        {bag.items?.length || 0} {bag.items?.length === 1 ? 'item' : 'items'}
+                      </span>
+                      <span className="font-medium text-[var(--text-secondary)]">/{bag.code}</span>
+                    </div>
                     <span>{formatDate(bag.created_at)}</span>
                   </div>
                 </div>
