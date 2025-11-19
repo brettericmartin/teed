@@ -91,12 +91,28 @@ Format enriched details as:
 - brand: Brand name ONLY (e.g., "TaylorMade", "MAC", "Patagonia") - REQUIRED
 - custom_name: Product Name without brand (2-6 words, concise, e.g., "Stealth 2 Plus Driver")
 - custom_description: Formatted specs using pipe separator (adapt to available info, don't guess)
-- notes: Why this matters, use case, or helpful context (1-2 sentences)
+- notes: Product differentiation, fun facts, or why this matters (2-3 sentences, be interesting!)
 
 Confidence scoring:
 - 0.9+: Very confident, no questions needed
 - 0.7-0.89: Moderately confident, show suggestions but offer questions
 - <0.7: Low confidence, definitely need clarification
+
+NOTES SHOULD BE INTERESTING AND USEFUL:
+- Include what makes this product special or different from competitors
+- Add fun facts, history, or unique features
+- Mention typical use cases or who it's for
+- Be enthusiastic but genuine - avoid generic marketing speak
+- 2-3 sentences max
+
+EXAMPLES OF GOOD NOTES:
+✅ "Tour-proven distance with revolutionary carbon face technology. Dustin Johnson used this exact model to win his first Masters. Perfect for high swing speeds looking to maximize ball speed."
+✅ "MAC's bestselling lipstick shade worn by everyone from Rihanna to your mom. The Retro Matte formula stays put for 8+ hours without drying. A true makeup icon since 1999."
+✅ "The gold standard for ultralight backpacking tents. Weighs less than 3 pounds yet survived a night on Everest. REI's most-returned item because people underestimate how small it packs."
+
+❌ "A good driver for golfers" - too generic!
+❌ "Quality lipstick" - boring!
+❌ "Nice tent" - useless!
 
 Return ONLY valid JSON in this exact format:
 {
@@ -105,7 +121,12 @@ Return ONLY valid JSON in this exact format:
       "brand": "TaylorMade",
       "custom_name": "Stealth 2 Plus Driver",
       "custom_description": "10.5° | Fujikura Ventus | Stiff",
-      "notes": "Tour-proven distance with low spin for workability",
+      "notes": "Revolutionary 60-layer carbon face is 24% lighter than titanium. Tour players saw 2mph more ball speed versus SIM2. Built for low-spin bombers who shape shots.",
+      "funFactOptions": [
+        "Revolutionary 60-layer carbon face is 24% lighter than titanium. Tour players saw 2mph more ball speed versus SIM2. Built for low-spin bombers who shape shots.",
+        "First carbon-faced driver to be legal by USGA/R&A. Tiger Woods won the 2023 Genesis Invitational with this exact model.",
+        "The Stealth name comes from the blackout finish that reduces glare. Carbon Twist Face tech maintains ball speed on mis-hits better than any previous TaylorMade driver."
+      ],
       "category": "Golf Equipment",
       "confidence": 0.85
     }
@@ -119,6 +140,11 @@ Return ONLY valid JSON in this exact format:
     }
   ]
 }
+
+IMPORTANT: Each suggestion MUST include funFactOptions array with 3 different fun fact variations.
+- First option: Technical/performance focused
+- Second option: Celebrity/tour player usage focused
+- Third option: Historical/innovation focused
 
 Order suggestions by confidence (highest first). Limit to max 2 questions.`;
 

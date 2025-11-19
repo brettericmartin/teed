@@ -220,6 +220,47 @@ export default function Navigation({ userHandle, displayName, isAuthenticated }:
           )}
         </div>
       </div>
+
+      {/* Mobile Bottom Navigation - Only visible on mobile when authenticated */}
+      {isAuthenticated && (
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--surface)]/95 backdrop-blur-md border-t border-[var(--border-subtle)] pb-safe">
+          <div className="flex items-center justify-around px-2 py-1">
+            <Link
+              href="/dashboard"
+              className={`flex flex-col items-center gap-1 p-2 min-h-[56px] min-w-[56px] rounded-lg transition-colors ${
+                pathname === '/dashboard'
+                  ? 'text-[var(--teed-green-9)]'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+              }`}
+            >
+              <LayoutDashboard className="w-6 h-6" />
+              <span className="text-xs font-medium">Dashboard</span>
+            </Link>
+            <Link
+              href="/discover"
+              className={`flex flex-col items-center gap-1 p-2 min-h-[56px] min-w-[56px] rounded-lg transition-colors ${
+                pathname === '/discover'
+                  ? 'text-[var(--teed-green-9)]'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+              }`}
+            >
+              <Compass className="w-6 h-6" />
+              <span className="text-xs font-medium">Discover</span>
+            </Link>
+            <button
+              onClick={() => setIsProfileOpen(!isProfileOpen)}
+              className={`flex flex-col items-center gap-1 p-2 min-h-[56px] min-w-[56px] rounded-lg transition-colors ${
+                isProfileOpen
+                  ? 'text-[var(--teed-green-9)]'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+              }`}
+            >
+              <User className="w-6 h-6" />
+              <span className="text-xs font-medium">Profile</span>
+            </button>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

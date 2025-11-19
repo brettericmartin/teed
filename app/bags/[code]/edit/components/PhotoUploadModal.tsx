@@ -98,27 +98,27 @@ export default function PhotoUploadModal({
     <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+        className="fixed inset-0 bg-[var(--overlay-bg)] transition-opacity"
         onClick={handleCloseModal}
       />
 
       {/* Modal */}
       <div className="flex min-h-full items-center justify-center p-4">
-        <div className="relative bg-white rounded-lg shadow-xl max-w-2xl w-full">
+        <div className="relative bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-4)] max-w-2xl w-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200">
+          <div className="flex items-center justify-between p-6 border-b border-[var(--border-subtle)]">
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">
+              <h2 className="text-xl font-semibold text-[var(--text-primary)]">
                 Upload Product Photo
               </h2>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-[var(--text-secondary)] mt-1">
                 Take a photo or select from your device
                 {bagType && ` (${bagType} items)`}
               </p>
             </div>
             <button
               onClick={handleCloseModal}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -138,7 +138,6 @@ export default function PhotoUploadModal({
               ref={fileInputRef}
               type="file"
               accept="image/*"
-              capture="environment" // Use rear camera on mobile
               onChange={handleFileSelect}
               className="hidden"
             />
@@ -150,7 +149,7 @@ export default function PhotoUploadModal({
                 <button
                   onClick={handleCameraCapture}
                   disabled={isProcessing}
-                  className="w-full py-4 px-6 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                  className="w-full py-4 px-6 bg-[var(--button-primary-bg)] hover:bg-[var(--button-primary-bg-hover)] text-[var(--button-primary-text)] font-medium rounded-[var(--radius-lg)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
@@ -173,7 +172,7 @@ export default function PhotoUploadModal({
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isProcessing}
-                  className="w-full py-4 px-6 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                  className="w-full py-4 px-6 bg-[var(--button-secondary-bg)] hover:bg-[var(--button-secondary-bg-hover)] text-[var(--button-secondary-text)] font-medium rounded-[var(--radius-lg)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
@@ -187,9 +186,9 @@ export default function PhotoUploadModal({
                 </button>
 
                 {/* Info box */}
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
+                <div className="bg-[var(--sky-2)] border border-[var(--sky-6)] rounded-[var(--radius-lg)] p-4 mt-6">
                   <div className="flex gap-3">
-                    <svg className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-[var(--sky-11)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -198,8 +197,8 @@ export default function PhotoUploadModal({
                       />
                     </svg>
                     <div>
-                      <h3 className="text-sm font-medium text-blue-900">Tips for best results</h3>
-                      <ul className="mt-2 text-sm text-blue-700 space-y-1">
+                      <h3 className="text-sm font-medium text-[var(--sky-12)]">Tips for best results</h3>
+                      <ul className="mt-2 text-sm text-[var(--sky-11)] space-y-1">
                         <li>• Take clear, well-lit photos</li>
                         <li>• Include multiple items in one photo</li>
                         <li>• Ensure products are visible and in focus</li>
@@ -213,7 +212,7 @@ export default function PhotoUploadModal({
               // Preview and confirm
               <div className="space-y-4">
                 {/* Image preview */}
-                <div className="relative rounded-lg overflow-hidden bg-gray-100">
+                <div className="relative rounded-[var(--radius-lg)] overflow-hidden bg-[var(--sand-2)]">
                   <img
                     src={preview}
                     alt="Preview"
@@ -225,13 +224,13 @@ export default function PhotoUploadModal({
                 <div className="flex items-center justify-between gap-3">
                   <button
                     onClick={handleReset}
-                    className="px-6 py-3 text-gray-700 hover:text-gray-900 font-medium transition-colors"
+                    className="px-6 py-3 text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium transition-colors"
                   >
                     Take Another
                   </button>
                   <button
                     onClick={handleUsePhoto}
-                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+                    className="px-6 py-3 bg-[var(--button-primary-bg)] hover:bg-[var(--button-primary-bg-hover)] text-[var(--button-primary-text)] font-medium rounded-[var(--radius-lg)] transition-colors"
                   >
                     Identify Products
                   </button>
@@ -241,9 +240,9 @@ export default function PhotoUploadModal({
 
             {/* Error message */}
             {error && (
-              <div className="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
+              <div className="mt-4 bg-[var(--copper-2)] border border-[var(--copper-6)] rounded-[var(--radius-lg)] p-4">
                 <div className="flex gap-3">
-                  <svg className="w-5 h-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-[var(--copper-11)] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -251,7 +250,7 @@ export default function PhotoUploadModal({
                       d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  <p className="text-sm text-red-700">{error}</p>
+                  <p className="text-sm text-[var(--copper-11)]">{error}</p>
                 </div>
               </div>
             )}

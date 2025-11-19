@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link as LinkIcon, Loader2 } from 'lucide-react';
 import AISuggestions from './AISuggestions';
+import ItemPreview from './ItemPreview';
 
 type ProductSuggestion = {
   custom_name: string;
@@ -11,6 +12,7 @@ type ProductSuggestion = {
   category: string;
   confidence: number;
   brand?: string;
+  funFactOptions?: string[]; // Multiple fun fact options to choose from
   productUrl?: string;
   imageUrl?: string;
   price?: string;
@@ -38,6 +40,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
   const [isAdding, setIsAdding] = useState(false);
   const [isScrapingUrl, setIsScrapingUrl] = useState(false);
   const [scrapedData, setScrapedData] = useState<any>(null);
+  const [previewingSuggestion, setPreviewingSuggestion] = useState<ProductSuggestion | null>(null);
 
   // Helper to detect if input is a URL
   const isUrl = (text: string): boolean => {
@@ -148,10 +151,15 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
     return () => clearTimeout(timer);
   }, [input, existingAnswers, fetchSuggestions, scrapeUrl]);
 
-  const handleSelectSuggestion = async (suggestion: ProductSuggestion) => {
+  const handleSelectSuggestion = (suggestion: ProductSuggestion) => {
+    // Show preview modal instead of adding directly
+    setPreviewingSuggestion(suggestion);
+  };
+
+  const handleConfirmPreview = async (editedSuggestion: ProductSuggestion) => {
     setIsAdding(true);
     try {
-      await onAdd(suggestion);
+      await onAdd(editedSuggestion);
 
       // Reset form
       setInput('');
@@ -159,11 +167,16 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
       setQuestions([]);
       setExistingAnswers({});
       setScrapedData(null);
+      setPreviewingSuggestion(null);
     } catch (error) {
       console.error('Error adding item:', error);
     } finally {
       setIsAdding(false);
     }
+  };
+
+  const handleCancelPreview = () => {
+    setPreviewingSuggestion(null);
   };
 
   const handleAnswerQuestion = (answers: Record<string, string>) => {
@@ -172,7 +185,17 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
   };
 
   return (
-    <div className="bg-white border-2 border-gray-200 rounded-lg p-4 shadow-sm">
+    <>
+      {/* Preview Modal */}
+      {previewingSuggestion && (
+        <ItemPreview
+          suggestion={previewingSuggestion}
+          onConfirm={handleConfirmPreview}
+          onCancel={handleCancelPreview}
+        />
+      )}
+
+      <div className="bg-white border-2 border-gray-200 rounded-lg p-4 shadow-sm">
       {/* Quick Input */}
       <div>
         <div className="relative">
@@ -257,5 +280,6 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
         )}
       </div>
     </div>
+    </>
   );
 }

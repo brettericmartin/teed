@@ -65,12 +65,42 @@ export default async function UserBagPage({ params }: PageProps) {
   // Sort items by sort_index
   const sortedItems = bag.items?.sort((a: any, b: any) => a.sort_index - b.sort_index) || [];
 
+  // Check if bag has affiliate links
+  const itemIds = bag.items?.map((item: any) => item.id) || [];
+  let hasAffiliateLinks = false;
+  let disclosureText = undefined;
+
+  if (itemIds.length > 0) {
+    // Check for affiliate links
+    const { data: affiliateLinks } = await supabase
+      .from('affiliate_links')
+      .select('id')
+      .in('bag_item_id', itemIds)
+      .eq('is_active', true)
+      .limit(1);
+
+    hasAffiliateLinks = (affiliateLinks?.length || 0) > 0;
+
+    // If has affiliate links, fetch creator's disclosure settings
+    if (hasAffiliateLinks) {
+      const { data: creatorSettings } = await supabase
+        .from('creator_settings')
+        .select('custom_disclosure_text')
+        .eq('profile_id', profile.id)
+        .single();
+
+      disclosureText = creatorSettings?.custom_disclosure_text || undefined;
+    }
+  }
+
   return (
     <PublicBagView
       bag={bag}
       items={sortedItems}
       ownerHandle={profile.handle}
       ownerName={profile.display_name}
+      hasAffiliateLinks={hasAffiliateLinks}
+      disclosureText={disclosureText}
     />
   );
 }

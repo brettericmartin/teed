@@ -8,6 +8,13 @@ export const metadata: Metadata = {
   description: "Create and share curated collections of your favorite gear, kits, and loadouts.",
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+};
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -40,7 +47,7 @@ export default async function RootLayout({
           isAuthenticated={!!user}
         />
 
-        <main className="pt-16">
+        <main className="pt-16 pb-20 md:pb-0">
           {children}
         </main>
       </body>
