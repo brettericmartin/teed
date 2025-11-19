@@ -97,19 +97,19 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
   return (
     <div className="bg-[var(--surface)] border border-[var(--border-subtle)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] hover:shadow-[var(--shadow-3)] transition-all">
       {/* Item Header */}
-      <div className="p-4">
-        <div className="flex items-start gap-4">
-          {/* Photo thumbnail (left side) */}
-          {item.photo_url && !isEditing && (
-            <div className="flex-shrink-0">
-              <img
-                src={item.photo_url}
-                alt={item.custom_name || 'Item photo'}
-                className="w-16 h-16 sm:w-20 sm:h-20 object-contain bg-[var(--sky-2)] rounded border-2 border-[var(--border-subtle)]"
-              />
-            </div>
-          )}
+      <div className="p-3 sm:p-4">
+        {/* Photo thumbnail - full width on mobile, left side on desktop */}
+        {item.photo_url && !isEditing && (
+          <div className="mb-3 sm:mb-0 sm:float-left sm:mr-4">
+            <img
+              src={item.photo_url}
+              alt={item.custom_name || 'Item photo'}
+              className="w-full sm:w-20 h-auto sm:h-20 max-h-48 sm:max-h-20 object-contain bg-[var(--sky-2)] rounded border-2 border-[var(--border-subtle)]"
+            />
+          </div>
+        )}
 
+        <div className="flex items-start gap-2 sm:gap-4">
           <div className="flex-1 min-w-0">
             {isEditing ? (
               <div className="space-y-3">
@@ -117,7 +117,7 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
                   type="text"
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
-                  className="w-full text-lg font-semibold px-2 py-1 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent placeholder:text-[var(--input-placeholder)]"
+                  className="w-full text-base sm:text-lg font-semibold px-3 py-2 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent placeholder:text-[var(--input-placeholder)]"
                   autoFocus
                 />
                 <input
@@ -125,23 +125,23 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
                   value={editBrand}
                   onChange={(e) => setEditBrand(e.target.value)}
                   placeholder="Brand (e.g., TaylorMade, MAC, Patagonia)"
-                  className="w-full text-sm px-2 py-1 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent placeholder:text-[var(--input-placeholder)]"
+                  className="w-full text-base px-3 py-2 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent placeholder:text-[var(--input-placeholder)]"
                 />
                 <input
                   type="text"
                   value={editDescription}
                   onChange={(e) => setEditDescription(e.target.value)}
                   placeholder="Description"
-                  className="w-full text-sm px-2 py-1 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent placeholder:text-[var(--input-placeholder)]"
+                  className="w-full text-base px-3 py-2 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent placeholder:text-[var(--input-placeholder)]"
                 />
                 <div className="flex items-center gap-2">
-                  <label className="text-sm text-[var(--text-primary)]">Qty:</label>
+                  <label className="text-base text-[var(--text-primary)]">Qty:</label>
                   <input
                     type="number"
                     value={editQuantity}
                     onChange={(e) => setEditQuantity(e.target.value)}
                     min="1"
-                    className="w-20 text-sm px-2 py-1 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent"
+                    className="w-20 text-base px-3 py-2 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent"
                   />
                 </div>
                 <input
@@ -149,12 +149,12 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
                   value={editPromoCodes}
                   onChange={(e) => setEditPromoCodes(e.target.value)}
                   placeholder="Promo codes (e.g., SAVE20, WELCOME10)"
-                  className="w-full text-sm px-2 py-1 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent placeholder:text-[var(--input-placeholder)]"
+                  className="w-full text-base px-3 py-2 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent placeholder:text-[var(--input-placeholder)]"
                 />
               </div>
             ) : (
               <>
-                <h3 className="text-lg font-semibold text-[var(--text-primary)] truncate">
+                <h3 className="text-base sm:text-lg font-semibold text-[var(--text-primary)] line-clamp-2 leading-tight">
                   {item.custom_name}
                 </h3>
                 {item.brand && (
@@ -190,7 +190,7 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
           </div>
 
           {/* Actions */}
-          <div className="flex items-center gap-1 sm:gap-2 ml-2 sm:ml-4 flex-shrink-0">
+          <div className="flex items-center gap-1 flex-shrink-0">
             {isEditing ? (
               <>
                 <button
@@ -212,11 +212,12 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
               </>
             ) : (
               <>
+                {/* Show Star and Link only on desktop or when expanded */}
                 <button
                   onClick={() => {
                     onUpdate(item.id, { is_featured: !item.is_featured });
                   }}
-                  className={`p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg transition-all ${
+                  className={`hidden sm:flex p-2.5 min-h-[44px] min-w-[44px] items-center justify-center rounded-lg transition-all ${
                     item.is_featured
                       ? 'text-[var(--amber-9)] bg-[var(--amber-3)] hover:bg-[var(--amber-4)] hover:text-[var(--amber-10)]'
                       : 'text-[var(--text-tertiary)] hover:text-[var(--amber-9)] hover:bg-[var(--amber-2)]'
@@ -228,7 +229,7 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
                 </button>
                 <button
                   onClick={() => setIsLinkModalOpen(true)}
-                  className={`p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg transition-colors relative ${
+                  className={`hidden sm:flex p-2.5 min-h-[44px] min-w-[44px] items-center justify-center rounded-lg transition-colors relative ${
                     itemLinks.length > 0
                       ? 'text-[var(--teed-green-9)] hover:text-[var(--teed-green-10)] hover:bg-[var(--teed-green-2)]'
                       : 'text-[var(--text-tertiary)] hover:text-[var(--teed-green-9)] hover:bg-[var(--teed-green-2)]'
@@ -261,7 +262,7 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
                 </button>
                 <button
                   onClick={() => onDelete(item.id)}
-                  className="p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-[var(--text-tertiary)] hover:text-[var(--copper-9)] hover:bg-[var(--copper-2)] rounded-lg transition-colors"
+                  className="hidden sm:flex p-2.5 min-h-[44px] min-w-[44px] items-center justify-center text-[var(--text-tertiary)] hover:text-[var(--copper-9)] hover:bg-[var(--copper-2)] rounded-lg transition-colors"
                   title="Delete"
                   aria-label="Delete item"
                 >
@@ -276,6 +277,42 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
       {/* Expanded Content */}
       {isExpanded && !isEditing && (
         <div className="border-t border-[var(--border-subtle)] p-4 bg-[var(--sky-1)] space-y-4">
+          {/* Mobile-only action buttons */}
+          <div className="flex items-center gap-2 sm:hidden pb-4 border-b border-[var(--border-subtle)]">
+            <button
+              onClick={() => {
+                onUpdate(item.id, { is_featured: !item.is_featured });
+              }}
+              className={`flex-1 min-h-[44px] px-4 py-2 rounded-lg transition-all flex items-center justify-center gap-2 ${
+                item.is_featured
+                  ? 'text-[var(--amber-9)] bg-[var(--amber-3)] hover:bg-[var(--amber-4)]'
+                  : 'text-[var(--text-secondary)] bg-[var(--surface)] border border-[var(--border-subtle)] hover:border-[var(--amber-6)]'
+              }`}
+            >
+              <Star className={`w-5 h-5 ${item.is_featured ? 'fill-current' : ''}`} />
+              <span className="text-sm font-medium">{item.is_featured ? 'Featured' : 'Feature'}</span>
+            </button>
+            <button
+              onClick={() => setIsLinkModalOpen(true)}
+              className="flex-1 min-h-[44px] px-4 py-2 rounded-lg transition-all flex items-center justify-center gap-2 text-[var(--text-secondary)] bg-[var(--surface)] border border-[var(--border-subtle)] hover:border-[var(--teed-green-6)] relative"
+            >
+              <LinkIcon className="w-5 h-5" />
+              <span className="text-sm font-medium">Links</span>
+              {itemLinks.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[var(--teed-green-9)] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
+                  {itemLinks.length}
+                </span>
+              )}
+            </button>
+            <button
+              onClick={() => onDelete(item.id)}
+              className="flex-1 min-h-[44px] px-4 py-2 rounded-lg transition-all flex items-center justify-center gap-2 text-[var(--copper-9)] bg-[var(--surface)] border border-[var(--border-subtle)] hover:border-[var(--copper-6)] hover:bg-[var(--copper-2)]"
+            >
+              <Trash2 className="w-5 h-5" />
+              <span className="text-sm font-medium">Delete</span>
+            </button>
+          </div>
+
           {/* Photo Upload/Display */}
           <div>
             <h4 className="text-sm font-medium text-[var(--text-primary)] mb-2">Photo</h4>
@@ -385,7 +422,7 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
             onChange={(e) => setEditNotes(e.target.value)}
             placeholder="Add notes about this item"
             rows={3}
-            className="w-full px-2 py-1 text-sm border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent resize-none placeholder:text-[var(--input-placeholder)]"
+            className="w-full px-3 py-2 text-base border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent resize-none placeholder:text-[var(--input-placeholder)]"
           />
         </div>
       )}
