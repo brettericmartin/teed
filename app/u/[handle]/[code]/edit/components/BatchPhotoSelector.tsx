@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Check, Loader2, Image as ImageIcon, Images } from 'lucide-react';
+import { X, Check, Loader2, Image as ImageIcon, Images, RefreshCw, Search } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
 interface ItemWithSuggestion {
@@ -13,6 +13,7 @@ interface ItemWithSuggestion {
   selectedImageUrl: string | null;
   isLoading: boolean;
   error: string | null;
+  customSearchQuery?: string;
 }
 
 interface BatchPhotoSelectorProps {
@@ -37,6 +38,7 @@ export default function BatchPhotoSelector({
   const [itemsWithSuggestions, setItemsWithSuggestions] = useState<ItemWithSuggestion[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isApplying, setIsApplying] = useState(false);
+  const [editingSearchQuery, setEditingSearchQuery] = useState<Record<string, string>>({});
 
   if (!isOpen) return null;
 
@@ -115,6 +117,75 @@ export default function BatchPhotoSelector({
         item.id === itemId ? { ...item, selectedImageUrl: null } : item
       )
     );
+  };
+
+  const handleRetrySearch = async (itemId: string, customQuery?: string) => {
+    const item = itemsWithSuggestions.find(i => i.id === itemId);
+    if (!item) return;
+
+    // Set loading state for this item
+    setItemsWithSuggestions(prev =>
+      prev.map(i =>
+        i.id === itemId ? { ...i, isLoading: true, error: null } : i
+      )
+    );
+
+    try {
+      // Use custom query if provided, otherwise build from item details
+      const queryParts = customQuery ? [customQuery] : [item.custom_name];
+      if (!customQuery && item.brand) queryParts.unshift(item.brand);
+      const query = queryParts.join(' ');
+
+      const response = await fetch('/api/ai/find-product-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to find image');
+      }
+
+      const data = await response.json();
+      const imageUrls = (data.images || []).slice(0, 4);
+
+      setItemsWithSuggestions(prev =>
+        prev.map(i =>
+          i.id === itemId
+            ? {
+                ...i,
+                suggestedImageUrls: imageUrls,
+                selectedImageUrl: imageUrls.length > 0 ? imageUrls[0] : null,
+                isLoading: false,
+                error: imageUrls.length === 0 ? 'No images found' : null,
+                customSearchQuery: customQuery,
+              }
+            : i
+        )
+      );
+
+      // Clear the editing search query
+      setEditingSearchQuery(prev => {
+        const newState = { ...prev };
+        delete newState[itemId];
+        return newState;
+      });
+    } catch (error: any) {
+      setItemsWithSuggestions(prev =>
+        prev.map(i =>
+          i.id === itemId
+            ? {
+                ...i,
+                suggestedImageUrls: [],
+                selectedImageUrl: null,
+                isLoading: false,
+                error: error.message || 'Failed to find image',
+              }
+            : i
+        )
+      );
+    }
   };
 
   const handleApply = async () => {
@@ -212,12 +283,26 @@ export default function BatchPhotoSelector({
                           {item.brand}
                         </p>
                       )}
+                      {item.customSearchQuery && !item.error && (
+                        <p className="text-xs text-[var(--text-tertiary)] mt-0.5">
+                          Custom search: "{item.customSearchQuery}"
+                        </p>
+                      )}
                     </div>
                     <div className="flex items-center gap-2">
                       {items.find(i => i.id === item.id)?.currentPhotoUrl && (
                         <span className="text-xs bg-[var(--sky-3)] text-[var(--sky-11)] px-2 py-1 rounded">
                           Has Photo
                         </span>
+                      )}
+                      {!item.isLoading && !item.error && (
+                        <button
+                          onClick={() => handleRetrySearch(item.id)}
+                          className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] rounded-lg transition-colors"
+                          title="Search again"
+                        >
+                          <RefreshCw className="w-4 h-4" />
+                        </button>
                       )}
                       {item.selectedImageUrl && (
                         <button
@@ -236,10 +321,52 @@ export default function BatchPhotoSelector({
                       <Loader2 className="animate-spin h-8 w-8 text-[var(--text-tertiary)]" />
                     </div>
                   ) : item.error ? (
-                    <div className="flex items-center justify-center py-12">
-                      <div className="text-center">
+                    <div className="py-6">
+                      <div className="text-center mb-4">
                         <ImageIcon className="w-12 h-12 mx-auto text-[var(--text-tertiary)] mb-2" />
-                        <p className="text-sm text-[var(--text-secondary)]">{item.error}</p>
+                        <p className="text-sm text-[var(--text-secondary)] mb-1">{item.error}</p>
+                        {item.customSearchQuery && (
+                          <p className="text-xs text-[var(--text-tertiary)]">
+                            Searched for: "{item.customSearchQuery}"
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Custom Search Input */}
+                      <div className="max-w-md mx-auto">
+                        <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                          Try a different search
+                        </label>
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            value={editingSearchQuery[item.id] || ''}
+                            onChange={(e) =>
+                              setEditingSearchQuery(prev => ({
+                                ...prev,
+                                [item.id]: e.target.value,
+                              }))
+                            }
+                            placeholder={`e.g., ${item.brand ? item.brand + ' ' : ''}${item.custom_name} product`}
+                            className="flex-1 px-3 py-2 text-base border border-[var(--input-border)] rounded-lg bg-[var(--input-bg)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent"
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                handleRetrySearch(item.id, editingSearchQuery[item.id]);
+                              }
+                            }}
+                          />
+                          <button
+                            onClick={() => handleRetrySearch(item.id, editingSearchQuery[item.id])}
+                            disabled={!editingSearchQuery[item.id]?.trim()}
+                            className="px-4 py-2 min-h-[44px] bg-[var(--teed-green-9)] text-white rounded-lg hover:bg-[var(--teed-green-10)] disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-colors flex items-center gap-2"
+                          >
+                            <Search className="w-4 h-4" />
+                            Search
+                          </button>
+                        </div>
+                        <p className="text-xs text-[var(--text-tertiary)] mt-2">
+                          Add more details like color, size, or model to find better matches
+                        </p>
                       </div>
                     </div>
                   ) : (
