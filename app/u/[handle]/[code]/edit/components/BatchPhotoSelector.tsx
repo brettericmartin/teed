@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Check, Loader2, Image as ImageIcon, Images, RefreshCw, Search } from 'lucide-react';
+import { X, Check, Loader2, Image as ImageIcon, Images, RefreshCw, Search, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
 interface ItemWithSuggestion {
@@ -39,6 +39,7 @@ export default function BatchPhotoSelector({
   const [isSearching, setIsSearching] = useState(false);
   const [isApplying, setIsApplying] = useState(false);
   const [editingSearchQuery, setEditingSearchQuery] = useState<Record<string, string>>({});
+  const [showCustomSearch, setShowCustomSearch] = useState<Record<string, boolean>>({});
 
   if (!isOpen) return null;
 
@@ -122,7 +123,7 @@ export default function BatchPhotoSelector({
     );
   };
 
-  const handleRetrySearch = async (itemId: string, customQuery?: string) => {
+  const handleRetrySearch = async (itemId: string, customDescription?: string) => {
     const item = itemsWithSuggestions.find(i => i.id === itemId);
     if (!item) return;
 
@@ -134,11 +135,37 @@ export default function BatchPhotoSelector({
     );
 
     try {
-      // Use custom query if provided, otherwise build from item details
-      const queryParts = customQuery ? [customQuery] : [item.custom_name];
-      if (!customQuery && item.brand) queryParts.unshift(item.brand);
-      const query = queryParts.join(' ');
+      let query: string;
 
+      // If custom description provided, enhance it with AI first
+      if (customDescription && customDescription.trim()) {
+        console.log('Enhancing search query with AI:', customDescription);
+
+        const enhanceResponse = await fetch('/api/ai/enhance-search-query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            description: customDescription.trim(),
+            productName: item.custom_name,
+            brand: item.brand || undefined,
+          }),
+        });
+
+        if (!enhanceResponse.ok) {
+          throw new Error('Failed to enhance search query');
+        }
+
+        const enhanceData = await enhanceResponse.json();
+        query = enhanceData.query;
+        console.log('AI-enhanced query:', query);
+      } else {
+        // Build query from item details
+        const queryParts = [item.custom_name];
+        if (item.brand) queryParts.unshift(item.brand);
+        query = queryParts.join(' ');
+      }
+
+      // Search for images using the query (enhanced or default)
       const response = await fetch('/api/ai/find-product-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -165,18 +192,22 @@ export default function BatchPhotoSelector({
                 selectedImageUrl: imageUrls.length > 0 ? imageUrls[0] : null,
                 isLoading: false,
                 error: imageUrls.length === 0 ? 'No images found' : null,
-                customSearchQuery: customQuery,
+                customSearchQuery: customDescription ? query : undefined, // Store the enhanced query
               }
             : i
         )
       );
 
-      // Clear the editing search query
+      // Clear the editing search query and hide custom search section
       setEditingSearchQuery(prev => {
         const newState = { ...prev };
         delete newState[itemId];
         return newState;
       });
+      setShowCustomSearch(prev => ({
+        ...prev,
+        [itemId]: false,
+      }));
     } catch (error: any) {
       setItemsWithSuggestions(prev =>
         prev.map(i =>
@@ -338,10 +369,10 @@ export default function BatchPhotoSelector({
                         )}
                       </div>
 
-                      {/* Custom Search Input */}
+                      {/* Custom Search Input - Always visible for errors */}
                       <div className="max-w-md mx-auto">
                         <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
-                          Try a different search
+                          Describe what you're looking for
                         </label>
                         <div className="flex gap-2">
                           <input
@@ -353,10 +384,10 @@ export default function BatchPhotoSelector({
                                 [item.id]: e.target.value,
                               }))
                             }
-                            placeholder={`e.g., ${item.brand ? item.brand + ' ' : ''}${item.custom_name} product`}
+                            placeholder={`e.g., "black with white swoosh" or "the blue one"`}
                             className="flex-1 px-3 py-2 text-base border border-[var(--input-border)] rounded-lg bg-[var(--input-bg)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent"
                             onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
+                              if (e.key === 'Enter' && editingSearchQuery[item.id]?.trim()) {
                                 handleRetrySearch(item.id, editingSearchQuery[item.id]);
                               }
                             }}
@@ -371,12 +402,13 @@ export default function BatchPhotoSelector({
                           </button>
                         </div>
                         <p className="text-xs text-[var(--text-tertiary)] mt-2">
-                          Add more details like color, size, or model to find better matches
+                          AI will enhance your description to find better matches
                         </p>
                       </div>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-4 gap-3">
+                    <>
+                      <div className="grid grid-cols-4 gap-3">
                       {/* Show current photo as first option if it exists */}
                       {(() => {
                         const currentItem = items.find(i => i.id === item.id);
@@ -435,6 +467,65 @@ export default function BatchPhotoSelector({
                         </button>
                       ))}
                     </div>
+
+                    {/* Custom Search Section - Collapsible */}
+                    <div className="mt-4 border-t border-[var(--border-subtle)] pt-4">
+                      <button
+                        onClick={() =>
+                          setShowCustomSearch(prev => ({
+                            ...prev,
+                            [item.id]: !prev[item.id],
+                          }))
+                        }
+                        className="flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                      >
+                        {showCustomSearch[item.id] ? (
+                          <ChevronUp className="w-4 h-4" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4" />
+                        )}
+                        <span className="font-medium">Try different search with AI</span>
+                      </button>
+
+                      {showCustomSearch[item.id] && (
+                        <div className="mt-3 max-w-md">
+                          <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                            Describe what you're looking for
+                          </label>
+                          <div className="flex gap-2">
+                            <input
+                              type="text"
+                              value={editingSearchQuery[item.id] || ''}
+                              onChange={(e) =>
+                                setEditingSearchQuery(prev => ({
+                                  ...prev,
+                                  [item.id]: e.target.value,
+                                }))
+                              }
+                              placeholder={`e.g., "black with white swoosh" or "the blue one"`}
+                              className="flex-1 px-3 py-2 text-base border border-[var(--input-border)] rounded-lg bg-[var(--input-bg)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent"
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' && editingSearchQuery[item.id]?.trim()) {
+                                  handleRetrySearch(item.id, editingSearchQuery[item.id]);
+                                }
+                              }}
+                            />
+                            <button
+                              onClick={() => handleRetrySearch(item.id, editingSearchQuery[item.id])}
+                              disabled={!editingSearchQuery[item.id]?.trim()}
+                              className="px-4 py-2 min-h-[44px] bg-[var(--teed-green-9)] text-white rounded-lg hover:bg-[var(--teed-green-10)] disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-colors flex items-center gap-2"
+                            >
+                              <Search className="w-4 h-4" />
+                              Search
+                            </button>
+                          </div>
+                          <p className="text-xs text-[var(--text-tertiary)] mt-2">
+                            AI will enhance your description to find better matches
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                    </>
                   )}
                 </div>
               ))}
