@@ -180,7 +180,7 @@ export default function ItemSelectionModal({
             <Button
               onClick={handleConfirm}
               disabled={selectedCount === 0}
-              variant="primary"
+              variant="create"
               className="flex-1 sm:flex-none"
             >
               <Check className="w-4 h-4 mr-2" />
