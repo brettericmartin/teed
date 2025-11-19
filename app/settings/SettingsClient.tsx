@@ -364,7 +364,7 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
                   type="email"
                   value={userEmail}
                   disabled
-                  className="w-full px-4 py-3 bg-[var(--input-bg-disabled)] border border-[var(--input-border)] rounded-[var(--radius-md)] text-[var(--text-secondary)] cursor-not-allowed"
+                  className="w-full px-4 py-3 text-base bg-[var(--input-bg-disabled)] border border-[var(--input-border)] rounded-[var(--radius-md)] text-[var(--text-secondary)] cursor-not-allowed"
                 />
                 <p className="mt-1 text-xs text-[var(--text-tertiary)]">
                   Email cannot be changed
@@ -386,7 +386,7 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
                     required
                     value={handle}
                     onChange={(e) => setHandle(e.target.value.toLowerCase())}
-                    className="w-full pl-8 pr-12 py-3 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-[var(--radius-md)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:outline-none focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent transition-all"
+                    className="w-full pl-8 pr-12 py-3 text-base bg-[var(--input-bg)] border border-[var(--input-border)] rounded-[var(--radius-md)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:outline-none focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent transition-all"
                     disabled={isSaving}
                   />
                   <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
@@ -421,7 +421,7 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   maxLength={50}
-                  className="w-full px-4 py-3 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-[var(--radius-md)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:outline-none focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 text-base bg-[var(--input-bg)] border border-[var(--input-border)] rounded-[var(--radius-md)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:outline-none focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent transition-all"
                   disabled={isSaving}
                 />
                 <p className="mt-1 text-xs text-[var(--text-tertiary)]">
