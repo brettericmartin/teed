@@ -341,16 +341,6 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                     }
                   })()}
 
-                  {/* Category Badge (top-left) */}
-                  {bag.category && (
-                    <div className="absolute top-3 left-3">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-[var(--teed-green-9)] text-white shadow-sm">
-                        <Layers className="w-3 h-3" />
-                        {bag.category}
-                      </span>
-                    </div>
-                  )}
-
                   {/* Owner Badge (bottom-left) */}
                   <Link
                     href={`/u/${bag.owner.handle}`}
