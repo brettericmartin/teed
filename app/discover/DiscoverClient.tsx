@@ -264,35 +264,34 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                 key={bag.id}
                 className="bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden hover:shadow-[var(--shadow-5)] hover:-translate-y-1 transition-all duration-300 group"
               >
-                {/* Cover Image or Featured Items Grid - Hero + Grid Layout */}
+                {/* Cover Image or Featured Items Grid - Flexible Hero Layout */}
                 <div
                   onClick={() => router.push(`/u/${bag.owner.handle}/${bag.code}`)}
                   className="h-[200px] bg-gradient-to-br from-[var(--teed-green-6)] to-[var(--sky-6)] relative overflow-hidden cursor-pointer border-b border-[var(--border-subtle)]"
                 >
                   {(() => {
                     const featuredItems = bag.items?.filter(item => item.is_featured && item.photo_url)
-                      .sort((a, b) => (a.featured_position || 0) - (b.featured_position || 0))
-                      .slice(0, 7) || [];
+                      .sort((a, b) => (a.featured_position || 0) - (b.featured_position || 0)) || [];
+                    const hasBagPhoto = !!bag.background_image;
 
-                    if (featuredItems.length > 0) {
-                      // Show Hero + Grid layout (1 hero + 6 supporting images)
+                    if (hasBagPhoto && featuredItems.length > 0) {
+                      // Layout 1: Bag photo as hero + up to 6 item photos
+                      const itemsToShow = featuredItems.slice(0, 6);
                       return (
                         <>
                           <div className="grid grid-cols-4 grid-rows-3 gap-1.5 p-2 h-full">
-                            {/* Hero image - position 1 (2x2 space) */}
-                            {featuredItems[0] && (
-                              <div className="col-span-2 row-span-2 relative bg-white rounded-lg overflow-hidden shadow-sm">
-                                <img
-                                  src={featuredItems[0].photo_url!}
-                                  alt={featuredItems[0].custom_name || 'Featured item'}
-                                  className="w-full h-full object-cover"
-                                  loading="lazy"
-                                />
-                              </div>
-                            )}
+                            {/* Hero: Bag photo (2x2 space) */}
+                            <div className="col-span-2 row-span-2 relative bg-white rounded-lg overflow-hidden shadow-sm">
+                              <img
+                                src={bag.background_image!}
+                                alt={bag.title}
+                                className="w-full h-full object-cover"
+                                loading="lazy"
+                              />
+                            </div>
 
-                            {/* Remaining 6 images in grid */}
-                            {featuredItems.slice(1, 7).map((item) => (
+                            {/* Item photos (6 smaller tiles) */}
+                            {itemsToShow.map((item) => (
                               <div key={item.id} className="relative bg-white rounded overflow-hidden shadow-sm">
                                 <img
                                   src={item.photo_url!}
@@ -304,8 +303,43 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                             ))}
 
                             {/* Fill empty slots with placeholders */}
-                            {Array.from({ length: Math.max(0, 7 - featuredItems.length) }).map((_, i) => (
-                              <div key={`placeholder-${i}`} className={`bg-white/20 rounded ${i === 0 ? 'col-span-2 row-span-2 rounded-lg' : ''}`}></div>
+                            {Array.from({ length: Math.max(0, 6 - itemsToShow.length) }).map((_, i) => (
+                              <div key={`placeholder-${i}`} className="bg-white/20 rounded"></div>
+                            ))}
+                          </div>
+
+                          {/* Hover overlay with description */}
+                          {bag.description && (
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                              <div className="absolute bottom-3 left-3 right-3">
+                                <p className="text-white text-sm font-medium line-clamp-3 drop-shadow-lg">
+                                  {bag.description}
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      );
+                    } else if (featuredItems.length > 0) {
+                      // Layout 2: No bag photo, show up to 8 equal-sized item photos
+                      const itemsToShow = featuredItems.slice(0, 8);
+                      return (
+                        <>
+                          <div className="grid grid-cols-4 gap-1.5 p-2 h-full">
+                            {itemsToShow.map((item) => (
+                              <div key={item.id} className="relative bg-white rounded overflow-hidden shadow-sm">
+                                <img
+                                  src={item.photo_url!}
+                                  alt={item.custom_name || 'Item'}
+                                  className="w-full h-full object-contain"
+                                  loading="lazy"
+                                />
+                              </div>
+                            ))}
+
+                            {/* Fill empty slots with placeholders */}
+                            {Array.from({ length: Math.max(0, 8 - itemsToShow.length) }).map((_, i) => (
+                              <div key={`placeholder-${i}`} className="bg-white/20 rounded"></div>
                             ))}
                           </div>
 
@@ -322,17 +356,29 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                         </>
                       );
                     } else if (bag.background_image) {
-                      // Show background image if no featured items
+                      // Layout 3: Only bag photo, no items
                       return (
-                        <img
-                          src={bag.background_image}
-                          alt={bag.title}
-                          className="w-full h-full object-cover"
-                          loading="lazy"
-                        />
+                        <>
+                          <img
+                            src={bag.background_image}
+                            alt={bag.title}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                          {/* Hover overlay with description */}
+                          {bag.description && (
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                              <div className="absolute bottom-3 left-3 right-3">
+                                <p className="text-white text-sm font-medium line-clamp-3 drop-shadow-lg">
+                                  {bag.description}
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                        </>
                       );
                     } else {
-                      // Show placeholder icon
+                      // Layout 4: No photos at all, show placeholder
                       return (
                         <div className="absolute inset-0 flex items-center justify-center">
                           <Package className="w-16 h-16 text-[var(--evergreen-12)] opacity-20" />
