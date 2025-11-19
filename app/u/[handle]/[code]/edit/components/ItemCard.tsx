@@ -322,6 +322,7 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
               onPhotoUploaded={handlePhotoUploaded}
               onPhotoRemoved={handlePhotoRemoved}
               itemName={item.custom_name || 'Item'}
+              itemBrand={item.brand}
               itemDescription={item.custom_description}
             />
           </div>

@@ -9,6 +9,7 @@ type ItemPhotoUploadProps = {
   onPhotoUploaded: (mediaAssetId: string, photoUrl: string) => void;
   onPhotoRemoved?: () => void;
   itemName: string;
+  itemBrand?: string | null;
   itemDescription?: string | null;
 };
 
@@ -18,6 +19,7 @@ export default function ItemPhotoUpload({
   onPhotoUploaded,
   onPhotoRemoved,
   itemName,
+  itemBrand,
   itemDescription,
 }: ItemPhotoUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
@@ -82,12 +84,40 @@ export default function ItemPhotoUpload({
     setImageSuggestions([]);
 
     try {
-      // Build search query from item details
-      const searchQuery = [itemName, itemDescription]
-        .filter(Boolean)
-        .join(' ');
+      let searchQuery: string;
 
-      console.log('Searching for images with query:', searchQuery);
+      // If we have a description, use AI to enhance it
+      if (itemDescription && itemDescription.trim()) {
+        console.log('Enhancing search query with AI from description:', itemDescription);
+
+        const enhanceResponse = await fetch('/api/ai/enhance-search-query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            description: itemDescription.trim(),
+            productName: itemName,
+            brand: itemBrand || undefined,
+          }),
+        });
+
+        if (!enhanceResponse.ok) {
+          console.warn('AI enhancement failed, falling back to basic query');
+          // Fall back to basic query if AI enhancement fails
+          const queryParts = [itemName];
+          if (itemBrand) queryParts.unshift(itemBrand);
+          searchQuery = queryParts.join(' ');
+        } else {
+          const enhanceData = await enhanceResponse.json();
+          searchQuery = enhanceData.query;
+          console.log('AI-enhanced query:', searchQuery);
+        }
+      } else {
+        // Build basic query from item name and brand
+        const queryParts = [itemName];
+        if (itemBrand) queryParts.unshift(itemBrand);
+        searchQuery = queryParts.join(' ');
+        console.log('Using basic query:', searchQuery);
+      }
 
       // Use Google Custom Search to find product images
       const response = await fetch('/api/ai/find-product-image', {
@@ -97,7 +127,8 @@ export default function ItemPhotoUpload({
       });
 
       if (!response.ok) {
-        throw new Error('Failed to find product images');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to find product images');
       }
 
       const data = await response.json();
@@ -107,7 +138,7 @@ export default function ItemPhotoUpload({
         setImageSuggestions(data.images);
         setShowImagePicker(true);
       } else {
-        setError('No product images found. Try uploading your own.');
+        setError('No product images found. Try adding more details to the description or upload your own.');
       }
     } catch (err: any) {
       console.error('Find image error:', err);
