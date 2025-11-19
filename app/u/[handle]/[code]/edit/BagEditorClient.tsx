@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Loader2, Share2, Trash2, Camera, ChevronLeft, Package, Images } from 'lucide-react';
+import { ArrowLeft, Loader2, Share2, Trash2, Camera, ChevronLeft, Package, Images, Link, Sparkles } from 'lucide-react';
 import ItemList from './components/ItemList';
 import QuickAddItem from './components/QuickAddItem';
 import AddItemForm from './components/AddItemForm';
@@ -10,6 +10,7 @@ import ShareModal from './components/ShareModal';
 import PhotoUploadModal from './components/PhotoUploadModal';
 import ProductReviewModal, { IdentifiedProduct } from './components/ProductReviewModal';
 import BatchPhotoSelector from './components/BatchPhotoSelector';
+import EnrichmentPreview from './components/EnrichmentPreview';
 import { Button } from '@/components/ui/Button';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
@@ -19,6 +20,7 @@ type Link = {
   kind: string;
   metadata: any;
   created_at: string;
+  is_auto_generated?: boolean;
 };
 
 type Item = {
@@ -74,6 +76,9 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     processingTime: number;
   } | null>(null);
   const [isIdentifying, setIsIdentifying] = useState(false);
+  const [isFillingLinks, setIsFillingLinks] = useState(false);
+  const [enrichmentSuggestions, setEnrichmentSuggestions] = useState<any[]>([]);
+  const [showEnrichmentPreview, setShowEnrichmentPreview] = useState(false);
 
   // Auto-save bag metadata (debounced)
   useEffect(() => {
@@ -367,6 +372,101 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     }
   };
 
+  // Fill product info handler - shows preview modal
+  const handleFillLinks = async () => {
+    setIsFillingLinks(true);
+
+    try {
+      // Get preview suggestions
+      const response = await fetch('/api/items/preview-enrichment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bagId: bag.id }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate suggestions');
+      }
+
+      const result = await response.json();
+
+      if (!result.suggestions || result.suggestions.length === 0) {
+        alert('No items to enrich! Add some items to your bag first.');
+        return;
+      }
+
+      // Show preview modal (even if items have data - user can choose to replace)
+      setEnrichmentSuggestions(result.suggestions);
+      setShowEnrichmentPreview(true);
+    } catch (error) {
+      console.error('Error generating suggestions:', error);
+      alert('Failed to generate suggestions. Please try again.');
+    } finally {
+      setIsFillingLinks(false);
+    }
+  };
+
+  // Apply approved enrichments
+  const handleApproveEnrichments = async (approvedItemIds: string[], editedValues: Record<string, any>) => {
+    try {
+      // Build approved suggestions with edited values
+      const approvedSuggestions = enrichmentSuggestions
+        .filter(s => approvedItemIds.includes(s.itemId))
+        .map(s => {
+          const edited = editedValues[s.itemId] || {};
+          return {
+            itemId: s.itemId,
+            brand: edited.brand !== undefined ? edited.brand : s.suggested.brand,
+            description: edited.description !== undefined ? edited.description : s.suggested.description,
+            notes: edited.notes !== undefined ? edited.notes : s.suggested.notes,
+            link: edited.link !== undefined ? edited.link : s.suggested.link,
+          };
+        });
+
+      const response = await fetch('/api/items/apply-enrichment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bagId: bag.id,
+          approvedSuggestions,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to apply enrichments');
+      }
+
+      const result = await response.json();
+
+      // Refresh bag
+      const bagResponse = await fetch(`/api/bags/${bag.code}`);
+      if (bagResponse.ok) {
+        const updatedBag = await bagResponse.json();
+        setBag(updatedBag);
+      }
+
+      // Close modal
+      setShowEnrichmentPreview(false);
+      setEnrichmentSuggestions([]);
+
+      // Show success message
+      const messages = [];
+      if (result.detailsEnriched > 0) {
+        messages.push(`✨ Enriched ${result.detailsEnriched} item${result.detailsEnriched > 1 ? 's' : ''}`);
+      }
+      if (result.linksAdded > 0) {
+        messages.push(`🔗 Added ${result.linksAdded} link${result.linksAdded > 1 ? 's' : ''}`);
+      }
+
+      if (messages.length > 0) {
+        alert(messages.join('\n') + '\n\nYour bag has been updated! 🎉');
+      }
+    } catch (error) {
+      console.error('Error applying enrichments:', error);
+      alert('Failed to apply changes. Please try again.');
+    }
+  };
+
   // Batch photo application handler
   const handleApplyBatchPhotos = async (selections: Array<{ itemId: string; imageUrl: string }>) => {
     try {
@@ -621,6 +721,28 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             </Button>
           )}
 
+          {/* Fill Product Info Button */}
+          {bag.items.length > 0 && (
+            <Button
+              onClick={handleFillLinks}
+              disabled={isFillingLinks}
+              variant="secondary"
+              className="w-full py-3"
+            >
+              {isFillingLinks ? (
+                <>
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                  Filling Product Info...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-5 h-5 mr-2" />
+                  Fill Product Info (AI)
+                </>
+              )}
+            </Button>
+          )}
+
           {/* Manual Form (Hidden by default) */}
           {showManualForm && (
             <div className="space-y-3">
@@ -724,6 +846,18 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         }))}
         onApplyPhotos={handleApplyBatchPhotos}
       />
+
+      {/* Enrichment Preview Modal */}
+      {showEnrichmentPreview && (
+        <EnrichmentPreview
+          suggestions={enrichmentSuggestions}
+          onApprove={handleApproveEnrichments}
+          onCancel={() => {
+            setShowEnrichmentPreview(false);
+            setEnrichmentSuggestions([]);
+          }}
+        />
+      )}
     </div>
   );
 }
