@@ -12,7 +12,6 @@ import ProductReviewModal, { IdentifiedProduct } from './components/ProductRevie
 import BatchPhotoSelector from './components/BatchPhotoSelector';
 import EnrichmentPreview from './components/EnrichmentPreview';
 import { Button } from '@/components/ui/Button';
-import Breadcrumbs from '@/components/Breadcrumbs';
 
 type Link = {
   id: string;
@@ -534,26 +533,46 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
 
   return (
     <div className="min-h-screen">
-      {/* Header */}
-      <header className="bg-[var(--surface)] border-b border-[var(--border-subtle)] sticky top-16 z-10">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          {/* Breadcrumbs and Actions */}
-          <div className="flex items-center justify-between mb-4 gap-2">
-            <Breadcrumbs
-              items={[
-                { label: 'My Bags', href: '/dashboard', icon: <Package className="w-4 h-4" /> },
-                { label: bag.title || 'Untitled Bag', href: `/u/${ownerHandle}/${bag.code}` },
-                { label: 'Edit' },
-              ]}
+      {/* Header - Scrolls away with content */}
+      <header className="bg-[var(--surface)] border-b border-[var(--border-subtle)]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+          {/* Title Row with Public Toggle and Actions */}
+          <div className="flex items-start gap-2 sm:gap-3 mb-2">
+            {/* Editable Title */}
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Bag Title"
+              className="flex-1 text-lg sm:text-2xl font-bold text-[var(--text-primary)] text-base border-0 border-b-2 border-transparent hover:border-[var(--border-subtle)] focus:border-[var(--teed-green-8)] focus:outline-none bg-transparent px-0 py-1 transition-colors placeholder:text-[var(--input-placeholder)] min-w-0"
             />
 
-            <div className="flex items-center gap-2 flex-shrink-0">
+            {/* Privacy Toggle - Inline with title */}
+            <button
+              type="button"
+              role="switch"
+              aria-checked={isPublic}
+              onClick={() => setIsPublic(!isPublic)}
+              className={`${
+                isPublic ? 'bg-[var(--teed-green-8)]' : 'bg-[var(--grey-5)]'
+              } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 flex-shrink-0 mt-1`}
+              title={isPublic ? 'Public - Anyone with link can view' : 'Private - Only you can view'}
+            >
+              <span
+                className={`${
+                  isPublic ? 'translate-x-6' : 'translate-x-1'
+                } inline-block h-4 w-4 transform rounded-full bg-white transition-transform shadow-sm`}
+              />
+            </button>
+
+            {/* Action Buttons */}
+            <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
               {/* Share Button */}
               <Button
                 onClick={() => setShowShareModal(true)}
                 variant="secondary"
                 size="sm"
-                className="min-h-[44px]"
+                className="min-h-[44px] min-w-[44px] p-2.5"
               >
                 <Share2 className="w-4 h-4 sm:mr-2" />
                 <span className="hidden sm:inline">Share</span>
@@ -564,7 +583,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 onClick={handleDeleteBag}
                 variant="destructive"
                 size="sm"
-                className="min-h-[44px]"
+                className="min-h-[44px] min-w-[44px] p-2.5"
               >
                 <Trash2 className="w-4 h-4 sm:mr-2" />
                 <span className="hidden sm:inline">Delete</span>
@@ -572,62 +591,32 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             </div>
           </div>
 
-          {/* Save Status */}
-          <div className="text-xs text-[var(--text-secondary)] mb-4">
-            {isSaving ? (
-              <span className="flex items-center">
-                <Loader2 className="animate-spin mr-2 h-3 w-3 flex-shrink-0" />
-                <span className="hidden sm:inline">Saving...</span>
+          {/* Description and Status Row */}
+          <div className="flex items-start gap-2">
+            {/* Editable Description */}
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Add a description..."
+              rows={1}
+              className="flex-1 text-sm text-[var(--text-secondary)] text-base w-full border-0 border-b-2 border-transparent hover:border-[var(--border-subtle)] focus:border-[var(--teed-green-8)] focus:outline-none bg-transparent px-0 py-1 resize-none transition-colors placeholder:text-[var(--input-placeholder)] min-w-0"
+            />
+
+            {/* Save Status & Privacy Label */}
+            <div className="flex items-center gap-2 text-xs text-[var(--text-secondary)] flex-shrink-0">
+              {isSaving ? (
+                <span className="flex items-center">
+                  <Loader2 className="animate-spin h-3 w-3" />
+                </span>
+              ) : lastSaved ? (
+                <span className="hidden sm:inline">
+                  Saved {formatLastSaved()}
+                </span>
+              ) : null}
+              <span className="text-[var(--text-primary)] font-medium">
+                {isPublic ? '🌐 Public' : '🔒 Private'}
               </span>
-            ) : lastSaved ? (
-              <span className="truncate block">
-                <span className="hidden sm:inline">Saved </span>
-                {formatLastSaved()}
-              </span>
-            ) : null}
-          </div>
-
-          {/* Editable Title */}
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Bag Title"
-            className="text-2xl font-bold text-[var(--text-primary)] w-full border-0 border-b-2 border-transparent hover:border-[var(--border-subtle)] focus:border-[var(--teed-green-8)] focus:outline-none bg-transparent px-0 py-1 transition-colors placeholder:text-[var(--input-placeholder)]"
-          />
-
-          {/* Editable Description */}
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Add a description..."
-            rows={2}
-            className="mt-2 text-sm text-[var(--text-secondary)] w-full border-0 border-b-2 border-transparent hover:border-[var(--border-subtle)] focus:border-[var(--teed-green-8)] focus:outline-none bg-transparent px-0 py-1 resize-none transition-colors placeholder:text-[var(--input-placeholder)]"
-          />
-
-          {/* Privacy Toggle */}
-          <div className="mt-4 flex items-center gap-2 flex-wrap">
-            <button
-              type="button"
-              role="switch"
-              aria-checked={isPublic}
-              onClick={() => setIsPublic(!isPublic)}
-              className={`${
-                isPublic ? 'bg-[var(--teed-green-8)]' : 'bg-[var(--grey-5)]'
-              } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 flex-shrink-0`}
-            >
-              <span
-                className={`${
-                  isPublic ? 'translate-x-6' : 'translate-x-1'
-                } inline-block h-4 w-4 transform rounded-full bg-white transition-transform shadow-sm`}
-              />
-            </button>
-            <span className="text-sm text-[var(--text-primary)] font-medium">
-              {isPublic ? 'Public' : 'Private'}
-            </span>
-            <span className="text-xs text-[var(--text-secondary)] w-full sm:w-auto sm:ml-0">
-              {isPublic ? 'Anyone with the link can view' : 'Only you can view'}
-            </span>
+            </div>
           </div>
         </div>
       </header>
