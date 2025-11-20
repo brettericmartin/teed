@@ -20,17 +20,59 @@ export default async function DiscoverPage() {
     profile = data;
   }
 
-  // Fetch discover data (all public bags)
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-  const response = await fetch(`${baseUrl}/api/discover`, {
-    cache: 'no-store',
-  });
+  // Fetch discover data (all public bags) directly from Supabase
+  const { data: bags } = await supabase
+    .from('bags')
+    .select(`
+      *,
+      items:bag_items(
+        id,
+        custom_name,
+        custom_photo_id,
+        is_featured,
+        featured_position
+      ),
+      owner:profiles!bags_owner_id_fkey(
+        id,
+        handle,
+        display_name,
+        avatar_url
+      )
+    `)
+    .eq('is_public', true)
+    .order('created_at', { ascending: false })
+    .limit(100);
 
-  let bags = [];
-  if (response.ok) {
-    const data = await response.json();
-    bags = data.bags || [];
+  // Get all photo IDs from all bags
+  const allPhotoIds = bags
+    ?.flatMap((bag: any) =>
+      bag.items?.map((item: any) => item.custom_photo_id).filter(Boolean) || []
+    ) || [];
+
+  // Fetch media assets for all photos
+  let photoUrls: Record<string, string> = {};
+  if (allPhotoIds.length > 0) {
+    const { data: mediaAssets } = await supabase
+      .from('media_assets')
+      .select('id, url')
+      .in('id', allPhotoIds);
+
+    if (mediaAssets) {
+      photoUrls = mediaAssets.reduce((acc, asset) => {
+        acc[asset.id] = asset.url;
+        return acc;
+      }, {} as Record<string, string>);
+    }
   }
+
+  // Map photo URLs to items
+  const bagsWithPhotos = bags?.map((bag: any) => ({
+    ...bag,
+    items: bag.items?.map((item: any) => ({
+      ...item,
+      photo_url: item.custom_photo_id ? photoUrls[item.custom_photo_id] || null : null,
+    })),
+  })) || [];
 
   return (
     <>
@@ -39,7 +81,7 @@ export default async function DiscoverPage() {
         displayName={profile?.display_name || ''}
         isAuthenticated={!!user}
       />
-      <DiscoverClient initialBags={bags} />
+      <DiscoverClient initialBags={bagsWithPhotos} />
     </>
   );
 }
