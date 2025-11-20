@@ -153,13 +153,22 @@ export default function DashboardClient({
                 {/* Cover Image or Featured Items Grid - Flexible Hero Layout */}
                 <div className="h-[200px] bg-gradient-to-br from-[var(--teed-green-6)] to-[var(--sky-6)] relative overflow-hidden border-b border-[var(--border-subtle)]">
                   {(() => {
-                    const featuredItems = bag.items?.filter(item => item.is_featured && item.photo_url)
-                      .sort((a, b) => (a.featured_position || 0) - (b.featured_position || 0)) || [];
+                    // Get all items with photos
+                    const allItemsWithPhotos = bag.items?.filter(item => item.photo_url) || [];
+
+                    // Prioritize featured items, then add non-featured to fill slots
+                    const featuredItems = allItemsWithPhotos
+                      .filter(item => item.is_featured)
+                      .sort((a, b) => (a.featured_position || 0) - (b.featured_position || 0));
+                    const nonFeaturedItems = allItemsWithPhotos
+                      .filter(item => !item.is_featured);
+
                     const hasBagPhoto = !!bag.background_image;
 
-                    if (hasBagPhoto && featuredItems.length > 0) {
+                    if (hasBagPhoto && allItemsWithPhotos.length > 0) {
                       // Layout 1: Bag photo as hero + up to 6 item photos
-                      const itemsToShow = featuredItems.slice(0, 6);
+                      // Prioritize featured, fill remaining with non-featured
+                      const itemsToShow = [...featuredItems, ...nonFeaturedItems].slice(0, 6);
                       return (
                         <>
                           <div className="grid grid-cols-4 grid-rows-3 gap-1.5 p-2 h-full">
@@ -203,9 +212,10 @@ export default function DashboardClient({
                           )}
                         </>
                       );
-                    } else if (featuredItems.length > 0) {
+                    } else if (allItemsWithPhotos.length > 0) {
                       // Layout 2: No bag photo, show up to 8 equal-sized item photos
-                      const itemsToShow = featuredItems.slice(0, 8);
+                      // Prioritize featured, fill remaining with non-featured
+                      const itemsToShow = [...featuredItems, ...nonFeaturedItems].slice(0, 8);
                       return (
                         <>
                           <div className="grid grid-cols-4 gap-1.5 p-2 h-full">
