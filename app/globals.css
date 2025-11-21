@@ -600,6 +600,10 @@ button, a, input, textarea, select {
     padding-left: max(16px, env(safe-area-inset-left));
     padding-right: max(16px, env(safe-area-inset-right));
   }
+
+  .pt-nav-safe {
+    padding-top: calc(4rem + env(safe-area-inset-top, 0px));
+  }
 }
 
 /* Mobile Text Utilities - Prevent iOS zoom on focus */

@@ -50,6 +50,54 @@ const CATEGORIES = [
   { value: 'other', label: '📦 Other', icon: '📦' },
 ];
 
+// Color mapping for categories based on semantic meaning
+const getCategoryColor = (categoryValue: string) => {
+  const colorMap: Record<string, { bg: string; text: string }> = {
+    golf: { bg: 'bg-[var(--teed-green-8)]', text: 'text-white' },
+    outdoor: { bg: 'bg-[var(--evergreen-9)]', text: 'text-white' },
+    travel: { bg: 'bg-[var(--sky-9)]', text: 'text-white' },
+    tech: { bg: 'bg-[var(--sky-10)]', text: 'text-white' },
+    fashion: { bg: 'bg-[var(--copper-7)]', text: 'text-white' },
+    fitness: { bg: 'bg-[var(--copper-8)]', text: 'text-white' },
+    gaming: { bg: 'bg-[var(--copper-6)]', text: 'text-white' },
+    photography: { bg: 'bg-[var(--sand-9)]', text: 'text-white' },
+    music: { bg: 'bg-[var(--sand-8)]', text: 'text-white' },
+    other: { bg: 'bg-[var(--grey-7)]', text: 'text-white' },
+  };
+  return colorMap[categoryValue] || { bg: 'bg-[var(--teed-green-8)]', text: 'text-white' };
+};
+
+// Diversified gradient options for bag cards
+const GRADIENT_OPTIONS = [
+  'from-[var(--teed-green-6)] to-[var(--sky-6)]', // Green to Sky (original)
+  'from-[var(--copper-4)] to-[var(--sky-5)]', // Copper to Sky (warm to cool)
+  'from-[var(--sand-5)] to-[var(--copper-5)]', // Sand to Copper (warm gradient)
+  'from-[var(--sky-5)] to-[var(--teed-green-5)]', // Sky to Green (cool gradient)
+  'from-[var(--evergreen-6)] to-[var(--teed-green-6)]', // Evergreen to Green (monochrome depth)
+];
+
+// Hash function to deterministically select gradient based on bag ID
+const getBagGradient = (bagId: string) => {
+  let hash = 0;
+  for (let i = 0; i < bagId.length; i++) {
+    hash = ((hash << 5) - hash) + bagId.charCodeAt(i);
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  const index = Math.abs(hash) % GRADIENT_OPTIONS.length;
+  return GRADIENT_OPTIONS[index];
+};
+
+// Placeholder background colors
+const PLACEHOLDER_COLORS = [
+  'bg-[var(--copper-2)]',
+  'bg-[var(--sky-2)]',
+  'bg-[var(--sand-2)]',
+];
+
+const getPlaceholderColor = (index: number) => {
+  return PLACEHOLDER_COLORS[index % PLACEHOLDER_COLORS.length];
+};
+
 export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -165,7 +213,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                       value={searchInput}
                       onChange={(e) => setSearchInput(e.target.value)}
                       placeholder="Search bags..."
-                      className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--teed-green-8)] focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--sky-9)] focus:border-transparent"
                     />
                   </div>
                 </form>
@@ -176,7 +224,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                     onClick={() => setShowFollowing(!showFollowing)}
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all whitespace-nowrap ${
                       showFollowing
-                        ? 'bg-[var(--teed-green-8)] text-white'
+                        ? 'bg-[var(--sky-9)] text-white'
                         : 'bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] hover:bg-[var(--surface-hover)]'
                     }`}
                   >
@@ -189,7 +237,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                 {hasActiveFilters && (
                   <button
                     onClick={clearFilters}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-all whitespace-nowrap"
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-[var(--copper-9)] hover:text-[var(--copper-10)] hover:bg-[var(--copper-2)] transition-all whitespace-nowrap"
                   >
                     <X className="w-4 h-4" />
                     <span className="hidden sm:inline">Clear</span>
@@ -199,22 +247,26 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
 
               {/* Category Filters */}
               <div className="flex flex-wrap gap-2">
-                {CATEGORIES.map((category) => (
-                  <button
-                    key={category.value}
-                    onClick={() => setSelectedCategory(
-                      selectedCategory === category.value ? null : category.value
-                    )}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                      selectedCategory === category.value
-                        ? 'bg-[var(--teed-green-8)] text-white'
-                        : 'bg-[var(--surface-elevated)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)]'
-                    }`}
-                  >
-                    <span>{category.icon}</span>
-                    <span className="ml-1.5">{category.label.split(' ')[1]}</span>
-                  </button>
-                ))}
+                {CATEGORIES.map((category) => {
+                  const colors = getCategoryColor(category.value);
+                  const isSelected = selectedCategory === category.value;
+                  return (
+                    <button
+                      key={category.value}
+                      onClick={() => setSelectedCategory(
+                        selectedCategory === category.value ? null : category.value
+                      )}
+                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                        isSelected
+                          ? `${colors.bg} ${colors.text}`
+                          : 'bg-[var(--surface-elevated)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)]'
+                      }`}
+                    >
+                      <span>{category.icon}</span>
+                      <span className="ml-1.5">{category.label.split(' ')[1]}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -267,7 +319,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                 {/* Cover Image or Featured Items Grid - Flexible Hero Layout */}
                 <div
                   onClick={() => router.push(`/u/${bag.owner.handle}/${bag.code}`)}
-                  className="h-[200px] bg-gradient-to-br from-[var(--teed-green-6)] to-[var(--sky-6)] relative overflow-hidden cursor-pointer border-b border-[var(--border-subtle)]"
+                  className={`h-[200px] bg-gradient-to-br ${getBagGradient(bag.id)} relative overflow-hidden cursor-pointer border-b border-[var(--border-subtle)]`}
                 >
                   {(() => {
                     // Get all items with photos
@@ -313,7 +365,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
 
                             {/* Fill empty slots with placeholders */}
                             {Array.from({ length: Math.max(0, 6 - itemsToShow.length) }).map((_, i) => (
-                              <div key={`placeholder-${i}`} className="bg-white/20 rounded"></div>
+                              <div key={`placeholder-${i}`} className={`${getPlaceholderColor(i)} rounded opacity-40`}></div>
                             ))}
                           </div>
 
@@ -349,7 +401,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
 
                             {/* Fill empty slots with placeholders */}
                             {Array.from({ length: Math.max(0, 8 - itemsToShow.length) }).map((_, i) => (
-                              <div key={`placeholder-${i}`} className="bg-white/20 rounded"></div>
+                              <div key={`placeholder-${i}`} className={`${getPlaceholderColor(i)} rounded opacity-40`}></div>
                             ))}
                           </div>
 

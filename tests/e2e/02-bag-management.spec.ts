@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { login } from './utils/auth';
+import { login, TEST_USER } from './utils/auth';
 import { createBag, addItem, deleteBag, randomBagData, randomItemData } from './utils/testData';
 
 /**
@@ -27,7 +27,7 @@ test.describe('Bag Management', () => {
     const { code } = await createBag(page, bagData);
 
     // Should be on bag editor page
-    await expect(page).toHaveURL(`/bags/${code}/edit`);
+    await expect(page).toHaveURL(`/u/${TEST_USER.handle}/${code}/edit`);
 
     // Should see bag title
     await expect(page.locator(`input[value="${bagData.title}"]`)).toBeVisible();
@@ -148,7 +148,7 @@ test.describe('Item Management', () => {
   });
 
   test('should display empty state for bag with no items', async ({ page }) => {
-    await page.goto(`/bags/${bagCode}/edit`);
+    await page.goto(`/u/${TEST_USER.handle}/${bagCode}/edit`);
 
     // Should see empty state or add item button
     await expect(page.locator('text=Add Item, text=No items')).toBeVisible();

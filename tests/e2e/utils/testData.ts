@@ -1,4 +1,5 @@
 import { Page } from '@playwright/test';
+import { TEST_USER } from './auth';
 
 /**
  * Test Data Utilities - Create and manage test data
@@ -60,12 +61,12 @@ export async function createBag(
   await page.waitForTimeout(300); // Wait for modal animation
   await page.locator('form button[type="submit"]:has-text("Create")').click({ force: true });
 
-  // Wait for navigation to bag editor
-  await page.waitForURL(/\/bags\/[^\/]+\/edit/, { timeout: 10000 });
+  // Wait for navigation to bag editor (new URL structure: /u/[handle]/[code]/edit)
+  await page.waitForURL(/\/u\/[^\/]+\/[^\/]+\/edit/, { timeout: 10000 });
 
   // Extract bag code from URL
   const url = page.url();
-  const match = url.match(/\/bags\/([^\/]+)\/edit/);
+  const match = url.match(/\/u\/[^\/]+\/([^\/]+)\/edit/);
   const code = match ? match[1] : '';
 
   return { code };
@@ -79,7 +80,7 @@ export async function addItem(
   bagCode: string,
   item: TestItem
 ): Promise<void> {
-  await page.goto(`/bags/${bagCode}/edit`);
+  await page.goto(`/u/${TEST_USER.handle}/${bagCode}/edit`);
 
   // Click "Add Item" button
   await page.click('button:has-text("Add Item")');
@@ -146,7 +147,7 @@ export async function addLink(
  * Delete a bag
  */
 export async function deleteBag(page: Page, bagCode: string): Promise<void> {
-  await page.goto(`/bags/${bagCode}/edit`);
+  await page.goto(`/u/${TEST_USER.handle}/${bagCode}/edit`);
 
   // Set up dialog listener before clicking
   page.once('dialog', dialog => dialog.accept());
@@ -208,7 +209,7 @@ export async function cleanupTestBags(page: Page): Promise<void> {
   for (let i = 0; i < count; i++) {
     try {
       await testBags.nth(0).click(); // Click first one (index changes as we delete)
-      await deleteBag(page, page.url().match(/\/bags\/([^\/]+)/)?.[1] || '');
+      await deleteBag(page, page.url().match(/\/u\/[^\/]+\/([^\/]+)/)?.[1] || '');
     } catch (e) {
       // Continue if delete fails
       console.log('Failed to delete test bag:', e);

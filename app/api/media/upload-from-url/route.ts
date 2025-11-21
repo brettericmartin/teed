@@ -92,7 +92,11 @@ export async function POST(request: NextRequest) {
 
     // Download image from URL (server-side, bypasses CORS)
     console.log('Downloading image from URL:', imageUrl);
-    const imageResponse = await fetch(imageUrl);
+    const imageResponse = await fetch(imageUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; TeedBot/1.0)',
+      },
+    });
 
     if (!imageResponse.ok) {
       return NextResponse.json(
@@ -112,11 +116,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate file size (2MB max)
-    const MAX_SIZE = 2 * 1024 * 1024; // 2MB
+    // Validate file size (10MB max)
+    const MAX_SIZE = 10 * 1024 * 1024; // 10MB
     if (imageBlob.size > MAX_SIZE) {
       return NextResponse.json(
-        { error: 'Image size exceeds 2MB limit' },
+        { error: 'Image size exceeds 10MB limit' },
         { status: 400 }
       );
     }

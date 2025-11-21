@@ -34,7 +34,7 @@ export default function ItemPhotoUpload({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const MAX_SIZE_MB = 2;
+  const MAX_SIZE_MB = 10;
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
   // Close menu when clicking outside

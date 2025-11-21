@@ -13,6 +13,7 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
+  viewportFit: 'cover',
 };
 
 export default async function RootLayout({
@@ -47,7 +48,7 @@ export default async function RootLayout({
           isAuthenticated={!!user}
         />
 
-        <main className="pt-16 pb-20 md:pb-0">
+        <main className="pt-nav-safe pb-20 md:pb-0">
           {children}
         </main>
       </body>

@@ -33,6 +33,37 @@ type DashboardClientProps = {
   displayName: string;
 };
 
+// Diversified gradient options for bag cards
+const GRADIENT_OPTIONS = [
+  'from-[var(--teed-green-6)] to-[var(--sky-6)]', // Green to Sky (original)
+  'from-[var(--copper-4)] to-[var(--sky-5)]', // Copper to Sky (warm to cool)
+  'from-[var(--sand-5)] to-[var(--copper-5)]', // Sand to Copper (warm gradient)
+  'from-[var(--sky-5)] to-[var(--teed-green-5)]', // Sky to Green (cool gradient)
+  'from-[var(--evergreen-6)] to-[var(--teed-green-6)]', // Evergreen to Green (monochrome depth)
+];
+
+// Hash function to deterministically select gradient based on bag ID
+const getBagGradient = (bagId: string) => {
+  let hash = 0;
+  for (let i = 0; i < bagId.length; i++) {
+    hash = ((hash << 5) - hash) + bagId.charCodeAt(i);
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  const index = Math.abs(hash) % GRADIENT_OPTIONS.length;
+  return GRADIENT_OPTIONS[index];
+};
+
+// Placeholder background colors
+const PLACEHOLDER_COLORS = [
+  'bg-[var(--copper-2)]',
+  'bg-[var(--sky-2)]',
+  'bg-[var(--sand-2)]',
+];
+
+const getPlaceholderColor = (index: number) => {
+  return PLACEHOLDER_COLORS[index % PLACEHOLDER_COLORS.length];
+};
+
 export default function DashboardClient({
   initialBags,
   userHandle,
@@ -108,7 +139,7 @@ export default function DashboardClient({
               </div>
             </div>
             <Button
-              variant="create"
+              variant="featured"
               onClick={() => setShowNewBagModal(true)}
               className="w-full sm:w-auto min-h-[48px]"
             >
@@ -151,7 +182,7 @@ export default function DashboardClient({
                 className="bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden hover:shadow-[var(--shadow-5)] hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
               >
                 {/* Cover Image or Featured Items Grid - Flexible Hero Layout */}
-                <div className="h-[200px] bg-gradient-to-br from-[var(--teed-green-6)] to-[var(--sky-6)] relative overflow-hidden border-b border-[var(--border-subtle)]">
+                <div className={`h-[200px] bg-gradient-to-br ${getBagGradient(bag.id)} relative overflow-hidden border-b border-[var(--border-subtle)]`}>
                   {(() => {
                     // Get all items with photos
                     const allItemsWithPhotos = bag.items?.filter(item => item.photo_url) || [];
@@ -196,7 +227,7 @@ export default function DashboardClient({
 
                             {/* Fill empty slots with placeholders */}
                             {Array.from({ length: Math.max(0, 6 - itemsToShow.length) }).map((_, i) => (
-                              <div key={`placeholder-${i}`} className="bg-white/20 rounded"></div>
+                              <div key={`placeholder-${i}`} className={`${getPlaceholderColor(i)} rounded opacity-40`}></div>
                             ))}
                           </div>
 
@@ -232,7 +263,7 @@ export default function DashboardClient({
 
                             {/* Fill empty slots with placeholders */}
                             {Array.from({ length: Math.max(0, 8 - itemsToShow.length) }).map((_, i) => (
-                              <div key={`placeholder-${i}`} className="bg-white/20 rounded"></div>
+                              <div key={`placeholder-${i}`} className={`${getPlaceholderColor(i)} rounded opacity-40`}></div>
                             ))}
                           </div>
 
@@ -283,7 +314,7 @@ export default function DashboardClient({
                   {/* Privacy Badge (top-right) */}
                   <div className="absolute top-3 right-3">
                     {bag.is_public ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-white/90 text-[var(--evergreen-12)] backdrop-blur-sm shadow-sm">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-[var(--sky-9)] text-white backdrop-blur-sm shadow-sm">
                         <Eye className="w-3 h-3" />
                         Public
                       </span>
@@ -304,9 +335,9 @@ export default function DashboardClient({
                   {/* Icon-based metadata */}
                   <div className="flex items-center justify-between text-xs text-[var(--text-tertiary)]">
                     <div className="flex items-center gap-3">
-                      <span className="flex items-center gap-1">
+                      <span className="flex items-center gap-1 text-[var(--sky-10)]">
                         <Package className="w-3.5 h-3.5" />
-                        {bag.items?.length || 0} {bag.items?.length === 1 ? 'item' : 'items'}
+                        <span className="font-medium">{bag.items?.length || 0} {bag.items?.length === 1 ? 'item' : 'items'}</span>
                       </span>
                       <span className="font-medium text-[var(--text-secondary)]">/{bag.code}</span>
                     </div>

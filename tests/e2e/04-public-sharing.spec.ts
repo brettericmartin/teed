@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { login } from './utils/auth';
+import { login, TEST_USER } from './utils/auth';
 import { createBag, addItem, addLink, deleteBag, randomBagData, randomItemData } from './utils/testData';
 
 /**
@@ -119,7 +119,7 @@ test.describe('Share Modal and QR Codes', () => {
   });
 
   test('should open share modal', async ({ page }) => {
-    await page.goto(`/bags/${bagCode}/edit`);
+    await page.goto(`/u/${TEST_USER.handle}/${bagCode}/edit`);
 
     // Click share button
     await page.click('button:has-text("Share")');
@@ -129,7 +129,7 @@ test.describe('Share Modal and QR Codes', () => {
   });
 
   test('should display public link', async ({ page }) => {
-    await page.goto(`/bags/${bagCode}/edit`);
+    await page.goto(`/u/${TEST_USER.handle}/${bagCode}/edit`);
 
     // Open share modal
     await page.click('button:has-text("Share")');
@@ -141,7 +141,7 @@ test.describe('Share Modal and QR Codes', () => {
   test('should copy link to clipboard', async ({ page, context }) => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
 
-    await page.goto(`/bags/${bagCode}/edit`);
+    await page.goto(`/u/${TEST_USER.handle}/${bagCode}/edit`);
     await page.click('button:has-text("Share")');
 
     // Click copy button
@@ -162,7 +162,7 @@ test.describe('Share Modal and QR Codes', () => {
       isPublic: false,
     });
 
-    await page.goto(`/bags/${code}/edit`);
+    await page.goto(`/u/${TEST_USER.handle}/${code}/edit`);
     await page.click('button:has-text("Share")');
 
     // Should see privacy warning
@@ -173,7 +173,7 @@ test.describe('Share Modal and QR Codes', () => {
   });
 
   test('should display QR code for public bag', async ({ page }) => {
-    await page.goto(`/bags/${bagCode}/edit`);
+    await page.goto(`/u/${TEST_USER.handle}/${bagCode}/edit`);
     await page.click('button:has-text("Share")');
 
     // Should see QR code canvas
@@ -184,7 +184,7 @@ test.describe('Share Modal and QR Codes', () => {
   });
 
   test('should have preview link to public view', async ({ page }) => {
-    await page.goto(`/bags/${bagCode}/edit`);
+    await page.goto(`/u/${TEST_USER.handle}/${bagCode}/edit`);
     await page.click('button:has-text("Share")');
 
     // Should see preview link
@@ -197,7 +197,7 @@ test.describe('Share Modal and QR Codes', () => {
   });
 
   test('QR code should encode correct URL', async ({ page }) => {
-    await page.goto(`/bags/${bagCode}/edit`);
+    await page.goto(`/u/${TEST_USER.handle}/${bagCode}/edit`);
     await page.click('button:has-text("Share")');
 
     // Wait for QR code to render

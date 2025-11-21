@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'ai' | 'create' | 'destructive' | 'secondary' | 'ghost' | 'outline';
+  variant?: 'ai' | 'create' | 'featured' | 'destructive' | 'secondary' | 'ghost' | 'outline';
   size?: 'sm' | 'md' | 'lg';
 }
 
@@ -12,7 +12,8 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
  * Variants:
  * - ai: For AI-powered features and intelligent actions (Earthy Sage)
  * - create: For creating new items and additive actions (Deep Evergreen) - PRIMARY
- * - destructive: For delete/remove actions (Copper) - Requires confirmation
+ * - featured: For creative/featured actions with energy (Copper Orange)
+ * - destructive: For delete/remove actions (Dark Copper) - Requires confirmation
  * - secondary: For less prominent actions (Sky Tint/Sage)
  * - ghost: For tertiary actions (Transparent with border)
  * - outline: For outlined style (White with Evergreen border)
@@ -29,7 +30,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       // Create/Add: Deep Evergreen for primary actions
       create: 'bg-[var(--button-create-bg)] text-[var(--button-create-text)] hover:bg-[var(--button-create-bg-hover)] active:bg-[var(--button-create-bg-active)] shadow-sm hover:shadow-md active:scale-[0.98]',
 
-      // Destructive: Copper for remove/delete actions
+      // Featured/Creative: Copper Orange for creative/featured actions
+      featured: 'bg-[var(--copper-8)] text-white hover:bg-[var(--copper-9)] active:bg-[var(--copper-10)] shadow-sm hover:shadow-md active:scale-[0.98]',
+
+      // Destructive: Dark Copper for remove/delete actions
       destructive: 'bg-[var(--button-destructive-bg)] text-[var(--button-destructive-text)] hover:bg-[var(--button-destructive-bg-hover)] active:bg-[var(--button-destructive-bg-active)] shadow-sm hover:shadow-md active:scale-[0.98]',
 
       // Secondary: Soft backgrounds for secondary actions

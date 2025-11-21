@@ -75,11 +75,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate file size (2MB max)
-    const MAX_SIZE = 2 * 1024 * 1024; // 2MB
+    // Validate file size (10MB max)
+    const MAX_SIZE = 10 * 1024 * 1024; // 10MB
     if (file.size > MAX_SIZE) {
       return NextResponse.json(
-        { error: 'File size must be less than 2MB' },
+        { error: 'File size must be less than 10MB' },
         { status: 400 }
       );
     }

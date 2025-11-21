@@ -127,12 +127,12 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
                   placeholder="Brand (e.g., TaylorMade, MAC, Patagonia)"
                   className="w-full text-base px-3 py-2 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent placeholder:text-[var(--input-placeholder)]"
                 />
-                <input
-                  type="text"
+                <textarea
                   value={editDescription}
                   onChange={(e) => setEditDescription(e.target.value)}
-                  placeholder="Description"
-                  className="w-full text-base px-3 py-2 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent placeholder:text-[var(--input-placeholder)]"
+                  placeholder="Description (e.g., specs, color, features)"
+                  rows={2}
+                  className="w-full text-base px-3 py-2 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent resize-none placeholder:text-[var(--input-placeholder)]"
                 />
                 <div className="flex items-center gap-2">
                   <label className="text-base text-[var(--text-primary)]">Qty:</label>
@@ -151,6 +151,16 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
                   placeholder="Promo codes (e.g., SAVE20, WELCOME10)"
                   className="w-full text-base px-3 py-2 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent placeholder:text-[var(--input-placeholder)]"
                 />
+                <div>
+                  <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">Notes</label>
+                  <textarea
+                    value={editNotes}
+                    onChange={(e) => setEditNotes(e.target.value)}
+                    placeholder="Private notes (e.g., where you bought it, why you love it)"
+                    rows={2}
+                    className="w-full px-3 py-2 text-base border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent resize-none placeholder:text-[var(--input-placeholder)]"
+                  />
+                </div>
               </div>
             ) : (
               <>
@@ -165,6 +175,11 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
                 {item.custom_description && (
                   <p className="mt-1 text-sm text-[var(--text-secondary)] line-clamp-2">
                     {item.custom_description}
+                  </p>
+                )}
+                {item.notes && (
+                  <p className="mt-1 text-sm text-[var(--text-tertiary)] italic line-clamp-1">
+                    💭 {item.notes}
                   </p>
                 )}
                 {itemLinks.length > 0 && (

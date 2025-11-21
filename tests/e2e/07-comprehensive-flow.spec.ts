@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { login } from './utils/auth';
+import { login, TEST_USER } from './utils/auth';
 
 /**
  * Comprehensive End-to-End Flow Tests
@@ -121,7 +121,7 @@ test.describe('Complete User Journey', () => {
   });
 
   test('error handling - invalid URLs', async ({ page }) => {
-    await page.goto('/bags/nonexistent-bag-code');
+    await page.goto(`/u/${TEST_USER.handle}/nonexistent-bag-code`);
 
     // Should show 404 or redirect
     await page.waitForTimeout(1000);

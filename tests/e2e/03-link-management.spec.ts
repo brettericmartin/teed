@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { login } from './utils/auth';
+import { login, TEST_USER } from './utils/auth';
 import { createBag, addItem, deleteBag, randomBagData, randomItemData } from './utils/testData';
 
 /**
@@ -32,7 +32,7 @@ test.describe('Link Management', () => {
   });
 
   test('should open link manager modal', async ({ page }) => {
-    await page.goto(`/bags/${bagCode}/edit`);
+    await page.goto(`/u/${TEST_USER.handle}/${bagCode}/edit`);
 
     // Expand item
     const itemCard = page.locator(`text=${itemName}`).locator('..').locator('..');
@@ -43,7 +43,7 @@ test.describe('Link Management', () => {
   });
 
   test('should add a product link', async ({ page }) => {
-    await page.goto(`/bags/${bagCode}/edit`);
+    await page.goto(`/u/${TEST_USER.handle}/${bagCode}/edit`);
 
     // Open link manager
     const itemCard = page.locator(`text=${itemName}`).locator('..').locator('..');
@@ -66,7 +66,7 @@ test.describe('Link Management', () => {
   });
 
   test('should validate URL format', async ({ page }) => {
-    await page.goto(`/bags/${bagCode}/edit`);
+    await page.goto(`/u/${TEST_USER.handle}/${bagCode}/edit`);
 
     // Open link manager
     const itemCard = page.locator(`text=${itemName}`).locator('..').locator('..');
@@ -82,7 +82,7 @@ test.describe('Link Management', () => {
   });
 
   test('should edit a link', async ({ page }) => {
-    await page.goto(`/bags/${bagCode}/edit`);
+    await page.goto(`/u/${TEST_USER.handle}/${bagCode}/edit`);
 
     // Add a link first
     const itemCard = page.locator(`text=${itemName}`).locator('..').locator('..');
@@ -109,7 +109,7 @@ test.describe('Link Management', () => {
   });
 
   test('should delete a link', async ({ page }) => {
-    await page.goto(`/bags/${bagCode}/edit`);
+    await page.goto(`/u/${TEST_USER.handle}/${bagCode}/edit`);
 
     // Add a link first
     const itemCard = page.locator(`text=${itemName}`).locator('..').locator('..');
@@ -131,7 +131,7 @@ test.describe('Link Management', () => {
   });
 
   test('should display link count on item card', async ({ page }) => {
-    await page.goto(`/bags/${bagCode}/edit`);
+    await page.goto(`/u/${TEST_USER.handle}/${bagCode}/edit`);
 
     // Add two links
     const itemCard = page.locator(`text=${itemName}`).locator('..').locator('..');
@@ -155,7 +155,7 @@ test.describe('Link Management', () => {
   });
 
   test('should support different link types', async ({ page }) => {
-    await page.goto(`/bags/${bagCode}/edit`);
+    await page.goto(`/u/${TEST_USER.handle}/${bagCode}/edit`);
 
     const itemCard = page.locator(`text=${itemName}`).locator('..').locator('..');
     await itemCard.locator('button:has-text("Add Link")').first().click();
