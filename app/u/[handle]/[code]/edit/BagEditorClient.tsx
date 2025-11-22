@@ -523,32 +523,24 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   // Batch photo application handler
   const handleApplyBatchPhotos = async (selections: Array<{ itemId: string; imageUrl: string }>) => {
     try {
-      // Apply photos in parallel
+      // Apply photos in parallel using server-side upload to bypass CORS
       await Promise.all(
         selections.map(async ({ itemId, imageUrl }) => {
           try {
-            // Download the image through our proxy to avoid CORS
-            const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(imageUrl)}`;
-            const imageResponse = await fetch(proxyUrl);
-
-            if (!imageResponse.ok) {
-              throw new Error('Failed to download image');
-            }
-
-            const imageBlob = await imageResponse.blob();
-
-            // Upload to our storage
-            const formData = new FormData();
-            formData.append('file', imageBlob, 'product.jpg');
-            formData.append('itemId', itemId);
-
-            const uploadResponse = await fetch('/api/media/upload', {
+            // Use server-side upload-from-url to download and upload in one step
+            const uploadResponse = await fetch('/api/media/upload-from-url', {
               method: 'POST',
-              body: formData,
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                imageUrl,
+                itemId,
+                filename: 'product.jpg',
+              }),
             });
 
             if (!uploadResponse.ok) {
-              throw new Error('Failed to upload image');
+              const errorData = await uploadResponse.json().catch(() => ({}));
+              throw new Error(errorData.error || 'Failed to upload image');
             }
 
             const uploadData = await uploadResponse.json();
