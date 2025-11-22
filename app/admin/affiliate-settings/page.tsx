@@ -4,6 +4,8 @@ import Navigation from '@/components/Navigation';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import AffiliateSettingsClient from './AffiliateSettingsClient';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AffiliateSettingsPage() {
   if (!(await isAdmin())) {
     redirect('/dashboard');

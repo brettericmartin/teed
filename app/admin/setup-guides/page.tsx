@@ -4,6 +4,8 @@ import Navigation from '@/components/Navigation';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import SetupGuidesClient from './SetupGuidesClient';
 
+export const dynamic = 'force-dynamic';
+
 export default async function SetupGuidesPage() {
   if (!(await isAdmin())) {
     redirect('/dashboard');

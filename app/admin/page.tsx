@@ -4,6 +4,8 @@ import Navigation from '@/components/Navigation';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import AdminDashboardClient from './AdminDashboardClient';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminDashboardPage() {
   // Check if user is admin
   if (!(await isAdmin())) {
