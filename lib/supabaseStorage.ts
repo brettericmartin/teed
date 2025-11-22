@@ -11,7 +11,12 @@ const BUCKET_NAME = 'item-photos';
 // Create server-side Supabase client with service role for storage operations
 function getSupabaseAdmin() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  // Try both possible env var names
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
+
+  // Debug: log all SUPABASE env vars (keys only, not values)
+  const allEnvKeys = Object.keys(process.env).filter(k => k.includes('SUPABASE'));
+  console.log('Available SUPABASE env vars:', allEnvKeys);
 
   if (!supabaseUrl || !supabaseServiceKey) {
     console.error('Supabase env check:', {
@@ -19,8 +24,9 @@ function getSupabaseAdmin() {
       hasServiceKey: !!supabaseServiceKey,
       urlValue: supabaseUrl ? 'set' : 'missing',
       serviceKeyLength: supabaseServiceKey?.length || 0,
+      availableKeys: allEnvKeys,
     });
-    throw new Error(`Missing Supabase environment variables: URL=${!!supabaseUrl}, ServiceKey=${!!supabaseServiceKey}`);
+    throw new Error(`Missing Supabase environment variables: URL=${!!supabaseUrl}, ServiceKey=${!!supabaseServiceKey}, AvailableKeys=${allEnvKeys.join(',')}`);
   }
 
   return createClient(supabaseUrl, supabaseServiceKey, {
