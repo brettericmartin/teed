@@ -14,7 +14,13 @@ function getSupabaseAdmin() {
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseUrl || !supabaseServiceKey) {
-    throw new Error('Missing Supabase environment variables');
+    console.error('Supabase env check:', {
+      hasUrl: !!supabaseUrl,
+      hasServiceKey: !!supabaseServiceKey,
+      urlValue: supabaseUrl ? 'set' : 'missing',
+      serviceKeyLength: supabaseServiceKey?.length || 0,
+    });
+    throw new Error(`Missing Supabase environment variables: URL=${!!supabaseUrl}, ServiceKey=${!!supabaseServiceKey}`);
   }
 
   return createClient(supabaseUrl, supabaseServiceKey, {
