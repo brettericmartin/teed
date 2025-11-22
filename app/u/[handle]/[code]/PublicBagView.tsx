@@ -21,6 +21,8 @@ interface Item {
   notes: string | null;
   quantity: number;
   sort_index: number;
+  photo_url: string | null;
+  is_featured: boolean;
   links: ItemLink[];
 }
 
@@ -174,33 +176,46 @@ export default function PublicBagView({
               <div
                 key={item.id}
                 onClick={() => setSelectedItem(item)}
-                className="bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] p-4 md:p-6 hover:shadow-[var(--shadow-3)] transition-all cursor-pointer active:scale-[0.98]"
+                className="bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden hover:shadow-[var(--shadow-3)] transition-all cursor-pointer active:scale-[0.98]"
               >
-                <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-base md:text-lg font-semibold text-[var(--text-primary)] flex-1 leading-tight">
-                    {item.custom_name}
-                  </h3>
-                  {item.quantity > 1 && (
-                    <span className="ml-2 px-2 py-1 bg-[var(--sky-3)] text-[var(--evergreen-12)] text-xs font-medium rounded-lg">
-                      ×{item.quantity}
-                    </span>
-                  )}
-                </div>
-
-                {item.custom_description && (
-                  <p className="text-sm text-[var(--text-secondary)] mb-3 line-clamp-2">
-                    {item.custom_description}
-                  </p>
-                )}
-
-                {item.links.length > 0 && (
-                  <div className="flex items-center gap-1 text-xs text-[var(--text-tertiary)]">
-                    <ExternalLink className="w-3 h-3" />
-                    <span>
-                      {item.links.length} {item.links.length === 1 ? 'link' : 'links'}
-                    </span>
+                {/* Item Photo */}
+                {item.photo_url && (
+                  <div className="aspect-square bg-[var(--sky-2)] overflow-hidden">
+                    <img
+                      src={item.photo_url}
+                      alt={item.custom_name || 'Item photo'}
+                      className="w-full h-full object-contain"
+                    />
                   </div>
                 )}
+
+                <div className="p-4 md:p-6">
+                  <div className="flex items-start justify-between mb-3">
+                    <h3 className="text-base md:text-lg font-semibold text-[var(--text-primary)] flex-1 leading-tight">
+                      {item.custom_name}
+                    </h3>
+                    {item.quantity > 1 && (
+                      <span className="ml-2 px-2 py-1 bg-[var(--sky-3)] text-[var(--evergreen-12)] text-xs font-medium rounded-lg">
+                        ×{item.quantity}
+                      </span>
+                    )}
+                  </div>
+
+                  {item.custom_description && (
+                    <p className="text-sm text-[var(--text-secondary)] mb-3 line-clamp-2">
+                      {item.custom_description}
+                    </p>
+                  )}
+
+                  {item.links.length > 0 && (
+                    <div className="flex items-center gap-1 text-xs text-[var(--text-tertiary)]">
+                      <ExternalLink className="w-3 h-3" />
+                      <span>
+                        {item.links.length} {item.links.length === 1 ? 'link' : 'links'}
+                      </span>
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -245,6 +260,19 @@ export default function PublicBagView({
 
             {/* Modal Content */}
             <div className="px-4 sm:px-8 py-6 space-y-6">
+              {/* Photo */}
+              {selectedItem.photo_url && (
+                <div className="flex justify-center">
+                  <div className="max-w-md w-full bg-[var(--sky-2)] rounded-[var(--radius-lg)] overflow-hidden">
+                    <img
+                      src={selectedItem.photo_url}
+                      alt={selectedItem.custom_name || 'Item photo'}
+                      className="w-full h-auto object-contain max-h-80"
+                    />
+                  </div>
+                </div>
+              )}
+
               {/* Notes */}
               {selectedItem.notes && (
                 <div>
@@ -300,7 +328,7 @@ export default function PublicBagView({
                 </div>
               )}
 
-              {!selectedItem.notes && selectedItem.links.length === 0 && (
+              {!selectedItem.notes && !selectedItem.photo_url && selectedItem.links.length === 0 && (
                 <p className="text-[var(--text-secondary)] text-center py-8">No additional details</p>
               )}
             </div>

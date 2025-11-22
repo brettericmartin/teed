@@ -43,6 +43,8 @@ export default async function UserBagPage({ params }: PageProps) {
         notes,
         quantity,
         sort_index,
+        custom_photo_id,
+        is_featured,
         links (
           id,
           url,
@@ -62,8 +64,34 @@ export default async function UserBagPage({ params }: PageProps) {
     notFound();
   }
 
-  // Sort items by sort_index
-  const sortedItems = bag.items?.sort((a: any, b: any) => a.sort_index - b.sort_index) || [];
+  // Fetch photo URLs for items that have custom_photo_id
+  const photoIds = bag.items
+    ?.map((item: any) => item.custom_photo_id)
+    .filter((id: string | null): id is string => id !== null) || [];
+
+  let photoUrls: Record<string, string> = {};
+
+  if (photoIds.length > 0) {
+    const { data: mediaAssets, error: mediaError } = await supabase
+      .from('media_assets')
+      .select('id, url')
+      .in('id', photoIds);
+
+    if (!mediaError && mediaAssets) {
+      photoUrls = mediaAssets.reduce((acc: Record<string, string>, asset: { id: string; url: string }) => {
+        acc[asset.id] = asset.url;
+        return acc;
+      }, {});
+    }
+  }
+
+  // Sort items by sort_index and add photo URLs
+  const sortedItems = bag.items
+    ?.map((item: any) => ({
+      ...item,
+      photo_url: item.custom_photo_id ? photoUrls[item.custom_photo_id] || null : null,
+    }))
+    .sort((a: any, b: any) => a.sort_index - b.sort_index) || [];
 
   // Check if bag has affiliate links
   const itemIds = bag.items?.map((item: any) => item.id) || [];
