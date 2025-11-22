@@ -77,6 +77,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     totalConfidence: number;
     processingTime: number;
   } | null>(null);
+  const [capturedPhotoBase64, setCapturedPhotoBase64] = useState<string | null>(null);
   const [isIdentifying, setIsIdentifying] = useState(false);
   const [isFillingLinks, setIsFillingLinks] = useState(false);
   const [enrichmentSuggestions, setEnrichmentSuggestions] = useState<any[]>([]);
@@ -255,6 +256,8 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const handlePhotoCapture = async (base64Image: string) => {
     setIsIdentifying(true);
     setShowPhotoUpload(false);
+    // Store the captured photo to use later when creating items
+    setCapturedPhotoBase64(base64Image);
 
     try {
       const response = await fetch('/api/ai/identify-products', {
@@ -277,6 +280,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       setShowProductReview(true);
     } catch (error: any) {
       console.error('Error identifying products:', error);
+      setCapturedPhotoBase64(null); // Clear on error
       alert(error.message || 'Failed to identify products. Please try again.');
     } finally {
       setIsIdentifying(false);
@@ -288,7 +292,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     try {
       // Create all items in parallel for better performance
       const createdItems = await Promise.all(
-        selectedProducts.map(async (product) => {
+        selectedProducts.map(async (product, index) => {
           const response = await fetch(`/api/bags/${bag.code}/items`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -311,16 +315,27 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
 
           const newItem = await response.json();
 
-          // If product has a Google image, download and upload it
-          if (product.productImage?.imageUrl) {
+          // Try to upload a photo for this item
+          // Priority: 1) User's captured photo (for single item), 2) Google product image
+          const shouldUseUserPhoto = capturedPhotoBase64 && selectedProducts.length === 1;
+
+          if (shouldUseUserPhoto && capturedPhotoBase64) {
+            // Upload the user's captured photo for single item selection
             try {
-              // Download the Google image
-              const imageResponse = await fetch(product.productImage.imageUrl);
-              const imageBlob = await imageResponse.blob();
+              // Convert base64 to blob
+              const base64Data = capturedPhotoBase64.split(',')[1];
+              const mimeType = capturedPhotoBase64.split(';')[0].split(':')[1];
+              const byteCharacters = atob(base64Data);
+              const byteNumbers = new Array(byteCharacters.length);
+              for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+              }
+              const byteArray = new Uint8Array(byteNumbers);
+              const blob = new Blob([byteArray], { type: mimeType });
 
               // Upload to our storage
               const formData = new FormData();
-              formData.append('file', imageBlob, `${product.name}.jpg`);
+              formData.append('file', blob, `${product.name}-${Date.now()}.jpg`);
               formData.append('itemId', newItem.id);
 
               const uploadResponse = await fetch('/api/media/upload', {
@@ -344,6 +359,41 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 newItem.photo_url = uploadData.url;
               }
             } catch (photoError) {
+              console.error(`Failed to upload user photo for ${product.name}:`, photoError);
+              // Continue without photo - don't fail the whole operation
+            }
+          } else if (product.productImage?.imageUrl) {
+            // Use server-side upload-from-url to bypass CORS for Google images
+            try {
+              const uploadResponse = await fetch('/api/media/upload-from-url', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  imageUrl: product.productImage.imageUrl,
+                  itemId: newItem.id,
+                  filename: `${product.name}.jpg`,
+                }),
+              });
+
+              if (uploadResponse.ok) {
+                const uploadData = await uploadResponse.json();
+
+                // Update item with photo
+                await fetch(`/api/items/${newItem.id}`, {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    custom_photo_id: uploadData.mediaAssetId,
+                  }),
+                });
+
+                newItem.custom_photo_id = uploadData.mediaAssetId;
+                newItem.photo_url = uploadData.url;
+              } else {
+                const errorData = await uploadResponse.json().catch(() => ({}));
+                console.error(`Failed to upload Google image for ${product.name}:`, errorData);
+              }
+            } catch (photoError) {
               console.error(`Failed to upload product image for ${product.name}:`, photoError);
               // Continue without photo - don't fail the whole operation
             }
@@ -364,6 +414,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
 
       setShowProductReview(false);
       setIdentifiedProducts(null);
+      setCapturedPhotoBase64(null); // Clear the captured photo
 
       // Show success message
       alert(`Successfully added ${createdItems.length} items to your bag!`);
