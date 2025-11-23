@@ -144,13 +144,15 @@ export default function AIAssistantHub({
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-[var(--text-primary)]">AI Assistant</h3>
+              <h3 className="font-semibold text-[var(--text-primary)]">
+                Cur<span className="text-[var(--sky-11)]">AI</span>tor
+              </h3>
               <span className="px-1.5 py-0.5 text-[10px] font-medium bg-[var(--sky-4)] text-[var(--sky-11)] rounded uppercase tracking-wide">
                 Beta
               </span>
             </div>
             <p className="text-xs text-[var(--text-secondary)]">
-              Let AI help you build your bag faster
+              Your smart assistant for building bags
             </p>
           </div>
         </div>
