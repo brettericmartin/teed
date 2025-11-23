@@ -1,6 +1,6 @@
 'use client';
 
-import { Camera, Images, Sparkles, ChevronRight, Loader2 } from 'lucide-react';
+import { Camera, Images, Sparkles, ChevronRight, Loader2, Bot } from 'lucide-react';
 
 type AIAction = {
   id: string;
@@ -140,12 +140,13 @@ export default function AIAssistantHub({
         {/* Header */}
         <div className="flex items-center gap-3 mb-4">
           <div className="w-8 h-8 rounded-lg bg-[var(--sky-5)] flex items-center justify-center">
-            <Sparkles className="w-4 h-4 text-[var(--sky-11)] animate-sparkle" />
+            <Bot className="w-4 h-4 text-[var(--sky-11)] animate-sparkle" />
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-[var(--text-primary)]">
-                Cur<span className="text-[var(--sky-11)]">AI</span>tor
+              <h3 className="font-semibold text-[var(--text-primary)] flex items-center gap-1.5">
+                Curator
+                <Sparkles className="w-3.5 h-3.5 text-[var(--sky-9)]" />
               </h3>
               <span className="px-1.5 py-0.5 text-[10px] font-medium bg-[var(--sky-4)] text-[var(--sky-11)] rounded uppercase tracking-wide">
                 Beta
