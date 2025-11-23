@@ -567,6 +567,87 @@ button, a, input, textarea, select {
 }
 
 /* ============================================
+   AI ASSISTANT ANIMATIONS
+   ============================================ */
+
+/* Sparkle icon pulse animation */
+@keyframes sparkle-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.15);
+  }
+}
+
+.animate-sparkle {
+  animation: sparkle-pulse 2s ease-in-out infinite;
+}
+
+/* Subtle glow pulse for AI card border */
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 1px var(--sky-5), 0 4px 12px rgba(207, 227, 232, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 0 1px var(--sky-6), 0 4px 20px rgba(207, 227, 232, 0.35), 0 0 30px rgba(207, 227, 232, 0.15);
+  }
+}
+
+.animate-glow {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* Shimmer effect for action rows */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.ai-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--sky-4) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* AI action row hover lift */
+.ai-action-row {
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ai-action-row:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Staggered entrance animation */
+@keyframes slide-up-fade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up-fade 0.4s ease-out forwards;
+}
+
+/* ============================================
    MOBILE-FIRST UTILITIES
    ============================================ */
 

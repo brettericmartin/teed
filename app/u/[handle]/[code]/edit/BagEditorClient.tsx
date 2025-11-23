@@ -12,6 +12,7 @@ import ProductReviewModal, { IdentifiedProduct } from './components/ProductRevie
 import BatchPhotoSelector from './components/BatchPhotoSelector';
 import ItemSelectionModal from './components/ItemSelectionModal';
 import EnrichmentPreview from './components/EnrichmentPreview';
+import AIAssistantHub from './components/AIAssistantHub';
 import { Button } from '@/components/ui/Button';
 
 type Link = {
@@ -722,61 +723,16 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             />
           )}
 
-          {/* Photo Upload Button (Secondary) */}
-          <Button
-            onClick={() => setShowPhotoUpload(true)}
-            disabled={isIdentifying}
-            variant="ai"
-            className="w-full py-3"
-          >
-            {isIdentifying ? (
-              <>
-                <Loader2 className="animate-spin h-5 w-5 mr-2" />
-                Identifying Products...
-              </>
-            ) : (
-              <>
-                <Camera className="w-5 h-5 mr-2" />
-                Add from Photo (AI)
-              </>
-            )}
-          </Button>
-
-          {/* Batch Photo Finder Button */}
-          {bag.items.length > 0 && (
-            <Button
-              onClick={() => setShowItemSelection(true)}
-              variant="secondary"
-              className="w-full py-3"
-            >
-              <Images className="w-5 h-5 mr-2" />
-              {bag.items.filter(item => !item.photo_url).length > 0
-                ? `Find Photos for ${bag.items.filter(item => !item.photo_url).length} Items (AI)`
-                : `Find/Replace Photos for ${bag.items.length} Items (AI)`}
-            </Button>
-          )}
-
-          {/* Fill Product Info Button */}
-          {bag.items.length > 0 && (
-            <Button
-              onClick={handleFillLinks}
-              disabled={isFillingLinks}
-              variant="secondary"
-              className="w-full py-3"
-            >
-              {isFillingLinks ? (
-                <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Filling Product Info...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  Fill Product Info (AI)
-                </>
-              )}
-            </Button>
-          )}
+          {/* AI Assistant Hub */}
+          <AIAssistantHub
+            itemCount={bag.items.length}
+            itemsWithoutPhotos={bag.items.filter(item => !item.photo_url).length}
+            onAddFromPhoto={() => setShowPhotoUpload(true)}
+            onFindPhotos={() => setShowItemSelection(true)}
+            onFillProductInfo={handleFillLinks}
+            isIdentifying={isIdentifying}
+            isFillingInfo={isFillingLinks}
+          />
 
           {/* Manual Form (Hidden by default) */}
           {showManualForm && (

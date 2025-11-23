@@ -9,6 +9,7 @@ import AddItemForm from './components/AddItemForm';
 import ShareModal from './components/ShareModal';
 import PhotoUploadModal from './components/PhotoUploadModal';
 import ProductReviewModal, { IdentifiedProduct } from './components/ProductReviewModal';
+import AIAssistantHub from './components/AIAssistantHub';
 import { Button } from '@/components/ui/Button';
 
 type Link = {
@@ -474,25 +475,16 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
             />
           )}
 
-          {/* Photo Upload Button (Secondary) */}
-          <Button
-            onClick={() => setShowPhotoUpload(true)}
-            disabled={isIdentifying}
-            variant="ai"
-            className="w-full py-3"
-          >
-            {isIdentifying ? (
-              <>
-                <Loader2 className="animate-spin h-5 w-5 mr-2" />
-                Identifying Products...
-              </>
-            ) : (
-              <>
-                <Camera className="w-5 h-5 mr-2" />
-                Add from Photo (AI)
-              </>
-            )}
-          </Button>
+          {/* AI Assistant Hub */}
+          <AIAssistantHub
+            itemCount={bag.items.length}
+            itemsWithoutPhotos={bag.items.filter(item => !item.photo_url).length}
+            onAddFromPhoto={() => setShowPhotoUpload(true)}
+            onFindPhotos={() => {}} // Not implemented in this version
+            onFillProductInfo={() => {}} // Not implemented in this version
+            isIdentifying={isIdentifying}
+            isFillingInfo={false}
+          />
 
           {/* Manual Form (Hidden by default) */}
           {showManualForm && (
