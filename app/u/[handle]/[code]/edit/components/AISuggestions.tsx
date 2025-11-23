@@ -84,7 +84,7 @@ export default function AISuggestions({
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <div className="font-semibold text-gray-900 group-hover:text-[var(--sky-12)]">
+                <div className="font-semibold text-gray-900 group-hover:text-[var(--sky-11)]">
                   {suggestion.custom_name}
                 </div>
                 <div className="text-sm text-gray-600 mt-1">
@@ -131,7 +131,7 @@ export default function AISuggestions({
                         onClick={() => handleAnswerChange(question.id, option)}
                         className={`p-3 border-2 rounded-lg text-sm transition-all ${
                           answers[question.id] === option
-                            ? 'border-[var(--sky-6)] bg-[var(--sky-2)] text-[var(--sky-12)] font-medium'
+                            ? 'border-[var(--sky-6)] bg-[var(--sky-2)] text-[var(--sky-11)] font-medium'
                             : 'border-gray-200 hover:border-gray-300 text-gray-700'
                         }`}
                       >
@@ -145,7 +145,7 @@ export default function AISuggestions({
               {Object.keys(answers).length === questions.length && (
                 <button
                   onClick={handleSubmitAnswers}
-                  className="w-full mt-4 py-2 px-4 bg-[var(--sky-8)] text-[var(--sky-12)] rounded-lg hover:bg-[var(--sky-9)] font-medium transition-colors"
+                  className="w-full mt-4 py-2 px-4 bg-[var(--sky-5)] text-[var(--sky-11)] rounded-lg hover:bg-[var(--sky-6)] font-medium transition-colors"
                 >
                   Get Refined Suggestions
                 </button>

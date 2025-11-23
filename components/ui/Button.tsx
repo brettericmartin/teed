@@ -10,12 +10,12 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
  * Follows the Teed brand design system with semantic button variants
  *
  * Color Strategy:
- * - Sky Tint = AI/intelligent features (soft mint-blue bg with dark text)
+ * - Sky Blue = AI/intelligent features (soft blue bg with deep muted blue text)
  * - Deep Evergreen = Manual/user-initiated actions (create variant)
  * - Copper Orange = Remove/Edit actions (destructive, featured variants)
  *
  * Variants:
- * - ai: For AI-powered features and intelligent actions (Sky Tint #CFE8E1)
+ * - ai: For AI-powered features and intelligent actions (Sky Blue #CFE3E8)
  * - create: For manual new items and user-initiated actions (Deep Evergreen) - PRIMARY
  * - featured: For edit/creative actions (Copper Orange)
  * - destructive: For delete/remove actions (Copper Orange) - Requires confirmation

@@ -144,7 +144,7 @@ export default function EnrichmentPreview({
           {/* Progress bar */}
           <div className="mt-3 h-1.5 bg-gray-100 rounded-full overflow-hidden">
             <div
-              className="h-full bg-[var(--sky-8)] transition-all duration-300"
+              className="h-full bg-[var(--sky-5)] transition-all duration-300"
               style={{ width: `${((currentIndex + 1) / suggestions.length) * 100}%` }}
             />
           </div>
@@ -284,7 +284,7 @@ export default function EnrichmentPreview({
             <button
               onClick={handleApproveAll}
               disabled={selectedCount === 0 || isApplying}
-              className="flex-[2] px-4 py-3.5 text-base font-medium text-[var(--sky-12)] bg-[var(--sky-8)] rounded-xl hover:bg-[var(--sky-9)] active:bg-[var(--sky-10)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex-[2] px-4 py-3.5 text-base font-medium text-[var(--sky-11)] bg-[var(--sky-5)] rounded-xl hover:bg-[var(--sky-6)] active:bg-[var(--sky-7)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isApplying ? (
                 <>
@@ -331,7 +331,7 @@ function FieldCard({
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-gray-700">{label}</span>
           {isNew && (
-            <span className="text-xs px-2 py-0.5 bg-[var(--sky-3)] text-[var(--sky-12)] rounded-full font-medium">
+            <span className="text-xs px-2 py-0.5 bg-[var(--sky-3)] text-[var(--sky-11)] rounded-full font-medium">
               New
             </span>
           )}

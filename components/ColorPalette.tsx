@@ -13,7 +13,7 @@ export function ColorPalette() {
     { name: 'Deep Evergreen', value: '#1F3A2E', var: '--evergreen-12' },
     { name: 'Warm Sand', value: '#D9B47C', var: '--sand-8' },
     { name: 'Stone Grey', value: '#868996', var: '--grey-8' },
-    { name: 'Sky Tint', value: '#CFE8E1', var: '--sky-8' },
+    { name: 'Sky Blue', value: '#CFE3E8', var: '--sky-5' },
     { name: 'Copper', value: '#C2784A', var: '--copper-8' },
   ];
 

@@ -147,7 +147,7 @@ export default function ProductReviewModal({
           >
             <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-colors ${
               allSelected
-                ? 'bg-[var(--sky-8)] border-[var(--sky-8)]'
+                ? 'bg-[var(--sky-5)] border-[var(--sky-5)]'
                 : 'border-gray-300 bg-white'
             }`}>
               {allSelected && <Check className="w-4 h-4 text-white" />}
@@ -193,7 +193,7 @@ export default function ProductReviewModal({
                       >
                         <div className={`w-7 h-7 rounded-lg border-2 flex items-center justify-center transition-all ${
                           isSelected
-                            ? 'bg-[var(--sky-8)] border-[var(--sky-8)] scale-100'
+                            ? 'bg-[var(--sky-5)] border-[var(--sky-5)] scale-100'
                             : 'border-gray-300 bg-white hover:border-gray-400'
                         }`}>
                           {isSelected && <Check className="w-4 h-4 text-white" />}
@@ -343,7 +343,7 @@ export default function ProductReviewModal({
             <button
               onClick={handleAddSelected}
               disabled={isAdding || selectedCount === 0}
-              className="flex-[2] px-4 py-3.5 text-base font-medium text-[var(--sky-12)] bg-[var(--sky-8)] rounded-xl hover:bg-[var(--sky-9)] active:bg-[var(--sky-10)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex-[2] px-4 py-3.5 text-base font-medium text-[var(--sky-11)] bg-[var(--sky-5)] rounded-xl hover:bg-[var(--sky-6)] active:bg-[var(--sky-7)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isAdding ? (
                 <>

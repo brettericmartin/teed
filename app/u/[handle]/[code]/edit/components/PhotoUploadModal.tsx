@@ -197,7 +197,7 @@ export default function PhotoUploadModal({
                       />
                     </svg>
                     <div>
-                      <h3 className="text-sm font-medium text-[var(--sky-12)]">Tips for best results</h3>
+                      <h3 className="text-sm font-medium text-[var(--sky-11)]">Tips for best results</h3>
                       <ul className="mt-2 text-sm text-[var(--sky-11)] space-y-1">
                         <li>• Take clear, well-lit photos</li>
                         <li>• Include multiple items in one photo</li>

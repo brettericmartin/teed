@@ -103,8 +103,8 @@ export default function PhotoUploadModal({
       />
 
       {/* Modal */}
-      <div className="flex min-h-full items-center justify-center p-4">
-        <div className="relative bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-4)] max-w-2xl w-full">
+      <div className="flex min-h-full items-start md:items-center justify-center md:p-4">
+        <div className="relative bg-[var(--surface)] md:rounded-[var(--radius-xl)] shadow-[var(--shadow-4)] w-full h-full md:h-auto md:max-w-2xl">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-[var(--border-subtle)]">
             <div>
@@ -118,7 +118,7 @@ export default function PhotoUploadModal({
             </div>
             <button
               onClick={handleCloseModal}
-              className="text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors"
+              className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors rounded-lg hover:bg-[var(--surface-hover)] active:bg-[var(--surface-active)]"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -197,7 +197,7 @@ export default function PhotoUploadModal({
                       />
                     </svg>
                     <div>
-                      <h3 className="text-sm font-medium text-[var(--sky-12)]">Tips for best results</h3>
+                      <h3 className="text-sm font-medium text-[var(--sky-11)]">Tips for best results</h3>
                       <ul className="mt-2 text-sm text-[var(--sky-11)] space-y-1">
                         <li>• Take clear, well-lit photos</li>
                         <li>• Include multiple items in one photo</li>

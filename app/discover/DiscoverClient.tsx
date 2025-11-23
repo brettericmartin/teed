@@ -55,8 +55,8 @@ const getCategoryColor = (categoryValue: string) => {
   const colorMap: Record<string, { bg: string; text: string }> = {
     golf: { bg: 'bg-[var(--teed-green-8)]', text: 'text-white' },
     outdoor: { bg: 'bg-[var(--evergreen-9)]', text: 'text-white' },
-    travel: { bg: 'bg-[var(--sky-9)]', text: 'text-white' },
-    tech: { bg: 'bg-[var(--sky-10)]', text: 'text-white' },
+    travel: { bg: 'bg-[var(--sky-6)]', text: 'text-white' },
+    tech: { bg: 'bg-[var(--sky-7)]', text: 'text-white' },
     fashion: { bg: 'bg-[var(--copper-7)]', text: 'text-white' },
     fitness: { bg: 'bg-[var(--copper-8)]', text: 'text-white' },
     gaming: { bg: 'bg-[var(--copper-6)]', text: 'text-white' },
@@ -213,7 +213,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                       value={searchInput}
                       onChange={(e) => setSearchInput(e.target.value)}
                       placeholder="Search bags..."
-                      className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--sky-9)] focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--sky-6)] focus:border-transparent"
                     />
                   </div>
                 </form>
@@ -224,7 +224,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                     onClick={() => setShowFollowing(!showFollowing)}
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all whitespace-nowrap ${
                       showFollowing
-                        ? 'bg-[var(--sky-9)] text-white'
+                        ? 'bg-[var(--sky-6)] text-white'
                         : 'bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] hover:bg-[var(--surface-hover)]'
                     }`}
                   >

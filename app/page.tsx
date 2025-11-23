@@ -229,7 +229,7 @@ export default function Home() {
 
               <div className="absolute -bottom-4 -left-4 bg-[var(--surface)] rounded-[var(--radius-lg)] shadow-[var(--shadow-4)] px-4 py-2 border border-[var(--border-subtle)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 hidden lg:block">
                 <div className="flex items-center gap-2">
-                  <Share2 className="w-4 h-4 text-[var(--sky-9)]" />
+                  <Share2 className="w-4 h-4 text-[var(--sky-6)]" />
                   <span className="text-sm text-[var(--text-secondary)]">Share Publicly</span>
                 </div>
               </div>

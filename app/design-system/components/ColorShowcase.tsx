@@ -23,7 +23,7 @@ export function ColorShowcase() {
     { name: 'Deep Evergreen', value: '#1F3A2E', variable: '--evergreen-12', usage: 'Primary text, create actions' },
     { name: 'Warm Sand', value: '#D9B47C', variable: '--sand-8', usage: 'Warm accents, highlights' },
     { name: 'Stone Grey', value: '#868996', variable: '--grey-8', usage: 'Secondary text, labels' },
-    { name: 'Sky Tint', value: '#CFE8E1', variable: '--sky-8', usage: 'Backgrounds, subtle accents' },
+    { name: 'Sky Blue', value: '#CFE3E8', variable: '--sky-5', usage: 'AI features, backgrounds, subtle accents' },
     { name: 'Copper', value: '#C2784A', variable: '--copper-8', usage: 'Destructive actions, warnings' },
   ];
 

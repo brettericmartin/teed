@@ -68,19 +68,19 @@
   --grey-11: #464B55;
   --grey-12: #32363E;
 
-  /* Sky Tint Scale - 12 steps */
-  --sky-1: #FAFDFC;
-  --sky-2: #F4FAF9;
-  --sky-3: #E8F5F2;
-  --sky-4: #D9EEE9;
-  --sky-5: #C7E5DD;
-  --sky-6: #B1D9CE;
-  --sky-7: #96CABBB;
-  --sky-8: #CFE8E1; /* Primary - Sky Tint */
-  --sky-9: #A8D8CB;
-  --sky-10: #8BC9B8;
-  --sky-11: #6DB9A6;
-  --sky-12: #4F9B89;
+  /* Sky Blue Scale - 12 steps */
+  --sky-1: #FAFCFD;
+  --sky-2: #F4F8FA;
+  --sky-3: #E8F1F5;
+  --sky-4: #DAEAEF;
+  --sky-5: #CFE3E8; /* Primary - Sky Blue */
+  --sky-6: #B8D4DC;
+  --sky-7: #9DC3CE;
+  --sky-8: #82B2BF;
+  --sky-9: #6A9EAD;
+  --sky-10: #5A8A99;
+  --sky-11: #4A6172; /* Deep Muted Blue */
+  --sky-12: #3A4F5C;
 
   /* Copper Scale - 12 steps */
   --copper-1: #FEF8F5;
@@ -129,12 +129,12 @@
      COMPONENT TOKENS - Specific component uses
      ============================================ */
 
-  /* Button - AI/Smart Actions (Sky Tint - soft mint-blue for AI features) */
-  --button-ai-bg: var(--sky-8);
-  --button-ai-bg-hover: var(--sky-9);
-  --button-ai-bg-active: var(--sky-10);
-  --button-ai-text: var(--sky-12);
-  --button-ai-border: var(--sky-9);
+  /* Button - AI/Smart Actions (Sky Blue - soft blue for AI features) */
+  --button-ai-bg: var(--sky-5);
+  --button-ai-bg-hover: var(--sky-6);
+  --button-ai-bg-active: var(--sky-7);
+  --button-ai-text: var(--sky-11);
+  --button-ai-border: var(--sky-6);
 
   /* Button - Create/Add Actions */
   --button-create-bg: var(--evergreen-12);
