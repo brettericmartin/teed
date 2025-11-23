@@ -9,12 +9,17 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
  * Teed Button Component
  * Follows the Teed brand design system with semantic button variants
  *
+ * Color Strategy:
+ * - Sky Tint = AI/intelligent features (soft mint-blue bg with dark text)
+ * - Deep Evergreen = Manual/user-initiated actions (create variant)
+ * - Copper Orange = Remove/Edit actions (destructive, featured variants)
+ *
  * Variants:
- * - ai: For AI-powered features and intelligent actions (Earthy Sage)
- * - create: For creating new items and additive actions (Deep Evergreen) - PRIMARY
- * - featured: For creative/featured actions with energy (Copper Orange)
- * - destructive: For delete/remove actions (Dark Copper) - Requires confirmation
- * - secondary: For less prominent actions (Sky Tint/Sage)
+ * - ai: For AI-powered features and intelligent actions (Sky Tint #CFE8E1)
+ * - create: For manual new items and user-initiated actions (Deep Evergreen) - PRIMARY
+ * - featured: For edit/creative actions (Copper Orange)
+ * - destructive: For delete/remove actions (Copper Orange) - Requires confirmation
+ * - secondary: For less prominent actions (Soft backgrounds)
  * - ghost: For tertiary actions (Transparent with border)
  * - outline: For outlined style (White with Evergreen border)
  */
@@ -24,16 +29,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       'inline-flex items-center justify-center font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--focus-ring)] disabled:opacity-50 disabled:cursor-not-allowed';
 
     const variantStyles = {
-      // AI Actions: Earthy Sage for intelligent features
+      // AI Actions: Sky Tint (soft mint-blue) for intelligent/AI-powered features
       ai: 'bg-[var(--button-ai-bg)] text-[var(--button-ai-text)] hover:bg-[var(--button-ai-bg-hover)] active:bg-[var(--button-ai-bg-active)] shadow-sm hover:shadow-md active:scale-[0.98]',
 
-      // Create/Add: Deep Evergreen for primary actions
+      // Create/Add: Deep Evergreen for manual/user-initiated actions
       create: 'bg-[var(--button-create-bg)] text-[var(--button-create-text)] hover:bg-[var(--button-create-bg-hover)] active:bg-[var(--button-create-bg-active)] shadow-sm hover:shadow-md active:scale-[0.98]',
 
-      // Featured/Creative: Copper Orange for creative/featured actions
+      // Featured/Edit: Copper Orange for edit/creative actions
       featured: 'bg-[var(--copper-8)] text-white hover:bg-[var(--copper-9)] active:bg-[var(--copper-10)] shadow-sm hover:shadow-md active:scale-[0.98]',
 
-      // Destructive: Dark Copper for remove/delete actions
+      // Destructive: Copper Orange for remove/delete actions
       destructive: 'bg-[var(--button-destructive-bg)] text-[var(--button-destructive-text)] hover:bg-[var(--button-destructive-bg-hover)] active:bg-[var(--button-destructive-bg-active)] shadow-sm hover:shadow-md active:scale-[0.98]',
 
       // Secondary: Soft backgrounds for secondary actions

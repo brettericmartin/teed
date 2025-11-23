@@ -270,7 +270,7 @@ export default function AddItemForm({ onSubmit, onCancel, bagTitle }: AddItemFor
         <button
           type="submit"
           disabled={isSubmitting || !name.trim()}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-4 py-2 bg-[var(--button-create-bg)] hover:bg-[var(--button-create-bg-hover)] text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? 'Adding...' : 'Add Item'}
         </button>

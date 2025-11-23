@@ -129,12 +129,12 @@
      COMPONENT TOKENS - Specific component uses
      ============================================ */
 
-  /* Button - AI/Smart Actions */
-  --button-ai-bg: var(--teed-green-8);
-  --button-ai-bg-hover: var(--teed-green-9);
-  --button-ai-bg-active: var(--teed-green-10);
-  --button-ai-text: var(--base-white);
-  --button-ai-border: var(--teed-green-9);
+  /* Button - AI/Smart Actions (Sky Tint - soft mint-blue for AI features) */
+  --button-ai-bg: var(--sky-8);
+  --button-ai-bg-hover: var(--sky-9);
+  --button-ai-bg-active: var(--sky-10);
+  --button-ai-text: var(--sky-12);
+  --button-ai-border: var(--sky-9);
 
   /* Button - Create/Add Actions */
   --button-create-bg: var(--evergreen-12);

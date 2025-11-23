@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { ChevronDown, Check, X } from 'lucide-react';
 
 export type IdentifiedProduct = {
   name: string;
@@ -42,10 +43,11 @@ export default function ProductReviewModal({
   onAddSelected,
 }: ProductReviewModalProps) {
   const [selectedIds, setSelectedIds] = useState<Set<number>>(
-    new Set(products.map((_, i) => i)) // All selected by default
+    new Set(products.map((_, i) => i))
   );
   const [editedProducts, setEditedProducts] = useState<IdentifiedProduct[]>(products);
   const [isAdding, setIsAdding] = useState(false);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   const toggleSelection = (index: number) => {
     const newSelected = new Set(selectedIds);
@@ -83,10 +85,7 @@ export default function ProductReviewModal({
 
   const handleAddSelected = async () => {
     const selected = editedProducts.filter((_, i) => selectedIds.has(i));
-
-    if (selected.length === 0) {
-      return;
-    }
+    if (selected.length === 0) return;
 
     setIsAdding(true);
     try {
@@ -104,312 +103,261 @@ export default function ProductReviewModal({
   const selectedCount = selectedIds.size;
   const allSelected = selectedIds.size === products.length;
 
+  const getConfidenceColor = (confidence: number) => {
+    if (confidence >= 70) return 'bg-green-500';
+    if (confidence >= 50) return 'bg-yellow-500';
+    return 'bg-red-500';
+  };
+
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      {/* Backdrop */}
+    <div className="fixed inset-0 z-50 flex flex-col bg-white md:bg-black/50 md:items-center md:justify-center md:p-4">
+      {/* Desktop backdrop - click to close */}
       <div
-        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+        className="hidden md:block fixed inset-0"
         onClick={onClose}
       />
 
-      {/* Modal */}
-      <div className="flex min-h-full items-center justify-center p-4">
-        <div className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-          {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200">
-            <div>
-              <h2 className="text-xl font-semibold text-gray-900">
-                Review Identified Products
-              </h2>
-              <div className="flex items-center gap-4 mt-1 text-sm text-gray-600">
-                <span>{products.length} products found</span>
-                <span>•</span>
-                <span>{totalConfidence}% confidence</span>
-                <span>•</span>
-                <span>{processingTime}ms</span>
-              </div>
+      {/* Modal container - full screen mobile, centered card desktop */}
+      <div className="relative flex flex-col w-full h-full md:h-auto md:max-h-[90vh] md:max-w-2xl md:rounded-xl md:shadow-2xl bg-white overflow-hidden">
+
+        {/* Header - compact on mobile */}
+        <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 md:px-6 md:py-4 border-b border-gray-200 bg-white">
+          <div className="flex-1 min-w-0">
+            <h2 className="text-lg font-semibold text-gray-900">
+              Review Products
+            </h2>
+            <p className="text-sm text-gray-500 mt-0.5">
+              {products.length} found • {totalConfidence}% confidence
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="ml-2 p-2 -mr-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors"
+            aria-label="Close"
+          >
+            <X className="w-6 h-6 text-gray-500" />
+          </button>
+        </div>
+
+        {/* Select All Bar */}
+        <div className="flex-shrink-0 px-4 py-2.5 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+          <button
+            onClick={toggleSelectAll}
+            className="flex items-center gap-3 py-1"
+          >
+            <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-colors ${
+              allSelected
+                ? 'bg-[var(--sky-8)] border-[var(--sky-8)]'
+                : 'border-gray-300 bg-white'
+            }`}>
+              {allSelected && <Check className="w-4 h-4 text-white" />}
             </div>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
-
-          {/* Select All */}
-          <div className="px-6 py-3 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={allSelected}
-                onChange={toggleSelectAll}
-                className="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"
-              />
-              <span className="text-sm font-medium text-gray-700">
-                Select All ({products.length})
-              </span>
-            </label>
-            <span className="text-sm text-gray-600">
-              {selectedCount} selected
+            <span className="text-sm font-medium text-gray-700">
+              Select All
             </span>
-          </div>
+          </button>
+          <span className="text-sm text-gray-500">
+            {selectedCount} selected
+          </span>
+        </div>
 
-          {/* Products List */}
-          <div className="flex-1 overflow-y-auto p-6">
-            {products.length === 0 ? (
-              <div className="text-center py-12">
-                <svg
-                  className="mx-auto h-12 w-12 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <h3 className="mt-2 text-sm font-medium text-gray-900">No products identified</h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Try taking another photo with better lighting
-                </p>
+        {/* Products List - scrollable area */}
+        <div className="flex-1 overflow-y-auto overscroll-contain">
+          {products.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                <X className="w-8 h-8 text-gray-400" />
               </div>
-            ) : (
-              <div className="space-y-4">
-                {editedProducts.map((product, index) => (
+              <h3 className="text-base font-medium text-gray-900">No products found</h3>
+              <p className="text-sm text-gray-500 mt-1">
+                Try taking another photo with better lighting
+              </p>
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-100">
+              {editedProducts.map((product, index) => {
+                const isSelected = selectedIds.has(index);
+                const isExpanded = expandedIndex === index;
+
+                return (
                   <div
                     key={index}
-                    className={`border rounded-lg p-4 transition-all ${
-                      selectedIds.has(index)
-                        ? 'border-blue-300 bg-blue-50'
-                        : 'border-gray-200 bg-white'
-                    }`}
+                    className={`transition-colors ${isSelected ? 'bg-[var(--sky-2)]' : 'bg-white'}`}
                   >
-                    <div className="flex items-start gap-4">
-                      {/* Checkbox */}
-                      <input
-                        type="checkbox"
-                        checked={selectedIds.has(index)}
-                        onChange={() => toggleSelection(index)}
-                        className="mt-1 w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"
-                      />
-
-                      {/* Product Image */}
-                      {product.productImage && (
-                        <div className="flex-shrink-0">
-                          <img
-                            src={product.productImage.thumbnailUrl}
-                            alt={product.name}
-                            className="w-20 h-20 object-cover rounded border border-gray-200"
-                            onError={(e) => {
-                              // Hide image if it fails to load
-                              e.currentTarget.style.display = 'none';
-                            }}
-                          />
-                          <div className="text-xs text-gray-500 mt-1 text-center truncate max-w-[80px]">
-                            {product.productImage.source}
-                          </div>
+                    {/* Product Row - always visible */}
+                    <div className="flex items-center gap-3 px-4 py-3">
+                      {/* Selection checkbox */}
+                      <button
+                        onClick={() => toggleSelection(index)}
+                        className="flex-shrink-0"
+                      >
+                        <div className={`w-7 h-7 rounded-lg border-2 flex items-center justify-center transition-all ${
+                          isSelected
+                            ? 'bg-[var(--sky-8)] border-[var(--sky-8)] scale-100'
+                            : 'border-gray-300 bg-white hover:border-gray-400'
+                        }`}>
+                          {isSelected && <Check className="w-4 h-4 text-white" />}
                         </div>
+                      </button>
+
+                      {/* Product image thumbnail */}
+                      {product.productImage && (
+                        <img
+                          src={product.productImage.thumbnailUrl}
+                          alt=""
+                          className="w-12 h-12 rounded-lg object-cover border border-gray-200 flex-shrink-0"
+                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                        />
                       )}
 
-                      {/* Product Details */}
-                      <div className="flex-1 space-y-3">
-                        {/* Name and Brand */}
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <label className="block text-xs font-medium text-gray-700 mb-1">
-                              Product Name
-                            </label>
-                            <input
-                              type="text"
-                              value={product.name}
-                              onChange={(e) => updateProduct(index, 'name', e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-medium text-gray-700 mb-1">
-                              Brand (optional)
-                            </label>
-                            <input
-                              type="text"
-                              value={product.brand || ''}
-                              onChange={(e) => updateProduct(index, 'brand', e.target.value || undefined)}
-                              placeholder="Brand name"
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            />
-                          </div>
-                        </div>
-
-                        {/* Category and Confidence */}
-                        <div className="flex items-center gap-4 flex-wrap">
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs font-medium text-gray-700">Category:</span>
-                            <select
-                              value={product.category}
-                              onChange={(e) => updateProduct(index, 'category', e.target.value)}
-                              className="px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
-                              <option value="camping">Camping</option>
-                              <option value="golf">Golf</option>
-                              <option value="hiking">Hiking</option>
-                              <option value="travel">Travel</option>
-                              <option value="sports">Sports</option>
-                              <option value="electronics">Electronics</option>
-                              <option value="clothing">Clothing</option>
-                              <option value="other">Other</option>
-                            </select>
-                          </div>
-
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs font-medium text-gray-700">Confidence:</span>
-                            <div className="flex items-center gap-1">
-                              <div className="w-24 bg-gray-200 rounded-full h-2">
-                                <div
-                                  className={`h-2 rounded-full ${
-                                    product.confidence >= 70
-                                      ? 'bg-green-500'
-                                      : product.confidence >= 50
-                                      ? 'bg-yellow-500'
-                                      : 'bg-red-500'
-                                  }`}
-                                  style={{ width: `${product.confidence}%` }}
-                                />
-                              </div>
-                              <span className="text-xs text-gray-600">{product.confidence}%</span>
-                            </div>
-                          </div>
-
-                          {product.estimatedPrice && (
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs font-medium text-gray-700">Price:</span>
-                              <span className="text-xs text-gray-600">{product.estimatedPrice}</span>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Model Number */}
-                        {product.modelNumber && (
-                          <div className="flex items-center gap-2 text-xs">
-                            <span className="font-medium text-gray-700">Model:</span>
-                            <span className="text-gray-600 font-mono bg-gray-100 px-2 py-0.5 rounded">
-                              {product.modelNumber}
-                            </span>
-                          </div>
-                        )}
-
-                        {/* Additional Info */}
-                        {(product.color || (product.specifications && product.specifications.length > 0)) && (
-                          <div className="flex items-center gap-4 text-xs text-gray-600">
-                            {product.color && (
-                              <span>Color: {product.color}</span>
-                            )}
-                            {product.specifications && product.specifications.length > 0 && (
-                              <span>Specs: {product.specifications.join(', ')}</span>
+                      {/* Product info */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0">
+                            <h3 className="font-medium text-gray-900 truncate">
+                              {product.name}
+                            </h3>
+                            {product.brand && (
+                              <p className="text-sm text-gray-500 truncate">
+                                {product.brand}
+                              </p>
                             )}
                           </div>
-                        )}
+                          {/* Confidence indicator */}
+                          <div className="flex-shrink-0 flex items-center gap-1.5">
+                            <div className={`w-2 h-2 rounded-full ${getConfidenceColor(product.confidence)}`} />
+                            <span className="text-xs text-gray-500">{product.confidence}%</span>
+                          </div>
+                        </div>
+                      </div>
 
-                        {/* Alternatives Section - Show when confidence < 70 */}
+                      {/* Expand button */}
+                      <button
+                        onClick={() => setExpandedIndex(isExpanded ? null : index)}
+                        className="flex-shrink-0 p-2 -mr-2 rounded-full hover:bg-gray-100 active:bg-gray-200"
+                      >
+                        <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+                      </button>
+                    </div>
+
+                    {/* Expanded edit section */}
+                    {isExpanded && (
+                      <div className="px-4 pb-4 pt-1 space-y-4 border-t border-gray-100 bg-gray-50/50">
+                        {/* Name input */}
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1.5">
+                            Product Name
+                          </label>
+                          <input
+                            type="text"
+                            value={product.name}
+                            onChange={(e) => updateProduct(index, 'name', e.target.value)}
+                            className="w-full px-3 py-3 text-base border border-gray-300 rounded-xl focus:ring-2 focus:ring-[var(--sky-6)] focus:border-transparent"
+                          />
+                        </div>
+
+                        {/* Brand input */}
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1.5">
+                            Brand (optional)
+                          </label>
+                          <input
+                            type="text"
+                            value={product.brand || ''}
+                            onChange={(e) => updateProduct(index, 'brand', e.target.value || undefined)}
+                            placeholder="Enter brand name"
+                            className="w-full px-3 py-3 text-base border border-gray-300 rounded-xl focus:ring-2 focus:ring-[var(--sky-6)] focus:border-transparent"
+                          />
+                        </div>
+
+                        {/* Category select */}
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1.5">
+                            Category
+                          </label>
+                          <select
+                            value={product.category}
+                            onChange={(e) => updateProduct(index, 'category', e.target.value)}
+                            className="w-full px-3 py-3 text-base border border-gray-300 rounded-xl focus:ring-2 focus:ring-[var(--sky-6)] focus:border-transparent bg-white"
+                          >
+                            <option value="camping">Camping</option>
+                            <option value="golf">Golf</option>
+                            <option value="hiking">Hiking</option>
+                            <option value="travel">Travel</option>
+                            <option value="sports">Sports</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="other">Other</option>
+                          </select>
+                        </div>
+
+                        {/* Alternatives */}
                         {product.alternatives && product.alternatives.length > 0 && (
-                          <div className="mt-3 pt-3 border-t border-gray-200">
-                            <div className="text-xs font-medium text-gray-700 mb-2">
-                              Alternative Identifications:
-                            </div>
+                          <div className="pt-2">
+                            <p className="text-xs font-medium text-gray-600 mb-2">
+                              Did you mean one of these?
+                            </p>
                             <div className="space-y-2">
                               {product.alternatives.map((alt, altIndex) => (
-                                <div
+                                <button
                                   key={altIndex}
-                                  className="flex items-start justify-between gap-3 bg-yellow-50 border border-yellow-200 rounded p-2"
+                                  onClick={() => {
+                                    selectAlternative(index, alt);
+                                  }}
+                                  className="w-full text-left p-3 bg-amber-50 border border-amber-200 rounded-xl hover:bg-amber-100 active:bg-amber-200 transition-colors"
                                 >
-                                  <div className="flex-1">
-                                    <div className="text-xs font-medium text-gray-900">
-                                      {alt.name}
+                                  <div className="flex items-center justify-between">
+                                    <div>
+                                      <span className="font-medium text-gray-900">{alt.name}</span>
                                       {alt.brand && (
-                                        <span className="text-gray-600"> ({alt.brand})</span>
+                                        <span className="text-gray-500"> • {alt.brand}</span>
                                       )}
                                     </div>
-                                    <div className="text-xs text-gray-600 mt-0.5">
-                                      {alt.reason}
-                                    </div>
-                                    <div className="flex items-center gap-1 mt-1">
-                                      <div className="w-16 bg-gray-200 rounded-full h-1.5">
-                                        <div
-                                          className="h-1.5 rounded-full bg-yellow-500"
-                                          style={{ width: `${alt.confidence}%` }}
-                                        />
-                                      </div>
-                                      <span className="text-xs text-gray-500">{alt.confidence}%</span>
-                                    </div>
+                                    <span className="text-xs text-gray-500">{alt.confidence}%</span>
                                   </div>
-                                  <button
-                                    onClick={() => selectAlternative(index, alt)}
-                                    className="px-2 py-1 text-xs bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
-                                  >
-                                    Use This
-                                  </button>
-                                </div>
+                                  <p className="text-xs text-gray-600 mt-1">{alt.reason}</p>
+                                </button>
                               ))}
                             </div>
                           </div>
                         )}
                       </div>
-                    </div>
+                    )}
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
 
-          {/* Footer */}
-          <div className="flex items-center justify-between gap-3 p-6 border-t border-gray-200 bg-gray-50">
+        {/* Footer - sticky at bottom */}
+        <div className="flex-shrink-0 px-4 py-4 md:px-6 border-t border-gray-200 bg-white safe-area-bottom">
+          <div className="flex gap-3">
             <button
               onClick={onClose}
               disabled={isAdding}
-              className="px-6 py-3 text-gray-700 hover:text-gray-900 font-medium transition-colors disabled:opacity-50"
+              className="flex-1 px-4 py-3.5 text-base font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 active:bg-gray-300 transition-colors disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               onClick={handleAddSelected}
               disabled={isAdding || selectedCount === 0}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="flex-[2] px-4 py-3.5 text-base font-medium text-[var(--sky-12)] bg-[var(--sky-8)] rounded-xl hover:bg-[var(--sky-9)] active:bg-[var(--sky-10)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isAdding ? (
                 <>
-                  <svg
-                    className="animate-spin h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
+                  <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                   </svg>
                   Adding...
                 </>
               ) : (
-                `Add ${selectedCount} ${selectedCount === 1 ? 'Item' : 'Items'} to Bag`
+                <>
+                  <Check className="w-5 h-5" />
+                  Add {selectedCount} {selectedCount === 1 ? 'Item' : 'Items'}
+                </>
               )}
             </button>
           </div>

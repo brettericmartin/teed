@@ -243,7 +243,7 @@ export default function LinkManagerModal({
                           value={editUrl}
                           onChange={(e) => setEditUrl(e.target.value)}
                           placeholder="https://example.com/product"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--teed-green-6)] focus:border-transparent"
                         />
                       </div>
                       <div>
@@ -253,7 +253,7 @@ export default function LinkManagerModal({
                         <select
                           value={editKind}
                           onChange={(e) => setEditKind(e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--teed-green-6)] focus:border-transparent"
                         >
                           {linkKindOptions.map(option => (
                             <option key={option.value} value={option.value}>
@@ -266,7 +266,7 @@ export default function LinkManagerModal({
                         <button
                           onClick={() => handleEditLink(link.id)}
                           disabled={isSubmitting}
-                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="px-4 py-2 bg-[var(--button-create-bg)] text-white rounded-lg hover:bg-[var(--button-create-bg-hover)] disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {isSubmitting ? 'Saving...' : 'Save'}
                         </button>
@@ -284,7 +284,7 @@ export default function LinkManagerModal({
                     <div className="flex items-start justify-between">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700">
+                          <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-[var(--teed-green-2)] text-[var(--teed-green-11)]">
                             {linkKindOptions.find(opt => opt.value === link.kind)?.label || link.kind}
                           </span>
                         </div>
@@ -292,7 +292,7 @@ export default function LinkManagerModal({
                           href={link.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-600 hover:text-blue-800 text-sm font-medium break-all"
+                          className="text-[var(--teed-green-9)] hover:text-[var(--teed-green-11)] text-sm font-medium break-all"
                         >
                           {getLinkDisplay(link.url)}
                         </a>
@@ -306,7 +306,7 @@ export default function LinkManagerModal({
                         </button>
                         <button
                           onClick={() => handleDeleteLink(link.id)}
-                          className="text-sm text-red-600 hover:text-red-800"
+                          className="text-sm text-[var(--copper-9)] hover:text-[var(--copper-11)]"
                         >
                           Delete
                         </button>
@@ -336,7 +336,7 @@ export default function LinkManagerModal({
                   }
                 }}
                 placeholder="https://example.com/product"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--teed-green-6)] focus:border-transparent"
               />
             </div>
             <div>
@@ -346,7 +346,7 @@ export default function LinkManagerModal({
               <select
                 value={newKind}
                 onChange={(e) => setNewKind(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--teed-green-6)] focus:border-transparent"
               >
                 {linkKindOptions.map(option => (
                   <option key={option.value} value={option.value}>
@@ -358,7 +358,7 @@ export default function LinkManagerModal({
             <button
               onClick={handleAddLink}
               disabled={isSubmitting || !newUrl.trim()}
-              className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-4 py-2 bg-[var(--button-create-bg)] text-white rounded-lg hover:bg-[var(--button-create-bg-hover)] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Adding...' : 'Add Link'}
             </button>

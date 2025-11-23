@@ -230,7 +230,7 @@ export default function ItemPreview({ suggestion, onConfirm, onCancel }: ItemPre
             </button>
             <button
               onClick={handleConfirm}
-              className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
+              className="flex items-center gap-2 px-6 py-2 bg-[var(--button-create-bg)] text-white rounded-lg hover:bg-[var(--button-create-bg-hover)] font-medium transition-colors"
             >
               <Check className="w-4 h-4" />
               Add to Bag

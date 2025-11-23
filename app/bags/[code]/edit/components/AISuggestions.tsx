@@ -80,11 +80,11 @@ export default function AISuggestions({
           <button
             key={index}
             onClick={() => onSelectSuggestion(suggestion)}
-            className="w-full text-left p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all group"
+            className="w-full text-left p-4 border-2 border-gray-200 rounded-lg hover:border-[var(--sky-6)] hover:bg-[var(--sky-2)] transition-all group"
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <div className="font-semibold text-gray-900 group-hover:text-blue-700">
+                <div className="font-semibold text-gray-900 group-hover:text-[var(--sky-12)]">
                   {suggestion.custom_name}
                 </div>
                 <div className="text-sm text-gray-600 mt-1">
@@ -131,7 +131,7 @@ export default function AISuggestions({
                         onClick={() => handleAnswerChange(question.id, option)}
                         className={`p-3 border-2 rounded-lg text-sm transition-all ${
                           answers[question.id] === option
-                            ? 'border-blue-500 bg-blue-50 text-blue-700 font-medium'
+                            ? 'border-[var(--sky-6)] bg-[var(--sky-2)] text-[var(--sky-12)] font-medium'
                             : 'border-gray-200 hover:border-gray-300 text-gray-700'
                         }`}
                       >
@@ -145,7 +145,7 @@ export default function AISuggestions({
               {Object.keys(answers).length === questions.length && (
                 <button
                   onClick={handleSubmitAnswers}
-                  className="w-full mt-4 py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
+                  className="w-full mt-4 py-2 px-4 bg-[var(--sky-8)] text-[var(--sky-12)] rounded-lg hover:bg-[var(--sky-9)] font-medium transition-colors"
                 >
                   Get Refined Suggestions
                 </button>

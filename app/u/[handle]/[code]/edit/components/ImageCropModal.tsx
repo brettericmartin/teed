@@ -146,7 +146,7 @@ export default function ImageCropModal({
             <button
               onClick={handleSave}
               disabled={isProcessing}
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="px-4 py-2 text-sm font-medium text-white bg-[var(--button-create-bg)] rounded-md hover:bg-[var(--button-create-bg-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               {isProcessing ? (
                 <>
