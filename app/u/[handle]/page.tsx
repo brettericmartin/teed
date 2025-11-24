@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import UserProfileClient from './UserProfileClient';
+import { createServerSupabase } from '@/lib/serverSupabase';
 
 type PageProps = {
   params: Promise<{
@@ -11,26 +12,37 @@ type PageProps = {
 export default async function UserProfilePage({ params }: PageProps) {
   const { handle } = await params;
 
-  // Fetch user profile and public bags
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-  const response = await fetch(
-    `${baseUrl}/api/users/${handle}/bags`,
-    {
-      cache: 'no-store',
-    }
-  );
+  // Query database directly instead of HTTP fetch
+  const supabase = await createServerSupabase();
 
-  if (!response.ok) {
+  // Find the user by handle
+  const { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .select('id, handle, display_name, avatar_url, bio, created_at')
+    .eq('handle', handle)
+    .single();
+
+  if (profileError || !profile) {
     notFound();
   }
 
-  const data = await response.json();
-  const { profile, bags } = data;
+  // Fetch user's public bags
+  const { data: bags, error: bagsError } = await supabase
+    .from('bags')
+    .select('id, code, title, description, background_image, is_public, created_at, updated_at')
+    .eq('owner_id', profile.id)
+    .eq('is_public', true)
+    .order('updated_at', { ascending: false });
+
+  if (bagsError) {
+    console.error('Error fetching user bags:', bagsError);
+    notFound();
+  }
 
   return (
     <>
       <Navigation isAuthenticated={false} />
-      <UserProfileClient profile={profile} bags={bags} />
+      <UserProfileClient profile={profile} bags={bags || []} />
     </>
   );
 }

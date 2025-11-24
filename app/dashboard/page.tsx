@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
 import { createServerSupabase } from '@/lib/serverSupabase';
-import Navigation from '@/components/Navigation';
 import DashboardClient from './DashboardClient';
 
 export default async function DashboardPage() {
@@ -84,17 +83,10 @@ export default async function DashboardPage() {
   }
 
   return (
-    <>
-      <Navigation
-        userHandle={profile?.handle || ''}
-        displayName={profile?.display_name || ''}
-        isAuthenticated={true}
-      />
-      <DashboardClient
-        initialBags={bagsWithPhotos || []}
-        userHandle={profile?.handle || ''}
-        displayName={profile?.display_name || ''}
-      />
-    </>
+    <DashboardClient
+      initialBags={bagsWithPhotos || []}
+      userHandle={profile?.handle || ''}
+      displayName={profile?.display_name || ''}
+    />
   );
 }

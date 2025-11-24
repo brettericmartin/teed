@@ -429,19 +429,6 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
         </div>
       )}
 
-      {/* Edit Notes */}
-      {isEditing && (
-        <div className="border-t border-[var(--border-subtle)] p-4 bg-[var(--sky-1)]">
-          <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">Notes</label>
-          <textarea
-            value={editNotes}
-            onChange={(e) => setEditNotes(e.target.value)}
-            placeholder="Add notes about this item"
-            rows={3}
-            className="w-full px-3 py-2 text-base border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent resize-none placeholder:text-[var(--input-placeholder)]"
-          />
-        </div>
-      )}
 
       {/* Link Manager Modal */}
       <LinkManagerModal
