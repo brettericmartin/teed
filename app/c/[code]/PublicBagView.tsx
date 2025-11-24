@@ -234,7 +234,7 @@ export default function PublicBagView({
                               </span>
                             </div>
                             <p className="text-[var(--text-primary)] group-hover:text-[var(--teed-green-9)] font-medium break-all transition-colors">
-                              {link.label || new URL(link.url).hostname}
+                              {link.label || (() => { try { return new URL(link.url).hostname; } catch { return link.url; } })()}
                             </p>
                             <p className="text-xs text-[var(--text-tertiary)] mt-1 break-all">
                               {link.url}
