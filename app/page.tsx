@@ -1,16 +1,78 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { Camera, Share2, Sparkles, TrendingUp, Users, Zap } from 'lucide-react';
 
+const ROTATING_WORDS = [
+  'Gear',
+  'Golf Bag',
+  'Makeup Kit',
+  'Shopping Haul',
+  'Desk Setup',
+  'Camera Kit',
+  'Travel Kit',
+  'Skincare',
+  'Tech Stack',
+  'Fitness Gear',
+  'Daily Carry',
+  'Book Collection',
+  'Art Supplies',
+  'Kitchen Setup',
+];
+
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [showFixedHero, setShowFixedHero] = useState(true);
+  const [heroOpacity, setHeroOpacity] = useState(1);
+  const heroRef = useRef<HTMLElement>(null);
   const featuresRef = useRef<HTMLDivElement>(null);
   const useCasesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsVisible(true);
+
+    // Scroll-triggered word rotation
+    const handleScroll = () => {
+      if (!heroRef.current) return;
+
+      const heroRect = heroRef.current.getBoundingClientRect();
+      const heroHeight = heroRef.current.offsetHeight;
+      // Calculate scroll progress through the hero section
+      const scrollProgress = Math.max(0, Math.min(1, -heroRect.top / (heroHeight - window.innerHeight)));
+
+      const wordIndex = Math.min(
+        ROTATING_WORDS.length - 1,
+        Math.floor(scrollProgress * ROTATING_WORDS.length)
+      );
+
+      setCurrentWordIndex(wordIndex);
+
+      // Smoothly fade out fixed hero when approaching end of hero section
+      const heroBottom = heroRect.bottom;
+      // Start fading when hero bottom is within 600px of viewport top (earlier = smoother)
+      const fadeStartThreshold = 600;
+      if (heroBottom > fadeStartThreshold) {
+        setHeroOpacity(1);
+        setShowFixedHero(true);
+      } else if (heroBottom > 100) {
+        // Smoothly interpolate opacity from 1 to 0, with easing
+        const rawOpacity = (heroBottom - 100) / (fadeStartThreshold - 100);
+        // Apply ease-out curve for smoother visual transition
+        const opacity = rawOpacity * rawOpacity;
+        setHeroOpacity(opacity);
+        setShowFixedHero(true);
+      } else {
+        // Fully hide before the features section appears
+        setHeroOpacity(0);
+        setShowFixedHero(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initial call
 
     const observerOptions = {
       threshold: 0.1,
@@ -28,229 +90,131 @@ export default function Home() {
     const elements = document.querySelectorAll('.fade-in-section');
     elements.forEach(el => observer.observe(el));
 
-    return () => observer.disconnect();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
+    };
   }, []);
 
   return (
-    <div className="min-h-screen bg-[var(--surface)] overflow-x-hidden">
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden">
-        {/* Animated Background Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[var(--teed-green-2)] via-[var(--sky-2)] to-[var(--amber-2)] opacity-50">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,var(--teed-green-3),transparent_50%)] animate-pulse-slow" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,var(--sky-3),transparent_50%)] animate-pulse-slow animation-delay-1000" />
-        </div>
+    <div className="min-h-screen bg-[var(--background)] overflow-x-hidden">
+      {/* Hero Section - Creates scroll distance for word cycling */}
+      <section ref={heroRef} className="relative" style={{ height: `${100 + ROTATING_WORDS.length * 10}vh` }}>
 
-        {/* Floating Elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-20 h-20 bg-[var(--teed-green-4)] rounded-full opacity-20 animate-float" />
-          <div className="absolute top-40 right-20 w-32 h-32 bg-[var(--sky-4)] rounded-full opacity-20 animate-float animation-delay-2000" />
-          <div className="absolute bottom-20 left-1/4 w-24 h-24 bg-[var(--amber-4)] rounded-full opacity-20 animate-float animation-delay-3000" />
+        {/* "Share your" text - positioned above the laptop screen */}
+        {showFixedHero && (
+        <div
+          className={`fixed left-1/2 -translate-x-1/2 transition-all duration-700 pointer-events-none top-[12%] sm:top-[10%] md:top-[8%] ${
+            isVisible ? 'opacity-100' : 'opacity-0'
+          }`}
+          style={{ zIndex: 50, opacity: isVisible ? heroOpacity : 0 }}
+        >
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-[var(--text-primary)] whitespace-nowrap drop-shadow-sm">
+            Share your
+          </h2>
         </div>
+        )}
 
-        {/* Hero Content */}
-        <div className="relative z-10 text-center max-w-5xl mx-auto">
+        {/* Fixed layers - stay in place while scrolling through hero section */}
+        {showFixedHero && (
+        <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 1 }}>
+
+          {/* Solid background - fades out slower than content to hide features underneath */}
           <div
-            className={`transition-all duration-1000 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
+            className="absolute inset-0 transition-opacity duration-200"
+            style={{
+              backgroundColor: '#dfd5cf',
+              zIndex: 0,
+              // Background stays more opaque longer, then fades quickly at the end
+              opacity: Math.min(1, heroOpacity * 1.5)
+            }}
+          />
+
+          {/* Layer 1: Scrolling words - centered in screen area */}
+          <div
+            className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center top-[22%] sm:top-[21%] md:top-[20%] h-[5%] w-[10%] transition-opacity duration-150"
+            style={{ zIndex: 1, opacity: heroOpacity }}
           >
-            {/* Logo/Title */}
-            <div className="mb-6 inline-block">
-              <h1 className="text-7xl sm:text-8xl md:text-9xl font-bold text-[var(--text-primary)] mb-2 tracking-tight">
-                Teed
-              </h1>
-              <div className="h-2 bg-gradient-to-r from-[var(--teed-green-8)] via-[var(--teed-green-9)] to-[var(--teed-green-10)] rounded-full transform scale-x-0 animate-scale-in animation-delay-500" />
+            <div className="relative flex items-center justify-center">
+              {ROTATING_WORDS.map((word, index) => (
+                <span
+                  key={word}
+                  className={`absolute text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold text-[var(--teed-green-10)] transition-all duration-300 whitespace-nowrap ${
+                    index === currentWordIndex
+                      ? 'opacity-100 transform translate-y-0'
+                      : index < currentWordIndex
+                      ? 'opacity-0 transform -translate-y-3'
+                      : 'opacity-0 transform translate-y-3'
+                  }`}
+                >
+                  {word}
+                </span>
+              ))}
             </div>
+          </div>
 
-            {/* Tagline */}
-            <p className="text-2xl sm:text-3xl md:text-4xl text-[var(--text-secondary)] mb-6 font-medium leading-relaxed transition-all duration-1000 delay-300">
-              Organize. Curate. Share.
-            </p>
+          {/* Layer 2 (FRONT): Hero image with transparent laptop screen */}
+          <div className="absolute inset-0 transition-opacity duration-150" style={{ zIndex: 10, opacity: heroOpacity }}>
+            <Image
+              src="/hero-screen-v11.png"
+              alt="Curated collection of gear - golf clubs, camera, laptop, makeup, and more"
+              fill
+              priority
+              className="object-cover object-center"
+              sizes="100vw"
+            />
+          </div>
 
-            <p className="text-lg sm:text-xl md:text-2xl text-[var(--text-tertiary)] mb-12 max-w-3xl mx-auto transition-all duration-1000 delay-500">
-              Showcase your gear, kits, and collections with style.
-              From golf bags to travel essentials, create visual lists that inspire.
-            </p>
-
-            {/* CTA Buttons */}
-            <div
-              className={`flex flex-col sm:flex-row gap-4 justify-center transition-all duration-1000 delay-700 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}
+          {/* CTA Button - positioned on laptop trackpad */}
+          <div
+            className={`absolute left-1/2 -translate-x-1/2 transition-all duration-300 pointer-events-auto top-[44%] sm:top-[43%] md:top-[42%] ${
+              isVisible ? 'opacity-100' : 'opacity-0'
+            }`}
+            style={{ zIndex: 20, opacity: isVisible ? heroOpacity : 0 }}
+          >
+            <Link
+              href="/discover"
+              className="group relative inline-flex px-6 py-3 sm:px-8 sm:py-3 md:px-10 md:py-4 bg-[var(--teed-green-8)] text-white text-base sm:text-lg font-semibold rounded-[var(--radius-xl)] hover:bg-[var(--teed-green-9)] transition-all duration-300 shadow-[var(--shadow-4)] hover:shadow-[var(--shadow-5)] hover:scale-105 overflow-hidden"
             >
-              <Link
-                href="/login"
-                className="group relative px-8 py-4 bg-[var(--teed-green-8)] text-white text-lg font-semibold rounded-[var(--radius-xl)] hover:bg-[var(--teed-green-9)] transition-all duration-300 shadow-[var(--shadow-3)] hover:shadow-[var(--shadow-4)] hover:scale-105 overflow-hidden"
-              >
-                <span className="relative z-10">Get Started Free</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-[var(--teed-green-9)] to-[var(--teed-green-10)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </Link>
-
-              <Link
-                href="#features"
-                className="px-8 py-4 bg-[var(--surface)] text-[var(--text-primary)] text-lg font-semibold rounded-[var(--radius-xl)] border-2 border-[var(--teed-green-8)] hover:bg-[var(--teed-green-2)] transition-all duration-300 shadow-[var(--shadow-2)] hover:shadow-[var(--shadow-3)] hover:scale-105"
-              >
-                See How It Works
-              </Link>
-            </div>
-
-            {/* Social Proof */}
-            <div className="mt-16 text-sm text-[var(--text-tertiary)] transition-all duration-1000 delay-1000">
-              <p>Trusted by creators, enthusiasts, and organizers worldwide</p>
-            </div>
+              <span className="relative z-10">Explore</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-[var(--teed-green-9)] to-[var(--teed-green-10)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </Link>
           </div>
 
-          {/* Hero Banner - App Preview */}
+          {/* Scroll hint */}
           <div
-            className={`mt-20 max-w-6xl mx-auto transition-all duration-1200 delay-900 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'
+            className={`absolute bottom-8 left-1/2 -translate-x-1/2 transition-all duration-300 ${
+              isVisible ? 'opacity-100' : 'opacity-0'
             }`}
+            style={{ zIndex: 20, opacity: isVisible ? heroOpacity : 0 }}
           >
-            <div className="relative group">
-              {/* Glow effect behind banner */}
-              <div className="absolute -inset-4 bg-gradient-to-r from-[var(--teed-green-6)] via-[var(--sky-6)] to-[var(--teed-green-6)] rounded-[var(--radius-2xl)] opacity-20 blur-2xl group-hover:opacity-30 transition-opacity duration-500" />
-
-              {/* Main banner container */}
-              <div className="relative bg-[var(--surface)] rounded-[var(--radius-2xl)] shadow-[var(--shadow-6)] border-2 border-[var(--border-subtle)] overflow-hidden group-hover:border-[var(--teed-green-6)] transition-all duration-500">
-                {/* Browser chrome */}
-                <div className="bg-[var(--surface-elevated)] px-4 py-3 border-b border-[var(--border-subtle)] flex items-center gap-2">
-                  <div className="flex gap-2">
-                    <div className="w-3 h-3 rounded-full bg-[var(--copper-8)]" />
-                    <div className="w-3 h-3 rounded-full bg-[var(--amber-8)]" />
-                    <div className="w-3 h-3 rounded-full bg-[var(--teed-green-8)]" />
-                  </div>
-                  <div className="flex-1 mx-4">
-                    <div className="bg-[var(--surface)] rounded-full px-4 py-1.5 text-xs text-[var(--text-tertiary)] border border-[var(--border-subtle)]">
-                      teed.app/u/golfer/my-bag
-                    </div>
-                  </div>
-                </div>
-
-                {/* App mockup content */}
-                <div className="bg-gradient-to-br from-[var(--teed-green-1)] to-[var(--sky-1)] p-8 sm:p-12">
-                  {/* Mock bag header */}
-                  <div className="bg-[var(--surface)] rounded-[var(--radius-xl)] p-6 shadow-[var(--shadow-3)] mb-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div>
-                        <div className="h-8 w-48 bg-gradient-to-r from-[var(--teed-green-3)] to-transparent rounded mb-2" />
-                        <div className="h-4 w-32 bg-[var(--sand-3)] rounded" />
-                      </div>
-                      <div className="flex gap-2">
-                        <div className="w-10 h-10 rounded-full bg-[var(--sky-3)]" />
-                        <div className="w-10 h-10 rounded-full bg-[var(--teed-green-3)]" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Mock items grid */}
-                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {[
-                      {
-                        name: 'Titleist GT3 Driver',
-                        brand: 'Titleist',
-                        category: 'Golf',
-                        icon: '⛳',
-                        color: 'from-[var(--teed-green-4)] to-[var(--teed-green-6)]'
-                      },
-                      {
-                        name: 'Srixon ZXi7 Irons',
-                        brand: 'Srixon',
-                        category: 'Golf',
-                        icon: '🏌️',
-                        color: 'from-[var(--sky-4)] to-[var(--sky-6)]'
-                      },
-                      {
-                        name: 'Cotopaxi Allpa 35L',
-                        brand: 'Cotopaxi',
-                        category: 'Travel',
-                        icon: '🎒',
-                        color: 'from-[var(--amber-4)] to-[var(--amber-6)]'
-                      },
-                      {
-                        name: 'Osprey Hikelite 26',
-                        brand: 'Osprey',
-                        category: 'Outdoor',
-                        icon: '🏔️',
-                        color: 'from-[var(--copper-4)] to-[var(--copper-6)]'
-                      },
-                      {
-                        name: 'BioLite Headlamp 425',
-                        brand: 'BioLite',
-                        category: 'Tech',
-                        icon: '💡',
-                        color: 'from-[var(--purple-4)] to-[var(--purple-6)]'
-                      },
-                      {
-                        name: 'MSR PocketRocket',
-                        brand: 'MSR',
-                        category: 'Camping',
-                        icon: '🔥',
-                        color: 'from-[var(--orange-4)] to-[var(--orange-6)]'
-                      }
-                    ].map((item, i) => (
-                      <div
-                        key={i}
-                        className="bg-[var(--surface)] rounded-[var(--radius-lg)] p-4 shadow-[var(--shadow-2)] hover:shadow-[var(--shadow-3)] transition-all duration-300 hover:-translate-y-1"
-                        style={{ animationDelay: `${i * 100}ms` }}
-                      >
-                        {/* Product image with icon */}
-                        <div className={`aspect-square bg-gradient-to-br ${item.color} rounded-[var(--radius-md)] mb-3 flex items-center justify-center`}>
-                          <div className="text-6xl opacity-90">{item.icon}</div>
-                        </div>
-                        {/* Product details */}
-                        <div className="space-y-1.5">
-                          <h3 className="font-semibold text-[var(--text-primary)] text-sm line-clamp-1">
-                            {item.name}
-                          </h3>
-                          <p className="text-xs text-[var(--text-secondary)]">
-                            {item.brand}
-                          </p>
-                        </div>
-                        {/* Category badge */}
-                        <div className="mt-3 inline-flex">
-                          <span className="text-xs px-2.5 py-1 bg-[var(--teed-green-3)] text-[var(--teed-green-11)] rounded-full font-medium">
-                            {item.category}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating UI elements */}
-              <div className="absolute -top-4 -right-4 bg-[var(--surface)] rounded-[var(--radius-lg)] shadow-[var(--shadow-4)] px-4 py-2 border border-[var(--border-subtle)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 hidden lg:block">
-                <div className="flex items-center gap-2">
-                  <Camera className="w-4 h-4 text-[var(--teed-green-9)]" />
-                  <span className="text-sm text-[var(--text-secondary)]">AI Recognition</span>
-                </div>
-              </div>
-
-              <div className="absolute -bottom-4 -left-4 bg-[var(--surface)] rounded-[var(--radius-lg)] shadow-[var(--shadow-4)] px-4 py-2 border border-[var(--border-subtle)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 hidden lg:block">
-                <div className="flex items-center gap-2">
-                  <Share2 className="w-4 h-4 text-[var(--sky-6)]" />
-                  <span className="text-sm text-[var(--text-secondary)]">Share Publicly</span>
-                </div>
-              </div>
-
-              <div className="absolute top-1/2 -right-8 bg-[var(--surface)] rounded-[var(--radius-lg)] shadow-[var(--shadow-4)] px-4 py-2 border border-[var(--border-subtle)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 hidden xl:block">
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-[var(--amber-9)]" />
-                  <span className="text-sm text-[var(--text-secondary)]">Affiliate Links</span>
-                </div>
+            <div className="flex flex-col items-center gap-2 text-[var(--text-secondary)]">
+              <span className="text-sm font-medium">Scroll to explore</span>
+              <div className="w-6 h-10 border-2 border-[var(--text-tertiary)] rounded-full flex items-start justify-center p-2">
+                <div className="w-1 h-3 bg-[var(--text-tertiary)] rounded-full animate-scroll" />
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-[var(--text-tertiary)] rounded-full flex items-start justify-center p-2">
-            <div className="w-1 h-3 bg-[var(--text-tertiary)] rounded-full animate-scroll" />
-          </div>
+          {/* Bottom gradient fade for smooth transition to features section */}
+          <div
+            className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+            style={{
+              zIndex: 30,
+              background: 'linear-gradient(to bottom, transparent, var(--surface-elevated))'
+            }}
+          />
         </div>
+        )}
       </section>
+
+      {/* Transition spacer - creates smooth color transition from hero to features */}
+      <div
+        className="relative h-32"
+        style={{
+          background: 'linear-gradient(to bottom, #dfd5cf 0%, var(--surface-elevated) 100%)'
+        }}
+      />
 
       {/* Features Section */}
       <section id="features" ref={featuresRef} className="py-24 px-4 sm:px-6 lg:px-8 bg-[var(--surface-elevated)]">
