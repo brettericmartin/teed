@@ -94,12 +94,11 @@ export function validateAndCompressImage(base64Image: string): {
     const base64Data = base64Image.split(',')[1];
     const sizeKB = Math.round((base64Data.length * 3) / 4 / 1024);
 
-    // OpenAI limit is 20MB, but we want to stay well under for cost/performance
-    // Best practice: Keep under 2MB (2048 KB)
-    if (sizeKB > 2048) {
+    // OpenAI limit is 20MB, we allow up to 10MB for high quality photos
+    if (sizeKB > 10240) {
       return {
         valid: false,
-        error: `Image too large: ${sizeKB}KB. Please compress to under 2MB.`,
+        error: `Image too large: ${sizeKB}KB. Please compress to under 10MB.`,
         sizeKB,
       };
     }

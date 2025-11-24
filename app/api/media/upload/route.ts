@@ -9,7 +9,7 @@ import { uploadItemPhoto, createMediaAsset } from '@/lib/supabaseStorage';
  * Upload photo for an item and create media_assets record
  *
  * Request body (multipart/form-data):
- * - file: Image file (max 2MB)
+ * - file: Image file (max 10MB)
  * - itemId: ID of item this photo belongs to
  * - alt?: Alt text for accessibility
  *
