@@ -9,6 +9,50 @@ type PhotoUploadModalProps = {
   bagType?: string;
 };
 
+// Compress image to target size while maintaining quality
+async function compressImage(base64: string, maxSizeKB: number = 3500): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let { width, height } = img;
+
+      // Max dimension for good quality while reducing size
+      const MAX_DIMENSION = 2000;
+      if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+        const ratio = Math.min(MAX_DIMENSION / width, MAX_DIMENSION / height);
+        width = Math.round(width * ratio);
+        height = Math.round(height * ratio);
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        reject(new Error('Failed to get canvas context'));
+        return;
+      }
+
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // Try different quality levels to get under target size
+      let quality = 0.9;
+      let result = canvas.toDataURL('image/jpeg', quality);
+
+      // Reduce quality until we're under the target size
+      while (result.length > maxSizeKB * 1024 * 1.37 && quality > 0.3) { // 1.37 accounts for base64 overhead
+        quality -= 0.1;
+        result = canvas.toDataURL('image/jpeg', quality);
+      }
+
+      resolve(result);
+    };
+    img.onerror = () => reject(new Error('Failed to load image for compression'));
+    img.src = base64;
+  });
+}
+
 export default function PhotoUploadModal({
   isOpen,
   onClose,
@@ -20,7 +64,7 @@ export default function PhotoUploadModal({
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const MAX_SIZE_MB = 10;
+  const MAX_SIZE_MB = 20; // Accept larger files since we'll compress them
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
   const handleFileSelect = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -47,10 +91,28 @@ export default function PhotoUploadModal({
       // Read file as base64
       const reader = new FileReader();
 
-      reader.onload = (event) => {
-        const base64 = event.target?.result as string;
-        setPreview(base64);
-        setIsProcessing(false);
+      reader.onload = async (event) => {
+        try {
+          const base64 = event.target?.result as string;
+
+          // Check if image needs compression (> 3.5MB to stay under Vercel's 4.5MB limit)
+          const sizeKB = Math.round((base64.length * 3) / 4 / 1024);
+          let finalBase64 = base64;
+
+          if (sizeKB > 3500) {
+            console.log(`Compressing image from ${sizeKB}KB...`);
+            finalBase64 = await compressImage(base64, 3500);
+            const newSizeKB = Math.round((finalBase64.length * 3) / 4 / 1024);
+            console.log(`Compressed to ${newSizeKB}KB`);
+          }
+
+          setPreview(finalBase64);
+          setIsProcessing(false);
+        } catch (compressError) {
+          console.error('Compression error:', compressError);
+          setError('Failed to process image. Please try a smaller file.');
+          setIsProcessing(false);
+        }
       };
 
       reader.onerror = () => {

@@ -3,6 +3,18 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { identifyProductsInImage } from '@/lib/ai';
 
+// Increase body size limit for large images (iPhone photos can be 5-10MB)
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '15mb',
+    },
+  },
+};
+
+// For Next.js App Router, also export runtime config
+export const maxDuration = 60; // Allow up to 60 seconds for AI processing
+
 /**
  * POST /api/ai/identify-products
  *
@@ -49,8 +61,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Parse request body
-    const body = await request.json();
+    // Parse request body with error handling for large payloads
+    let body;
+    try {
+      body = await request.json();
+    } catch (parseError: any) {
+      console.error('Failed to parse request body:', parseError.message);
+      return NextResponse.json(
+        { error: 'Failed to parse image. The image may be too large. Please try a smaller image.' },
+        { status: 413 }
+      );
+    }
     const { image, bagType, expectedCategories } = body;
 
     // Best Practice: Validate required fields
