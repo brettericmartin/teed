@@ -48,9 +48,11 @@ type ItemListProps = {
   onDelete: (itemId: string) => void;
   onUpdate: (itemId: string, updates: Partial<Omit<Item, 'id' | 'bag_id' | 'links'>>) => void;
   bagCode: string;
+  heroItemId?: string | null;
+  onToggleHero?: (itemId: string) => void;
 };
 
-export default function ItemList({ items, onDelete, onUpdate, bagCode }: ItemListProps) {
+export default function ItemList({ items, onDelete, onUpdate, bagCode, heroItemId, onToggleHero }: ItemListProps) {
   // Sort items by sort_index
   const [sortedItems, setSortedItems] = useState([...items].sort((a, b) => a.sort_index - b.sort_index));
   const [isMounted, setIsMounted] = useState(false);
@@ -113,6 +115,8 @@ export default function ItemList({ items, onDelete, onUpdate, bagCode }: ItemLis
               onDelete={onDelete}
               onUpdate={onUpdate}
               bagCode={bagCode}
+              isHero={heroItemId === item.id}
+              onToggleHero={onToggleHero}
             />
           </div>
         ))}
@@ -131,6 +135,8 @@ export default function ItemList({ items, onDelete, onUpdate, bagCode }: ItemLis
               onDelete={onDelete}
               onUpdate={onUpdate}
               bagCode={bagCode}
+              isHero={heroItemId === item.id}
+              onToggleHero={onToggleHero}
             />
           ))}
         </div>

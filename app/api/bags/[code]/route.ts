@@ -141,9 +141,24 @@ export async function GET(
       has_photo_url: !!i.photo_url
     })));
 
-    // Return bag with items and links
+    // Fetch cover photo URL if present
+    let coverPhotoUrl: string | null = null;
+    if (bag.cover_photo_id) {
+      const { data: coverAsset, error: coverError } = await supabase
+        .from('media_assets')
+        .select('url')
+        .eq('id', bag.cover_photo_id)
+        .single();
+
+      if (!coverError && coverAsset) {
+        coverPhotoUrl = coverAsset.url;
+      }
+    }
+
+    // Return bag with items, links, and cover photo URL
     return NextResponse.json({
       ...bag,
+      cover_photo_url: coverPhotoUrl,
       items: itemsWithLinks,
     });
   } catch (error) {
@@ -275,6 +290,51 @@ export async function PUT(
         .map((tag: string) => tag.trim().toLowerCase());
       // Pass the array directly - Supabase will serialize it as JSONB
       updates.tags = cleanedTags;
+    }
+
+    // Handle hero_item_id (the designated hero item for this bag)
+    if (body.hero_item_id !== undefined) {
+      if (body.hero_item_id === null) {
+        updates.hero_item_id = null;
+      } else {
+        // Validate that the hero item belongs to this bag
+        const { data: heroItem, error: heroError } = await supabase
+          .from('bag_items')
+          .select('id')
+          .eq('id', body.hero_item_id)
+          .eq('bag_id', bag.id)
+          .single();
+
+        if (heroError || !heroItem) {
+          return NextResponse.json(
+            { error: 'Hero item not found in this bag' },
+            { status: 400 }
+          );
+        }
+        updates.hero_item_id = body.hero_item_id;
+      }
+    }
+
+    // Handle cover_photo_id (optional cover image for the bag)
+    if (body.cover_photo_id !== undefined) {
+      if (body.cover_photo_id === null) {
+        updates.cover_photo_id = null;
+      } else {
+        // Validate that the media asset exists
+        const { data: mediaAsset, error: mediaError } = await supabase
+          .from('media_assets')
+          .select('id')
+          .eq('id', body.cover_photo_id)
+          .single();
+
+        if (mediaError || !mediaAsset) {
+          return NextResponse.json(
+            { error: 'Cover photo not found' },
+            { status: 400 }
+          );
+        }
+        updates.cover_photo_id = body.cover_photo_id;
+      }
     }
 
     // Always update updated_at timestamp

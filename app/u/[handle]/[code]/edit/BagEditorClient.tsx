@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Loader2, Share2, Trash2, Camera, ChevronLeft, Package, Images, Link, Sparkles } from 'lucide-react';
+import { ArrowLeft, Loader2, Share2, Trash2, Camera, ChevronLeft, Package, Images, Link, Sparkles, Upload, Image, X } from 'lucide-react';
 import ItemList from './components/ItemList';
 import QuickAddItem from './components/QuickAddItem';
 import AddItemForm from './components/AddItemForm';
@@ -54,6 +54,9 @@ type Bag = {
   background_image: string | null;
   category: string | null;
   tags: string[];
+  hero_item_id: string | null;
+  cover_photo_id: string | null;
+  cover_photo_url: string | null;
   created_at: string;
   updated_at: string | null;
   items: Item[];
@@ -448,6 +451,93 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     const minutes = Math.floor(seconds / 60);
     if (minutes < 60) return `${minutes}m ago`;
     return lastSaved.toLocaleTimeString();
+  };
+
+  // Handle toggling hero item
+  const handleToggleHero = async (itemId: string) => {
+    const newHeroId = bag.hero_item_id === itemId ? null : itemId;
+
+    try {
+      const response = await fetch(`/api/bags/${bag.code}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          hero_item_id: newHeroId,
+        }),
+      });
+
+      if (response.ok) {
+        const updatedBag = await response.json();
+        setBag((prev) => ({ ...prev, hero_item_id: updatedBag.hero_item_id }));
+      }
+    } catch (error) {
+      console.error('Error updating hero item:', error);
+    }
+  };
+
+  // Handle cover photo upload
+  const handleCoverPhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const uploadResponse = await fetch('/api/media/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error('Failed to upload cover photo');
+      }
+
+      const uploadData = await uploadResponse.json();
+
+      // Update bag with cover photo
+      const response = await fetch(`/api/bags/${bag.code}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cover_photo_id: uploadData.mediaAssetId,
+        }),
+      });
+
+      if (response.ok) {
+        setBag((prev) => ({
+          ...prev,
+          cover_photo_id: uploadData.mediaAssetId,
+          cover_photo_url: uploadData.url,
+        }));
+      }
+    } catch (error) {
+      console.error('Error uploading cover photo:', error);
+      alert('Failed to upload cover photo. Please try again.');
+    }
+  };
+
+  // Handle removing cover photo
+  const handleRemoveCoverPhoto = async () => {
+    try {
+      const response = await fetch(`/api/bags/${bag.code}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cover_photo_id: null,
+        }),
+      });
+
+      if (response.ok) {
+        setBag((prev) => ({
+          ...prev,
+          cover_photo_id: null,
+          cover_photo_url: null,
+        }));
+      }
+    } catch (error) {
+      console.error('Error removing cover photo:', error);
+    }
   };
 
   const handleDeleteBag = async () => {
@@ -1043,6 +1133,43 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
 
       {/* Main Content */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Cover Photo Section */}
+        <div className="mb-6">
+          <h3 className="text-sm font-medium text-[var(--text-primary)] mb-2">Cover Photo</h3>
+          {bag.cover_photo_url ? (
+            <div className="relative rounded-lg overflow-hidden bg-[var(--sky-2)] border border-[var(--border-subtle)]">
+              <img
+                src={bag.cover_photo_url}
+                alt="Bag cover"
+                className="w-full h-48 object-cover"
+              />
+              <button
+                onClick={handleRemoveCoverPhoto}
+                className="absolute top-2 right-2 p-2 bg-[var(--surface)] rounded-full shadow-md hover:bg-[var(--surface-hover)] transition-colors"
+                title="Remove cover photo"
+              >
+                <X className="w-4 h-4 text-[var(--text-secondary)]" />
+              </button>
+            </div>
+          ) : (
+            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-[var(--border-subtle)] rounded-lg cursor-pointer hover:border-[var(--teed-green-8)] hover:bg-[var(--surface-hover)] transition-colors">
+              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                <Image className="w-8 h-8 text-[var(--text-tertiary)] mb-2" />
+                <p className="text-sm text-[var(--text-secondary)]">
+                  <span className="font-medium text-[var(--teed-green-9)]">Click to upload</span> a cover photo
+                </p>
+                <p className="text-xs text-[var(--text-tertiary)] mt-1">PNG, JPG up to 10MB</p>
+              </div>
+              <input
+                type="file"
+                className="hidden"
+                accept="image/*"
+                onChange={handleCoverPhotoUpload}
+              />
+            </label>
+          )}
+        </div>
+
         {/* Add Item Section */}
         <div className="mb-6 space-y-4">
           {/* Quick AI-Powered Text Input (Primary) */}
@@ -1145,6 +1272,8 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             onDelete={handleDeleteItem}
             onUpdate={handleUpdateItem}
             bagCode={bag.code}
+            heroItemId={bag.hero_item_id}
+            onToggleHero={handleToggleHero}
           />
         ) : (
           <div className="text-center py-12">

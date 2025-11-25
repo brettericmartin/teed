@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ChevronDown, Edit2, Trash2, X, Check, Link as LinkIcon, Copy, CheckCheck, Star } from 'lucide-react';
+import { ChevronDown, Edit2, Trash2, X, Check, Link as LinkIcon, Copy, CheckCheck, Star, Trophy } from 'lucide-react';
 import LinkManagerModal from './LinkManagerModal';
 import ItemPhotoUpload from './ItemPhotoUpload';
 
@@ -36,9 +36,11 @@ type ItemCardProps = {
   onDelete: (itemId: string) => void;
   onUpdate: (itemId: string, updates: Partial<Omit<Item, 'id' | 'bag_id' | 'links'>>) => void;
   bagCode: string;
+  isHero?: boolean;
+  onToggleHero?: (itemId: string) => void;
 };
 
-export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCardProps) {
+export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = false, onToggleHero }: ItemCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(item.custom_name || '');
@@ -227,7 +229,21 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
               </>
             ) : (
               <>
-                {/* Show Star and Link only on desktop or when expanded */}
+                {/* Show Trophy, Star and Link only on desktop or when expanded */}
+                {onToggleHero && (
+                  <button
+                    onClick={() => onToggleHero(item.id)}
+                    className={`hidden sm:flex p-2.5 min-h-[44px] min-w-[44px] items-center justify-center rounded-lg transition-all ${
+                      isHero
+                        ? 'text-[var(--amber-9)] bg-[var(--amber-3)] hover:bg-[var(--amber-4)] hover:text-[var(--amber-10)]'
+                        : 'text-[var(--text-tertiary)] hover:text-[var(--amber-9)] hover:bg-[var(--amber-2)]'
+                    }`}
+                    title={isHero ? 'Remove hero status' : 'Set as hero piece'}
+                    aria-label={isHero ? 'Remove hero status' : 'Set as hero piece'}
+                  >
+                    <Trophy className={`w-5 h-5 transition-all ${isHero ? 'fill-current scale-110' : ''}`} />
+                  </button>
+                )}
                 <button
                   onClick={() => {
                     onUpdate(item.id, { is_featured: !item.is_featured });
@@ -294,6 +310,19 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
         <div className="border-t border-[var(--border-subtle)] p-4 bg-[var(--sky-1)] space-y-4">
           {/* Mobile-only action buttons */}
           <div className="flex items-center gap-2 sm:hidden pb-4 border-b border-[var(--border-subtle)]">
+            {onToggleHero && (
+              <button
+                onClick={() => onToggleHero(item.id)}
+                className={`flex-1 min-h-[44px] px-4 py-2 rounded-lg transition-all flex items-center justify-center gap-2 ${
+                  isHero
+                    ? 'text-[var(--amber-9)] bg-[var(--amber-3)] hover:bg-[var(--amber-4)]'
+                    : 'text-[var(--text-secondary)] bg-[var(--surface)] border border-[var(--border-subtle)] hover:border-[var(--amber-6)]'
+                }`}
+              >
+                <Trophy className={`w-5 h-5 ${isHero ? 'fill-current' : ''}`} />
+                <span className="text-sm font-medium">{isHero ? 'Hero' : 'Hero'}</span>
+              </button>
+            )}
             <button
               onClick={() => {
                 onUpdate(item.id, { is_featured: !item.is_featured });

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Share2, ExternalLink, User, X, Package } from 'lucide-react';
+import { Share2, ExternalLink, User, X, Package, Trophy } from 'lucide-react';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 interface ItemLink {
@@ -32,6 +32,9 @@ interface Bag {
   title: string;
   description: string | null;
   is_public: boolean;
+  hero_item_id: string | null;
+  cover_photo_id: string | null;
+  cover_photo_url: string | null;
   created_at: string;
 }
 
@@ -208,6 +211,19 @@ export default function PublicBagView({
         </div>
       )}
 
+      {/* Cover Photo Banner */}
+      {bag.cover_photo_url && (
+        <div className="max-w-5xl mx-auto px-4 pt-8">
+          <div className="rounded-[var(--radius-xl)] overflow-hidden shadow-[var(--shadow-3)]">
+            <img
+              src={bag.cover_photo_url}
+              alt={`${bag.title} cover`}
+              className="w-full h-48 md:h-64 object-cover"
+            />
+          </div>
+        </div>
+      )}
+
       {/* Items Grid */}
       <div className="max-w-5xl mx-auto px-4 py-8">
         {items.length === 0 ? (
@@ -219,12 +235,25 @@ export default function PublicBagView({
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {items.map((item) => (
+            {items.map((item) => {
+              const isHero = bag.hero_item_id === item.id;
+              return (
               <div
                 key={item.id}
                 onClick={() => setSelectedItem(item)}
-                className="bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden hover:shadow-[var(--shadow-3)] transition-all cursor-pointer active:scale-[0.98]"
+                className={`bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] overflow-hidden hover:shadow-[var(--shadow-3)] transition-all cursor-pointer active:scale-[0.98] relative ${
+                  isHero
+                    ? 'ring-2 ring-[var(--amber-8)] border-2 border-[var(--amber-6)]'
+                    : 'border border-[var(--border-subtle)]'
+                }`}
               >
+                {/* Hero Badge */}
+                {isHero && (
+                  <div className="absolute top-3 right-3 z-10 bg-[var(--amber-3)] text-[var(--amber-11)] px-2 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                    <Trophy className="w-3.5 h-3.5 fill-current" />
+                    <span className="text-xs font-medium">Hero</span>
+                  </div>
+                )}
                 {/* Item Photo */}
                 {item.photo_url && (
                   <div className="aspect-square bg-[var(--sky-2)] overflow-hidden">
@@ -264,7 +293,8 @@ export default function PublicBagView({
                   )}
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

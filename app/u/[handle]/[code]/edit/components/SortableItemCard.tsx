@@ -11,9 +11,11 @@ type SortableItemCardProps = {
   onDelete: (itemId: string) => void;
   onUpdate: (itemId: string, updates: Partial<Omit<Item, 'id' | 'bag_id' | 'links'>>) => void;
   bagCode: string;
+  isHero?: boolean;
+  onToggleHero?: (itemId: string) => void;
 };
 
-export default function SortableItemCard({ item, onDelete, onUpdate, bagCode }: SortableItemCardProps) {
+export default function SortableItemCard({ item, onDelete, onUpdate, bagCode, isHero, onToggleHero }: SortableItemCardProps) {
   const {
     attributes,
     listeners,
@@ -47,6 +49,8 @@ export default function SortableItemCard({ item, onDelete, onUpdate, bagCode }: 
         onDelete={onDelete}
         onUpdate={onUpdate}
         bagCode={bagCode}
+        isHero={isHero}
+        onToggleHero={onToggleHero}
       />
     </div>
   );
