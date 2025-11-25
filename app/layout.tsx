@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
+import FeedbackWidget from "@/components/FeedbackWidget";
 import { createServerSupabase } from "@/lib/serverSupabase";
 
 export const metadata: Metadata = {
@@ -51,6 +52,9 @@ export default async function RootLayout({
         <main className="pt-nav-safe pb-20 md:pb-0">
           {children}
         </main>
+
+        {/* Feedback widget for authenticated users */}
+        {user && <FeedbackWidget />}
       </body>
     </html>
   );

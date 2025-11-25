@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Share2, ExternalLink, User, X, Package } from 'lucide-react';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -56,6 +56,32 @@ export default function PublicBagView({
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
 
+  // Track page view
+  useEffect(() => {
+    const trackView = async () => {
+      try {
+        await fetch('/api/analytics/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            event_type: 'bag_viewed',
+            event_data: {
+              bag_id: bag.id,
+              bag_code: bag.code,
+              owner_handle: ownerHandle,
+              referrer: document.referrer || undefined,
+            },
+          }),
+        });
+      } catch (error) {
+        // Silent failure - don't interrupt user experience
+        console.log('[Analytics] View tracking failed:', error);
+      }
+    };
+
+    trackView();
+  }, [bag.id, bag.code, ownerHandle]);
+
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -72,6 +98,27 @@ export default function PublicBagView({
       // Fallback: copy to clipboard
       navigator.clipboard.writeText(shareUrl);
       alert('Link copied to clipboard!');
+    }
+  };
+
+  // Track link click
+  const trackLinkClick = async (linkId: string, itemId: string, url: string) => {
+    try {
+      await fetch('/api/analytics/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          event_type: 'link_clicked',
+          event_data: {
+            link_id: linkId,
+            item_id: itemId,
+            bag_id: bag.id,
+            url,
+          },
+        }),
+      });
+    } catch (error) {
+      // Silent failure
     }
   };
 
@@ -292,6 +339,7 @@ export default function PublicBagView({
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => trackLinkClick(link.id, selectedItem.id, link.url)}
                         className="block p-4 border border-[var(--border-subtle)] rounded-[var(--radius-md)] hover:border-[var(--teed-green-8)] hover:bg-[var(--surface-hover)] transition-all group"
                       >
                         <div className="flex items-start justify-between">

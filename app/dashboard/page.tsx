@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import DashboardClient from './DashboardClient';
+import BetaGate from './BetaGate';
 
 export default async function DashboardPage() {
   const supabase = await createServerSupabase();
@@ -15,7 +16,20 @@ export default async function DashboardPage() {
     redirect('/login'); // Redirect to login if not authenticated
   }
 
+  // Check beta access first
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('handle, display_name, beta_tier, beta_approved_at, total_views, total_bags, total_followers, stats_updated_at')
+    .eq('id', user.id)
+    .single();
+
+  // If user doesn't have beta access, show the beta gate
+  if (!profile?.beta_tier) {
+    return <BetaGate userEmail={user.email || ''} userName={profile?.display_name || ''} />;
+  }
+
   // Fetch user's bags with featured items
+  // Sort by: pinned first (by pinned_at DESC), then by created_at DESC
   const { data: bags, error: bagsError } = await supabase
     .from('bags')
     .select(`
@@ -29,6 +43,8 @@ export default async function DashboardPage() {
       )
     `)
     .eq('owner_id', user.id)
+    .order('is_pinned', { ascending: false })
+    .order('pinned_at', { ascending: false, nullsFirst: false })
     .order('created_at', { ascending: false });
 
   if (bagsError) {
@@ -66,27 +82,19 @@ export default async function DashboardPage() {
     })),
   }));
 
-  // Get profile
-  const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    .select('handle, display_name')
-    .eq('id', user.id)
-    .single();
-
-  if (profileError) {
-    console.error('Error fetching profile:', profileError);
-  }
-
-  // If no profile exists, we have a problem - user signed up but profile wasn't created
-  if (!profile) {
-    console.error('No profile found for user:', user.id, user.email);
-  }
+  // Profile already fetched above for beta check
 
   return (
     <DashboardClient
       initialBags={bagsWithPhotos || []}
       userHandle={profile?.handle || ''}
       displayName={profile?.display_name || ''}
+      profileStats={{
+        totalViews: profile?.total_views || 0,
+        totalBags: profile?.total_bags || 0,
+        totalFollowers: profile?.total_followers || 0,
+        statsUpdatedAt: profile?.stats_updated_at || null,
+      }}
     />
   );
 }

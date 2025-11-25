@@ -18,7 +18,7 @@ export default async function UserProfilePage({ params }: PageProps) {
   // Find the user by handle
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
-    .select('id, handle, display_name, avatar_url, bio, created_at')
+    .select('id, handle, display_name, avatar_url, banner_url, bio, social_links, created_at')
     .eq('handle', handle)
     .single();
 

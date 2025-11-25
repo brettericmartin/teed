@@ -27,6 +27,8 @@ type Bag = {
   description: string | null;
   is_public: boolean;
   background_image: string | null;
+  category: string | null;
+  tags: string[];
   created_at: string;
   updated_at: string | null;
   items?: BagItem[];
@@ -111,6 +113,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(searchParams.get('category'));
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
+  const [selectedTags, setSelectedTags] = useState<string[]>(searchParams.get('tags')?.split(',').filter(Boolean) || []);
 
   useEffect(() => {
     checkAuth();
@@ -118,7 +121,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
 
   useEffect(() => {
     fetchBags();
-  }, [showFollowing, selectedCategory, searchQuery]);
+  }, [showFollowing, selectedCategory, searchQuery, selectedTags]);
 
   const checkAuth = async () => {
     try {
@@ -139,6 +142,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
       if (showFollowing) params.append('following', 'true');
       if (selectedCategory) params.append('category', selectedCategory);
       if (searchQuery) params.append('search', searchQuery);
+      if (selectedTags.length > 0) params.append('tags', selectedTags.join(','));
 
       const response = await fetch(`/api/discover?${params.toString()}`);
       if (response.ok) {
@@ -162,9 +166,27 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
     setSelectedCategory(null);
     setSearchQuery('');
     setSearchInput('');
+    setSelectedTags([]);
   };
 
-  const hasActiveFilters = showFollowing || selectedCategory || searchQuery;
+  const toggleTag = (tag: string) => {
+    setSelectedTags(prev =>
+      prev.includes(tag)
+        ? prev.filter(t => t !== tag)
+        : [...prev, tag]
+    );
+  };
+
+  // Get all unique tags from current bags for filter suggestions
+  const getAllTags = () => {
+    const tagSet = new Set<string>();
+    bags.forEach(bag => {
+      bag.tags?.forEach((tag: string) => tagSet.add(tag));
+    });
+    return Array.from(tagSet).sort();
+  };
+
+  const hasActiveFilters = showFollowing || selectedCategory || searchQuery || selectedTags.length > 0;
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -246,28 +268,60 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
               </div>
 
               {/* Category Filters */}
-              <div className="flex flex-wrap gap-2">
-                {CATEGORIES.map((category) => {
-                  const colors = getCategoryColor(category.value);
-                  const isSelected = selectedCategory === category.value;
-                  return (
-                    <button
-                      key={category.value}
-                      onClick={() => setSelectedCategory(
-                        selectedCategory === category.value ? null : category.value
-                      )}
-                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                        isSelected
-                          ? `${colors.bg} ${colors.text}`
-                          : 'bg-[var(--surface-elevated)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)]'
-                      }`}
-                    >
-                      <span>{category.icon}</span>
-                      <span className="ml-1.5">{category.label.split(' ')[1]}</span>
-                    </button>
-                  );
-                })}
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-xs font-medium text-[var(--text-tertiary)]">Categories:</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {CATEGORIES.map((category) => {
+                    const colors = getCategoryColor(category.value);
+                    const isSelected = selectedCategory === category.value;
+                    return (
+                      <button
+                        key={category.value}
+                        onClick={() => setSelectedCategory(
+                          selectedCategory === category.value ? null : category.value
+                        )}
+                        className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                          isSelected
+                            ? `${colors.bg} ${colors.text}`
+                            : 'bg-[var(--surface-elevated)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)]'
+                        }`}
+                      >
+                        <span>{category.icon}</span>
+                        <span className="ml-1.5">{category.label.split(' ')[1]}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
+
+              {/* Tag Filters (show popular tags from current results) */}
+              {getAllTags().length > 0 && (
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-xs font-medium text-[var(--text-tertiary)]">Tags:</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {getAllTags().slice(0, 15).map((tag) => {
+                      const isSelected = selectedTags.includes(tag);
+                      return (
+                        <button
+                          key={tag}
+                          onClick={() => toggleTag(tag)}
+                          className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all ${
+                            isSelected
+                              ? 'bg-[var(--sky-6)] text-white'
+                              : 'bg-[var(--surface-elevated)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)]'
+                          }`}
+                        >
+                          #{tag}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -474,12 +528,43 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
 
                 {/* Bag Info - Compressed */}
                 <div className="p-4">
-                  <h3
-                    onClick={() => router.push(`/u/${bag.owner.handle}/${bag.code}`)}
-                    className="text-xl font-semibold text-[var(--text-primary)] group-hover:text-[var(--teed-green-9)] transition-colors line-clamp-1 mb-2 cursor-pointer"
-                  >
-                    {bag.title}
-                  </h3>
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <h3
+                      onClick={() => router.push(`/u/${bag.owner.handle}/${bag.code}`)}
+                      className="text-xl font-semibold text-[var(--text-primary)] group-hover:text-[var(--teed-green-9)] transition-colors line-clamp-1 cursor-pointer flex-1"
+                    >
+                      {bag.title}
+                    </h3>
+                    {/* Category Badge */}
+                    {bag.category && (
+                      <span className={`flex-shrink-0 px-2 py-0.5 rounded-md text-xs font-medium ${getCategoryColor(bag.category).bg} ${getCategoryColor(bag.category).text}`}>
+                        {CATEGORIES.find(c => c.value === bag.category)?.icon || '📦'}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Tags */}
+                  {bag.tags && bag.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mb-2">
+                      {bag.tags.slice(0, 3).map((tag: string) => (
+                        <span
+                          key={tag}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleTag(tag);
+                          }}
+                          className="px-1.5 py-0.5 bg-[var(--sky-2)] text-[var(--sky-11)] rounded text-xs font-medium hover:bg-[var(--sky-3)] cursor-pointer transition-colors"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                      {bag.tags.length > 3 && (
+                        <span className="px-1.5 py-0.5 text-[var(--text-tertiary)] text-xs">
+                          +{bag.tags.length - 3}
+                        </span>
+                      )}
+                    </div>
+                  )}
 
                   {/* Icon-based metadata */}
                   <div className="flex items-center justify-between text-xs text-[var(--text-tertiary)]">

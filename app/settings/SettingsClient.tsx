@@ -3,14 +3,23 @@
 import { useState, useEffect, useRef, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
-import { User, Loader2, Check, X, Upload, Trash2, Camera, ArrowLeft } from 'lucide-react';
+import { User, Loader2, Check, X, Upload, Trash2, Camera, ArrowLeft, Instagram, Twitter, Youtube, Globe, Video } from 'lucide-react';
 
 type Profile = {
   id: string;
   handle: string;
   display_name: string;
   avatar_url: string | null;
+  banner_url?: string | null;
   bio: string | null;
+  social_links?: {
+    instagram?: string;
+    twitter?: string;
+    youtube?: string;
+    tiktok?: string;
+    website?: string;
+    twitch?: string;
+  };
   created_at: string;
   updated_at: string;
 };
@@ -26,6 +35,13 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
   const [displayName, setDisplayName] = useState(profile.display_name);
   const [handle, setHandle] = useState(profile.handle);
   const [bio, setBio] = useState(profile.bio || '');
+  const [socialLinks, setSocialLinks] = useState({
+    instagram: profile.social_links?.instagram || '',
+    twitter: profile.social_links?.twitter || '',
+    youtube: profile.social_links?.youtube || '',
+    tiktok: profile.social_links?.tiktok || '',
+    website: profile.social_links?.website || '',
+  });
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -128,6 +144,14 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
     setIsSaving(true);
 
     try {
+      // Clean up social links - only include non-empty values
+      const cleanedSocialLinks: Record<string, string> = {};
+      Object.entries(socialLinks).forEach(([key, value]) => {
+        if (value.trim()) {
+          cleanedSocialLinks[key] = value.trim();
+        }
+      });
+
       const response = await fetch('/api/profile', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -135,6 +159,7 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
           display_name: displayName.trim(),
           handle: handle.trim().toLowerCase(),
           bio: bio.trim() || null,
+          social_links: cleanedSocialLinks,
         }),
       });
 
@@ -446,6 +471,92 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
                 />
                 <p className="mt-1 text-xs text-[var(--text-tertiary)]">
                   {bio.length}/500 characters
+                </p>
+              </div>
+
+              {/* Social Links */}
+              <div>
+                <label className="block text-sm font-medium text-[var(--text-primary)] mb-4">
+                  Social Links
+                </label>
+                <div className="space-y-3">
+                  {/* Instagram */}
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <Instagram className="w-4 h-4 text-[var(--text-secondary)]" />
+                    </div>
+                    <input
+                      type="text"
+                      value={socialLinks.instagram}
+                      onChange={(e) => setSocialLinks(prev => ({ ...prev, instagram: e.target.value }))}
+                      placeholder="Instagram username"
+                      className="w-full pl-11 pr-4 py-3 text-base bg-[var(--input-bg)] border border-[var(--input-border)] rounded-[var(--radius-md)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:outline-none focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent transition-all"
+                      disabled={isSaving}
+                    />
+                  </div>
+
+                  {/* Twitter/X */}
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <Twitter className="w-4 h-4 text-[var(--text-secondary)]" />
+                    </div>
+                    <input
+                      type="text"
+                      value={socialLinks.twitter}
+                      onChange={(e) => setSocialLinks(prev => ({ ...prev, twitter: e.target.value }))}
+                      placeholder="Twitter/X handle"
+                      className="w-full pl-11 pr-4 py-3 text-base bg-[var(--input-bg)] border border-[var(--input-border)] rounded-[var(--radius-md)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:outline-none focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent transition-all"
+                      disabled={isSaving}
+                    />
+                  </div>
+
+                  {/* YouTube */}
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <Youtube className="w-4 h-4 text-[var(--text-secondary)]" />
+                    </div>
+                    <input
+                      type="text"
+                      value={socialLinks.youtube}
+                      onChange={(e) => setSocialLinks(prev => ({ ...prev, youtube: e.target.value }))}
+                      placeholder="YouTube channel URL or @handle"
+                      className="w-full pl-11 pr-4 py-3 text-base bg-[var(--input-bg)] border border-[var(--input-border)] rounded-[var(--radius-md)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:outline-none focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent transition-all"
+                      disabled={isSaving}
+                    />
+                  </div>
+
+                  {/* TikTok */}
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <Video className="w-4 h-4 text-[var(--text-secondary)]" />
+                    </div>
+                    <input
+                      type="text"
+                      value={socialLinks.tiktok}
+                      onChange={(e) => setSocialLinks(prev => ({ ...prev, tiktok: e.target.value }))}
+                      placeholder="TikTok username"
+                      className="w-full pl-11 pr-4 py-3 text-base bg-[var(--input-bg)] border border-[var(--input-border)] rounded-[var(--radius-md)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:outline-none focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent transition-all"
+                      disabled={isSaving}
+                    />
+                  </div>
+
+                  {/* Website */}
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <Globe className="w-4 h-4 text-[var(--text-secondary)]" />
+                    </div>
+                    <input
+                      type="url"
+                      value={socialLinks.website}
+                      onChange={(e) => setSocialLinks(prev => ({ ...prev, website: e.target.value }))}
+                      placeholder="Your website URL"
+                      className="w-full pl-11 pr-4 py-3 text-base bg-[var(--input-bg)] border border-[var(--input-border)] rounded-[var(--radius-md)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:outline-none focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent transition-all"
+                      disabled={isSaving}
+                    />
+                  </div>
+                </div>
+                <p className="mt-2 text-xs text-[var(--text-tertiary)]">
+                  These links will appear on your public profile page
                 </p>
               </div>
 

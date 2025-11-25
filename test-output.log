@@ -1,0 +1,18 @@
+🔐 Setting up authentication for tests...
+TimeoutError: page.fill: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('input[type="email"]')[22m
+
+
+   at setup/global-setup.ts:21
+
+  19 |
+  20 |   // Fill in test credentials
+> 21 |   await page.fill('input[type="email"]', 'test@teed-test.com');
+     |              ^
+  22 |   await page.fill('input[type="password"]', 'test-password');
+  23 |
+  24 |   // Submit and wait for auth response
+    at globalSetup (/home/brettm/development/teed/teed/tests/e2e/setup/global-setup.ts:21:14)
+
+[1A[2K

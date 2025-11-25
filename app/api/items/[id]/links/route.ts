@@ -78,6 +78,84 @@ export async function POST(
       );
     }
 
+    // Enrich product links with AI analysis
+    let enrichedMetadata = metadata || null;
+    let enrichedLabel = label?.trim() || null;
+
+    if (kind === 'product') {
+      try {
+        console.log(`[Link Add] Analyzing product URL: ${url}`);
+
+        const analyzeResponse = await fetch(
+          `${request.nextUrl.origin}/api/ai/analyze-product-url`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: url.trim() }),
+          }
+        );
+
+        if (analyzeResponse.ok) {
+          const analysis = await analyzeResponse.json();
+
+          // Store AI analysis in metadata
+          enrichedMetadata = {
+            ...enrichedMetadata,
+            ai_analysis: {
+              brand: analysis.brand,
+              productName: analysis.productName,
+              category: analysis.category,
+              specs: analysis.specs,
+              price: analysis.price,
+              color: analysis.color,
+              confidence: analysis.confidence,
+              analyzed_at: analysis.extracted_at,
+            },
+          };
+
+          // Use AI-extracted product name as label if not provided
+          if (!enrichedLabel && analysis.productName) {
+            enrichedLabel = analysis.brand && analysis.productName
+              ? `${analysis.brand} ${analysis.productName}`
+              : analysis.productName;
+          }
+
+          console.log(`[Link Add] AI analysis complete (confidence: ${analysis.confidence})`);
+
+          // If the item is missing brand/category, update it with AI findings
+          if (analysis.confidence >= 0.7) {
+            const { data: currentItem } = await supabase
+              .from('bag_items')
+              .select('brand, category, custom_name')
+              .eq('id', itemId)
+              .single();
+
+            const updates: any = {};
+            if (!currentItem?.brand && analysis.brand) {
+              updates.brand = analysis.brand;
+            }
+            if (!currentItem?.category && analysis.category) {
+              updates.category = analysis.category;
+            }
+
+            if (Object.keys(updates).length > 0) {
+              await supabase
+                .from('bag_items')
+                .update(updates)
+                .eq('id', itemId);
+
+              console.log(`[Link Add] Updated item with AI data:`, updates);
+            }
+          }
+        } else {
+          console.warn('[Link Add] AI analysis failed, continuing without enrichment');
+        }
+      } catch (error) {
+        console.error('[Link Add] AI enrichment error:', error);
+        // Continue without enrichment - don't fail the link creation
+      }
+    }
+
     // Create the link
     const { data: link, error: createError } = await supabase
       .from('links')
@@ -85,8 +163,8 @@ export async function POST(
         bag_item_id: itemId,
         url: url.trim(),
         kind: kind.trim(),
-        label: label?.trim() || null,
-        metadata: metadata || null,
+        label: enrichedLabel,
+        metadata: enrichedMetadata,
       })
       .select()
       .single();

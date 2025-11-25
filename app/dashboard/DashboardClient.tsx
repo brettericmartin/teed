@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Plus, Package, User, Settings, Eye, Layers } from 'lucide-react';
+import { Plus, Package, User, Settings, Eye, Layers, Pin } from 'lucide-react';
 import NewBagModal from './components/NewBagModal';
 import { Button } from '@/components/ui/Button';
+import ProfileStats from '@/components/ProfileStats';
 
 type BagItem = {
   id: string;
@@ -22,15 +23,25 @@ type Bag = {
   description: string | null;
   is_public: boolean;
   background_image: string | null;
+  is_pinned: boolean;
+  pinned_at: string | null;
   created_at: string;
   updated_at: string | null;
   items?: BagItem[];
+};
+
+type ProfileStats = {
+  totalViews: number;
+  totalBags: number;
+  totalFollowers: number;
+  statsUpdatedAt: string | null;
 };
 
 type DashboardClientProps = {
   initialBags: Bag[];
   userHandle: string;
   displayName: string;
+  profileStats: ProfileStats;
 };
 
 // Diversified gradient options for bag cards
@@ -68,6 +79,7 @@ export default function DashboardClient({
   initialBags,
   userHandle,
   displayName,
+  profileStats,
 }: DashboardClientProps) {
   const router = useRouter();
   const [bags, setBags] = useState<Bag[]>(initialBags);
@@ -111,6 +123,43 @@ export default function DashboardClient({
     }).format(date);
   };
 
+  const handlePinToggle = async (bagId: string, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent navigation to bag editor
+
+    try {
+      const response = await fetch(`/api/bags/${bagId}/pin`, {
+        method: 'POST',
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.error || 'Failed to toggle pin');
+        return;
+      }
+
+      // Update local state
+      setBags(prevBags =>
+        prevBags.map(bag =>
+          bag.id === bagId
+            ? { ...bag, is_pinned: data.isPinned, pinned_at: data.isPinned ? new Date().toISOString() : null }
+            : bag
+        ).sort((a, b) => {
+          // Sort: pinned first, then by pinned_at DESC, then by created_at DESC
+          if (a.is_pinned && !b.is_pinned) return -1;
+          if (!a.is_pinned && b.is_pinned) return 1;
+          if (a.is_pinned && b.is_pinned) {
+            return new Date(b.pinned_at!).getTime() - new Date(a.pinned_at!).getTime();
+          }
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        })
+      );
+    } catch (error) {
+      console.error('Error toggling pin:', error);
+      alert('Failed to toggle pin. Please try again.');
+    }
+  };
+
   return (
     <div className="min-h-screen pt-16">
       {/* Header */}
@@ -150,6 +199,16 @@ export default function DashboardClient({
           </div>
         </div>
       </header>
+
+      {/* Profile Stats */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <ProfileStats
+          totalBags={profileStats.totalBags}
+          totalViews={profileStats.totalViews}
+          totalFollowers={profileStats.totalFollowers}
+          statsUpdatedAt={profileStats.statsUpdatedAt}
+        />
+      </div>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

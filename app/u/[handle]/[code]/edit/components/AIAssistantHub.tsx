@@ -1,6 +1,6 @@
 'use client';
 
-import { Camera, Images, Sparkles, ChevronRight, Loader2, Bot } from 'lucide-react';
+import { Camera, Images, Sparkles, ChevronRight, Loader2, Bot, FileText } from 'lucide-react';
 
 type AIAction = {
   id: string;
@@ -20,6 +20,7 @@ type AIAssistantHubProps = {
   itemCount: number;
   itemsWithoutPhotos: number;
   onAddFromPhoto: () => void;
+  onAddFromTranscript: () => void;
   onFindPhotos: () => void;
   onFillProductInfo: () => void;
   isIdentifying?: boolean;
@@ -89,6 +90,7 @@ export default function AIAssistantHub({
   itemCount,
   itemsWithoutPhotos,
   onAddFromPhoto,
+  onAddFromTranscript,
   onFindPhotos,
   onFillProductInfo,
   isIdentifying = false,
@@ -105,6 +107,14 @@ export default function AIAssistantHub({
       loadingText: 'Identifying...',
       disabled: isIdentifying,
       delay: 100,
+    },
+    {
+      id: 'add-from-transcript',
+      icon: <FileText className="w-5 h-5" />,
+      title: 'Add from Transcript',
+      description: 'Paste a video/podcast transcript',
+      onClick: onAddFromTranscript,
+      delay: 150,
     },
     {
       id: 'find-photos',

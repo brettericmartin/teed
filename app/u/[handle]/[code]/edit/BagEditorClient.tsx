@@ -8,11 +8,15 @@ import QuickAddItem from './components/QuickAddItem';
 import AddItemForm from './components/AddItemForm';
 import ShareModal from './components/ShareModal';
 import PhotoUploadModal from './components/PhotoUploadModal';
+import BulkPhotoUploadModal from './components/BulkPhotoUploadModal';
+import TranscriptProcessorModal from './components/TranscriptProcessorModal';
 import ProductReviewModal, { IdentifiedProduct } from './components/ProductReviewModal';
 import BatchPhotoSelector from './components/BatchPhotoSelector';
 import ItemSelectionModal from './components/ItemSelectionModal';
 import EnrichmentPreview from './components/EnrichmentPreview';
+import ClarificationModal from './components/ClarificationModal';
 import AIAssistantHub from './components/AIAssistantHub';
+import BagAnalytics from './components/BagAnalytics';
 import { Button } from '@/components/ui/Button';
 
 type Link = {
@@ -48,6 +52,8 @@ type Bag = {
   description: string | null;
   is_public: boolean;
   background_image: string | null;
+  category: string | null;
+  tags: string[];
   created_at: string;
   updated_at: string | null;
   items: Item[];
@@ -64,11 +70,15 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [title, setTitle] = useState(bag.title);
   const [description, setDescription] = useState(bag.description || '');
   const [isPublic, setIsPublic] = useState(bag.is_public);
+  const [category, setCategory] = useState(bag.category || '');
+  const [tags, setTags] = useState<string[]>(bag.tags || []);
+  const [tagInput, setTagInput] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [showManualForm, setShowManualForm] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showPhotoUpload, setShowPhotoUpload] = useState(false);
+  const [showTranscriptProcessor, setShowTranscriptProcessor] = useState(false);
   const [showProductReview, setShowProductReview] = useState(false);
   const [showItemSelection, setShowItemSelection] = useState(false);
   const [showBatchPhotoSelector, setShowBatchPhotoSelector] = useState(false);
@@ -83,13 +93,18 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [isFillingLinks, setIsFillingLinks] = useState(false);
   const [enrichmentSuggestions, setEnrichmentSuggestions] = useState<any[]>([]);
   const [showEnrichmentPreview, setShowEnrichmentPreview] = useState(false);
+  const [clarificationQuestions, setClarificationQuestions] = useState<any[]>([]);
+  const [showClarificationModal, setShowClarificationModal] = useState(false);
+  const [clarificationAnswers, setClarificationAnswers] = useState<Record<string, Record<string, string>>>({});
 
   // Auto-save bag metadata (debounced)
   useEffect(() => {
     const hasChanges =
       title !== bag.title ||
       description !== (bag.description || '') ||
-      isPublic !== bag.is_public;
+      isPublic !== bag.is_public ||
+      category !== (bag.category || '') ||
+      JSON.stringify(tags) !== JSON.stringify(bag.tags || []);
 
     if (!hasChanges) return;
 
@@ -98,7 +113,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     }, 500); // 500ms debounce
 
     return () => clearTimeout(timeoutId);
-  }, [title, description, isPublic]);
+  }, [title, description, isPublic, category, tags]);
 
   const saveBagMetadata = async () => {
     setIsSaving(true);
@@ -111,6 +126,8 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           title,
           description: description || null,
           is_public: isPublic,
+          category: category || null,
+          tags: tags,
         }),
       });
 
@@ -123,6 +140,25 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       console.error('Error saving bag:', error);
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleAddTag = () => {
+    const trimmedTag = tagInput.trim().toLowerCase();
+    if (trimmedTag && !tags.includes(trimmedTag)) {
+      setTags([...tags, trimmedTag]);
+      setTagInput('');
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    setTags(tags.filter(tag => tag !== tagToRemove));
+  };
+
+  const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAddTag();
     }
   };
 
@@ -149,9 +185,192 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         items: [...prev.items, { ...newItem, links: [] }],
       }));
       // QuickAddItem component handles its own state reset
+
+      // Trigger background auto-enrichment (don't await - run silently)
+      autoEnrichItem(newItem.id, itemData.custom_name);
     } catch (error) {
       console.error('Error adding item:', error);
       alert('Failed to add item. Please try again.');
+    }
+  };
+
+  // Silent auto-enrichment for newly added items
+  const autoEnrichItem = async (itemId: string, itemName: string) => {
+    try {
+      console.log(`[auto-enrich] Starting for "${itemName}" (${itemId})`);
+
+      // Get AI suggestions for this item
+      const enrichResponse = await fetch('/api/ai/enrich-item', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userInput: itemName,
+          bagContext: bag.title,
+        }),
+      });
+
+      if (!enrichResponse.ok) {
+        console.log(`[auto-enrich] Failed to get suggestions for "${itemName}"`);
+        return;
+      }
+
+      const enrichResult = await enrichResponse.json();
+
+      // Pick the top suggestion if confidence is high enough
+      const topSuggestion = enrichResult.suggestions?.[0];
+      if (!topSuggestion || topSuggestion.confidence < 0.7) {
+        console.log(`[auto-enrich] Skipping "${itemName}" - low confidence (${topSuggestion?.confidence || 0})`);
+        return;
+      }
+
+      // Prepare updates (only apply if fields are empty)
+      const updates: Record<string, string> = {};
+
+      // Get current item state from bag
+      const currentItem = bag.items.find(i => i.id === itemId);
+
+      if (!currentItem?.brand && topSuggestion.brand) {
+        updates.brand = topSuggestion.brand;
+      }
+      if (!currentItem?.custom_description && topSuggestion.custom_description) {
+        updates.custom_description = topSuggestion.custom_description;
+      }
+      if (!currentItem?.notes && topSuggestion.notes) {
+        updates.notes = topSuggestion.notes;
+      }
+
+      // Apply updates if we have any
+      if (Object.keys(updates).length > 0) {
+        const updateResponse = await fetch(`/api/items/${itemId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updates),
+        });
+
+        if (updateResponse.ok) {
+          const updatedItem = await updateResponse.json();
+          console.log(`[auto-enrich] Updated "${itemName}" with:`, Object.keys(updates));
+
+          // Update local state
+          setBag((prev) => ({
+            ...prev,
+            items: prev.items.map((item) =>
+              item.id === itemId ? { ...item, ...updatedItem } : item
+            ),
+          }));
+        }
+      }
+
+      // Also try to find and add a product link
+      try {
+        const linkSearchQuery = `${topSuggestion.brand || ''} ${itemName}`.trim();
+        const linkResponse = await fetch('/api/ai/find-product-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            productName: linkSearchQuery,
+            brandName: topSuggestion.brand,
+          }),
+        });
+
+        if (linkResponse.ok) {
+          const linkResult = await linkResponse.json();
+
+          // If we found a product URL, add it as a link
+          if (linkResult.productUrl) {
+            const addLinkResponse = await fetch(`/api/items/${itemId}/links`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                url: linkResult.productUrl,
+                kind: 'shop',
+                is_auto_generated: true,
+              }),
+            });
+
+            if (addLinkResponse.ok) {
+              const newLink = await addLinkResponse.json();
+              console.log(`[auto-enrich] Added link for "${itemName}":`, linkResult.productUrl);
+
+              // Update local state with new link
+              setBag((prev) => ({
+                ...prev,
+                items: prev.items.map((item) =>
+                  item.id === itemId
+                    ? { ...item, links: [...item.links, newLink] }
+                    : item
+                ),
+              }));
+            }
+          }
+        }
+      } catch (linkError) {
+        console.log(`[auto-enrich] Link search failed for "${itemName}":`, linkError);
+      }
+
+      console.log(`[auto-enrich] Completed for "${itemName}"`);
+    } catch (error) {
+      console.error(`[auto-enrich] Error for "${itemName}":`, error);
+      // Silent failure - don't interrupt user
+    }
+  };
+
+  // Silent auto-link finding for items that are already enriched (e.g., from photo ID)
+  const autoFindProductLink = async (itemId: string, itemName: string, brand?: string | null) => {
+    try {
+      console.log(`[auto-link] Starting for "${itemName}" (${itemId})`);
+
+      const searchQuery = `${brand || ''} ${itemName}`.trim();
+      const linkResponse = await fetch('/api/ai/find-product-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productName: searchQuery,
+          brandName: brand,
+        }),
+      });
+
+      if (!linkResponse.ok) {
+        console.log(`[auto-link] Failed to find link for "${itemName}"`);
+        return;
+      }
+
+      const linkResult = await linkResponse.json();
+
+      // If we found a product URL, add it as a link
+      if (linkResult.productUrl) {
+        const addLinkResponse = await fetch(`/api/items/${itemId}/links`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            url: linkResult.productUrl,
+            kind: 'shop',
+            is_auto_generated: true,
+          }),
+        });
+
+        if (addLinkResponse.ok) {
+          const newLink = await addLinkResponse.json();
+          console.log(`[auto-link] Added link for "${itemName}":`, linkResult.productUrl);
+
+          // Update local state with new link
+          setBag((prev) => ({
+            ...prev,
+            items: prev.items.map((item) =>
+              item.id === itemId
+                ? { ...item, links: [...item.links, newLink] }
+                : item
+            ),
+          }));
+        }
+      } else {
+        console.log(`[auto-link] No product URL found for "${itemName}"`);
+      }
+
+      console.log(`[auto-link] Completed for "${itemName}"`);
+    } catch (error) {
+      console.error(`[auto-link] Error for "${itemName}":`, error);
+      // Silent failure - don't interrupt user
     }
   };
 
@@ -288,6 +507,55 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     }
   };
 
+  // Bulk photo upload handler (for 2-10 photos)
+  const handleBulkPhotosCapture = async (base64Images: string[]) => {
+    setIsIdentifying(true);
+    setShowPhotoUpload(false);
+
+    try {
+      const response = await fetch('/api/ai/identify-products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          images: base64Images,
+          bagType: bag.title,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to identify products');
+      }
+
+      const result = await response.json();
+
+      setIdentifiedProducts(result);
+      setShowProductReview(true);
+    } catch (error: any) {
+      console.error('Error identifying products:', error);
+      alert(error.message || 'Failed to identify products. Please try again.');
+    } finally {
+      setIsIdentifying(false);
+    }
+  };
+
+  // Transcript processing handler
+  const handleTranscriptProductsExtracted = async (products: IdentifiedProduct[]) => {
+    setShowTranscriptProcessor(false);
+
+    // Format products to match the expected structure
+    const formattedResult = {
+      products,
+      totalConfidence: products.length > 0
+        ? products.reduce((sum, p) => sum + (p.confidence || 0), 0) / products.length
+        : 0,
+      processingTime: 0,
+    };
+
+    setIdentifiedProducts(formattedResult);
+    setShowProductReview(true);
+  };
+
   // Step 29: Batch item creation from AI results
   const handleAddSelectedProducts = async (selectedProducts: IdentifiedProduct[], uploadedPhotoFile?: File) => {
     try {
@@ -419,6 +687,15 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
 
       // Show success message
       alert(`Successfully added ${createdItems.length} items to your bag!`);
+
+      // Trigger background auto-link finding for photo ID items
+      // (they already have enrichment from AI vision, just need links)
+      createdItems.forEach((item, index) => {
+        const product = selectedProducts[index];
+        if (product) {
+          autoFindProductLink(item.id, product.name, product.brand);
+        }
+      });
     } catch (error: any) {
       console.error('Error adding products:', error);
       alert(error.message || 'Failed to add some items. Please try again.');
@@ -426,16 +703,19 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     }
   };
 
-  // Fill product info handler - shows preview modal
-  const handleFillLinks = async () => {
+  // Fill product info handler - shows preview modal (or clarification questions first)
+  const handleFillLinks = async (withAnswers?: Record<string, Record<string, string>>) => {
     setIsFillingLinks(true);
 
     try {
-      // Get preview suggestions
+      // Get preview suggestions (include answers if provided)
       const response = await fetch('/api/items/preview-enrichment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bagId: bag.id }),
+        body: JSON.stringify({
+          bagId: bag.id,
+          clarificationAnswers: withAnswers || clarificationAnswers,
+        }),
       });
 
       if (!response.ok) {
@@ -449,15 +729,40 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         return;
       }
 
+      // If there are clarification questions and no answers provided yet, show questions first
+      if (result.needsClarification && result.questions?.length > 0 && !withAnswers) {
+        setClarificationQuestions(result.questions);
+        setEnrichmentSuggestions(result.suggestions); // Store suggestions for later
+        setShowClarificationModal(true);
+        return;
+      }
+
       // Show preview modal (even if items have data - user can choose to replace)
       setEnrichmentSuggestions(result.suggestions);
       setShowEnrichmentPreview(true);
+      setShowClarificationModal(false);
+      setClarificationQuestions([]);
     } catch (error) {
       console.error('Error generating suggestions:', error);
       alert('Failed to generate suggestions. Please try again.');
     } finally {
       setIsFillingLinks(false);
     }
+  };
+
+  // Handle clarification answers and re-run enrichment
+  const handleClarificationSubmit = async (answers: Record<string, Record<string, string>>) => {
+    setClarificationAnswers(answers);
+    setShowClarificationModal(false);
+    // Re-run with answers
+    await handleFillLinks(answers);
+  };
+
+  // Skip clarification and use current suggestions
+  const handleSkipClarification = () => {
+    setShowClarificationModal(false);
+    setClarificationQuestions([]);
+    setShowEnrichmentPreview(true);
   };
 
   // Apply approved enrichments
@@ -665,6 +970,74 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
               </span>
             </div>
           </div>
+
+          {/* Category and Tags Row */}
+          <div className="flex flex-wrap gap-3 mt-3 pt-3 border-t border-[var(--border-subtle)]">
+            {/* Category Selector */}
+            <div className="flex items-center gap-2">
+              <label className="text-xs font-medium text-[var(--text-secondary)]">Category:</label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="text-xs bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] rounded px-2 py-1 focus:outline-none focus:border-[var(--teed-green-8)] transition-colors"
+              >
+                <option value="">None</option>
+                <option value="golf">⛳ Golf</option>
+                <option value="travel">✈️ Travel</option>
+                <option value="tech">💻 Tech</option>
+                <option value="camping">🏕️ Camping</option>
+                <option value="photography">📷 Photography</option>
+                <option value="fitness">💪 Fitness</option>
+                <option value="cooking">🍳 Cooking</option>
+                <option value="music">🎵 Music</option>
+                <option value="art">🎨 Art</option>
+                <option value="gaming">🎮 Gaming</option>
+                <option value="other">📦 Other</option>
+              </select>
+            </div>
+
+            {/* Tags Input */}
+            <div className="flex-1 min-w-[200px]">
+              <div className="flex items-center gap-2 mb-1">
+                <label className="text-xs font-medium text-[var(--text-secondary)]">Tags:</label>
+                <input
+                  type="text"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={handleTagInputKeyDown}
+                  placeholder="Add tag and press Enter..."
+                  className="flex-1 text-xs bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] rounded px-2 py-1 focus:outline-none focus:border-[var(--teed-green-8)] transition-colors placeholder:text-[var(--input-placeholder)]"
+                />
+                <button
+                  onClick={handleAddTag}
+                  className="text-xs bg-[var(--teed-green-8)] text-white px-2 py-1 rounded hover:bg-[var(--teed-green-9)] transition-colors"
+                  type="button"
+                >
+                  Add
+                </button>
+              </div>
+              {/* Tag Display */}
+              {tags.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                  {tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="inline-flex items-center gap-1 px-2 py-0.5 bg-[var(--sky-2)] text-[var(--sky-11)] rounded text-xs"
+                    >
+                      #{tag}
+                      <button
+                        onClick={() => handleRemoveTag(tag)}
+                        className="hover:text-[var(--sky-12)] transition-colors"
+                        type="button"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </header>
 
@@ -728,11 +1101,17 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             itemCount={bag.items.length}
             itemsWithoutPhotos={bag.items.filter(item => !item.photo_url).length}
             onAddFromPhoto={() => setShowPhotoUpload(true)}
+            onAddFromTranscript={() => setShowTranscriptProcessor(true)}
             onFindPhotos={() => setShowItemSelection(true)}
             onFillProductInfo={handleFillLinks}
             isIdentifying={isIdentifying}
             isFillingInfo={isFillingLinks}
           />
+
+          {/* Analytics (only show for public bags) */}
+          {isPublic && (
+            <BagAnalytics bagId={bag.id} />
+          )}
 
           {/* Manual Form (Hidden by default) */}
           {showManualForm && (
@@ -801,11 +1180,19 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         onTogglePublic={() => setIsPublic(!isPublic)}
       />
 
-      {/* Photo Upload Modal */}
-      <PhotoUploadModal
+      {/* Bulk Photo Upload Modal (supports 1-10 photos) */}
+      <BulkPhotoUploadModal
         isOpen={showPhotoUpload}
         onClose={() => setShowPhotoUpload(false)}
-        onPhotoCapture={handlePhotoCapture}
+        onPhotosCapture={handleBulkPhotosCapture}
+        bagType={bag.title}
+      />
+
+      {/* Transcript Processor Modal */}
+      <TranscriptProcessorModal
+        isOpen={showTranscriptProcessor}
+        onClose={() => setShowTranscriptProcessor(false)}
+        onProductsExtracted={handleTranscriptProductsExtracted}
         bagType={bag.title}
       />
 
@@ -860,6 +1247,20 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         }))}
         onApplyPhotos={handleApplyBatchPhotos}
       />
+
+      {/* Clarification Questions Modal */}
+      {showClarificationModal && (
+        <ClarificationModal
+          questions={clarificationQuestions}
+          itemNames={bag.items.reduce((acc, item) => {
+            acc[item.id] = item.custom_name || 'Unnamed Item';
+            return acc;
+          }, {} as Record<string, string>)}
+          onSubmit={handleClarificationSubmit}
+          onSkip={handleSkipClarification}
+          isLoading={isFillingLinks}
+        />
+      )}
 
       {/* Enrichment Preview Modal */}
       {showEnrichmentPreview && (

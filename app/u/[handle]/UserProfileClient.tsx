@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Package, UserPlus, UserMinus } from 'lucide-react';
+import { Package, UserPlus, UserMinus, Instagram, Twitter, Youtube, Globe, Video } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 type Bag = {
@@ -20,7 +20,16 @@ type Profile = {
   handle: string;
   display_name: string;
   avatar_url: string | null;
+  banner_url?: string | null;
   bio: string | null;
+  social_links?: {
+    instagram?: string;
+    twitter?: string;
+    youtube?: string;
+    tiktok?: string;
+    website?: string;
+    twitch?: string;
+  };
   created_at: string;
 };
 
@@ -111,6 +120,36 @@ export default function UserProfileClient({ profile, bags }: UserProfileClientPr
     }).format(date);
   };
 
+  const getSocialIcon = (platform: string) => {
+    const iconMap: Record<string, any> = {
+      instagram: Instagram,
+      twitter: Twitter,
+      youtube: Youtube,
+      tiktok: Video,
+      website: Globe,
+      twitch: Video,
+    };
+    return iconMap[platform] || Globe;
+  };
+
+  const getSocialUrl = (platform: string, value: string) => {
+    // If value is already a URL, use it
+    if (value.startsWith('http://') || value.startsWith('https://')) {
+      return value;
+    }
+
+    // Otherwise, construct the URL based on platform
+    const urlMap: Record<string, string> = {
+      instagram: `https://instagram.com/${value.replace('@', '')}`,
+      twitter: `https://twitter.com/${value.replace('@', '')}`,
+      youtube: value.startsWith('@') ? `https://youtube.com/${value}` : value,
+      tiktok: `https://tiktok.com/@${value.replace('@', '')}`,
+      twitch: `https://twitch.tv/${value}`,
+      website: value,
+    };
+    return urlMap[platform] || value;
+  };
+
   return (
     <div className="min-h-screen">
       {/* Profile Header */}
@@ -179,6 +218,31 @@ export default function UserProfileClient({ profile, bags }: UserProfileClientPr
                   {profile.bio}
                 </p>
               )}
+
+              {/* Social Links */}
+              {profile.social_links && Object.keys(profile.social_links).length > 0 && (
+                <div className="flex flex-wrap gap-3 mt-4">
+                  {Object.entries(profile.social_links).map(([platform, value]) => {
+                    if (!value) return null;
+                    const Icon = getSocialIcon(platform);
+                    const url = getSocialUrl(platform, value);
+                    return (
+                      <a
+                        key={platform}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 px-3 py-1.5 bg-[var(--surface-hover)] hover:bg-[var(--sand-3)] border border-[var(--border-subtle)] rounded-[var(--radius-md)] text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                        title={`${platform.charAt(0).toUpperCase() + platform.slice(1)}: ${value}`}
+                      >
+                        <Icon className="w-4 h-4" />
+                        <span className="capitalize">{platform}</span>
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
+
               <p className="text-sm text-[var(--text-tertiary)] mt-4">
                 Joined {formatDate(profile.created_at)}
               </p>

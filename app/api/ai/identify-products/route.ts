@@ -18,11 +18,12 @@ export const maxDuration = 60; // Allow up to 60 seconds for AI processing
 /**
  * POST /api/ai/identify-products
  *
- * Identifies products in an image using GPT-4 Vision
+ * Identifies products in one or more images using GPT-4 Vision
  *
  * Request body:
  * {
- *   image: string (base64),
+ *   image?: string (base64) - single image (legacy)
+ *   images?: string[] (base64) - multiple images (up to 10)
  *   bagType?: string,
  *   expectedCategories?: string[]
  * }
@@ -72,40 +73,76 @@ export async function POST(request: NextRequest) {
         { status: 413 }
       );
     }
-    const { image, bagType, expectedCategories } = body;
+    const { image, images, bagType, expectedCategories } = body;
+
+    // Support both single image (legacy) and multiple images
+    const imageArray: string[] = images || (image ? [image] : []);
 
     // Best Practice: Validate required fields
-    if (!image) {
+    if (imageArray.length === 0) {
       return NextResponse.json(
-        { error: 'Image is required' },
+        { error: 'At least one image is required' },
         { status: 400 }
       );
     }
 
-    // Best Practice: Validate image format
-    if (!image.startsWith('data:image/')) {
+    // Validate max images
+    if (imageArray.length > 10) {
       return NextResponse.json(
-        { error: 'Invalid image format. Must be base64 encoded.' },
+        { error: 'Maximum 10 images allowed per request' },
         { status: 400 }
       );
     }
 
-    // Call AI function
-    const result = await identifyProductsInImage(image, {
-      bagType,
-      expectedCategories,
-    });
+    // Best Practice: Validate image formats
+    for (const img of imageArray) {
+      if (!img.startsWith('data:image/')) {
+        return NextResponse.json(
+          { error: 'Invalid image format. All images must be base64 encoded.' },
+          { status: 400 }
+        );
+      }
+    }
+
+    const startTime = Date.now();
+
+    // Process all images in parallel
+    console.log(`[Bulk Identify] Processing ${imageArray.length} image(s)`);
+    const results = await Promise.all(
+      imageArray.map((img, index) =>
+        identifyProductsInImage(img, {
+          bagType,
+          expectedCategories,
+        }).then(result => ({
+          ...result,
+          imageIndex: index,
+        }))
+      )
+    );
+
+    // Combine all results
+    const allProducts = results.flatMap(r => r.products);
+    const avgConfidence = results.reduce((sum, r) => sum + r.totalConfidence, 0) / results.length;
+    const totalProcessingTime = Date.now() - startTime;
+
+    const combinedResult = {
+      products: allProducts,
+      totalConfidence: Math.round(avgConfidence * 100) / 100,
+      processingTime: totalProcessingTime,
+      imagesProcessed: imageArray.length,
+    };
 
     // Best Practice: Log usage for monitoring
     console.log('AI Vision used:', {
       userId: user.id,
-      productsFound: result.products.length,
-      confidence: result.totalConfidence,
-      processingTime: result.processingTime,
+      imagesProcessed: imageArray.length,
+      productsFound: allProducts.length,
+      avgConfidence: combinedResult.totalConfidence,
+      processingTime: totalProcessingTime,
     });
 
     // Return results
-    return NextResponse.json(result, { status: 200 });
+    return NextResponse.json(combinedResult, { status: 200 });
 
   } catch (error: any) {
     // Best Practice: Detailed error logging

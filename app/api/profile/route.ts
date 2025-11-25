@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
 /**
  * PATCH /api/profile
  * Update the current authenticated user's profile
- * Accepts: { display_name?, bio?, handle? }
+ * Accepts: { display_name?, bio?, handle?, social_links? }
  */
 export async function PATCH(request: NextRequest) {
   try {
@@ -72,7 +72,7 @@ export async function PATCH(request: NextRequest) {
 
     // Parse request body
     const body = await request.json();
-    const { display_name, bio, handle } = body;
+    const { display_name, bio, handle, social_links } = body;
 
     // Validate input
     const updates: any = {};
@@ -107,6 +107,36 @@ export async function PATCH(request: NextRequest) {
         );
       }
       updates.bio = bio ? bio.trim() : null;
+    }
+
+    if (social_links !== undefined) {
+      if (social_links !== null && typeof social_links !== 'object') {
+        return NextResponse.json(
+          { error: 'Social links must be an object' },
+          { status: 400 }
+        );
+      }
+
+      // Validate social links structure
+      const allowedPlatforms = ['instagram', 'twitter', 'youtube', 'tiktok', 'website', 'twitch'];
+      if (social_links) {
+        for (const [platform, value] of Object.entries(social_links)) {
+          if (!allowedPlatforms.includes(platform)) {
+            return NextResponse.json(
+              { error: `Invalid social platform: ${platform}` },
+              { status: 400 }
+            );
+          }
+          if (typeof value !== 'string') {
+            return NextResponse.json(
+              { error: `Social link value for ${platform} must be a string` },
+              { status: 400 }
+            );
+          }
+        }
+      }
+
+      updates.social_links = social_links || {};
     }
 
     if (handle !== undefined) {

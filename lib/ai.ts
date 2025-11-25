@@ -136,6 +136,16 @@ CRITICAL REQUIREMENTS:
 5. For products where you're unsure, provide alternatives with reasoning
 6. SPECIFICITY IS EVERYTHING - generic names are useless
 
+CONFIDENCE SCORING (BE CONSERVATIVE):
+- 90-100: You can see CLEAR branding, model text/numbers, distinctive design features
+- 70-89: Brand is clear but model is inferred from visual features
+- 50-69: Can identify general product type but brand/model uncertain
+- 30-49: Can only make educated guess based on shape/color
+- <30: Very uncertain, minimal visible details
+
+IMPORTANT: If you can't read text/logos clearly or see distinctive features, DO NOT give high confidence.
+Better to say 60% confidence with alternatives than falsely claim 95% certainty.
+
 DETAIL FORMATTING STANDARDS (use pipe separator):
 - Golf: "Loft | Shaft | Flex" (e.g., "10.5° | Fujikura Ventus | Stiff")
 - Makeup: "Shade | Finish | Size" (e.g., "Ruby Woo | Matte | 3g")

@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
     const following = searchParams.get('following') === 'true';
     const category = searchParams.get('category');
     const search = searchParams.get('search');
+    const tags = searchParams.get('tags')?.split(',').filter(Boolean); // Comma-separated tags
 
     // Check authentication for "following" filter
     let followingIds: string[] = [];
@@ -41,7 +42,16 @@ export async function GET(request: NextRequest) {
     let query = supabase
       .from('bags')
       .select(`
-        *,
+        id,
+        title,
+        description,
+        code,
+        is_public,
+        background_image,
+        category,
+        tags,
+        created_at,
+        updated_at,
         items:bag_items(
           id,
           custom_name,
@@ -69,6 +79,13 @@ export async function GET(request: NextRequest) {
 
     if (search) {
       query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
+    }
+
+    // Tag filtering using jsonb operator
+    // For each tag, filter bags that contain that tag
+    if (tags && tags.length > 0) {
+      // Use overlaps operator (&&) to check if any of the requested tags exist in the bag's tags
+      query = query.overlaps('tags', tags);
     }
 
     // Fetch bags
