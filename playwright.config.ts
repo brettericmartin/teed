@@ -30,6 +30,9 @@ export default defineConfig({
   // Global setup - authenticate once before all tests
   globalSetup: './tests/e2e/setup/global-setup.ts',
 
+  // Global teardown - clean up test data after all tests
+  globalTeardown: './tests/e2e/setup/global-teardown.ts',
+
   // Reporter to use
   reporter: [
     ['html', { outputFolder: 'playwright-report' }],
