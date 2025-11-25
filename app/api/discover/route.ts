@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
         tags,
         created_at,
         updated_at,
-        items:bag_items(
+        items:bag_items!bag_items_bag_id_fkey(
           id,
           custom_name,
           custom_photo_id,

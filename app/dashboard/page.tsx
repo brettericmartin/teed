@@ -34,7 +34,7 @@ export default async function DashboardPage() {
     .from('bags')
     .select(`
       *,
-      items:bag_items(
+      items:bag_items!bag_items_bag_id_fkey(
         id,
         custom_name,
         custom_photo_id,
