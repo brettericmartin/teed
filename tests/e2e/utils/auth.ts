@@ -15,7 +15,7 @@ export interface TestUser {
 export const TEST_USER: TestUser = {
   email: 'test@teed-test.com',
   password: 'test-password',
-  handle: 'test-user-api',
+  handle: 'test_user_api',
   displayName: 'API Test User',
 };
 

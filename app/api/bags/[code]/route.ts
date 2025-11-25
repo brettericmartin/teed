@@ -203,7 +203,16 @@ export async function PUT(
     }
 
     // Parse request body
-    const body = await request.json();
+    let body: any = {};
+    try {
+      body = await request.json();
+    } catch (e) {
+      // Empty body or invalid JSON - treat as empty update
+      return NextResponse.json(
+        { error: 'Request body must be valid JSON' },
+        { status: 400 }
+      );
+    }
     const updates: any = {};
 
     if (body.title !== undefined) {
@@ -226,6 +235,46 @@ export async function PUT(
 
     if (body.background_image !== undefined) {
       updates.background_image = body.background_image?.trim() || null;
+    }
+
+    if (body.category !== undefined) {
+      // Validate category is one of the allowed values
+      const allowedCategories = [
+        'golf',
+        'travel',
+        'tech',
+        'camping',
+        'photography',
+        'fitness',
+        'cooking',
+        'music',
+        'art',
+        'gaming',
+        'other',
+      ];
+      if (body.category && !allowedCategories.includes(body.category)) {
+        return NextResponse.json(
+          { error: 'Invalid category value' },
+          { status: 400 }
+        );
+      }
+      updates.category = body.category?.trim() || null;
+    }
+
+    if (body.tags !== undefined) {
+      // Validate tags is an array of strings
+      if (!Array.isArray(body.tags)) {
+        return NextResponse.json(
+          { error: 'Tags must be an array' },
+          { status: 400 }
+        );
+      }
+      // Clean and validate tag strings
+      const cleanedTags = body.tags
+        .filter((tag: any) => typeof tag === 'string' && tag.trim().length > 0)
+        .map((tag: string) => tag.trim().toLowerCase());
+      // Pass the array directly - Supabase will serialize it as JSONB
+      updates.tags = cleanedTags;
     }
 
     // Always update updated_at timestamp
