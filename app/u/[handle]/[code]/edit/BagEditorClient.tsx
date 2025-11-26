@@ -785,10 +785,24 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           // Priority: 1) User's source photo from bulk upload (via sourceImageIndex)
           //           2) User's captured photo (for single item legacy flow)
           //           3) Google product image
+          console.log('[AddProduct] Photo sources:', {
+            productName: product.name,
+            sourceImageIndex: product.sourceImageIndex,
+            capturedPhotosArrayLength: capturedPhotosArray.length,
+            hasCapturedPhotoBase64: !!capturedPhotoBase64,
+            hasProductImage: !!product.productImage?.imageUrl,
+          });
+
           const sourcePhotoFromBulk = typeof product.sourceImageIndex === 'number' &&
             capturedPhotosArray[product.sourceImageIndex];
           const shouldUseLegacyUserPhoto = capturedPhotoBase64 && selectedProducts.length === 1;
           const userPhotoToUse = sourcePhotoFromBulk || (shouldUseLegacyUserPhoto ? capturedPhotoBase64 : null);
+
+          console.log('[AddProduct] Photo decision:', {
+            hasSourcePhotoFromBulk: !!sourcePhotoFromBulk,
+            shouldUseLegacyUserPhoto,
+            willUploadUserPhoto: !!userPhotoToUse,
+          });
 
           if (userPhotoToUse) {
             // Upload the user's captured photo
@@ -1058,10 +1072,12 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
 
   // Batch photo application handler
   const handleApplyBatchPhotos = async (selections: Array<{ itemId: string; imageUrl: string }>) => {
+    console.log('[BatchPhotos] Applying photos:', selections);
     try {
       // Apply photos in parallel using server-side upload to bypass CORS
       await Promise.all(
         selections.map(async ({ itemId, imageUrl }) => {
+          console.log('[BatchPhotos] Uploading photo for item:', itemId, imageUrl.substring(0, 50));
           try {
             // Use server-side upload-from-url to download and upload in one step
             const uploadResponse = await fetch('/api/media/upload-from-url', {

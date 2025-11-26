@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
+import { createServerSupabase } from '@/lib/serverSupabase';
 import { uploadItemPhoto, createMediaAsset } from '@/lib/supabaseStorage';
 
 /**
@@ -23,22 +22,15 @@ import { uploadItemPhoto, createMediaAsset } from '@/lib/supabaseStorage';
  */
 export async function POST(request: NextRequest) {
   try {
-    // Verify authentication
-    const cookieStore = await cookies();
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll: () => cookieStore.getAll(),
-          setAll: () => {}, // Read-only
-        },
-      }
-    );
+    // Verify authentication using consistent server supabase client
+    const supabase = await createServerSupabase();
 
     const {
       data: { user },
+      error: authError,
     } = await supabase.auth.getUser();
+
+    console.log('[upload-from-url] Auth check:', { hasUser: !!user, authError: authError?.message });
 
     if (!user) {
       return NextResponse.json(
@@ -67,15 +59,23 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify user owns the item
+    console.log('[upload-from-url] Looking up item:', itemId);
     const { data: item, error: itemError } = await supabase
       .from('bag_items')
       .select('bag_id, bags!inner(owner_id)')
       .eq('id', itemId)
       .single();
 
+    console.log('[upload-from-url] Item lookup result:', {
+      hasItem: !!item,
+      itemError: itemError?.message,
+      itemErrorCode: itemError?.code,
+    });
+
     if (itemError || !item) {
+      console.error('[upload-from-url] Item not found:', { itemId, error: itemError });
       return NextResponse.json(
-        { error: 'Item not found' },
+        { error: 'Item not found', details: itemError?.message },
         { status: 404 }
       );
     }
