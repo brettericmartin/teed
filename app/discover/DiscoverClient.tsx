@@ -154,8 +154,12 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
 
+  // Popular tags state
+  const [popularTags, setPopularTags] = useState<Array<{ tag: string; count: number }>>([]);
+
   useEffect(() => {
     checkAuth();
+    fetchPopularTags();
   }, []);
 
   useEffect(() => {
@@ -218,6 +222,18 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
     }
   };
 
+  const fetchPopularTags = async () => {
+    try {
+      const response = await fetch('/api/discover/tags?limit=15');
+      if (response.ok) {
+        const data = await response.json();
+        setPopularTags(data.tags || []);
+      }
+    } catch (error) {
+      console.error('Error fetching popular tags:', error);
+    }
+  };
+
   const fetchBags = async () => {
     setIsLoading(true);
     try {
@@ -273,15 +289,6 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
         ? prev.filter(t => t !== tag)
         : [...prev, tag]
     );
-  };
-
-  // Get all unique tags from current bags for filter suggestions
-  const getAllTags = () => {
-    const tagSet = new Set<string>();
-    bags.forEach(bag => {
-      bag.tags?.forEach((tag: string) => tagSet.add(tag));
-    });
-    return Array.from(tagSet).sort();
   };
 
   const hasActiveFilters = showFollowing || selectedCategory || searchQuery || selectedTags.length > 0 || sortBy !== 'newest';
@@ -519,26 +526,33 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                 </div>
               </div>
 
-              {/* Tag Filters (show popular tags from current results) */}
-              {getAllTags().length > 0 && (
+              {/* Tag Filters (show popular tags across all bags) */}
+              {popularTags.length > 0 && (
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xs font-medium text-[var(--text-tertiary)]">Tags:</span>
+                    <span className="text-xs font-medium text-[var(--text-tertiary)]">Popular Tags:</span>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {getAllTags().slice(0, 15).map((tag) => {
+                    {popularTags.map(({ tag, count }) => {
                       const isSelected = selectedTags.includes(tag);
                       return (
                         <button
                           key={tag}
                           onClick={() => toggleTag(tag)}
-                          className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all ${
+                          className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all flex items-center gap-1.5 ${
                             isSelected
                               ? 'bg-[var(--sky-6)] text-white'
                               : 'bg-[var(--surface-elevated)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)]'
                           }`}
                         >
                           #{tag}
+                          <span className={`text-[10px] px-1 py-0.5 rounded ${
+                            isSelected
+                              ? 'bg-white/20'
+                              : 'bg-[var(--surface-hover)]'
+                          }`}>
+                            {count}
+                          </span>
                         </button>
                       );
                     })}
