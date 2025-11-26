@@ -116,12 +116,13 @@ export async function POST(request: NextRequest, context: RouteContext) {
     const publicUrl = publicUrlData.publicUrl;
 
     // Create media asset record
+    // Note: source_type must be 'user_upload' or null due to DB constraint
     const { data: mediaAsset, error: mediaError } = await supabaseAdmin
       .from('media_assets')
       .insert({
         owner_id: user.id,
         url: publicUrl,
-        source_type: 'cover_photo',
+        source_type: 'user_upload',
         alt: `Cover photo for ${code}`,
       })
       .select('id')

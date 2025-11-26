@@ -469,6 +469,8 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     updates: Partial<Omit<Item, 'id' | 'bag_id' | 'links'>>
   ) => {
     try {
+      console.log('[UpdateItem] Updating item:', itemId, 'with:', updates);
+
       const response = await fetch(`/api/items/${itemId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -476,10 +478,19 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update item');
+        let errorMessage = 'Failed to update item';
+        try {
+          const errorData = await response.json();
+          console.error('[UpdateItem] Server error:', errorData);
+          errorMessage = errorData.error || errorMessage;
+        } catch {
+          console.error('[UpdateItem] Failed to parse error response');
+        }
+        throw new Error(errorMessage);
       }
 
       const updatedItem = await response.json();
+      console.log('[UpdateItem] Success:', updatedItem);
 
       // Preserve photo_url since API doesn't return it
       const preservedPhotoUrl =
@@ -500,9 +511,9 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           return item;
         }),
       }));
-    } catch (error) {
-      console.error('Error updating item:', error);
-      alert('Failed to update item. Please try again.');
+    } catch (error: any) {
+      console.error('[UpdateItem] Error:', error);
+      alert(error.message || 'Failed to update item. Please try again.');
     }
   };
 
