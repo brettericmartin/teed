@@ -1070,62 +1070,78 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     }
   };
 
-  // Batch photo application handler
+  // Batch photo application handler - handles partial failures gracefully
   const handleApplyBatchPhotos = async (selections: Array<{ itemId: string; imageUrl: string }>) => {
     console.log('[BatchPhotos] Applying photos:', selections);
-    try {
-      // Apply photos in parallel using server-side upload to bypass CORS
-      await Promise.all(
-        selections.map(async ({ itemId, imageUrl }) => {
-          console.log('[BatchPhotos] Uploading photo for item:', itemId, imageUrl.substring(0, 50));
-          try {
-            // Use server-side upload-from-url to download and upload in one step
-            const uploadResponse = await fetch('/api/media/upload-from-url', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                imageUrl,
-                itemId,
-                filename: 'product.jpg',
-              }),
-            });
 
-            if (!uploadResponse.ok) {
-              const errorData = await uploadResponse.json().catch(() => ({}));
-              throw new Error(errorData.error || 'Failed to upload image');
-            }
+    // Use Promise.allSettled to handle partial failures
+    const results = await Promise.allSettled(
+      selections.map(async ({ itemId, imageUrl }) => {
+        console.log('[BatchPhotos] Uploading photo for item:', itemId, imageUrl.substring(0, 50));
 
-            const uploadData = await uploadResponse.json();
+        // Use server-side upload-from-url to download and upload in one step
+        const uploadResponse = await fetch('/api/media/upload-from-url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            imageUrl,
+            itemId,
+            filename: 'product.jpg',
+          }),
+        });
 
-            // Update item with photo
-            await fetch(`/api/items/${itemId}`, {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                custom_photo_id: uploadData.mediaAssetId,
-              }),
-            });
+        if (!uploadResponse.ok) {
+          const errorData = await uploadResponse.json().catch(() => ({}));
+          throw new Error(errorData.error || 'Failed to upload image');
+        }
 
-            // Update local state
-            setBag((prev) => ({
-              ...prev,
-              items: prev.items.map((item) =>
-                item.id === itemId
-                  ? { ...item, custom_photo_id: uploadData.mediaAssetId, photo_url: uploadData.url }
-                  : item
-              ),
-            }));
-          } catch (error) {
-            console.error(`Failed to apply photo for item ${itemId}:`, error);
-            throw error;
-          }
-        })
-      );
+        const uploadData = await uploadResponse.json();
 
-      alert(`Successfully added ${selections.length} photos!`);
-    } catch (error: any) {
-      console.error('Error applying batch photos:', error);
-      throw new Error(error.message || 'Failed to apply some photos');
+        // Update item with photo
+        const updateResponse = await fetch(`/api/items/${itemId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            custom_photo_id: uploadData.mediaAssetId,
+          }),
+        });
+
+        if (!updateResponse.ok) {
+          throw new Error('Failed to update item with photo');
+        }
+
+        // Update local state
+        setBag((prev) => ({
+          ...prev,
+          items: prev.items.map((item) =>
+            item.id === itemId
+              ? { ...item, custom_photo_id: uploadData.mediaAssetId, photo_url: uploadData.url }
+              : item
+          ),
+        }));
+
+        return { itemId, success: true };
+      })
+    );
+
+    // Count successes and failures
+    const succeeded = results.filter((r) => r.status === 'fulfilled').length;
+    const failed = results.filter((r) => r.status === 'rejected').length;
+
+    // Log failures for debugging
+    results.forEach((result, index) => {
+      if (result.status === 'rejected') {
+        console.error(`[BatchPhotos] Failed for item ${selections[index].itemId}:`, result.reason);
+      }
+    });
+
+    // Show appropriate message
+    if (failed === 0) {
+      alert(`Successfully added ${succeeded} photos!`);
+    } else if (succeeded > 0) {
+      alert(`Added ${succeeded} photos. ${failed} failed (some items may have been deleted).`);
+    } else {
+      throw new Error('Failed to add any photos. Please try again.');
     }
   };
 
