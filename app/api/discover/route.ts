@@ -12,6 +12,8 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category');
     const search = searchParams.get('search');
     const tags = searchParams.get('tags')?.split(',').filter(Boolean); // Comma-separated tags
+    const sort = searchParams.get('sort') || 'newest'; // newest, popular, most_items
+    const trending = searchParams.get('trending') === 'true'; // Get trending bags only
 
     // Check authentication for "following" filter
     let followingIds: string[] = [];
@@ -88,10 +90,28 @@ export async function GET(request: NextRequest) {
       query = query.overlaps('tags', tags);
     }
 
+    // Apply sorting
+    switch (sort) {
+      case 'popular':
+        // For now, sort by updated_at as proxy for activity
+        // TODO: Add proper view count column to bags table
+        query = query.order('updated_at', { ascending: false, nullsFirst: false });
+        break;
+      case 'most_items':
+        // This will be sorted client-side after fetching
+        query = query.order('created_at', { ascending: false });
+        break;
+      case 'oldest':
+        query = query.order('created_at', { ascending: true });
+        break;
+      case 'newest':
+      default:
+        query = query.order('created_at', { ascending: false });
+        break;
+    }
+
     // Fetch bags
-    const { data: bags, error: bagsError } = await query
-      .order('created_at', { ascending: false })
-      .limit(100);
+    const { data: bags, error: bagsError } = await query.limit(100);
 
     if (bagsError) {
       console.error('Error fetching bags:', bagsError);
@@ -120,16 +140,22 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Map photo URLs to items
-    const bagsWithPhotos = bags?.map((bag: any) => ({
+    // Map photo URLs to items and add item_count
+    let bagsWithPhotos = bags?.map((bag: any) => ({
       ...bag,
+      item_count: bag.items?.length || 0,
       items: bag.items?.map((item: any) => ({
         ...item,
         photo_url: item.custom_photo_id ? photoUrls[item.custom_photo_id] || null : null,
       })),
-    }));
+    })) || [];
 
-    return NextResponse.json({ bags: bagsWithPhotos || [] }, { status: 200 });
+    // Sort by most items if requested (client-side sort since Supabase can't sort by computed field)
+    if (sort === 'most_items') {
+      bagsWithPhotos = bagsWithPhotos.sort((a: any, b: any) => b.item_count - a.item_count);
+    }
+
+    return NextResponse.json({ bags: bagsWithPhotos }, { status: 200 });
   } catch (error) {
     console.error('Discover API error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

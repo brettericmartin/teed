@@ -1,9 +1,9 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Compass, Package, Search, Filter, X, Heart, Eye, Layers } from 'lucide-react';
+import { Compass, Package, Search, Filter, X, Heart, Eye, Layers, ChevronDown, User, Tag, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 type BagItem = {
   id: string;
@@ -31,13 +31,43 @@ type Bag = {
   tags: string[];
   created_at: string;
   updated_at: string | null;
+  item_count?: number;
   items?: BagItem[];
   owner: BagOwner;
+};
+
+type Suggestion = {
+  bags: Array<{
+    type: 'bag';
+    id: string;
+    title: string;
+    code: string;
+    category: string | null;
+    owner: { handle: string; display_name: string };
+  }>;
+  users: Array<{
+    type: 'user';
+    id: string;
+    handle: string;
+    display_name: string;
+    avatar_url: string | null;
+  }>;
+  tags: Array<{
+    type: 'tag';
+    tag: string;
+  }>;
 };
 
 type DiscoverClientProps = {
   initialBags: Bag[];
 };
+
+const SORT_OPTIONS = [
+  { value: 'newest', label: 'Newest First', icon: '🆕' },
+  { value: 'oldest', label: 'Oldest First', icon: '📅' },
+  { value: 'most_items', label: 'Most Items', icon: '📦' },
+  { value: 'popular', label: 'Most Active', icon: '🔥' },
+];
 
 const CATEGORIES = [
   { value: 'golf', label: '⛳ Golf', icon: '⛳' },
@@ -103,6 +133,8 @@ const getPlaceholderColor = (index: number) => {
 export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
 
   const [bags, setBags] = useState<Bag[]>(initialBags);
   const [isLoading, setIsLoading] = useState(false);
@@ -114,6 +146,13 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
   const [selectedTags, setSelectedTags] = useState<string[]>(searchParams.get('tags')?.split(',').filter(Boolean) || []);
+  const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'newest');
+  const [showSortMenu, setShowSortMenu] = useState(false);
+
+  // Autocomplete states
+  const [suggestions, setSuggestions] = useState<Suggestion | null>(null);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
 
   useEffect(() => {
     checkAuth();
@@ -121,7 +160,51 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
 
   useEffect(() => {
     fetchBags();
-  }, [showFollowing, selectedCategory, searchQuery, selectedTags]);
+  }, [showFollowing, selectedCategory, searchQuery, selectedTags, sortBy]);
+
+  // Debounced autocomplete
+  useEffect(() => {
+    if (searchInput.length < 2) {
+      setSuggestions(null);
+      setShowSuggestions(false);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setIsLoadingSuggestions(true);
+      try {
+        const response = await fetch(`/api/discover/suggestions?q=${encodeURIComponent(searchInput)}`);
+        if (response.ok) {
+          const data = await response.json();
+          setSuggestions(data.suggestions);
+          setShowSuggestions(true);
+        }
+      } catch (error) {
+        console.error('Error fetching suggestions:', error);
+      } finally {
+        setIsLoadingSuggestions(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchInput]);
+
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(event.target as Node) &&
+        searchInputRef.current &&
+        !searchInputRef.current.contains(event.target as Node)
+      ) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const checkAuth = async () => {
     try {
@@ -143,6 +226,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
       if (selectedCategory) params.append('category', selectedCategory);
       if (searchQuery) params.append('search', searchQuery);
       if (selectedTags.length > 0) params.append('tags', selectedTags.join(','));
+      if (sortBy) params.append('sort', sortBy);
 
       const response = await fetch(`/api/discover?${params.toString()}`);
       if (response.ok) {
@@ -159,6 +243,19 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSearchQuery(searchInput);
+    setShowSuggestions(false);
+  };
+
+  const handleSuggestionClick = (type: 'bag' | 'user' | 'tag', value: any) => {
+    setShowSuggestions(false);
+    if (type === 'bag') {
+      router.push(`/u/${value.owner.handle}/${value.code}`);
+    } else if (type === 'user') {
+      router.push(`/u/${value.handle}`);
+    } else if (type === 'tag') {
+      toggleTag(value.tag);
+      setSearchInput('');
+    }
   };
 
   const clearFilters = () => {
@@ -167,6 +264,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
     setSearchQuery('');
     setSearchInput('');
     setSelectedTags([]);
+    setSortBy('newest');
   };
 
   const toggleTag = (tag: string) => {
@@ -186,7 +284,13 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
     return Array.from(tagSet).sort();
   };
 
-  const hasActiveFilters = showFollowing || selectedCategory || searchQuery || selectedTags.length > 0;
+  const hasActiveFilters = showFollowing || selectedCategory || searchQuery || selectedTags.length > 0 || sortBy !== 'newest';
+
+  const hasSuggestions = suggestions && (
+    suggestions.bags.length > 0 ||
+    suggestions.users.length > 0 ||
+    suggestions.tags.length > 0
+  );
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -224,21 +328,140 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
 
             {/* Filters */}
             <div className="flex flex-col gap-3">
-              {/* Search and Following */}
+              {/* Search, Sort, and Following */}
               <div className="flex flex-col sm:flex-row gap-2">
-                {/* Search Bar */}
-                <form onSubmit={handleSearchSubmit} className="flex-1">
+                {/* Search Bar with Autocomplete */}
+                <form onSubmit={handleSearchSubmit} className="flex-1 relative">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-tertiary)]" />
                     <input
+                      ref={searchInputRef}
                       type="text"
                       value={searchInput}
                       onChange={(e) => setSearchInput(e.target.value)}
-                      placeholder="Search bags..."
+                      onFocus={() => hasSuggestions && setShowSuggestions(true)}
+                      placeholder="Search bags, users, or tags..."
                       className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--sky-6)] focus:border-transparent"
                     />
+                    {isLoadingSuggestions && (
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                        <div className="w-4 h-4 border-2 border-[var(--sky-6)] border-t-transparent rounded-full animate-spin" />
+                      </div>
+                    )}
                   </div>
+
+                  {/* Autocomplete Dropdown */}
+                  {showSuggestions && hasSuggestions && (
+                    <div
+                      ref={suggestionsRef}
+                      className="absolute top-full left-0 right-0 mt-1 bg-[var(--surface)] border border-[var(--border-subtle)] rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto"
+                    >
+                      {/* Bag suggestions */}
+                      {suggestions.bags.length > 0 && (
+                        <div className="p-2">
+                          <div className="text-xs font-medium text-[var(--text-tertiary)] px-2 py-1">Bags</div>
+                          {suggestions.bags.map((bag) => (
+                            <button
+                              key={bag.id}
+                              type="button"
+                              onClick={() => handleSuggestionClick('bag', bag)}
+                              className="w-full flex items-center gap-3 px-2 py-2 rounded-md hover:bg-[var(--surface-hover)] text-left"
+                            >
+                              <Package className="w-4 h-4 text-[var(--text-tertiary)]" />
+                              <div className="flex-1 min-w-0">
+                                <div className="font-medium text-[var(--text-primary)] truncate">{bag.title}</div>
+                                <div className="text-xs text-[var(--text-tertiary)]">by {bag.owner.display_name}</div>
+                              </div>
+                              {bag.category && (
+                                <span className="text-xs px-1.5 py-0.5 bg-[var(--surface-elevated)] rounded">
+                                  {CATEGORIES.find(c => c.value === bag.category)?.icon}
+                                </span>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* User suggestions */}
+                      {suggestions.users.length > 0 && (
+                        <div className="p-2 border-t border-[var(--border-subtle)]">
+                          <div className="text-xs font-medium text-[var(--text-tertiary)] px-2 py-1">Users</div>
+                          {suggestions.users.map((user) => (
+                            <button
+                              key={user.id}
+                              type="button"
+                              onClick={() => handleSuggestionClick('user', user)}
+                              className="w-full flex items-center gap-3 px-2 py-2 rounded-md hover:bg-[var(--surface-hover)] text-left"
+                            >
+                              {user.avatar_url ? (
+                                <img src={user.avatar_url} alt="" className="w-6 h-6 rounded-full" />
+                              ) : (
+                                <div className="w-6 h-6 rounded-full bg-[var(--teed-green-8)] flex items-center justify-center">
+                                  <User className="w-3 h-3 text-white" />
+                                </div>
+                              )}
+                              <div className="flex-1 min-w-0">
+                                <div className="font-medium text-[var(--text-primary)] truncate">{user.display_name}</div>
+                                <div className="text-xs text-[var(--text-tertiary)]">@{user.handle}</div>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Tag suggestions */}
+                      {suggestions.tags.length > 0 && (
+                        <div className="p-2 border-t border-[var(--border-subtle)]">
+                          <div className="text-xs font-medium text-[var(--text-tertiary)] px-2 py-1">Tags</div>
+                          <div className="flex flex-wrap gap-1 px-2">
+                            {suggestions.tags.map((item) => (
+                              <button
+                                key={item.tag}
+                                type="button"
+                                onClick={() => handleSuggestionClick('tag', item)}
+                                className="px-2 py-1 bg-[var(--sky-2)] text-[var(--sky-11)] rounded text-sm hover:bg-[var(--sky-3)]"
+                              >
+                                #{item.tag}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </form>
+
+                {/* Sort Dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowSortMenu(!showSortMenu)}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] hover:bg-[var(--surface-hover)] transition-all whitespace-nowrap"
+                  >
+                    <span>{SORT_OPTIONS.find(o => o.value === sortBy)?.icon}</span>
+                    <span className="hidden sm:inline">{SORT_OPTIONS.find(o => o.value === sortBy)?.label}</span>
+                    <ChevronDown className={`w-4 h-4 transition-transform ${showSortMenu ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {showSortMenu && (
+                    <div className="absolute top-full right-0 mt-1 bg-[var(--surface)] border border-[var(--border-subtle)] rounded-lg shadow-lg z-50 min-w-[160px]">
+                      {SORT_OPTIONS.map((option) => (
+                        <button
+                          key={option.value}
+                          onClick={() => {
+                            setSortBy(option.value);
+                            setShowSortMenu(false);
+                          }}
+                          className={`w-full flex items-center gap-2 px-4 py-2.5 text-left hover:bg-[var(--surface-hover)] first:rounded-t-lg last:rounded-b-lg ${
+                            sortBy === option.value ? 'bg-[var(--sky-2)] text-[var(--sky-11)]' : 'text-[var(--text-primary)]'
+                          }`}
+                        >
+                          <span>{option.icon}</span>
+                          <span>{option.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
 
                 {/* Following Toggle */}
                 {isAuthenticated && (
