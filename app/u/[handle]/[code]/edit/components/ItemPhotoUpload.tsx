@@ -72,8 +72,18 @@ export default function ItemPhotoUpload({
     // Show crop modal for manual upload
     const reader = new FileReader();
     reader.onload = (event) => {
-      setSelectedImageUrl(event.target?.result as string);
+      const result = event.target?.result;
+      // Validate data URL format (important for mobile compatibility)
+      if (!result || typeof result !== 'string' || !result.startsWith('data:image/')) {
+        console.error('Invalid image data from FileReader:', typeof result, (result as string)?.substring?.(0, 30));
+        setError('Failed to read image. Please try again.');
+        return;
+      }
+      setSelectedImageUrl(result);
       setIsCropModalOpen(true);
+    };
+    reader.onerror = () => {
+      setError('Failed to read image file. Please try again.');
     };
     reader.readAsDataURL(file);
   };

@@ -95,8 +95,18 @@ export default function PhotoUploadModal({
         try {
           const base64 = event.target?.result as string;
 
+          // Validate data URL format (important for mobile compatibility)
+          if (!base64 || typeof base64 !== 'string' || !base64.startsWith('data:image/')) {
+            console.error('Invalid image data from FileReader:', typeof base64, base64?.substring?.(0, 30));
+            setError('Failed to read image. Please try again.');
+            setIsProcessing(false);
+            return;
+          }
+
           // Check if image needs compression (> 3.5MB to stay under Vercel's 4.5MB limit)
-          const sizeKB = Math.round((base64.length * 3) / 4 / 1024);
+          const commaIdx = base64.indexOf(',');
+          const base64Part = commaIdx > -1 ? base64.substring(commaIdx + 1) : base64;
+          const sizeKB = Math.round((base64Part.length * 3) / 4 / 1024);
           let finalBase64 = base64;
 
           if (sizeKB > 3500) {

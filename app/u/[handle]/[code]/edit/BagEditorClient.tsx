@@ -689,9 +689,41 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           if (userPhotoToUse) {
             // Upload the user's captured photo
             try {
-              // Convert base64 to blob
-              const base64Data = userPhotoToUse.split(',')[1];
-              const mimeType = userPhotoToUse.split(';')[0].split(':')[1];
+              // Convert base64 to blob with robust parsing
+              // Expected format: data:image/jpeg;base64,/9j/4AAQSkZJRgAB...
+              let base64Data: string;
+              let mimeType: string = 'image/jpeg'; // Default fallback
+
+              if (typeof userPhotoToUse !== 'string') {
+                console.error('Photo data is not a string:', typeof userPhotoToUse);
+                throw new Error('Invalid photo data type');
+              }
+
+              // Parse data URL format
+              const commaIndex = userPhotoToUse.indexOf(',');
+              if (commaIndex === -1) {
+                // No comma found - might be raw base64 without data URL prefix
+                console.warn('No data URL prefix found, assuming raw base64');
+                base64Data = userPhotoToUse;
+              } else {
+                base64Data = userPhotoToUse.substring(commaIndex + 1);
+                // Extract mime type from prefix
+                const prefix = userPhotoToUse.substring(0, commaIndex);
+                const mimeMatch = prefix.match(/^data:([^;]+)/);
+                if (mimeMatch && mimeMatch[1]) {
+                  mimeType = mimeMatch[1];
+                }
+              }
+
+              // Validate base64 data
+              if (!base64Data || base64Data.length === 0) {
+                console.error('Empty base64 data after parsing');
+                throw new Error('Empty photo data');
+              }
+
+              // Remove any whitespace/newlines that mobile browsers might add
+              base64Data = base64Data.replace(/\s/g, '');
+
               const byteCharacters = atob(base64Data);
               const byteNumbers = new Array(byteCharacters.length);
               for (let i = 0; i < byteCharacters.length; i++) {

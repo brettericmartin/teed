@@ -135,15 +135,40 @@ export default function BulkPhotoUploadModal({
           reader.readAsDataURL(file);
         });
 
+        // Validate data URL format
+        if (!base64 || typeof base64 !== 'string') {
+          console.error('FileReader returned invalid data:', typeof base64);
+          setError(`Failed to read "${file.name}". Please try again.`);
+          continue;
+        }
+
+        // Ensure it's a valid data URL
+        if (!base64.startsWith('data:')) {
+          console.error('Invalid data URL format for', file.name, '- prefix:', base64.substring(0, 20));
+          setError(`Invalid image format for "${file.name}".`);
+          continue;
+        }
+
         // Compress if needed
-        const sizeKB = Math.round((base64.length * 3) / 4 / 1024);
+        const commaIdx = base64.indexOf(',');
+        const base64Part = commaIdx > -1 ? base64.substring(commaIdx + 1) : base64;
+        const sizeKB = Math.round((base64Part.length * 3) / 4 / 1024);
         let finalBase64 = base64;
 
         if (sizeKB > 3500) {
           console.log(`Compressing ${file.name} from ${sizeKB}KB...`);
           finalBase64 = await compressImage(base64, 3500);
-          const newSizeKB = Math.round((finalBase64.length * 3) / 4 / 1024);
+          const newCommaIdx = finalBase64.indexOf(',');
+          const newBase64Part = newCommaIdx > -1 ? finalBase64.substring(newCommaIdx + 1) : finalBase64;
+          const newSizeKB = Math.round((newBase64Part.length * 3) / 4 / 1024);
           console.log(`Compressed to ${newSizeKB}KB`);
+        }
+
+        // Final validation
+        if (!finalBase64.startsWith('data:image/')) {
+          console.error('Final base64 invalid for', file.name);
+          setError(`Failed to process "${file.name}".`);
+          continue;
         }
 
         newPhotos.push({
