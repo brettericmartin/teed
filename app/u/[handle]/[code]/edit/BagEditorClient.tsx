@@ -653,38 +653,73 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     // Store the photos array for mapping to identified products later
     setCapturedPhotosArray(base64Images);
 
-    // Debug: log image info
-    console.log('Bulk photos to send:', base64Images.map((img, i) => ({
-      index: i,
-      prefix: img.substring(0, 50),
-      length: img.length,
-      sizeKB: Math.round((img.length * 3) / 4 / 1024),
-    })));
+    // Calculate total payload size
+    const totalSizeKB = base64Images.reduce((sum, img) => {
+      return sum + Math.round((img.length * 3) / 4 / 1024);
+    }, 0);
+
+    console.log('[BulkUpload] Sending:', {
+      imageCount: base64Images.length,
+      totalSizeKB,
+      images: base64Images.map((img, i) => ({
+        index: i,
+        prefix: img.substring(0, 50),
+        sizeKB: Math.round((img.length * 3) / 4 / 1024),
+      })),
+    });
+
+    // Warn if payload is very large (over 15MB)
+    if (totalSizeKB > 15000) {
+      console.warn('[BulkUpload] Warning: Large payload', totalSizeKB, 'KB');
+    }
 
     try {
+      // Build request body
+      const requestBody = JSON.stringify({
+        images: base64Images,
+        bagType: bag.title,
+      });
+
+      console.log('[BulkUpload] Request body size:', Math.round(requestBody.length / 1024), 'KB');
+
       const response = await fetch('/api/ai/identify-products', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          images: base64Images,
-          bagType: bag.title,
-        }),
+        body: requestBody,
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        console.error('API error response:', error);
-        throw new Error(error.error || 'Failed to identify products');
+        let errorMessage = 'Failed to identify products';
+        try {
+          const error = await response.json();
+          console.error('[BulkUpload] API error:', error);
+          errorMessage = error.error || errorMessage;
+        } catch {
+          console.error('[BulkUpload] Failed to parse error response');
+        }
+        throw new Error(errorMessage);
       }
 
       const result = await response.json();
+      console.log('[BulkUpload] Success:', result.products?.length, 'products found');
 
       setIdentifiedProducts(result);
       setShowProductReview(true);
     } catch (error: any) {
-      console.error('Error identifying products:', error);
+      console.error('[BulkUpload] Error:', error);
       setCapturedPhotosArray([]); // Clear on error
-      alert(error.message || 'Failed to identify products. Please try again.');
+
+      // Provide user-friendly error messages
+      let message = error.message || 'Failed to identify products';
+      if (message.includes('string') && message.includes('pattern')) {
+        message = 'The images are too large. Please try with fewer or smaller images.';
+      } else if (message.includes('413') || message.includes('too large')) {
+        message = 'The images are too large. Please try with fewer images.';
+      } else if (message.includes('Failed to fetch') || message.includes('NetworkError')) {
+        message = 'Network error. Please check your connection and try again.';
+      }
+
+      alert(message);
     } finally {
       setIsIdentifying(false);
     }

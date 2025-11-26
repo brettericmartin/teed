@@ -17,79 +17,140 @@ type PhotoPreview = {
 };
 
 // Compress image to target size while maintaining quality
-// Handles iPhone HEIC, various mobile browser quirks, etc.
+// Uses createImageBitmap for better mobile Safari support, falls back to Image
 async function compressImage(base64: string, maxSizeKB: number = 3500): Promise<string> {
+  // First, convert data URL to blob for createImageBitmap
+  const fetchBlob = async (): Promise<Blob> => {
+    // Try fetch approach first (works on most browsers)
+    try {
+      const response = await fetch(base64);
+      if (response.ok) {
+        return await response.blob();
+      }
+    } catch {
+      // Fall through to manual approach
+    }
+
+    // Manual conversion for older browsers
+    const commaIndex = base64.indexOf(',');
+    if (commaIndex === -1) throw new Error('Invalid data URL');
+
+    const prefix = base64.substring(0, commaIndex);
+    let data = base64.substring(commaIndex + 1);
+    const mimeMatch = prefix.match(/^data:([^;]+)/);
+    const mimeType = mimeMatch?.[1] || 'image/jpeg';
+
+    // Clean and decode
+    data = data.replace(/\s/g, '').replace(/-/g, '+').replace(/_/g, '/');
+    const paddingNeeded = (4 - (data.length % 4)) % 4;
+    if (paddingNeeded > 0) data += '='.repeat(paddingNeeded);
+
+    const binary = atob(data);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+
+    return new Blob([bytes], { type: mimeType });
+  };
+
+  try {
+    const blob = await fetchBlob();
+
+    // Try createImageBitmap first (better mobile support)
+    let imgWidth: number, imgHeight: number;
+    let drawSource: ImageBitmap | HTMLImageElement;
+
+    if (typeof createImageBitmap === 'function') {
+      try {
+        drawSource = await createImageBitmap(blob);
+        imgWidth = drawSource.width;
+        imgHeight = drawSource.height;
+      } catch {
+        // Fall back to Image
+        drawSource = await loadImageFromBlob(blob);
+        imgWidth = drawSource.width;
+        imgHeight = drawSource.height;
+      }
+    } else {
+      drawSource = await loadImageFromBlob(blob);
+      imgWidth = drawSource.width;
+      imgHeight = drawSource.height;
+    }
+
+    // Validate dimensions
+    if (imgWidth === 0 || imgHeight === 0) {
+      throw new Error('Image has invalid dimensions');
+    }
+
+    // Calculate target dimensions
+    let width = imgWidth;
+    let height = imgHeight;
+    const MAX_DIMENSION = 1600; // Reduced for mobile memory
+
+    if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+      const ratio = Math.min(MAX_DIMENSION / width, MAX_DIMENSION / height);
+      width = Math.round(width * ratio);
+      height = Math.round(height * ratio);
+    }
+
+    // Create canvas and draw
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('Failed to get canvas context');
+
+    ctx.drawImage(drawSource, 0, 0, width, height);
+
+    // Clean up ImageBitmap if used
+    if ('close' in drawSource && typeof drawSource.close === 'function') {
+      drawSource.close();
+    }
+
+    // Compress with reducing quality
+    let quality = 0.85;
+    let result = canvas.toDataURL('image/jpeg', quality);
+
+    while (result.length > maxSizeKB * 1024 * 1.37 && quality > 0.3) {
+      quality -= 0.1;
+      result = canvas.toDataURL('image/jpeg', quality);
+    }
+
+    if (!result.startsWith('data:image/')) {
+      throw new Error('Compression produced invalid format');
+    }
+
+    console.log('[Compress] Success:', {
+      original: `${imgWidth}x${imgHeight}`,
+      final: `${width}x${height}`,
+      quality: quality.toFixed(1),
+      sizeKB: Math.round((result.length * 3) / 4 / 1024),
+    });
+
+    return result;
+  } catch (err) {
+    console.error('[Compress] Error:', err);
+    throw err;
+  }
+}
+
+// Helper to load image from blob using HTMLImageElement
+function loadImageFromBlob(blob: Blob): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();
+    const url = URL.createObjectURL(blob);
 
     img.onload = () => {
-      try {
-        const canvas = document.createElement('canvas');
-        let { width, height } = img;
-
-        // Validate dimensions
-        if (width === 0 || height === 0) {
-          reject(new Error('Image has invalid dimensions'));
-          return;
-        }
-
-        const MAX_DIMENSION = 2000;
-        if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
-          const ratio = Math.min(MAX_DIMENSION / width, MAX_DIMENSION / height);
-          width = Math.round(width * ratio);
-          height = Math.round(height * ratio);
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-
-        const ctx = canvas.getContext('2d');
-        if (!ctx) {
-          reject(new Error('Failed to get canvas context'));
-          return;
-        }
-
-        ctx.drawImage(img, 0, 0, width, height);
-
-        let quality = 0.9;
-        let result = canvas.toDataURL('image/jpeg', quality);
-
-        while (result.length > maxSizeKB * 1024 * 1.37 && quality > 0.3) {
-          quality -= 0.1;
-          result = canvas.toDataURL('image/jpeg', quality);
-        }
-
-        // Validate the result - accept any data:image format
-        if (!result.startsWith('data:image/')) {
-          console.error('Compression produced invalid format:', result.substring(0, 50));
-          reject(new Error('Image compression failed'));
-          return;
-        }
-
-        console.log('Compressed successfully:', {
-          originalWidth: img.width,
-          originalHeight: img.height,
-          finalWidth: width,
-          finalHeight: height,
-          quality,
-          resultSizeKB: Math.round((result.length * 3) / 4 / 1024),
-        });
-
-        resolve(result);
-      } catch (err) {
-        console.error('Compression error:', err);
-        reject(err);
-      }
+      URL.revokeObjectURL(url);
+      resolve(img);
     };
 
-    img.onerror = (e) => {
-      console.error('Image load error:', e, 'src prefix:', base64.substring(0, 50));
-      reject(new Error('Failed to load image for compression. The image format may not be supported.'));
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error('Failed to load image'));
     };
 
-    // Handle cross-origin issues on some mobile browsers
-    img.crossOrigin = 'anonymous';
-    img.src = base64;
+    img.src = url;
   });
 }
 
@@ -132,9 +193,6 @@ export default function BulkPhotoUploadModal({
     }
 
     setIsProcessing(true);
-
-    // Detect mobile - skip compression on mobile (iOS handles HEIC conversion automatically)
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
     try {
       const newPhotos: PhotoPreview[] = [];
@@ -187,26 +245,32 @@ export default function BulkPhotoUploadModal({
 
         let finalBase64 = base64;
 
-        // Only compress on desktop and if file is large
-        // Mobile: skip compression - iOS converts HEIC automatically, and canvas can cause issues
-        if (!isMobile) {
-          const commaIdx = base64.indexOf(',');
-          const base64Part = commaIdx > -1 ? base64.substring(commaIdx + 1) : base64;
-          const sizeKB = Math.round((base64Part.length * 3) / 4 / 1024);
+        // ALWAYS compress images over 1MB for bulk uploads
+        // This is critical - large payloads cause "string did not match expected pattern" errors
+        const commaIdx = base64.indexOf(',');
+        const base64Part = commaIdx > -1 ? base64.substring(commaIdx + 1) : base64;
+        const sizeKB = Math.round((base64Part.length * 3) / 4 / 1024);
 
-          if (sizeKB > 3500) {
-            addDebug(`Compressing from ${sizeKB}KB...`);
-            try {
-              finalBase64 = await compressImage(base64, 3500);
-              addDebug(`Compressed OK`);
-            } catch (compErr: any) {
-              addDebug(`Compress failed, using original: ${compErr.message}`);
-              // Use original if compression fails
-              finalBase64 = base64;
+        // Use 1.5MB target for bulk (multiply by # of images = ~15MB max payload)
+        const targetSizeKB = 1500;
+
+        if (sizeKB > targetSizeKB) {
+          addDebug(`Compressing from ${sizeKB}KB to ~${targetSizeKB}KB...`);
+          try {
+            finalBase64 = await compressImage(base64, targetSizeKB);
+            const newSize = Math.round((finalBase64.length * 3) / 4 / 1024);
+            addDebug(`Compressed OK: ${newSize}KB`);
+          } catch (compErr: any) {
+            addDebug(`Compress failed: ${compErr.message}`);
+            // Still try to use original, but warn user if it's very large
+            if (sizeKB > 5000) {
+              setError(`"${file.name}" is too large and compression failed. Try a smaller image.`);
+              continue;
             }
+            finalBase64 = base64;
           }
         } else {
-          addDebug(`Mobile: skipping compression`);
+          addDebug(`Size OK: ${sizeKB}KB`);
         }
 
         addDebug(`Success: ${file.name}`);
