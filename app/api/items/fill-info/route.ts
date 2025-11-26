@@ -3,6 +3,17 @@ import { createServerSupabase } from '@/lib/serverSupabase';
 import { findBestProductLinks, detectProductAge } from '@/lib/services/SmartLinkFinder';
 import { openai } from '@/lib/openaiClient';
 
+// Predefined categorical tags (not brands, just categories/activities)
+const CATEGORICAL_TAGS = [
+  'golf', 'travel', 'tech', 'edc', 'camping', 'photography', 'fitness',
+  'gaming', 'music', 'outdoor', 'work', 'fashion', 'cooking', 'fishing',
+  'hiking', 'cycling', 'running', 'yoga', 'skiing', 'snowboarding',
+  'surfing', 'diving', 'hunting', 'woodworking', 'art', 'crafts',
+  'streaming', 'podcasting', 'video', 'audio', 'productivity', 'minimal',
+  'luxury', 'budget', 'vintage', 'everyday', 'weekend', 'professional',
+  'beginner', 'enthusiast', 'creator', 'athlete', 'commuter', 'home-office'
+];
+
 /**
  * POST /api/items/fill-info
  * Enriches items with BOTH AI-generated details AND smart product links
@@ -10,7 +21,8 @@ import { openai } from '@/lib/openaiClient';
  * This endpoint:
  * 1. Fills missing product details (brand, description, fun facts)
  * 2. Generates smart product links using AI
- * 3. Only fills items that have incomplete information
+ * 3. Generates categorical tags for the bag based on items
+ * 4. Only fills items that have incomplete information
  *
  * Body:
  * {
@@ -22,6 +34,7 @@ import { openai } from '@/lib/openaiClient';
  *   processed: number - Number of items processed
  *   detailsEnriched: number - Number of items with details added
  *   linksAdded: number - Number of links created
+ *   tagsGenerated: string[] - Tags generated for the bag
  *   items: Array<{ itemId: string, detailsAdded: boolean, linkAdded: boolean, reason?: string }>
  * }
  */
@@ -270,6 +283,91 @@ Fill in missing: ${!item.brand ? 'brand' : ''} ${!item.custom_description ? 'des
       results.push(result);
     }
 
+    // Step 3: Generate categorical tags for the bag based on items
+    let tagsGenerated: string[] = [];
+
+    // Get current bag tags
+    const { data: currentBag } = await supabase
+      .from('bags')
+      .select('tags, title, description, category')
+      .eq('id', bagId)
+      .single();
+
+    const currentTags = currentBag?.tags || [];
+
+    // Only generate tags if bag has items and fewer than 3 tags
+    if (items.length > 0 && currentTags.length < 3) {
+      try {
+        // Collect all item info for tag generation
+        const itemSummary = items
+          .filter(item => item.custom_name)
+          .map(item => `${item.custom_name}${item.brand ? ` (${item.brand})` : ''}${item.category ? ` [${item.category}]` : ''}`)
+          .join(', ');
+
+        console.log(`Generating tags for bag with items: ${itemSummary}`);
+
+        const tagResponse = await openai.chat.completions.create({
+          model: 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'system',
+              content: `You are a tag generator for product collections. Given a list of items, suggest 2-4 categorical tags.
+
+IMPORTANT RULES:
+- Only use tags from this approved list: ${CATEGORICAL_TAGS.join(', ')}
+- Choose tags that describe the USE CASE or ACTIVITY, not brands
+- Be specific but not too niche
+- If the bag title or category gives context, use it
+
+Return ONLY valid JSON array of lowercase tag strings:
+["tag1", "tag2", "tag3"]`,
+            },
+            {
+              role: 'user',
+              content: `Bag title: "${currentBag?.title || 'Untitled'}"
+${currentBag?.category ? `Category: ${currentBag.category}` : ''}
+${currentBag?.description ? `Description: ${currentBag.description}` : ''}
+
+Items in bag: ${itemSummary}
+
+Suggest 2-4 categorical tags:`,
+            },
+          ],
+          temperature: 0.3,
+          response_format: { type: 'json_object' },
+        });
+
+        const tagContent = tagResponse.choices[0]?.message?.content || '[]';
+        // Handle both array format and object with tags key
+        let suggestedTags: string[];
+        try {
+          const parsed = JSON.parse(tagContent);
+          suggestedTags = Array.isArray(parsed) ? parsed : (parsed.tags || []);
+        } catch {
+          suggestedTags = [];
+        }
+
+        // Filter to only approved categorical tags and merge with existing
+        const validTags = suggestedTags
+          .map(t => t.toLowerCase().trim())
+          .filter(t => CATEGORICAL_TAGS.includes(t) && !currentTags.includes(t));
+
+        if (validTags.length > 0) {
+          tagsGenerated = validTags;
+          const newTags = [...currentTags, ...validTags].slice(0, 5); // Max 5 tags
+
+          await supabase
+            .from('bags')
+            .update({ tags: newTags })
+            .eq('id', bagId);
+
+          console.log(`✅ Generated tags: ${validTags.join(', ')}`);
+        }
+      } catch (error) {
+        console.error('Failed to generate tags:', error);
+      }
+    }
+
     // Update bag's updated_at timestamp
     await supabase
       .from('bags')
@@ -281,12 +379,14 @@ Fill in missing: ${!item.brand ? 'brand' : ''} ${!item.custom_description ? 'des
    - Processed: ${items.length} items
    - Details enriched: ${detailsEnriched}
    - Links added: ${linksAdded}
+   - Tags generated: ${tagsGenerated.length > 0 ? tagsGenerated.join(', ') : 'none'}
     `);
 
     return NextResponse.json({
       processed: items.length,
       detailsEnriched,
       linksAdded,
+      tagsGenerated,
       items: results,
     });
   } catch (error) {

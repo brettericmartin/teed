@@ -1,9 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
+import { openai } from '@/lib/openaiClient';
+
+// Predefined categorical tags (not brands, just categories/activities)
+const CATEGORICAL_TAGS = [
+  'golf', 'travel', 'tech', 'edc', 'camping', 'photography', 'fitness',
+  'gaming', 'music', 'outdoor', 'work', 'fashion', 'cooking', 'fishing',
+  'hiking', 'cycling', 'running', 'yoga', 'skiing', 'snowboarding',
+  'surfing', 'diving', 'hunting', 'woodworking', 'art', 'crafts',
+  'streaming', 'podcasting', 'video', 'audio', 'productivity', 'minimal',
+  'luxury', 'budget', 'vintage', 'everyday', 'weekend', 'professional',
+  'beginner', 'enthusiast', 'creator', 'athlete', 'commuter', 'home-office'
+];
 
 /**
  * POST /api/items/apply-enrichment
- * Applies approved enrichment suggestions
+ * Applies approved enrichment suggestions and generates bag tags
  */
 export async function POST(request: NextRequest) {
   try {
@@ -109,16 +121,103 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Update bag timestamp
-    await supabase
+    // Generate categorical tags for the bag based on items
+    let tagsGenerated: string[] = [];
+
+    // Get bag info and all items
+    const { data: bagInfo } = await supabase
       .from('bags')
-      .update({ updated_at: new Date().toISOString() })
-      .eq('id', bagId);
+      .select('tags, title, description, category')
+      .eq('id', bagId)
+      .single();
+
+    const { data: allItems } = await supabase
+      .from('bag_items')
+      .select('custom_name, brand, category')
+      .eq('bag_id', bagId);
+
+    const currentTags = bagInfo?.tags || [];
+
+    // Only generate tags if bag has fewer than 3 tags
+    if (allItems && allItems.length > 0 && currentTags.length < 3) {
+      try {
+        const itemSummary = allItems
+          .filter(item => item.custom_name)
+          .map(item => `${item.custom_name}${item.brand ? ` (${item.brand})` : ''}${item.category ? ` [${item.category}]` : ''}`)
+          .join(', ');
+
+        console.log(`Generating tags for bag with items: ${itemSummary}`);
+
+        const tagResponse = await openai.chat.completions.create({
+          model: 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'system',
+              content: `You are a tag generator for product collections. Suggest 2-4 categorical tags.
+
+RULES:
+- Only use tags from: ${CATEGORICAL_TAGS.join(', ')}
+- Choose tags for USE CASE/ACTIVITY, not brands
+- Return JSON: {"tags": ["tag1", "tag2"]}`,
+            },
+            {
+              role: 'user',
+              content: `Bag: "${bagInfo?.title || 'Untitled'}"${bagInfo?.category ? ` (${bagInfo.category})` : ''}
+Items: ${itemSummary}
+Suggest 2-4 tags:`,
+            },
+          ],
+          temperature: 0.3,
+          response_format: { type: 'json_object' },
+        });
+
+        const tagContent = tagResponse.choices[0]?.message?.content || '{}';
+        const parsed = JSON.parse(tagContent);
+        const suggestedTags = Array.isArray(parsed) ? parsed : (parsed.tags || []);
+
+        // Filter to approved tags only
+        const validTags = suggestedTags
+          .map((t: string) => t.toLowerCase().trim())
+          .filter((t: string) => CATEGORICAL_TAGS.includes(t) && !currentTags.includes(t));
+
+        if (validTags.length > 0) {
+          tagsGenerated = validTags;
+          const newTags = [...currentTags, ...validTags].slice(0, 5);
+
+          await supabase
+            .from('bags')
+            .update({ tags: newTags, updated_at: new Date().toISOString() })
+            .eq('id', bagId);
+
+          console.log(`✅ Generated tags: ${validTags.join(', ')}`);
+        } else {
+          // Just update timestamp
+          await supabase
+            .from('bags')
+            .update({ updated_at: new Date().toISOString() })
+            .eq('id', bagId);
+        }
+      } catch (error) {
+        console.error('Failed to generate tags:', error);
+        // Still update timestamp even if tag generation fails
+        await supabase
+          .from('bags')
+          .update({ updated_at: new Date().toISOString() })
+          .eq('id', bagId);
+      }
+    } else {
+      // Just update timestamp
+      await supabase
+        .from('bags')
+        .update({ updated_at: new Date().toISOString() })
+        .eq('id', bagId);
+    }
 
     return NextResponse.json({
       success: true,
       detailsEnriched,
       linksAdded,
+      tagsGenerated,
     });
   } catch (error) {
     console.error('Error applying enrichments:', error);

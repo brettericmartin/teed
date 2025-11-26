@@ -902,6 +902,10 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       if (bagResponse.ok) {
         const updatedBag = await bagResponse.json();
         setBag(updatedBag);
+        // Update local tags state if tags were generated
+        if (updatedBag.tags) {
+          setTags(updatedBag.tags);
+        }
       }
 
       // Close modal
@@ -915,6 +919,9 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       }
       if (result.linksAdded > 0) {
         messages.push(`🔗 Added ${result.linksAdded} link${result.linksAdded > 1 ? 's' : ''}`);
+      }
+      if (result.tagsGenerated && result.tagsGenerated.length > 0) {
+        messages.push(`🏷️ Added tags: ${result.tagsGenerated.join(', ')}`);
       }
 
       if (messages.length > 0) {
