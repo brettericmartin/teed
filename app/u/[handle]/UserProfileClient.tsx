@@ -44,9 +44,12 @@ export default function UserProfileClient({ profile, bags }: UserProfileClientPr
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isOwnProfile, setIsOwnProfile] = useState(false);
+  const [followerCount, setFollowerCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
 
   useEffect(() => {
     checkFollowStatus();
+    fetchFollowCounts();
   }, [profile.id]);
 
   const checkFollowStatus = async () => {
@@ -75,6 +78,19 @@ export default function UserProfileClient({ profile, bags }: UserProfileClientPr
     }
   };
 
+  const fetchFollowCounts = async () => {
+    try {
+      const response = await fetch(`/api/follows/counts/${profile.id}`);
+      if (response.ok) {
+        const data = await response.json();
+        setFollowerCount(data.followers);
+        setFollowingCount(data.following);
+      }
+    } catch (error) {
+      console.error('Error fetching follow counts:', error);
+    }
+  };
+
   const handleFollowToggle = async () => {
     if (!isAuthenticated) {
       router.push('/login');
@@ -91,6 +107,7 @@ export default function UserProfileClient({ profile, bags }: UserProfileClientPr
 
         if (response.ok) {
           setIsFollowing(false);
+          setFollowerCount(prev => Math.max(0, prev - 1));
         }
       } else {
         // Follow
@@ -102,6 +119,7 @@ export default function UserProfileClient({ profile, bags }: UserProfileClientPr
 
         if (response.ok) {
           setIsFollowing(true);
+          setFollowerCount(prev => prev + 1);
         }
       }
     } catch (error) {
@@ -183,6 +201,26 @@ export default function UserProfileClient({ profile, bags }: UserProfileClientPr
                   <p className="text-lg text-[var(--text-secondary)] mt-1">
                     @{profile.handle}
                   </p>
+
+                  {/* Follower/Following Stats */}
+                  <div className="flex items-center gap-4 mt-3">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-semibold text-[var(--text-primary)]">{followerCount}</span>
+                      <span className="text-sm text-[var(--text-secondary)]">
+                        {followerCount === 1 ? 'Follower' : 'Followers'}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-semibold text-[var(--text-primary)]">{followingCount}</span>
+                      <span className="text-sm text-[var(--text-secondary)]">Following</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-semibold text-[var(--text-primary)]">{bags.length}</span>
+                      <span className="text-sm text-[var(--text-secondary)]">
+                        {bags.length === 1 ? 'Bag' : 'Bags'}
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Follow Button */}
