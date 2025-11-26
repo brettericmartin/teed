@@ -52,11 +52,29 @@ export async function uploadItemPhoto(
 ): Promise<{ url: string; path: string }> {
   const supabase = getSupabaseAdmin();
 
-  // Generate unique filename
+  // Generate unique filename with safe extension
   const timestamp = Date.now();
-  const fileExt = file instanceof File ? file.name.split('.').pop() : 'jpg';
+  let fileExt = 'jpg';
+  if (file instanceof File && file.name) {
+    const parts = file.name.split('.');
+    if (parts.length > 1) {
+      const ext = parts.pop()?.toLowerCase();
+      if (ext && /^[a-z0-9]+$/.test(ext)) {
+        fileExt = ext;
+      }
+    }
+  }
   const fileName = `${timestamp}.${fileExt}`;
   const filePath = `${userId}/${itemId}/${fileName}`;
+
+  // Debug logging
+  console.log('Upload attempt:', {
+    filePath,
+    fileSize: file.size,
+    fileType: file.type,
+    isFile: file instanceof File,
+    fileName: file instanceof File ? file.name : 'blob',
+  });
 
   // Upload to Supabase Storage
   const { data, error } = await supabase.storage
@@ -67,7 +85,12 @@ export async function uploadItemPhoto(
     });
 
   if (error) {
-    console.error('Supabase Storage upload error:', error);
+    console.error('Supabase Storage upload error:', {
+      error,
+      filePath,
+      fileType: file.type,
+      fileSize: file.size,
+    });
     throw new Error(`Failed to upload image: ${error.message}`);
   }
 
