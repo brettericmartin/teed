@@ -102,11 +102,19 @@ export default function BulkPhotoUploadModal({
   const [photos, setPhotos] = useState<PhotoPreview[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [debugLog, setDebugLog] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const MAX_PHOTOS = 10;
   const MAX_SIZE_MB = 20;
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
+  // Debug helper - adds timestamped log entry
+  const addDebug = (msg: string) => {
+    const time = new Date().toLocaleTimeString();
+    setDebugLog(prev => [...prev.slice(-9), `${time}: ${msg}`]);
+    console.log(`[BulkUpload] ${msg}`);
+  };
 
   if (!isOpen) return null;
 
@@ -114,6 +122,7 @@ export default function BulkPhotoUploadModal({
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
+    addDebug(`Selected ${files.length} file(s)`);
     setError(null);
 
     // Check total count
@@ -124,65 +133,83 @@ export default function BulkPhotoUploadModal({
 
     setIsProcessing(true);
 
+    // Detect mobile - skip compression on mobile (iOS handles HEIC conversion automatically)
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
     try {
       const newPhotos: PhotoPreview[] = [];
 
       for (const file of files) {
+        addDebug(`Processing: ${file.name} (${file.type}, ${Math.round(file.size/1024)}KB)`);
+
         // Validate file type
         if (!file.type.startsWith('image/')) {
-          continue; // Skip non-images
+          addDebug(`Skipped: not an image`);
+          continue;
         }
 
         // Validate file size
         if (file.size > MAX_SIZE_BYTES) {
+          addDebug(`Error: file too large`);
           setError(`"${file.name}" is too large (max ${MAX_SIZE_MB}MB)`);
           continue;
         }
 
-        // Read and process file
-        const base64 = await new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = (event) => resolve(event.target?.result as string);
-          reader.onerror = () => reject(new Error('Failed to read file'));
-          reader.readAsDataURL(file);
-        });
-
-        // Validate data URL format
-        if (!base64 || typeof base64 !== 'string') {
-          console.error('FileReader returned invalid data:', typeof base64);
-          setError(`Failed to read "${file.name}". Please try again.`);
+        // Read file as data URL
+        let base64: string;
+        try {
+          base64 = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              const result = event.target?.result;
+              if (typeof result === 'string') {
+                resolve(result);
+              } else {
+                reject(new Error('FileReader did not return string'));
+              }
+            };
+            reader.onerror = () => reject(new Error('FileReader error'));
+            reader.readAsDataURL(file);
+          });
+          addDebug(`Read OK: ${base64.substring(0, 30)}...`);
+        } catch (readErr: any) {
+          addDebug(`Read failed: ${readErr.message}`);
+          setError(`Failed to read "${file.name}".`);
           continue;
         }
 
-        // Ensure it's a valid data URL
-        if (!base64.startsWith('data:')) {
-          console.error('Invalid data URL format for', file.name, '- prefix:', base64.substring(0, 20));
-          setError(`Invalid image format for "${file.name}".`);
+        // Basic validation
+        if (!base64 || !base64.startsWith('data:')) {
+          addDebug(`Invalid data URL`);
+          setError(`Invalid format for "${file.name}".`);
           continue;
         }
 
-        // Compress if needed
-        const commaIdx = base64.indexOf(',');
-        const base64Part = commaIdx > -1 ? base64.substring(commaIdx + 1) : base64;
-        const sizeKB = Math.round((base64Part.length * 3) / 4 / 1024);
         let finalBase64 = base64;
 
-        if (sizeKB > 3500) {
-          console.log(`Compressing ${file.name} from ${sizeKB}KB...`);
-          finalBase64 = await compressImage(base64, 3500);
-          const newCommaIdx = finalBase64.indexOf(',');
-          const newBase64Part = newCommaIdx > -1 ? finalBase64.substring(newCommaIdx + 1) : finalBase64;
-          const newSizeKB = Math.round((newBase64Part.length * 3) / 4 / 1024);
-          console.log(`Compressed to ${newSizeKB}KB`);
+        // Only compress on desktop and if file is large
+        // Mobile: skip compression - iOS converts HEIC automatically, and canvas can cause issues
+        if (!isMobile) {
+          const commaIdx = base64.indexOf(',');
+          const base64Part = commaIdx > -1 ? base64.substring(commaIdx + 1) : base64;
+          const sizeKB = Math.round((base64Part.length * 3) / 4 / 1024);
+
+          if (sizeKB > 3500) {
+            addDebug(`Compressing from ${sizeKB}KB...`);
+            try {
+              finalBase64 = await compressImage(base64, 3500);
+              addDebug(`Compressed OK`);
+            } catch (compErr: any) {
+              addDebug(`Compress failed, using original: ${compErr.message}`);
+              // Use original if compression fails
+              finalBase64 = base64;
+            }
+          }
+        } else {
+          addDebug(`Mobile: skipping compression`);
         }
 
-        // Final validation
-        if (!finalBase64.startsWith('data:image/')) {
-          console.error('Final base64 invalid for', file.name);
-          setError(`Failed to process "${file.name}".`);
-          continue;
-        }
-
+        addDebug(`Success: ${file.name}`);
         newPhotos.push({
           id: `${Date.now()}-${Math.random()}`,
           base64: finalBase64,
@@ -190,6 +217,7 @@ export default function BulkPhotoUploadModal({
         });
       }
 
+      addDebug(`Added ${newPhotos.length} photo(s)`);
       setPhotos(prev => [...prev, ...newPhotos]);
       setIsProcessing(false);
 
@@ -197,8 +225,8 @@ export default function BulkPhotoUploadModal({
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
-    } catch (err) {
-      console.error('Photo processing error:', err);
+    } catch (err: any) {
+      addDebug(`Error: ${err.message || err}`);
       setError('Failed to process some photos. Please try again.');
       setIsProcessing(false);
     }
@@ -326,6 +354,24 @@ export default function BulkPhotoUploadModal({
             </div>
           )}
         </div>
+
+        {/* Debug Log - visible on screen for mobile debugging */}
+        {debugLog.length > 0 && (
+          <div className="mx-6 mb-2 p-3 bg-gray-900 rounded-lg max-h-24 overflow-y-auto">
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-xs text-gray-400 font-mono">Debug</span>
+              <button
+                onClick={() => setDebugLog([])}
+                className="text-xs text-gray-500 hover:text-gray-300"
+              >
+                Clear
+              </button>
+            </div>
+            {debugLog.map((log, i) => (
+              <div key={i} className="text-xs text-green-400 font-mono truncate">{log}</div>
+            ))}
+          </div>
+        )}
 
         {/* Footer */}
         <div className="p-6 border-t border-[var(--border-subtle)] bg-[var(--sky-1)] flex items-center justify-between">
