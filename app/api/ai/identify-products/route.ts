@@ -120,8 +120,13 @@ export async function POST(request: NextRequest) {
       )
     );
 
-    // Combine all results
-    const allProducts = results.flatMap(r => r.products);
+    // Combine all results, adding sourceImageIndex to each product
+    const allProducts = results.flatMap(r =>
+      r.products.map(product => ({
+        ...product,
+        sourceImageIndex: r.imageIndex,
+      }))
+    );
     const avgConfidence = results.reduce((sum, r) => sum + r.totalConfidence, 0) / results.length;
     const totalProcessingTime = Date.now() - startTime;
 

@@ -23,6 +23,7 @@ export type IdentifiedProduct = {
     confidence: number;
     reason: string;
   }>;
+  sourceImageIndex?: number; // Index of the source image this product was identified from (for bulk uploads)
 };
 
 type ProductReviewModalProps = {
@@ -214,9 +215,17 @@ export default function ProductReviewModal({
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0">
-                            <h3 className="font-medium text-gray-900 truncate">
-                              {product.name}
-                            </h3>
+                            <div className="flex items-center gap-2">
+                              <h3 className="font-medium text-gray-900 truncate">
+                                {product.name}
+                              </h3>
+                              {/* Source photo badge for bulk uploads */}
+                              {typeof product.sourceImageIndex === 'number' && (
+                                <span className="flex-shrink-0 px-1.5 py-0.5 text-[10px] font-medium bg-[var(--sky-3)] text-[var(--sky-11)] rounded">
+                                  Photo {product.sourceImageIndex + 1}
+                                </span>
+                              )}
+                            </div>
                             {product.brand && (
                               <p className="text-sm text-gray-500 truncate">
                                 {product.brand}

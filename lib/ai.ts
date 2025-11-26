@@ -23,6 +23,7 @@ export interface IdentifiedProduct {
     confidence: number;
     reason: string;
   }>;
+  sourceImageIndex?: number; // Index of the source image this product was identified from (for bulk uploads)
 }
 
 export interface VisionAnalysisResult {

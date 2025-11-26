@@ -92,6 +92,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     processingTime: number;
   } | null>(null);
   const [capturedPhotoBase64, setCapturedPhotoBase64] = useState<string | null>(null);
+  const [capturedPhotosArray, setCapturedPhotosArray] = useState<string[]>([]); // For bulk photo uploads
   const [isIdentifying, setIsIdentifying] = useState(false);
   const [isFillingLinks, setIsFillingLinks] = useState(false);
   const [enrichmentSuggestions, setEnrichmentSuggestions] = useState<any[]>([]);
@@ -601,6 +602,8 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const handleBulkPhotosCapture = async (base64Images: string[]) => {
     setIsIdentifying(true);
     setShowPhotoUpload(false);
+    // Store the photos array for mapping to identified products later
+    setCapturedPhotosArray(base64Images);
 
     try {
       const response = await fetch('/api/ai/identify-products', {
@@ -623,6 +626,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       setShowProductReview(true);
     } catch (error: any) {
       console.error('Error identifying products:', error);
+      setCapturedPhotosArray([]); // Clear on error
       alert(error.message || 'Failed to identify products. Please try again.');
     } finally {
       setIsIdentifying(false);
@@ -675,15 +679,20 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           const newItem = await response.json();
 
           // Try to upload a photo for this item
-          // Priority: 1) User's captured photo (for single item), 2) Google product image
-          const shouldUseUserPhoto = capturedPhotoBase64 && selectedProducts.length === 1;
+          // Priority: 1) User's source photo from bulk upload (via sourceImageIndex)
+          //           2) User's captured photo (for single item legacy flow)
+          //           3) Google product image
+          const sourcePhotoFromBulk = typeof product.sourceImageIndex === 'number' &&
+            capturedPhotosArray[product.sourceImageIndex];
+          const shouldUseLegacyUserPhoto = capturedPhotoBase64 && selectedProducts.length === 1;
+          const userPhotoToUse = sourcePhotoFromBulk || (shouldUseLegacyUserPhoto ? capturedPhotoBase64 : null);
 
-          if (shouldUseUserPhoto && capturedPhotoBase64) {
-            // Upload the user's captured photo for single item selection
+          if (userPhotoToUse) {
+            // Upload the user's captured photo
             try {
               // Convert base64 to blob
-              const base64Data = capturedPhotoBase64.split(',')[1];
-              const mimeType = capturedPhotoBase64.split(';')[0].split(':')[1];
+              const base64Data = userPhotoToUse.split(',')[1];
+              const mimeType = userPhotoToUse.split(';')[0].split(':')[1];
               const byteCharacters = atob(base64Data);
               const byteNumbers = new Array(byteCharacters.length);
               for (let i = 0; i < byteCharacters.length; i++) {
@@ -774,6 +783,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       setShowProductReview(false);
       setIdentifiedProducts(null);
       setCapturedPhotoBase64(null); // Clear the captured photo
+      setCapturedPhotosArray([]); // Clear the bulk photos array
 
       // Show success message
       alert(`Successfully added ${createdItems.length} items to your bag!`);
