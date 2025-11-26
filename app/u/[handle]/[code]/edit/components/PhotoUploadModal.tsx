@@ -10,45 +10,70 @@ type PhotoUploadModalProps = {
 };
 
 // Compress image to target size while maintaining quality
+// Handles iPhone HEIC, various mobile browser quirks, etc.
 async function compressImage(base64: string, maxSizeKB: number = 3500): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new Image();
+
     img.onload = () => {
-      const canvas = document.createElement('canvas');
-      let { width, height } = img;
+      try {
+        const canvas = document.createElement('canvas');
+        let { width, height } = img;
 
-      // Max dimension for good quality while reducing size
-      const MAX_DIMENSION = 2000;
-      if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
-        const ratio = Math.min(MAX_DIMENSION / width, MAX_DIMENSION / height);
-        width = Math.round(width * ratio);
-        height = Math.round(height * ratio);
+        // Validate dimensions
+        if (width === 0 || height === 0) {
+          reject(new Error('Image has invalid dimensions'));
+          return;
+        }
+
+        // Max dimension for good quality while reducing size
+        const MAX_DIMENSION = 2000;
+        if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+          const ratio = Math.min(MAX_DIMENSION / width, MAX_DIMENSION / height);
+          width = Math.round(width * ratio);
+          height = Math.round(height * ratio);
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject(new Error('Failed to get canvas context'));
+          return;
+        }
+
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Try different quality levels to get under target size
+        let quality = 0.9;
+        let result = canvas.toDataURL('image/jpeg', quality);
+
+        // Reduce quality until we're under the target size
+        while (result.length > maxSizeKB * 1024 * 1.37 && quality > 0.3) {
+          quality -= 0.1;
+          result = canvas.toDataURL('image/jpeg', quality);
+        }
+
+        // Validate the result
+        if (!result.startsWith('data:image/')) {
+          reject(new Error('Image compression failed'));
+          return;
+        }
+
+        resolve(result);
+      } catch (err) {
+        console.error('Compression error:', err);
+        reject(err);
       }
-
-      canvas.width = width;
-      canvas.height = height;
-
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        reject(new Error('Failed to get canvas context'));
-        return;
-      }
-
-      ctx.drawImage(img, 0, 0, width, height);
-
-      // Try different quality levels to get under target size
-      let quality = 0.9;
-      let result = canvas.toDataURL('image/jpeg', quality);
-
-      // Reduce quality until we're under the target size
-      while (result.length > maxSizeKB * 1024 * 1.37 && quality > 0.3) { // 1.37 accounts for base64 overhead
-        quality -= 0.1;
-        result = canvas.toDataURL('image/jpeg', quality);
-      }
-
-      resolve(result);
     };
-    img.onerror = () => reject(new Error('Failed to load image for compression'));
+
+    img.onerror = (e) => {
+      console.error('Image load error:', e);
+      reject(new Error('Failed to load image for compression'));
+    };
+
+    img.crossOrigin = 'anonymous';
     img.src = base64;
   });
 }

@@ -689,48 +689,34 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           if (userPhotoToUse) {
             // Upload the user's captured photo
             try {
-              // Convert base64 to blob with robust parsing
-              // Expected format: data:image/jpeg;base64,/9j/4AAQSkZJRgAB...
-              let base64Data: string;
-              let mimeType: string = 'image/jpeg'; // Default fallback
-
               if (typeof userPhotoToUse !== 'string') {
                 console.error('Photo data is not a string:', typeof userPhotoToUse);
                 throw new Error('Invalid photo data type');
               }
 
-              // Parse data URL format
-              const commaIndex = userPhotoToUse.indexOf(',');
-              if (commaIndex === -1) {
-                // No comma found - might be raw base64 without data URL prefix
-                console.warn('No data URL prefix found, assuming raw base64');
-                base64Data = userPhotoToUse;
+              // Use fetch API to convert data URL to blob - handles all encoding variants
+              // This works with HEIC, JPEG, PNG, URL-safe base64, missing padding, etc.
+              let blob: Blob;
+
+              if (userPhotoToUse.startsWith('data:')) {
+                // Data URL - use fetch which handles all base64 variants natively
+                const response = await fetch(userPhotoToUse);
+                blob = await response.blob();
               } else {
-                base64Data = userPhotoToUse.substring(commaIndex + 1);
-                // Extract mime type from prefix
-                const prefix = userPhotoToUse.substring(0, commaIndex);
-                const mimeMatch = prefix.match(/^data:([^;]+)/);
-                if (mimeMatch && mimeMatch[1]) {
-                  mimeType = mimeMatch[1];
-                }
+                // Raw base64 without data URL prefix - wrap it
+                console.warn('Raw base64 detected, wrapping as JPEG');
+                const dataUrl = `data:image/jpeg;base64,${userPhotoToUse}`;
+                const response = await fetch(dataUrl);
+                blob = await response.blob();
               }
 
-              // Validate base64 data
-              if (!base64Data || base64Data.length === 0) {
-                console.error('Empty base64 data after parsing');
+              // Validate blob
+              if (!blob || blob.size === 0) {
+                console.error('Failed to create blob from photo data');
                 throw new Error('Empty photo data');
               }
 
-              // Remove any whitespace/newlines that mobile browsers might add
-              base64Data = base64Data.replace(/\s/g, '');
-
-              const byteCharacters = atob(base64Data);
-              const byteNumbers = new Array(byteCharacters.length);
-              for (let i = 0; i < byteCharacters.length; i++) {
-                byteNumbers[i] = byteCharacters.charCodeAt(i);
-              }
-              const byteArray = new Uint8Array(byteNumbers);
-              const blob = new Blob([byteArray], { type: mimeType });
+              console.log('Created blob:', { type: blob.type, size: blob.size });
 
               // Upload to our storage
               const formData = new FormData();

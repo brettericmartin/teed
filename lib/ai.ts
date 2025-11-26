@@ -86,14 +86,30 @@ export function validateAndCompressImage(base64Image: string): {
   sizeKB: number;
 } {
   try {
-    // Check if valid base64
+    // Check if valid data URL (handle various formats from mobile browsers)
+    if (!base64Image || typeof base64Image !== 'string') {
+      return { valid: false, error: 'Invalid image data', sizeKB: 0 };
+    }
+
+    // Accept data URLs starting with data:image/ (handles jpeg, png, heic, webp, etc)
     if (!base64Image.startsWith('data:image/')) {
       return { valid: false, error: 'Invalid image format', sizeKB: 0 };
     }
 
-    // Calculate size
-    const base64Data = base64Image.split(',')[1];
-    const sizeKB = Math.round((base64Data.length * 3) / 4 / 1024);
+    // Calculate size - safely extract base64 portion
+    const commaIndex = base64Image.indexOf(',');
+    if (commaIndex === -1) {
+      return { valid: false, error: 'Malformed data URL', sizeKB: 0 };
+    }
+
+    const base64Data = base64Image.substring(commaIndex + 1);
+    if (!base64Data || base64Data.length === 0) {
+      return { valid: false, error: 'Empty image data', sizeKB: 0 };
+    }
+
+    // Remove whitespace for accurate size calculation (mobile Safari adds newlines)
+    const cleanBase64 = base64Data.replace(/\s/g, '');
+    const sizeKB = Math.round((cleanBase64.length * 3) / 4 / 1024);
 
     // OpenAI limit is 20MB, we allow up to 10MB for high quality photos
     if (sizeKB > 10240) {
@@ -106,6 +122,7 @@ export function validateAndCompressImage(base64Image: string): {
 
     return { valid: true, compressed: base64Image, sizeKB };
   } catch (error) {
+    console.error('Image validation error:', error);
     return { valid: false, error: 'Failed to process image', sizeKB: 0 };
   }
 }

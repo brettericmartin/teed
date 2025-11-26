@@ -17,13 +17,21 @@ type PhotoPreview = {
 };
 
 // Compress image to target size while maintaining quality
+// Handles iPhone HEIC, various mobile browser quirks, etc.
 async function compressImage(base64: string, maxSizeKB: number = 3500): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new Image();
+
     img.onload = () => {
       try {
         const canvas = document.createElement('canvas');
         let { width, height } = img;
+
+        // Validate dimensions
+        if (width === 0 || height === 0) {
+          reject(new Error('Image has invalid dimensions'));
+          return;
+        }
 
         const MAX_DIMENSION = 2000;
         if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
@@ -51,8 +59,8 @@ async function compressImage(base64: string, maxSizeKB: number = 3500): Promise<
           result = canvas.toDataURL('image/jpeg', quality);
         }
 
-        // Validate the result
-        if (!result.startsWith('data:image/jpeg;base64,')) {
+        // Validate the result - accept any data:image format
+        if (!result.startsWith('data:image/')) {
           console.error('Compression produced invalid format:', result.substring(0, 50));
           reject(new Error('Image compression failed'));
           return;
@@ -73,10 +81,14 @@ async function compressImage(base64: string, maxSizeKB: number = 3500): Promise<
         reject(err);
       }
     };
+
     img.onerror = (e) => {
-      console.error('Image load error:', e);
-      reject(new Error('Failed to load image for compression'));
+      console.error('Image load error:', e, 'src prefix:', base64.substring(0, 50));
+      reject(new Error('Failed to load image for compression. The image format may not be supported.'));
     };
+
+    // Handle cross-origin issues on some mobile browsers
+    img.crossOrigin = 'anonymous';
     img.src = base64;
   });
 }
