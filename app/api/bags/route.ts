@@ -92,6 +92,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Insert the bag with the unique code
+    // Explicitly set tags to empty array to satisfy tags_is_array constraint
     const { data: bag, error } = await supabase
       .from('bags')
       .insert({
@@ -100,6 +101,7 @@ export async function POST(request: NextRequest) {
         description: description?.trim() || null,
         is_public,
         code,
+        tags: [],
       })
       .select()
       .single();
