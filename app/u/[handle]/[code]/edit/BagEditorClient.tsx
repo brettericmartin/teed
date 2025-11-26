@@ -595,6 +595,14 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     // Store the photos array for mapping to identified products later
     setCapturedPhotosArray(base64Images);
 
+    // Debug: log image info
+    console.log('Bulk photos to send:', base64Images.map((img, i) => ({
+      index: i,
+      prefix: img.substring(0, 50),
+      length: img.length,
+      sizeKB: Math.round((img.length * 3) / 4 / 1024),
+    })));
+
     try {
       const response = await fetch('/api/ai/identify-products', {
         method: 'POST',
@@ -607,6 +615,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
 
       if (!response.ok) {
         const error = await response.json();
+        console.error('API error response:', error);
         throw new Error(error.error || 'Failed to identify products');
       }
 
