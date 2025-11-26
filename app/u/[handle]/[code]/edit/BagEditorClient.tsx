@@ -19,6 +19,17 @@ import AIAssistantHub from './components/AIAssistantHub';
 import BagAnalytics from './components/BagAnalytics';
 import { Button } from '@/components/ui/Button';
 
+// Predefined categorical tags (matches discovery filter and AI generation)
+const CATEGORICAL_TAGS = [
+  'golf', 'travel', 'tech', 'edc', 'camping', 'photography', 'fitness',
+  'gaming', 'music', 'outdoor', 'work', 'fashion', 'cooking', 'fishing',
+  'hiking', 'cycling', 'running', 'yoga', 'skiing', 'snowboarding',
+  'surfing', 'diving', 'hunting', 'woodworking', 'art', 'crafts',
+  'streaming', 'podcasting', 'video', 'audio', 'productivity', 'minimal',
+  'luxury', 'budget', 'vintage', 'everyday', 'weekend', 'professional',
+  'beginner', 'enthusiast', 'creator', 'athlete', 'commuter', 'home-office'
+];
+
 type Link = {
   id: string;
   url: string;
@@ -75,7 +86,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [isPublic, setIsPublic] = useState(bag.is_public);
   const [category, setCategory] = useState(bag.category || '');
   const [tags, setTags] = useState<string[]>(bag.tags || []);
-  const [tagInput, setTagInput] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [showManualForm, setShowManualForm] = useState(false);
@@ -147,11 +157,9 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     }
   };
 
-  const handleAddTag = () => {
-    const trimmedTag = tagInput.trim().toLowerCase();
-    if (trimmedTag && !tags.includes(trimmedTag)) {
-      setTags([...tags, trimmedTag]);
-      setTagInput('');
+  const handleAddTag = (tag: string) => {
+    if (tag && !tags.includes(tag) && tags.length < 5) {
+      setTags([...tags, tag]);
     }
   };
 
@@ -159,12 +167,8 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
 
-  const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleAddTag();
-    }
-  };
+  // Get available tags (not already selected)
+  const availableTags = CATEGORICAL_TAGS.filter(tag => !tags.includes(tag));
 
   const handleAddItem = async (itemData: {
     custom_name: string;
@@ -1107,21 +1111,23 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             <div className="flex-1 min-w-[200px]">
               <div className="flex items-center gap-2 mb-1">
                 <label className="text-xs font-medium text-[var(--text-secondary)]">Tags:</label>
-                <input
-                  type="text"
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyDown={handleTagInputKeyDown}
-                  placeholder="Add tag and press Enter..."
-                  className="flex-1 text-xs bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] rounded px-2 py-1 focus:outline-none focus:border-[var(--teed-green-8)] transition-colors placeholder:text-[var(--input-placeholder)]"
-                />
-                <button
-                  onClick={handleAddTag}
-                  className="text-xs bg-[var(--teed-green-8)] text-white px-2 py-1 rounded hover:bg-[var(--teed-green-9)] transition-colors"
-                  type="button"
+                <select
+                  value=""
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      handleAddTag(e.target.value);
+                    }
+                  }}
+                  disabled={tags.length >= 5}
+                  className="flex-1 text-xs bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] rounded px-2 py-1 focus:outline-none focus:border-[var(--teed-green-8)] transition-colors disabled:opacity-50"
                 >
-                  Add
-                </button>
+                  <option value="">{tags.length >= 5 ? 'Max 5 tags' : 'Select a tag...'}</option>
+                  {availableTags.map((tag) => (
+                    <option key={tag} value={tag}>
+                      {tag}
+                    </option>
+                  ))}
+                </select>
               </div>
               {/* Tag Display */}
               {tags.length > 0 && (
