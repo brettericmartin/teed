@@ -210,14 +210,36 @@ export default function Navigation({ userHandle, displayName, isAuthenticated }:
             </div>
           )}
 
-          {/* Login Button (when not authenticated) */}
+          {/* Navigation + CTA (when not authenticated) */}
           {!isAuthenticated && (
-            <Link
-              href="/login"
-              className="px-4 py-2.5 min-h-[44px] flex items-center text-sm font-medium text-[var(--button-primary-text)] bg-[var(--button-primary-bg)] hover:bg-[var(--button-primary-bg-hover)] rounded-lg transition-colors"
-            >
-              Sign In
-            </Link>
+            <div className="flex items-center gap-2 sm:gap-4">
+              {/* Discover link for visitors */}
+              <Link
+                href="/discover"
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  pathname === '/discover'
+                    ? 'bg-[var(--surface-hover)] text-[var(--text-primary)]'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]'
+                }`}
+              >
+                <Compass className="w-4 h-4" />
+                <span className="hidden sm:inline">Discover</span>
+              </Link>
+
+              {/* Sign In / Get Started */}
+              <Link
+                href="/login"
+                className="px-3 sm:px-4 py-2.5 min-h-[44px] flex items-center text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/signup"
+                className="px-4 py-2.5 min-h-[44px] flex items-center text-sm font-medium text-white bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] rounded-lg transition-colors"
+              >
+                Get Started
+              </Link>
+            </div>
           )}
         </div>
       </div>

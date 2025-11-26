@@ -36,6 +36,8 @@ interface Bag {
   cover_photo_id: string | null;
   cover_photo_url: string | null;
   created_at: string;
+  tags?: string[];
+  category?: string;
 }
 
 interface PublicBagViewProps {
@@ -178,6 +180,21 @@ export default function PublicBagView({
                   @{ownerHandle}
                 </Link>
               </div>
+
+              {/* Tags */}
+              {bag.tags && bag.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {bag.tags.map((tag) => (
+                    <Link
+                      key={tag}
+                      href={`/discover?tags=${encodeURIComponent(tag)}`}
+                      className="px-3 py-1 bg-[var(--sky-2)] text-[var(--sky-11)] text-sm rounded-full hover:bg-[var(--sky-3)] transition-colors"
+                    >
+                      #{tag}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -414,16 +431,37 @@ export default function PublicBagView({
         </div>
       )}
 
-      {/* Footer */}
-      <div className="max-w-5xl mx-auto px-4 py-8 mt-12 border-t border-[var(--border-subtle)]">
+      {/* Footer with CTA */}
+      <div className="max-w-5xl mx-auto px-4 py-12 mt-12 border-t border-[var(--border-subtle)]">
         <div className="text-center">
           <p className="text-[var(--text-secondary)] mb-2">Created with</p>
-          <h2 className="text-[var(--font-size-8)] font-semibold text-[var(--text-primary)]">
-            Teed
-          </h2>
-          <p className="text-sm text-[var(--text-secondary)] mt-2">
+          <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
+            <h2 className="text-[var(--font-size-8)] font-semibold text-[var(--text-primary)]">
+              Teed
+            </h2>
+          </Link>
+          <p className="text-sm text-[var(--text-secondary)] mt-2 mb-6">
             Curations, Made Shareable
           </p>
+
+          {/* CTA for visitors */}
+          <div className="bg-gradient-to-r from-[var(--teed-green-2)] to-[var(--sky-2)] rounded-2xl p-6 max-w-md mx-auto border border-[var(--teed-green-6)]">
+            <p className="text-[var(--text-primary)] font-medium mb-3">
+              Want to create your own curated bags?
+            </p>
+            <Link
+              href="/signup"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] text-white font-medium rounded-lg transition-colors"
+            >
+              Create Your Bag
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </Link>
+            <p className="text-xs text-[var(--text-tertiary)] mt-3">
+              Free to use • Share with anyone
+            </p>
+          </div>
         </div>
       </div>
     </div>
