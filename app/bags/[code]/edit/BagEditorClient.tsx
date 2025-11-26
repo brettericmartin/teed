@@ -308,7 +308,9 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
 
               // Upload to our storage
               const formData = new FormData();
-              formData.append('file', imageBlob, `${product.name}.jpg`);
+              // Sanitize filename - remove special characters that break Supabase storage
+              const sanitizedName = product.name.replace(/[^a-zA-Z0-9-_]/g, '-').substring(0, 50);
+              formData.append('file', imageBlob, `${sanitizedName}.jpg`);
               formData.append('itemId', newItem.id);
 
               const uploadResponse = await fetch('/api/media/upload', {

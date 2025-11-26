@@ -489,33 +489,23 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       const formData = new FormData();
       formData.append('file', file);
 
-      const uploadResponse = await fetch('/api/media/upload', {
+      const uploadResponse = await fetch(`/api/bags/${bag.code}/cover-photo`, {
         method: 'POST',
         body: formData,
       });
 
       if (!uploadResponse.ok) {
-        throw new Error('Failed to upload cover photo');
+        const errorData = await uploadResponse.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to upload cover photo');
       }
 
       const uploadData = await uploadResponse.json();
 
-      // Update bag with cover photo
-      const response = await fetch(`/api/bags/${bag.code}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cover_photo_id: uploadData.mediaAssetId,
-        }),
-      });
-
-      if (response.ok) {
-        setBag((prev) => ({
-          ...prev,
-          cover_photo_id: uploadData.mediaAssetId,
-          cover_photo_url: uploadData.url,
-        }));
-      }
+      setBag((prev) => ({
+        ...prev,
+        cover_photo_id: uploadData.mediaAssetId,
+        cover_photo_url: uploadData.url,
+      }));
     } catch (error) {
       console.error('Error uploading cover photo:', error);
       alert('Failed to upload cover photo. Please try again.');
@@ -525,12 +515,8 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   // Handle removing cover photo
   const handleRemoveCoverPhoto = async () => {
     try {
-      const response = await fetch(`/api/bags/${bag.code}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cover_photo_id: null,
-        }),
+      const response = await fetch(`/api/bags/${bag.code}/cover-photo`, {
+        method: 'DELETE',
       });
 
       if (response.ok) {
@@ -707,7 +693,9 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
 
               // Upload to our storage
               const formData = new FormData();
-              formData.append('file', blob, `${product.name}-${Date.now()}.jpg`);
+              // Sanitize filename - remove special characters that break Supabase storage
+              const sanitizedName = product.name.replace(/[^a-zA-Z0-9-_]/g, '-').substring(0, 50);
+              formData.append('file', blob, `${sanitizedName}-${Date.now()}.jpg`);
               formData.append('itemId', newItem.id);
 
               const uploadResponse = await fetch('/api/media/upload', {
@@ -737,13 +725,15 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           } else if (product.productImage?.imageUrl) {
             // Use server-side upload-from-url to bypass CORS for Google images
             try {
+              // Sanitize filename
+              const sanitizedName = product.name.replace(/[^a-zA-Z0-9-_]/g, '-').substring(0, 50);
               const uploadResponse = await fetch('/api/media/upload-from-url', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                   imageUrl: product.productImage.imageUrl,
                   itemId: newItem.id,
-                  filename: `${product.name}.jpg`,
+                  filename: `${sanitizedName}.jpg`,
                 }),
               });
 
