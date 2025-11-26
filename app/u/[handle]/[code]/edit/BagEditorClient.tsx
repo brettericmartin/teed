@@ -19,6 +19,64 @@ import AIAssistantHub from './components/AIAssistantHub';
 import BagAnalytics from './components/BagAnalytics';
 import { Button } from '@/components/ui/Button';
 
+/**
+ * Robust data URL to Blob converter that handles mobile browser quirks.
+ * Handles URL-safe base64 (-_ instead of +/), missing padding, and whitespace.
+ */
+async function dataUrlToBlob(dataUrl: string): Promise<Blob> {
+  // First try the fetch approach - most reliable when it works
+  try {
+    const response = await fetch(dataUrl);
+    if (response.ok) {
+      return await response.blob();
+    }
+  } catch (fetchError) {
+    console.log('Fetch approach failed, falling back to manual decode:', fetchError);
+  }
+
+  // Manual fallback for browsers where fetch(dataUrl) doesn't work
+  const commaIndex = dataUrl.indexOf(',');
+  if (commaIndex === -1) {
+    throw new Error('Invalid data URL format - no comma found');
+  }
+
+  const prefix = dataUrl.substring(0, commaIndex);
+  let base64 = dataUrl.substring(commaIndex + 1);
+
+  // Extract MIME type
+  const mimeMatch = prefix.match(/^data:([^;]+)/);
+  const mimeType = mimeMatch?.[1] || 'image/jpeg';
+
+  // Clean base64: remove whitespace
+  base64 = base64.replace(/\s/g, '');
+
+  // Convert URL-safe base64 to standard base64
+  base64 = base64.replace(/-/g, '+').replace(/_/g, '/');
+
+  // Add padding if needed
+  const paddingNeeded = (4 - (base64.length % 4)) % 4;
+  if (paddingNeeded > 0) {
+    base64 += '='.repeat(paddingNeeded);
+  }
+
+  // Decode base64 to binary
+  let binary: string;
+  try {
+    binary = atob(base64);
+  } catch (atobError) {
+    console.error('atob failed:', atobError, 'base64 prefix:', base64.substring(0, 30));
+    throw new Error('Failed to decode image data');
+  }
+
+  // Convert to Uint8Array
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+
+  return new Blob([bytes], { type: mimeType });
+}
+
 // Predefined categorical tags (matches discovery filter and AI generation)
 const CATEGORICAL_TAGS = [
   'golf', 'travel', 'tech', 'edc', 'camping', 'photography', 'fitness',
@@ -694,20 +752,18 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 throw new Error('Invalid photo data type');
               }
 
-              // Use fetch API to convert data URL to blob - handles all encoding variants
-              // This works with HEIC, JPEG, PNG, URL-safe base64, missing padding, etc.
+              // Use robust helper that handles mobile browser quirks
+              // (URL-safe base64, missing padding, whitespace, etc.)
               let blob: Blob;
+              const dataUrl = userPhotoToUse.startsWith('data:')
+                ? userPhotoToUse
+                : `data:image/jpeg;base64,${userPhotoToUse}`;
 
-              if (userPhotoToUse.startsWith('data:')) {
-                // Data URL - use fetch which handles all base64 variants natively
-                const response = await fetch(userPhotoToUse);
-                blob = await response.blob();
-              } else {
-                // Raw base64 without data URL prefix - wrap it
-                console.warn('Raw base64 detected, wrapping as JPEG');
-                const dataUrl = `data:image/jpeg;base64,${userPhotoToUse}`;
-                const response = await fetch(dataUrl);
-                blob = await response.blob();
+              try {
+                blob = await dataUrlToBlob(dataUrl);
+              } catch (convError) {
+                console.error('Failed to convert data URL to blob:', convError);
+                throw new Error('Failed to process image');
               }
 
               // Validate blob
