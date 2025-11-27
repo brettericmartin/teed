@@ -40,9 +40,10 @@ export async function PUT(
     }
 
     // Get the item and verify ownership through bag
+    // NOTE: Must specify FK relationship explicitly due to bags.hero_item_id creating a second FK
     const { data: item, error: itemError } = await supabase
       .from('bag_items')
-      .select('id, bag_id, bags(owner_id)')
+      .select('id, bag_id, bags:bags!bag_items_bag_id_fkey(owner_id)')
       .eq('id', id)
       .single();
 
@@ -162,9 +163,10 @@ export async function DELETE(
     }
 
     // Get the item and verify ownership through bag
+    // NOTE: Must specify FK relationship explicitly due to bags.hero_item_id creating a second FK
     const { data: item, error: itemError } = await supabase
       .from('bag_items')
-      .select('id, bag_id, bags(owner_id)')
+      .select('id, bag_id, bags:bags!bag_items_bag_id_fkey(owner_id)')
       .eq('id', id)
       .single();
 

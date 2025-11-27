@@ -59,12 +59,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify user owns the item
-    // NOTE: Using bags(owner_id) NOT bags!inner(owner_id) - the !inner syntax
-    // causes RLS issues where the entire query returns no results
+    // NOTE: Must specify the FK relationship explicitly because there are two:
+    // 1. bag_items.bag_id -> bags.id (item belongs to bag)
+    // 2. bags.hero_item_id -> bag_items.id (bag has hero item)
     console.log('[upload-from-url] Looking up item:', itemId);
     const { data: item, error: itemError } = await supabase
       .from('bag_items')
-      .select('id, bag_id, bags(owner_id)')
+      .select('id, bag_id, bags:bags!bag_items_bag_id_fkey(owner_id)')
       .eq('id', itemId)
       .single();
 
