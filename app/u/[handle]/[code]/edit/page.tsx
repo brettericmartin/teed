@@ -82,6 +82,11 @@ export default async function BagEditorPage({ params }: PageProps) {
     ?.map((item) => item.custom_photo_id)
     .filter((id): id is string => id !== null) || [];
 
+  // Also include cover photo if present
+  if (bag.cover_photo_id) {
+    photoIds.push(bag.cover_photo_id);
+  }
+
   let photoUrls: Record<string, string> = {};
 
   if (photoIds.length > 0) {
@@ -109,8 +114,12 @@ export default async function BagEditorPage({ params }: PageProps) {
     };
   });
 
+  // Get cover photo URL if present
+  const coverPhotoUrl = bag.cover_photo_id ? photoUrls[bag.cover_photo_id] || null : null;
+
   const bagWithItems = {
     ...bag,
+    cover_photo_url: coverPhotoUrl,
     items: itemsWithLinks,
   };
 
