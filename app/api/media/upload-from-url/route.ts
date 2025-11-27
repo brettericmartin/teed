@@ -1,6 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import { uploadItemPhoto, createMediaAsset } from '@/lib/supabaseStorage';
+import { createClient } from '@supabase/supabase-js';
+
+// Create admin client for queries that need to bypass RLS
+function getSupabaseAdmin() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
+
+  if (!supabaseUrl || !supabaseServiceKey) {
+    throw new Error('Missing Supabase environment variables');
+  }
+
+  return createClient(supabaseUrl, supabaseServiceKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  });
+}
 
 /**
  * POST /api/media/upload-from-url
@@ -58,9 +76,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify user owns the item
+    // Verify user owns the item - use admin client to bypass RLS
+    const supabaseAdmin = getSupabaseAdmin();
     console.log('[upload-from-url] Looking up item:', itemId);
-    const { data: item, error: itemError } = await supabase
+    const { data: item, error: itemError } = await supabaseAdmin
       .from('bag_items')
       .select('bag_id, bags!inner(owner_id)')
       .eq('id', itemId)
