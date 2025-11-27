@@ -575,6 +575,30 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     e.target.value = '';
   };
 
+  // Handle cropping existing cover photo
+  const handleCropExistingCover = async (imageUrl: string) => {
+    try {
+      // Fetch the existing image and convert to data URL for the cropper
+      const response = await fetch(imageUrl);
+      if (!response.ok) {
+        throw new Error('Failed to fetch image');
+      }
+      const blob = await response.blob();
+      const reader = new FileReader();
+      reader.onload = () => {
+        setCoverImageToCrop(reader.result as string);
+        setShowCoverCropper(true);
+      };
+      reader.onerror = () => {
+        throw new Error('Failed to read image');
+      };
+      reader.readAsDataURL(blob);
+    } catch (error) {
+      console.error('Error loading cover photo for cropping:', error);
+      toast.showError('Failed to load image for cropping. Try uploading a new photo.');
+    }
+  };
+
   // Handle cropped cover photo upload
   const handleCroppedCoverPhotoUpload = async (croppedBlob: Blob) => {
     setShowCoverCropper(false);
@@ -1346,10 +1370,21 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 className="w-full h-48 object-cover"
               />
               <div className="absolute top-2 right-2 flex gap-2">
-                {/* Change/Re-crop button */}
+                {/* Crop existing photo button */}
+                <button
+                  onClick={() => handleCropExistingCover(bag.cover_photo_url!)}
+                  className="p-2 bg-[var(--surface)] rounded-full shadow-md hover:bg-[var(--surface-hover)] transition-colors"
+                  title="Crop cover photo"
+                >
+                  <svg className="w-4 h-4 text-[var(--text-secondary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M6 2v14a2 2 0 0 0 2 2h14" />
+                    <path d="M18 22V8a2 2 0 0 0-2-2H2" />
+                  </svg>
+                </button>
+                {/* Change photo button */}
                 <label
                   className="p-2 bg-[var(--surface)] rounded-full shadow-md hover:bg-[var(--surface-hover)] transition-colors cursor-pointer"
-                  title="Change cover photo"
+                  title="Upload new cover photo"
                 >
                   <Camera className="w-4 h-4 text-[var(--text-secondary)]" />
                   <input
