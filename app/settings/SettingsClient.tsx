@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { User, Loader2, Check, X, Upload, Trash2, Camera, ArrowLeft, Instagram, Twitter, Youtube, Globe, Video } from 'lucide-react';
+import { useConfirm } from '@/components/ui/ConfirmDialog';
 
 type Profile = {
   id: string;
@@ -31,6 +32,7 @@ type SettingsClientProps = {
 
 export default function SettingsClient({ initialProfile, userEmail }: SettingsClientProps) {
   const router = useRouter();
+  const confirm = useConfirm();
   const [profile, setProfile] = useState<Profile>(initialProfile);
   const [displayName, setDisplayName] = useState(profile.display_name);
   const [handle, setHandle] = useState(profile.handle);
@@ -240,9 +242,15 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
   };
 
   const handleRemoveAvatar = async () => {
-    if (!confirm('Are you sure you want to remove your avatar?')) {
-      return;
-    }
+    const confirmed = await confirm({
+      title: 'Remove Avatar',
+      message: 'Remove your profile photo? You can always upload a new one later.',
+      confirmText: 'Remove',
+      cancelText: 'Keep',
+      variant: 'warning',
+    });
+
+    if (!confirmed) return;
 
     setIsUploadingAvatar(true);
     setError('');

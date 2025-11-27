@@ -11,6 +11,7 @@ import PhotoUploadModal from './components/PhotoUploadModal';
 import ProductReviewModal, { IdentifiedProduct } from './components/ProductReviewModal';
 import AIAssistantHub from './components/AIAssistantHub';
 import { Button } from '@/components/ui/Button';
+import { useConfirm } from '@/components/ui/ConfirmDialog';
 
 type Link = {
   id: string;
@@ -53,6 +54,7 @@ type BagEditorClientProps = {
 
 export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
   const router = useRouter();
+  const confirm = useConfirm();
   const [bag, setBag] = useState<Bag>(initialBag);
   const [title, setTitle] = useState(bag.title);
   const [description, setDescription] = useState(bag.description || '');
@@ -142,9 +144,18 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
   };
 
   const handleDeleteItem = async (itemId: string) => {
-    if (!confirm('Are you sure you want to delete this item?')) {
-      return;
-    }
+    const item = bag.items.find(i => i.id === itemId);
+    const itemName = item?.custom_name || 'this item';
+
+    const confirmed = await confirm({
+      title: 'Delete Item',
+      message: `Are you sure you want to delete "${itemName}"? This action cannot be undone.`,
+      confirmText: 'Delete',
+      cancelText: 'Keep',
+      variant: 'destructive',
+    });
+
+    if (!confirmed) return;
 
     try {
       const response = await fetch(`/api/items/${itemId}`, {
@@ -218,9 +229,15 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
   };
 
   const handleDeleteBag = async () => {
-    if (!confirm('Are you sure you want to delete this bag? This action cannot be undone.')) {
-      return;
-    }
+    const confirmed = await confirm({
+      title: 'Delete Bag',
+      message: `Are you sure you want to delete "${bag.title}"? All items and photos will be permanently removed.`,
+      confirmText: 'Delete Bag',
+      cancelText: 'Keep',
+      variant: 'destructive',
+    });
+
+    if (!confirmed) return;
 
     try {
       const response = await fetch(`/api/bags/${bag.code}`, {

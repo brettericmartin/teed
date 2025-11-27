@@ -20,6 +20,7 @@ import BagAnalytics from './components/BagAnalytics';
 import CoverPhotoCropper from './components/CoverPhotoCropper';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
+import { useConfirm } from '@/components/ui/ConfirmDialog';
 
 /**
  * Robust data URL to Blob converter that handles mobile browser quirks.
@@ -141,6 +142,7 @@ type BagEditorClientProps = {
 export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorClientProps) {
   const router = useRouter();
   const toast = useToast();
+  const confirm = useConfirm();
   const [bag, setBag] = useState<Bag>(initialBag);
   const [title, setTitle] = useState(bag.title);
   const [description, setDescription] = useState(bag.description || '');
@@ -446,9 +448,18 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   };
 
   const handleDeleteItem = async (itemId: string) => {
-    if (!confirm('Are you sure you want to delete this item?')) {
-      return;
-    }
+    const item = bag.items.find(i => i.id === itemId);
+    const itemName = item?.custom_name || 'this item';
+
+    const confirmed = await confirm({
+      title: 'Delete Item',
+      message: `Are you sure you want to delete "${itemName}"? This action cannot be undone.`,
+      confirmText: 'Delete',
+      cancelText: 'Keep',
+      variant: 'destructive',
+    });
+
+    if (!confirmed) return;
 
     try {
       const response = await fetch(`/api/items/${itemId}`, {
@@ -463,9 +474,11 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         ...prev,
         items: prev.items.filter((item) => item.id !== itemId),
       }));
+
+      toast.showSuccess(`"${itemName}" deleted`);
     } catch (error) {
       console.error('Error deleting item:', error);
-      alert('Failed to delete item. Please try again.');
+      toast.showError('Failed to delete item. Please try again.');
     }
   };
 
@@ -653,9 +666,15 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   };
 
   const handleDeleteBag = async () => {
-    if (!confirm('Are you sure you want to delete this bag? This action cannot be undone.')) {
-      return;
-    }
+    const confirmed = await confirm({
+      title: 'Delete Bag',
+      message: `Are you sure you want to delete "${bag.title}"? All items and photos will be permanently removed.`,
+      confirmText: 'Delete Bag',
+      cancelText: 'Keep',
+      variant: 'destructive',
+    });
+
+    if (!confirmed) return;
 
     try {
       const response = await fetch(`/api/bags/${bag.code}`, {
@@ -670,7 +689,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       router.push('/dashboard');
     } catch (error) {
       console.error('Error deleting bag:', error);
-      alert('Failed to delete bag. Please try again.');
+      toast.showError('Failed to delete bag. Please try again.');
     }
   };
 

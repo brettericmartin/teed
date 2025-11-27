@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
+import { useConfirm } from '@/components/ui/ConfirmDialog';
 
 interface Link {
   id: string;
@@ -36,6 +37,7 @@ export default function LinkManagerModal({
   const [editUrl, setEditUrl] = useState('');
   const [editKind, setEditKind] = useState('');
   const urlInputRef = useRef<HTMLInputElement>(null);
+  const confirm = useConfirm();
 
   // Auto-focus the URL input when modal opens
   useEffect(() => {
@@ -142,9 +144,17 @@ export default function LinkManagerModal({
   };
 
   const handleDeleteLink = async (linkId: string) => {
-    if (!confirm('Are you sure you want to delete this link?')) {
-      return;
-    }
+    const link = links.find(l => l.id === linkId);
+
+    const confirmed = await confirm({
+      title: 'Delete Link',
+      message: `Remove this ${link?.kind || 'link'} from ${itemName}?`,
+      confirmText: 'Delete',
+      cancelText: 'Keep',
+      variant: 'destructive',
+    });
+
+    if (!confirmed) return;
 
     // Optimistic update
     const originalLinks = [...links];
