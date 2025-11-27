@@ -18,6 +18,7 @@ import ClarificationModal from './components/ClarificationModal';
 import AIAssistantHub from './components/AIAssistantHub';
 import BagAnalytics from './components/BagAnalytics';
 import { Button } from '@/components/ui/Button';
+import { useToast } from '@/components/ui/Toast';
 
 /**
  * Robust data URL to Blob converter that handles mobile browser quirks.
@@ -138,6 +139,7 @@ type BagEditorClientProps = {
 
 export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorClientProps) {
   const router = useRouter();
+  const toast = useToast();
   const [bag, setBag] = useState<Bag>(initialBag);
   const [title, setTitle] = useState(bag.title);
   const [description, setDescription] = useState(bag.description || '');
@@ -923,7 +925,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       setCapturedPhotosArray([]); // Clear the bulk photos array
 
       // Show success message
-      alert(`Successfully added ${createdItems.length} items to your bag!`);
+      toast.showAI(`Successfully added ${createdItems.length} items to your bag!`);
 
       // Trigger background auto-link finding for photo ID items
       // (they already have enrichment from AI vision, just need links)
@@ -935,7 +937,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       });
     } catch (error: any) {
       console.error('Error adding products:', error);
-      alert(error.message || 'Failed to add some items. Please try again.');
+      toast.showError(error.message || 'Failed to add some items. Please try again.');
       throw error; // Re-throw so ProductReviewModal can handle it
     }
   };
@@ -1062,11 +1064,11 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       }
 
       if (messages.length > 0) {
-        alert(messages.join('\n') + '\n\nYour bag has been updated! 🎉');
+        toast.showAI(`${messages.join(' • ')} — Bag updated!`);
       }
     } catch (error) {
       console.error('Error applying enrichments:', error);
-      alert('Failed to apply changes. Please try again.');
+      toast.showError('Failed to apply changes. Please try again.');
     }
   };
 
@@ -1137,9 +1139,9 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
 
     // Show appropriate message
     if (failed === 0) {
-      alert(`Successfully added ${succeeded} photos!`);
+      toast.showAI(`Successfully added ${succeeded} photos!`);
     } else if (succeeded > 0) {
-      alert(`Added ${succeeded} photos. ${failed} failed (some items may have been deleted).`);
+      toast.showInfo(`Added ${succeeded} photos. ${failed} failed.`);
     } else {
       throw new Error('Failed to add any photos. Please try again.');
     }

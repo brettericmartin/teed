@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import FeedbackWidget from "@/components/FeedbackWidget";
+import Providers from "@/components/Providers";
 import { createServerSupabase } from "@/lib/serverSupabase";
 
 export const metadata: Metadata = {
@@ -43,18 +44,20 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased bg-[var(--base-background)]">
-        <Navigation
-          userHandle={userHandle}
-          displayName={displayName}
-          isAuthenticated={!!user}
-        />
+        <Providers>
+          <Navigation
+            userHandle={userHandle}
+            displayName={displayName}
+            isAuthenticated={!!user}
+          />
 
-        <main className="pt-nav-safe pb-20 md:pb-0">
-          {children}
-        </main>
+          <main className="pt-nav-safe pb-20 md:pb-0">
+            {children}
+          </main>
 
-        {/* Feedback widget for authenticated users */}
-        {user && <FeedbackWidget />}
+          {/* Feedback widget for authenticated users */}
+          {user && <FeedbackWidget />}
+        </Providers>
       </body>
     </html>
   );
