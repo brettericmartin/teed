@@ -1,8 +1,10 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Package, UserPlus, UserMinus, Instagram, Twitter, Youtube, Globe, Video } from 'lucide-react';
+import Link from 'next/link';
+import { Package, UserPlus, UserMinus, Instagram, Twitter, Youtube, Globe, Video, Settings, Lock } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/Button';
 
 type Bag = {
   id: string;
@@ -36,21 +38,25 @@ type Profile = {
 type UserProfileClientProps = {
   profile: Profile;
   bags: Bag[];
+  isOwnProfile?: boolean;
 };
 
-export default function UserProfileClient({ profile, bags }: UserProfileClientProps) {
+export default function UserProfileClient({ profile, bags, isOwnProfile: isOwnProfileProp = false }: UserProfileClientProps) {
   const router = useRouter();
   const [isFollowing, setIsFollowing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isOwnProfile, setIsOwnProfile] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(isOwnProfileProp);
+  const [isOwnProfile, setIsOwnProfile] = useState(isOwnProfileProp);
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
 
   useEffect(() => {
-    checkFollowStatus();
+    // Only check client-side auth if server didn't tell us we own the profile
+    if (!isOwnProfileProp) {
+      checkFollowStatus();
+    }
     fetchFollowCounts();
-  }, [profile.id]);
+  }, [profile.id, isOwnProfileProp]);
 
   const checkFollowStatus = async () => {
     try {
@@ -223,7 +229,17 @@ export default function UserProfileClient({ profile, bags }: UserProfileClientPr
                   </div>
                 </div>
 
-                {/* Follow Button */}
+                {/* Edit Profile Button (own profile) */}
+                {isOwnProfile && (
+                  <Link href="/settings">
+                    <Button variant="secondary" className="flex items-center gap-2">
+                      <Settings className="w-4 h-4" />
+                      Edit Profile
+                    </Button>
+                  </Link>
+                )}
+
+                {/* Follow Button (other profiles) */}
                 {isAuthenticated && !isOwnProfile && (
                   <button
                     onClick={handleFollowToggle}
@@ -289,10 +305,10 @@ export default function UserProfileClient({ profile, bags }: UserProfileClientPr
         </div>
       </div>
 
-      {/* Public Bags Section */}
+      {/* Bags Section */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-6">
-          Public Bags {bags.length > 0 && `(${bags.length})`}
+          {isOwnProfile ? 'Your Bags' : 'Public Bags'} {bags.length > 0 && `(${bags.length})`}
         </h2>
 
         {bags.length === 0 ? (
@@ -301,10 +317,21 @@ export default function UserProfileClient({ profile, bags }: UserProfileClientPr
             <div className="bg-[var(--sky-3)] w-20 h-20 rounded-full mx-auto flex items-center justify-center">
               <Package className="h-10 w-10 text-[var(--evergreen-10)]" />
             </div>
-            <h3 className="mt-6 text-xl font-semibold text-[var(--text-primary)]">No public bags yet</h3>
+            <h3 className="mt-6 text-xl font-semibold text-[var(--text-primary)]">
+              {isOwnProfile ? 'No bags yet' : 'No public bags yet'}
+            </h3>
             <p className="mt-2 text-base text-[var(--text-secondary)]">
-              {profile.display_name} hasn't shared any bags publicly.
+              {isOwnProfile
+                ? 'Create your first bag to start sharing your gear!'
+                : `${profile.display_name} hasn't shared any bags publicly.`}
             </p>
+            {isOwnProfile && (
+              <Link href="/dashboard">
+                <Button variant="create" className="mt-6">
+                  Create a Bag
+                </Button>
+              </Link>
+            )}
           </div>
         ) : (
           // Bags Grid
@@ -326,6 +353,13 @@ export default function UserProfileClient({ profile, bags }: UserProfileClientPr
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <Package className="w-16 h-16 text-[var(--evergreen-12)] opacity-20" />
+                    </div>
+                  )}
+                  {/* Private indicator */}
+                  {!bag.is_public && isOwnProfile && (
+                    <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 bg-black/60 rounded-full text-white text-xs">
+                      <Lock className="w-3 h-3" />
+                      <span>Private</span>
                     </div>
                   )}
                 </div>
