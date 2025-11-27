@@ -17,6 +17,7 @@ import EnrichmentPreview from './components/EnrichmentPreview';
 import ClarificationModal from './components/ClarificationModal';
 import AIAssistantHub from './components/AIAssistantHub';
 import BagAnalytics from './components/BagAnalytics';
+import CoverPhotoCropper from './components/CoverPhotoCropper';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
 
@@ -170,6 +171,8 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [clarificationQuestions, setClarificationQuestions] = useState<any[]>([]);
   const [showClarificationModal, setShowClarificationModal] = useState(false);
   const [clarificationAnswers, setClarificationAnswers] = useState<Record<string, Record<string, string>>>({});
+  const [showCoverCropper, setShowCoverCropper] = useState(false);
+  const [coverImageToCrop, setCoverImageToCrop] = useState<string | null>(null);
 
   // Auto-save bag metadata (debounced)
   useEffect(() => {
@@ -551,14 +554,35 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     }
   };
 
-  // Handle cover photo upload
-  const handleCoverPhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle cover photo selection - opens cropper first
+  const handleCoverPhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Read file as data URL to show in cropper
+    const reader = new FileReader();
+    reader.onload = () => {
+      setCoverImageToCrop(reader.result as string);
+      setShowCoverCropper(true);
+    };
+    reader.onerror = () => {
+      console.error('Error reading file');
+      alert('Failed to read image. Please try again.');
+    };
+    reader.readAsDataURL(file);
+
+    // Reset the input so the same file can be selected again if needed
+    e.target.value = '';
+  };
+
+  // Handle cropped cover photo upload
+  const handleCroppedCoverPhotoUpload = async (croppedBlob: Blob) => {
+    setShowCoverCropper(false);
+    setCoverImageToCrop(null);
+
     try {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('file', croppedBlob, 'cover-photo.jpg');
 
       const uploadResponse = await fetch(`/api/bags/${bag.code}/cover-photo`, {
         method: 'POST',
@@ -577,9 +601,11 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         cover_photo_id: uploadData.mediaAssetId,
         cover_photo_url: uploadData.url,
       }));
+
+      toast.showSuccess('Cover photo updated!');
     } catch (error) {
       console.error('Error uploading cover photo:', error);
-      alert('Failed to upload cover photo. Please try again.');
+      toast.showError('Failed to upload cover photo. Please try again.');
     }
   };
 
@@ -1319,13 +1345,29 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 alt="Bag cover"
                 className="w-full h-48 object-cover"
               />
-              <button
-                onClick={handleRemoveCoverPhoto}
-                className="absolute top-2 right-2 p-2 bg-[var(--surface)] rounded-full shadow-md hover:bg-[var(--surface-hover)] transition-colors"
-                title="Remove cover photo"
-              >
-                <X className="w-4 h-4 text-[var(--text-secondary)]" />
-              </button>
+              <div className="absolute top-2 right-2 flex gap-2">
+                {/* Change/Re-crop button */}
+                <label
+                  className="p-2 bg-[var(--surface)] rounded-full shadow-md hover:bg-[var(--surface-hover)] transition-colors cursor-pointer"
+                  title="Change cover photo"
+                >
+                  <Camera className="w-4 h-4 text-[var(--text-secondary)]" />
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={handleCoverPhotoSelect}
+                  />
+                </label>
+                {/* Remove button */}
+                <button
+                  onClick={handleRemoveCoverPhoto}
+                  className="p-2 bg-[var(--surface)] rounded-full shadow-md hover:bg-[var(--surface-hover)] transition-colors"
+                  title="Remove cover photo"
+                >
+                  <X className="w-4 h-4 text-[var(--text-secondary)]" />
+                </button>
+              </div>
             </div>
           ) : (
             <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-[var(--border-subtle)] rounded-lg cursor-pointer hover:border-[var(--teed-green-8)] hover:bg-[var(--surface-hover)] transition-colors">
@@ -1340,7 +1382,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 type="file"
                 className="hidden"
                 accept="image/*"
-                onChange={handleCoverPhotoUpload}
+                onChange={handleCoverPhotoSelect}
               />
             </label>
           )}
@@ -1575,6 +1617,18 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           onCancel={() => {
             setShowEnrichmentPreview(false);
             setEnrichmentSuggestions([]);
+          }}
+        />
+      )}
+
+      {/* Cover Photo Cropper Modal */}
+      {showCoverCropper && coverImageToCrop && (
+        <CoverPhotoCropper
+          imageSrc={coverImageToCrop}
+          onComplete={handleCroppedCoverPhotoUpload}
+          onCancel={() => {
+            setShowCoverCropper(false);
+            setCoverImageToCrop(null);
           }}
         />
       )}
