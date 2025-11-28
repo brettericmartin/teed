@@ -133,7 +133,7 @@ export default function AIAssistantHub({
       title: 'Auto-Fill Details',
       description: 'Complete missing product info',
       count: itemCount,
-      onClick: onFillProductInfo,
+      onClick: () => onFillProductInfo(),
       isLoading: isFillingInfo,
       loadingText: 'Filling info...',
       disabled: isFillingInfo,

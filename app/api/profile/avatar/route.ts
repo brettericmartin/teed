@@ -7,13 +7,18 @@ import { NextRequest, NextResponse } from 'next/server';
  * Accepts: multipart/form-data with 'file' field
  */
 export async function POST(request: NextRequest) {
+  console.log('[Avatar Upload] Starting POST request');
+
   try {
     const supabase = await createServerSupabase();
 
     // Get authenticated user
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
+    console.log('[Avatar Upload] Auth check:', { userId: user?.id, authError: authError?.message });
+
     if (authError || !user) {
+      console.log('[Avatar Upload] Unauthorized:', authError?.message);
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -24,7 +29,14 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const file = formData.get('file') as File;
 
+    console.log('[Avatar Upload] File received:', {
+      name: file?.name,
+      type: file?.type,
+      size: file?.size,
+    });
+
     if (!file) {
+      console.log('[Avatar Upload] No file provided');
       return NextResponse.json(
         { error: 'No file provided' },
         { status: 400 }
@@ -34,6 +46,7 @@ export async function POST(request: NextRequest) {
     // Validate file type
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     if (!allowedTypes.includes(file.type)) {
+      console.log('[Avatar Upload] Invalid file type:', file.type);
       return NextResponse.json(
         { error: 'Invalid file type. Only JPEG, PNG, WebP, and GIF are allowed' },
         { status: 400 }
@@ -43,19 +56,24 @@ export async function POST(request: NextRequest) {
     // Validate file size (max 2MB)
     const maxSize = 2 * 1024 * 1024; // 2MB
     if (file.size > maxSize) {
+      console.log('[Avatar Upload] File too large:', file.size);
       return NextResponse.json(
         { error: 'File size exceeds 2MB limit' },
         { status: 400 }
       );
     }
 
-    // Get file extension
-    const fileExt = file.name.split('.').pop();
+    // Get file extension - default to jpg for cropped blobs
+    const fileExt = file.name.includes('.') ? file.name.split('.').pop() : 'jpg';
     const fileName = `${user.id}/avatar.${fileExt}`;
+
+    console.log('[Avatar Upload] Uploading to path:', fileName);
 
     // Convert file to ArrayBuffer
     const arrayBuffer = await file.arrayBuffer();
     const buffer = new Uint8Array(arrayBuffer);
+
+    console.log('[Avatar Upload] Buffer size:', buffer.length);
 
     // Upload to Supabase Storage
     const { data: uploadData, error: uploadError } = await supabase.storage
@@ -65,10 +83,12 @@ export async function POST(request: NextRequest) {
         upsert: true, // Replace existing file
       });
 
+    console.log('[Avatar Upload] Storage response:', { uploadData, uploadError: uploadError?.message });
+
     if (uploadError) {
-      console.error('Error uploading avatar:', uploadError);
+      console.error('[Avatar Upload] Storage error:', uploadError);
       return NextResponse.json(
-        { error: 'Failed to upload avatar' },
+        { error: `Failed to upload avatar: ${uploadError.message}` },
         { status: 500 }
       );
     }
@@ -78,30 +98,37 @@ export async function POST(request: NextRequest) {
       .from('avatars')
       .getPublicUrl(fileName);
 
-    // Update profile with new avatar URL
+    console.log('[Avatar Upload] Public URL:', publicUrl);
+
+    // Update profile with new avatar URL (add cache buster to force refresh)
+    const avatarUrlWithCacheBust = `${publicUrl}?t=${Date.now()}`;
+
     const { data: updatedProfile, error: updateError } = await supabase
       .from('profiles')
-      .update({ avatar_url: publicUrl })
+      .update({ avatar_url: avatarUrlWithCacheBust })
       .eq('id', user.id)
       .select()
       .single();
 
+    console.log('[Avatar Upload] Profile update:', { updatedProfile, updateError: updateError?.message });
+
     if (updateError) {
-      console.error('Error updating profile with avatar:', updateError);
+      console.error('[Avatar Upload] Profile update error:', updateError);
       return NextResponse.json(
-        { error: 'Failed to update profile with avatar' },
+        { error: `Failed to update profile with avatar: ${updateError.message}` },
         { status: 500 }
       );
     }
 
+    console.log('[Avatar Upload] Success!');
     return NextResponse.json({
-      avatar_url: publicUrl,
+      avatar_url: avatarUrlWithCacheBust,
       profile: updatedProfile
     });
   } catch (error) {
-    console.error('POST /api/profile/avatar error:', error);
+    console.error('[Avatar Upload] Unexpected error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: `Internal server error: ${error instanceof Error ? error.message : 'Unknown error'}` },
       { status: 500 }
     );
   }

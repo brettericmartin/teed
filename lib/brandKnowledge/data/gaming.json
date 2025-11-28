@@ -1,0 +1,583 @@
+{
+  "category": "gaming",
+  "colorVocabulary": {
+    "black": ["matte black", "stealth black", "carbon black", "phantom black", "obsidian", "midnight black"],
+    "white": ["arctic white", "ghost white", "pearl white", "frost white", "glacier white"],
+    "gray": ["gunmetal", "titanium gray", "space gray", "charcoal", "storm gray", "silver"],
+    "red": ["crimson red", "blood red", "razer red", "fire red", "scarlet", "cardinal"],
+    "green": ["razer green", "viper green", "neon green", "toxic green", "matrix green"],
+    "blue": ["electric blue", "cyan", "corsair blue", "ice blue", "neon blue", "cobalt"],
+    "purple": ["royal purple", "violet", "neon purple", "amethyst", "cosmic purple"],
+    "pink": ["hot pink", "neon pink", "magenta", "rose quartz", "sakura pink"],
+    "yellow": ["neon yellow", "cyber yellow", "gold", "amber"],
+    "orange": ["neon orange", "sunset orange", "thermal orange"],
+    "rgb": ["RGB spectrum", "Chroma RGB", "iCUE RGB", "Aura Sync RGB", "Mystic Light RGB", "Prism RGB"],
+    "special": ["transparent", "translucent", "limited edition", "custom colorway", "retro wave", "cyberpunk"]
+  },
+  "patternTypes": ["RGB lighting", "honeycomb shell", "carbon fiber", "matte finish", "glossy finish", "soft-touch coating", "perforated design", "underglow", "braided cable", "transparent shell", "metal mesh", "diamond grip texture"],
+  "partTerminology": {
+    "keyboard": ["keycaps", "switches", "stabilizers", "PCB", "plate", "case", "wrist rest", "cable", "USB connector", "mounting points", "dampening foam", "backplate"],
+    "mouse": ["shell", "buttons", "scroll wheel", "sensor", "feet/skates", "cable", "DPI button", "side grips", "weight system", "RGB zones", "honeycomb cutouts"],
+    "headset": ["earcups", "ear cushions", "headband", "mic boom", "drivers", "inline controls", "cable", "wireless dongle", "charging port", "yoke", "padding"],
+    "controller": ["triggers", "bumpers", "thumbsticks", "D-pad", "face buttons", "grips", "back buttons", "battery compartment", "vibration motors", "touch pad"],
+    "monitor": ["panel", "bezel", "stand", "base", "VESA mount", "OSD controls", "ports", "RGB zones"],
+    "chair": ["seat pan", "backrest", "lumbar support", "armrests", "base", "casters", "gas lift", "recline mechanism", "cushions", "headrest pillow"],
+    "mousepad": ["surface", "stitched edges", "base", "RGB zones", "USB passthrough"]
+  },
+  "brands": [
+    {
+      "name": "Razer",
+      "aliases": ["Razer Inc", "Razer Gaming"],
+      "signatureColors": ["razer green", "black", "white", "mercury white", "quartz pink"],
+      "designCues": ["triple-headed snake logo", "Chroma RGB lighting", "angular aggressive design", "green accents", "honeycomb shell (Viper)", "underglow RGB", "braided cables"],
+      "identificationTips": [
+        "Triple snake logo is signature Razer",
+        "Razer green (RGB 0, 255, 0) is iconic brand color",
+        "Chroma RGB = Razer's lighting ecosystem",
+        "BlackWidow = keyboard line",
+        "DeathAdder = ergonomic mouse line",
+        "Viper = ambidextrous lightweight mouse",
+        "Kraken = headset line",
+        "Mercury/Quartz = white/pink limited editions",
+        "Huntsman = optical switch keyboards",
+        "Basilisk = customizable mouse line"
+      ],
+      "recentColorways": [
+        { "line": "Viper V3 Pro", "year": "2024", "colors": ["black", "white"] },
+        { "line": "BlackWidow V4 Pro", "year": "2023", "colors": ["black", "green underglow RGB"] },
+        { "line": "DeathAdder V3 Pro", "year": "2023", "colors": ["black", "white"] },
+        { "line": "Kraken V3 Pro", "year": "2023", "colors": ["black", "quartz pink", "mercury white"] },
+        { "line": "Huntsman V3 Pro", "year": "2024", "colors": ["black", "full Chroma RGB"] }
+      ]
+    },
+    {
+      "name": "Logitech G",
+      "aliases": ["Logitech Gaming", "Logi"],
+      "signatureColors": ["black", "white", "blue accents", "lightspeed blue"],
+      "designCues": ["G logo", "Lightspeed wireless branding", "Hero sensor badge", "RGB spectrum", "PowerPlay wireless charging", "clean modern lines", "blue LED accents"],
+      "identificationTips": [
+        "G logo prominently displayed",
+        "Lightspeed = wireless technology",
+        "Hero = sensor technology (25K)",
+        "G Pro = esports/tournament line",
+        "PowerPlay = wireless charging mousepad",
+        "G502 = iconic hero-shaped mouse",
+        "G915/G715 = low-profile keyboards",
+        "G733 = wireless headset",
+        "White colorway common on recent releases"
+      ],
+      "recentColorways": [
+        { "line": "G Pro X Superlight 2", "year": "2023", "colors": ["black", "white", "pink", "blue"] },
+        { "line": "G502 X Plus", "year": "2022", "colors": ["black", "white"] },
+        { "line": "G915 TKL", "year": "2023", "colors": ["black", "white"] },
+        { "line": "G733 Lightspeed", "year": "2023", "colors": ["black", "white", "blue", "lilac"] },
+        { "line": "G Pro X 60", "year": "2024", "colors": ["black", "white", "pink"] }
+      ]
+    },
+    {
+      "name": "SteelSeries",
+      "aliases": ["SS", "SteelSeries Gaming"],
+      "signatureColors": ["black", "white", "prime blue", "purple", "orange accents"],
+      "designCues": ["SS logo", "PrismSync RGB", "TrueMove sensor badge", "Nordic design", "minimalist aesthetic", "magnetic faceplates", "OLED display (keyboards)"],
+      "identificationTips": [
+        "SS logo with gradient often used",
+        "PrismSync = RGB lighting system",
+        "TrueMove = optical sensor line",
+        "Arctis = headset line with ski-goggle headband",
+        "Prime = esports-focused peripherals",
+        "Apex Pro = adjustable mechanical switches",
+        "OLED screen on high-end keyboards",
+        "Magnetic swappable faceplates on mice",
+        "Minimalist Scandinavian design language"
+      ],
+      "recentColorways": [
+        { "line": "Aerox 9 Wireless", "year": "2023", "colors": ["black", "white"] },
+        { "line": "Prime Wireless", "year": "2023", "colors": ["black"] },
+        { "line": "Apex Pro TKL", "year": "2023", "colors": ["black"] },
+        { "line": "Arctis Nova Pro", "year": "2023", "colors": ["black", "white"] },
+        { "line": "Alias Pro", "year": "2024", "colors": ["black", "white"] }
+      ]
+    },
+    {
+      "name": "Corsair",
+      "aliases": ["Corsair Gaming", "Corsair Components"],
+      "signatureColors": ["black", "white", "yellow accents", "corsair yellow"],
+      "designCues": ["sails logo", "iCUE RGB ecosystem", "yellow/black branding", "triangular design elements", "aluminum construction", "slipstream wireless"],
+      "identificationTips": [
+        "Corsair sails logo prominent",
+        "iCUE = RGB and macro software",
+        "Yellow triangle warning-style accents",
+        "K-series = keyboards",
+        "M-series = mice",
+        "Void/Virtuoso = headsets",
+        "Dark Core = wireless mouse line",
+        "Scimitar = MMO mouse with side buttons",
+        "Heavy aluminum build quality common"
+      ],
+      "recentColorways": [
+        { "line": "K70 RGB Pro", "year": "2023", "colors": ["black", "white"] },
+        { "line": "Dark Core RGB Pro SE", "year": "2023", "colors": ["black", "white"] },
+        { "line": "M65 RGB Ultra", "year": "2023", "colors": ["black", "white"] },
+        { "line": "Virtuoso RGB Wireless XT", "year": "2023", "colors": ["black", "white", "espresso"] },
+        { "line": "K65 Plus", "year": "2024", "colors": ["black", "white", "ice blue"] }
+      ]
+    },
+    {
+      "name": "HyperX",
+      "aliases": ["HyperX Gaming", "HP HyperX", "Kingston HyperX"],
+      "signatureColors": ["black", "red accents", "white", "pink"],
+      "designCues": ["HyperX logo", "red/black color scheme", "memory foam cushions", "braided cables", "steel frame construction", "cloud branding"],
+      "identificationTips": [
+        "Red and black signature colors",
+        "Cloud series = popular headset line",
+        "Alloy = keyboard series",
+        "Pulsefire = mouse line",
+        "Memory foam ear cushions standard",
+        "Now owned by HP (2021)",
+        "Red LED indicators common",
+        "Durable build focus"
+      ],
+      "recentColorways": [
+        { "line": "Cloud III", "year": "2023", "colors": ["black/red", "white/pink"] },
+        { "line": "Pulsefire Haste 2", "year": "2023", "colors": ["black", "white"] },
+        { "line": "Alloy Rise", "year": "2023", "colors": ["black"] },
+        { "line": "Cloud Alpha Wireless", "year": "2022", "colors": ["black/red"] }
+      ]
+    },
+    {
+      "name": "ASUS ROG",
+      "aliases": ["ROG", "Republic of Gamers", "ASUS Republic of Gamers"],
+      "signatureColors": ["black", "red", "pink", "white", "ROG red"],
+      "designCues": ["ROG eye logo", "aggressive angular design", "Aura Sync RGB", "slash design elements", "cyberpunk aesthetic", "ROG branding everywhere"],
+      "identificationTips": [
+        "ROG eye logo is signature",
+        "Red and black primary colors",
+        "Aura Sync = RGB ecosystem",
+        "Strix = mid-tier gaming line",
+        "Maximus = motherboard line",
+        "Chakram = modular joystick mouse",
+        "Very aggressive, gamer aesthetic",
+        "Often paired with anime collaborations"
+      ],
+      "recentColorways": [
+        { "line": "ROG Chakram X", "year": "2023", "colors": ["black", "white"] },
+        { "line": "ROG Azoth", "year": "2023", "colors": ["black", "white"] },
+        { "line": "ROG Delta S Wireless", "year": "2023", "colors": ["black", "white"] },
+        { "line": "ROG Strix Scope II 96", "year": "2023", "colors": ["black", "gunmetal gray"] },
+        { "line": "ROG Harpe Ace", "year": "2024", "colors": ["black", "white"] }
+      ]
+    },
+    {
+      "name": "MSI",
+      "aliases": ["Micro-Star International", "MSI Gaming"],
+      "signatureColors": ["black", "red", "dragon red"],
+      "designCues": ["dragon logo", "Mystic Light RGB", "red accents", "angular design", "gaming edge branding"],
+      "identificationTips": [
+        "Dragon logo signature MSI",
+        "Mystic Light = RGB system",
+        "Red and black color scheme",
+        "Clutch = mouse line",
+        "Vigor = keyboard line",
+        "Immerse = headset line",
+        "Strong motherboard/GPU heritage"
+      ],
+      "recentColorways": [
+        { "line": "Clutch GM51", "year": "2023", "colors": ["black", "white"] },
+        { "line": "Vigor GK71 Sonic", "year": "2023", "colors": ["white", "blue Sonic branding"] },
+        { "line": "Immerse GH61", "year": "2023", "colors": ["black", "white"] }
+      ]
+    },
+    {
+      "name": "Alienware",
+      "aliases": ["Dell Alienware", "AW"],
+      "signatureColors": ["lunar light", "dark side of the moon", "black", "white"],
+      "designCues": ["alien head logo", "AlienFX RGB lighting", "Legend design language", "premium materials", "curved edges", "integrated RGB"],
+      "identificationTips": [
+        "Alien head logo iconic",
+        "Legend 2.0/3.0 design language",
+        "Lunar Light = white colorway",
+        "Dark Side of the Moon = black",
+        "AlienFX = RGB ecosystem",
+        "Premium pricing tier",
+        "Curved ergonomic design",
+        "Often Dell G-series for budget"
+      ],
+      "recentColorways": [
+        { "line": "Alienware Pro Wireless", "year": "2023", "colors": ["lunar light", "dark side of the moon"] },
+        { "line": "AW720H Wireless", "year": "2023", "colors": ["lunar light", "dark side of the moon"] },
+        { "line": "AW920H", "year": "2024", "colors": ["dark side of the moon"] },
+        { "line": "Alienware 500Hz Monitor", "year": "2023", "colors": ["lunar light trim"] }
+      ]
+    },
+    {
+      "name": "Acer Predator",
+      "aliases": ["Predator", "Acer Gaming"],
+      "signatureColors": ["black", "blue accents", "predator blue"],
+      "designCues": ["predator logo", "angular aggressive design", "blue LED accents", "tribal patterns", "metal construction"],
+      "identificationTips": [
+        "Predator logo with three claws",
+        "Blue accent lighting",
+        "Very aggressive angular design",
+        "Strong monitor lineup",
+        "Helios = laptop line",
+        "Cestus = mouse line",
+        "Aethon = keyboard line"
+      ],
+      "recentColorways": [
+        { "line": "Cestus 350", "year": "2023", "colors": ["black", "blue accents"] },
+        { "line": "Aethon 500", "year": "2023", "colors": ["black", "blue lighting"] },
+        { "line": "Galea 500", "year": "2023", "colors": ["black", "blue"] }
+      ]
+    },
+    {
+      "name": "NZXT",
+      "aliases": ["NZXT Gaming"],
+      "signatureColors": ["black", "white", "purple accents", "matte finishes"],
+      "designCues": ["NZXT logo", "CAM software ecosystem", "minimalist design", "matte finishes", "clean lines", "purple/pink accents"],
+      "identificationTips": [
+        "Clean minimalist aesthetic",
+        "Matte white common colorway",
+        "CAM software for RGB control",
+        "Function = keyboard/mouse line",
+        "Strong PC case heritage",
+        "Purple accent color signature",
+        "Premium build quality focus"
+      ],
+      "recentColorways": [
+        { "line": "Lift 2 Symm", "year": "2024", "colors": ["black", "white"] },
+        { "line": "Lift 2 Ergo", "year": "2024", "colors": ["black", "white"] },
+        { "line": "Function 2", "year": "2023", "colors": ["black", "white"] },
+        { "line": "Function 2 MiniTKL", "year": "2024", "colors": ["black", "white"] }
+      ]
+    },
+    {
+      "name": "Secretlab",
+      "aliases": ["Secretlab Gaming Chairs"],
+      "signatureColors": ["black", "blue", "red", "white", "charcoal", "collaboration colors"],
+      "designCues": ["winged logo", "PU leather or fabric", "cold-cure foam", "4D armrests", "lumbar support system", "recline mechanism", "collaboration designs"],
+      "identificationTips": [
+        "Premium gaming chair specialist",
+        "Titan = larger size chair",
+        "Omega = standard size (discontinued)",
+        "NAPA/SoftWeave/NEO Hybrid materials",
+        "Extensive collaboration editions (Dota, LoL, etc)",
+        "Magnetic memory foam pillows",
+        "Cold-cure foam signature feature"
+      ],
+      "recentColorways": [
+        { "line": "Titan Evo 2022", "year": "2022-2024", "colors": ["stealth", "frost blue", "cookies and cream", "plush pink"] },
+        { "line": "Titan Evo (League of Legends)", "year": "2023", "colors": ["K/DA All Out", "Arcane Jinx", "T1"] },
+        { "line": "Titan Evo (Dota 2)", "year": "2023", "colors": ["radiant/dire"] },
+        { "line": "Titan Evo NE Hybrid", "year": "2024", "colors": ["black", "blue", "red"] }
+      ]
+    },
+    {
+      "name": "Herman Miller x Logitech",
+      "aliases": ["Herman Miller Gaming", "HM Logitech"],
+      "signatureColors": ["black", "white", "blue", "mineral colorways"],
+      "designCues": ["Logitech G logo integration", "Herman Miller ergonomics", "PostureFit lumbar", "premium mesh", "collaboration branding"],
+      "identificationTips": [
+        "Premium ergonomic gaming chairs",
+        "Embody Gaming Chair iconic",
+        "Vantum = dedicated gaming design",
+        "PostureFit/PostureFit SL lumbar",
+        "Logitech G logo on backrest",
+        "Medical-grade ergonomics",
+        "Premium price point ($1500+)"
+      ],
+      "recentColorways": [
+        { "line": "Embody Gaming Chair", "year": "2023", "colors": ["black", "white", "cyan", "purple"] },
+        { "line": "Vantum Gaming Chair", "year": "2022", "colors": ["black", "white"] }
+      ]
+    },
+    {
+      "name": "Glorious",
+      "aliases": ["Glorious PC Gaming Race", "GPCGR"],
+      "signatureColors": ["black", "white", "ghost white", "forge red", "onyx"],
+      "designCues": ["minimalist design", "honeycomb shell", "RGB underglow", "matte coating", "GMMK branding", "modular components"],
+      "identificationTips": [
+        "GMMK = modular keyboard line",
+        "Model O/D/I = mouse shapes",
+        "Honeycomb shell pioneered lightweight trend",
+        "Ghost = white colorway",
+        "Forge = red colorway",
+        "Very lightweight focus (<60g mice)",
+        "Enthusiast/modding community favorite"
+      ],
+      "recentColorways": [
+        { "line": "Model O 2 Wireless", "year": "2023", "colors": ["black", "white"] },
+        { "line": "Model D 2 Wireless", "year": "2023", "colors": ["black", "white"] },
+        { "line": "GMMK 3", "year": "2024", "colors": ["black", "white"] },
+        { "line": "Model I 2", "year": "2024", "colors": ["black", "white"] }
+      ]
+    },
+    {
+      "name": "Ducky",
+      "aliases": ["Ducky Channel"],
+      "signatureColors": ["black", "white", "yellow accents", "multicolor keycaps"],
+      "designCues": ["rubber duck logo", "two-tone keycaps", "year of the [animal] editions", "PBT keycaps", "compact layouts", "no software"],
+      "identificationTips": [
+        "Rubber duck logo signature",
+        "One 2/One 3 keyboard series",
+        "Year of the [Animal] special editions",
+        "Good-in-One cable system",
+        "Premium PBT keycaps standard",
+        "No software - all hardware programming",
+        "Mechanical keyboard specialist",
+        "Mini = 60%, SF = 65%, TKL available"
+      ],
+      "recentColorways": [
+        { "line": "One 3 Mini", "year": "2023", "colors": ["black", "white", "frozen llama", "aura"] },
+        { "line": "One 3 TKL", "year": "2023", "colors": ["black", "white", "matcha"] },
+        { "line": "Year of the Dragon", "year": "2024", "colors": ["red/gold accents"] }
+      ]
+    },
+    {
+      "name": "Keychron",
+      "aliases": ["Keychron Keyboards"],
+      "signatureColors": ["black", "white", "navy blue", "red", "transparent"],
+      "designCues": ["K-series naming", "Mac compatibility", "hot-swap sockets", "RGB/white backlight options", "wood palm rests", "wireless focus"],
+      "identificationTips": [
+        "K-series = main keyboard line (K2, K8, etc)",
+        "Q-series = premium aluminum",
+        "V-series = budget fully assembled",
+        "Mac layout keys included",
+        "Hot-swappable switches standard",
+        "Wireless + wired dual mode common",
+        "Enthusiast community favorite",
+        "Transparent/smokey cases available"
+      ],
+      "recentColorways": [
+        { "line": "Q1 Pro", "year": "2023", "colors": ["carbon black", "shell white", "fully assembled"] },
+        { "line": "K Pro", "year": "2023", "colors": ["black", "white", "red", "navy blue"] },
+        { "line": "V10", "year": "2024", "colors": ["black", "frosted white"] },
+        { "line": "Q6 Pro", "year": "2024", "colors": ["black", "white"] }
+      ]
+    },
+    {
+      "name": "Finalmouse",
+      "aliases": ["Final Mouse"],
+      "signatureColors": ["black", "white", "gold", "limited edition colors"],
+      "designCues": ["ultralight design", "honeycomb shell", "limited drops", "supreme-style scarcity marketing", "premium materials"],
+      "identificationTips": [
+        "Extreme lightweight (<50g)",
+        "Limited drop release model",
+        "Very high prices ($150-400)",
+        "Starlight = premium magnesium line",
+        "UltralightX = latest series",
+        "Medium/Small sizes",
+        "Honeycomb shell or solid",
+        "Artificial scarcity business model"
+      ],
+      "recentColorways": [
+        { "line": "UltralightX", "year": "2024", "colors": ["onyx", "tenz edition"] },
+        { "line": "Starlight Pro", "year": "2023", "colors": ["ares", "zeus", "apollo"] },
+        { "line": "Starlight-12", "year": "2022", "colors": ["phantom", "achilles", "hades"] }
+      ]
+    },
+    {
+      "name": "Zowie",
+      "aliases": ["BenQ Zowie", "Zowie Gear"],
+      "signatureColors": ["black", "white", "pink", "blue"],
+      "designCues": ["no RGB", "no software", "plug and play", "DPI switch on bottom", "matte coating", "esports focus"],
+      "identificationTips": [
+        "Zero RGB lights philosophy",
+        "No software required",
+        "EC/FK/S/ZA shape series",
+        "Owned by BenQ",
+        "Pure performance focus",
+        "DPI button on mouse bottom",
+        "Esports tournament standard",
+        "Matte coating standard"
+      ],
+      "recentColorways": [
+        { "line": "EC2-CW", "year": "2024", "colors": ["white"] },
+        { "line": "U2", "year": "2024", "colors": ["black", "white"] },
+        { "line": "S1-C", "year": "2023", "colors": ["black", "white"] },
+        { "line": "FK1+-C", "year": "2023", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "Pulsar",
+      "aliases": ["Pulsar Gaming Gears"],
+      "signatureColors": ["black", "white", "pink", "blue", "purple"],
+      "designCues": ["superlight design", "X2 shape series", "4K dongles", "paracord cables", "esports focus", "value pricing"],
+      "identificationTips": [
+        "X2 series = main mouse line",
+        "4K polling rate dongles",
+        "Superglide mouse skates",
+        "Excellent value proposition",
+        "Esports shapes (EC2, Viper clones)",
+        "Various sizes (Mini, V2, V3)",
+        "Clean minimalist design"
+      ],
+      "recentColorways": [
+        { "line": "X2V2", "year": "2023", "colors": ["black", "white", "pink", "blue"] },
+        { "line": "X2H", "year": "2024", "colors": ["black", "white"] },
+        { "line": "X2 Mini", "year": "2023", "colors": ["black", "white", "purple"] },
+        { "line": "Xlite V3", "year": "2024", "colors": ["black", "white"] }
+      ]
+    },
+    {
+      "name": "Turtle Beach",
+      "aliases": ["TB", "Turtle Beach Audio"],
+      "signatureColors": ["black", "white", "blue accents"],
+      "designCues": ["turtle logo", "Stealth series naming", "flip-up mic", "glasses-friendly", "superhuman hearing feature"],
+      "identificationTips": [
+        "Turtle shell logo",
+        "Stealth = main headset line",
+        "Flip-to-mute mic boom",
+        "ProSpecs glasses relief",
+        "Superhuman Hearing audio mode",
+        "Console gaming focus",
+        "Budget to mid-tier pricing"
+      ],
+      "recentColorways": [
+        { "line": "Stealth Pro", "year": "2023", "colors": ["black"] },
+        { "line": "Stealth 700 Gen 2 MAX", "year": "2023", "colors": ["black", "white"] },
+        { "line": "Atlas Air", "year": "2024", "colors": ["black", "white"] }
+      ]
+    },
+    {
+      "name": "Astro",
+      "aliases": ["Astro Gaming", "Logitech Astro"],
+      "signatureColors": ["black", "white", "navy blue"],
+      "designCues": ["Astro logo", "MixAmp external DAC", "modular design", "swappable parts", "premium build", "tournament standard"],
+      "identificationTips": [
+        "A-series naming (A10, A40, A50)",
+        "MixAmp TR for A40 signature",
+        "Mod kit ecosystem (speakers, cushions)",
+        "Now owned by Logitech",
+        "Premium pricing tier",
+        "Call of Duty League partnerships",
+        "Metal construction on high-end"
+      ],
+      "recentColorways": [
+        { "line": "A50X Wireless", "year": "2024", "colors": ["black", "white"] },
+        { "line": "A30 Wireless", "year": "2023", "colors": ["navy", "white"] },
+        { "line": "A10 Gen 2", "year": "2023", "colors": ["black", "white", "mint"] }
+      ]
+    },
+    {
+      "name": "Audio-Technica",
+      "aliases": ["AT", "Audio Technica Gaming"],
+      "signatureColors": ["black", "silver", "blue", "red accents"],
+      "designCues": ["AT logo", "professional audio heritage", "detachable boom mic", "closed/open back options", "premium drivers"],
+      "identificationTips": [
+        "ATH-G prefix for gaming",
+        "Professional audio company",
+        "Detachable boom mics",
+        "M50x audiophile heritage",
+        "Premium build quality",
+        "Neutral sound signature",
+        "Less RGB, more performance"
+      ],
+      "recentColorways": [
+        { "line": "ATH-G1WL", "year": "2023", "colors": ["black"] },
+        { "line": "ATH-GDL3", "year": "2023", "colors": ["black", "white"] },
+        { "line": "ATH-M50xSTS", "year": "2022", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "Elgato",
+      "aliases": ["Corsair Elgato"],
+      "signatureColors": ["black", "white", "yellow accents"],
+      "designCues": ["Elgato logo", "Stream Deck", "clean minimalist design", "content creator focus", "modular ecosystem"],
+      "identificationTips": [
+        "Stream Deck = LCD macro pad",
+        "Capture cards (HD60 S+, 4K60 Pro)",
+        "Wave microphones",
+        "Key Light/Ring Light",
+        "Facecam webcams",
+        "Now owned by Corsair",
+        "Content creator ecosystem",
+        "Premium pricing"
+      ],
+      "recentColorways": [
+        { "line": "Stream Deck +", "year": "2023", "colors": ["black"] },
+        { "line": "Facecam Pro", "year": "2023", "colors": ["black"] },
+        { "line": "Wave DX", "year": "2023", "colors": ["black", "white"] },
+        { "line": "HD60 X", "year": "2022", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "AVerMedia",
+      "aliases": ["AVerMedia Technologies"],
+      "signatureColors": ["black", "white", "red accents"],
+      "designCues": ["AVerMedia logo", "Live Gamer naming", "capture card focus", "streaming tools", "RGB accent rings"],
+      "identificationTips": [
+        "Live Gamer series capture cards",
+        "GC prefix for gaming products",
+        "Nexus app for streaming",
+        "Strong capture card lineup",
+        "4K pass-through support",
+        "Competes with Elgato"
+      ],
+      "recentColorways": [
+        { "line": "Live Gamer Ultra 2.1", "year": "2023", "colors": ["black"] },
+        { "line": "AVerMedia X'tra GO", "year": "2023", "colors": ["black", "white"] },
+        { "line": "Nexus", "year": "2023", "colors": ["black", "customizable RGB ring"] }
+      ]
+    },
+    {
+      "name": "PlayStation",
+      "aliases": ["PS", "Sony PlayStation", "PS5", "PS4"],
+      "signatureColors": ["white", "black", "cosmic red", "starlight blue", "nova pink", "galactic purple"],
+      "designCues": ["PlayStation symbols", "DualSense design", "haptic feedback", "adaptive triggers", "light bar", "touchpad"],
+      "identificationTips": [
+        "DualSense = PS5 controller",
+        "DualShock = PS4 controller",
+        "White/black standard PS5 colors",
+        "PlayStation symbols (circle, X, square, triangle)",
+        "Adaptive triggers on DualSense",
+        "Two-tone color schemes common",
+        "Edge = pro controller line"
+      ],
+      "recentColorways": [
+        { "line": "DualSense", "year": "2024", "colors": ["white", "midnight black", "cosmic red", "starlight blue", "nova pink", "galactic purple", "sterling silver"] },
+        { "line": "DualSense Edge", "year": "2023", "colors": ["white/black"] },
+        { "line": "PS5 Console Covers", "year": "2024", "colors": ["cosmic red", "starlight blue", "nova pink", "galactic purple", "gray camouflage"] }
+      ]
+    },
+    {
+      "name": "Xbox",
+      "aliases": ["Microsoft Xbox", "Xbox Gaming"],
+      "signatureColors": ["carbon black", "robot white", "shock blue", "electric volt", "pulse red"],
+      "designCues": ["Xbox logo", "textured grips", "share button", "impulse triggers", "3.5mm jack", "USB-C charging"],
+      "identificationTips": [
+        "Xbox Wireless Controller standard",
+        "Elite Series = pro controller",
+        "Design Lab = custom colors",
+        "Textured grip on back",
+        "Xbox button glows when on",
+        "Share button (newer models)",
+        "Cross-platform PC/Xbox"
+      ],
+      "recentColorways": [
+        { "line": "Xbox Wireless Controller", "year": "2024", "colors": ["carbon black", "robot white", "shock blue", "electric volt", "pulse red", "stellar shift", "astral purple"] },
+        { "line": "Xbox Elite Series 2", "year": "2023", "colors": ["black", "white", "core (blue)"] },
+        { "line": "Xbox Design Lab", "year": "2024", "colors": ["custom - 1 billion+ combinations"] }
+      ]
+    },
+    {
+      "name": "Nintendo",
+      "aliases": ["Nintendo Switch"],
+      "signatureColors": ["neon red", "neon blue", "gray", "white", "yellow", "purple", "green"],
+      "designCues": ["Joy-Con design", "Nintendo logo", "colorful aesthetic", "detachable controllers", "drift issues (Joy-Con)", "Pro Controller ergonomics"],
+      "identificationTips": [
+        "Joy-Con = detachable Switch controllers",
+        "Pro Controller = traditional gamepad",
+        "Neon red/blue iconic Switch colors",
+        "Special edition themed controllers",
+        "OLED model in white",
+        "GameCube-style controllers (Smash Bros)",
+        "Pastel colors common"
+      ],
+      "recentColorways": [
+        { "line": "Switch OLED Joy-Con", "year": "2024", "colors": ["white", "neon red/blue", "neon purple/orange", "neon pink/green", "mario red"] },
+        { "line": "Pro Controller", "year": "2024", "colors": ["black", "splatoon 3", "zelda tears of the kingdom", "pokemon scarlet/violet"] },
+        { "line": "Joy-Con Pairs", "year": "2024", "colors": ["neon red/blue", "gray", "neon purple/orange", "neon pink/green", "pastel purple/green"] }
+      ]
+    }
+  ]
+}

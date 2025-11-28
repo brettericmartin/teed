@@ -1,7 +1,32 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, Check, X } from 'lucide-react';
+import { ChevronDown, Check, X, Palette, Eye, Tag } from 'lucide-react';
+
+// Structured color information
+interface ProductColors {
+  primary: string;
+  secondary?: string;
+  accent?: string;
+  finish?: 'matte' | 'glossy' | 'metallic' | 'satin' | 'textured' | 'brushed';
+  colorway?: string;
+}
+
+// Pattern recognition
+interface ProductPattern {
+  type: 'solid' | 'striped' | 'plaid' | 'camo' | 'gradient' | 'geometric' |
+        'chevron' | 'heathered' | 'carbon-weave' | 'checkered' | 'floral' | 'other';
+  location: 'all-over' | 'accent' | 'trim' | 'crown-only' | 'partial' | 'sole-only';
+  description?: string;
+}
+
+// Visual brand signature
+interface BrandSignature {
+  signatureColors?: string[];
+  logoShape?: string;
+  designCues: string[];
+  visualConfidence: number;
+}
 
 export type IdentifiedProduct = {
   name: string;
@@ -10,6 +35,9 @@ export type IdentifiedProduct = {
   confidence: number;
   estimatedPrice?: string;
   color?: string;
+  colors?: ProductColors;
+  pattern?: ProductPattern;
+  brandSignature?: BrandSignature;
   specifications?: string[];
   modelNumber?: string;
   productImage?: {
@@ -23,7 +51,7 @@ export type IdentifiedProduct = {
     confidence: number;
     reason: string;
   }>;
-  sourceImageIndex?: number; // Index of the source image this product was identified from (for bulk uploads)
+  sourceImageIndex?: number;
 };
 
 type ProductReviewModalProps = {
@@ -299,6 +327,105 @@ export default function ProductReviewModal({
                             <option value="other">Other</option>
                           </select>
                         </div>
+
+                        {/* Visual Attributes Section - NEW */}
+                        {(product.colors || product.pattern || product.brandSignature) && (
+                          <div className="pt-2 border-t border-gray-200">
+                            <p className="text-xs font-medium text-gray-600 mb-3 flex items-center gap-1.5">
+                              <Eye className="w-3.5 h-3.5" />
+                              Visual Details
+                            </p>
+
+                            {/* Colors */}
+                            {product.colors && (
+                              <div className="mb-3">
+                                <div className="flex items-center gap-1.5 mb-1.5">
+                                  <Palette className="w-3 h-3 text-gray-400" />
+                                  <span className="text-xs text-gray-500">Colors</span>
+                                </div>
+                                <div className="flex flex-wrap gap-1.5">
+                                  {product.colors.primary && (
+                                    <span className="inline-flex items-center px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-md">
+                                      <span className="font-medium">Primary:</span>&nbsp;{product.colors.primary}
+                                    </span>
+                                  )}
+                                  {product.colors.secondary && (
+                                    <span className="inline-flex items-center px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-md">
+                                      <span className="font-medium">Secondary:</span>&nbsp;{product.colors.secondary}
+                                    </span>
+                                  )}
+                                  {product.colors.accent && (
+                                    <span className="inline-flex items-center px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-md">
+                                      <span className="font-medium">Accent:</span>&nbsp;{product.colors.accent}
+                                    </span>
+                                  )}
+                                  {product.colors.finish && (
+                                    <span className="inline-flex items-center px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-md capitalize">
+                                      {product.colors.finish}
+                                    </span>
+                                  )}
+                                  {product.colors.colorway && (
+                                    <span className="inline-flex items-center px-2 py-1 text-xs bg-purple-50 text-purple-700 rounded-md">
+                                      {product.colors.colorway}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Pattern */}
+                            {product.pattern && product.pattern.type !== 'solid' && (
+                              <div className="mb-3">
+                                <div className="flex items-center gap-1.5 mb-1.5">
+                                  <span className="text-xs text-gray-500">Pattern</span>
+                                </div>
+                                <div className="flex flex-wrap gap-1.5">
+                                  <span className="inline-flex items-center px-2 py-1 text-xs bg-orange-50 text-orange-700 rounded-md capitalize">
+                                    {product.pattern.type}
+                                  </span>
+                                  <span className="inline-flex items-center px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-md">
+                                    {product.pattern.location.replace('-', ' ')}
+                                  </span>
+                                  {product.pattern.description && (
+                                    <span className="text-xs text-gray-500 italic">
+                                      {product.pattern.description}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Brand Signature */}
+                            {product.brandSignature && product.brandSignature.designCues.length > 0 && (
+                              <div>
+                                <div className="flex items-center gap-1.5 mb-1.5">
+                                  <Tag className="w-3 h-3 text-gray-400" />
+                                  <span className="text-xs text-gray-500">
+                                    Brand Cues
+                                    <span className="ml-1 text-gray-400">
+                                      ({product.brandSignature.visualConfidence}% visual match)
+                                    </span>
+                                  </span>
+                                </div>
+                                <div className="flex flex-wrap gap-1.5">
+                                  {product.brandSignature.designCues.slice(0, 4).map((cue, i) => (
+                                    <span
+                                      key={i}
+                                      className="inline-flex items-center px-2 py-1 text-xs bg-green-50 text-green-700 rounded-md"
+                                    >
+                                      {cue}
+                                    </span>
+                                  ))}
+                                  {product.brandSignature.logoShape && (
+                                    <span className="inline-flex items-center px-2 py-1 text-xs bg-indigo-50 text-indigo-700 rounded-md">
+                                      Logo: {product.brandSignature.logoShape}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
 
                         {/* Alternatives */}
                         {product.alternatives && product.alternatives.length > 0 && (

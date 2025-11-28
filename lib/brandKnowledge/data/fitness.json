@@ -1,0 +1,557 @@
+{
+  "category": "fitness",
+  "colorVocabulary": {
+    "black": ["triple black", "blackout", "stealth black", "carbon black", "midnight black", "onyx", "noir"],
+    "white": ["triple white", "summit white", "pure white", "sail", "off-white", "cream"],
+    "gray": ["heather gray", "wolf gray", "cool gray", "charcoal", "concrete", "smoke gray"],
+    "red": ["university red", "Peloton red", "infrared", "crimson", "bright crimson", "gym red"],
+    "blue": ["royal blue", "navy", "coastal blue", "game royal", "mystic navy", "ice blue"],
+    "green": ["Whoop green", "mint", "neon green", "forest green", "sage", "olive"],
+    "pink": ["hot pink", "flamingo", "desert berry", "neon pink", "blush"],
+    "orange": ["bright mango", "total orange", "neon orange", "infrared", "safety orange"],
+    "purple": ["voltage purple", "wild berry", "court purple", "eggplant"],
+    "neon": ["volt", "hyper pink", "neon green", "electric yellow", "laser orange"],
+    "chrome": ["chrome silver", "metallic silver", "brushed steel", "polished chrome"],
+    "rubber": ["rubber black", "textured black", "matte rubber", "grip black"]
+  },
+  "patternTypes": ["solid", "heather", "camo", "mesh", "compression texture", "jacquard knit", "reflective details", "gradient fade", "color block", "tie-dye", "tiger stripe"],
+  "partTerminology": {
+    "shoes": ["upper", "sole", "midsole", "outsole", "heel counter", "toe box", "laces", "tongue", "ankle collar", "insole", "medial post", "lateral support"],
+    "watch": ["case", "band", "strap", "crown", "display", "bezel", "heart rate sensor", "GPS antenna", "buttons", "charging contacts"],
+    "weights": ["plates", "bar", "grip", "collar", "knurling", "sleeve", "center knurl", "weight marking", "bumper coating"],
+    "resistance_band": ["band", "handles", "anchor", "door attachment", "carabiner"],
+    "foam_roller": ["core", "surface texture", "grid pattern", "density zones"],
+    "apparel": ["waistband", "drawcord", "seams", "gusset", "thumbholes", "zipper", "pocket", "mesh panels", "compression zones"]
+  },
+  "brands": [
+    {
+      "name": "Nike",
+      "aliases": ["Nike Training", "Nike Fitness"],
+      "signatureColors": ["black", "white", "volt", "infrared", "university red"],
+      "designCues": ["swoosh logo", "Flyknit texture", "Zoom Air cushioning", "Metcon sole pattern", "React foam", "Dri-FIT branding"],
+      "identificationTips": [
+        "Swoosh logo on lateral side of shoes",
+        "Metcon = Nike's CrossFit/training shoe line",
+        "Flyknit = woven upper texture",
+        "Volt = signature neon yellow-green color",
+        "React foam = visible white midsole",
+        "Free = flexible sole with deep grooves"
+      ],
+      "recentColorways": [
+        { "line": "Metcon 9", "year": "2024", "colors": ["black/white", "university red", "game royal", "barely volt"] },
+        { "line": "Metcon 8", "year": "2023", "colors": ["triple black", "white/black", "hyper crimson"] },
+        { "line": "Free Metcon 5", "year": "2023", "colors": ["black/volt", "sail/pink blast"] },
+        { "line": "SuperRep Go 3", "year": "2023", "colors": ["white/volt", "black/pink"] }
+      ]
+    },
+    {
+      "name": "Adidas",
+      "aliases": ["adidas Training", "adidas Performance"],
+      "signatureColors": ["black", "white", "solar yellow", "solar red", "royal blue"],
+      "designCues": ["three stripes", "Boost midsole", "Primeknit upper", "Continental rubber sole", "trefoil logo", "performance logo"],
+      "identificationTips": [
+        "Three stripes on sides = signature Adidas",
+        "Boost = textured white/colored midsole foam",
+        "Primeknit = seamless knit upper",
+        "Continental = tire rubber outsole",
+        "Adiprene = older cushioning tech",
+        "Solar = bright neon colors"
+      ],
+      "recentColorways": [
+        { "line": "Ultraboost 23", "year": "2023", "colors": ["triple black", "cloud white", "solar yellow"] },
+        { "line": "Terrex Free Hiker", "year": "2023", "colors": ["core black", "grey/solar red"] },
+        { "line": "Dropset Trainer", "year": "2024", "colors": ["black/white", "wonder white/team royal blue"] }
+      ]
+    },
+    {
+      "name": "Lululemon",
+      "aliases": ["Lulu"],
+      "signatureColors": ["black", "navy", "red merlot", "dark olive", "pink pastel", "submarine"],
+      "designCues": ["omega logo", "Luon fabric", "Nulu fabric", "ABC pants design", "hidden pockets", "seamless construction"],
+      "identificationTips": [
+        "Omega logo (Ω) on waistband or chest",
+        "Align = Nulu fabric (buttery soft)",
+        "Wunder Under = Luon fabric (compression)",
+        "ABC = Anti-Ball Crushing pants",
+        "Define jacket = signature fitted jacket",
+        "Submarine = greenish-blue color"
+      ],
+      "recentColorways": [
+        { "line": "Align Leggings", "year": "2024", "colors": ["black", "navy", "pink pastel", "submarine"] },
+        { "line": "Fast and Free Tights", "year": "2024", "colors": ["black", "red merlot", "wild mint"] },
+        { "line": "ABC Jogger", "year": "2024", "colors": ["black", "obsidian", "dark olive", "iron blue"] }
+      ]
+    },
+    {
+      "name": "Under Armour",
+      "aliases": ["UA", "Under Armour Fitness"],
+      "signatureColors": ["black", "red", "navy", "stealth gray", "halo gray"],
+      "designCues": ["UA logo", "HeatGear branding", "ColdGear branding", "HOVR cushioning", "TriBase sole pattern"],
+      "identificationTips": [
+        "Interlocking UA logo",
+        "HeatGear = moisture wicking for warm weather",
+        "ColdGear = insulated for cold weather",
+        "HOVR = signature cushioning technology",
+        "TriBase = wide, stable heel base on training shoes",
+        "Project Rock = Dwayne Johnson collaboration line"
+      ],
+      "recentColorways": [
+        { "line": "HOVR Apex 3", "year": "2024", "colors": ["black/red", "mod gray/beta"] },
+        { "line": "TriBase Reign 5", "year": "2024", "colors": ["black/red", "white/black"] },
+        { "line": "Project Rock BSR 4", "year": "2024", "colors": ["black/white", "gray/orange"] }
+      ]
+    },
+    {
+      "name": "Reebok",
+      "aliases": ["Reebok Training"],
+      "signatureColors": ["black", "white", "red", "yellow", "primal red"],
+      "designCues": ["delta logo", "Nano series design", "Floatride foam", "Flexweave upper", "CrossFit branding"],
+      "identificationTips": [
+        "Delta triangle logo",
+        "Nano = signature CrossFit training shoe",
+        "Floatride = lightweight foam cushioning",
+        "Flexweave = woven figure-8 upper pattern",
+        "Strong CrossFit heritage",
+        "Primal Red = signature deep red color"
+      ],
+      "recentColorways": [
+        { "line": "Nano X3", "year": "2023-2024", "colors": ["black/white", "vector navy/primal red", "ftwr white/core black"] },
+        { "line": "Nano X2", "year": "2022-2023", "colors": ["black/pure grey", "white/vector navy"] },
+        { "line": "Floatride Energy 5", "year": "2024", "colors": ["core black", "white/black"] }
+      ]
+    },
+    {
+      "name": "Gymshark",
+      "aliases": [],
+      "signatureColors": ["black", "navy", "teal", "pink", "white", "camo green"],
+      "designCues": ["shark logo", "seamless construction", "tonal branding", "compression fit", "high waisted leggings"],
+      "identificationTips": [
+        "Shark logo on waistband or chest",
+        "Vital Seamless = signature seamless line",
+        "Adapt = camo pattern line",
+        "Legacy = their premium performance line",
+        "Form-fitting, gym-focused designs",
+        "Strong social media presence"
+      ],
+      "recentColorways": [
+        { "line": "Vital Seamless 2.0", "year": "2024", "colors": ["black", "navy", "dusky pink", "light grey"] },
+        { "line": "Adapt Camo", "year": "2024", "colors": ["olive green camo", "black camo", "grey camo"] },
+        { "line": "Power Leggings", "year": "2024", "colors": ["black", "navy", "indigo"] }
+      ]
+    },
+    {
+      "name": "Puma",
+      "aliases": ["Puma Training"],
+      "signatureColors": ["black", "white", "red", "yellow", "peacoat navy"],
+      "designCues": ["leaping puma logo", "Formstrip", "NITRO foam", "PWRPLATE technology", "bold colorways"],
+      "identificationTips": [
+        "Leaping puma (cat) logo",
+        "Formstrip = curved stripe on shoes",
+        "NITRO = nitrogen-infused foam cushioning",
+        "Fuse = training shoe line",
+        "PWRPLATE = TPU plate for stability",
+        "Bold, athletic styling"
+      ],
+      "recentColorways": [
+        { "line": "Fuse 3.0", "year": "2024", "colors": ["black/white", "white/red", "peacoat/yellow"] },
+        { "line": "LQDCELL Hydra", "year": "2023", "colors": ["black/yellow", "white/red"] }
+      ]
+    },
+    {
+      "name": "Vuori",
+      "aliases": [],
+      "signatureColors": ["black", "navy", "olive", "clay", "haze"],
+      "designCues": ["V logo", "athletic-casual hybrid design", "technical fabrics", "relaxed fits", "coastal aesthetic"],
+      "identificationTips": [
+        "Subtle V logo",
+        "Kore Short = signature men's short",
+        "Strato Tech Tee = moisture wicking shirt",
+        "Ripstop Jogger = casual athletic pant",
+        "Coastal California vibe",
+        "Premium price point"
+      ],
+      "recentColorways": [
+        { "line": "Kore Short", "year": "2024", "colors": ["black", "navy", "olive", "clay"] },
+        { "line": "Sunday Performance Jogger", "year": "2024", "colors": ["black", "charcoal", "nocturnal navy"] }
+      ]
+    },
+    {
+      "name": "Rhone",
+      "aliases": [],
+      "signatureColors": ["black", "navy", "gunmetal", "burgundy"],
+      "designCues": ["minimalist design", "GoldFusion technology", "premium fabrics", "slim athletic fits"],
+      "identificationTips": [
+        "Clean, minimal branding",
+        "GoldFusion = anti-odor technology",
+        "Commuter Pant = dress pant/athletic hybrid",
+        "Premium men's activewear focus",
+        "Professional aesthetic"
+      ],
+      "recentColorways": [
+        { "line": "Commuter Pant", "year": "2024", "colors": ["black", "navy", "charcoal"] },
+        { "line": "Swift Short Sleeve", "year": "2024", "colors": ["black", "navy", "smoke"] }
+      ]
+    },
+    {
+      "name": "Ten Thousand",
+      "aliases": ["10,000"],
+      "signatureColors": ["black", "navy", "gray", "olive"],
+      "signatureColors": ["black", "navy", "shadow", "ash"],
+      "designCues": ["minimal branding", "versatile designs", "technical fabrics", "Session Short", "Foundation Tee"],
+      "identificationTips": [
+        "Small wordmark logo",
+        "Session Short = signature 7-inch training short",
+        "Interval Short = 5-inch short",
+        "Foundation Tee = classic training tee",
+        "Focus on versatility and function",
+        "Clean, understated aesthetic"
+      ],
+      "recentColorways": [
+        { "line": "Session Short", "year": "2024", "colors": ["black", "navy", "shadow", "olive"] },
+        { "line": "Interval Short", "year": "2024", "colors": ["black", "navy", "ash"] }
+      ]
+    },
+    {
+      "name": "Rogue Fitness",
+      "aliases": ["Rogue"],
+      "signatureColors": ["black", "red", "white", "gray"],
+      "designCues": ["Rogue logo", "industrial design", "American flag", "Ohio Power Bar knurling", "bumper plate design"],
+      "identificationTips": [
+        "Rogue wordmark prominent",
+        "Ohio Power Bar = signature barbell",
+        "CrossFit Games equipment supplier",
+        "Made in USA branding",
+        "Industrial, gym-focused aesthetic",
+        "HG bumper plates = signature colored plates"
+      ],
+      "recentColorways": [
+        { "line": "Ohio Power Bar", "year": "2024", "colors": ["black zinc", "stainless steel", "cerakote colors"] },
+        { "line": "HG 2.0 Bumper Plates", "year": "2024", "colors": ["black with colored lettering", "color coded by weight"] },
+        { "line": "Echo Bike", "year": "2024", "colors": ["black/red"] }
+      ]
+    },
+    {
+      "name": "REP Fitness",
+      "aliases": ["REP"],
+      "signatureColors": ["black", "red", "silver", "blue"],
+      "designCues": ["REP logo", "knurling patterns", "value-focused design", "colored collars"],
+      "identificationTips": [
+        "REP logo on equipment",
+        "Black Widow Bar = signature power bar",
+        "Value pricing compared to Rogue",
+        "Color coded bumper plates",
+        "Strong online presence"
+      ],
+      "recentColorways": [
+        { "line": "Black Widow Bar", "year": "2024", "colors": ["black cerakote", "stainless steel"] },
+        { "line": "Color Bumper Plates", "year": "2024", "colors": ["color coded: red, blue, yellow, green, white"] }
+      ]
+    },
+    {
+      "name": "Titan Fitness",
+      "aliases": ["Titan"],
+      "signatureColors": ["black", "red", "yellow"],
+      "designCues": ["Titan logo", "budget-friendly designs", "T-3 rack series", "powder coat finish"],
+      "identificationTips": [
+        "Titan branding",
+        "Budget pricing point",
+        "T-3 = signature power rack series",
+        "X-3 = heavy duty rack line",
+        "Often Rogue-compatible designs"
+      ],
+      "recentColorways": [
+        { "line": "T-3 Series Power Rack", "year": "2024", "colors": ["black powder coat", "red/black"] },
+        { "line": "Economy Bumper Plates", "year": "2024", "colors": ["black rubber"] }
+      ]
+    },
+    {
+      "name": "Nobull",
+      "aliases": ["NO BULL"],
+      "signatureColors": ["black", "white", "army green", "navy", "wild pink"],
+      "designCues": ["NOBULL wordmark", "SuperFabric upper", "minimal branding", "seamless construction", "CrossFit aesthetic"],
+      "identificationTips": [
+        "NOBULL text logo",
+        "SuperFabric = diamond-patterned durable upper",
+        "Trainer = signature training shoe",
+        "Strong CrossFit community presence",
+        "Bold colorways and patterns",
+        "No logo besides wordmark"
+      ],
+      "recentColorways": [
+        { "line": "Trainer+", "year": "2024", "colors": ["black/white", "army/white", "wild pink/white", "stone/gum"] },
+        { "line": "Lifter", "year": "2024", "colors": ["black/black", "white/white", "navy/white"] },
+        { "line": "Runner", "year": "2024", "colors": ["black/white", "white/gum", "army/white"] }
+      ]
+    },
+    {
+      "name": "Garmin",
+      "aliases": ["Garmin Fitness"],
+      "signatureColors": ["black", "white", "silver", "blue", "slate gray"],
+      "designCues": ["round watch face", "5-button design", "GPS antenna", "optical heart rate sensor", "Garmin logo"],
+      "identificationTips": [
+        "Garmin logo on watch face",
+        "Fenix = premium outdoor multisport watch",
+        "Forerunner = running-focused watches",
+        "5-button control scheme common",
+        "Transflective display (readable in sunlight)",
+        "Long battery life focus"
+      ],
+      "recentColorways": [
+        { "line": "Fenix 7", "year": "2023-2024", "colors": ["slate gray", "carbon gray", "mineral blue"] },
+        { "line": "Forerunner 965", "year": "2024", "colors": ["black/powder gray", "whitestone"] },
+        { "line": "Vivoactive 5", "year": "2024", "colors": ["black", "ivory", "slate"] }
+      ]
+    },
+    {
+      "name": "Whoop",
+      "aliases": ["WHOOP"],
+      "signatureColors": ["black", "onyx", "electric blue", "neon yellow"],
+      "designCues": ["screenless design", "fabric band", "Whoop logo", "charging battery pack", "minimalist sensor pod"],
+      "identificationTips": [
+        "No screen/display = signature feature",
+        "Small sensor pod with fabric band",
+        "WHOOP branding on band",
+        "Battery pack slides over band to charge",
+        "Subscription-based model",
+        "Recovery and strain metrics focus"
+      ],
+      "recentColorways": [
+        { "line": "WHOOP 4.0", "year": "2024", "colors": ["onyx", "electric blue", "neon yellow", "black"] }
+      ]
+    },
+    {
+      "name": "Apple Watch",
+      "aliases": ["Apple", "AW"],
+      "signatureColors": ["midnight", "starlight", "silver", "graphite", "natural titanium"],
+      "designCues": ["Apple logo", "Digital Crown", "rectangular face", "interchangeable bands", "Retina display"],
+      "identificationTips": [
+        "Apple logo on back of watch",
+        "Digital Crown on right side",
+        "Rectangular/rounded square face",
+        "Series # on back",
+        "Action button = Ultra model",
+        "Titanium case = Ultra or Series 9 upgrade"
+      ],
+      "recentColorways": [
+        { "line": "Apple Watch Ultra 2", "year": "2023-2024", "colors": ["natural titanium"] },
+        { "line": "Apple Watch Series 9", "year": "2023-2024", "colors": ["midnight", "starlight", "silver", "gold", "product red"] },
+        { "line": "Apple Watch SE", "year": "2023", "colors": ["midnight", "starlight", "silver"] }
+      ]
+    },
+    {
+      "name": "Fitbit",
+      "aliases": ["Fitbit by Google"],
+      "signatureColors": ["black", "silver", "gold", "blue", "pink"],
+      "designCues": ["Fitbit logo", "rectangular display", "simple interface", "colorful band options"],
+      "identificationTips": [
+        "Fitbit logo on device",
+        "Charge = fitness tracker line",
+        "Versa = smartwatch line",
+        "Inspire = entry-level tracker",
+        "Single button design common",
+        "Google integration (newer models)"
+      ],
+      "recentColorways": [
+        { "line": "Charge 6", "year": "2024", "colors": ["obsidian/black", "coral/champagne gold", "porcelain/silver"] },
+        { "line": "Versa 4", "year": "2023", "colors": ["black/graphite", "pink sand/copper rose", "waterfall blue/platinum"] }
+      ]
+    },
+    {
+      "name": "Oura Ring",
+      "aliases": ["Oura", "Ōura"],
+      "signatureColors": ["silver", "black", "gold", "brushed titanium", "stealth"],
+      "designCues": ["ring form factor", "Oura logo inside", "seamless design", "sensors inside ring", "minimalist aesthetic"],
+      "identificationTips": [
+        "Ring shape = unique identifier",
+        "Oura logo visible inside band",
+        "Stealth = matte black coating",
+        "Sleep and recovery focus",
+        "No screen/display",
+        "Premium titanium construction"
+      ],
+      "recentColorways": [
+        { "line": "Oura Ring Gen3", "year": "2024", "colors": ["silver", "black", "gold", "brushed titanium", "stealth"] },
+        { "line": "Oura Ring Horizon", "year": "2024", "colors": ["silver", "black", "gold", "rose gold"] }
+      ]
+    },
+    {
+      "name": "Peloton",
+      "aliases": [],
+      "signatureColors": ["black", "red", "white"],
+      "designCues": ["Peloton logo", "touchscreen display", "red accents", "minimalist design", "premium finish"],
+      "identificationTips": [
+        "Peloton wordmark logo",
+        "Large touchscreen on bikes/treads",
+        "Signature red = brand identifier",
+        "Premium black finish",
+        "Subscription-based content",
+        "Bike/Tread/Row equipment lines"
+      ],
+      "recentColorways": [
+        { "line": "Bike+", "year": "2024", "colors": ["black/red accents"] },
+        { "line": "Tread", "year": "2024", "colors": ["black/red accents"] },
+        { "line": "Row", "year": "2024", "colors": ["black/red accents"] }
+      ]
+    },
+    {
+      "name": "NordicTrack",
+      "aliases": ["Nordic Track"],
+      "signatureColors": ["black", "red", "silver", "white"],
+      "designCues": ["NordicTrack logo", "iFIT integration", "touchscreen displays", "incline/decline capabilities"],
+      "identificationTips": [
+        "NordicTrack branding",
+        "iFIT = interactive training platform",
+        "Commercial series = high-end line",
+        "Incline trainers common",
+        "Red/black color scheme"
+      ],
+      "recentColorways": [
+        { "line": "Commercial 1750", "year": "2024", "colors": ["black/red/silver"] },
+        { "line": "RW900", "year": "2024", "colors": ["black/silver"] }
+      ]
+    },
+    {
+      "name": "Bowflex",
+      "aliases": [],
+      "signatureColors": ["black", "red", "gray"],
+      "designCues": ["Bowflex logo", "power rod system", "red accents", "compact design"],
+      "identificationTips": [
+        "Bowflex wordmark",
+        "Power rod resistance system",
+        "SelectTech dumbbells = adjustable weights",
+        "Red safety features common",
+        "Home gym focus"
+      ],
+      "recentColorways": [
+        { "line": "SelectTech 552", "year": "2024", "colors": ["black/red"] },
+        { "line": "VeloCore Bike", "year": "2024", "colors": ["black/gray"] }
+      ]
+    },
+    {
+      "name": "Mirror",
+      "aliases": ["Lululemon Mirror"],
+      "signatureColors": ["black frame", "mirror finish"],
+      "designCues": ["mirror surface", "hidden display", "minimal bezels", "wall-mounted design"],
+      "identificationTips": [
+        "Looks like regular mirror when off",
+        "Display appears when activated",
+        "Lululemon owned",
+        "Black frame around mirror",
+        "Camera at top for form feedback"
+      ],
+      "recentColorways": [
+        { "line": "Mirror", "year": "2024", "colors": ["black frame/mirror finish"] }
+      ]
+    },
+    {
+      "name": "Hyperice",
+      "aliases": [],
+      "signatureColors": ["black", "red", "gray"],
+      "designCues": ["Hyperice logo", "LED indicators", "modern tech aesthetic", "vibration motors visible"],
+      "identificationTips": [
+        "Hyperice branding prominent",
+        "Hypervolt = percussion massage gun",
+        "Vyper = vibrating foam roller",
+        "Venom = heat/vibration wraps",
+        "Black with red or blue accents",
+        "LED battery indicators"
+      ],
+      "recentColorways": [
+        { "line": "Hypervolt 2 Pro", "year": "2024", "colors": ["black/gray"] },
+        { "line": "Vyper Go", "year": "2024", "colors": ["black/red"] },
+        { "line": "Venom 2", "year": "2024", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "Theragun",
+      "aliases": ["Therabody"],
+      "signatureColors": ["black", "white", "red"],
+      "designCues": ["triangular handle", "Therabody logo", "ergonomic design", "adjustable arm", "QuietForce technology"],
+      "identificationTips": [
+        "Triangular handle = signature design",
+        "Therabody/Theragun branding",
+        "PRO = professional model with rotating arm",
+        "Elite = consumer flagship",
+        "Prime/mini = compact models",
+        "App connectivity"
+      ],
+      "recentColorways": [
+        { "line": "Theragun PRO", "year": "2024", "colors": ["black"] },
+        { "line": "Theragun Elite", "year": "2024", "colors": ["black", "white"] },
+        { "line": "Theragun Mini", "year": "2024", "colors": ["black", "red", "white"] }
+      ]
+    },
+    {
+      "name": "Trigger Point",
+      "aliases": ["TriggerPoint"],
+      "signatureColors": ["black", "orange", "green", "blue"],
+      "designCues": ["grid foam pattern", "color-coded density", "Trigger Point logo", "contoured shapes"],
+      "identificationTips": [
+        "GRID foam roller = signature product",
+        "Color coding = density levels",
+        "Orange = standard density",
+        "Green = softer",
+        "Black = extra firm",
+        "Patented GRID surface pattern"
+      ],
+      "recentColorways": [
+        { "line": "GRID Foam Roller", "year": "2024", "colors": ["orange", "black", "green", "pink"] },
+        { "line": "CHARGE Foam Roller", "year": "2024", "colors": ["blue/black"] }
+      ]
+    },
+    {
+      "name": "Hydro Flask",
+      "aliases": [],
+      "signatureColors": ["black", "white", "pacific", "hibiscus", "olive", "stone"],
+      "designCues": ["powder coat finish", "Hydro Flask logo", "wide mouth design", "honeycomb insulation"],
+      "identificationTips": [
+        "Hydro Flask wordmark logo",
+        "Powder coat textured finish",
+        "TempShield insulation branding",
+        "Wide variety of colors",
+        "Durable, non-slip exterior",
+        "Flex Cap common"
+      ],
+      "recentColorways": [
+        { "line": "Standard Mouth", "year": "2024", "colors": ["black", "white", "pacific", "stone", "hibiscus"] },
+        { "line": "Wide Mouth", "year": "2024", "colors": ["black", "sesame", "birch", "agave"] }
+      ]
+    },
+    {
+      "name": "Yeti",
+      "aliases": ["YETI"],
+      "signatureColors": ["stainless", "white", "black", "navy", "chartreuse", "coral"],
+      "designCues": ["YETI logo", "DuraCoat finish", "rugged construction", "thick insulation", "TripleHaul handle"],
+      "identificationTips": [
+        "YETI logo prominent",
+        "Rambler = drinkware line",
+        "DuraCoat = durable color coating",
+        "Kitchen-grade stainless steel",
+        "Premium price point",
+        "Over-engineered aesthetic"
+      ],
+      "recentColorways": [
+        { "line": "Rambler 30oz", "year": "2024", "colors": ["stainless", "black", "white", "navy", "chartreuse"] },
+        { "line": "Rambler Bottle", "year": "2024", "colors": ["stainless", "seafoam", "sharptail taupe", "coral"] }
+      ]
+    },
+    {
+      "name": "Nalgene",
+      "aliases": [],
+      "signatureColors": ["clear", "gray", "blue", "green", "pink", "purple"],
+      "designCues": ["wide mouth", "measurement markings", "loop-top cap", "transparent design", "Nalgene logo"],
+      "identificationTips": [
+        "Nalgene wordmark on bottle",
+        "Measurement markings on side",
+        "Wide mouth opening",
+        "Loop-top cap for carabiner",
+        "BPA-free labeling",
+        "Transparent Tritan material common"
+      ],
+      "recentColorways": [
+        { "line": "Wide Mouth 32oz", "year": "2024", "colors": ["clear", "gray", "blue", "green", "pink"] },
+        { "line": "Sustain", "year": "2024", "colors": ["moss green", "aubergine", "slate blue"] }
+      ]
+    }
+  ]
+}

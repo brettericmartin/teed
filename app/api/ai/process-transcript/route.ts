@@ -2,13 +2,68 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { openai } from '@/lib/openaiClient';
+import { generateBrandContext, loadCategoryKnowledge } from '@/lib/brandKnowledge';
 
 export const maxDuration = 60; // Transcripts can be long
 
 /**
+ * Detect the likely category from bagType and transcript content
+ */
+function detectCategory(bagType?: string, transcript?: string): string | null {
+  // Category keyword mapping for detection
+  const categoryKeywords: Record<string, string[]> = {
+    golf: ['golf', 'driver', 'iron', 'putter', 'wedge', 'titleist', 'taylormade', 'callaway', 'ping', 'mizuno'],
+    outdoor: ['hiking', 'camping', 'backpack', 'tent', 'outdoor', 'trail', 'osprey', 'patagonia', 'arc\'teryx'],
+    tech: ['tech', 'gadget', 'electronics', 'laptop', 'phone', 'tablet', 'apple', 'samsung', 'sony'],
+    fashion: ['fashion', 'clothing', 'apparel', 'shirt', 'pants', 'dress', 'nike', 'adidas', 'supreme'],
+    makeup: ['makeup', 'cosmetics', 'beauty', 'lipstick', 'foundation', 'mascara', 'fenty', 'mac', 'nars'],
+    photography: ['camera', 'lens', 'photography', 'photo', 'video', 'canon', 'nikon', 'sony', 'fujifilm'],
+    gaming: ['gaming', 'game', 'console', 'pc', 'xbox', 'playstation', 'nintendo', 'razer', 'logitech'],
+    music: ['music', 'guitar', 'piano', 'drums', 'audio', 'studio', 'fender', 'gibson', 'yamaha'],
+    fitness: ['fitness', 'gym', 'workout', 'exercise', 'crossfit', 'weights', 'rogue', 'nike', 'under armour'],
+    travel: ['travel', 'luggage', 'suitcase', 'bag', 'carry-on', 'samsonite', 'away', 'rimowa'],
+    edc: ['edc', 'everyday carry', 'knife', 'flashlight', 'wallet', 'benchmade', 'spyderco', 'leatherman'],
+  };
+
+  // First, try to detect from bagType
+  if (bagType) {
+    const lowerBagType = bagType.toLowerCase();
+    for (const [category, keywords] of Object.entries(categoryKeywords)) {
+      if (keywords.some(keyword => lowerBagType.includes(keyword))) {
+        return category;
+      }
+    }
+  }
+
+  // Then, try to detect from transcript content
+  if (transcript) {
+    const lowerTranscript = transcript.toLowerCase();
+    const categoryScores: Record<string, number> = {};
+
+    // Count keyword matches for each category
+    for (const [category, keywords] of Object.entries(categoryKeywords)) {
+      categoryScores[category] = keywords.filter(keyword =>
+        lowerTranscript.includes(keyword)
+      ).length;
+    }
+
+    // Return the category with the highest score (if > 0)
+    const maxScore = Math.max(...Object.values(categoryScores));
+    if (maxScore > 0) {
+      const detectedCategory = Object.entries(categoryScores)
+        .find(([_, score]) => score === maxScore)?.[0];
+      return detectedCategory || null;
+    }
+  }
+
+  return null;
+}
+
+/**
  * POST /api/ai/process-transcript
  *
- * Processes video/podcast transcripts to extract product mentions
+ * Processes video/podcast transcripts to extract product mentions.
+ * Uses brand knowledge when available to improve product identification accuracy.
  *
  * Request body:
  * {
@@ -25,7 +80,9 @@ export const maxDuration = 60; // Transcripts can be long
  *   metadata: {
  *     transcriptLength: number,
  *     productsFound: number,
- *     youtubeUrl?: string
+ *     youtubeUrl?: string,
+ *     detectedCategory?: string,
+ *     usedBrandKnowledge: boolean
  *   }
  * }
  */
@@ -87,20 +144,37 @@ export async function POST(request: NextRequest) {
 
     console.log(`[Transcript Processing] Processing transcript (${transcriptLength} chars)`);
 
-    // Use GPT-4 to extract product mentions
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: [
-        {
-          role: 'system',
-          content: `You are an expert at extracting product mentions from video/podcast transcripts.
+    // Detect category and load brand knowledge
+    const detectedCategory = detectCategory(bagType, transcript);
+    let brandContext = '';
+
+    if (detectedCategory) {
+      const knowledge = loadCategoryKnowledge(detectedCategory);
+      if (knowledge) {
+        brandContext = generateBrandContext(detectedCategory, 'standard');
+        console.log(`[Transcript Processing] Using brand knowledge for category: ${detectedCategory}`);
+      } else {
+        console.log(`[Transcript Processing] No brand knowledge available for category: ${detectedCategory}`);
+      }
+    } else {
+      console.log('[Transcript Processing] Could not detect category from bagType/transcript');
+    }
+
+    // Build the system prompt with optional brand knowledge
+    const systemPrompt = `You are an expert at extracting product mentions from video/podcast transcripts.
 
 Your task is to identify SPECIFIC products mentioned in the transcript. Focus on:
 - Products that are explicitly named or described
 - Brand names and model numbers when mentioned
 - Equipment, tools, gear, accessories
 - Avoid generic mentions (e.g., "I use a camera" without specifics)
-
+${brandContext ? `\n${brandContext}\n\nUSE THE BRAND KNOWLEDGE ABOVE TO:
+- Recognize brand-specific terminology in speech
+- Correctly spell brand and model names (even if misspelled in transcript)
+- Identify specific products mentioned based on visual descriptions
+- Match color descriptions to known brand colorways
+- Understand common abbreviations and nicknames for brands/products
+` : ''}
 Return ONLY valid JSON in this format:
 {
   "products": [
@@ -128,7 +202,15 @@ IMPORTANT:
 - If no specific products are mentioned, return empty products array
 - Don't invent products that aren't there
 - Higher confidence for explicit mentions with brand/model
-- Lower confidence for "I have a..." without details`,
+- Lower confidence for "I have a..." without details${brandContext ? '\n- Use brand knowledge to improve spelling and identification accuracy' : ''}`;
+
+    // Use GPT-4 to extract product mentions
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o',
+      messages: [
+        {
+          role: 'system',
+          content: systemPrompt,
         },
         {
           role: 'user',
@@ -173,6 +255,8 @@ ${transcript.trim()}`,
         transcriptLength,
         productsFound: products.length,
         youtubeUrl: youtubeUrl || null,
+        detectedCategory: detectedCategory || null,
+        usedBrandKnowledge: !!brandContext,
       },
     };
 
@@ -183,6 +267,8 @@ ${transcript.trim()}`,
       productsFound: products.length,
       avgConfidence: response.totalConfidence,
       processingTime,
+      detectedCategory: detectedCategory || 'none',
+      usedBrandKnowledge: !!brandContext,
     });
 
     return NextResponse.json(response, { status: 200 });

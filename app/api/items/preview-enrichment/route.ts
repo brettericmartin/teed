@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import { findBestProductLinks, detectProductAge } from '@/lib/services/SmartLinkFinder';
 import { openai } from '@/lib/openaiClient';
+import { generateBrandContext, loadCategoryKnowledge } from '@/lib/brandKnowledge';
 
 type ClarificationQuestion = {
   id: string;
@@ -9,6 +10,39 @@ type ClarificationQuestion = {
   options: string[];
   itemId: string;
 };
+
+/**
+ * Detect likely categories from bag metadata and item names
+ * Returns array of detected categories for brand knowledge loading
+ */
+function detectCategories(bagCategory?: string, bagTags?: any, itemNames?: string[]): string[] {
+  const categories: string[] = [];
+  const text = `${bagCategory || ''} ${JSON.stringify(bagTags || [])} ${(itemNames || []).join(' ')}`.toLowerCase();
+
+  // Category detection patterns
+  const categoryPatterns: Record<string, string[]> = {
+    golf: ['golf', 'driver', 'iron', 'wedge', 'putter', 'taylormade', 'callaway', 'titleist', 'ping', 'cobra', 'mizuno'],
+    makeup: ['makeup', 'beauty', 'cosmetic', 'lipstick', 'eyeshadow', 'foundation', 'mac', 'nars', 'fenty', 'dior'],
+    tech: ['tech', 'electronics', 'phone', 'laptop', 'tablet', 'airpods', 'apple', 'samsung', 'sony'],
+    fashion: ['fashion', 'clothing', 'shirt', 'pants', 'dress', 'jacket', 'nike', 'adidas', 'patagonia'],
+    outdoor: ['outdoor', 'camping', 'hiking', 'tent', 'sleeping bag', 'backpack', 'arc\'teryx', 'rei'],
+    photography: ['camera', 'lens', 'photography', 'photo', 'canon', 'nikon', 'sony'],
+    gaming: ['gaming', 'game', 'console', 'controller', 'playstation', 'xbox', 'nintendo'],
+    music: ['music', 'guitar', 'instrument', 'audio', 'speaker', 'fender', 'gibson'],
+    fitness: ['fitness', 'gym', 'workout', 'exercise', 'crossfit', 'sports'],
+    travel: ['travel', 'luggage', 'suitcase', 'bag'],
+    edc: ['edc', 'knife', 'flashlight', 'wallet', 'everyday carry'],
+  };
+
+  // Check each category's patterns
+  for (const [category, patterns] of Object.entries(categoryPatterns)) {
+    if (patterns.some(pattern => text.includes(pattern))) {
+      categories.push(category);
+    }
+  }
+
+  return categories;
+}
 
 /**
  * POST /api/items/preview-enrichment
@@ -36,10 +70,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'bagId is required' }, { status: 400 });
     }
 
-    // Verify bag ownership
+    // Verify bag ownership and get category/tags for brand knowledge
     const { data: bag, error: bagError } = await supabase
       .from('bags')
-      .select('id, owner_id')
+      .select('id, owner_id, category, tags')
       .eq('id', bagId)
       .single();
 
@@ -61,6 +95,18 @@ export async function POST(request: NextRequest) {
     if (!items || items.length === 0) {
       console.log('[preview-enrichment] No items in bag');
       return NextResponse.json({ suggestions: [] });
+    }
+
+    // Detect categories and load brand knowledge
+    const itemNames = items.map(item => `${item.brand || ''} ${item.custom_name || ''}`).filter(Boolean);
+    const detectedCategories = detectCategories(bag.category, bag.tags, itemNames);
+
+    let brandContext = '';
+    if (detectedCategories.length > 0) {
+      brandContext = generateBrandContext(detectedCategories, 'standard');
+      console.log(`[preview-enrichment] Loaded brand knowledge for: ${detectedCategories.join(', ')}`);
+    } else {
+      console.log('[preview-enrichment] No specific categories detected, proceeding without brand knowledge');
     }
 
     // Get existing links
@@ -111,7 +157,16 @@ export async function POST(request: NextRequest) {
             {
               role: 'system',
               content: `You are a product enrichment assistant. Generate detailed product information.
+${brandContext}
+${brandContext ? `
+IMPORTANT: Use the Brand Knowledge Base above to:
+- Recognize brand-specific terminology and colorway names
+- Identify specific model names and variations
+- Use correct color terms (e.g., "Qi10 Blue" instead of just "blue")
+- Provide accurate product details based on brand signature features
+- Match visual cues and design elements to specific brands
 
+` : ''}
 Return ONLY valid JSON:
 {
   "brand": "Brand Name",

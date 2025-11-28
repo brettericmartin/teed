@@ -1,0 +1,614 @@
+{
+  "category": "edc",
+  "colorVocabulary": {
+    "black": ["DLC black", "black oxide", "PVD black", "phantom black", "cerakote black", "tactical black", "onyx"],
+    "gray": ["stonewash", "bead blast", "titanium grey", "gunmetal", "anthracite", "dark grey", "tumbled grey"],
+    "silver": ["satin", "brushed satin", "polished steel", "stainless", "mirror polish", "bright satin"],
+    "bronze": ["bronze titanium", "copper wash", "vintage bronze", "antiqued bronze"],
+    "blue": ["blue titanium", "navy blue anodized", "electric blue", "cobalt blue", "blurple"],
+    "green": ["OD green", "ranger green", "olive drab", "jade green", "combat green"],
+    "gold": ["brass", "antique brass", "champagne gold", "bronze gold"],
+    "tan": ["coyote tan", "desert tan", "FDE", "sand", "khaki"],
+    "titanium": ["raw titanium", "bead blasted titanium", "stonewash titanium", "polished titanium", "anodized titanium"]
+  },
+  "patternTypes": ["knurled", "grooved", "milled", "textured", "smooth", "jimping", "checkered", "ridged", "diamond pattern", "grid pattern"],
+  "partTerminology": {
+    "knife": ["blade", "handle", "scales", "pocket clip", "pivot", "lock", "thumb stud", "flipper tab", "lanyard hole", "backspacer", "liner", "stop pin"],
+    "flashlight": ["head", "body", "tail cap", "lens", "emitter", "bezel", "clip", "switch", "battery tube", "reflector"],
+    "multitool": ["pliers", "blades", "tools", "scales", "bit driver", "file", "wire cutters", "scissors", "awl", "can opener"],
+    "wallet": ["card slots", "cash strap", "RFID blocking", "money clip", "elastic band", "frame", "plate"],
+    "pen": ["barrel", "grip section", "clip", "refill", "cap", "tip", "knock", "finial"],
+    "watch": ["case", "bezel", "crown", "bracelet", "strap", "dial", "hands", "crystal", "case back"],
+    "organizer": ["key holder", "carabiner", "D-ring", "lanyard loop", "bottle opener", "clip"]
+  },
+  "brands": [
+    {
+      "name": "Benchmade",
+      "aliases": ["BM", "Benchmade Knife Company"],
+      "signatureColors": ["black", "grey", "blue", "orange"],
+      "designCues": ["butterfly logo", "AXIS lock mechanism", "blue thumb stud", "reversible pocket clip", "laser-etched model numbers", "tri-ad lock"],
+      "identificationTips": [
+        "Butterfly logo on blade or scales is signature",
+        "Blue AXIS lock bar visible on handle",
+        "Blue anodized thumb studs common",
+        "Model numbers: 940, bugout, griptilian, mini griptilian",
+        "LifeSharp service = free sharpening for life",
+        "Oregon USA manufacturing stamp on blade",
+        "Reversible tip-up/tip-down clip"
+      ],
+      "recentColorways": [
+        { "line": "940 Osborne", "year": "2023-2024", "colors": ["green aluminum", "purple scales", "carbon fiber"] },
+        { "line": "Bugout", "year": "2023-2024", "colors": ["ranger green", "grey", "orange", "blue"] },
+        { "line": "Bailout", "year": "2023", "colors": ["black", "tan", "grey"] },
+        { "line": "Mini Griptilian", "year": "2024", "colors": ["black", "blue", "orange", "sheepsfoot blade"] }
+      ]
+    },
+    {
+      "name": "Spyderco",
+      "aliases": ["Spyderco Inc"],
+      "signatureColors": ["black", "blue", "orange", "tan", "sprint run colors"],
+      "designCues": ["round thumb hole", "wire pocket clip", "compression lock", "leaf-shaped blade", "lockback", "golden logo bug"],
+      "identificationTips": [
+        "Round hole in blade is signature Spyderco",
+        "Golden spider logo on blade or clip",
+        "Wire pocket clip with four screws",
+        "Compression lock on premium models",
+        "Sprint runs = limited edition colors",
+        "Made in Golden, Colorado or Taichung, Taiwan",
+        "Model naming: PM2, PM3, Para 3, Delica, Endura"
+      ],
+      "recentColorways": [
+        { "line": "Para 3", "year": "2023-2024", "colors": ["black G10", "sage green", "maxamet steel", "DLC coating"] },
+        { "line": "PM2", "year": "2023-2024", "colors": ["jade G10", "cruwear steel", "tan", "black"] },
+        { "line": "Shaman", "year": "2024", "colors": ["forest green", "black DLC", "S45VN steel"] },
+        { "line": "Native 5", "year": "2023", "colors": ["black FRN", "lightweight", "sprint runs"] }
+      ]
+    },
+    {
+      "name": "Chris Reeve Knives",
+      "aliases": ["CRK", "Sebenza", "Chris Reeve"],
+      "signatureColors": ["natural titanium", "black", "inlays"],
+      "designCues": ["integral lock design", "Damascus patterns", "titanium frame lock", "bead blast finish", "ceramic lock interface", "pivot bushing system"],
+      "identificationTips": [
+        "CRK logo on blade tang",
+        "Birth date card included with purchase",
+        "Sebenza = iconic flagship model",
+        "Umnumzaan = heavier duty model",
+        "Inkosi = mid-size between Sebenza/Umnumzaan",
+        "Titanium framelock construction",
+        "Boise, Idaho USA manufacturing",
+        "Premium fit and finish with tight tolerances"
+      ],
+      "recentColorways": [
+        { "line": "Sebenza 31", "year": "2023-2024", "colors": ["natural titanium", "black canvas micarta inlay", "ladder Damascus"] },
+        { "line": "Sebenza 31 Large", "year": "2024", "colors": ["CGG inlay", "raindrop Damascus", "small CGG"] },
+        { "line": "Inkosi", "year": "2023", "colors": ["natural titanium", "black micarta", "insingo blade"] },
+        { "line": "Umnumzaan", "year": "2024", "colors": ["bead blast titanium", "tanto blade option"] }
+      ]
+    },
+    {
+      "name": "Zero Tolerance",
+      "aliases": ["ZT", "ZT Knives", "Kai ZT"],
+      "signatureColors": ["black", "tiger stripe", "stonewash", "carbon fiber"],
+      "designCues": ["overbuilt construction", "flipper tab", "KVT bearing system", "tiger stripe G10", "hinderer design collaboration", "sub-frame lock"],
+      "identificationTips": [
+        "ZT logo laser etched on blade",
+        "Thick, overbuilt tactical aesthetic",
+        "Flipper tab opening mechanism",
+        "KVT ball bearing pivot system",
+        "Tiger stripe G10 handle scales",
+        "Kai USA manufacturing (owned by Kershaw)",
+        "Model numbers: 0450, 0462, 0566"
+      ],
+      "recentColorways": [
+        { "line": "0450CF", "year": "2023-2024", "colors": ["carbon fiber", "titanium frame", "S35VN steel"] },
+        { "line": "0562", "year": "2023", "colors": ["tiger stripe G10", "black DLC coating"] },
+        { "line": "0470", "year": "2024", "colors": ["carbon fiber", "20CV steel", "blue hardware"] },
+        { "line": "0609", "year": "2023", "colors": ["black", "bronze titanium", "CPM-20CV"] }
+      ]
+    },
+    {
+      "name": "Leatherman",
+      "aliases": ["Leatherman Tool Group"],
+      "signatureColors": ["stainless steel", "black oxide", "grey"],
+      "designCues": ["butterfly opening pliers", "replaceable wire cutters", "pocket clip", "lanyard ring", "bit driver", "25 year warranty"],
+      "identificationTips": [
+        "Leatherman name etched on tools",
+        "Butterfly plier opening mechanism",
+        "Wave/Charge/Surge = full-size models",
+        "Skeletool = minimal lightweight option",
+        "Free series = magnetic one-hand opening",
+        "Bit driver accepts standard 1/4 inch bits",
+        "Portland, Oregon USA headquarters",
+        "25 year warranty standard"
+      ],
+      "recentColorways": [
+        { "line": "Wave Plus", "year": "2023-2024", "colors": ["stainless steel", "black oxide option"] },
+        { "line": "Charge Plus", "year": "2024", "colors": ["stainless", "TTi titanium handles", "S30V blade"] },
+        { "line": "Free P4", "year": "2023", "colors": ["stainless", "black DLC coating"] },
+        { "line": "Skeletool CX", "year": "2024", "colors": ["carbon fiber", "154CM steel blade"] }
+      ]
+    },
+    {
+      "name": "Victorinox",
+      "aliases": ["Swiss Army", "Victorinox Swiss Army"],
+      "signatureColors": ["classic red", "black", "blue", "alox silver"],
+      "designCues": ["Swiss cross shield", "red cellidor scales", "alox textured handles", "toothpick and tweezers", "corkscrew", "multiple layers"],
+      "identificationTips": [
+        "Swiss cross shield on scales",
+        "Classic red cellidor handles",
+        "Alox = textured aluminum scales",
+        "Model names: Classic, Cadet, Pioneer, Spartan, Huntsman",
+        "Toothpick and tweezers in handle scales",
+        "Swiss Made stamp on blade",
+        "Ibach, Switzerland manufacturing",
+        "Lifetime warranty"
+      ],
+      "recentColorways": [
+        { "line": "Classic SD", "year": "2023-2024", "colors": ["classic red", "sapphire blue", "alox silver", "pink"] },
+        { "line": "Cadet", "year": "2024", "colors": ["alox silver", "alox red", "alox blue"] },
+        { "line": "Pioneer X", "year": "2023", "colors": ["black alox", "silver alox", "damast steel"] },
+        { "line": "SwissTool Spirit X", "year": "2024", "colors": ["stainless steel", "black oxide"] }
+      ]
+    },
+    {
+      "name": "Gerber",
+      "aliases": ["Gerber Legendary Blades"],
+      "signatureColors": ["black", "tan", "grey", "orange"],
+      "designCues": ["Gerber logo oval", "fast draw sheath", "suspension system", "bear grylls collaboration", "rubber overmold handles"],
+      "identificationTips": [
+        "Gerber oval logo on blade or tool",
+        "Bear Grylls survival series",
+        "Suspension = affordable multitool",
+        "MP600 = tactical multitool",
+        "Orange accents on survival gear",
+        "Portland, Oregon based",
+        "Budget-friendly EDC options"
+      ],
+      "recentColorways": [
+        { "line": "MP600", "year": "2023-2024", "colors": ["black oxide", "coyote tan"] },
+        { "line": "Suspension NXT", "year": "2024", "colors": ["grey", "black"] },
+        { "line": "Fastball", "year": "2023", "colors": ["black", "grey", "cleaver blade"] },
+        { "line": "Armbar Drive", "year": "2024", "colors": ["orange", "black", "grey"] }
+      ]
+    },
+    {
+      "name": "Olight",
+      "aliases": ["Olight Technology"],
+      "signatureColors": ["black", "desert tan", "OD green", "titanium", "copper", "limited edition colors"],
+      "designCues": ["magnetic charging", "proximity sensor", "bi-directional clip", "orange peel reflector", "OLED display on some models"],
+      "identificationTips": [
+        "Olight logo laser etched on body",
+        "Magnetic MCC charging cable",
+        "Warrior/Baton/Seeker model names",
+        "Proximity sensor prevents overheating",
+        "Bi-directional pocket clip",
+        "Limited edition colors released quarterly",
+        "Proprietary battery on some models",
+        "High lumens to size ratio"
+      ],
+      "recentColorways": [
+        { "line": "Warrior 3S", "year": "2023-2024", "colors": ["black", "desert tan", "OD green", "2300 lumens"] },
+        { "line": "Baton 3 Pro Max", "year": "2024", "colors": ["black", "limited edition copper", "4000 lumens"] },
+        { "line": "Seeker 4 Pro", "year": "2023", "colors": ["black", "tan", "4600 lumens"] },
+        { "line": "i3T EOS", "year": "2024", "colors": ["black", "blue", "red", "copper", "orange"] }
+      ]
+    },
+    {
+      "name": "Fenix",
+      "aliases": ["Fenix Lighting"],
+      "signatureColors": ["black", "grey", "desert tan", "olive green"],
+      "designCues": ["dual switch design", "battery level indicator", "IP68 waterproof", "anti-roll design", "precision digital optics"],
+      "identificationTips": [
+        "Fenix logo on bezel or body",
+        "Dual switch (side + tail) common",
+        "Model codes: PD, TK, LD series",
+        "Battery level indicator LEDs",
+        "IP68 waterproof rating standard",
+        "Anti-roll hexagonal body shapes",
+        "18650/21700 battery compatibility",
+        "Neutral white LED options"
+      ],
+      "recentColorways": [
+        { "line": "PD36R Pro", "year": "2023-2024", "colors": ["black", "2800 lumens", "dual switch"] },
+        { "line": "TK16 V2.0", "year": "2024", "colors": ["black", "tactical switch", "3100 lumens"] },
+        { "line": "E35R", "year": "2023", "colors": ["black", "desert tan", "3100 lumens"] },
+        { "line": "LD30", "year": "2024", "colors": ["black", "compact AA/14500", "1600 lumens"] }
+      ]
+    },
+    {
+      "name": "Surefire",
+      "aliases": ["SureFire LLC"],
+      "signatureColors": ["black", "tan", "OD green"],
+      "designCues": ["military aesthetic", "clickable tail cap", "weapon light compatibility", "TIR lens", "aerospace aluminum construction"],
+      "identificationTips": [
+        "Surefire logo on bezel ring",
+        "Military/tactical heritage",
+        "G2X/6PX model naming",
+        "Clickable tail cap switches",
+        "Weapon light mounts available",
+        "Premium price point",
+        "Made in USA (Fountain Valley, CA)",
+        "Two CR123A battery standard"
+      ],
+      "recentColorways": [
+        { "line": "G2X Pro", "year": "2023-2024", "colors": ["black", "tan", "600 lumens"] },
+        { "line": "Fury DFT", "year": "2024", "colors": ["black", "1500 lumens", "dual fuel"] },
+        { "line": "EDCL2-T", "year": "2023", "colors": ["black", "1200 lumens", "pocket clip"] },
+        { "line": "Stilletto Pro", "year": "2024", "colors": ["black", "1000 lumens", "rechargeable"] }
+      ]
+    },
+    {
+      "name": "Streamlight",
+      "aliases": ["Streamlight Inc"],
+      "signatureColors": ["black", "coyote tan", "red", "orange"],
+      "designCues": ["Ten-Tap programming", "rechargeable lithium ion", "anti-roll faceted design", "rubber switch boots"],
+      "identificationTips": [
+        "Streamlight logo on body",
+        "Ten-Tap programmable switch",
+        "ProTac series = professional tactical",
+        "Microstream = compact EDC",
+        "USB-C charging on newer models",
+        "Orange accents on some models",
+        "Eagleville, PA USA headquarters",
+        "Lifetime warranty"
+      ],
+      "recentColorways": [
+        { "line": "ProTac 2L-X", "year": "2023-2024", "colors": ["black", "coyote", "500 lumens"] },
+        { "line": "Microstream USB", "year": "2024", "colors": ["black", "coyote", "250 lumens"] },
+        { "line": "Wedge", "year": "2023", "colors": ["black", "slim EDC", "1000 lumens"] },
+        { "line": "MacroStream USB", "year": "2024", "colors": ["black", "coyote", "500 lumens"] }
+      ]
+    },
+    {
+      "name": "Ridge Wallet",
+      "aliases": ["The Ridge", "Ridge"],
+      "signatureColors": ["black", "gunmetal", "burnt titanium", "carbon fiber"],
+      "designCues": ["aluminum/titanium plates", "elastic cash strap", "RFID blocking", "minimalist design", "3-15 card capacity"],
+      "identificationTips": [
+        "Two plates with elastic band design",
+        "Ridge logo engraved on plate",
+        "RFID blocking standard",
+        "Money clip or cash strap options",
+        "Holds 1-12 cards (expandable to 15)",
+        "Lifetime warranty",
+        "Premium materials: aluminum, titanium, carbon fiber",
+        "Various plate patterns available"
+      ],
+      "recentColorways": [
+        { "line": "Original", "year": "2023-2024", "colors": ["black", "gunmetal", "navy", "burnt titanium"] },
+        { "line": "Carbon Fiber", "year": "2024", "colors": ["black carbon fiber", "3K weave"] },
+        { "line": "Titanium", "year": "2023", "colors": ["raw titanium", "burnt titanium", "gunmetal titanium"] },
+        { "line": "Forged Carbon", "year": "2024", "colors": ["marbled carbon fiber", "unique patterns"] }
+      ]
+    },
+    {
+      "name": "Bellroy",
+      "aliases": ["Bellroy Pty Ltd"],
+      "signatureColors": ["black", "navy", "tan", "java", "burnt sienna"],
+      "designCues": ["leather construction", "pull tab for cards", "hidden pockets", "RFID protection", "slim profile"],
+      "identificationTips": [
+        "Bellroy tab logo inside wallet",
+        "Premium leather construction",
+        "Pull tab for easy card access",
+        "Ultra-slim profile designs",
+        "Environmentally certified leather",
+        "Hidden pockets and compartments",
+        "Note Sleeve = flagship model",
+        "Melbourne, Australia based"
+      ],
+      "recentColorways": [
+        { "line": "Note Sleeve", "year": "2023-2024", "colors": ["black", "java", "burnt sienna", "navy"] },
+        { "line": "Slim Sleeve", "year": "2024", "colors": ["black", "caramel", "basalt", "RFID option"] },
+        { "line": "Card Pocket", "year": "2023", "colors": ["black", "navy", "java", "minimal design"] },
+        { "line": "Hide & Seek", "year": "2024", "colors": ["black", "arctic blue", "java", "coin pocket"] }
+      ]
+    },
+    {
+      "name": "Secrid",
+      "aliases": ["Secrid Wallets"],
+      "signatureColors": ["black", "navy", "brown", "red", "matte finishes"],
+      "designCues": ["aluminum card protector", "push button mechanism", "cascading card display", "RFID blocking", "leather wrapping"],
+      "identificationTips": [
+        "Secrid logo on card protector",
+        "Push button card ejection mechanism",
+        "Cards cascade out in steps",
+        "Aluminum core with leather wrap",
+        "RFID/NFC protection certified",
+        "Holds 4-6 cards in protector",
+        "Netherlands based design",
+        "Red Dot Design Award winner"
+      ],
+      "recentColorways": [
+        { "line": "Cardprotector", "year": "2023-2024", "colors": ["black", "navy", "red", "powder matte"] },
+        { "line": "Slimwallet", "year": "2024", "colors": ["black leather", "vintage brown", "matte black"] },
+        { "line": "Miniwallet", "year": "2023", "colors": ["crisple black", "navy", "tan"] },
+        { "line": "Twinwallet", "year": "2024", "colors": ["vintage brown", "black", "navy blue"] }
+      ]
+    },
+    {
+      "name": "Dango",
+      "aliases": ["Dango Products"],
+      "signatureColors": ["raw aluminum", "jet black", "tactical grey"],
+      "designCues": ["MT01 multitool integration", "Cerakote finish", "paracord loop", "industrial design", "modular system"],
+      "identificationTips": [
+        "Dango logo on wallet plates",
+        "MT01 multitool clips to wallet",
+        "Cerakote protective coating",
+        "Raw aluminum CNC machined",
+        "Paracord lanyard loop",
+        "RFID blocking plates",
+        "D01 Dapper = flagship wallet",
+        "San Francisco based"
+      ],
+      "recentColorways": [
+        { "line": "D01 Dapper", "year": "2023-2024", "colors": ["raw aluminum", "jet black", "tactical grey"] },
+        { "line": "T01 Tactical", "year": "2024", "colors": ["black cerakote", "raw aluminum", "OD green"] },
+        { "line": "P01 Pioneer", "year": "2023", "colors": ["black", "raw aluminum", "rawhide edition"] },
+        { "line": "M1 Maverick", "year": "2024", "colors": ["jet black", "raw aluminum", "bifold design"] }
+      ]
+    },
+    {
+      "name": "Fisher Space Pen",
+      "aliases": ["Fisher Pen Company", "Space Pen"],
+      "signatureColors": ["chrome", "matte black", "brass", "titanium"],
+      "designCues": ["bullet shape", "pressurized ink cartridge", "writes upside down", "compact size", "cap posts to back"],
+      "identificationTips": [
+        "Fisher logo clip or imprint",
+        "Bullet shape when capped",
+        "Writes upside down/underwater/in space",
+        "Pressurized nitrogen cartridge",
+        "Cap posts to create full-size pen",
+        "AG7 = original NASA model",
+        "Made in Boulder City, Nevada",
+        "Lifetime warranty on mechanism"
+      ],
+      "recentColorways": [
+        { "line": "Bullet Space Pen", "year": "2023-2024", "colors": ["chrome", "matte black", "raw brass", "purple"] },
+        { "line": "AG7 Original Astronaut", "year": "2024", "colors": ["chrome", "anti-reflective black"] },
+        { "line": "Titanium Bullet", "year": "2023", "colors": ["raw titanium", "stonewash finish"] },
+        { "line": "Cap-O-Matic", "year": "2024", "colors": ["black", "chrome", "click mechanism"] }
+      ]
+    },
+    {
+      "name": "Tactile Turn",
+      "aliases": ["Tactile Turn LLC"],
+      "signatureColors": ["titanium", "copper", "brass", "zirconium"],
+      "designCues": ["machined from solid bar stock", "bolt action mechanism", "side click mechanism", "knurled grip", "Damascus pattern options"],
+      "identificationTips": [
+        "Tactile Turn logo on clip",
+        "Bolt action or side click mechanism",
+        "CNC machined from solid metal",
+        "Knurled or smooth grip options",
+        "Damascus pattern bolt available",
+        "Premium materials: Ti, Cu, Zr, SS",
+        "Dallas, Texas manufacturing",
+        "Pilot G2 refill compatibility"
+      ],
+      "recentColorways": [
+        { "line": "Bolt Action Standard", "year": "2023-2024", "colors": ["titanium", "copper", "brass", "Damascus bolt"] },
+        { "line": "Side Click", "year": "2024", "colors": ["titanium", "zirconium black", "copper"] },
+        { "line": "Slim Bolt", "year": "2023", "colors": ["titanium", "bronze", "Damascus pattern"] },
+        { "line": "Nautilus", "year": "2024", "colors": ["titanium", "copper", "spiral grip"] }
+      ]
+    },
+    {
+      "name": "Refyne",
+      "aliases": ["Refyne Pens"],
+      "signatureColors": ["stainless steel", "titanium", "brass"],
+      "designCues": ["bolt action mechanism", "stainless steel construction", "clip design", "modular design", "pocket clip"],
+      "identificationTips": [
+        "Refyne logo on clip or barrel",
+        "EP1 = original bolt action model",
+        "Stainless steel construction standard",
+        "Thumb stud bolt mechanism",
+        "Parker style refill compatibility",
+        "Tool-free disassembly",
+        "Budget-friendly premium pen",
+        "Various grip patterns available"
+      ],
+      "recentColorways": [
+        { "line": "EP1", "year": "2023-2024", "colors": ["stainless steel", "titanium", "brass"] },
+        { "line": "FP1", "year": "2024", "colors": ["stainless steel", "fountain pen version"] },
+        { "line": "EP2", "year": "2023", "colors": ["stainless steel", "black DLC coating"] }
+      ]
+    },
+    {
+      "name": "Trayvax",
+      "aliases": ["Trayvax Enterprises"],
+      "signatureColors": ["raw steel", "oil black", "whiskey brown"],
+      "designCues": ["industrial metal construction", "leather accents", "bottle opener integrated", "paracord lanyard", "rugged aesthetic"],
+      "identificationTips": [
+        "Trayvax logo stamped on metal",
+        "Raw steel construction with patina",
+        "Leather accent pieces",
+        "Integrated bottle opener",
+        "Paracord lanyard included",
+        "Original/Contour/Element models",
+        "Made in USA (Texas)",
+        "Lifetime warranty"
+      ],
+      "recentColorways": [
+        { "line": "Original 2.0", "year": "2023-2024", "colors": ["raw steel", "stealth black", "whiskey leather"] },
+        { "line": "Contour", "year": "2024", "colors": ["oil black", "tobacco brown", "raw steel"] },
+        { "line": "Element", "year": "2023", "colors": ["raw steel", "midnight black", "canyon brown"] },
+        { "line": "Ascent", "year": "2024", "colors": ["stealth black", "tungsten grey"] }
+      ]
+    },
+    {
+      "name": "KeySmart",
+      "aliases": ["KeySmart Inc"],
+      "signatureColors": ["black", "silver", "blue", "red"],
+      "designCues": ["compact key organizer", "aluminum body", "expansion packs", "tile tracker integration", "loop piece for car fob"],
+      "identificationTips": [
+        "KeySmart logo on side plate",
+        "Compact folding key organization",
+        "Aluminum construction standard",
+        "Expansion packs available",
+        "Tile/AirTag integration options",
+        "Loop piece for oversized keys",
+        "Holds 2-8 keys standard",
+        "Chicago, Illinois based"
+      ],
+      "recentColorways": [
+        { "line": "KeySmart Pro", "year": "2023-2024", "colors": ["black", "blue", "Tile tracker integrated"] },
+        { "line": "KeySmart Max", "year": "2024", "colors": ["black", "grey", "AirTag compatible"] },
+        { "line": "Classic", "year": "2023", "colors": ["black", "silver", "red", "blue"] },
+        { "line": "Rugged", "year": "2024", "colors": ["black", "desert tan", "heavy duty"] }
+      ]
+    },
+    {
+      "name": "Orbitkey",
+      "aliases": ["Orbitkey Pty Ltd"],
+      "signatureColors": ["black", "navy", "tan", "stone grey"],
+      "designCues": ["leather wrapped key organizer", "D-ring attachment", "modular accessories", "ring lock mechanism"],
+      "identificationTips": [
+        "Orbitkey logo on leather strap",
+        "Leather-wrapped key stack design",
+        "Stainless steel posts and D-ring",
+        "Ring lock mechanism for attachment",
+        "Modular accessories available",
+        "Nest = multi-tool attachment",
+        "Melbourne, Australia based",
+        "Holds 2-7 keys standard"
+      ],
+      "recentColorways": [
+        { "line": "Orbitkey 2.0", "year": "2023-2024", "colors": ["black leather", "navy", "tan", "stone grey"] },
+        { "line": "Orbitkey Active", "year": "2024", "colors": ["black polymer", "orange", "grey"] },
+        { "line": "Orbitkey Nest", "year": "2023", "colors": ["stainless steel", "black DLC coating"] }
+      ]
+    },
+    {
+      "name": "Casio G-Shock",
+      "aliases": ["G-Shock", "Casio G-Shock", "Casio"],
+      "signatureColors": ["black", "military green", "tan", "red", "blue"],
+      "designCues": ["shock resistant structure", "200m water resistance", "resin case and band", "mineral glass", "LED backlight"],
+      "identificationTips": [
+        "G-Shock logo on dial face",
+        "Rugged resin case construction",
+        "200m water resistance standard",
+        "Shock resistant structure",
+        "GA/GW/DW model prefixes",
+        "Solar powered options (Tough Solar)",
+        "Multi-Band 6 atomic timekeeping",
+        "Square DW-5600 = iconic model"
+      ],
+      "recentColorways": [
+        { "line": "GA-2100", "year": "2023-2024", "colors": ["all black", "military green", "grey", "CasiOak design"] },
+        { "line": "DW-5600", "year": "2024", "colors": ["black", "red", "blue", "classic square"] },
+        { "line": "GW-M5610", "year": "2023", "colors": ["black", "solar powered", "atomic sync"] },
+        { "line": "Mudmaster GG-B100", "year": "2024", "colors": ["black", "tan", "military green"] }
+      ]
+    },
+    {
+      "name": "Seiko",
+      "aliases": ["Seiko Watch Corporation"],
+      "signatureColors": ["black", "blue", "silver", "green"],
+      "designCues": ["automatic movement", "Hardlex crystal", "day-date complication", "dive watch aesthetics", "Prospex/Presage lines"],
+      "identificationTips": [
+        "Seiko logo and model on dial",
+        "SKX/SRPD/SNK model numbers",
+        "Automatic movement standard",
+        "Day-date window at 3 o'clock",
+        "Hardlex or sapphire crystal",
+        "Diver's 200m common",
+        "Prospex = sport/dive watches",
+        "Japan/Malaysia manufacturing"
+      ],
+      "recentColorways": [
+        { "line": "SKX007", "year": "2023-2024", "colors": ["black dial", "black bezel", "dive watch icon"] },
+        { "line": "SRPD", "year": "2024", "colors": ["black", "blue", "green", "5KX series"] },
+        { "line": "SNK809", "year": "2023", "colors": ["black dial", "canvas strap", "Seiko 5"] },
+        { "line": "Prospex Turtle", "year": "2024", "colors": ["black", "blue", "green", "cushion case"] }
+      ]
+    },
+    {
+      "name": "Citizen",
+      "aliases": ["Citizen Watch Company"],
+      "signatureColors": ["black", "blue", "silver", "two-tone"],
+      "designCues": ["Eco-Drive solar technology", "atomic timekeeping", "titanium construction", "anti-reflective sapphire", "perpetual calendar"],
+      "identificationTips": [
+        "Citizen logo on dial",
+        "Eco-Drive = solar powered",
+        "Never needs battery replacement",
+        "Radio controlled atomic time",
+        "Super Titanium construction",
+        "BN/BL/CA model prefixes",
+        "Promaster = dive watch line",
+        "Japan-based watchmaker"
+      ],
+      "recentColorways": [
+        { "line": "Eco-Drive Promaster", "year": "2023-2024", "colors": ["black dial", "blue dial", "200m dive"] },
+        { "line": "BN0151", "year": "2024", "colors": ["black", "solar diver", "rubber strap"] },
+        { "line": "Nighthawk", "year": "2023", "colors": ["black dial", "pilot watch", "slide rule bezel"] },
+        { "line": "Chandler", "year": "2024", "colors": ["black", "field watch", "Eco-Drive"] }
+      ]
+    },
+    {
+      "name": "Mystery Ranch",
+      "aliases": ["Mystery Ranch Backpacks"],
+      "signatureColors": ["coyote brown", "black", "foliage", "shadow"],
+      "designCues": ["Y-zipper design", "overload feature", "futura yoke system", "triple zip design", "500D Cordura"],
+      "identificationTips": [
+        "Mystery Ranch logo patch",
+        "Signature Y-zipper (3-zip design)",
+        "Futura yoke adjustable harness",
+        "Overload shelf feature",
+        "500D or 330D Cordura fabric",
+        "Military/hunting heritage",
+        "Bozeman, Montana based",
+        "Lifetime warranty"
+      ],
+      "recentColorways": [
+        { "line": "Urban Assault 21", "year": "2023-2024", "colors": ["black", "coyote", "shadow", "wood"] },
+        { "line": "2 Day Assault", "year": "2024", "colors": ["coyote", "foliage", "black", "multicam"] },
+        { "line": "Coulee 25", "year": "2023", "colors": ["black", "gravel", "wood", "everyday carry"] },
+        { "line": "Rip Ruck 24", "year": "2024", "colors": ["black", "coyote", "Y-zip design"] }
+      ]
+    },
+    {
+      "name": "Maxpedition",
+      "aliases": ["Maxpedition Hard Use Gear"],
+      "signatureColors": ["khaki", "black", "foliage green", "wolf grey"],
+      "designCues": ["MOLLE/PALS webbing", "Teflon fabric protector", "YKK zippers", "tactical aesthetic", "modular attachment"],
+      "identificationTips": [
+        "Maxpedition logo patch",
+        "MOLLE/PALS webbing coverage",
+        "Teflon fabric protection",
+        "YKK self-repairing zippers",
+        "1000D nylon construction",
+        "Modular pouch ecosystem",
+        "Tactical/utility aesthetic",
+        "Lifetime warranty"
+      ],
+      "recentColorways": [
+        { "line": "Falcon II", "year": "2023-2024", "colors": ["khaki", "black", "foliage green"] },
+        { "line": "Prepared Citizen Classic", "year": "2024", "colors": ["black", "tan", "grey", "sling bag"] },
+        { "line": "Entity 21", "year": "2023", "colors": ["ash", "charcoal", "modern design"] },
+        { "line": "AGR Advanced Gear Research", "year": "2024", "colors": ["black", "tan", "grey", "urban series"] }
+      ]
+    },
+    {
+      "name": "Vertx",
+      "aliases": ["Vertx Tactical"],
+      "signatureColors": ["black", "smoke grey", "OD green", "galaxy"],
+      "designCues": ["concealed carry integration", "YKK zippers", "VaporCore mesh", "MOLLE compatible", "tactigami organization"],
+      "identificationTips": [
+        "Vertx logo tag or patch",
+        "Concealed carry pockets integrated",
+        "VaporCore ventilated mesh panels",
+        "It's A Secret (IAS) pouch system",
+        "Tactigami organization platform",
+        "Ready Pack/Gamut series",
+        "Premium YKK zippers",
+        "Low-profile tactical aesthetic"
+      ],
+      "recentColorways": [
+        { "line": "Gamut 2.0", "year": "2023-2024", "colors": ["black", "smoke grey", "galaxy"] },
+        { "line": "Ready Pack 2.0", "year": "2024", "colors": ["black", "OD green", "smoke grey"] },
+        { "line": "Commuter Sling XL", "year": "2023", "colors": ["black", "galaxy", "smoke grey"] },
+        { "line": "Essential Sling 2.0", "year": "2024", "colors": ["black", "heather black", "galaxy"] }
+      ]
+    }
+  ]
+}

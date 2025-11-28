@@ -1,0 +1,570 @@
+{
+  "category": "golf",
+  "colorVocabulary": {
+    "black": ["stealth black", "carbon black", "phantom black", "matte black", "brushed black", "jet black"],
+    "white": ["tour white", "pearl white", "bright white", "gloss white", "arctic white"],
+    "gray": ["graphite", "smoke", "titanium", "gunmetal", "phantom grey", "charcoal"],
+    "blue": ["royal blue", "navy", "Qi blue", "ocean blue", "cobalt", "ice blue"],
+    "red": ["tour red", "crimson", "cardinal", "blood red", "scarlet"],
+    "green": ["Masters green", "tour green", "forest green", "emerald"],
+    "gold": ["championship gold", "tour gold", "brushed gold", "bronze"],
+    "silver": ["chrome silver", "brushed silver", "platinum", "metallic silver"]
+  },
+  "patternTypes": ["carbon fiber weave", "crown texture", "speed lines", "sole grind patterns", "alignment graphics", "twist face pattern", "milled face"],
+  "partTerminology": {
+    "driver": ["crown", "sole", "face", "hosel", "weight port", "alignment aid", "speed pocket"],
+    "iron": ["blade", "cavity", "topline", "sole", "ferrule", "badge", "tungsten weighting"],
+    "putter": ["head", "face insert", "alignment line", "sightline", "grip", "mallet", "blade"],
+    "wedge": ["grooves", "grind", "bounce", "sole width"]
+  },
+  "brands": [
+    {
+      "name": "TaylorMade",
+      "aliases": ["TM", "TMaG", "TaylorMade Golf"],
+      "signatureColors": ["white", "red", "black", "blue"],
+      "designCues": ["carbon crown texture", "speed pocket sole", "twist face lines", "sliding weight track", "carbonwood construction"],
+      "identificationTips": [
+        "White crown with carbon sole = Stealth/Qi series (2022-2024)",
+        "Blue accents = Qi10 series (2024)",
+        "Red accents = Stealth series (2022-2023)",
+        "All-carbon matte black = Stealth 2 (2023)",
+        "Speed Pocket visible on sole is signature TaylorMade design",
+        "Red/white racing stripe logo on heel"
+      ],
+      "recentColorways": [
+        { "line": "Qi10", "year": "2024", "colors": ["carbon black", "blue accents", "white crown option"] },
+        { "line": "Qi10 Max", "year": "2024", "colors": ["blue/black", "larger head profile"] },
+        { "line": "Stealth 2", "year": "2023", "colors": ["all carbon black", "red accents"] },
+        { "line": "Stealth 2 Plus", "year": "2023", "colors": ["carbon/red", "sliding weight"] }
+      ]
+    },
+    {
+      "name": "Titleist",
+      "aliases": ["Acushnet"],
+      "signatureColors": ["black", "gold", "red", "white"],
+      "designCues": ["brushed black finish", "gold accents", "classic styling", "SureFit hosel", "compact head shapes", "eagle/bird logo"],
+      "identificationTips": [
+        "Subtle gold accents on black finish = TSR series",
+        "Compact head profile compared to competitors",
+        "SureFit adjustable hosel visible on heel",
+        "Red 'Titleist' script on sole",
+        "Classic, traditional styling - less aggressive than competitors",
+        "Black/gold/red color scheme is signature"
+      ],
+      "recentColorways": [
+        { "line": "TSR1", "year": "2023-2024", "colors": ["matte black", "gold accents", "red Titleist script"] },
+        { "line": "TSR2", "year": "2023-2024", "colors": ["brushed black", "gold trim"] },
+        { "line": "TSR3", "year": "2023-2024", "colors": ["black/gold", "more compact"] },
+        { "line": "TSR4", "year": "2023-2024", "colors": ["black/gold", "low spin"] }
+      ]
+    },
+    {
+      "name": "Callaway",
+      "aliases": ["Callaway Golf"],
+      "signatureColors": ["dark green", "white", "yellow", "purple", "black"],
+      "designCues": ["chevron patterns", "white crown alignment aid", "flowing curves", "Jailbreak bars", "AI face design", "Apex branding"],
+      "identificationTips": [
+        "Chevron logo on crown is signature Callaway",
+        "Dark green = Paradym series (2023-2024)",
+        "Yellow/lime accents = Mavrik series (2020)",
+        "Purple/burgundy = Rogue ST series (2022)",
+        "White crown with contrasting sole common",
+        "Triple Diamond = tour-level, compact head"
+      ],
+      "recentColorways": [
+        { "line": "Paradym", "year": "2023-2024", "colors": ["dark green", "black", "white crown option"] },
+        { "line": "Paradym Ai Smoke", "year": "2024", "colors": ["smoke gray", "blue accents"] },
+        { "line": "Rogue ST Max", "year": "2022", "colors": ["purple/white", "flowing lines"] },
+        { "line": "Epic Flash", "year": "2019", "colors": ["yellow/black", "Flash Face"] }
+      ]
+    },
+    {
+      "name": "Ping",
+      "aliases": ["PING"],
+      "signatureColors": ["blue", "teal", "orange", "black", "silver"],
+      "designCues": ["G-icon on sole", "turbulators on crown", "forgiving cavity backs", "tungsten weighting", "Dragonfly technology"],
+      "identificationTips": [
+        "Blue/teal accents = G430 series (2023-2024)",
+        "Orange accents = G410/G425 series (2019-2022)",
+        "Turbulator ridges on crown for alignment",
+        "G-icon prominently on sole",
+        "Forgiving, high-MOI designs",
+        "Alta CB/Tour shafts often stock"
+      ],
+      "recentColorways": [
+        { "line": "G430", "year": "2023-2024", "colors": ["blue/black", "teal accents"] },
+        { "line": "G430 Max", "year": "2023", "colors": ["blue crown", "black sole"] },
+        { "line": "G425", "year": "2021-2022", "colors": ["black", "orange accents"] },
+        { "line": "G410", "year": "2019-2020", "colors": ["black", "bright orange"] }
+      ]
+    },
+    {
+      "name": "Cobra",
+      "aliases": ["Cobra Golf", "Puma Golf"],
+      "signatureColors": ["orange", "yellow", "black", "red"],
+      "designCues": ["snake logo", "Baffler rails", "aggressive styling", "one-length irons", "Radspeed branding"],
+      "identificationTips": [
+        "Snake head logo is signature",
+        "Orange/yellow accents common",
+        "Baffler rails on fairway woods/hybrids",
+        "One-length iron sets unique to Cobra",
+        "Often Puma branding connection",
+        "Aggressive, youthful styling"
+      ],
+      "recentColorways": [
+        { "line": "Aerojet", "year": "2023-2024", "colors": ["black", "red accents"] },
+        { "line": "LTDx", "year": "2022", "colors": ["yellow/black", "orange accents"] },
+        { "line": "Radspeed", "year": "2021", "colors": ["black", "red/yellow"] }
+      ]
+    },
+    {
+      "name": "Cleveland",
+      "aliases": ["Cleveland Golf", "Srixon/Cleveland"],
+      "signatureColors": ["red", "black", "silver"],
+      "designCues": ["RTX grooves pattern", "industrial aesthetic", "tour-focused wedges", "Launcher branding"],
+      "identificationTips": [
+        "Red/black color scheme common",
+        "RTX series wedges very popular",
+        "Industrial, workman-like design",
+        "Srixon connection (same company)",
+        "Strong wedge/short game heritage"
+      ],
+      "recentColorways": [
+        { "line": "RTX 6 Zipcore", "year": "2023", "colors": ["tour satin", "black", "raw"] },
+        { "line": "Launcher XL Halo", "year": "2022", "colors": ["black", "red accents"] }
+      ]
+    },
+    {
+      "name": "Mizuno",
+      "aliases": ["Mizuno Golf"],
+      "signatureColors": ["blue", "silver", "white"],
+      "designCues": ["grain flow forged", "MP series numbering", "clean lines", "Japanese craftsmanship", "chrome finish"],
+      "identificationTips": [
+        "Blue accents = signature Mizuno",
+        "MP prefix = Mizuno Pro (tour irons)",
+        "JPX = game improvement line",
+        "Grain flow forged badge visible",
+        "Premium chrome/nickel finish",
+        "Japanese flag often on sole"
+      ],
+      "recentColorways": [
+        { "line": "Pro 245", "year": "2024", "colors": ["chrome", "blue accents"] },
+        { "line": "JPX 923", "year": "2023", "colors": ["chrome silver", "blue badge"] },
+        { "line": "Pro 225", "year": "2022", "colors": ["satin chrome", "MP badge"] }
+      ]
+    },
+    {
+      "name": "Scotty Cameron",
+      "aliases": ["Scotty", "Cameron", "Titleist Scotty Cameron"],
+      "signatureColors": ["red", "blue", "silver", "black"],
+      "designCues": ["milled face patterns", "Studio Design aesthetic", "circle-T tour logo", "crowned weights", "custom headcovers"],
+      "identificationTips": [
+        "Milled face patterns visible",
+        "Red/blue/silver color scheme",
+        "Circle-T = tour issue",
+        "Studio Design = premium line",
+        "Phantom/Select series naming",
+        "Custom shop headcovers highly collectible"
+      ],
+      "recentColorways": [
+        { "line": "Phantom X", "year": "2023-2024", "colors": ["black", "silver face insert"] },
+        { "line": "Special Select", "year": "2022", "colors": ["tour black", "milled face"] },
+        { "line": "Super Select", "year": "2024", "colors": ["silver", "blue alignment"] }
+      ]
+    },
+    {
+      "name": "Bridgestone",
+      "aliases": ["Bridgestone Golf"],
+      "signatureColors": ["orange", "white", "black"],
+      "designCues": ["Tour B ball pattern", "J-series club styling", "orange accents", "carbon composite"],
+      "identificationTips": [
+        "Orange accents signature color",
+        "Tour B golf ball branding",
+        "J-series naming for woods",
+        "Strong ball fitting focus"
+      ],
+      "recentColorways": [
+        { "line": "Tour B JGR", "year": "2023", "colors": ["black", "orange accents"] }
+      ]
+    },
+    {
+      "name": "Srixon",
+      "aliases": ["Srixon Golf", "Cleveland/Srixon"],
+      "signatureColors": ["blue", "red", "white", "black"],
+      "signatureColors": ["blue", "red", "white", "black"],
+      "designCues": ["star logo", "Z-series branding", "tour-level balls", "diamond face pattern", "rebound frame"],
+      "identificationTips": [
+        "Blue/white color scheme common on balls",
+        "Z-series clubs (ZX5, ZX7) tour irons",
+        "Star logo prominently featured",
+        "Diamond pattern on driver face",
+        "Same parent company as Cleveland",
+        "Q-Star ball line for mid-handicappers"
+      ],
+      "recentColorways": [
+        { "line": "ZX Mk II", "year": "2023", "colors": ["black", "blue accents"] },
+        { "line": "ZX5/ZX7 Irons", "year": "2023", "colors": ["chrome", "blue badge"] },
+        { "line": "Z-Star Ball", "year": "2024", "colors": ["tour white", "yellow", "orange"] },
+        { "line": "Q-Star Ball", "year": "2024", "colors": ["white", "yellow", "green"] }
+      ]
+    },
+    {
+      "name": "Odyssey",
+      "aliases": ["Odyssey Golf", "Callaway Odyssey"],
+      "signatureColors": ["white", "red", "black", "blue"],
+      "designCues": ["White Hot insert", "2-Ball alignment", "Stroke Lab shaft", "microhinge face", "Tank design"],
+      "identificationTips": [
+        "White Hot insert = signature Odyssey technology",
+        "2-Ball alignment system iconic",
+        "Stroke Lab shaft - red/blue counterbalanced",
+        "Part of Callaway family",
+        "Tri-Hot 5K line most recent",
+        "Microhinge face pattern visible"
+      ],
+      "recentColorways": [
+        { "line": "Tri-Hot 5K", "year": "2024", "colors": ["black", "white insert", "red alignment"] },
+        { "line": "Ai-ONE", "year": "2023", "colors": ["black", "white insert", "blue accents"] },
+        { "line": "White Hot OG", "year": "2022", "colors": ["black/chrome", "white insert"] },
+        { "line": "Stroke Lab", "year": "2019-2023", "colors": ["red/blue shaft", "black head"] }
+      ]
+    },
+    {
+      "name": "Vokey",
+      "aliases": ["Titleist Vokey", "Vokey Design", "SM Wedges", "Bob Vokey"],
+      "signatureColors": ["silver", "black", "raw", "gold"],
+      "designCues": ["SM series numbering", "progressive CG design", "spin milled grooves", "multiple sole grinds", "Vokey script"],
+      "identificationTips": [
+        "SM = Spin Milled (SM9, SM10 most recent)",
+        "Multiple grind options (F, S, M, D, K, L)",
+        "Tour Chrome, Brushed Steel, Jet Black finishes",
+        "Bob Vokey signature on back",
+        "Part of Titleist family",
+        "Raw finish option rusts over time"
+      ],
+      "recentColorways": [
+        { "line": "SM10", "year": "2024", "colors": ["tour chrome", "brushed steel", "jet black"] },
+        { "line": "SM9", "year": "2023", "colors": ["tour chrome", "black", "raw"] },
+        { "line": "SM8", "year": "2020-2022", "colors": ["brushed steel", "jet black"] }
+      ]
+    },
+    {
+      "name": "FootJoy",
+      "aliases": ["FJ", "FootJoy Golf"],
+      "signatureColors": ["white", "black", "red", "blue", "brown"],
+      "designCues": ["classic saddle design", "FJ logo", "premium leather", "PowerPlate technology", "Tour Alpha branding"],
+      "identificationTips": [
+        "Classic white golf shoe with saddle = FootJoy signature",
+        "FJ logo on heel or tongue",
+        "Premium leather construction",
+        "Tour Alpha = tour-level shoe",
+        "Fuel/Pro SL = athletic performance line",
+        "Traditions = classic leather style"
+      ],
+      "recentColorways": [
+        { "line": "Tour Alpha", "year": "2024", "colors": ["white/black", "white/navy", "brown/tan"] },
+        { "line": "Premiere Series", "year": "2023-2024", "colors": ["white/saddle tan", "black patent"] },
+        { "line": "Fuel Sport", "year": "2023", "colors": ["white/red", "grey/blue", "black/lime"] },
+        { "line": "Pro SL Carbon", "year": "2023", "colors": ["white/charcoal", "navy/white"] }
+      ]
+    },
+    {
+      "name": "Puma Golf",
+      "aliases": ["Puma"],
+      "signatureColors": ["white", "black", "orange", "blue", "red"],
+      "designCues": ["Puma cat logo", "athletic styling", "Ignite foam", "ProAdapt Delta", "spikeless designs"],
+      "identificationTips": [
+        "Leaping cat logo prominently displayed",
+        "Athletic, sneaker-style designs",
+        "Ignite foam cushioning",
+        "Rickie Fowler and Bryson connection",
+        "ProAdapt = premium stability line",
+        "Bold colorways and patterns"
+      ],
+      "recentColorways": [
+        { "line": "ProAdapt Alphacat", "year": "2024", "colors": ["white/grey", "navy/red", "black/gold"] },
+        { "line": "Ignite ProAdapt Delta", "year": "2023", "colors": ["white/blue", "grey/orange"] },
+        { "line": "RS-G", "year": "2023", "colors": ["white/black/yellow", "navy/red"] },
+        { "line": "Limited Edition Rickie", "year": "2024", "colors": ["orange/white", "bold patterns"] }
+      ]
+    },
+    {
+      "name": "Callaway Apex",
+      "aliases": ["Apex", "Apex Irons", "Apex Pro"],
+      "signatureColors": ["chrome", "black", "red"],
+      "designCues": ["Apex medallion", "forged construction", "tungsten weighting", "AI-designed face", "tour-player's choice"],
+      "identificationTips": [
+        "Apex medallion on cavity back",
+        "Forged feel and sound",
+        "Chrome or black PVD finish",
+        "Multiple models: Pro, TCB, DCB, UW",
+        "Premium player's iron under Callaway",
+        "AI Flash Face Cup technology"
+      ],
+      "recentColorways": [
+        { "line": "Apex Ai200", "year": "2024", "colors": ["chrome", "black badge"] },
+        { "line": "Apex TCB", "year": "2023", "colors": ["tour chrome", "compact blade"] },
+        { "line": "Apex Pro", "year": "2023", "colors": ["chrome", "minimal offset"] },
+        { "line": "Apex DCB", "year": "2023", "colors": ["chrome", "deep cavity"] }
+      ]
+    },
+    {
+      "name": "Wilson Staff",
+      "aliases": ["Wilson", "Wilson Golf"],
+      "signatureColors": ["red", "black", "white", "silver"],
+      "designCues": ["Wilson 'W' logo", "Staff branding", "classic styling", "thin topline", "FG Tour irons"],
+      "identificationTips": [
+        "Red 'W' logo signature Wilson",
+        "Staff = premium tour line",
+        "Classic, traditional styling",
+        "FG Tour = forged irons",
+        "D9 = recent driver series",
+        "Strong heritage brand"
+      ],
+      "recentColorways": [
+        { "line": "Dynapwr", "year": "2024", "colors": ["black", "red accents", "carbon crown"] },
+        { "line": "D9 Driver", "year": "2022", "colors": ["blue/black", "red highlights"] },
+        { "line": "Staff Model Irons", "year": "2023", "colors": ["chrome", "red badge"] },
+        { "line": "Launch Pad", "year": "2023", "colors": ["black/red", "game improvement"] }
+      ]
+    },
+    {
+      "name": "XXIO",
+      "aliases": ["XXIO Golf", "Dunlop XXIO"],
+      "signatureColors": ["blue", "silver", "gold", "burgundy"],
+      "designCues": ["premium Japanese design", "lightweight construction", "Rebound Frame", "Star Frame", "senior-focused"],
+      "identificationTips": [
+        "Pronounced 'zek-see-oh'",
+        "Premium lightweight clubs",
+        "Blue/gold color scheme common",
+        "Star logo design",
+        "Japanese market heritage",
+        "Multiple XXIO generations (12, 13, Prime)"
+      ],
+      "recentColorways": [
+        { "line": "XXIO 13", "year": "2024", "colors": ["navy blue", "gold accents", "white crown"] },
+        { "line": "XXIO Prime", "year": "2024", "colors": ["burgundy", "gold trim", "premium"] },
+        { "line": "XXIO 12", "year": "2023", "colors": ["royal blue", "silver accents"] },
+        { "line": "XXIO X", "year": "2023", "colors": ["black/blue", "faster swing speeds"] }
+      ]
+    },
+    {
+      "name": "Honma",
+      "aliases": ["Honma Golf"],
+      "signatureColors": ["gold", "black", "red", "white"],
+      "designCues": ["gold star logo", "TR series", "premium craftsmanship", "Beres luxury line", "Japanese heritage"],
+      "identificationTips": [
+        "Gold star logo = Honma signature",
+        "Beres = ultra-premium luxury line",
+        "TR (Tour Release) = tour models",
+        "Premium Japanese manufacturing",
+        "Often gold finishes and accents",
+        "High-end pricing tier"
+      ],
+      "recentColorways": [
+        { "line": "TR20", "year": "2024", "colors": ["black", "gold star", "red accents"] },
+        { "line": "Beres IE-06", "year": "2024", "colors": ["gold plate", "luxury finish"] },
+        { "line": "XP-1", "year": "2023", "colors": ["black/gold", "carbon crown"] },
+        { "line": "T//World GS", "year": "2023", "colors": ["blue/white", "game improvement"] }
+      ]
+    },
+    {
+      "name": "Tour Edge",
+      "aliases": ["Tour Edge Golf", "Exotics"],
+      "signatureColors": ["orange", "black", "blue"],
+      "designCues": ["Exotics branding", "Diamond Face VFT", "Ridgeback technology", "value-oriented", "Hot Launch line"],
+      "identificationTips": [
+        "Exotics = premium Tour Edge line",
+        "Orange accents common",
+        "Hot Launch = game improvement",
+        "Diamond Face pattern on drivers",
+        "Value-priced performance",
+        "Direct-to-consumer focus"
+      ],
+      "recentColorways": [
+        { "line": "Exotics E723", "year": "2023", "colors": ["black", "orange accents"] },
+        { "line": "Hot Launch E523", "year": "2023", "colors": ["black/orange", "blue highlights"] },
+        { "line": "Exotics C723", "year": "2023", "colors": ["carbon black", "orange details"] }
+      ]
+    },
+    {
+      "name": "Sub 70",
+      "aliases": ["Sub70", "Sub Seventy"],
+      "signatureColors": ["black", "blue", "white", "red"],
+      "designCues": ["clean minimalist design", "direct-to-consumer", "639 irons", "Sycamore putter", "tour quality"],
+      "identificationTips": [
+        "Direct-to-consumer pricing model",
+        "639 = player's iron line",
+        "699 = game improvement irons",
+        "Sycamore = popular putter",
+        "Clean, tour-inspired aesthetics",
+        "Strong value proposition"
+      ],
+      "recentColorways": [
+        { "line": "639 CB", "year": "2023-2024", "colors": ["chrome", "black badge"] },
+        { "line": "699 Pro", "year": "2023", "colors": ["chrome", "blue accent"] },
+        { "line": "Sycamore Putter", "year": "2023", "colors": ["black", "white alignment"] },
+        { "line": "TA1 Driver", "year": "2024", "colors": ["black crown", "carbon fiber"] }
+      ]
+    },
+    {
+      "name": "Bettinardi",
+      "aliases": ["Bettinardi Golf"],
+      "signatureColors": ["silver", "black", "copper", "blue"],
+      "designCues": ["honeycomb face pattern", "BB series", "Queen B line", "hand-milled", "Chicago craftsmanship"],
+      "identificationTips": [
+        "Honeycomb face milling signature",
+        "BB prefix = Bettinardi series",
+        "Queen B = mallet designs",
+        "Made in Chicago badge",
+        "Premium hand-milled putters",
+        "Copper or silver finish options"
+      ],
+      "recentColorways": [
+        { "line": "BB1", "year": "2024", "colors": ["platinum", "honeycomb face"] },
+        { "line": "Queen B 12", "year": "2024", "colors": ["black", "silver accents"] },
+        { "line": "Studio Stock", "year": "2023", "colors": ["copper finish", "blue alignment"] },
+        { "line": "Inovai 9.0", "year": "2023", "colors": ["black PVD", "pyramid face"] }
+      ]
+    },
+    {
+      "name": "Evnroll",
+      "aliases": ["Evnroll Golf"],
+      "signatureColors": ["black", "silver", "red", "white"],
+      "designCues": ["Sweet Face Technology", "V-Series grooves", "ER prefix", "gravity grip", "Guerin Rife design"],
+      "identificationTips": [
+        "Sweet Face Technology grooves visible",
+        "ER prefix (ER2, ER8, etc.)",
+        "V-Series grooved face pattern",
+        "Gravity Grip counterbalanced",
+        "Guerin Rife designer name",
+        "Face technology for off-center hits"
+      ],
+      "recentColorways": [
+        { "line": "ER11v", "year": "2024", "colors": ["black", "white alignment lines"] },
+        { "line": "ER2v", "year": "2023", "colors": ["silver/black", "red accents"] },
+        { "line": "ER8v Tour", "year": "2023", "colors": ["black finish", "grooved face"] },
+        { "line": "Zero Putter", "year": "2024", "colors": ["black/white", "innovative design"] }
+      ]
+    },
+    {
+      "name": "True Temper",
+      "aliases": ["TT", "True Temper Sports"],
+      "signatureColors": ["gold", "black", "red", "white"],
+      "designCues": ["Dynamic Gold branding", "Project X shafts", "EI70 technology", "stepped steel design"],
+      "identificationTips": [
+        "Dynamic Gold = tour-level steel shafts",
+        "Project X = graphite and steel options",
+        "Gold/black color scheme signature",
+        "EI70 marking on premium shafts",
+        "Stepped steel design visible",
+        "Most popular steel shaft maker"
+      ],
+      "recentColorways": [
+        { "line": "Dynamic Gold X100", "year": "2024", "colors": ["gold/black", "tour stiff"] },
+        { "line": "Project X HZRDUS", "year": "2024", "colors": ["smoke black", "red/white graphics"] },
+        { "line": "AMT Tour White", "year": "2023", "colors": ["white shaft", "black text"] },
+        { "line": "EI70 Smoke", "year": "2023", "colors": ["black/grey", "premium graphite"] }
+      ]
+    },
+    {
+      "name": "Fujikura",
+      "aliases": ["Fujikura Golf"],
+      "signatureColors": ["blue", "red", "white", "black"],
+      "designCues": ["Ventus branding", "Speeder evolution", "Pro line", "Japanese technology", "VCT technology"],
+      "identificationTips": [
+        "Ventus = premium driver shaft line",
+        "Speeder = fairway/hybrid shafts",
+        "Blue/red/black Ventus variants",
+        "TR = Tour Rated",
+        "Japanese manufacturing",
+        "VCT (Versatile Club Technology)"
+      ],
+      "recentColorways": [
+        { "line": "Ventus TR", "year": "2024", "colors": ["blue/black", "red/black", "black/black"] },
+        { "line": "Ventus Black", "year": "2023", "colors": ["black shaft", "white/red text"] },
+        { "line": "Speeder NX", "year": "2023", "colors": ["blue/white", "green accents"] },
+        { "line": "Pro 2.0", "year": "2024", "colors": ["white shaft", "blue graphics"] }
+      ]
+    },
+    {
+      "name": "Project X",
+      "aliases": ["Project X Shafts", "PX"],
+      "signatureColors": ["black", "red", "white", "green"],
+      "designCues": ["HZRDUS branding", "Evenflow", "LZ steel", "aggressive graphics", "smoke patterns"],
+      "identificationTips": [
+        "HZRDUS = premium graphite line",
+        "Evenflow = consistent bend profile",
+        "Smoke = recent popular colorway",
+        "LZ = Loading Zone steel shafts",
+        "Black/red aggressive graphics",
+        "Part of True Temper family"
+      ],
+      "recentColorways": [
+        { "line": "HZRDUS Black", "year": "2024", "colors": ["smoke black", "red highlights"] },
+        { "line": "HZRDUS Smoke Green", "year": "2023", "colors": ["black/grey", "green accents"] },
+        { "line": "Evenflow Riptide", "year": "2023", "colors": ["blue/white", "wave graphics"] },
+        { "line": "LZ Steel", "year": "2024", "colors": ["black finish", "white text"] }
+      ]
+    },
+    {
+      "name": "Graphite Design",
+      "aliases": ["Graphite Design Golf"],
+      "signatureColors": ["gold", "blue", "red", "white"],
+      "designCues": ["Tour AD branding", "Japanese craftsmanship", "color-coded series", "premium performance"],
+      "identificationTips": [
+        "Tour AD = signature line",
+        "Color-coded series (DI, IZ, GP, etc.)",
+        "Premium Japanese manufacturing",
+        "Metallic finish options",
+        "Four Horsemen = ultra-premium",
+        "Used by tour professionals"
+      ],
+      "recentColorways": [
+        { "line": "Tour AD DI", "year": "2024", "colors": ["navy blue", "white/gold text"] },
+        { "line": "Tour AD IZ", "year": "2023", "colors": ["black/red", "silver accents"] },
+        { "line": "Tour AD UB", "year": "2023", "colors": ["red/black", "gold graphics"] },
+        { "line": "Mad Pro", "year": "2024", "colors": ["white shaft", "blue/red details"] }
+      ]
+    },
+    {
+      "name": "SuperStroke",
+      "aliases": ["Super Stroke"],
+      "signatureColors": ["white", "black", "red", "blue", "green"],
+      "designCues": ["no-taper design", "Traxion texture", "CounterCore weight", "S-Tech coating", "bold branding"],
+      "identificationTips": [
+        "No-taper parallel design signature",
+        "Traxion surface texture visible",
+        "Bright white most popular",
+        "CounterCore weight port in end",
+        "Multiple size options (1.0-5.0)",
+        "Most popular putter grip brand"
+      ],
+      "recentColorways": [
+        { "line": "Traxion Tour", "year": "2024", "colors": ["white/black", "red/white", "blue/black"] },
+        { "line": "Zenergy Tour", "year": "2023", "colors": ["white", "green", "orange"] },
+        { "line": "S-Tech", "year": "2023", "colors": ["black/white", "grey/red"] },
+        { "line": "Pistol GT Tour", "year": "2024", "colors": ["white", "black", "red/white"] }
+      ]
+    },
+    {
+      "name": "Golf Pride",
+      "aliases": ["GP", "Golf Pride Grips"],
+      "signatureColors": ["black", "white", "red", "blue", "grey"],
+      "designCues": ["Tour Velvet texture", "MCC hybrid design", "CP2 wrap", "Z-Grip pattern", "industry standard"],
+      "identificationTips": [
+        "Tour Velvet = most popular grip",
+        "MCC = Multi-Compound with cord",
+        "CP2 = softer wrap feel",
+        "Z-Grip = textured pattern",
+        "Industry standard for decades",
+        "Black or red Golf Pride logo"
+      ],
+      "recentColorways": [
+        { "line": "Tour Velvet Plus", "year": "2024", "colors": ["black", "white", "grey"] },
+        { "line": "MCC Plus4", "year": "2023", "colors": ["black/grey", "blue/grey"] },
+        { "line": "CP2 Wrap", "year": "2023", "colors": ["black", "red/black"] },
+        { "line": "Z-Grip Cord", "year": "2024", "colors": ["black/white", "all black"] }
+      ]
+    }
+  ]
+}

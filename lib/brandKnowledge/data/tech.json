@@ -1,0 +1,523 @@
+{
+  "category": "tech",
+  "colorVocabulary": {
+    "black": ["space black", "midnight", "jet black", "matte black", "graphite"],
+    "white": ["starlight", "silver", "pearl white", "arctic white"],
+    "gray": ["space gray", "graphite", "titanium", "platinum"],
+    "blue": ["pacific blue", "sierra blue", "alpine blue", "navy"],
+    "gold": ["gold", "rose gold", "champagne", "bronze"],
+    "purple": ["deep purple", "lavender", "violet"],
+    "green": ["alpine green", "midnight green", "forest green"],
+    "red": ["product red", "crimson", "scarlet"]
+  },
+  "patternTypes": ["brushed metal", "glass back", "ceramic", "leather texture", "carbon fiber"],
+  "partTerminology": {
+    "phone": ["screen", "notch", "camera island", "frame", "back glass", "port"],
+    "laptop": ["display", "keyboard", "trackpad", "hinge", "ports", "lid"],
+    "headphones": ["ear cups", "headband", "drivers", "cushions", "controls"]
+  },
+  "brands": [
+    {
+      "name": "Apple",
+      "aliases": ["AAPL"],
+      "signatureColors": ["space gray", "silver", "gold", "midnight", "starlight"],
+      "designCues": ["rounded rectangles", "minimal branding", "Apple logo on back", "premium materials", "clean lines", "camera island shape"],
+      "identificationTips": [
+        "Apple logo centered on back = iPhone/iPad/MacBook",
+        "Rounded rectangle form factor",
+        "Space Gray = darker aluminum, Space Black = titanium (Pro)",
+        "Dynamic Island notch = iPhone 14 Pro+",
+        "Camera island shape identifies generation",
+        "Starlight = warm white, Silver = cool white"
+      ],
+      "recentColorways": [
+        { "line": "iPhone 15 Pro", "year": "2023", "colors": ["natural titanium", "blue titanium", "white titanium", "black titanium"] },
+        { "line": "iPhone 15", "year": "2023", "colors": ["pink", "yellow", "green", "blue", "black"] },
+        { "line": "MacBook Pro", "year": "2023", "colors": ["space black", "silver"] },
+        { "line": "MacBook Air", "year": "2024", "colors": ["midnight", "starlight", "space gray", "silver"] }
+      ]
+    },
+    {
+      "name": "Samsung",
+      "aliases": ["Samsung Electronics", "Galaxy"],
+      "signatureColors": ["phantom black", "cream", "green", "lavender", "burgundy"],
+      "designCues": ["edge curves", "camera island shapes", "Samsung wordmark", "One UI", "S Pen slot"],
+      "identificationTips": [
+        "Samsung wordmark usually on front bottom",
+        "Galaxy S series = flagship phones",
+        "Contour cut camera = Galaxy S23 Ultra",
+        "Phantom = deep saturated colors",
+        "Fold/Flip = foldable devices"
+      ],
+      "recentColorways": [
+        { "line": "Galaxy S24 Ultra", "year": "2024", "colors": ["titanium black", "titanium gray", "titanium violet", "titanium yellow"] },
+        { "line": "Galaxy S24", "year": "2024", "colors": ["onyx black", "marble gray", "cobalt violet", "amber yellow"] },
+        { "line": "Galaxy Z Fold5", "year": "2023", "colors": ["icy blue", "phantom black", "cream"] }
+      ]
+    },
+    {
+      "name": "Sony",
+      "aliases": ["Sony Electronics"],
+      "signatureColors": ["black", "silver", "white"],
+      "designCues": ["minimal design", "Sony logo", "alpha mount", "PlayStation aesthetic", "orange accents on cameras"],
+      "identificationTips": [
+        "Sony logo on front = TVs, cameras",
+        "Alpha (a) prefix = cameras",
+        "WH/WF prefix = headphones",
+        "Orange accents = camera strap mounts",
+        "Xperia = smartphones"
+      ],
+      "recentColorways": [
+        { "line": "WH-1000XM5", "year": "2022", "colors": ["black", "silver", "midnight blue"] },
+        { "line": "Alpha A7", "year": "2023", "colors": ["black body", "orange accents"] }
+      ]
+    },
+    {
+      "name": "Bose",
+      "aliases": [],
+      "signatureColors": ["black", "white", "silver"],
+      "designCues": ["Bose wordmark", "minimalist design", "premium materials", "QuietComfort branding"],
+      "identificationTips": [
+        "Bose wordmark on ear cup or case",
+        "QuietComfort (QC) = noise cancelling line",
+        "SoundLink = portable speakers",
+        "Ultra = premium tier"
+      ],
+      "recentColorways": [
+        { "line": "QuietComfort Ultra", "year": "2023", "colors": ["black", "white smoke", "sandstone"] },
+        { "line": "QuietComfort 45", "year": "2021", "colors": ["black", "white smoke"] }
+      ]
+    },
+    {
+      "name": "Google",
+      "aliases": ["Google Pixel"],
+      "signatureColors": ["obsidian", "snow", "hazel", "coral", "bay"],
+      "designCues": ["camera bar", "G logo", "two-tone design", "material you colors"],
+      "identificationTips": [
+        "Camera bar across back = Pixel 6+",
+        "G logo on back",
+        "Two-tone back design common",
+        "Bay = blue-green color (Pixel 8)"
+      ],
+      "recentColorways": [
+        { "line": "Pixel 8 Pro", "year": "2023", "colors": ["obsidian", "porcelain", "bay"] },
+        { "line": "Pixel 8", "year": "2023", "colors": ["obsidian", "hazel", "rose", "mint"] }
+      ]
+    },
+    {
+      "name": "JBL",
+      "aliases": ["JBL Audio", "Harman JBL"],
+      "signatureColors": ["black", "blue", "red", "teal"],
+      "designCues": ["JBL logo", "rugged design", "colorful options", "PartyBoost branding"],
+      "identificationTips": [
+        "JBL logo prominently displayed",
+        "Flip/Charge = portable speakers",
+        "Xtreme = large party speakers",
+        "Bold colors common"
+      ],
+      "recentColorways": [
+        { "line": "Flip 6", "year": "2022", "colors": ["black", "blue", "red", "teal", "pink", "gray"] },
+        { "line": "Charge 5", "year": "2021", "colors": ["black", "blue", "red", "teal", "gray"] }
+      ]
+    },
+    {
+      "name": "Microsoft",
+      "aliases": ["Surface", "Xbox"],
+      "signatureColors": ["platinum", "black", "cobalt blue", "poppy red", "ice blue"],
+      "designCues": ["Surface logo", "kickstand", "Xbox logo", "signature type cover colors", "clean modern lines"],
+      "identificationTips": [
+        "Surface logo on back = Surface devices",
+        "Kickstand = Surface Pro/Go",
+        "Xbox logo = gaming products",
+        "Alcantara fabric keyboard = Surface Laptop",
+        "Platinum = light gray metallic finish"
+      ],
+      "recentColorways": [
+        { "line": "Surface Laptop 5", "year": "2022", "colors": ["platinum", "matte black", "sage", "sandstone"] },
+        { "line": "Surface Pro 9", "year": "2022", "colors": ["platinum", "graphite", "sapphire", "forest"] },
+        { "line": "Xbox Series X", "year": "2020", "colors": ["matte black"] },
+        { "line": "Xbox Series S", "year": "2020", "colors": ["white"] }
+      ]
+    },
+    {
+      "name": "Dell",
+      "aliases": ["Alienware", "Dell Technologies"],
+      "signatureColors": ["platinum silver", "lunar light", "dark side of the moon", "legend black"],
+      "designCues": ["Dell logo", "Alienware alien head logo", "RGB lighting on gaming", "carbon fiber texture", "angular gaming design"],
+      "identificationTips": [
+        "Dell wordmark = business/consumer laptops",
+        "Alien head logo = Alienware gaming",
+        "XPS = premium ultrabooks",
+        "Inspiron = consumer laptops",
+        "RGB lighting prominent on Alienware"
+      ],
+      "recentColorways": [
+        { "line": "XPS 13 Plus", "year": "2023", "colors": ["platinum", "graphite"] },
+        { "line": "XPS 15", "year": "2023", "colors": ["platinum silver", "frost white"] },
+        { "line": "Alienware m18", "year": "2024", "colors": ["dark metallic moon", "lunar light"] },
+        { "line": "Alienware Aurora R15", "year": "2023", "colors": ["dark side of the moon", "lunar light"] }
+      ]
+    },
+    {
+      "name": "HP",
+      "aliases": ["Omen", "HP Inc"],
+      "signatureColors": ["natural silver", "pale gold", "ceramic white", "shadow black", "mica silver"],
+      "designCues": ["HP logo", "Omen logo", "gem cut design on premium", "Bang & Olufsen speakers", "angular gaming aesthetics"],
+      "identificationTips": [
+        "HP logo on lid",
+        "Omen branding = gaming line",
+        "Envy = premium consumer",
+        "Spectre = ultra-premium ultrabooks",
+        "Gem cut edges = Spectre line"
+      ],
+      "recentColorways": [
+        { "line": "Spectre x360", "year": "2023", "colors": ["nocturne blue", "nightfall black", "natural silver"] },
+        { "line": "Envy 16", "year": "2023", "colors": ["natural silver", "midnight black"] },
+        { "line": "Omen 17", "year": "2023", "colors": ["shadow black", "ceramic white"] },
+        { "line": "Omen 45L", "year": "2023", "colors": ["shadow black", "mica silver"] }
+      ]
+    },
+    {
+      "name": "Lenovo",
+      "aliases": ["ThinkPad", "IdeaPad"],
+      "signatureColors": ["iron gray", "arctic gray", "thunder black", "storm gray"],
+      "designCues": ["red TrackPoint", "ThinkPad logo", "Legion Y logo", "matte black finish", "minimalist business design"],
+      "identificationTips": [
+        "Red TrackPoint nub = ThinkPad",
+        "ThinkPad = business laptops",
+        "Legion = gaming laptops",
+        "IdeaPad = consumer laptops",
+        "Matte black finish signature on ThinkPad"
+      ],
+      "recentColorways": [
+        { "line": "ThinkPad X1 Carbon Gen 11", "year": "2023", "colors": ["deep black", "thunder black"] },
+        { "line": "ThinkPad T14s Gen 4", "year": "2023", "colors": ["thunder black", "storm gray"] },
+        { "line": "Legion Pro 7i", "year": "2024", "colors": ["onyx gray", "glacier white"] },
+        { "line": "IdeaPad Slim 5", "year": "2023", "colors": ["cloud gray", "abyss blue"] }
+      ]
+    },
+    {
+      "name": "ASUS",
+      "aliases": ["ROG", "Republic of Gamers", "ZenBook"],
+      "signatureColors": ["black", "moonlight white", "ponder blue", "jade black"],
+      "designCues": ["ROG logo", "RGB lighting", "ErgoLift hinge", "ZenBook concentric circles", "gaming aesthetics"],
+      "identificationTips": [
+        "ROG eye logo = gaming products",
+        "ZenBook = premium ultrabooks",
+        "Concentric circle pattern on ZenBook lids",
+        "ErgoLift hinge lifts keyboard",
+        "Aura Sync RGB on gaming"
+      ],
+      "recentColorways": [
+        { "line": "ZenBook 14 OLED", "year": "2024", "colors": ["ponder blue", "jasper gray", "aqua celadon"] },
+        { "line": "ROG Zephyrus G14", "year": "2024", "colors": ["moonlight white", "eclipse gray"] },
+        { "line": "ROG Strix Scar 18", "year": "2024", "colors": ["off black", "volt green accents"] },
+        { "line": "Vivobook S 15", "year": "2024", "colors": ["cool silver", "quiet blue", "indie black"] }
+      ]
+    },
+    {
+      "name": "LG",
+      "aliases": ["LG Electronics"],
+      "signatureColors": ["obsidian black", "snow white", "silver", "pink"],
+      "designCues": ["LG logo", "gram branding", "ultra-light design", "minimalist aesthetic"],
+      "identificationTips": [
+        "gram branding = ultralight laptops",
+        "LG logo on front bezel (TVs/monitors)",
+        "Ultra-thin bezels signature",
+        "Magnesium alloy construction on gram"
+      ],
+      "recentColorways": [
+        { "line": "gram Style 16", "year": "2023", "colors": ["white", "obsidian black"] },
+        { "line": "gram 17", "year": "2024", "colors": ["obsidian black", "snow white"] },
+        { "line": "UltraGear Gaming Monitor", "year": "2023", "colors": ["matte black", "white"] }
+      ]
+    },
+    {
+      "name": "Anker",
+      "aliases": ["Soundcore", "Eufy", "Nebula"],
+      "signatureColors": ["black", "blue", "white"],
+      "designCues": ["Anker logo", "minimalist design", "blue accents", "compact form factor"],
+      "identificationTips": [
+        "Anker wordmark on products",
+        "Soundcore = audio products",
+        "PowerCore = battery banks",
+        "Blue LED indicators common",
+        "Eufy = smart home sub-brand"
+      ],
+      "recentColorways": [
+        { "line": "PowerCore 20K", "year": "2023", "colors": ["black", "blue"] },
+        { "line": "Soundcore Liberty 4", "year": "2023", "colors": ["midnight black", "cloud white", "sky blue"] },
+        { "line": "Anker 747 Charger", "year": "2023", "colors": ["black", "white"] }
+      ]
+    },
+    {
+      "name": "Belkin",
+      "aliases": [],
+      "signatureColors": ["black", "white", "silver"],
+      "designCues": ["Belkin logo", "clean modern design", "premium materials", "Apple-compatible aesthetic"],
+      "identificationTips": [
+        "Belkin wordmark on products",
+        "Boost Charge = charging products",
+        "Often matches Apple aesthetics",
+        "Premium cables with braided designs"
+      ],
+      "recentColorways": [
+        { "line": "BoostCharge Pro 3-in-1", "year": "2023", "colors": ["black", "white"] },
+        { "line": "Soundform Elite", "year": "2023", "colors": ["black", "white"] },
+        { "line": "Secure Holder with MagSafe", "year": "2023", "colors": ["black", "white", "sand"] }
+      ]
+    },
+    {
+      "name": "Twelve South",
+      "aliases": [],
+      "signatureColors": ["black leather", "cognac brown", "warm taupe"],
+      "designCues": ["leather materials", "premium finishes", "Apple-focused design", "vintage aesthetic", "metal accents"],
+      "identificationTips": [
+        "Leather materials signature",
+        "Exclusively Apple accessories",
+        "BookBook = leather wallet cases",
+        "Vintage book aesthetic common",
+        "Premium metal and leather combo"
+      ],
+      "recentColorways": [
+        { "line": "BookBook Case iPhone 15", "year": "2023", "colors": ["brown vintage leather", "black leather"] },
+        { "line": "HiRise 3 Deluxe", "year": "2023", "colors": ["black metal", "silver metal"] },
+        { "line": "AirFly Pro", "year": "2023", "colors": ["white"] }
+      ]
+    },
+    {
+      "name": "Nomad",
+      "aliases": ["Nomad Goods"],
+      "signatureColors": ["rustic brown", "black", "horween leather"],
+      "designCues": ["Horween leather", "rugged design", "metal accents", "patina development", "industrial aesthetic"],
+      "identificationTips": [
+        "Horween leather = premium American leather",
+        "Develops patina over time",
+        "Metal frame bumpers signature",
+        "Rugged cases for Apple products",
+        "Rustic brown leather signature color"
+      ],
+      "recentColorways": [
+        { "line": "Modern Leather Case iPhone 15", "year": "2023", "colors": ["rustic brown", "black"] },
+        { "line": "Sport Case iPhone 15", "year": "2023", "colors": ["lunar gray", "marine blue", "ash green"] },
+        { "line": "Base One Max 3-in-1", "year": "2023", "colors": ["black metal", "silver metal"] }
+      ]
+    },
+    {
+      "name": "Mophie",
+      "aliases": ["mophie by Zagg"],
+      "signatureColors": ["black", "blue", "red"],
+      "designCues": ["mophie logo", "battery case design", "juice pack branding", "sleek minimalist"],
+      "identificationTips": [
+        "Juice pack = battery cases",
+        "mophie wordmark on products",
+        "Powerstation = portable batteries",
+        "Apple-focused battery solutions"
+      ],
+      "recentColorways": [
+        { "line": "Snap+ Juice Pack Mini", "year": "2023", "colors": ["black"] },
+        { "line": "Powerstation Plus XL", "year": "2023", "colors": ["soft black", "berry"] },
+        { "line": "Snap+ Wireless Charger", "year": "2023", "colors": ["black", "white"] }
+      ]
+    },
+    {
+      "name": "OtterBox",
+      "aliases": [],
+      "signatureColors": ["black", "blue", "clear", "starry night"],
+      "signatureColors": ["black", "blue", "clear", "starry night"],
+      "designCues": ["rugged protection", "multi-layer design", "port covers", "Defender branding", "bold colors"],
+      "identificationTips": [
+        "Defender = maximum protection series",
+        "Symmetry = slim protection",
+        "Commuter = everyday protection",
+        "Multi-layer construction signature",
+        "Port covers on Defender series"
+      ],
+      "recentColorways": [
+        { "line": "Defender Series iPhone 15", "year": "2023", "colors": ["black", "purple nebula", "aloha oe blue"] },
+        { "line": "Symmetry Series iPhone 15", "year": "2023", "colors": ["clear", "starry night", "blue marble"] },
+        { "line": "Commuter Series Samsung S24", "year": "2024", "colors": ["black", "blue", "pink"] }
+      ]
+    },
+    {
+      "name": "Spigen",
+      "aliases": [],
+      "signatureColors": ["matte black", "crystal clear", "gunmetal"],
+      "designCues": ["minimal design", "Air Cushion Technology", "precise cutouts", "slim profile", "affordable premium"],
+      "identificationTips": [
+        "Tough Armor = heavy duty protection",
+        "Ultra Hybrid = clear back with bumper",
+        "Liquid Air = textured matte finish",
+        "Air Cushion corners signature",
+        "Precise camera cutouts"
+      ],
+      "recentColorways": [
+        { "line": "Tough Armor iPhone 15 Pro", "year": "2023", "colors": ["black", "gunmetal", "navy"] },
+        { "line": "Ultra Hybrid iPhone 15", "year": "2023", "colors": ["crystal clear", "matte black", "rose crystal"] },
+        { "line": "Liquid Air Galaxy S24", "year": "2024", "colors": ["matte black", "navy"] }
+      ]
+    },
+    {
+      "name": "Amazon",
+      "aliases": ["Echo", "Fire", "Kindle", "Alexa"],
+      "signatureColors": ["charcoal", "glacier white", "twilight blue", "sandstone"],
+      "designCues": ["Amazon smile logo", "fabric mesh", "light ring on Echo", "minimalist design", "blue Alexa ring"],
+      "identificationTips": [
+        "Echo = smart speakers with Alexa",
+        "Fire = tablets and TV sticks",
+        "Kindle = e-readers",
+        "Blue light ring = Echo devices",
+        "Fabric mesh covering on speakers"
+      ],
+      "recentColorways": [
+        { "line": "Echo Dot 5th Gen", "year": "2022", "colors": ["charcoal", "glacier white", "deep sea blue"] },
+        { "line": "Kindle Paperwhite", "year": "2024", "colors": ["black", "denim", "jade green"] },
+        { "line": "Fire HD 10", "year": "2023", "colors": ["black", "denim", "lavender"] },
+        { "line": "Echo Show 8", "year": "2023", "colors": ["charcoal", "glacier white"] }
+      ]
+    },
+    {
+      "name": "Meta",
+      "aliases": ["Quest", "Oculus", "Meta Quest"],
+      "signatureColors": ["white", "black"],
+      "designCues": ["Meta logo", "Quest branding", "VR headset design", "controllers with rings", "fabric head straps"],
+      "identificationTips": [
+        "Quest branding = VR headsets",
+        "White is primary color for Quest",
+        "Ring controllers signature design",
+        "Meta infinity logo",
+        "Oculus = legacy branding"
+      ],
+      "recentColorways": [
+        { "line": "Quest 3", "year": "2023", "colors": ["white"] },
+        { "line": "Quest 2", "year": "2020", "colors": ["white"] },
+        { "line": "Quest Pro", "year": "2022", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "Valve",
+      "aliases": ["Steam", "Steam Deck"],
+      "signatureColors": ["black", "gray"],
+      "designCues": ["Steam logo", "handheld gaming form", "trackpads", "matte finish", "industrial design"],
+      "identificationTips": [
+        "Steam logo on device",
+        "Dual trackpads signature",
+        "Handheld PC form factor",
+        "Matte black finish",
+        "Orange accent branding"
+      ],
+      "recentColorways": [
+        { "line": "Steam Deck", "year": "2022", "colors": ["black"] },
+        { "line": "Steam Deck OLED", "year": "2023", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "NVIDIA",
+      "aliases": ["GeForce", "RTX"],
+      "signatureColors": ["black", "green accents", "silver"],
+      "designCues": ["NVIDIA logo", "green lighting", "angular design", "RTX branding", "Founders Edition aesthetic"],
+      "identificationTips": [
+        "Green eye logo = NVIDIA",
+        "RTX = ray tracing GPUs",
+        "GeForce = consumer graphics cards",
+        "Founders Edition = NVIDIA reference design",
+        "Green LED accents signature"
+      ],
+      "recentColorways": [
+        { "line": "GeForce RTX 4090 FE", "year": "2022", "colors": ["black", "silver accents"] },
+        { "line": "GeForce RTX 4080 FE", "year": "2023", "colors": ["black", "silver accents"] },
+        { "line": "GeForce RTX 4060 Ti FE", "year": "2023", "colors": ["black", "gray"] }
+      ]
+    },
+    {
+      "name": "AMD",
+      "aliases": ["Radeon", "Ryzen"],
+      "signatureColors": ["black", "red accents", "silver"],
+      "designCues": ["AMD logo", "red lighting", "Radeon branding", "angular design", "red eye logo"],
+      "identificationTips": [
+        "Red AMD logo",
+        "Radeon = graphics cards",
+        "Ryzen = processors",
+        "Red LED accents common",
+        "Reference design angular"
+      ],
+      "recentColorways": [
+        { "line": "Radeon RX 7900 XTX", "year": "2023", "colors": ["black", "silver", "red accents"] },
+        { "line": "Radeon RX 7800 XT", "year": "2023", "colors": ["black", "red accents"] },
+        { "line": "Radeon RX 7600", "year": "2023", "colors": ["black", "gray"] }
+      ]
+    },
+    {
+      "name": "Intel",
+      "aliases": ["Core", "Intel Core"],
+      "signatureColors": ["blue", "black", "silver"],
+      "designCues": ["Intel logo", "blue branding", "processor packaging", "Core branding", "premium metal finishes"],
+      "identificationTips": [
+        "Intel blue logo",
+        "Core i5/i7/i9 = consumer processors",
+        "NUC = mini PCs",
+        "Blue accent color signature",
+        "Evo branding = premium laptops"
+      ],
+      "recentColorways": [
+        { "line": "NUC 13 Extreme", "year": "2023", "colors": ["black"] },
+        { "line": "Arc A770 Graphics", "year": "2022", "colors": ["black", "blue accents"] },
+        { "line": "Core i9 Processor Box", "year": "2023", "colors": ["blue", "black", "silver"] }
+      ]
+    },
+    {
+      "name": "Western Digital",
+      "aliases": ["WD", "SanDisk"],
+      "signatureColors": ["black", "blue", "orange", "red", "gold"],
+      "designCues": ["WD logo", "color-coded product lines", "ribbed texture on drives", "My Passport branding"],
+      "identificationTips": [
+        "WD Blue = standard HDDs",
+        "WD Black = performance HDDs/SSDs",
+        "WD Red = NAS drives",
+        "SanDisk = flash storage sub-brand",
+        "My Passport = portable drives"
+      ],
+      "recentColorways": [
+        { "line": "My Passport SSD", "year": "2023", "colors": ["midnight blue", "gold", "red", "space gray"] },
+        { "line": "WD Black SN850X", "year": "2023", "colors": ["black with heatsink"] },
+        { "line": "SanDisk Extreme Pro Portable", "year": "2023", "colors": ["black", "orange accents"] }
+      ]
+    },
+    {
+      "name": "Seagate",
+      "aliases": ["Backup Plus", "IronWolf"],
+      "signatureColors": ["black", "silver", "blue"],
+      "designCues": ["Seagate logo", "ribbed design", "diamond pattern texture", "orange accent stripe"],
+      "identificationTips": [
+        "IronWolf = NAS drives",
+        "BarraCuda = desktop drives",
+        "FireCuda = gaming drives",
+        "Backup Plus = portable drives",
+        "Orange stripe accent common"
+      ],
+      "recentColorways": [
+        { "line": "FireCuda Gaming SSD", "year": "2023", "colors": ["black", "RGB lighting"] },
+        { "line": "Backup Plus Slim", "year": "2023", "colors": ["black", "silver", "blue"] },
+        { "line": "IronWolf Pro", "year": "2023", "colors": ["silver"] }
+      ]
+    },
+    {
+      "name": "Crucial",
+      "aliases": ["Crucial by Micron"],
+      "signatureColors": ["black", "green PCB", "silver"],
+      "designCues": ["Crucial logo", "green circuit boards", "aluminum heatsinks", "minimalist design"],
+      "identificationTips": [
+        "Green PCB on RAM modules",
+        "Crucial wordmark on SSDs",
+        "MX series = consumer SSDs",
+        "P series = performance SSDs",
+        "Aluminum heatspreaders common"
+      ],
+      "recentColorways": [
+        { "line": "P5 Plus SSD", "year": "2023", "colors": ["black"] },
+        { "line": "MX500 SSD", "year": "2023", "colors": ["black metal casing"] },
+        { "line": "DDR5 RAM", "year": "2023", "colors": ["black heatsink", "green PCB"] }
+      ]
+    }
+  ]
+}

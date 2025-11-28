@@ -1,0 +1,687 @@
+{
+  "category": "music",
+  "colorVocabulary": {
+    "black": ["jet black", "ebony", "noir", "satin black", "gloss black", "matte black", "tuxedo black"],
+    "white": ["olympic white", "arctic white", "vintage white", "cream white", "pearl white", "alpine white"],
+    "red": ["candy apple red", "cherry red", "heritage cherry", "wine red", "fiesta red", "dakota red", "transparent red"],
+    "blue": ["sonic blue", "lake placid blue", "pelham blue", "daphne blue", "cobalt blue", "surf green"],
+    "yellow": ["butterscotch", "vintage blonde", "graffiti yellow", "TV yellow", "canary yellow"],
+    "brown": ["tobacco sunburst", "vintage sunburst", "honeyburst", "tobacco burst", "walnut", "rosewood"],
+    "natural": ["natural wood", "natural maple", "natural ash", "amber", "honey"],
+    "silver": ["chrome", "brushed silver", "metallic silver", "platinum", "polished nickel"],
+    "gold": ["gold top", "goldtop", "gold hardware", "champagne gold", "antique gold"],
+    "green": ["surf green", "sherwood green", "olive green", "sea foam green", "transparent green"],
+    "purple": ["purple burst", "amethyst", "violet", "plum"],
+    "gray": ["charcoal", "graphite", "silver burst", "tungsten"]
+  },
+  "patternTypes": ["sunburst", "wood grain", "lacquer", "satin finish", "gloss finish", "matte finish", "flame maple", "quilted maple", "figured maple", "bird's eye maple", "bookmatched", "spalted maple", "nitrocellulose lacquer", "polyurethane", "oil finish", "relic finish", "aged finish"],
+  "partTerminology": {
+    "guitar": ["headstock", "neck", "fretboard", "frets", "body", "pickups", "bridge", "saddles", "tuners", "tuning pegs", "nut", "pickguard", "control knobs", "pickup selector", "output jack", "strap buttons", "truss rod", "inlays"],
+    "bass": ["headstock", "neck", "fretboard", "body", "pickups", "bridge", "tuners", "control knobs", "output jack", "pickup selector", "truss rod"],
+    "headphones": ["drivers", "earcups", "ear pads", "headband", "cable", "jack", "plug", "connector", "yoke", "slider", "cushions", "baffle"],
+    "microphone": ["capsule", "diaphragm", "body", "grille", "windscreen", "mount", "shock mount", "XLR connector", "switch", "stand adapter"],
+    "speaker": ["driver", "woofer", "tweeter", "cabinet", "enclosure", "port", "bass reflex", "crossover", "binding posts", "baffle", "cone"],
+    "keyboard": ["keys", "keybed", "action", "chassis", "control panel", "mod wheel", "pitch wheel", "pads", "knobs", "faders", "display"],
+    "pedal": ["footswitch", "enclosure", "knobs", "LED", "input jack", "output jack", "power jack", "bypass", "stomp", "true bypass"],
+    "interface": ["inputs", "outputs", "preamps", "converters", "headphone output", "monitor outputs", "phantom power", "gain knobs", "LED meters", "chassis"],
+    "synthesizer": ["oscillator", "filter", "envelope", "LFO", "keys", "mod wheel", "pitch wheel", "patch bay", "control panel", "display"]
+  },
+  "brands": [
+    {
+      "name": "Fender",
+      "aliases": ["Fender Musical Instruments", "Fender USA", "Fender Mexico", "Fender Japan"],
+      "signatureColors": ["sunburst", "olympic white", "candy apple red", "sonic blue", "lake placid blue", "surf green", "black"],
+      "designCues": ["Stratocaster headstock shape", "Telecaster bridge plate", "single-coil pickups", "bolt-on neck", "Fender logo script", "large headstock on CBS-era", "spaghetti logo (vintage)", "modern logo (current)", "contoured body", "pickguard designs"],
+      "identificationTips": [
+        "Stratocaster headstock = 6-on-a-side tuners with distinctive shape",
+        "Telecaster = slab body, bridge pickup in metal plate",
+        "Precision Bass = split-coil pickup, slab body",
+        "Jazz Bass = dual single-coil pickups, offset body",
+        "Vintage colors: Sunburst, Olympic White, Candy Apple Red are classic",
+        "American = made in USA, higher end",
+        "Player Series = Mexican made, mid-range",
+        "Squier = budget line, owned by Fender",
+        "Custom Shop = premium hand-built instruments"
+      ],
+      "recentColorways": [
+        { "line": "American Professional II", "year": "2020-present", "colors": ["3-tone sunburst", "olympic white", "miami blue", "dark night", "mystic surf green"] },
+        { "line": "American Ultra", "year": "2019-present", "colors": ["ultraburst", "mocha burst", "texas tea", "cobra blue", "plasma red"] },
+        { "line": "Player Series", "year": "2018-present", "colors": ["3-tone sunburst", "polar white", "buttercream", "tidepool", "sonic red"] },
+        { "line": "Vintera", "year": "2021-present", "colors": ["vintage blonde", "ice blue metallic", "fiesta red", "ocean turquoise"] }
+      ]
+    },
+    {
+      "name": "Gibson",
+      "aliases": ["Gibson USA", "Gibson Custom Shop", "Epiphone"],
+      "signatureColors": ["heritage cherry sunburst", "tobacco sunburst", "goldtop", "ebony", "vintage sunburst", "wine red"],
+      "signaturePatterns": ["flame maple top", "quilted maple", "figured maple"],
+      "designCues": ["set neck construction", "mahogany body", "humbucker pickups", "trapezoid inlays", "crown headstock inlay", "Gibson script logo", "Les Paul control layout", "SG devil horns", "open book headstock", "split diamond headstock"],
+      "identificationTips": [
+        "Les Paul = single cutaway, carved top, dual humbuckers",
+        "SG = dual cutaway, thin body, devil horns shape",
+        "ES-335 = semi-hollow, f-holes, center block",
+        "Flying V = V-shaped body",
+        "Explorer = angular geometric body",
+        "Heritage Cherry Sunburst = classic LP color",
+        "Goldtop = Les Paul with gold finish on top",
+        "Epiphone = Gibson's budget brand",
+        "Custom Shop = premium handmade",
+        "USA = higher end production",
+        "Crown inlay on headstock = Gibson signature"
+      ],
+      "recentColorways": [
+        { "line": "Les Paul Standard '50s", "year": "2019-present", "colors": ["heritage cherry sunburst", "gold top", "tobacco burst", "bourbon burst"] },
+        { "line": "Les Paul Modern", "year": "2020-present", "colors": ["faded pelham blue", "graphite top", "satin ice tea", "sparkling burgundy"] },
+        { "line": "SG Standard", "year": "2019-present", "colors": ["heritage cherry", "ebony", "vintage sunburst", "faded pelham blue"] },
+        { "line": "ES-335", "year": "ongoing", "colors": ["vintage sunburst", "faded lightburst", "sixties cherry", "ebony"] }
+      ]
+    },
+    {
+      "name": "PRS",
+      "aliases": ["Paul Reed Smith", "PRS Guitars", "PRS SE"],
+      "signatureColors": ["vintage sunburst", "fire red", "blue matteo", "charcoal", "emerald green", "purple mist"],
+      "designCues": ["bird inlays", "flame maple tops", "PRS headstock shape", "wide thin neck profile", "carved tops", "smooth body contours", "moon inlays (SE models)", "10-top designation for best maple"],
+      "identificationTips": [
+        "Bird inlays on fretboard = Core/S2 line",
+        "Moon inlays = SE (Student Edition) budget line",
+        "Highly figured flame/quilted maple tops signature",
+        "PRS headstock distinctive smooth curves",
+        "Core = USA made premium",
+        "S2 = USA made mid-range",
+        "SE = import budget line",
+        "Private Stock = ultra-premium custom",
+        "10-top = highest grade flame maple",
+        "Artist packages in unique colors"
+      ],
+      "recentColorways": [
+        { "line": "Custom 24", "year": "ongoing", "colors": ["fire red burst", "brian's limited", "yellow tiger", "charcoal burst", "faded blue jean"] },
+        { "line": "Silver Sky", "year": "2018-present", "colors": ["dodgem blue", "midnight rose", "golden mesa", "moc sand", "roxy pink"] },
+        { "line": "SE Standard 24", "year": "ongoing", "colors": ["tobacco sunburst", "translucent blue", "vintage cherry", "black gold burst"] },
+        { "line": "McCarty 594", "year": "2016-present", "colors": ["mccarty tobacco sunburst", "black gold wrap", "faded blue smokeburst", "charcoal cherry"] }
+      ]
+    },
+    {
+      "name": "Ibanez",
+      "aliases": ["Ibanez Guitars"],
+      "signatureColors": ["black", "transparent red", "twilight black", "blue space", "green space", "jewel blue"],
+      "designCues": ["thin neck profiles", "double-locking tremolo", "pointed headstock", "Wizard neck", "shark tooth inlays", "RG body shape", "JEM floral pattern", "S series thin body", "Ibanez logo script"],
+      "identificationTips": [
+        "RG series = superstrat, thin neck, Floyd Rose",
+        "JEM series = Steve Vai signature, monkey grip, Lion's Claw",
+        "AZ series = modern take on classic design",
+        "Prestige = Japanese premium line",
+        "Premium = Indonesian high-end",
+        "Standard = entry level",
+        "Wizard neck = ultra-thin profile",
+        "Sharktooth inlays on many models",
+        "Transparent finishes common on Premium/Prestige"
+      ],
+      "recentColorways": [
+        { "line": "RG Prestige", "year": "ongoing", "colors": ["twilight black", "blue reef gradation", "transparent gray flat", "transparent red"] },
+        { "line": "AZ Premium", "year": "2018-present", "colors": ["black", "sea foam green metallic", "prussian blue metallic", "white"] },
+        { "line": "JEM", "year": "ongoing", "colors": ["floral pattern", "white", "pink", "yellow heart"] },
+        { "line": "S Series", "year": "ongoing", "colors": ["black", "sapphire blue", "antique brown stained"] }
+      ]
+    },
+    {
+      "name": "Taylor",
+      "aliases": ["Taylor Guitars"],
+      "signatureColors": ["natural", "shaded edgeburst", "tobacco sunburst", "koa", "rosewood"],
+      "designCues": ["clean modern aesthetic", "Taylor headstock shape", "Expression System pickup", "NT neck joint", "beveled armrest", "minimal binding", "dot inlays", "Grand Auditorium body", "Grand Concert body"],
+      "identificationTips": [
+        "3-digit model numbers (e.g., 814, 314)",
+        "First digit = series (2=200, 3=300, etc.)",
+        "Second digit = back/side wood (1=sapele, 4=ovangkol, etc.)",
+        "Third digit = body shape (4=Grand Auditorium, 2=Grand Concert)",
+        "V-Class bracing = modern innovation",
+        "Natural finish most common",
+        "Shaded edgeburst = darkened edges",
+        "Expression System = onboard electronics",
+        "American made = 300 series and up",
+        "Taylor logo small, understated"
+      ],
+      "recentColorways": [
+        { "line": "814ce", "year": "ongoing", "colors": ["natural", "shaded edgeburst"] },
+        { "line": "714ce", "year": "ongoing", "colors": ["natural", "western sunburst"] },
+        { "line": "214ce-K DLX", "year": "2020-present", "colors": ["natural koa"] },
+        { "line": "Academy Series", "year": "2019-present", "colors": ["natural", "sunburst", "black"] }
+      ]
+    },
+    {
+      "name": "Martin",
+      "aliases": ["C.F. Martin", "Martin Guitar", "Martin & Co"],
+      "signatureColors": ["natural", "sunburst", "black", "ambertone"],
+      "designCues": ["X-bracing", "dreadnought body shape", "vintage appointments", "Martin headstock logo", "herringbone purfling (on D-28)", "tortoise pickguard", "forward-shifted bracing", "aging toner"],
+      "identificationTips": [
+        "D-28 = iconic dreadnought, herringbone trim",
+        "D-18 = mahogany back/sides, simpler appointments",
+        "000 = smaller orchestra model",
+        "OM = orchestra model with 14-fret neck",
+        "D = dreadnought body",
+        "HD = herringbone dreadnought",
+        "Standard Series = solid wood construction",
+        "X Series = HPL laminate back/sides",
+        "Natural finish most common",
+        "Vintage-inspired aging on some models"
+      ],
+      "recentColorways": [
+        { "line": "D-28", "year": "ongoing", "colors": ["natural", "ambertone", "sunburst"] },
+        { "line": "D-18", "year": "ongoing", "colors": ["natural", "authentic aging"] },
+        { "line": "000-28", "year": "ongoing", "colors": ["natural", "sunburst"] },
+        { "line": "SC-13E", "year": "2019-present", "colors": ["black", "natural"] }
+      ]
+    },
+    {
+      "name": "Shure",
+      "aliases": ["Shure Incorporated"],
+      "signatureColors": ["black", "silver", "champagne"],
+      "designCues": ["SM58 ball grille", "SM57 cardioid grille", "beta series mesh", "Shure logo on body", "XLR connector", "on/off switch on some models"],
+      "identificationTips": [
+        "SM58 = iconic ball grille, vocal mic",
+        "SM57 = instrument mic, smaller grille",
+        "Beta series = supercardioid, high output",
+        "KSM series = studio condenser mics",
+        "Black = standard live sound",
+        "Champagne = studio/broadcast",
+        "Silver = classic vintage look",
+        "Shure logo on mic body",
+        "Durable construction for live use"
+      ],
+      "recentColorways": [
+        { "line": "SM58", "year": "1966-present", "colors": ["black", "silver"] },
+        { "line": "SM7B", "year": "2001-present", "colors": ["black"] },
+        { "line": "Beta 58A", "year": "ongoing", "colors": ["black"] },
+        { "line": "MV7", "year": "2020-present", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "Sennheiser",
+      "aliases": ["Sennheiser Electronic"],
+      "signatureColors": ["black", "silver", "white"],
+      "designCues": ["minimalist design", "Sennheiser logo", "velour earpads", "open-back grilles", "German engineering aesthetic", "modular cables"],
+      "identificationTips": [
+        "HD 600 series = open-back audiophile headphones",
+        "Momentum = consumer line with premium materials",
+        "IE series = in-ear monitors",
+        "Black/silver color scheme common",
+        "Velour earpads on HD series",
+        "Open-back = visible drivers through grille",
+        "Professional broadcast headsets in black",
+        "German engineering emphasis"
+      ],
+      "recentColorways": [
+        { "line": "HD 660S2", "year": "2023", "colors": ["black", "anthracite"] },
+        { "line": "Momentum 4", "year": "2022", "colors": ["black", "white"] },
+        { "line": "HD 800S", "year": "2015-present", "colors": ["black", "silver"] },
+        { "line": "IE 600", "year": "2022", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "Audio-Technica",
+      "aliases": ["Audio Technica", "AT"],
+      "signatureColors": ["black", "silver", "blue", "red", "navy"],
+      "designCues": ["ATH prefix for headphones", "AT prefix for mics", "triangular logo", "blue accents on M-series", "3D wing support system", "large earcups"],
+      "identificationTips": [
+        "ATH-M50x = iconic blue/black studio headphones",
+        "AT2020 = popular entry-level condenser mic",
+        "ATH prefix = headphones",
+        "AT prefix = microphones/turntables",
+        "M-series = monitor headphones, blue accents",
+        "R-series = reference headphones",
+        "Blue color signature on M50x and variants",
+        "3D wing headband on some models"
+      ],
+      "recentColorways": [
+        { "line": "ATH-M50x", "year": "2014-present", "colors": ["black/blue", "white", "navy"] },
+        { "line": "ATH-R70x", "year": "2015-present", "colors": ["black"] },
+        { "line": "AT2020", "year": "2004-present", "colors": ["black"] },
+        { "line": "ATH-M70x", "year": "2015-present", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "Rode",
+      "aliases": ["RØDE", "RODE Microphones"],
+      "signatureColors": ["black", "silver", "white"],
+      "designCues": ["NT prefix for studio mics", "cylindrical body design", "shock mount included", "gold diaphragm visible", "Rode logo on body", "distinctive red trim on some models"],
+      "identificationTips": [
+        "NT1 = classic large diaphragm condenser",
+        "VideoMic series = on-camera shotgun mics",
+        "PodMic = broadcast/podcast dynamic mic",
+        "Black body with silver grille common",
+        "Gold capsule visible through grille",
+        "Rode logo prominently displayed",
+        "Rycote shock mount standard",
+        "Australian brand"
+      ],
+      "recentColorways": [
+        { "line": "NT1 5th Gen", "year": "2023", "colors": ["black body", "silver grille"] },
+        { "line": "PodMic", "year": "2020-present", "colors": ["black"] },
+        { "line": "VideoMic NTG", "year": "2019-present", "colors": ["black"] },
+        { "line": "NT-USB+", "year": "2021-present", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "Neumann",
+      "aliases": ["Georg Neumann GmbH"],
+      "signatureColors": ["nickel", "black", "silver"],
+      "designCues": ["U 87 classic body shape", "Neumann logo badge", "large diaphragm", "chrome/nickel finish", "German precision", "vintage aesthetic", "pattern switch", "pad and filter switches"],
+      "identificationTips": [
+        "U 87 = iconic studio standard microphone",
+        "TLM series = transformerless mics",
+        "KM series = small diaphragm condensers",
+        "Nickel/chrome finish = classic look",
+        "Black = modern TLM series",
+        "Neumann badge on body",
+        "Premium studio standard",
+        "German manufacturing",
+        "Elastic suspension mount"
+      ],
+      "recentColorways": [
+        { "line": "U 87 Ai", "year": "1986-present", "colors": ["nickel"] },
+        { "line": "TLM 103", "year": "1997-present", "colors": ["nickel", "black"] },
+        { "line": "TLM 107", "year": "2015-present", "colors": ["nickel", "black"] },
+        { "line": "KM 184", "year": "1999-present", "colors": ["nickel", "black"] }
+      ]
+    },
+    {
+      "name": "Yamaha",
+      "aliases": ["Yamaha Corporation", "Yamaha Music"],
+      "signatureColors": ["black", "white", "natural wood", "red"],
+      "designCues": ["tuning fork logo", "Montage series design", "PSR keyboard styling", "CFX piano sample", "motif series", "clean Japanese design"],
+      "identificationTips": [
+        "Tuning fork logo = signature Yamaha",
+        "Montage = flagship synthesizer workstation",
+        "PSR series = portable keyboards",
+        "P-series = digital pianos",
+        "Reface = mini retro keyboards",
+        "Black and white common colors",
+        "Natural wood on acoustic pianos/guitars",
+        "CFX concert grand = flagship piano sound",
+        "Diverse product range"
+      ],
+      "recentColorways": [
+        { "line": "Montage M", "year": "2023", "colors": ["black", "white keys"] },
+        { "line": "Reface Series", "year": "2015-present", "colors": ["black", "red panels", "blue panels", "green panels"] },
+        { "line": "PSR-SX900", "year": "2020-present", "colors": ["black"] },
+        { "line": "P-125", "year": "2018-present", "colors": ["black", "white"] }
+      ]
+    },
+    {
+      "name": "Roland",
+      "aliases": ["Roland Corporation"],
+      "signatureColors": ["black", "red", "white"],
+      "designCues": ["Roland logo", "TR drum machine aesthetic", "Jupiter branding", "BOSS pedal styling", "JC amplifier", "red panel accents on some gear"],
+      "identificationTips": [
+        "TR-808/909 = legendary drum machines",
+        "Jupiter series = flagship synthesizers",
+        "JD-Xi/XA = synth workstations",
+        "Fantom = workstation keyboards",
+        "V-Drums = electronic drum kits",
+        "BOSS = pedal division (red/black)",
+        "Black is primary color",
+        "Red accents on some synths",
+        "Japanese innovation"
+      ],
+      "recentColorways": [
+        { "line": "Fantom", "year": "2019-present", "colors": ["black", "red accents"] },
+        { "line": "Jupiter-X", "year": "2019-present", "colors": ["black", "white"] },
+        { "line": "TR-8S", "year": "2018-present", "colors": ["black", "green LED"] },
+        { "line": "JD-Xi", "year": "2015-present", "colors": ["black", "white"] }
+      ]
+    },
+    {
+      "name": "Korg",
+      "aliases": ["Korg Inc"],
+      "signatureColors": ["black", "white", "silver", "limited edition colors"],
+      "designCues": ["Korg logo", "Kaoss pad touchscreen", "microKEY compact design", "Minilogue panel layout", "Kronos workstation", "Volca series mini synths"],
+      "identificationTips": [
+        "Minilogue = popular analog poly synth",
+        "Volca series = mini battery-powered synths",
+        "Kronos = flagship workstation",
+        "microKEY = compact MIDI controllers",
+        "Kaoss pad = touchscreen effects",
+        "Black most common",
+        "Limited editions in unique colors",
+        "Innovative compact designs"
+      ],
+      "recentColorways": [
+        { "line": "Minilogue XD", "year": "2019-present", "colors": ["black", "pearl white", "module"] },
+        { "line": "Volca Series", "year": "2013-present", "colors": ["black", "red (beats)", "blue (keys)", "limited editions"] },
+        { "line": "Kronos 2", "year": "2017-present", "colors": ["black"] },
+        { "line": "Opsix", "year": "2021-present", "colors": ["black", "white"] }
+      ]
+    },
+    {
+      "name": "Native Instruments",
+      "aliases": ["NI", "Native Instruments GmbH"],
+      "signatureColors": ["black", "white", "silver"],
+      "designCues": ["Maschine pads with RGB lighting", "Komplete Kontrol light guide", "NI logo", "minimalist design", "integration with software", "premium aluminum construction"],
+      "identificationTips": [
+        "Maschine = drum pad controller with screens",
+        "Komplete Kontrol = keyboard with light guide",
+        "Traktor = DJ controllers and software",
+        "Black aluminum construction common",
+        "RGB pad lighting signature",
+        "Light guide on keyboards",
+        "Tight software integration",
+        "German design"
+      ],
+      "recentColorways": [
+        { "line": "Maschine+", "year": "2021-present", "colors": ["black"] },
+        { "line": "Komplete Kontrol S-Series", "year": "2022-present", "colors": ["black", "white (limited)"] },
+        { "line": "Traktor Kontrol S4", "year": "2020-present", "colors": ["black"] },
+        { "line": "Maschine Mikro", "year": "ongoing", "colors": ["black", "white (limited)"] }
+      ]
+    },
+    {
+      "name": "Focusrite",
+      "aliases": ["Focusrite Audio Engineering"],
+      "signatureColors": ["red", "black", "silver"],
+      "designCues": ["red anodized chassis", "Scarlett red color", "Clarett silver", "Red Evolution preamps", "halo indicators", "minimalist front panel"],
+      "identificationTips": [
+        "Scarlett series = red chassis, entry-level interfaces",
+        "Clarett series = silver, professional interfaces",
+        "Red Evolution preamps = signature technology",
+        "Red is signature color for Scarlett",
+        "Halo ring indicators around gain knobs",
+        "British audio heritage",
+        "Air mode = vintage preamp emulation",
+        "USB-C connectivity on newer models"
+      ],
+      "recentColorways": [
+        { "line": "Scarlett 4th Gen", "year": "2023", "colors": ["red chassis", "black knobs"] },
+        { "line": "Clarett+", "year": "2021-present", "colors": ["silver chassis"] },
+        { "line": "Vocaster", "year": "2022-present", "colors": ["red chassis", "broadcast styling"] },
+        { "line": "Red 8Pre", "year": "ongoing", "colors": ["red", "rack mount"] }
+      ]
+    },
+    {
+      "name": "Universal Audio",
+      "aliases": ["UA", "UAD", "UAUDIO"],
+      "signatureColors": ["black", "silver", "vintage cream"],
+      "designCues": ["vintage aesthetic", "Apollo series design", "retro VU meters", "premium metal construction", "UA logo", "Unison preamp technology"],
+      "identificationTips": [
+        "Apollo series = flagship audio interfaces",
+        "Arrow = compact desktop interface",
+        "Volt = budget interface line",
+        "Black/silver = professional look",
+        "Vintage-inspired design elements",
+        "Premium metal chassis",
+        "UAD plugin integration",
+        "Unison preamp modeling",
+        "Thunderbolt connectivity"
+      ],
+      "recentColorways": [
+        { "line": "Apollo x8", "year": "2018-present", "colors": ["silver/black"] },
+        { "line": "Apollo Twin X", "year": "2019-present", "colors": ["silver", "heritage edition"] },
+        { "line": "Volt 276", "year": "2021-present", "colors": ["vintage cream", "black"] },
+        { "line": "Arrow", "year": "2018-present", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "PreSonus",
+      "aliases": ["PreSonus Audio Electronics"],
+      "signatureColors": ["blue", "black"],
+      "designCues": ["blue LED accents", "PreSonus logo", "Studio One integration", "XMAX preamps", "blue chassis on some models"],
+      "identificationTips": [
+        "Studio series = blue chassis interfaces",
+        "AudioBox = budget interface line",
+        "Quantum series = Thunderbolt interfaces",
+        "Blue signature color",
+        "XMAX preamps = signature technology",
+        "Studio One DAW integration",
+        "Affordable pro audio"
+      ],
+      "recentColorways": [
+        { "line": "Studio 68c", "year": "2019-present", "colors": ["blue chassis"] },
+        { "line": "Quantum 2626", "year": "2018-present", "colors": ["black"] },
+        { "line": "AudioBox USB 96", "year": "2016-present", "colors": ["black", "blue accents"] },
+        { "line": "Revelator", "year": "2021-present", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "JBL",
+      "aliases": ["JBL Professional", "JBL by Harman"],
+      "signatureColors": ["black", "white"],
+      "designCues": ["JBL logo", "waveguide design", "bi-amped design", "blue LED ring", "LSR series", "horn-loaded design on some models"],
+      "identificationTips": [
+        "LSR series = studio monitors",
+        "305P/308P = popular budget monitors",
+        "7 Series = professional monitoring",
+        "Black most common",
+        "White cone woofers visible",
+        "Blue LED power indicator",
+        "Image Control Waveguide",
+        "Front-ported design common"
+      ],
+      "recentColorways": [
+        { "line": "LSR305P MKII", "year": "2019-present", "colors": ["black", "white cone"] },
+        { "line": "LSR308P MKII", "year": "2019-present", "colors": ["black", "white cone"] },
+        { "line": "306P MKII", "year": "2019-present", "colors": ["black"] },
+        { "line": "7 Series", "year": "ongoing", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "KRK",
+      "aliases": ["KRK Systems"],
+      "signatureColors": ["black", "yellow", "white"],
+      "designCues": ["yellow Kevlar cone woofers", "black cabinets", "Rokit series branding", "KRK logo", "front-firing port", "bi-amped design"],
+      "identificationTips": [
+        "Yellow woofer cone = signature KRK look",
+        "Rokit series = most popular line",
+        "Black cabinets standard",
+        "Yellow/black color scheme iconic",
+        "Front bass port",
+        "G3/G4 = generation markers",
+        "White limited editions exist",
+        "Kevlar cone material"
+      ],
+      "recentColorways": [
+        { "line": "Rokit RP5 G4", "year": "2019-present", "colors": ["black cabinet", "yellow cone"] },
+        { "line": "Rokit RP7 G4", "year": "2019-present", "colors": ["black cabinet", "yellow cone"] },
+        { "line": "Rokit RP8 G4", "year": "2019-present", "colors": ["black cabinet", "yellow cone"] },
+        { "line": "Classic 5", "year": "2020-present", "colors": ["black", "white cone"] }
+      ]
+    },
+    {
+      "name": "Genelec",
+      "aliases": ["Genelec Oy"],
+      "signatureColors": ["dark gray", "white", "black"],
+      "designCues": ["rounded cabinet edges", "Genelec logo", "Iso-Pod mounting", "curved cabinet design", "front LED indicator", "minimalist Scandinavian design"],
+      "identificationTips": [
+        "Rounded cabinet edges = signature design",
+        "Dark gray/charcoal most common",
+        "White limited editions",
+        "Iso-Pod decoupling mount",
+        "Front-firing port under woofer",
+        "Finnish precision",
+        "High-end studio standard",
+        "DCW waveguide technology"
+      ],
+      "recentColorways": [
+        { "line": "8030C", "year": "ongoing", "colors": ["dark gray"] },
+        { "line": "8050B", "year": "ongoing", "colors": ["dark gray"] },
+        { "line": "8361A", "year": "2019-present", "colors": ["dark gray", "white (limited)"] },
+        { "line": "8331A", "year": "2014-present", "colors": ["dark gray"] }
+      ]
+    },
+    {
+      "name": "Adam Audio",
+      "aliases": ["ADAM Audio GmbH"],
+      "signatureColors": ["black", "silver"],
+      "designCues": ["ART tweeter ribbon", "hexagonal front baffle", "Adam logo", "distinctive tweeter design", "German engineering aesthetic"],
+      "identificationTips": [
+        "ART ribbon tweeter = signature technology",
+        "Hexagonal tweeter surround",
+        "Black cabinets standard",
+        "Silver tweeter visible",
+        "A-series = flagship monitors",
+        "T-series = budget line",
+        "German precision",
+        "Folded ribbon tweeter"
+      ],
+      "recentColorways": [
+        { "line": "A7V", "year": "2022-present", "colors": ["black"] },
+        { "line": "T7V", "year": "2020-present", "colors": ["black"] },
+        { "line": "A8H", "year": "2019-present", "colors": ["black"] },
+        { "line": "T5V", "year": "2020-present", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "Boss",
+      "aliases": ["BOSS", "Roland BOSS"],
+      "signatureColors": ["various bright colors", "black", "red", "blue", "green", "yellow"],
+      "designCues": ["compact enclosure", "footswitch design", "Boss logo", "LED indicator", "color-coded by effect type", "9V battery compartment", "rubber feet"],
+      "identificationTips": [
+        "Compact pedal format = signature Boss",
+        "Color indicates effect type traditionally",
+        "Orange = distortion (DS-1)",
+        "Blue = chorus (CE-2)",
+        "Green = overdrive (OD-1)",
+        "Yellow = Super Overdrive (SD-1)",
+        "DD series = digital delay",
+        "Metal Zone = black with orange",
+        "True bypass on some newer models"
+      ],
+      "recentColorways": [
+        { "line": "DS-1 Distortion", "year": "1978-present", "colors": ["orange"] },
+        { "line": "BD-2 Blues Driver", "year": "1995-present", "colors": ["blue"] },
+        { "line": "DD-8 Digital Delay", "year": "2020-present", "colors": ["green"] },
+        { "line": "RC-5 Loop Station", "year": "2021-present", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "MXR",
+      "aliases": ["MXR Innovations", "Jim Dunlop MXR"],
+      "signatureColors": ["black", "yellow", "blue", "red"],
+      "designCues": ["block logo", "script logo (vintage)", "LED indicator", "simple control layout", "rugged construction", "battery door"],
+      "identificationTips": [
+        "Phase 90 = orange enclosure, classic phaser",
+        "Dyna Comp = red enclosure, compressor",
+        "Carbon Copy = black/green, analog delay",
+        "Block logo = modern MXR",
+        "Script logo = vintage reissue",
+        "Color-coded effects",
+        "Owned by Dunlop",
+        "Professional standard pedals"
+      ],
+      "recentColorways": [
+        { "line": "Phase 90", "year": "1974-present", "colors": ["orange"] },
+        { "line": "Carbon Copy", "year": "2007-present", "colors": ["black", "green LED"] },
+        { "line": "Dyna Comp", "year": "1972-present", "colors": ["red"] },
+        { "line": "EVH 5150 Overdrive", "year": "2015-present", "colors": ["red/white/black stripes"] }
+      ]
+    },
+    {
+      "name": "Strymon",
+      "aliases": ["Strymon Engineering"],
+      "signatureColors": ["blue", "teal", "red", "white"],
+      "designCues": ["minimalist design", "soft-touch switches", "premium enclosure", "Strymon logo", "SHARC DSP", "favorite switch", "expression pedal input"],
+      "identificationTips": [
+        "Blue = signature color for many pedals",
+        "Premium boutique effects",
+        "Soft-touch relay switches",
+        "Favorite switch for presets",
+        "Timeline = blue, flagship delay",
+        "BigSky = blue, reverb",
+        "Mobius = blue, modulation",
+        "High-end digital processing",
+        "Clean minimalist aesthetic"
+      ],
+      "recentColorways": [
+        { "line": "Timeline", "year": "2011-present", "colors": ["blue"] },
+        { "line": "BigSky", "year": "2013-present", "colors": ["blue"] },
+        { "line": "Iridium", "year": "2019-present", "colors": ["white/silver"] },
+        { "line": "Volante", "year": "2019-present", "colors": ["red"] }
+      ]
+    },
+    {
+      "name": "Eventide",
+      "aliases": ["Eventide Audio"],
+      "signatureColors": ["black", "green", "silver"],
+      "designCues": ["rack mount heritage", "green LED displays", "Eventide logo", "H9 stompbox design", "vintage rack aesthetic"],
+      "identificationTips": [
+        "H9 = flagship stompbox with algorithms",
+        "Black enclosures standard",
+        "Green LED displays common",
+        "Rack mount origins",
+        "Premium effects algorithms",
+        "Legendary studio gear heritage",
+        "Harmonizer technology",
+        "Professional standard"
+      ],
+      "recentColorways": [
+        { "line": "H9 Max", "year": "2013-present", "colors": ["black"] },
+        { "line": "H90", "year": "2023-present", "colors": ["black"] },
+        { "line": "TimeFactor", "year": "2008-present", "colors": ["black", "green display"] },
+        { "line": "Space", "year": "2011-present", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "Pioneer DJ",
+      "aliases": ["Pioneer", "Pioneer Corporation"],
+      "signatureColors": ["black", "silver", "white"],
+      "designCues": ["CDJ jog wheel", "Rekordbox integration", "professional DJ aesthetic", "RGB jog display", "large platters", "metal construction"],
+      "identificationTips": [
+        "CDJ series = industry standard media players",
+        "DJM series = DJ mixers",
+        "Black = professional standard color",
+        "RGB jog wheel display",
+        "Large motorized platters",
+        "Rekordbox software integration",
+        "Club standard equipment",
+        "Premium metal construction"
+      ],
+      "recentColorways": [
+        { "line": "CDJ-3000", "year": "2020-present", "colors": ["black", "silver", "white (limited)"] },
+        { "line": "DJM-A9", "year": "2022-present", "colors": ["black"] },
+        { "line": "DDJ-FLX10", "year": "2023-present", "colors": ["black"] },
+        { "line": "XDJ-XZ", "year": "2019-present", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "Technics",
+      "aliases": ["Technics by Panasonic"],
+      "signatureColors": ["black", "silver"],
+      "designCues": ["SL-1200 design", "direct drive motor", "pitch control", "strobe dots", "Technics logo", "quartz lock", "aluminum die-cast platter"],
+      "identificationTips": [
+        "SL-1200 = legendary turntable",
+        "Direct drive technology",
+        "Silver original color (SL-1200 MK2)",
+        "Black = modern versions",
+        "Strobe dots on platter edge",
+        "Pitch control slider",
+        "S-shaped tonearm",
+        "Hip-hop and DJ standard",
+        "Recent revival by Panasonic"
+      ],
+      "recentColorways": [
+        { "line": "SL-1200MK7", "year": "2019-present", "colors": ["black", "silver"] },
+        { "line": "SL-1200GR", "year": "2017-present", "colors": ["black", "silver"] },
+        { "line": "SL-1210GR", "year": "2019-present", "colors": ["black"] },
+        { "line": "SL-100C", "year": "2022-present", "colors": ["black", "silver", "beige"] }
+      ]
+    },
+    {
+      "name": "Serato",
+      "aliases": ["Serato Audio Research"],
+      "signatureColors": ["black", "green accents"],
+      "designCues": ["Serato logo", "green waveforms", "vinyl control integration", "DJ software aesthetic", "performance pads"],
+      "identificationTips": [
+        "Serato DJ software = industry standard",
+        "Green waveform displays",
+        "Serato logo on hardware",
+        "Rane partnership for hardware",
+        "Control vinyl and CDs",
+        "Black hardware common",
+        "Performance pad integration",
+        "DVS (Digital Vinyl System)"
+      ],
+      "recentColorways": [
+        { "line": "Serato Studio", "year": "2018-present", "colors": ["software"] },
+        { "line": "Control Vinyl", "year": "ongoing", "colors": ["black vinyl", "clear"] },
+        { "line": "Accessories", "year": "ongoing", "colors": ["black", "green branding"] }
+      ]
+    }
+  ]
+}

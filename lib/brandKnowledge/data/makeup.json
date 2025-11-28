@@ -1,0 +1,507 @@
+{
+  "category": "makeup",
+  "colorVocabulary": {
+    "red": ["ruby woo", "russian red", "dragon girl", "cherry bomb", "viva glam", "brick red", "wine red", "oxblood", "crimson", "scarlet"],
+    "pink": ["powder pink", "millennial pink", "bubblegum", "fuchsia", "hot pink", "coral pink", "mauve pink", "rose", "blush pink", "candy pink"],
+    "nude": ["nude beige", "natural nude", "cinnamon nude", "mocha nude", "honey nude", "caramel nude", "tan nude", "sand nude", "peach nude", "rose nude"],
+    "berry": ["plum", "mulberry", "wine berry", "blackberry", "raspberry", "deep berry", "purple berry", "grape"],
+    "orange": ["tangerine", "coral", "apricot", "peach", "burnt orange", "terracotta", "copper orange"],
+    "brown": ["chocolate brown", "espresso", "mahogany", "chestnut", "cocoa", "bronze brown", "taupe brown"],
+    "foundation": ["porcelain", "ivory", "alabaster", "fair", "light beige", "sand", "natural beige", "honey", "caramel", "mocha", "cocoa", "espresso", "ebony", "golden undertone", "neutral undertone", "cool undertone", "warm undertone"],
+    "eyeshadow": ["champagne", "rose gold", "bronzed copper", "smoky taupe", "charcoal", "midnight blue", "emerald", "burgundy", "dusty rose", "golden bronze", "shimmering gold", "matte brown", "satin beige"],
+    "nailpolish": ["ballet pink", "sheer nude", "classic red", "bordeaux", "oxblood", "midnight navy", "dove gray", "sage green", "lavender", "coral reef", "shell pink"]
+  },
+  "patternTypes": ["matte", "satin", "shimmer", "glitter", "metallic", "cream", "velvet", "dewy", "glossy", "pearl", "frost", "sheer", "opaque", "vinyl", "liquid", "powder"],
+  "partTerminology": {
+    "lipstick": ["bullet", "tube", "cap", "applicator", "doe-foot", "wand", "packaging", "case", "swivel mechanism"],
+    "palette": ["pans", "pressed powder", "mirror", "compact", "magnetic base", "packaging", "wells", "refillable pans"],
+    "mascara": ["wand", "bristles", "brush", "tube", "formula", "reservoir", "applicator tip"],
+    "foundation": ["pump", "bottle", "dropper", "compact", "cushion", "sponge applicator", "doe-foot", "jar"],
+    "compact": ["mirror", "pan", "case", "hinge", "closure", "magnetic snap"],
+    "brush": ["bristles", "ferrule", "handle", "synthetic bristles", "natural hair"]
+  },
+  "brands": [
+    {
+      "name": "MAC",
+      "aliases": ["MAC Cosmetics", "M·A·C"],
+      "signatureColors": ["black", "white", "silver"],
+      "designCues": ["sleek black packaging", "silver MAC logo", "minimalist design", "professional aesthetic", "bullet lipstick in black tube", "white labels"],
+      "identificationTips": [
+        "Black tube with silver MAC logo = signature lipstick",
+        "Black packaging with white product labels",
+        "Minimalist, professional aesthetic",
+        "Ruby Woo = most iconic red lipstick shade",
+        "Studio Fix = foundation line",
+        "Matte finish lipsticks are signature",
+        "Compact powder in black case with silver pan"
+      ],
+      "recentColorways": [
+        { "line": "Powder Kiss Lipstick", "year": "2023-2024", "colors": ["devoted to chili", "mull it over", "lasting passion", "werk werk werk"] },
+        { "line": "Studio Fix Fluid", "year": "2023-2024", "colors": ["nc15", "nc25", "nc37", "nc42", "nc50", "nw20", "nw35"] },
+        { "line": "Eye Shadow x 9", "year": "2024", "colors": ["burgundy times nine", "dusky rose times nine", "amber times nine"] },
+        { "line": "Love Me Liquid Lipcolour", "year": "2024", "colors": ["laissez-faire", "dgaf attitude", "give me fever", "bated breath"] }
+      ]
+    },
+    {
+      "name": "NARS",
+      "aliases": ["NARS Cosmetics"],
+      "signatureColors": ["black", "white"],
+      "designCues": ["matte black packaging", "white NARS logo", "soft-touch rubber finish", "minimalist design", "iconic product names"],
+      "identificationTips": [
+        "Matte black rubber-touch packaging is signature",
+        "White NARS logo in clean sans-serif font",
+        "Provocative product names (Orgasm, Deep Throat, etc.)",
+        "Orgasm blush = most iconic product (peachy pink with gold shimmer)",
+        "Radiant Creamy Concealer in square tube",
+        "Clean, modern aesthetic"
+      ],
+      "recentColorways": [
+        { "line": "Light Reflecting Foundation", "year": "2023-2024", "colors": ["oslo", "gobi", "stromboli", "punjab", "trinidad", "macao"] },
+        { "line": "Afterglow Lip Balm", "year": "2024", "colors": ["orgasm", "laguna", "turbo", "dolce vita"] },
+        { "line": "Air Matte Blush", "year": "2024", "colors": ["impassioned", "luster", "limited", "behave"] },
+        { "line": "Explicit Lipstick", "year": "2023", "colors": ["starwoman", "voodoo", "fire down below", "Charlotte"] }
+      ]
+    },
+    {
+      "name": "Charlotte Tilbury",
+      "aliases": ["CT", "Charlotte Tilbury Beauty"],
+      "signatureColors": ["rose gold", "nude pink", "cream", "gold"],
+      "designCues": ["luxurious rose gold packaging", "art deco styling", "Charlotte's signature", "glamorous aesthetic", "vintage-inspired design"],
+      "identificationTips": [
+        "Rose gold metallic packaging is signature",
+        "Art deco geometric patterns",
+        "Charlotte Tilbury signature on products",
+        "Pillow Talk = iconic nude pink lipstick shade",
+        "Magic Cream = bestselling moisturizer in cream jar",
+        "Luxury, old Hollywood glamour aesthetic",
+        "Compact mirrors with vintage design"
+      ],
+      "recentColorways": [
+        { "line": "Pillow Talk Collection", "year": "2023-2024", "colors": ["pillow talk original", "pillow talk medium", "pillow talk intense", "pillow talk big"] },
+        { "line": "Beautiful Skin Foundation", "year": "2024", "colors": ["fair 1", "light 3", "medium 7", "tan 9", "deep 12"] },
+        { "line": "Eyes to Mesmerise", "year": "2023-2024", "colors": ["walk of no shame", "bette", "star gold", "rose gold"] },
+        { "line": "Matte Revolution Lipstick", "year": "2024", "colors": ["pillow talk", "amazing grace", "bond girl", "walk of shame"] }
+      ]
+    },
+    {
+      "name": "Fenty Beauty",
+      "aliases": ["Fenty", "Fenty by Rihanna"],
+      "signatureColors": ["white", "blue", "holographic", "yellow"],
+      "designCues": ["clean white packaging", "blue accents", "modern typography", "inclusive shade range", "holographic details", "bold yellow accents"],
+      "identificationTips": [
+        "Clean white packaging with blue/yellow accents",
+        "Fenty logo in bold modern font",
+        "Known for 50+ foundation shades",
+        "Gloss Bomb = iconic lip gloss in clear tube",
+        "Pro Filt'r Foundation = original foundation line",
+        "Modern, inclusive branding",
+        "Holographic packaging on special editions"
+      ],
+      "recentColorways": [
+        { "line": "Pro Filt'r Soft Matte Foundation", "year": "2023-2024", "colors": ["100", "140", "190", "260", "290", "345", "385", "440", "498"] },
+        { "line": "Icon Velvet Liquid Lipstick", "year": "2024", "colors": ["the mvp", "shawty", "freckle fiesta", "thicc"] },
+        { "line": "Eaze Drop Blurring Skin Tint", "year": "2023", "colors": ["1", "3", "6", "8", "10", "12"] },
+        { "line": "Gloss Bomb Universal Lip Luminizer", "year": "2023-2024", "colors": ["fussy", "fu$$y", "fenty glow", "hot chocolit"] }
+      ]
+    },
+    {
+      "name": "Rare Beauty",
+      "aliases": ["Rare Beauty by Selena Gomez"],
+      "signatureColors": ["soft pink", "white", "rose"],
+      "designCues": ["rounded packaging", "soft pink accents", "minimalist design", "doe-foot applicators", "accessible design features"],
+      "identificationTips": [
+        "Soft pink and white color scheme",
+        "Rounded, ergonomic packaging",
+        "Rare Beauty script logo",
+        "Soft Pinch Liquid Blush = bestseller in pink bottle",
+        "Mental health advocacy messaging",
+        "Easy-grip bottle designs",
+        "Minimalist, gentle aesthetic"
+      ],
+      "recentColorways": [
+        { "line": "Soft Pinch Liquid Blush", "year": "2023-2024", "colors": ["happy", "bliss", "joy", "encourage", "grateful", "believe"] },
+        { "line": "Liquid Touch Weightless Foundation", "year": "2023-2024", "colors": ["110W", "170N", "230C", "310N", "380W", "450C"] },
+        { "line": "Kind Words Matte Lipstick", "year": "2024", "colors": ["worthy", "fearless", "inspire", "brave"] },
+        { "line": "Positive Light Liquid Luminizer", "year": "2023", "colors": ["enlighten", "mesmerize", "emanate"] }
+      ]
+    },
+    {
+      "name": "Urban Decay",
+      "aliases": ["UD"],
+      "signatureColors": ["purple", "pink", "black", "metallic"],
+      "designCues": ["edgy packaging", "metallic finishes", "bold colors", "grunge aesthetic", "skull logos", "rock-and-roll vibe"],
+      "identificationTips": [
+        "Purple and pink signature brand colors",
+        "Edgy, grunge-inspired packaging",
+        "Naked Palette = iconic nude eyeshadow palette",
+        "All Nighter Setting Spray in purple bottle",
+        "Bold, rebellious branding",
+        "Metallic and glittery finishes common",
+        "Urban, street-style aesthetic"
+      ],
+      "recentColorways": [
+        { "line": "Naked3 Palette", "year": "2023-2024", "colors": ["rose gold tones", "12 pink-neutral shades"] },
+        { "line": "Stay Naked Foundation", "year": "2023-2024", "colors": ["10NN", "20CP", "40CG", "60WY", "80WO", "90WR"] },
+        { "line": "Vice Lipstick", "year": "2024", "colors": ["bad blood", "conspiracy", "naked", "backstab"] },
+        { "line": "Moondust Eyeshadow", "year": "2023", "colors": ["cosmic", "space cowboy", "galaxy", "solstice"] }
+      ]
+    },
+    {
+      "name": "Too Faced",
+      "aliases": ["Too Faced Cosmetics"],
+      "signatureColors": ["pink", "gold", "peach", "white"],
+      "designCues": ["playful packaging", "pink and gold accents", "sweet scents", "feminine design", "novelty shapes", "glitter details"],
+      "identificationTips": [
+        "Pink and gold color scheme is signature",
+        "Playful, feminine packaging",
+        "Better Than Sex Mascara = bestseller in pink tube",
+        "Chocolate Bar Palette = cocoa-scented eyeshadows",
+        "Sweet, dessert-inspired product names",
+        "Heart and bow motifs",
+        "Fun, girly aesthetic"
+      ],
+      "recentColorways": [
+        { "line": "Born This Way Foundation", "year": "2023-2024", "colors": ["snow", "vanilla", "light beige", "golden beige", "chocolate", "espresso"] },
+        { "line": "Lip Injection Extreme", "year": "2024", "colors": ["bee sting", "milkshake", "yummy gummy", "spicy cinnamon"] },
+        { "line": "Natural Lust Palette", "year": "2023", "colors": ["12 nude shimmer and matte shades"] },
+        { "line": "Diamond Light Highlighter", "year": "2024", "colors": ["fancy pink", "canary diamond", "diamond fire"] }
+      ]
+    },
+    {
+      "name": "Tarte",
+      "aliases": ["Tarte Cosmetics"],
+      "signatureColors": ["purple", "gold", "turquoise", "rose gold"],
+      "designCues": ["eco-friendly packaging", "purple accents", "natural ingredients messaging", "tropical themes", "bamboo materials"],
+      "identificationTips": [
+        "Purple and gold brand colors",
+        "Eco-friendly, natural positioning",
+        "Shape Tape Concealer = iconic product in purple tube",
+        "Amazonian clay marketing",
+        "Tropical, beachy branding",
+        "Mermaid and ocean-inspired collections",
+        "Cruelty-free messaging prominent"
+      ],
+      "recentColorways": [
+        { "line": "Shape Tape Concealer", "year": "2023-2024", "colors": ["8B porcelain beige", "12S fair", "22N light neutral", "35N medium-tan neutral", "47S rich sand"] },
+        { "line": "Maracuja Juicy Lip", "year": "2024", "colors": ["watermelon", "guava", "passion fruit", "pomegranate"] },
+        { "line": "Tartelette Palette", "year": "2023-2024", "colors": ["neutral matte eyeshadows", "12 earth tones"] },
+        { "line": "Sea Surfer Curl Mascara", "year": "2024", "colors": ["black", "brown"] }
+      ]
+    },
+    {
+      "name": "Benefit",
+      "aliases": ["Benefit Cosmetics"],
+      "signatureColors": ["pink", "coral", "gold", "mint green"],
+      "designCues": ["retro packaging", "playful illustrations", "vintage pinup aesthetic", "pink boxes", "quirky product names", "illustrated characters"],
+      "identificationTips": [
+        "Retro, vintage-inspired packaging",
+        "Pink boxes with illustrated designs",
+        "POREfessional Primer = bestseller in pink tube",
+        "Hoola Bronzer in coral pink compact",
+        "They're Real Mascara in pink tube",
+        "Quirky, fun product names",
+        "1950s pinup girl aesthetic"
+      ],
+      "recentColorways": [
+        { "line": "Hoola Bronzer", "year": "2023-2024", "colors": ["hoola original", "hoola lite", "hoola toasted", "hoola caramel"] },
+        { "line": "Benetint Lip & Cheek Stain", "year": "2023-2024", "colors": ["rose tinted", "love tint", "benetint original"] },
+        { "line": "The POREfessional Face Primer", "year": "2024", "colors": ["translucent", "pearl primer", "matte rescue"] },
+        { "line": "Gimme Brow+ Gel", "year": "2023-2024", "colors": ["1 light", "3 medium", "4 medium/deep", "5 deep"] }
+      ]
+    },
+    {
+      "name": "NYX",
+      "aliases": ["NYX Professional Makeup", "NYX Cosmetics"],
+      "signatureColors": ["black", "white", "hot pink"],
+      "designCues": ["affordable packaging", "black and white design", "hot pink accents", "professional styling", "bold typography"],
+      "identificationTips": [
+        "Black, white, and hot pink color scheme",
+        "Affordable drugstore pricing",
+        "NYX logo in bold letters",
+        "Butter Gloss = bestselling lip gloss",
+        "Epic Ink Liner in black pen-style packaging",
+        "Professional makeup artist branding",
+        "Wide shade ranges"
+      ],
+      "recentColorways": [
+        { "line": "Can't Stop Won't Stop Foundation", "year": "2023-2024", "colors": ["pale", "light ivory", "natural", "caramel", "mahogany", "deep espresso"] },
+        { "line": "Butter Gloss", "year": "2024", "colors": ["creme brulee", "tiramisu", "angel food cake", "brownie"] },
+        { "line": "Ultimate Shadow Palette", "year": "2023", "colors": ["warm neutrals", "cool neutrals", "brights", "phoenix"] },
+        { "line": "Lip Lingerie XXL", "year": "2024", "colors": ["honeymoon", "confident", "satin ribbon", "woke up"] }
+      ]
+    },
+    {
+      "name": "Maybelline",
+      "aliases": ["Maybelline New York"],
+      "signatureColors": ["red", "yellow", "black"],
+      "designCues": ["yellow and black packaging", "drugstore aesthetic", "bold red accents", "New York branding", "accessible design"],
+      "identificationTips": [
+        "Yellow and black signature colors",
+        "Maybelline New York branding",
+        "Great Lash Mascara = iconic pink and green tube",
+        "Fit Me Foundation = bestselling foundation line",
+        "Bold red lipstick heritage",
+        "Drugstore pricing, professional results",
+        "Urban, New York aesthetic"
+      ],
+      "recentColorways": [
+        { "line": "Fit Me Matte + Poreless Foundation", "year": "2023-2024", "colors": ["102 fair porcelain", "120 classic ivory", "220 natural beige", "310 sun beige", "355 coconut", "375 java"] },
+        { "line": "SuperStay Matte Ink", "year": "2024", "colors": ["lover", "pioneer", "voyager", "amazonian"] },
+        { "line": "Lifter Gloss", "year": "2023-2024", "colors": ["pearl", "topaz", "moon", "amber"] },
+        { "line": "Sky High Mascara", "year": "2023-2024", "colors": ["blackest black", "brownish black", "cosmic black"] }
+      ]
+    },
+    {
+      "name": "L'Oreal",
+      "aliases": ["L'Oreal Paris", "L'Oreal Cosmetics"],
+      "signatureColors": ["gold", "black", "white"],
+      "designCues": ["gold packaging", "luxury drugstore positioning", "French branding", "elegant design", "Worth It tagline"],
+      "identificationTips": [
+        "Gold packaging is signature",
+        "L'Oreal Paris branding",
+        "Because You're Worth It tagline",
+        "French luxury positioning",
+        "Voluminous Lash Paradise Mascara in gold tube",
+        "Infallible Pro-Matte Foundation",
+        "Elegant, sophisticated aesthetic"
+      ],
+      "recentColorways": [
+        { "line": "Infallible 24H Fresh Wear Foundation", "year": "2023-2024", "colors": ["pearl", "linen", "vanilla", "natural beige", "cocoa", "ebony"] },
+        { "line": "Colour Riche Lipstick", "year": "2024", "colors": ["fairest nude", "eva's nude", "jennifer's nude", "blake's red"] },
+        { "line": "True Match Foundation", "year": "2023-2024", "colors": ["C1", "N3", "W4", "N5", "C7", "N9"] },
+        { "line": "Paradise Extatic Mascara", "year": "2024", "colors": ["blackest black", "mysterious blue", "brown"] }
+      ]
+    },
+    {
+      "name": "Revlon",
+      "aliases": ["Revlon Cosmetics"],
+      "signatureColors": ["red", "black", "silver"],
+      "designCues": ["classic red lipstick heritage", "silver accents", "vintage glamour", "bold red packaging", "Hollywood aesthetic"],
+      "identificationTips": [
+        "Red and black signature colors",
+        "Classic lipstick bullet shape",
+        "Super Lustrous Lipstick = iconic line",
+        "ColorStay Foundation = long-wear bestseller",
+        "Old Hollywood glamour branding",
+        "Silver metallic accents",
+        "Heritage beauty brand aesthetic"
+      ],
+      "recentColorways": [
+        { "line": "ColorStay Makeup Foundation", "year": "2023-2024", "colors": ["110 ivory", "150 buff", "220 natural beige", "310 warm golden", "400 caramel", "450 mocha"] },
+        { "line": "Super Lustrous Lipstick", "year": "2024", "colors": ["love that red", "fire & ice", "pink in the afternoon", "rum raisin"] },
+        { "line": "ColorStay Satin Ink", "year": "2023", "colors": ["it's everything", "got the blues", "in the money", "always on"] },
+        { "line": "Volume + Length Mascara", "year": "2024", "colors": ["blackest black", "blackened brown"] }
+      ]
+    },
+    {
+      "name": "CoverGirl",
+      "aliases": ["CoverGirl Cosmetics"],
+      "signatureColors": ["teal", "orange", "white"],
+      "designCues": ["teal and orange packaging", "accessible design", "diverse model representation", "clean aesthetic", "easy breezy messaging"],
+      "identificationTips": [
+        "Teal and orange brand colors",
+        "Easy, Breezy, Beautiful tagline",
+        "Clean & Fresh aesthetic",
+        "LashBlast Mascara in orange tube",
+        "TruBlend Foundation line",
+        "Accessible, inclusive branding",
+        "Fresh, youthful positioning"
+      ],
+      "recentColorways": [
+        { "line": "TruBlend Matte Made Foundation", "year": "2023-2024", "colors": ["L10 fair porcelain", "M30 light medium", "M50 medium", "D40 medium deep", "D60 deep"] },
+        { "line": "Exhibitionist Lipstick", "year": "2024", "colors": ["get fired up", "coral me crazy", "pink petal", "mauve over"] },
+        { "line": "Simply Ageless Serum Foundation", "year": "2023", "colors": ["210 classic ivory", "245 warm beige", "280 natural beige", "330 toasted almond"] },
+        { "line": "LashBlast Volume Mascara", "year": "2023-2024", "colors": ["very black", "black brown", "brown"] }
+      ]
+    },
+    {
+      "name": "e.l.f.",
+      "aliases": ["e.l.f. Cosmetics", "eyes lips face"],
+      "signatureColors": ["black", "white", "gold"],
+      "designCues": ["minimalist packaging", "affordable positioning", "black and white design", "clean aesthetic", "vegan messaging"],
+      "identificationTips": [
+        "Black and white minimalist packaging",
+        "e.l.f. lowercase logo",
+        "Ultra-affordable pricing",
+        "Poreless Putty Primer in white jar",
+        "Camo Concealer in simple black packaging",
+        "Vegan and cruelty-free messaging",
+        "Clean, modern aesthetic"
+      ],
+      "recentColorways": [
+        { "line": "Halo Glow Liquid Filter", "year": "2023-2024", "colors": ["fair/light", "light/medium", "medium", "tan/deep"] },
+        { "line": "Camo Concealer", "year": "2023-2024", "colors": ["fair beige", "light sand", "medium peach", "tan neutral", "deep chestnut"] },
+        { "line": "Power Grip Primer", "year": "2024", "colors": ["clear", "universal"] },
+        { "line": "Liquid Glitter Eyeshadow", "year": "2023", "colors": ["disco queen", "party popper", "rose gold", "party hopper"] }
+      ]
+    },
+    {
+      "name": "Pat McGrath Labs",
+      "aliases": ["Pat McGrath", "PML"],
+      "signatureColors": ["gold", "black", "burgundy", "holographic"],
+      "designCues": ["luxury packaging", "gold accents", "ornate design", "holographic elements", "high-fashion aesthetic", "opulent branding"],
+      "identificationTips": [
+        "Luxurious gold packaging",
+        "Pat McGrath Labs logo",
+        "Mothership Palettes = luxury eyeshadow palettes",
+        "High price point, prestige positioning",
+        "Holographic and metallic finishes",
+        "Ornate, baroque-inspired design",
+        "Haute couture makeup aesthetic"
+      ],
+      "recentColorways": [
+        { "line": "Mothership IX Palette", "year": "2023", "colors": ["huetopian dream", "9 iridescent shades"] },
+        { "line": "Skin Fetish Foundation", "year": "2023-2024", "colors": ["light 3", "medium 12", "deep 28", "deep 36"] },
+        { "line": "MatteTrance Lipstick", "year": "2024", "colors": ["flesh 3", "omi", "elson", "christy"] },
+        { "line": "Divine Skin Rose 001 Highlighting Trio", "year": "2023", "colors": ["rose gold", "champagne", "bronze"] }
+      ]
+    },
+    {
+      "name": "Hourglass",
+      "aliases": ["Hourglass Cosmetics"],
+      "signatureColors": ["beige", "gold", "nude"],
+      "designCues": ["sleek packaging", "gold accents", "luxury minimalism", "architectural design", "nude color palette", "cruelty-free messaging"],
+      "identificationTips": [
+        "Sleek, architectural packaging",
+        "Gold and nude color scheme",
+        "Hourglass logo",
+        "Ambient Lighting Powder in luxe compact",
+        "Veil Primer = bestselling primer",
+        "Luxury, minimalist aesthetic",
+        "Innovative product formulations"
+      ],
+      "recentColorways": [
+        { "line": "Vanish Airbrush Foundation", "year": "2023-2024", "colors": ["blanc", "shell", "nude", "natural", "beige", "sable"] },
+        { "line": "Ambient Lighting Powder", "year": "2023-2024", "colors": ["diffused light", "dim light", "ethereal light", "luminous light"] },
+        { "line": "Confession Lipstick", "year": "2024", "colors": ["i believe", "i dance", "i desire", "i embellish"] },
+        { "line": "Scattered Light Eyeshadow", "year": "2023", "colors": ["smoke", "ray", "aura", "blaze"] }
+      ]
+    },
+    {
+      "name": "Laura Mercier",
+      "aliases": ["Laura Mercier Cosmetics"],
+      "signatureColors": ["cream", "nude", "champagne"],
+      "designCues": ["elegant packaging", "French sophistication", "nude palette", "champagne accents", "luxury aesthetic", "professional artistry"],
+      "identificationTips": [
+        "Cream and nude packaging",
+        "Laura Mercier script logo",
+        "Translucent Powder = iconic setting powder",
+        "French-inspired luxury",
+        "Flawless Face philosophy",
+        "Professional makeup artist heritage",
+        "Sophisticated, timeless aesthetic"
+      ],
+      "recentColorways": [
+        { "line": "Flawless Lumiere Foundation", "year": "2023-2024", "colors": ["0N1 pearl", "1N2 vanille", "2N1 cashew", "3W1 tawny", "5N1 pecan"] },
+        { "line": "Caviar Stick Eye Shadow", "year": "2024", "colors": ["rose gold", "amethyst", "steel", "copper"] },
+        { "line": "Tinted Moisturizer", "year": "2023-2024", "colors": ["0N1 pearl", "1C1 shell", "2W1 natural", "3N1 sand", "5W1 tan"] },
+        { "line": "Rouge Essentiel Lipstick", "year": "2023", "colors": ["nude naturel", "rose ultime", "brun profond", "rose majeur"] }
+      ]
+    },
+    {
+      "name": "Bobbi Brown",
+      "aliases": ["Bobbi Brown Cosmetics"],
+      "signatureColors": ["black", "nude", "brown"],
+      "designCues": ["professional packaging", "black compacts", "nude color philosophy", "understated luxury", "makeup artist aesthetic"],
+      "identificationTips": [
+        "Black professional packaging",
+        "Bobbi Brown logo",
+        "Skin Foundation Stick = bestseller",
+        "Nude and brown color focus",
+        "Makeup artist heritage",
+        "Understated, classic aesthetic",
+        "Natural beauty philosophy"
+      ],
+      "recentColorways": [
+        { "line": "Skin Long-Wear Foundation", "year": "2023-2024", "colors": ["porcelain", "cool ivory", "warm natural", "golden", "almond", "espresso"] },
+        { "line": "Crushed Lip Color", "year": "2024", "colors": ["bare", "ruby", "babe", "crush"] },
+        { "line": "Luxe Eye Shadow", "year": "2023", "colors": ["heat ray", "moon rock", "melting point", "incandescent"] },
+        { "line": "Highlighting Powder", "year": "2023-2024", "colors": ["pink glow", "bronze glow", "champagne quartz"] }
+      ]
+    },
+    {
+      "name": "Clinique",
+      "aliases": ["Clinique Cosmetics"],
+      "signatureColors": ["lime green", "silver", "white"],
+      "designCues": ["clinical packaging", "lime green accents", "dermatologist-developed messaging", "allergy-tested branding", "medical aesthetic"],
+      "identificationTips": [
+        "Lime green and silver packaging",
+        "Clinique logo",
+        "Dramatically Different Moisturizer = iconic product",
+        "3-Step Skin Care System",
+        "Allergy tested, fragrance-free messaging",
+        "Clinical, dermatologist aesthetic",
+        "Clean, medical-inspired design"
+      ],
+      "recentColorways": [
+        { "line": "Even Better Foundation", "year": "2023-2024", "colors": ["alabaster", "linen", "vanilla", "cream chamois", "nutty", "espresso"] },
+        { "line": "Black Honey Almost Lipstick", "year": "2023-2024", "colors": ["black honey", "pink honey", "tender honey"] },
+        { "line": "Pop Lip Color", "year": "2024", "colors": ["bare pop", "plum pop", "cherry pop", "melon pop"] },
+        { "line": "Chubby Stick Shadow", "year": "2023", "colors": ["roomiest rose", "pink pop", "lavender lush", "beach bronze"] }
+      ]
+    },
+    {
+      "name": "Glossier",
+      "aliases": ["Glossier Inc"],
+      "signatureColors": ["millennial pink", "white", "nude"],
+      "designCues": ["minimalist packaging", "millennial pink accents", "cloud logo", "Instagram-friendly aesthetic", "dewy skin philosophy", "direct-to-consumer branding"],
+      "identificationTips": [
+        "Millennial pink signature color",
+        "Minimalist white packaging",
+        "Glossier script logo with cloud",
+        "Boy Brow = bestselling brow gel",
+        "Cloud Paint = cream blush in tube",
+        "Dewy, natural aesthetic",
+        "Instagram-worthy, minimal design"
+      ],
+      "recentColorways": [
+        { "line": "Skin Tint", "year": "2023-2024", "colors": ["G11", "G12", "G6", "G8", "G10", "deep"] },
+        { "line": "Cloud Paint Blush", "year": "2024", "colors": ["puff", "beam", "dusk", "storm", "eve"] },
+        { "line": "Generation G Lipstick", "year": "2023-2024", "colors": ["cake", "zip", "jam", "crush"] },
+        { "line": "Lidstar Eyeshadow", "year": "2023", "colors": ["slip", "moon", "fawn", "cub"] }
+      ]
+    },
+    {
+      "name": "Milk Makeup",
+      "aliases": ["Milk"],
+      "signatureColors": ["white", "black", "holographic"],
+      "designCues": ["stick format products", "white packaging", "minimalist design", "graffiti-inspired logo", "urban aesthetic", "vegan messaging"],
+      "identificationTips": [
+        "White and black packaging",
+        "Graffiti-style Milk logo",
+        "Stick format products (twist-up)",
+        "Hydrogrip Primer = bestseller in white bottle",
+        "Urban, New York aesthetic",
+        "Clean, vegan, cruelty-free messaging",
+        "Cool, downtown vibe"
+      ],
+      "recentColorways": [
+        { "line": "Pore Eclipse Primer", "year": "2024", "colors": ["translucent"] },
+        { "line": "Lip + Cheek Stick", "year": "2023-2024", "colors": ["werk", "rally", "perk", "quickie"] },
+        { "line": "Kush Mascara", "year": "2023-2024", "colors": ["boom", "green", "purple haze"] },
+        { "line": "Bionic Liquid Blush", "year": "2024", "colors": ["rave", "flare", "burst", "hype"] }
+      ]
+    },
+    {
+      "name": "ColourPop",
+      "aliases": ["Colourpop Cosmetics"],
+      "signatureColors": ["rainbow colors", "white", "holographic"],
+      "designCues": ["affordable packaging", "colorful design", "playful aesthetic", "collaboration collections", "trendy releases", "social media driven"],
+      "identificationTips": [
+        "Colorful, playful packaging",
+        "ColourPop logo",
+        "Ultra-affordable pricing",
+        "Super Shock Shadows in colorful pots",
+        "Frequent collaborations and limited editions",
+        "Trendy, Instagram-inspired products",
+        "Wide shade ranges"
+      ],
+      "recentColorways": [
+        { "line": "Pretty Fresh Foundation", "year": "2023-2024", "colors": ["fair 10N", "light 40N", "medium 110N", "deep 210N", "deep dark 340N"] },
+        { "line": "Lux Lipstick", "year": "2024", "colors": ["westie", "still crazy", "ziggie", "aquarius"] },
+        { "line": "Super Shock Shadow", "year": "2023-2024", "colors": ["ritz", "weenie", "birthday girl", "cricket"] },
+        { "line": "Blush Stix", "year": "2023", "colors": ["cool it", "show & tell", "graceland", "meet cute"] }
+      ]
+    }
+  ]
+}

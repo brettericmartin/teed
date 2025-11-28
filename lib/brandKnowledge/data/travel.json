@@ -1,0 +1,572 @@
+{
+  "category": "travel",
+  "colorVocabulary": {
+    "black": ["stealth black", "jet black", "matte black", "onyx", "carbon black", "midnight"],
+    "navy": ["navy blue", "deep blue", "midnight blue", "marine blue", "ocean navy"],
+    "gray": ["charcoal", "slate", "graphite", "titanium", "concrete", "ash gray"],
+    "silver": ["aluminum", "metallic silver", "brushed aluminum", "polished aluminum", "chrome"],
+    "green": ["olive", "forest green", "sage", "hunter green", "moss"],
+    "burgundy": ["wine", "oxblood", "maroon", "deep red"],
+    "beige": ["sand", "tan", "camel", "khaki", "desert"],
+    "pink": ["rose gold", "blush", "dusty rose", "millennial pink"],
+    "white": ["off-white", "cream", "pearl", "ivory"],
+    "brown": ["cognac", "chestnut", "chocolate", "caramel"],
+    "red": ["cardinal", "cherry", "fire red"],
+    "blue": ["cobalt", "sky blue", "powder blue", "pacific blue"],
+    "materialFinishes": ["ballistic nylon", "polycarbonate", "leather", "vegan leather", "canvas", "ripstop", "quilted nylon", "grooved texture", "smooth finish", "matte finish"]
+  },
+  "patternTypes": ["solid", "quilted", "logo pattern", "textured", "grooved", "geometric pattern", "monogram", "camo", "herringbone weave"],
+  "partTerminology": {
+    "suitcase": ["shell", "wheels", "spinner wheels", "handle", "telescoping handle", "zipper", "TSA lock", "expansion zipper", "divider", "compression straps", "corner guards", "bumper"],
+    "backpack": ["main compartment", "laptop sleeve", "shoulder straps", "sternum strap", "hip belt", "compression straps", "water bottle pocket", "quick access pocket", "organizational panel", "luggage pass-through"],
+    "organizer": ["pockets", "mesh panels", "compression", "zipper", "dividers", "elastic loops", "clear windows", "handle"],
+    "duffel": ["handles", "shoulder strap", "removable strap", "end pocket", "shoe compartment", "wet pocket", "ID window"],
+    "tote": ["handles", "shoulder strap", "zipper closure", "interior pockets", "laptop sleeve", "trolley sleeve"]
+  },
+  "brands": [
+    {
+      "name": "Away",
+      "aliases": ["Away Travel"],
+      "signatureColors": ["navy", "black", "aluminum", "sand", "sky blue", "coast"],
+      "designCues": ["minimalist aesthetic", "grooved shell pattern", "interior compression system", "ejectable battery (older models)", "TSA-approved lock", "360-degree spinner wheels", "leather luggage tag"],
+      "identificationTips": [
+        "Horizontal grooved texture on polycarbonate shell",
+        "Interior compression pad with zippers",
+        "Away wordmark on exterior tag",
+        "Minimalist color palette",
+        "Ejectable battery compartment (pre-2020 models)",
+        "Laundry bag included",
+        "Leather patch on exterior"
+      ],
+      "recentColorways": [
+        { "line": "The Bigger Carry-On", "year": "2024", "colors": ["navy", "black", "aluminum", "sand", "sky", "coast"] },
+        { "line": "The Medium", "year": "2024", "colors": ["navy", "black", "aluminum", "sand"] },
+        { "line": "Aluminum Edition", "year": "2023-2024", "colors": ["silver", "black", "navy"] },
+        { "line": "Coast Collection", "year": "2024", "colors": ["coast blue", "sand"] }
+      ]
+    },
+    {
+      "name": "Rimowa",
+      "aliases": ["RIMOWA", "LVMH Rimowa"],
+      "signatureColors": ["silver", "black", "desert rose", "navy blue", "blue gloss", "night blue"],
+      "designCues": ["parallel groove design", "aluminum or polycarbonate construction", "Flex Divider system", "TSA lock integrated into shell", "Multiwheel system", "leather handles", "iconic grooves"],
+      "identificationTips": [
+        "Distinctive parallel grooves running vertically",
+        "Silver aluminum = Classic line",
+        "Polycarbonate = Essential line",
+        "Rimowa logo plate on front",
+        "German engineering heritage",
+        "Multiwheel spinner system",
+        "Premium price point indicator",
+        "Flex Divider interior visible"
+      ],
+      "recentColorways": [
+        { "line": "Original Cabin", "year": "2023-2024", "colors": ["silver aluminum", "black aluminum"] },
+        { "line": "Essential Lite", "year": "2024", "colors": ["black", "navy", "desert rose", "blue gloss"] },
+        { "line": "Classic Flight", "year": "2023", "colors": ["silver", "gold"] },
+        { "line": "Never Still Collection", "year": "2024", "colors": ["night blue", "arctic blue"] }
+      ]
+    },
+    {
+      "name": "Samsonite",
+      "aliases": ["Samsonite Luggage"],
+      "signatureColors": ["black", "navy", "red", "charcoal", "silver"],
+      "designCues": ["Curv technology shell", "cross-rib design", "recessed TSA lock", "lightweight construction", "Samsonite logo badge", "wide wheelbase"],
+      "identificationTips": [
+        "Samsonite logo badge on front",
+        "Omni PC series = textured diamond pattern",
+        "Winfield series = brushed texture",
+        "Curv material = ultra-lightweight",
+        "Wide variety of price points",
+        "10-year warranty standard",
+        "Red accent color common"
+      ],
+      "recentColorways": [
+        { "line": "Omni 2", "year": "2024", "colors": ["black", "navy", "red", "teal", "purple"] },
+        { "line": "Winfield 3", "year": "2023", "colors": ["charcoal", "navy", "red", "brushed anthracite"] },
+        { "line": "Freeform", "year": "2023-2024", "colors": ["black", "navy", "red", "white"] },
+        { "line": "Stryde 2", "year": "2024", "colors": ["glider gray", "navy", "black"] }
+      ]
+    },
+    {
+      "name": "Tumi",
+      "aliases": ["Tumi Inc"],
+      "signatureColors": ["black", "navy", "pewter gray", "graphite"],
+      "designCues": ["ballistic nylon construction", "Tumi Tracer program", "Alpha branding", "leather accents", "business-focused design", "expandable compartments", "organizational pockets"],
+      "identificationTips": [
+        "Ballistic nylon fabric = signature Tumi",
+        "Tumi Tracer metal plate (20-digit number)",
+        "Alpha series = most popular line",
+        "Premium leather accents",
+        "Business professional aesthetic",
+        "Excellent organization features",
+        "High price point",
+        "Pewter gray metallic accent color"
+      ],
+      "recentColorways": [
+        { "line": "Alpha 3", "year": "2023-2024", "colors": ["black", "navy", "anthracite"] },
+        { "line": "19 Degree Aluminum", "year": "2024", "colors": ["silver", "matte black"] },
+        { "line": "Latitude", "year": "2023", "colors": ["black", "navy"] },
+        { "line": "Merge", "year": "2024", "colors": ["black", "navy", "ocean blue"] }
+      ]
+    },
+    {
+      "name": "Briggs & Riley",
+      "aliases": ["Briggs and Riley", "B&R"],
+      "signatureColors": ["black", "navy", "hunter green", "slate"],
+      "designCues": ["CX compression expansion system", "lifetime warranty", "durable ballistic nylon", "Outsider handle", "SpeedThru pocket", "organizational features"],
+      "identificationTips": [
+        "CX expansion zipper system (patent)",
+        "Outsider handle (outside mounted, more interior space)",
+        "Lifetime guarantee even for airline damage",
+        "SpeedThru laptop pocket (TSA checkpoint friendly)",
+        "Made in USA heritage (some lines)",
+        "Business traveler focus",
+        "Extremely durable construction"
+      ],
+      "recentColorways": [
+        { "line": "Baseline", "year": "2023-2024", "colors": ["black", "navy", "olive"] },
+        { "line": "Rhapsody", "year": "2024", "colors": ["black", "plum", "teal"] },
+        { "line": "Torq", "year": "2023", "colors": ["stealth black", "cobalt", "ruby"] },
+        { "line": "ZDX", "year": "2024", "colors": ["hunter green", "black"] }
+      ]
+    },
+    {
+      "name": "Monos",
+      "aliases": ["Monos Luggage"],
+      "signatureColors": ["charcoal", "black", "white", "sage", "terracotta", "slate blue"],
+      "designCuelues": ["minimalist design", "vegan leather accents", "compression pads", "Hinomoto wheels", "aircraft-grade aluminum handle", "antimicrobial lining"],
+      "identificationTips": [
+        "Clean minimalist aesthetic",
+        "Vegan leather details",
+        "Hinomoto Japanese wheels",
+        "YKK zippers throughout",
+        "Antimicrobial interior lining",
+        "Monos logo subtly debossed",
+        "Modern color palette",
+        "Direct-to-consumer brand"
+      ],
+      "recentColorways": [
+        { "line": "Carry-On Pro", "year": "2024", "colors": ["charcoal", "black", "white", "sage", "terracotta"] },
+        { "line": "Check-In Medium", "year": "2024", "colors": ["charcoal", "black", "slate blue"] },
+        { "line": "Metro Backpack", "year": "2023", "colors": ["black", "charcoal", "forest"] },
+        { "line": "Kiyo UVC", "year": "2023", "colors": ["white", "black"] }
+      ]
+    },
+    {
+      "name": "July",
+      "aliases": ["July Luggage"],
+      "signatureColors": ["black", "rainforest", "pink clay", "storm blue", "limestone"],
+      "designCues": ["Australian design", "front pocket access", "compression system", "corner guards", "smooth polycarbonate", "sustainable materials"],
+      "identificationTips": [
+        "Australian brand",
+        "Front laptop pocket on carry-ons",
+        "Distinctive color names (Rainforest, Pink Clay)",
+        "Smooth polycarbonate finish",
+        "Compression packing cubes included",
+        "July logo badge",
+        "Direct-to-consumer pricing",
+        "Sustainability focus"
+      ],
+      "recentColorways": [
+        { "line": "Carry On", "year": "2024", "colors": ["black", "rainforest", "pink clay", "storm blue", "limestone"] },
+        { "line": "Checked", "year": "2024", "colors": ["black", "rainforest", "limestone"] },
+        { "line": "Weekender", "year": "2023", "colors": ["black", "blush", "rainforest"] }
+      ]
+    },
+    {
+      "name": "Calpak",
+      "aliases": ["CalPak", "CALPAK"],
+      "signatureColors": ["black", "deep purple", "lemonade", "milk marble", "golden yellow", "terracotta"],
+      "signatureDesignCues": ["colorful aesthetics", "social media friendly", "lightweight construction", "interior organization", "trolley sleeve", "compression straps"],
+      "identificationTips": [
+        "Vibrant color options",
+        "Instagram-friendly aesthetic",
+        "Luka collection = most popular",
+        "Kaya laptop backpack line",
+        "Affordable price point",
+        "Fashion-forward design",
+        "Target demographic: millennials/Gen Z",
+        "Collaborations with influencers"
+      ],
+      "recentColorways": [
+        { "line": "Luka", "year": "2024", "colors": ["black", "deep purple", "lemonade", "terracotta", "lilac"] },
+        { "line": "Hue Collection", "year": "2024", "colors": ["golden yellow", "pink quartz", "sage"] },
+        { "line": "Kaya Laptop Backpack", "year": "2023", "colors": ["black", "milk marble", "dusty rose"] },
+        { "line": "Stevyn", "year": "2023", "colors": ["black", "navy", "pink"] }
+      ]
+    },
+    {
+      "name": "Beis",
+      "aliases": ["BEIS", "Beis Travel"],
+      "signatureColors": ["beige", "black", "blush", "brown", "green"],
+      "designCues": ["celebrity founder (Shay Mitchell)", "Instagram aesthetic", "organizational features", "vegan leather", "trolley sleeve", "compression"],
+      "identificationTips": [
+        "Founded by actress Shay Mitchell",
+        "Signature beige color",
+        "Fashion-forward design",
+        "Strong social media presence",
+        "Vegan leather accents",
+        "Affordable luxury positioning",
+        "Popular with influencers",
+        "The Carry-On Roller signature product"
+      ],
+      "recentColorways": [
+        { "line": "The Carry-On Roller", "year": "2024", "colors": ["beige", "black", "brown", "green"] },
+        { "line": "The Check-In Roller", "year": "2024", "colors": ["beige", "black"] },
+        { "line": "The Weekender", "year": "2023", "colors": ["beige", "black", "blush"] },
+        { "line": "The Backpack", "year": "2023", "colors": ["beige", "black", "terracotta"] }
+      ]
+    },
+    {
+      "name": "Paravel",
+      "aliases": ["Paravel Travel"],
+      "signatureColors": ["black", "sand", "sky", "brick", "forest"],
+      "designCues": ["sustainable materials", "recycled polycarbonate", "carbon neutral", "interior compression", "cross-body strap", "minimalist design"],
+      "identificationTips": [
+        "Eco-friendly focus (recycled materials)",
+        "Carbon neutral certified",
+        "Aviator collection = signature line",
+        "Cabana tote popular",
+        "Premium pricing",
+        "B Corporation certified",
+        "Made from recycled water bottles",
+        "Sustainability messaging prominent"
+      ],
+      "recentColorways": [
+        { "line": "Aviator Grand", "year": "2024", "colors": ["black", "sand", "sky", "brick", "forest"] },
+        { "line": "Aviator Carry-On", "year": "2024", "colors": ["black", "sand", "sky", "brick"] },
+        { "line": "Fold-Up Bag", "year": "2023", "colors": ["black", "rainbow stripe", "indigo"] },
+        { "line": "Cabana Tote", "year": "2023", "colors": ["black canvas", "cream canvas"] }
+      ]
+    },
+    {
+      "name": "Peak Design",
+      "aliases": ["Peak Design Travel"],
+      "signatureColors": ["black", "midnight navy", "sage", "bone"],
+      "designCues": ["photographer focus", "modular system", "external carry straps", "MagLatch hardware", "weatherproof materials", "camera cube integration"],
+      "identificationTips": [
+        "Photography and travel focus",
+        "Modular packing cube system",
+        "MagLatch magnetic buckles",
+        "External carry straps for tripods",
+        "Weather-resistant materials",
+        "Camera gear organization",
+        "Travel Backpack signature product",
+        "Premium quality, high price"
+      ],
+      "recentColorways": [
+        { "line": "Travel Backpack 45L", "year": "2023-2024", "colors": ["black", "midnight navy", "sage"] },
+        { "line": "Travel Duffel 65L", "year": "2024", "colors": ["black", "midnight navy"] },
+        { "line": "Packing Cubes", "year": "2023", "colors": ["black", "sage", "bone"] },
+        { "line": "Tech Pouch", "year": "2023", "colors": ["black", "midnight", "sage"] }
+      ]
+    },
+    {
+      "name": "Aer",
+      "aliases": ["Aer Designs", "AER"],
+      "signatureColors": ["black", "navy", "gray"],
+      "designCues": ["urban commuter design", "modular organization", "laptop compartments", "weather-resistant", "minimal branding", "technical fabrics"],
+      "identificationTips": [
+        "San Francisco-based brand",
+        "Urban professional focus",
+        "Cordura nylon construction",
+        "YKK zippers",
+        "Minimal external branding",
+        "Tech organization features",
+        "Flight Pack popular for travel",
+        "Duffel Pack signature design"
+      ],
+      "recentColorways": [
+        { "line": "Travel Pack 3", "year": "2024", "colors": ["black", "navy"] },
+        { "line": "Flight Pack 3", "year": "2023", "colors": ["black", "navy", "gray"] },
+        { "line": "Duffel Pack 3", "year": "2024", "colors": ["black", "navy"] },
+        { "line": "City Pack Pro", "year": "2023", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "Bellroy",
+      "aliases": ["Bellroy Travel"],
+      "signatureColors": ["black", "navy", "ranger green", "limestone", "basalt"],
+      "designCues": ["Australian design", "premium materials", "slim profiles", "leather accents", "hidden magnetic closures", "organizational efficiency"],
+      "identificationTips": [
+        "Premium leather and fabric combinations",
+        "Slim, efficient design philosophy",
+        "Hidden magnetic closures",
+        "Bellroy logo subtly placed",
+        "Nature-inspired color names",
+        "Sustainability focus",
+        "Transit Backpack signature",
+        "High-end price point"
+      ],
+      "recentColorways": [
+        { "line": "Transit Backpack Plus", "year": "2024", "colors": ["black", "ranger green", "basalt"] },
+        { "line": "Classic Backpack Plus", "year": "2023", "colors": ["black", "navy", "limestone"] },
+        { "line": "Lite Duffel", "year": "2024", "colors": ["black", "basalt", "clay"] },
+        { "line": "Transit Workpack", "year": "2023", "colors": ["black", "navy"] }
+      ]
+    },
+    {
+      "name": "Nomatic",
+      "aliases": ["Nomatic Travel"],
+      "signatureColors": ["black", "navy", "gray"],
+      "designCues": ["Kickstarter origins", "maximalist organization", "RFID pockets", "water bottle pockets", "compression straps", "modular accessories"],
+      "identificationTips": [
+        "Extremely organized compartments",
+        "RFID-protected pockets",
+        "Magnetic water bottle holder",
+        "20+ organizational features",
+        "Kickstarter success story",
+        "Travel Pack signature product",
+        "Tech-focused design",
+        "Direct-to-consumer brand"
+      ],
+      "recentColorways": [
+        { "line": "Travel Pack", "year": "2023-2024", "colors": ["black", "navy"] },
+        { "line": "Carry-On Pro", "year": "2024", "colors": ["black"] },
+        { "line": "Navigator Duffel", "year": "2023", "colors": ["black", "navy"] },
+        { "line": "Peter McKinnon Camera Pack", "year": "2023", "colors": ["black"] }
+      ]
+    },
+    {
+      "name": "Tortuga",
+      "aliases": ["Tortuga Backpacks"],
+      "signatureColors": ["black", "navy"],
+      "designCues": ["digital nomad focus", "laptop protection", "hip belt", "compression straps", "lockable zippers", "carry-on sized"],
+      "identificationTips": [
+        "Digital nomad/long-term travel focus",
+        "Always carry-on sized",
+        "Laptop compartment on back panel",
+        "Hip belt for weight distribution",
+        "Lockable YKK zippers",
+        "Simple color options (black/navy)",
+        "Setout collection popular",
+        "Minimalist external design"
+      ],
+      "recentColorways": [
+        { "line": "Setout Backpack", "year": "2023-2024", "colors": ["black"] },
+        { "line": "Setout Divide", "year": "2024", "colors": ["black"] },
+        { "line": "Outbreaker", "year": "2023", "colors": ["black", "navy"] }
+      ]
+    },
+    {
+      "name": "Osprey",
+      "aliases": ["Osprey Packs"],
+      "signatureColors": ["black", "gray", "blue", "green", "red"],
+      "designCues": ["outdoor heritage", "ventilated back panel", "hip belt", "compression straps", "hydration compatible", "All Mighty Guarantee"],
+      "identificationTips": [
+        "Outdoor/hiking brand heritage",
+        "Farpoint/Fairview = travel series",
+        "Ventilated back panel system",
+        "Hip belt standard on larger packs",
+        "All Mighty Guarantee (lifetime warranty)",
+        "Stowaway harness system",
+        "Osprey logo patch",
+        "Technical features from hiking packs"
+      ],
+      "recentColorways": [
+        { "line": "Farpoint 40", "year": "2023-2024", "colors": ["volcanic gray", "black"] },
+        { "line": "Fairview 40", "year": "2024", "colors": ["rainforest green", "black"] },
+        { "line": "Sojourn Porter 46", "year": "2023", "colors": ["black", "hoodoo red"] },
+        { "line": "Transporter Wheeled", "year": "2024", "colors": ["black", "kingfisher blue"] }
+      ]
+    },
+    {
+      "name": "Cotopaxi",
+      "aliases": ["Cotopaxi Gear"],
+      "signatureColors": ["multi-color", "black", "blue", "green", "red", "yellow"],
+      "designCues": ["colorful designs", "Del Día collection (unique colors)", "social impact mission", "outdoor aesthetic", "llama logo", "durable materials"],
+      "identificationTips": [
+        "Bright, colorful designs",
+        "Del Día = every bag unique colors",
+        "Llama logo prominent",
+        "B Corporation certified",
+        "Social impact mission (poverty alleviation)",
+        "Outdoor/adventure aesthetic",
+        "Allpa Travel Pack signature",
+        "Repurposed materials in Del Día line"
+      ],
+      "recentColorways": [
+        { "line": "Allpa 35L", "year": "2024", "colors": ["black", "spruce green", "Del Día (varies)"] },
+        { "line": "Allpa 42L", "year": "2024", "colors": ["black", "evergreen", "coastal blue"] },
+        { "line": "Batac 24L", "year": "2023", "colors": ["Del Día (varies)", "black"] },
+        { "line": "Coso Duffel", "year": "2023", "colors": ["black", "Del Día (varies)"] }
+      ]
+    },
+    {
+      "name": "Fjällräven",
+      "aliases": ["Fjallraven"],
+      "signatureColors": ["ochre", "forest green", "navy", "black", "frost green", "burnt orange"],
+      "designCues": ["Scandinavian design", "G-1000 fabric", "arctic fox logo", "Kånken backpack style", "durable construction", "waxed canvas"],
+      "identificationTips": [
+        "Swedish outdoor brand",
+        "Arctic fox logo",
+        "G-1000 durable fabric (cotton/polyester)",
+        "Kånken backpack = iconic design",
+        "Greenland Wax treatment",
+        "Ochre yellow signature color",
+        "Minimalist Scandinavian aesthetic",
+        "Sustainability focus"
+      ],
+      "recentColorways": [
+        { "line": "Kånken Backpack", "year": "2023-2024", "colors": ["ochre", "forest green", "navy", "black", "frost green"] },
+        { "line": "Greenland Zip", "year": "2024", "colors": ["black", "dark olive"] },
+        { "line": "High Coast Duffel", "year": "2023", "colors": ["navy", "black", "limestone"] },
+        { "line": "Travel Pack", "year": "2024", "colors": ["black", "deep forest"] }
+      ]
+    },
+    {
+      "name": "Louis Vuitton",
+      "aliases": ["LV", "Louis Vuitton Malletier"],
+      "signatureColors": ["monogram brown", "damier ebene", "damier azur", "black epi", "red epi"],
+      "designCues": ["LV monogram pattern", "Damier checkered pattern", "Epi leather texture", "brass hardware", "leather trim", "toile canvas", "luxury positioning"],
+      "identificationTips": [
+        "LV monogram canvas = signature",
+        "Damier checkered pattern",
+        "Epi leather (textured leather)",
+        "Brass hardware and rivets",
+        "Vachetta leather handles (tan, patinas)",
+        "Made in France/Spain/USA",
+        "Extreme luxury price point",
+        "Date code inside"
+      ],
+      "recentColorways": [
+        { "line": "Horizon 55", "year": "2024", "colors": ["monogram canvas", "damier graphite", "black epi"] },
+        { "line": "Keepall 55", "year": "2023-2024", "colors": ["monogram", "damier ebene", "black taiga"] },
+        { "line": "Pegase 55", "year": "2023", "colors": ["monogram", "damier graphite"] },
+        { "line": "Rolling Luggage", "year": "2024", "colors": ["monogram eclipse", "damier cobalt"] }
+      ]
+    },
+    {
+      "name": "Goyard",
+      "aliases": ["Maison Goyard"],
+      "signatureColors": ["black with tan", "navy with tan", "gray with tan", "special colors"],
+      "designCues": ["Chevron pattern", "hand-painted personalization", "Saint Louis tote", "luxury discretion", "no online sales", "French heritage"],
+      "identificationTips": [
+        "Chevron Y pattern = signature",
+        "Hand-painted personalization available",
+        "No online sales (in-store only)",
+        "Extremely exclusive positioning",
+        "Saint Louis tote iconic",
+        "Made in France",
+        "Minimal branding externally",
+        "Ultra-luxury price point"
+      ],
+      "recentColorways": [
+        { "line": "Saint Louis Tote", "year": "2023-2024", "colors": ["black/tan", "navy/tan", "gray/tan", "special colors"] },
+        { "line": "Bellechasse Bag", "year": "2024", "colors": ["black/tan chevron", "custom colors"] },
+        { "line": "Ambassade Briefcase", "year": "2023", "colors": ["black chevron", "navy chevron"] }
+      ]
+    },
+    {
+      "name": "Eagle Creek",
+      "aliases": ["Eagle Creek Travel Gear"],
+      "signatureColors": ["black", "blue", "red", "gray"],
+      "designCues": ["packing cubes expertise", "Pack-It system", "compression features", "lifetime warranty", "travel organization", "durable fabrics"],
+      "identificationTips": [
+        "Pack-It packing cubes = signature product",
+        "Compression systems",
+        "No Matter What warranty (lifetime)",
+        "Travel organization focus",
+        "Eagle logo",
+        "Affordable price point",
+        "Extensive packing solutions",
+        "Wayfinder collection for luggage"
+      ],
+      "recentColorways": [
+        { "line": "Pack-It Reveal Cubes", "year": "2024", "colors": ["black", "blue", "coral"] },
+        { "line": "Wayfinder Backpack 40L", "year": "2023", "colors": ["black", "blue sea"] },
+        { "line": "Cargo Hauler Duffel", "year": "2024", "colors": ["black", "blue", "red clay"] },
+        { "line": "Expanse Wheeled", "year": "2023", "colors": ["black", "blue"] }
+      ]
+    },
+    {
+      "name": "Sea to Summit",
+      "aliases": ["Sea to Summit Travel"],
+      "signatureColors": ["black", "blue", "lime", "red"],
+      "designCues": ["outdoor gear heritage", "ultra-lightweight", "compression technology", "waterproof materials", "technical features", "traveling light philosophy"],
+      "identificationTips": [
+        "Australian outdoor brand",
+        "Ultra-Sil fabric (ultra-lightweight)",
+        "eVent waterproof technology",
+        "Traveling Light collection",
+        "Compression dry bags",
+        "Technical outdoor features",
+        "Lime green accent color",
+        "Pack like a pro philosophy"
+      ],
+      "recentColorways": [
+        { "line": "Travelling Light Duffel", "year": "2024", "colors": ["black", "blue"] },
+        { "line": "Ultra-Sil Day Pack", "year": "2023", "colors": ["black", "lime", "blue"] },
+        { "line": "Duffle/Backpack", "year": "2024", "colors": ["black"] },
+        { "line": "Packing Cells", "year": "2023", "colors": ["black", "blue", "lime"] }
+      ]
+    },
+    {
+      "name": "Tom Bihn",
+      "aliases": ["TOM BIHN"],
+      "signatureColors": ["black", "steel", "concrete", "tropical blue", "nebulous gray"],
+      "designCues": ["Seattle-made", "modular design", "Halcyon fabric", "organizational features", "lifetime craftsmanship guarantee", "technical construction"],
+      "identificationTips": [
+        "Made in Seattle, USA",
+        "Halcyon nylon fabric (proprietary)",
+        "Modular accessory system",
+        "Lifetime craftsmanship guarantee",
+        "Technical construction details",
+        "Aeronaut travel bag signature",
+        "O-rings for attachments",
+        "Premium price, cult following"
+      ],
+      "recentColorways": [
+        { "line": "Aeronaut 45", "year": "2023-2024", "colors": ["black", "steel", "nebulous gray"] },
+        { "line": "Synik 30", "year": "2024", "colors": ["black", "concrete", "tropical blue"] },
+        { "line": "Techonaut 30", "year": "2023", "colors": ["black", "steel"] },
+        { "line": "Tri-Star", "year": "2024", "colors": ["black", "concrete", "deep purple"] }
+      ]
+    },
+    {
+      "name": "Pelican",
+      "aliases": ["Pelican Products", "Pelican Cases"],
+      "signatureColors": ["black", "desert tan", "olive drab", "orange", "yellow"],
+      "designCues": ["hard case construction", "waterproof seals", "pressure release valve", "customizable foam", "virtually indestructible", "military grade"],
+      "identificationTips": [
+        "Extremely rugged hard cases",
+        "Waterproof/crushproof/dustproof",
+        "Automatic pressure equalization valve",
+        "Pick-and-pluck foam interior",
+        "Pelican logo on front",
+        "Used by military/professionals",
+        "Lifetime guarantee",
+        "Heavy-duty latches"
+      ],
+      "recentColorways": [
+        { "line": "1510 Carry-On", "year": "2023-2024", "colors": ["black", "desert tan", "olive drab"] },
+        { "line": "BA22 Elite Luggage", "year": "2024", "colors": ["black", "gray"] },
+        { "line": "1535 Air", "year": "2023", "colors": ["black", "orange", "yellow"] },
+        { "line": "V550 Vault", "year": "2024", "colors": ["black", "tan"] }
+      ]
+    },
+    {
+      "name": "Nanuk",
+      "aliases": ["Nanuk Cases", "Plasticase"],
+      "signatureColors": ["black", "olive", "orange", "yellow", "silver"],
+      "designCues": ["hard case construction", "PowerClaw latches", "waterproof design", "padlock eyes", "Canadian made", "NK-7 resin"],
+      "identificationTips": [
+        "PowerClaw latching system (patent)",
+        "Canadian manufactured",
+        "NK-7 resin construction",
+        "Waterproof and impact resistant",
+        "Padlock eyelets",
+        "Lifetime warranty",
+        "Lighter than Pelican competitors",
+        "Nanuk logo on front"
+      ],
+      "recentColorways": [
+        { "line": "935", "year": "2023-2024", "colors": ["black", "olive", "orange"] },
+        { "line": "950", "year": "2024", "colors": ["black", "silver", "yellow"] },
+        { "line": "960 Wheeled", "year": "2023", "colors": ["black", "olive"] },
+        { "line": "910", "year": "2024", "colors": ["black", "graphite", "lime"] }
+      ]
+    }
+  ]
+}

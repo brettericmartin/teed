@@ -1,0 +1,591 @@
+{
+  "category": "outdoor",
+  "colorVocabulary": {
+    "black": ["black", "onyx", "jet black", "raven"],
+    "gray": ["slate", "granite", "storm", "charcoal", "graphite"],
+    "blue": ["navy", "deep sea", "alpine blue", "twilight", "cobalt"],
+    "green": ["forest green", "olive", "sage", "moss", "evergreen", "alpine meadow"],
+    "red": ["cardinal", "crimson", "brick", "rust", "fiery red"],
+    "orange": ["burnt orange", "tangerine", "blaze orange", "sunset"],
+    "brown": ["tan", "coyote", "earth", "bark", "espresso"]
+  },
+  "patternTypes": ["solid", "camo", "heathered", "ripstop texture", "quilted", "grid pattern"],
+  "partTerminology": {
+    "backpack": ["main compartment", "hip belt", "shoulder straps", "brain lid", "compression straps", "hydration sleeve"],
+    "tent": ["fly", "body", "vestibule", "poles", "stakes", "guy lines"],
+    "sleeping_bag": ["shell", "lining", "hood", "zipper", "draft collar", "footbox"]
+  },
+  "brands": [
+    {
+      "name": "Patagonia",
+      "aliases": ["Patagucci"],
+      "signatureColors": ["black", "navy", "cobalt blue", "forge grey", "nouveau green"],
+      "designCues": ["mountain/sky logo silhouette", "earth tones", "recycled fabric labels", "minimal branding", "durable construction"],
+      "identificationTips": [
+        "Fitzroy mountain silhouette logo",
+        "P-6 logo = classic Patagonia",
+        "Fair Trade Certified labels",
+        "Recycled polyester common",
+        "Subtle branding compared to competitors"
+      ],
+      "recentColorways": [
+        { "line": "Nano Puff", "year": "2024", "colors": ["black", "classic navy", "forge grey", "nouveau green"] },
+        { "line": "Better Sweater", "year": "2024", "colors": ["oar tan", "new navy", "nickel"] },
+        { "line": "Torrentshell", "year": "2024", "colors": ["black", "lagom blue", "nouveau green"] }
+      ]
+    },
+    {
+      "name": "Arc'teryx",
+      "aliases": ["Arcteryx", "Arc"],
+      "signatureColors": ["black", "dark matter", "labyrinth", "lampyre", "void"],
+      "designCues": ["fossil bird logo", "minimalist design", "GORE-TEX labels", "trim fit", "articulated design"],
+      "identificationTips": [
+        "Archaeopteryx fossil bird logo",
+        "Premium price point materials",
+        "GORE-TEX Pro common",
+        "Technical, minimalist aesthetic",
+        "Alpha/Beta/Gamma naming system"
+      ],
+      "recentColorways": [
+        { "line": "Alpha SV", "year": "2024", "colors": ["black", "dynasty", "bordeaux"] },
+        { "line": "Beta LT", "year": "2024", "colors": ["black", "dark matter", "lampyre"] },
+        { "line": "Atom LT", "year": "2024", "colors": ["black", "void", "labyrinth"] }
+      ]
+    },
+    {
+      "name": "The North Face",
+      "aliases": ["TNF", "North Face"],
+      "signatureColors": ["black", "summit gold", "fiery red", "utility brown"],
+      "designCues": ["half-dome logo", "bold colors", "Summit Series for pro gear", "DryVent technology"],
+      "identificationTips": [
+        "Half-dome logo iconic",
+        "Summit Series = pro-level gear",
+        "Black/yellow common combo",
+        "TNF often abbreviated on gear",
+        "Base Camp = duffel line"
+      ],
+      "recentColorways": [
+        { "line": "Nuptse", "year": "2024", "colors": ["black", "summit gold", "brandy brown"] },
+        { "line": "ThermoBall", "year": "2024", "colors": ["black", "utility brown", "vanadis grey"] },
+        { "line": "1996 Retro", "year": "2024", "colors": ["recycled TNF black", "coal brown", "brandy brown"] }
+      ]
+    },
+    {
+      "name": "Osprey",
+      "aliases": ["Osprey Packs"],
+      "signatureColors": ["black", "tunnel vision grey", "pashmina pink", "venturi blue"],
+      "designCues": ["osprey bird icon", "anti-gravity suspension", "integrated raincover", "Stow-on-the-Go trekking pole attachment"],
+      "identificationTips": [
+        "Osprey bird logo",
+        "AG = Anti-Gravity suspension",
+        "All Mighty Guarantee lifetime warranty",
+        "Atmos/Aura = flagship hiking packs"
+      ],
+      "recentColorways": [
+        { "line": "Atmos AG 65", "year": "2024", "colors": ["black", "venturi blue", "mythical green"] },
+        { "line": "Daylite", "year": "2024", "colors": ["black", "cosmic red", "wave blue"] }
+      ]
+    },
+    {
+      "name": "Yeti",
+      "aliases": ["YETI"],
+      "signatureColors": ["white", "charcoal", "navy", "rescue red", "king crab orange"],
+      "designCues": ["YETI wordmark", "bear-proof construction", "heavy-duty rotomold", "T-Rex lid latches"],
+      "identificationTips": [
+        "YETI wordmark prominent",
+        "Rotomolded construction",
+        "Tundra = hard coolers",
+        "Rambler = drinkware",
+        "Premium price point"
+      ],
+      "recentColorways": [
+        { "line": "Tundra", "year": "2024", "colors": ["white", "tan", "charcoal", "navy"] },
+        { "line": "Rambler", "year": "2024", "colors": ["black", "navy", "rescue red", "king crab orange", "canopy green"] }
+      ]
+    },
+    {
+      "name": "Black Diamond",
+      "aliases": ["BD"],
+      "signatureColors": ["black", "burnt orange", "ultra blue", "solution blue"],
+      "designCues": ["diamond logo", "climbing focus", "aluminum construction", "technical precision"],
+      "identificationTips": [
+        "Diamond logo on products",
+        "Climbing/skiing heritage",
+        "Technical gear focus",
+        "Aluminum carabiners/poles"
+      ],
+      "recentColorways": [
+        { "line": "Storm 400", "year": "2024", "colors": ["black", "aluminum"] },
+        { "line": "Spot 400", "year": "2024", "colors": ["graphite", "aluminum", "octane"] }
+      ]
+    },
+    {
+      "name": "REI",
+      "aliases": ["REI Co-op"],
+      "signatureColors": ["black", "green", "navy", "burnt orange"],
+      "designCues": ["REI Co-op branding", "green accents", "member dividend focus", "sustainable materials"],
+      "identificationTips": [
+        "REI Co-op logo",
+        "Green is signature brand color",
+        "Co-op member focused",
+        "Flash = lightweight line"
+      ],
+      "recentColorways": [
+        { "line": "Flash 55", "year": "2024", "colors": ["black", "wilderness", "sargasso"] },
+        { "line": "Trailbreak", "year": "2024", "colors": ["black", "dark navy", "deep maroon"] }
+      ]
+    },
+    {
+      "name": "Columbia",
+      "aliases": ["Columbia Sportswear"],
+      "signatureColors": ["black", "navy", "collegiate navy", "mountain red", "stone green"],
+      "designCues": ["Columbia wordmark", "Omni-Tech/Omni-Heat labels", "accessible pricing", "plaid patterns", "casual outdoor aesthetic"],
+      "identificationTips": [
+        "Columbia script logo prominent",
+        "Omni-Tech = waterproof technology",
+        "Omni-Heat reflective lining (silver dots)",
+        "PFG = fishing gear line",
+        "Bugaboo = popular jacket line"
+      ],
+      "recentColorways": [
+        { "line": "Bugaboo", "year": "2024", "colors": ["black", "collegiate navy", "mountain red", "stone green"] },
+        { "line": "Silver Ridge", "year": "2024", "colors": ["fossil", "safari", "collegiate navy"] },
+        { "line": "Omni-Heat Infinity", "year": "2024", "colors": ["black", "dark mountain", "delta"] }
+      ]
+    },
+    {
+      "name": "Marmot",
+      "aliases": ["Marmot Mountain"],
+      "signatureColors": ["black", "victory red", "crocodile", "arctic navy", "team red"],
+      "designCues": ["marmot animal logo", "GORE-TEX products", "mountain heritage", "bold color blocking"],
+      "identificationTips": [
+        "Marmot animal silhouette logo",
+        "PreCip = popular rain jacket",
+        "Mountain heritage branding",
+        "MemBrain = proprietary waterproofing",
+        "Trestles = sleeping bag line"
+      ],
+      "recentColorways": [
+        { "line": "Minimalist", "year": "2024", "colors": ["black", "crocodile", "victory red"] },
+        { "line": "PreCip Eco", "year": "2024", "colors": ["black", "arctic navy", "rosin green"] },
+        { "line": "Guides Down", "year": "2024", "colors": ["black", "team red", "dark steel"] }
+      ]
+    },
+    {
+      "name": "Mountain Hardwear",
+      "aliases": ["MHW"],
+      "signatureColors": ["black", "alpine red", "dark storm", "nightfall blue", "surplus green"],
+      "designCues": ["mountain nut logo", "technical alpine focus", "Ghost Whisperer signature piece", "premium down"],
+      "identificationTips": [
+        "Mountain nut/chock logo",
+        "Ghost Whisperer = ultralight down jacket",
+        "MHW abbreviation common",
+        "Alpine focus and aesthetics",
+        "Lamina = sleeping bag line"
+      ],
+      "recentColorways": [
+        { "line": "Ghost Whisperer", "year": "2024", "colors": ["black", "alpine red", "dark storm"] },
+        { "line": "Kor Preshell", "year": "2024", "colors": ["black", "nightfall blue", "combat green"] },
+        { "line": "Stretch Down", "year": "2024", "colors": ["black", "surplus green", "dark zinc"] }
+      ]
+    },
+    {
+      "name": "Outdoor Research",
+      "aliases": ["OR"],
+      "signatureColors": ["black", "cobalt", "loden", "tahoe", "fire"],
+      "designCues": ["OR logo circles", "glove/headwear focus", "GORE-TEX products", "Seattle heritage"],
+      "identificationTips": [
+        "OR in overlapping circles logo",
+        "Gloves and hats specialty",
+        "Seattle-based heritage",
+        "Helium = ultralight rain gear",
+        "Ferrosi = popular softshell pants"
+      ],
+      "recentColorways": [
+        { "line": "Helium Rain Jacket", "year": "2024", "colors": ["black", "cobalt", "loden"] },
+        { "line": "Ferrosi", "year": "2024", "colors": ["black", "tahoe", "charcoal"] },
+        { "line": "Foray", "year": "2024", "colors": ["black", "night", "fire"] }
+      ]
+    },
+    {
+      "name": "prAna",
+      "aliases": ["Prana"],
+      "signatureColors": ["black", "cargo green", "dark khaki", "nautical", "volcanic plum"],
+      "designCues": ["Sanskrit-inspired name", "sustainable materials", "climbing/yoga crossover", "hemp blends", "casual style"],
+      "identificationTips": [
+        "prAna lowercase styling",
+        "Hemp and organic cotton focus",
+        "Climbing/yoga lifestyle brand",
+        "Stretch Zion = popular pant",
+        "Fair Trade Certified products"
+      ],
+      "recentColorways": [
+        { "line": "Stretch Zion", "year": "2024", "colors": ["black", "cargo green", "dark khaki"] },
+        { "line": "Brion", "year": "2024", "colors": ["gravel", "nautical", "mud"] },
+        { "line": "Halle", "year": "2024", "colors": ["black", "volcanic plum", "silver sage"] }
+      ]
+    },
+    {
+      "name": "Kuhl",
+      "aliases": ["KUHL", "Kühl"],
+      "signatureColors": ["black", "raven", "carbon", "espresso", "pirate blue"],
+      "signatureColors": ["black", "raven", "carbon", "espresso", "pirate blue"],
+      "designCues": ["umlaut in name", "European styling", "articulated design", "premium fabrics", "Born in the Mountains tagline"],
+      "identificationTips": [
+        "KÜHL with umlaut branding",
+        "Austrian/European aesthetic",
+        "Renegade = signature pant",
+        "Alfpaca = fleece line",
+        "Premium casual-technical style"
+      ],
+      "recentColorways": [
+        { "line": "Renegade", "year": "2024", "colors": ["carbon", "raven", "espresso"] },
+        { "line": "Resistor", "year": "2024", "colors": ["blackout", "pirate blue", "burnt olive"] },
+        { "line": "Burr", "year": "2024", "colors": ["espresso", "dark khaki", "raven"] }
+      ]
+    },
+    {
+      "name": "Eddie Bauer",
+      "aliases": ["EB"],
+      "signatureColors": ["black", "navy", "dark smoke", "red clay", "rainier"],
+      "designCues": ["EB logo shield", "1920s heritage", "down expertise", "classic American outdoor", "casual styling"],
+      "identificationTips": [
+        "Eddie Bauer shield logo",
+        "Down jacket heritage (invented in 1936)",
+        "First Ascent = technical line",
+        "Classic American outdoor aesthetic",
+        "Guide Pro = professional guide line"
+      ],
+      "recentColorways": [
+        { "line": "MicroTherm", "year": "2024", "colors": ["black", "dark smoke", "red clay"] },
+        { "line": "First Ascent", "year": "2024", "colors": ["black", "rainier", "deep navy"] },
+        { "line": "Cloud Cap", "year": "2024", "colors": ["black", "autumn orange", "seaplane grey"] }
+      ]
+    },
+    {
+      "name": "L.L. Bean",
+      "aliases": ["LL Bean", "Bean"],
+      "signatureColors": ["black", "navy", "deep pine", "russet", "nautical navy"],
+      "designCues": ["L.L.Bean signature", "duck boots iconic", "hunting heritage", "flannel shirts", "guaranteed satisfaction"],
+      "identificationTips": [
+        "L.L.Bean signature script",
+        "Bean Boots = iconic duck boot",
+        "Maine heritage and aesthetics",
+        "Boat and Tote = canvas bag",
+        "Wicked Good = slipper line"
+      ],
+      "recentColorways": [
+        { "line": "Mountain Classic", "year": "2024", "colors": ["black", "nautical navy", "deep pine"] },
+        { "line": "Trail Model", "year": "2024", "colors": ["black", "russet brown", "midnight navy"] },
+        { "line": "Wicked Good", "year": "2024", "colors": ["brown", "navy", "charcoal"] }
+      ]
+    },
+    {
+      "name": "Kelty",
+      "aliases": ["Kelty Packs"],
+      "signatureColors": ["black", "trekking green", "canyon brown", "twilight blue"],
+      "designCues": ["Kelty name badge", "accessible pricing", "family camping focus", "external frame heritage"],
+      "identificationTips": [
+        "Kelty logo badge design",
+        "Affordable outdoor gear",
+        "External frame pack pioneer",
+        "Cosmic = popular sleeping bag",
+        "Family camping specialization"
+      ],
+      "recentColorways": [
+        { "line": "Redwing", "year": "2024", "colors": ["black", "trekking green", "dark shadow"] },
+        { "line": "Cosmic", "year": "2024", "colors": ["dark slate", "canyon brown", "lyons blue"] },
+        { "line": "Discovery", "year": "2024", "colors": ["black", "twilight blue", "pine needle"] }
+      ]
+    },
+    {
+      "name": "Big Agnes",
+      "aliases": ["BA"],
+      "signatureColors": ["black", "olive", "copper", "silver", "yellow"],
+      "designCues": ["Big Agnes wordmark", "tent specialization", "ultralight focus", "copper/olive tones", "integrated sleeping pad sleeves"],
+      "identificationTips": [
+        "Big Agnes text logo",
+        "Tent and sleeping bag focus",
+        "Copper Spur = iconic tent",
+        "System integration (pad sleeves)",
+        "Ultralight backpacking focus"
+      ],
+      "recentColorways": [
+        { "line": "Copper Spur", "year": "2024", "colors": ["olive", "grey", "yellow accents"] },
+        { "line": "Tiger Wall", "year": "2024", "colors": ["grey", "orange", "blue"] },
+        { "line": "Fly Creek", "year": "2024", "colors": ["grey", "olive", "white"] }
+      ]
+    },
+    {
+      "name": "MSR",
+      "aliases": ["Mountain Safety Research"],
+      "signatureColors": ["black", "red", "grey", "orange"],
+      "designCues": ["MSR letters bold", "stove expertise", "technical precision", "backcountry focus", "red accent colors"],
+      "identificationTips": [
+        "MSR in bold letters",
+        "Stove specialization (WhisperLite)",
+        "Water filter expertise (Guardian)",
+        "Technical mountaineering focus",
+        "Hubba Hubba = popular tent"
+      ],
+      "recentColorways": [
+        { "line": "Hubba Hubba", "year": "2024", "colors": ["grey", "green", "red accents"] },
+        { "line": "FreeLite", "year": "2024", "colors": ["grey", "orange", "white"] },
+        { "line": "WhisperLite", "year": "2024", "colors": ["silver", "red"] }
+      ]
+    },
+    {
+      "name": "Jetboil",
+      "aliases": ["Jet Boil"],
+      "signatureColors": ["black", "carbon", "genesis", "zip red", "flash orange"],
+      "signatureColors": ["black", "carbon", "genesis", "zip red", "flash orange"],
+      "designCues": ["Jetboil logo flame", "integrated cooking system", "FluxRing technology", "camping stove focus"],
+      "identificationTips": [
+        "Jetboil flame logo",
+        "Flash = classic model",
+        "FluxRing on pot bottom",
+        "Integrated cooking systems",
+        "MiniMo = regulated model"
+      ],
+      "recentColorways": [
+        { "line": "Flash", "year": "2024", "colors": ["carbon", "zip red", "flash orange"] },
+        { "line": "MiniMo", "year": "2024", "colors": ["sunset", "carbon", "matrix"] },
+        { "line": "Zip", "year": "2024", "colors": ["black", "alpine green", "red"] }
+      ]
+    },
+    {
+      "name": "Snow Peak",
+      "aliases": ["SnowPeak"],
+      "signatureColors": ["silver", "black", "stainless steel", "olive drab"],
+      "designCues": ["Snow Peak logo mountain", "titanium products", "Japanese minimalism", "premium materials", "stackable design"],
+      "identificationTips": [
+        "Snow Peak mountain logo",
+        "Japanese minimalist design",
+        "Titanium cookware specialty",
+        "Premium price point",
+        "Lifetime warranty philosophy"
+      ],
+      "recentColorways": [
+        { "line": "Titanium Cookware", "year": "2024", "colors": ["titanium", "silver"] },
+        { "line": "Field Barista", "year": "2024", "colors": ["stainless", "black"] },
+        { "line": "IGT System", "year": "2024", "colors": ["black", "silver", "bamboo accents"] }
+      ]
+    },
+    {
+      "name": "Stanley",
+      "aliases": ["Stanley PMI"],
+      "signatureColors": ["hammertone green", "black", "navy", "cream", "charcoal"],
+      "designCues": ["Stanley logo classic", "vacuum bottle heritage", "hammertone finish", "lifetime warranty", "retro aesthetic"],
+      "identificationTips": [
+        "Classic Stanley logo",
+        "Hammertone green signature color",
+        "Vacuum bottle since 1913",
+        "Quencher = popular tumbler",
+        "Classic Trigger-Action mug"
+      ],
+      "recentColorways": [
+        { "line": "Quencher", "year": "2024", "colors": ["rose quartz", "cream", "charcoal", "pool"] },
+        { "line": "Classic Vacuum", "year": "2024", "colors": ["hammertone green", "black", "navy"] },
+        { "line": "Adventure", "year": "2024", "colors": ["polar", "lapis", "charcoal"] }
+      ]
+    },
+    {
+      "name": "Nemo Equipment",
+      "aliases": ["NEMO", "Nemo"],
+      "signatureColors": ["black", "birch leaf green", "sunset orange", "dark ember"],
+      "designCues": ["NEMO wordmark", "innovative tent designs", "spoon-shaped sleeping bags", "New Hampshire heritage"],
+      "identificationTips": [
+        "NEMO text logo",
+        "Dagger = popular tent",
+        "Spoon shape sleeping bags",
+        "Innovative pole structures",
+        "New Hampshire based"
+      ],
+      "recentColorways": [
+        { "line": "Dagger", "year": "2024", "colors": ["birch leaf green", "grey", "orange accents"] },
+        { "line": "Disco", "year": "2024", "colors": ["sunset orange", "dark ember"] },
+        { "line": "Tensor", "year": "2024", "colors": ["green", "grey", "blue"] }
+      ]
+    },
+    {
+      "name": "Sea to Summit",
+      "aliases": ["S2S", "STS"],
+      "signatureColors": ["black", "orange", "blue", "lime", "grey"],
+      "designCues": ["Sea to Summit wordmark", "Australian heritage", "stuff sacks specialty", "travel/adventure focus"],
+      "identificationTips": [
+        "Sea to Summit text logo",
+        "Australian brand",
+        "Stuff sack and organization specialty",
+        "eVent and UltraSil fabrics",
+        "Compression and waterproof bags"
+      ],
+      "recentColorways": [
+        { "line": "UltraLight", "year": "2024", "colors": ["orange", "blue", "lime"] },
+        { "line": "Aeros", "year": "2024", "colors": ["grey", "teal", "red"] },
+        { "line": "eVent Compression", "year": "2024", "colors": ["black", "blue", "orange"] }
+      ]
+    },
+    {
+      "name": "Gregory",
+      "aliases": ["Gregory Packs", "Gregory Mountain Products"],
+      "signatureColors": ["black", "flame red", "navy blue", "forest green", "pixel black"],
+      "designCues": ["Gregory script logo", "suspension systems", "backpacking focus", "comfortable fit reputation"],
+      "identificationTips": [
+        "Gregory script signature",
+        "Baltoro/Deva = flagship packs",
+        "Suspension comfort focus",
+        "Backpacking specialization",
+        "QuickSwap harness system"
+      ],
+      "recentColorways": [
+        { "line": "Baltoro", "year": "2024", "colors": ["pixel black", "forest green", "sunset grey"] },
+        { "line": "Paragon", "year": "2024", "colors": ["flame red", "smoke black", "navy blue"] },
+        { "line": "Zulu", "year": "2024", "colors": ["empire blue", "ozone black", "sunset grey"] }
+      ]
+    },
+    {
+      "name": "Deuter",
+      "aliases": ["Deuter Sport"],
+      "signatureColors": ["black", "arctic", "redwood", "alpine green", "graphite"],
+      "designCues": ["Deuter D logo", "German engineering", "Aircomfort system", "European fit", "trekking focus"],
+      "identificationTips": [
+        "Deuter 'D' logo",
+        "German brand heritage",
+        "Aircomfort ventilation system",
+        "ACT = suspension system",
+        "European sizing and fit"
+      ],
+      "recentColorways": [
+        { "line": "Aircontact", "year": "2024", "colors": ["graphite", "arctic", "redwood"] },
+        { "line": "Futura", "year": "2024", "colors": ["black", "ivy", "arctic"] },
+        { "line": "Speed Lite", "year": "2024", "colors": ["alpine green", "black", "maron"] }
+      ]
+    },
+    {
+      "name": "Salomon",
+      "aliases": ["Salomon Sports"],
+      "signatureColors": ["black", "racing red", "imperial blue", "sulphur spring", "ebony"],
+      "designCues": ["Salomon logo angular", "trail running focus", "ski heritage", "Quicklace system", "technical footwear"],
+      "identificationTips": [
+        "Salomon angular logo",
+        "Speedcross = iconic trail shoe",
+        "Quicklace system proprietary",
+        "French Alps heritage",
+        "Trail running specialization"
+      ],
+      "recentColorways": [
+        { "line": "Speedcross", "year": "2024", "colors": ["black", "racing red", "imperial blue"] },
+        { "line": "XA Pro", "year": "2024", "colors": ["black", "ebony", "sulphur spring"] },
+        { "line": "Agile", "year": "2024", "colors": ["black", "poseidon", "fiery red"] }
+      ]
+    },
+    {
+      "name": "Merrell",
+      "aliases": ["Merrell Footwear"],
+      "signatureColors": ["black", "boulder", "burnt orange", "navy", "olive"],
+      "designCues": ["Merrell M logo", "hiking boot heritage", "Vibram soles", "comfort focus", "accessible pricing"],
+      "identificationTips": [
+        "Merrell 'M' logo",
+        "Moab = most popular hiking shoe",
+        "Vibram sole partnerships",
+        "Comfort and value focus",
+        "Hiking and casual crossover"
+      ],
+      "recentColorways": [
+        { "line": "Moab", "year": "2024", "colors": ["walnut", "boulder", "black"] },
+        { "line": "MQM", "year": "2024", "colors": ["black", "navy", "olive"] },
+        { "line": "Ontario", "year": "2024", "colors": ["espresso", "black", "cloudy"] }
+      ]
+    },
+    {
+      "name": "La Sportiva",
+      "aliases": ["Sportiva"],
+      "signatureColors": ["yellow", "black", "red", "blue", "green"],
+      "designCues": ["La Sportiva oval logo", "Italian craftsmanship", "climbing shoe specialty", "mountain running", "technical precision"],
+      "identificationTips": [
+        "La Sportiva oval logo",
+        "Italian mountain heritage",
+        "Climbing shoe specialization",
+        "Yellow/black signature combo",
+        "Technical mountaineering boots"
+      ],
+      "recentColorways": [
+        { "line": "TX4", "year": "2024", "colors": ["carbon", "flame", "ocean"] },
+        { "line": "Nucleo", "year": "2024", "colors": ["black", "yellow", "carbon"] },
+        { "line": "Ultra Raptor", "year": "2024", "colors": ["carbon", "tangerine", "ocean"] }
+      ]
+    },
+    {
+      "name": "Scarpa",
+      "aliases": ["SCARPA"],
+      "signatureColors": ["black", "shark", "orange", "lake blue", "smoke"],
+      "designCues": ["SCARPA logo bold", "Italian craftsmanship", "mountaineering boots", "climbing heritage", "technical precision"],
+      "identificationTips": [
+        "SCARPA in bold caps",
+        "Italian mountain boot heritage",
+        "Mountaineering specialization",
+        "Vibram partnerships",
+        "Technical alpine focus"
+      ],
+      "recentColorways": [
+        { "line": "Zodiac", "year": "2024", "colors": ["smoke", "lake blue", "orange"] },
+        { "line": "Instinct", "year": "2024", "colors": ["black", "orange", "vapor"] },
+        { "line": "Marmolada", "year": "2024", "colors": ["shark", "orange", "black"] }
+      ]
+    },
+    {
+      "name": "Petzl",
+      "aliases": ["Petzl Sport"],
+      "signatureColors": ["black", "yellow", "orange", "blue"],
+      "designCues": ["Petzl logo clean", "headlamp specialty", "climbing hardware", "French heritage", "safety focus"],
+      "identificationTips": [
+        "Petzl clean logo design",
+        "Headlamp market leader",
+        "French caving heritage",
+        "Climbing hardware specialty",
+        "Reactiv lighting technology"
+      ],
+      "recentColorways": [
+        { "line": "Actik", "year": "2024", "colors": ["black", "blue", "hybrid"] },
+        { "line": "Tikka", "year": "2024", "colors": ["black", "red", "blue"] },
+        { "line": "Grigri", "year": "2024", "colors": ["orange", "grey", "blue"] }
+      ]
+    },
+    {
+      "name": "Mammut",
+      "aliases": ["Mammut Sports"],
+      "signatureColors": ["black", "safety orange", "marine", "bright white", "iguana"],
+      "designCues": ["mammoth logo icon", "Swiss heritage", "rope specialty", "alpine focus", "safety orange accents"],
+      "identificationTips": [
+        "Mammoth animal logo",
+        "Swiss mountain heritage since 1862",
+        "Climbing rope specialization",
+        "Safety orange signature accent",
+        "Barryvox = avalanche beacon"
+      ],
+      "recentColorways": [
+        { "line": "Eiger Extreme", "year": "2024", "colors": ["black", "marine", "safety orange"] },
+        { "line": "Nordwand", "year": "2024", "colors": ["black", "iguana", "marine"] },
+        { "line": "Trion", "year": "2024", "colors": ["black", "dark orange", "highway"] }
+      ]
+    },
+    {
+      "name": "Rab",
+      "aliases": ["RAB Equipment"],
+      "signatureColors": ["black", "ascent red", "beluga", "dark sulphur", "steel"],
+      "designCues": ["RAB logo simple", "British heritage", "down expertise", "mountaineering focus", "technical insulation"],
+      "identificationTips": [
+        "RAB simple text logo",
+        "British mountain heritage",
+        "Down jacket specialization",
+        "Neutrino = flagship down jacket",
+        "Hydrophobic down technology"
+      ],
+      "recentColorways": [
+        { "line": "Neutrino", "year": "2024", "colors": ["black", "ascent red", "beluga"] },
+        { "line": "Microlight", "year": "2024", "colors": ["black", "steel", "dark sulphur"] },
+        { "line": "Infinity", "year": "2024", "colors": ["black", "firecracker", "orion blue"] }
+      ]
+    }
+  ]
+}

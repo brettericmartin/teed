@@ -1,0 +1,581 @@
+{
+  "category": "fashion",
+  "colorVocabulary": {
+    "black": ["black", "onyx", "jet", "obsidian", "noir"],
+    "white": ["white", "bone", "ivory", "cream", "off-white"],
+    "gray": ["heather gray", "charcoal", "slate", "ash", "graphite"],
+    "blue": ["navy", "royal blue", "cobalt", "indigo", "denim", "chambray"],
+    "red": ["crimson", "burgundy", "scarlet", "cherry", "wine"],
+    "green": ["olive", "sage", "forest", "hunter", "moss", "army"],
+    "pink": ["blush", "rose", "coral", "salmon", "dusty pink"],
+    "brown": ["tan", "camel", "cognac", "chocolate", "espresso", "khaki"]
+  },
+  "patternTypes": ["solid", "striped", "plaid", "checkered", "heathered", "color block", "camo", "floral", "geometric"],
+  "partTerminology": {
+    "shirt": ["collar", "cuffs", "placket", "hem", "yoke"],
+    "pants": ["waistband", "inseam", "hem", "pockets", "belt loops"],
+    "jacket": ["collar", "cuffs", "hem", "zipper", "hood", "lining"]
+  },
+  "brands": [
+    {
+      "name": "Nike",
+      "aliases": ["Nike Inc"],
+      "signatureColors": ["black", "white", "volt", "university red", "royal blue"],
+      "designCues": ["swoosh logo", "Dri-FIT fabric", "Air branding", "Flyknit texture", "bold colorways"],
+      "identificationTips": [
+        "Swoosh logo iconic and consistent",
+        "Dri-FIT = performance moisture-wicking",
+        "Air = cushioning technology",
+        "Volt = signature neon yellow-green",
+        "Just Do It tagline"
+      ],
+      "recentColorways": [
+        { "line": "Air Force 1", "year": "2024", "colors": ["white", "black", "university red"] },
+        { "line": "Dri-FIT", "year": "2024", "colors": ["black", "white", "university blue", "team orange"] }
+      ]
+    },
+    {
+      "name": "Adidas",
+      "aliases": ["Adidas AG"],
+      "signatureColors": ["black", "white", "red", "blue", "green"],
+      "designCues": ["three stripes", "trefoil logo", "Boost midsole", "Primeknit texture"],
+      "identificationTips": [
+        "Three stripes = signature design",
+        "Trefoil = Originals/heritage line",
+        "Performance logo = sports line",
+        "Boost = visible foam cushioning"
+      ],
+      "recentColorways": [
+        { "line": "Ultraboost", "year": "2024", "colors": ["core black", "cloud white", "grey three"] },
+        { "line": "Stan Smith", "year": "2024", "colors": ["white/green", "white/navy", "all white"] }
+      ]
+    },
+    {
+      "name": "Lululemon",
+      "aliases": ["Lulu"],
+      "signatureColors": ["black", "true navy", "dark olive", "heather gray", "bold colors"],
+      "designCues": ["omega logo", "Luon fabric", "reflective details", "hidden pockets", "thumb loops"],
+      "identificationTips": [
+        "Omega/A logo on products",
+        "ABC = Anti-Ball Crushing pants",
+        "Luon/Luxtreme/Nulu = fabric types",
+        "Swiftly = running tops",
+        "Premium athleisure positioning"
+      ],
+      "recentColorways": [
+        { "line": "Align", "year": "2024", "colors": ["black", "true navy", "dark olive", "heathered graphite"] },
+        { "line": "ABC Jogger", "year": "2024", "colors": ["black", "obsidian", "trench"] }
+      ]
+    },
+    {
+      "name": "Under Armour",
+      "aliases": ["UA"],
+      "signatureColors": ["black", "red", "white", "steel gray"],
+      "designCues": ["UA logo", "HeatGear/ColdGear", "compression fit", "moisture transport"],
+      "identificationTips": [
+        "UA interlocking logo",
+        "HeatGear = hot weather",
+        "ColdGear = cold weather",
+        "Compression fit common",
+        "Founded by athletes aesthetic"
+      ],
+      "recentColorways": [
+        { "line": "Tech 2.0", "year": "2024", "colors": ["black", "white", "academy", "mod gray"] },
+        { "line": "Rival Fleece", "year": "2024", "colors": ["black", "pitch gray", "onyx white"] }
+      ]
+    },
+    {
+      "name": "TravisMathew",
+      "aliases": ["Travis Mathew", "TM"],
+      "signatureColors": ["black", "heather gray", "navy", "white"],
+      "designCues": ["TM logo", "golf lifestyle", "four-way stretch", "performance casual"],
+      "identificationTips": [
+        "TM logo on chest/sleeve",
+        "Golf lifestyle focus",
+        "Performance fabrics with casual styling",
+        "Cloud = soft tech line",
+        "Often worn by PGA Tour players"
+      ],
+      "recentColorways": [
+        { "line": "Heater", "year": "2024", "colors": ["black", "heather gray", "white", "navy"] },
+        { "line": "Cloud Polo", "year": "2024", "colors": ["white", "heather sleet", "black"] }
+      ]
+    },
+    {
+      "name": "FootJoy",
+      "aliases": ["FJ"],
+      "signatureColors": ["white", "navy", "black", "gray"],
+      "designCues": ["FJ logo", "saddle shoe styling", "BOA lacing", "waterproof construction"],
+      "identificationTips": [
+        "FJ logo on tongue/heel",
+        "#1 shoe in golf",
+        "Pro/SL = spikeless flagship",
+        "Tour Alpha = spiked performance",
+        "Classic golf styling"
+      ],
+      "recentColorways": [
+        { "line": "Pro/SL", "year": "2024", "colors": ["white/navy", "white/gray", "black"] },
+        { "line": "Tour Alpha", "year": "2024", "colors": ["white/navy", "white/black", "black"] }
+      ]
+    },
+    {
+      "name": "Uniqlo",
+      "aliases": ["UNIQLO"],
+      "signatureColors": ["black", "white", "navy", "gray", "red"],
+      "designCues": ["minimalist design", "LifeWear", "HeatTech", "AIRism", "clean lines"],
+      "identificationTips": [
+        "Simple, functional design philosophy",
+        "HeatTech = thermal warmth technology",
+        "AIRism = cooling, moisture-wicking fabric",
+        "LifeWear = everyday essentials focus",
+        "Affordable basics with quality materials"
+      ],
+      "recentColorways": [
+        { "line": "HeatTech Ultra Warm", "year": "2024", "colors": ["black", "dark gray", "navy", "brown"] },
+        { "line": "AIRism", "year": "2024", "colors": ["white", "black", "gray", "blue"] }
+      ]
+    },
+    {
+      "name": "Everlane",
+      "aliases": ["Everlane Inc"],
+      "signatureColors": ["black", "white", "navy", "camel", "gray"],
+      "designCues": ["radical transparency", "ethical production", "minimalist aesthetic", "premium basics"],
+      "identificationTips": [
+        "Transparent pricing model",
+        "Ethical factories emphasized",
+        "Modern essentials focus",
+        "Clean, minimal design",
+        "ReNew = recycled materials line"
+      ],
+      "recentColorways": [
+        { "line": "The Day Glove", "year": "2024", "colors": ["black", "bone", "navy", "olive"] },
+        { "line": "ReNew Transit", "year": "2024", "colors": ["black", "navy", "surplus"] }
+      ]
+    },
+    {
+      "name": "J.Crew",
+      "aliases": ["JCrew", "J Crew"],
+      "signatureColors": ["navy", "white", "red", "khaki", "gingham blue"],
+      "designCues": ["preppy aesthetic", "chino style", "stripe patterns", "classic American"],
+      "identificationTips": [
+        "Classic American prep style",
+        "Ludlow = suit line",
+        "484 = slim-fit chino",
+        "770 = straight-fit chino",
+        "Known for gingham and stripes"
+      ],
+      "recentColorways": [
+        { "line": "484 Chino", "year": "2024", "colors": ["navy", "khaki", "stone", "moss"] },
+        { "line": "Ludlow Suit", "year": "2024", "colors": ["charcoal", "navy", "light gray"] }
+      ]
+    },
+    {
+      "name": "Bonobos",
+      "aliases": ["Bonobos Inc"],
+      "signatureColors": ["navy", "khaki", "gray", "burgundy", "light blue"],
+      "designCues": ["better-fitting pants", "curved waistband", "guide shops", "athletic fit"],
+      "identificationTips": [
+        "Started as better-fitting chinos",
+        "Curved waistband for better fit",
+        "Multiple fit options (slim, athletic, straight)",
+        "Guide shops for try-before-buy",
+        "Known for colorful pants and shorts"
+      ],
+      "recentColorways": [
+        { "line": "Chinos", "year": "2024", "colors": ["jet blues", "khaki", "phantom", "mosstone"] },
+        { "line": "Golf Pants", "year": "2024", "colors": ["navy", "stone", "black"] }
+      ]
+    },
+    {
+      "name": "Banana Republic",
+      "aliases": ["BR", "Banana"],
+      "signatureColors": ["navy", "black", "camel", "gray", "white"],
+      "designCues": ["modern workwear", "elevated basics", "safari heritage", "polished casual"],
+      "identificationTips": [
+        "Modern professional clothing",
+        "Traveler pants = wrinkle-resistant",
+        "Core Temp = temperature-regulating",
+        "Safari heritage in design DNA",
+        "Gap Inc upscale brand"
+      ],
+      "recentColorways": [
+        { "line": "Traveler Pant", "year": "2024", "colors": ["navy", "charcoal", "khaki", "black"] },
+        { "line": "Core Temp", "year": "2024", "colors": ["white", "black", "blue", "gray"] }
+      ]
+    },
+    {
+      "name": "Gap",
+      "aliases": ["Gap Inc"],
+      "signatureColors": ["navy", "white", "khaki", "black", "denim blue"],
+      "designCues": ["American casual", "logo hoodies", "denim heritage", "basic layers"],
+      "identificationTips": [
+        "Classic American casual brand",
+        "Logo gap hoodie iconic",
+        "1969 = premium denim line",
+        "Known for khakis and chinos",
+        "Everyday casual basics focus"
+      ],
+      "recentColorways": [
+        { "line": "Logo Hoodie", "year": "2024", "colors": ["navy", "black", "gray", "red"] },
+        { "line": "1969 Denim", "year": "2024", "colors": ["indigo", "black", "light wash", "vintage"] }
+      ]
+    },
+    {
+      "name": "H&M",
+      "aliases": ["H and M", "Hennes & Mauritz"],
+      "signatureColors": ["black", "white", "gray", "navy", "seasonal trends"],
+      "designCues": ["fast fashion", "trend-driven", "affordable", "European style"],
+      "identificationTips": [
+        "Swedish fast fashion brand",
+        "Trend-focused at low prices",
+        "Conscious Collection = sustainable line",
+        "Premium Quality = higher-end basics",
+        "Frequent collaborations with designers"
+      ],
+      "recentColorways": [
+        { "line": "Essentials", "year": "2024", "colors": ["black", "white", "beige", "gray"] },
+        { "line": "Conscious Collection", "year": "2024", "colors": ["earth tones", "sage", "terracotta"] }
+      ]
+    },
+    {
+      "name": "Zara",
+      "aliases": ["Zara Home"],
+      "signatureColors": ["black", "white", "beige", "navy", "trending colors"],
+      "designCues": ["runway-inspired", "European minimalism", "fast fashion", "tailored fits"],
+      "identificationTips": [
+        "Spanish fast fashion brand",
+        "Runway trends adapted quickly",
+        "More tailored European fits",
+        "Join Life = sustainable collection",
+        "Premium feel at accessible prices"
+      ],
+      "recentColorways": [
+        { "line": "Tailored Blazer", "year": "2024", "colors": ["black", "navy", "stone", "camel"] },
+        { "line": "Join Life", "year": "2024", "colors": ["natural", "ecru", "moss green"] }
+      ]
+    },
+    {
+      "name": "Patagonia",
+      "aliases": ["Patagonia Inc"],
+      "signatureColors": ["navy", "black", "forge gray", "red", "blue"],
+      "designCues": ["environmental mission", "Better Sweater", "Synchilla fleece", "durability focus"],
+      "identificationTips": [
+        "Strong environmental commitment",
+        "Better Sweater = signature fleece",
+        "Synchilla = recycled fleece material",
+        "Worn Wear = repair and resale program",
+        "Lifetime warranty on products"
+      ],
+      "recentColorways": [
+        { "line": "Better Sweater", "year": "2024", "colors": ["forge gray", "navy", "black", "red"] },
+        { "line": "Nano Puff", "year": "2024", "colors": ["smolder blue", "black", "birch white"] }
+      ]
+    },
+    {
+      "name": "Carhartt",
+      "aliases": ["Carhartt WIP"],
+      "signatureColors": ["brown", "black", "orange", "navy", "moss"],
+      "designCues": ["workwear heritage", "duck canvas", "double-knee", "rugged construction"],
+      "identificationTips": [
+        "American workwear heritage",
+        "Duck canvas signature material",
+        "Double-knee reinforcements",
+        "WIP = Work In Progress streetwear line",
+        "C logo patch on products"
+      ],
+      "recentColorways": [
+        { "line": "Duck Detroit Jacket", "year": "2024", "colors": ["carhartt brown", "black", "moss"] },
+        { "line": "WIP", "year": "2024", "colors": ["black", "navy", "khaki", "orange"] }
+      ]
+    },
+    {
+      "name": "Dickies",
+      "aliases": ["Dickies Workwear"],
+      "signatureColors": ["black", "khaki", "navy", "charcoal", "brown"],
+      "designCues": ["workwear classic", "874 work pant", "durable twill", "functional pockets"],
+      "identificationTips": [
+        "Classic American workwear",
+        "874 = iconic work pant silhouette",
+        "Double-knee work pants",
+        "Horseshoe logo on back pocket",
+        "Adopted by skate culture"
+      ],
+      "recentColorways": [
+        { "line": "874 Work Pant", "year": "2024", "colors": ["black", "khaki", "navy", "charcoal"] },
+        { "line": "Skate Line", "year": "2024", "colors": ["black", "stone", "brown duck"] }
+      ]
+    },
+    {
+      "name": "Levi's",
+      "aliases": ["Levis", "Levi Strauss"],
+      "signatureColors": ["indigo", "black", "stonewash", "rigid"],
+      "designCues": ["denim pioneers", "red tab", "501 original", "arcuate stitching"],
+      "identificationTips": [
+        "Original denim jeans brand",
+        "501 = original straight fit",
+        "511 = slim fit, 514 = straight",
+        "Red tab on back pocket",
+        "Arcuate stitching on back pockets"
+      ],
+      "recentColorways": [
+        { "line": "501 Original", "year": "2024", "colors": ["stonewash", "rigid", "black", "light indigo"] },
+        { "line": "511 Slim", "year": "2024", "colors": ["dark indigo", "black stretch", "gray"] }
+      ]
+    },
+    {
+      "name": "Wrangler",
+      "aliases": ["Wrangler Jeans"],
+      "signatureColors": ["indigo", "black", "khaki", "stonewash"],
+      "designCues": ["western heritage", "cowboy cut", "W stitching", "rodeo association"],
+      "identificationTips": [
+        "Western and rodeo heritage",
+        "Cowboy Cut = classic fit",
+        "W-shaped back pocket stitching",
+        "13MWZ = original cowboy cut number",
+        "Official jeans of ProRodeo"
+      ],
+      "recentColorways": [
+        { "line": "13MWZ Cowboy Cut", "year": "2024", "colors": ["rigid indigo", "stonewash", "black"] },
+        { "line": "Retro", "year": "2024", "colors": ["dark wash", "vintage indigo"] }
+      ]
+    },
+    {
+      "name": "The North Face",
+      "aliases": ["TNF", "North Face"],
+      "signatureColors": ["black", "white", "red", "blue", "yellow"],
+      "designCues": ["half dome logo", "Nuptse puffer", "Summit Series", "outdoor heritage"],
+      "identificationTips": [
+        "Half dome mountain logo",
+        "Nuptse = iconic puffer jacket",
+        "Summit Series = technical line",
+        "Never Stop Exploring tagline",
+        "1996 Retro Nuptse highly popular"
+      ],
+      "recentColorways": [
+        { "line": "1996 Retro Nuptse", "year": "2024", "colors": ["black", "summit gold", "TNF blue", "red"] },
+        { "line": "Denali", "year": "2024", "colors": ["black", "recycled TNF red", "blue"] }
+      ]
+    },
+    {
+      "name": "Canada Goose",
+      "aliases": ["CG"],
+      "signatureColors": ["black", "navy", "red", "white", "graphite"],
+      "designCues": ["arctic patch", "coyote fur trim", "extreme warmth", "luxury outerwear"],
+      "identificationTips": [
+        "Arctic disc patch on arm",
+        "Extreme cold weather protection",
+        "Coyote fur hood trim (optional)",
+        "Made in Canada emphasis",
+        "Chilliwack/Chateau = popular models"
+      ],
+      "recentColorways": [
+        { "line": "Chilliwack Bomber", "year": "2024", "colors": ["black", "navy", "military green"] },
+        { "line": "Chateau Parka", "year": "2024", "colors": ["black", "graphite", "red"] }
+      ]
+    },
+    {
+      "name": "Moncler",
+      "aliases": ["Moncler Group"],
+      "signatureColors": ["black", "navy", "red", "white"],
+      "designCues": ["luxury puffer", "logo patch", "glossy nylon", "alpine heritage"],
+      "identificationTips": [
+        "Luxury French-Italian brand",
+        "Rooster logo patch",
+        "High-gloss nylon fabric",
+        "Alpine skiing heritage",
+        "Maya = iconic down jacket"
+      ],
+      "recentColorways": [
+        { "line": "Maya", "year": "2024", "colors": ["black", "navy", "red", "army green"] },
+        { "line": "Grenoble", "year": "2024", "colors": ["black", "white", "blue"] }
+      ]
+    },
+    {
+      "name": "Allbirds",
+      "aliases": ["All Birds"],
+      "signatureColors": ["natural white", "gray", "navy", "black", "earth tones"],
+      "designCues": ["merino wool", "eucalyptus tree fiber", "sustainable materials", "minimalist design"],
+      "identificationTips": [
+        "Sustainable materials focus",
+        "Wool Runners = signature shoe",
+        "Tree line = eucalyptus fiber",
+        "No visible logo/branding",
+        "Carbon footprint labeled"
+      ],
+      "recentColorways": [
+        { "line": "Wool Runner", "year": "2024", "colors": ["natural white", "hazy indigo", "storm", "coal"] },
+        { "line": "Tree Dasher", "year": "2024", "colors": ["true black", "natural gray", "navy"] }
+      ]
+    },
+    {
+      "name": "Hoka",
+      "aliases": ["HOKA", "Hoka One One"],
+      "signatureColors": ["white", "black", "blue", "yellow", "red"],
+      "designCues": ["maximal cushioning", "oversized midsole", "Meta-Rocker", "lightweight"],
+      "identificationTips": [
+        "Maximum cushioning philosophy",
+        "Oversized midsole signature look",
+        "Bondi = max cushion flagship",
+        "Clifton = everyday trainer",
+        "Meta-Rocker technology for efficiency"
+      ],
+      "recentColorways": [
+        { "line": "Bondi 8", "year": "2024", "colors": ["white/white", "black/black", "harbor mist"] },
+        { "line": "Clifton 9", "year": "2024", "colors": ["white/white", "black/white", "diva blue"] }
+      ]
+    },
+    {
+      "name": "On Running",
+      "aliases": ["On", "On Shoes"],
+      "signatureColors": ["white", "black", "all-white", "navy"],
+      "designCues": ["CloudTec sole", "Swiss engineering", "minimalist design", "speed board"],
+      "identificationTips": [
+        "CloudTec pods on outsole",
+        "Swiss performance brand",
+        "Speedboard for energy return",
+        "Cloud = cushioned everyday",
+        "Cloudmonster = max cushion"
+      ],
+      "recentColorways": [
+        { "line": "Cloud 5", "year": "2024", "colors": ["all-white", "black/white", "eclipse/lime"] },
+        { "line": "Cloudmonster", "year": "2024", "colors": ["all-white", "undyed-white", "glacier/flame"] }
+      ]
+    },
+    {
+      "name": "New Balance",
+      "aliases": ["NB"],
+      "signatureColors": ["gray", "navy", "burgundy", "white", "black"],
+      "designCues": ["N logo", "990 series", "Made in USA/UK", "running heritage"],
+      "identificationTips": [
+        "Large N logo on side",
+        "990 series = heritage flagship",
+        "574 = classic casual",
+        "Made in USA/UK premium lines",
+        "Dad shoe aesthetic popular"
+      ],
+      "recentColorways": [
+        { "line": "990v6", "year": "2024", "colors": ["gray/navy", "navy/gray", "black/silver"] },
+        { "line": "574", "year": "2024", "colors": ["gray", "navy", "burgundy", "black"] }
+      ]
+    },
+    {
+      "name": "ASICS",
+      "aliases": ["Asics"],
+      "signatureColors": ["white", "black", "blue", "red", "yellow"],
+      "designCues": ["tiger stripes", "GEL cushioning", "running focus", "Japanese engineering"],
+      "identificationTips": [
+        "Tiger stripe logo on sides",
+        "GEL cushioning technology",
+        "Gel-Kayano = stability flagship",
+        "Gel-Nimbus = neutral cushion",
+        "Onitsuka Tiger = lifestyle line"
+      ],
+      "recentColorways": [
+        { "line": "Gel-Kayano 30", "year": "2024", "colors": ["white/pure silver", "black/white", "blue"] },
+        { "line": "Gel-Nimbus 26", "year": "2024", "colors": ["white/pure silver", "black/white"] }
+      ]
+    },
+    {
+      "name": "Brooks",
+      "aliases": ["Brooks Running"],
+      "signatureColors": ["blue", "black", "white", "red", "gray"],
+      "designCues": ["Run Happy", "DNA cushioning", "GuideRails", "running-only focus"],
+      "identificationTips": [
+        "Run Happy motto",
+        "Running-focused brand only",
+        "Ghost = neutral cushion flagship",
+        "Adrenaline GTS = stability",
+        "DNA technology in midsoles"
+      ],
+      "recentColorways": [
+        { "line": "Ghost 16", "year": "2024", "colors": ["black/white", "blue/orange", "white/blue"] },
+        { "line": "Adrenaline GTS 23", "year": "2024", "colors": ["black/white", "navy/blue"] }
+      ]
+    },
+    {
+      "name": "Saucony",
+      "aliases": ["Saucony Running"],
+      "signatureColors": ["blue", "white", "red", "black", "teal"],
+      "designCues": ["triple dot logo", "PWRRUN cushioning", "running heritage", "retro styling"],
+      "identificationTips": [
+        "Three-dot logo on side",
+        "Kinvara = lightweight trainer",
+        "Triumph = max cushion",
+        "Shadow series = retro lifestyle",
+        "PWRRUN foam technology"
+      ],
+      "recentColorways": [
+        { "line": "Kinvara 14", "year": "2024", "colors": ["white/blue", "black/white", "teal/orange"] },
+        { "line": "Shadow 6000", "year": "2024", "colors": ["gray/teal", "navy/red", "black/white"] }
+      ]
+    },
+    {
+      "name": "Vans",
+      "aliases": ["Vans Shoes"],
+      "signatureColors": ["black", "white", "checkerboard", "red", "navy"],
+      "designCues": ["waffle sole", "Old Skool stripe", "checkerboard pattern", "skate heritage"],
+      "identificationTips": [
+        "Waffle pattern outsole",
+        "Off the Wall tagline",
+        "Old Skool = side stripe classic",
+        "Checkerboard Slip-On iconic",
+        "Skate and surf culture roots"
+      ],
+      "recentColorways": [
+        { "line": "Old Skool", "year": "2024", "colors": ["black/white", "navy/white", "all-black"] },
+        { "line": "Slip-On", "year": "2024", "colors": ["checkerboard", "black/white", "platform"] }
+      ]
+    },
+    {
+      "name": "Converse",
+      "aliases": ["Converse All Star"],
+      "signatureColors": ["white", "black", "red", "navy", "optical white"],
+      "designCues": ["Chuck Taylor", "star logo", "rubber toe cap", "canvas upper"],
+      "identificationTips": [
+        "Chuck Taylor All Star iconic",
+        "Star ankle patch logo",
+        "Rubber toe cap distinctive",
+        "High-top and low-top versions",
+        "All Star circular patch"
+      ],
+      "recentColorways": [
+        { "line": "Chuck 70", "year": "2024", "colors": ["optical white", "black", "parchment", "navy"] },
+        { "line": "Chuck Taylor All Star", "year": "2024", "colors": ["white", "black", "red", "seasonal"] }
+      ]
+    },
+    {
+      "name": "Cole Haan",
+      "aliases": ["Cole Haan Inc"],
+      "signatureColors": ["brown", "black", "tan", "navy", "burgundy"],
+      "designCues": ["Grand.OS technology", "wingtip brogue", "dress casual hybrid", "comfort innovation"],
+      "identificationTips": [
+        "Grand.OS cushioning technology",
+        "ZeroGrand = hybrid dress/sneaker",
+        "Dress shoes with sneaker comfort",
+        "Wingtip styling signature",
+        "OriginalGrand line popular"
+      ],
+      "recentColorways": [
+        { "line": "ZeroGrand", "year": "2024", "colors": ["black", "british tan", "navy", "gray"] },
+        { "line": "OriginalGrand Wingtip", "year": "2024", "colors": ["woodbury/ivory", "black/white"] }
+      ]
+    },
+    {
+      "name": "Allen Edmonds",
+      "aliases": ["AE"],
+      "signatureColors": ["brown", "black", "burgundy", "walnut", "oxblood"],
+      "designCues": ["Goodyear welt", "recraftable", "360-degree welting", "American craftsmanship"],
+      "identificationTips": [
+        "Goodyear welt construction",
+        "Recraftable/resoleable shoes",
+        "Made in USA emphasis",
+        "Park Avenue = cap-toe oxford classic",
+        "Strand = wingtip flagship"
+      ],
+      "recentColorways": [
+        { "line": "Park Avenue", "year": "2024", "colors": ["black", "dark chili", "walnut"] },
+        { "line": "Strand", "year": "2024", "colors": ["walnut", "oxblood", "black", "brown"] }
+      ]
+    }
+  ]
+}

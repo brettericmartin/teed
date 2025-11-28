@@ -1,15 +1,63 @@
 import { openai } from './openaiClient';
+import { generateBrandContext, loadCategoryKnowledge } from './brandKnowledge';
 
 /**
  * Best Practice: Define TypeScript interfaces for all AI responses
  */
+/**
+ * Structured color information for products
+ */
+export interface ProductColors {
+  primary: string;           // Main/dominant color (e.g., "Stealth Black", "Navy Blue")
+  secondary?: string;        // Second most prominent color
+  accent?: string;           // Trim, highlights, small details
+  finish?: 'matte' | 'glossy' | 'metallic' | 'satin' | 'textured' | 'brushed';
+  colorway?: string;         // Official brand colorway name if known (e.g., "Qi10 Blue")
+}
+
+/**
+ * Pattern recognition for products
+ */
+export interface ProductPattern {
+  type: 'solid' | 'striped' | 'plaid' | 'camo' | 'gradient' | 'geometric' |
+        'chevron' | 'heathered' | 'carbon-weave' | 'checkered' | 'floral' | 'other';
+  location: 'all-over' | 'accent' | 'trim' | 'crown-only' | 'partial' | 'sole-only';
+  description?: string;      // Additional pattern details if unusual
+}
+
+/**
+ * Visual brand signature detection (beyond text recognition)
+ */
+export interface BrandSignature {
+  signatureColors?: string[];    // Brand's signature color palette detected
+  logoShape?: string;            // Logo shape description even if text unreadable
+  designCues: string[];          // Visual elements that identify the brand
+  visualConfidence: number;      // 0-100 confidence based on visual cues ONLY
+}
+
+/**
+ * Stage 1: Category detection result (fast, cheap)
+ */
+export interface CategoryDetectionResult {
+  categories: Array<{
+    category: 'golf' | 'tech' | 'outdoor' | 'fashion' | 'camping' | 'sports' | 'electronics' | 'other';
+    objectCount: number;
+    confidence: number;
+  }>;
+  totalObjects: number;
+  processingTimeMs: number;
+}
+
 export interface IdentifiedProduct {
   name: string; // MUST be specific model/product name, not generic
   brand?: string;
   category: string;
   confidence: number; // 0-100
   estimatedPrice?: string;
-  color?: string;
+  color?: string;              // Simple color string (kept for backwards compatibility)
+  colors?: ProductColors;      // NEW: Structured color information
+  pattern?: ProductPattern;    // NEW: Pattern recognition
+  brandSignature?: BrandSignature; // NEW: Visual brand cues
   specifications?: string[];
   modelNumber?: string; // Specific model/SKU if visible
   productImage?: { // Fetched from Google Custom Search
@@ -128,12 +176,109 @@ export function validateAndCompressImage(base64Image: string): {
 }
 
 /**
+ * STAGE 1: Quick Category Detection using gpt-4o-mini
+ *
+ * Fast, cheap scan to identify product categories before detailed analysis.
+ * Uses ~$0.001 per image vs ~$0.01 for full gpt-4o analysis.
+ *
+ * @param imageBase64 - Base64 encoded image
+ * @returns Categories detected with counts and confidence
+ */
+export async function detectCategories(
+  imageBase64: string
+): Promise<CategoryDetectionResult> {
+  const startTime = Date.now();
+
+  // Validate image first
+  const validation = validateAndCompressImage(imageBase64);
+  if (!validation.valid) {
+    throw new Error(validation.error || 'Invalid image');
+  }
+
+  const systemPrompt = `You are a fast product category scanner. Quickly identify what TYPES of products are in the image.
+
+Return JSON with this exact structure:
+{
+  "categories": [
+    { "category": "golf", "objectCount": 5, "confidence": 90 },
+    { "category": "fashion", "objectCount": 2, "confidence": 85 }
+  ],
+  "totalObjects": 7
+}
+
+Category options: golf, tech, outdoor, fashion, camping, sports, electronics, other
+
+Rules:
+- Be FAST - don't analyze details, just identify categories
+- Count approximate objects per category
+- Confidence 0-100 for category identification certainty
+- Only list categories that have items present`;
+
+  try {
+    const response = await retryWithBackoff(async () => {
+      return await openai.chat.completions.create({
+        model: 'gpt-4o-mini', // Fast and cheap for category detection
+        messages: [
+          { role: 'system', content: systemPrompt },
+          {
+            role: 'user',
+            content: [
+              { type: 'text', text: 'Quickly scan and categorize the products in this image.' },
+              {
+                type: 'image_url',
+                image_url: {
+                  url: imageBase64,
+                  detail: 'low', // Low detail for speed - we just need categories
+                },
+              },
+            ],
+          },
+        ],
+        max_tokens: 300,
+        temperature: 0.1, // Very low for consistency
+        response_format: { type: 'json_object' },
+      });
+    });
+
+    const content = response.choices[0]?.message?.content;
+    if (!content) {
+      throw new Error('No response from category detection');
+    }
+
+    const parsed = JSON.parse(content);
+    const processingTimeMs = Date.now() - startTime;
+
+    console.log(`[Stage 1] Category detection completed in ${processingTimeMs}ms:`, parsed.categories);
+
+    return {
+      categories: (parsed.categories || []).map((c: any) => ({
+        category: c.category || 'other',
+        objectCount: c.objectCount || 1,
+        confidence: Math.min(100, Math.max(0, c.confidence || 50)),
+      })),
+      totalObjects: parsed.totalObjects || 0,
+      processingTimeMs,
+    };
+  } catch (error: any) {
+    console.error('[Stage 1] Category detection failed:', error.message);
+    // Return empty result on error - Stage 2 will proceed without brand context
+    return {
+      categories: [],
+      totalObjects: 0,
+      processingTimeMs: Date.now() - startTime,
+    };
+  }
+}
+
+/**
  * Best Practice: Structured prompt engineering for consistent results
- * Identify products in an image using GPT-4 Vision
+ * Two-Stage Product Identification:
+ * - Stage 1: Quick category detection with gpt-4o-mini
+ * - Stage 2: Detailed identification with category-specific brand knowledge
  */
 export async function identifyProductsInImage(
   imageBase64: string,
-  context?: { bagType?: string; expectedCategories?: string[]; focusCategories?: string[] }
+  context?: { bagType?: string; expectedCategories?: string[]; focusCategories?: string[]; skipCategoryDetection?: boolean }
 ): Promise<VisionAnalysisResult> {
   const startTime = Date.now();
 
@@ -143,60 +288,121 @@ export async function identifyProductsInImage(
     throw new Error(validation.error || 'Invalid image');
   }
 
-  // Best Practice: Use system message for consistent behavior with emphasis on specificity
-  const systemPrompt = `You are an expert product identifier with deep knowledge of specific product models, brands, and SKUs.
+  // === STAGE 1: Quick Category Detection ===
+  let brandContext = '';
+  let detectedCategories: string[] = [];
 
-CRITICAL REQUIREMENTS:
+  if (!context?.skipCategoryDetection) {
+    try {
+      const categoryResult = await detectCategories(imageBase64);
+      detectedCategories = categoryResult.categories.map(c => c.category);
+
+      // Load brand knowledge for detected categories
+      if (detectedCategories.length > 0) {
+        brandContext = generateBrandContext(detectedCategories, 'standard');
+        console.log(`[Stage 2] Loaded brand knowledge for: ${detectedCategories.join(', ')}`);
+      }
+    } catch (error) {
+      console.warn('[Stage 1] Category detection failed, proceeding without brand context:', error);
+    }
+  }
+
+  // === STAGE 2: Detailed Product Identification ===
+  // Build system prompt with optional brand context
+  const systemPrompt = `You are an expert product identifier with deep knowledge of specific product models, brands, and SKUs.
+${brandContext}
+═══════════════════════════════════════════════════════════════
+IDENTIFICATION REQUIREMENTS
+═══════════════════════════════════════════════════════════════
+
+CRITICAL RULES:
 1. IDENTIFY EVERY PRODUCT VISIBLE - If there are 20+ items, list them ALL. No limits.
 2. BE HYPER-SPECIFIC - Never use generic names like "Driver", "Golf Bag", "Tent"
-3. Include EXACT model names like "TaylorMade SIM2 Max Driver", "Callaway Rogue ST Triple Diamond Fairway Wood"
+3. Include EXACT model names like "TaylorMade Qi10 Max Driver", "Callaway Paradym Ai Smoke Driver"
 4. Include model numbers/SKUs when visible (e.g., "M2 2017", "Apex DCB 21")
 5. For products where you're unsure, provide alternatives with reasoning
 6. SPECIFICITY IS EVERYTHING - generic names are useless
 
-CONFIDENCE SCORING (BE CONSERVATIVE):
-- 90-100: You can see CLEAR branding, model text/numbers, distinctive design features
+═══════════════════════════════════════════════════════════════
+COLOR & PATTERN IDENTIFICATION (CRITICAL)
+═══════════════════════════════════════════════════════════════
+
+For EVERY product, you MUST provide detailed visual attributes:
+
+COLOR IDENTIFICATION:
+- Primary: The dominant/main color (use brand-specific terms from knowledge base if available)
+- Secondary: Second most prominent color (if applicable)
+- Accent: Trim, highlights, small details (if applicable)
+- Finish: matte, glossy, metallic, satin, textured, or brushed
+- Colorway: Official brand colorway name if recognizable (e.g., "Qi10 Blue", "Stealth Carbon")
+
+PATTERN IDENTIFICATION:
+- Type: solid, striped, plaid, camo, gradient, geometric, chevron, heathered, carbon-weave, checkered, floral, or other
+- Location: all-over, accent, trim, crown-only, partial, or sole-only
+- Description: Any additional pattern details
+
+BRAND SIGNATURE (for visual brand identification):
+- Even if text is unreadable, identify brands by visual cues
+- Note logo shapes, design elements, signature colorways
+- Rate your visual confidence separately (0-100)
+
+═══════════════════════════════════════════════════════════════
+CONFIDENCE SCORING (BE CONSERVATIVE)
+═══════════════════════════════════════════════════════════════
+- 90-100: CLEAR branding, model text/numbers, distinctive design features visible
 - 70-89: Brand is clear but model is inferred from visual features
 - 50-69: Can identify general product type but brand/model uncertain
 - 30-49: Can only make educated guess based on shape/color
 - <30: Very uncertain, minimal visible details
 
-IMPORTANT: If you can't read text/logos clearly or see distinctive features, DO NOT give high confidence.
+IMPORTANT: If you can't read text/logos clearly, DO NOT give high confidence.
 Better to say 60% confidence with alternatives than falsely claim 95% certainty.
 
-DETAIL FORMATTING STANDARDS (use pipe separator):
-- Golf: "Loft | Shaft | Flex" (e.g., "10.5° | Fujikura Ventus | Stiff")
-- Makeup: "Shade | Finish | Size" (e.g., "Ruby Woo | Matte | 3g")
-- Fashion: "Size | Color | Material" (e.g., "Medium | Black | 100% Cotton")
-- Tech: "Storage | Key Feature | Connectivity" (e.g., "256GB | A17 Pro | USB-C")
-- Outdoor: "Weight | Rating | Capacity" (e.g., "12.6oz | 20°F | 2-person")
-*Adapt format if specific details aren't visible - don't guess, just omit.*
+═══════════════════════════════════════════════════════════════
+EXAMPLES
+═══════════════════════════════════════════════════════════════
+GOOD:
+✅ "TaylorMade Qi10 Max Driver" with colors: { primary: "Qi Blue", secondary: "Carbon Black", finish: "metallic" }
+✅ "Titleist TSR2 Driver" with brandSignature: { signatureColors: ["black", "gold"], logoShape: "eagle silhouette", designCues: ["brushed black finish", "gold accents"], visualConfidence: 85 }
 
-GOOD EXAMPLES:
-✅ "TaylorMade Stealth 2 Plus Driver" NOT "Driver"
-✅ "Titleist Pro V1x Golf Balls (2023)" NOT "Golf Balls"
-✅ "Ping G425 Max Fairway 3-Wood" NOT "Fairway Wood"
-✅ "REI Co-op Half Dome SL 2+ Tent" NOT "Tent"
-✅ "Osprey Atmos AG 65 Backpack" NOT "Backpack"
+BAD (NEVER DO THIS):
+❌ "Driver" - too generic
+❌ "Golf Club" - missing brand and model
+❌ color: "blue" - too vague, use specific terms
 
-BAD EXAMPLES (NEVER DO THIS):
-❌ "Golf Club" - too generic
-❌ "Driver" - missing brand and model
-❌ "Camping Stove" - need brand and model
-❌ "Backpack" - need specific model
-
-Return your response as valid JSON with this exact structure:
+═══════════════════════════════════════════════════════════════
+JSON OUTPUT FORMAT
+═══════════════════════════════════════════════════════════════
+Return your response as valid JSON:
 {
   "products": [
     {
       "name": "Specific Product Name with Model",
       "brand": "Brand name",
-      "category": "One of: camping, golf, hiking, travel, sports, electronics, clothing, other",
+      "category": "camping|golf|hiking|travel|sports|electronics|clothing|other",
       "confidence": 85,
-      "modelNumber": "Model/SKU if visible (optional)",
-      "estimatedPrice": "$XX-XX range (optional)",
-      "color": "Primary color (optional)",
-      "specifications": ["spec1", "spec2"] (optional),
+      "modelNumber": "Model/SKU if visible",
+      "estimatedPrice": "$XX-XX range",
+      "color": "Primary color (simple string for backwards compatibility)",
+      "colors": {
+        "primary": "Main color with brand terminology",
+        "secondary": "Second color if present",
+        "accent": "Trim/detail color if present",
+        "finish": "matte|glossy|metallic|satin|textured|brushed",
+        "colorway": "Official colorway name if known"
+      },
+      "pattern": {
+        "type": "solid|striped|plaid|camo|gradient|geometric|chevron|heathered|carbon-weave|checkered|floral|other",
+        "location": "all-over|accent|trim|crown-only|partial|sole-only",
+        "description": "Additional pattern details"
+      },
+      "brandSignature": {
+        "signatureColors": ["brand's signature colors detected"],
+        "logoShape": "Description of logo shape if visible",
+        "designCues": ["Visual elements that identify the brand"],
+        "visualConfidence": 75
+      },
+      "specifications": ["spec1", "spec2"],
       "alternatives": [
         {
           "name": "Alternative Product Name",
@@ -204,12 +410,12 @@ Return your response as valid JSON with this exact structure:
           "confidence": 60,
           "reason": "Why this could be the product"
         }
-      ] (only if confidence < 70)
+      ]
     }
   ]
 }
 
-If you cannot identify the SPECIFIC model, include alternatives. Confidence should be 0-100.`;
+Include "alternatives" only when confidence < 70. Always include "colors" and "brandSignature".`;
 
   let userPrompt = '';
 
@@ -307,13 +513,36 @@ Requirements:
     }
 
     // Best Practice: Sanitize and validate each product
-    const products: IdentifiedProduct[] = parsed.products.map((p) => ({
+    const products: IdentifiedProduct[] = parsed.products.map((p: any) => ({
       name: p.name || 'Unknown Product',
       brand: p.brand || undefined,
       category: p.category || 'other',
       confidence: Math.min(100, Math.max(0, p.confidence || 50)),
       estimatedPrice: p.estimatedPrice,
       color: p.color,
+      // NEW: Structured color information
+      colors: p.colors ? {
+        primary: p.colors.primary || p.color || undefined,
+        secondary: p.colors.secondary || undefined,
+        accent: p.colors.accent || undefined,
+        finish: ['matte', 'glossy', 'metallic', 'satin', 'textured', 'brushed'].includes(p.colors.finish)
+          ? p.colors.finish
+          : undefined,
+        colorway: p.colors.colorway || undefined,
+      } : undefined,
+      // NEW: Pattern recognition
+      pattern: p.pattern ? {
+        type: p.pattern.type || 'solid',
+        location: p.pattern.location || 'all-over',
+        description: p.pattern.description || undefined,
+      } : undefined,
+      // NEW: Brand signature for visual identification
+      brandSignature: p.brandSignature ? {
+        signatureColors: p.brandSignature.signatureColors || [],
+        logoShape: p.brandSignature.logoShape || undefined,
+        designCues: p.brandSignature.designCues || [],
+        visualConfidence: Math.min(100, Math.max(0, p.brandSignature.visualConfidence || 50)),
+      } : undefined,
       specifications: p.specifications,
       modelNumber: p.modelNumber,
       alternatives: p.alternatives?.map((alt: any) => ({

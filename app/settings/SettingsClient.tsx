@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { User, Loader2, Check, X, Upload, Trash2, Camera, ArrowLeft, Instagram, Twitter, Youtube, Globe, Video } from 'lucide-react';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
+import AvatarCropper from '@/components/ui/AvatarCropper';
 
 type Profile = {
   id: string;
@@ -52,6 +53,8 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(profile.avatar_url);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showAvatarCropper, setShowAvatarCropper] = useState(false);
+  const [avatarImageToCrop, setAvatarImageToCrop] = useState<string | null>(null);
 
   // Handle availability state (only check if handle changed)
   const [handleAvailability, setHandleAvailability] = useState<{
@@ -185,32 +188,66 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
 
   const handleAvatarSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      console.log('[Avatar] No file selected');
+      return;
+    }
+
+    console.log('[Avatar] File selected:', { name: file.name, type: file.type, size: file.size });
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
+      console.log('[Avatar] Invalid file type:', file.type);
       setError('Please select an image file');
       return;
     }
 
-    // Validate file size (max 2MB)
-    if (file.size > 2 * 1024 * 1024) {
-      setError('Image must be smaller than 2MB');
+    // Validate file size (max 5MB for cropping, final will be smaller)
+    if (file.size > 5 * 1024 * 1024) {
+      console.log('[Avatar] File too large:', file.size);
+      setError('Image must be smaller than 5MB');
       return;
     }
 
-    // Create preview
+    // Create data URL and open cropper
     const reader = new FileReader();
     reader.onloadend = () => {
-      setAvatarPreview(reader.result as string);
+      console.log('[Avatar] File read complete, opening cropper');
+      setAvatarImageToCrop(reader.result as string);
+      setShowAvatarCropper(true);
+    };
+    reader.onerror = () => {
+      console.error('[Avatar] Error reading file:', reader.error);
+      setError('Failed to read image file');
     };
     reader.readAsDataURL(file);
 
-    // Upload avatar
-    uploadAvatar(file);
+    // Clear the input so the same file can be selected again
+    e.target.value = '';
+  };
+
+  const handleCroppedAvatarUpload = async (croppedBlob: Blob) => {
+    console.log('[Avatar] Cropped blob received:', { size: croppedBlob.size, type: croppedBlob.type });
+    setShowAvatarCropper(false);
+    setAvatarImageToCrop(null);
+
+    // Create a preview from the blob
+    const previewUrl = URL.createObjectURL(croppedBlob);
+    setAvatarPreview(previewUrl);
+    console.log('[Avatar] Preview URL created');
+
+    // Upload the cropped blob
+    await uploadAvatarBlob(croppedBlob);
+  };
+
+  const handleAvatarCropCancel = () => {
+    console.log('[Avatar] Crop cancelled');
+    setShowAvatarCropper(false);
+    setAvatarImageToCrop(null);
   };
 
   const uploadAvatar = async (file: File) => {
+    console.log('[Avatar Upload] Starting file upload:', { name: file.name, type: file.type, size: file.size });
     setIsUploadingAvatar(true);
     setError('');
 
@@ -218,22 +255,70 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
       const formData = new FormData();
       formData.append('file', file);
 
+      console.log('[Avatar Upload] Sending request to /api/profile/avatar');
       const response = await fetch('/api/profile/avatar', {
         method: 'POST',
         body: formData,
       });
 
+      console.log('[Avatar Upload] Response status:', response.status);
+
       if (!response.ok) {
         const data = await response.json();
+        console.log('[Avatar Upload] Error response:', data);
         throw new Error(data.error || 'Failed to upload avatar');
       }
 
       const data = await response.json();
+      console.log('[Avatar Upload] Success:', data);
       setProfile(data.profile);
       setAvatarPreview(data.avatar_url);
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
     } catch (err: any) {
+      console.error('[Avatar Upload] Error:', err);
+      setError(err.message || 'Failed to upload avatar');
+      setAvatarPreview(profile.avatar_url);
+    } finally {
+      setIsUploadingAvatar(false);
+    }
+  };
+
+  const uploadAvatarBlob = async (blob: Blob) => {
+    console.log('[Avatar Upload Blob] Starting blob upload:', { size: blob.size, type: blob.type });
+    setIsUploadingAvatar(true);
+    setError('');
+
+    try {
+      // Create a File from the Blob with a proper name
+      const file = new File([blob], 'avatar.jpg', { type: blob.type || 'image/jpeg' });
+      console.log('[Avatar Upload Blob] Created file:', { name: file.name, type: file.type, size: file.size });
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      console.log('[Avatar Upload Blob] Sending request to /api/profile/avatar');
+      const response = await fetch('/api/profile/avatar', {
+        method: 'POST',
+        body: formData,
+      });
+
+      console.log('[Avatar Upload Blob] Response status:', response.status);
+
+      if (!response.ok) {
+        const data = await response.json();
+        console.log('[Avatar Upload Blob] Error response:', data);
+        throw new Error(data.error || 'Failed to upload avatar');
+      }
+
+      const data = await response.json();
+      console.log('[Avatar Upload Blob] Success:', data);
+      setProfile(data.profile);
+      setAvatarPreview(data.avatar_url);
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (err: any) {
+      console.error('[Avatar Upload Blob] Error:', err);
       setError(err.message || 'Failed to upload avatar');
       setAvatarPreview(profile.avatar_url);
     } finally {
@@ -625,6 +710,15 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
           </div>
         </div>
       </main>
+
+      {/* Avatar Cropper Modal */}
+      {showAvatarCropper && avatarImageToCrop && (
+        <AvatarCropper
+          imageSrc={avatarImageToCrop}
+          onComplete={handleCroppedAvatarUpload}
+          onCancel={handleAvatarCropCancel}
+        />
+      )}
     </div>
   );
 }

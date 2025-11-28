@@ -1,0 +1,224 @@
+import { test, expect } from '@playwright/test';
+
+/**
+ * Avatar Cropper Tests
+ * Tests the new avatar cropping feature in settings
+ *
+ * Note: These tests use pre-authenticated storage state from global setup
+ */
+
+test.describe('Avatar Cropper Feature', () => {
+  test.beforeEach(async ({ page }) => {
+    // Navigate to settings - auth is pre-loaded via storageState
+    await page.goto('/settings');
+    await page.waitForLoadState('domcontentloaded');
+  });
+
+  test('should show avatar section in settings', async ({ page }) => {
+    // The settings page should have an avatar/profile picture section
+    // Look for file input for avatar upload
+    const fileInput = page.locator('input[type="file"]').first();
+    await expect(fileInput).toBeAttached({ timeout: 10000 });
+  });
+
+  test('should open cropper modal when valid image is selected', async ({ page }) => {
+    // Wait for page to settle
+    await page.waitForTimeout(1000);
+
+    // Find the file input
+    const fileInput = page.locator('input[type="file"]').first();
+
+    // Create a simple valid PNG (1x1 pixel red)
+    const pngBuffer = Buffer.from([
+      0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D,
+      0x49, 0x48, 0x44, 0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+      0x08, 0x02, 0x00, 0x00, 0x00, 0x90, 0x77, 0x53, 0xDE, 0x00, 0x00, 0x00,
+      0x0C, 0x49, 0x44, 0x41, 0x54, 0x08, 0xD7, 0x63, 0xF8, 0xCF, 0xC0, 0x00,
+      0x00, 0x00, 0x03, 0x00, 0x01, 0x00, 0x18, 0xDD, 0x8D, 0xB4, 0x00, 0x00,
+      0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82
+    ]);
+
+    await fileInput.setInputFiles({
+      name: 'test-avatar.png',
+      mimeType: 'image/png',
+      buffer: pngBuffer,
+    });
+
+    // Cropper modal should appear with title
+    await expect(page.locator('text=Crop Profile Picture')).toBeVisible({ timeout: 10000 });
+  });
+
+  test('should have zoom slider in cropper', async ({ page }) => {
+    await page.waitForTimeout(1000);
+
+    const fileInput = page.locator('input[type="file"]').first();
+
+    const pngBuffer = Buffer.from([
+      0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D,
+      0x49, 0x48, 0x44, 0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+      0x08, 0x02, 0x00, 0x00, 0x00, 0x90, 0x77, 0x53, 0xDE, 0x00, 0x00, 0x00,
+      0x0C, 0x49, 0x44, 0x41, 0x54, 0x08, 0xD7, 0x63, 0xF8, 0xCF, 0xC0, 0x00,
+      0x00, 0x00, 0x03, 0x00, 0x01, 0x00, 0x18, 0xDD, 0x8D, 0xB4, 0x00, 0x00,
+      0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82
+    ]);
+
+    await fileInput.setInputFiles({
+      name: 'test-avatar.png',
+      mimeType: 'image/png',
+      buffer: pngBuffer,
+    });
+
+    await expect(page.locator('text=Crop Profile Picture')).toBeVisible({ timeout: 10000 });
+
+    // Zoom slider should be present
+    const zoomSlider = page.locator('input[type="range"]');
+    await expect(zoomSlider).toBeVisible();
+  });
+
+  test('should have Cancel and Apply buttons in cropper', async ({ page }) => {
+    await page.waitForTimeout(1000);
+
+    const fileInput = page.locator('input[type="file"]').first();
+
+    const pngBuffer = Buffer.from([
+      0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D,
+      0x49, 0x48, 0x44, 0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+      0x08, 0x02, 0x00, 0x00, 0x00, 0x90, 0x77, 0x53, 0xDE, 0x00, 0x00, 0x00,
+      0x0C, 0x49, 0x44, 0x41, 0x54, 0x08, 0xD7, 0x63, 0xF8, 0xCF, 0xC0, 0x00,
+      0x00, 0x00, 0x03, 0x00, 0x01, 0x00, 0x18, 0xDD, 0x8D, 0xB4, 0x00, 0x00,
+      0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82
+    ]);
+
+    await fileInput.setInputFiles({
+      name: 'test-avatar.png',
+      mimeType: 'image/png',
+      buffer: pngBuffer,
+    });
+
+    await expect(page.locator('text=Crop Profile Picture')).toBeVisible({ timeout: 10000 });
+
+    // Cancel and Apply buttons
+    await expect(page.locator('button:has-text("Cancel")')).toBeVisible();
+    await expect(page.locator('button:has-text("Apply")')).toBeVisible();
+  });
+
+  test('should close cropper when Cancel is clicked', async ({ page }) => {
+    await page.waitForTimeout(1000);
+
+    const fileInput = page.locator('input[type="file"]').first();
+
+    const pngBuffer = Buffer.from([
+      0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D,
+      0x49, 0x48, 0x44, 0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+      0x08, 0x02, 0x00, 0x00, 0x00, 0x90, 0x77, 0x53, 0xDE, 0x00, 0x00, 0x00,
+      0x0C, 0x49, 0x44, 0x41, 0x54, 0x08, 0xD7, 0x63, 0xF8, 0xCF, 0xC0, 0x00,
+      0x00, 0x00, 0x03, 0x00, 0x01, 0x00, 0x18, 0xDD, 0x8D, 0xB4, 0x00, 0x00,
+      0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82
+    ]);
+
+    await fileInput.setInputFiles({
+      name: 'test-avatar.png',
+      mimeType: 'image/png',
+      buffer: pngBuffer,
+    });
+
+    await expect(page.locator('text=Crop Profile Picture')).toBeVisible({ timeout: 10000 });
+
+    // Click Cancel
+    await page.locator('button:has-text("Cancel")').click();
+
+    // Modal should close
+    await expect(page.locator('text=Crop Profile Picture')).not.toBeVisible({ timeout: 5000 });
+  });
+
+  test('should show helper instructions in cropper', async ({ page }) => {
+    await page.waitForTimeout(1000);
+
+    const fileInput = page.locator('input[type="file"]').first();
+
+    const pngBuffer = Buffer.from([
+      0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D,
+      0x49, 0x48, 0x44, 0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+      0x08, 0x02, 0x00, 0x00, 0x00, 0x90, 0x77, 0x53, 0xDE, 0x00, 0x00, 0x00,
+      0x0C, 0x49, 0x44, 0x41, 0x54, 0x08, 0xD7, 0x63, 0xF8, 0xCF, 0xC0, 0x00,
+      0x00, 0x00, 0x03, 0x00, 0x01, 0x00, 0x18, 0xDD, 0x8D, 0xB4, 0x00, 0x00,
+      0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82
+    ]);
+
+    await fileInput.setInputFiles({
+      name: 'test-avatar.png',
+      mimeType: 'image/png',
+      buffer: pngBuffer,
+    });
+
+    await expect(page.locator('text=Crop Profile Picture')).toBeVisible({ timeout: 10000 });
+
+    // Should show instructions
+    await expect(page.locator('text=Drag to reposition')).toBeVisible();
+  });
+});
+
+test.describe('Avatar Upload API', () => {
+  test('should reject invalid file types', async ({ page, request }) => {
+    // Go to settings to ensure we're authenticated (using pre-loaded state)
+    await page.goto('/settings');
+    await page.waitForLoadState('domcontentloaded');
+
+    // Get cookies for authenticated request
+    const cookies = await page.context().cookies();
+    const cookieHeader = cookies.map(c => `${c.name}=${c.value}`).join('; ');
+
+    const response = await request.post('/api/profile/avatar', {
+      headers: {
+        Cookie: cookieHeader,
+      },
+      multipart: {
+        file: {
+          name: 'test.txt',
+          mimeType: 'text/plain',
+          buffer: Buffer.from('not an image'),
+        },
+      },
+    });
+
+    expect(response.status()).toBe(400);
+    const data = await response.json();
+    expect(data.error).toContain('Invalid file type');
+  });
+
+  test('should accept valid image types', async ({ page, request }) => {
+    await page.goto('/settings');
+    await page.waitForLoadState('domcontentloaded');
+
+    const cookies = await page.context().cookies();
+    const cookieHeader = cookies.map(c => `${c.name}=${c.value}`).join('; ');
+
+    // Valid 1x1 PNG
+    const pngBuffer = Buffer.from([
+      0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D,
+      0x49, 0x48, 0x44, 0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+      0x08, 0x02, 0x00, 0x00, 0x00, 0x90, 0x77, 0x53, 0xDE, 0x00, 0x00, 0x00,
+      0x0C, 0x49, 0x44, 0x41, 0x54, 0x08, 0xD7, 0x63, 0xF8, 0xCF, 0xC0, 0x00,
+      0x00, 0x00, 0x03, 0x00, 0x01, 0x00, 0x18, 0xDD, 0x8D, 0xB4, 0x00, 0x00,
+      0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82
+    ]);
+
+    const response = await request.post('/api/profile/avatar', {
+      headers: {
+        Cookie: cookieHeader,
+      },
+      multipart: {
+        file: {
+          name: 'avatar.png',
+          mimeType: 'image/png',
+          buffer: pngBuffer,
+        },
+      },
+    });
+
+    // Should succeed (200) or indicate success
+    expect(response.ok()).toBeTruthy();
+    const data = await response.json();
+    expect(data.avatar_url).toBeDefined();
+  });
+});

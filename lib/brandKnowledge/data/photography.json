@@ -1,0 +1,498 @@
+{
+  "category": "photography",
+  "colorVocabulary": {
+    "black": ["matte black", "gloss black", "carbon black", "stealth black", "jet black", "piano black"],
+    "silver": ["chrome silver", "brushed silver", "titanium silver", "platinum silver", "metallic silver"],
+    "gray": ["graphite", "charcoal", "gunmetal", "titanium gray", "space gray", "slate gray"],
+    "white": ["pearl white", "arctic white", "snow white", "frost white"],
+    "red": ["cardinal red", "crimson", "fire red", "cherry red"],
+    "gold": ["champagne gold", "rose gold", "bronze gold", "brass"],
+    "blue": ["navy blue", "midnight blue", "steel blue", "cobalt blue"],
+    "green": ["forest green", "olive green", "military green"],
+    "brown": ["mocha brown", "chocolate brown", "walnut brown", "cognac brown"]
+  },
+  "patternTypes": ["rubberized grip", "carbon fiber", "leather wrap", "textured plastic", "diamond pattern grip", "honeycomb texture", "brushed metal finish", "weather sealing gasket", "knurled metal"],
+  "partTerminology": {
+    "camera": ["body", "viewfinder", "LCD screen", "grip", "hot shoe", "mode dial", "shutter button", "sensor", "lens mount", "control wheel", "battery grip", "card slot", "flash sync port"],
+    "lens": ["barrel", "focus ring", "zoom ring", "lens hood", "filter thread", "lens mount", "aperture ring", "distance scale", "front element", "rear element", "image stabilization switch", "focus limiter"],
+    "tripod": ["legs", "head", "quick release plate", "center column", "leg locks", "ball head", "pan handle", "feet", "spreader", "hook"],
+    "flash": ["flash head", "reflector", "diffuser", "battery compartment", "hot shoe mount", "sync port", "modeling light", "LCD panel"],
+    "bag": ["dividers", "strap", "buckle", "zipper", "rain cover", "laptop compartment", "tripod holder", "pocket"]
+  },
+  "brands": [
+    {
+      "name": "Canon",
+      "aliases": ["Canon Inc.", "Canon Cameras"],
+      "signatureColors": ["black", "silver", "white (telephoto lenses)", "red (L-series ring)"],
+      "designCues": ["red ring on L-series lenses", "white telephoto lenses", "EOS branding", "RF/EF lens mount", "smooth rounded body design", "red accent stripe"],
+      "identificationTips": [
+        "Red ring on lens barrel = L-series professional lens",
+        "White lens barrel = super telephoto lens (70-200mm+)",
+        "EOS prefix on camera bodies",
+        "RF mount = mirrorless (2018+), EF mount = DSLR",
+        "R5/R6 = full-frame mirrorless flagship",
+        "Red accent line on right side of body",
+        "Control ring on RF lenses near mount"
+      ],
+      "recentColorways": [
+        { "line": "EOS R5", "year": "2020-2024", "colors": ["matte black body"] },
+        { "line": "EOS R6 Mark II", "year": "2022-2024", "colors": ["black body"] },
+        { "line": "EOS R8", "year": "2023", "colors": ["black body"] },
+        { "line": "RF 24-70mm f/2.8L", "year": "2018-2024", "colors": ["black barrel", "red L ring"] },
+        { "line": "RF 100-500mm f/4.5-7.1L", "year": "2020-2024", "colors": ["white barrel", "red L ring"] }
+      ]
+    },
+    {
+      "name": "Nikon",
+      "aliases": ["Nikon Corporation"],
+      "signatureColors": ["black", "silver", "gold (lens ring)", "red (triangle logo)"],
+      "designCues": ["gold ring on professional lenses", "red triangle logo", "Z/F lens mount", "angular body design", "yellow/gold Nikon script"],
+      "identificationTips": [
+        "Gold/brass ring on lens barrel = professional Nikkor lens",
+        "Red triangle on camera grip = signature Nikon",
+        "Z mount = mirrorless (2018+), F mount = DSLR",
+        "N logo in gold = Nikon branding",
+        "S-line = premium Z-mount lenses",
+        "Df = retro design with silver/black combo",
+        "Yellow Nikon script on strap"
+      ],
+      "recentColorways": [
+        { "line": "Z9", "year": "2021-2024", "colors": ["black body", "magnesium alloy"] },
+        { "line": "Z8", "year": "2023-2024", "colors": ["black body"] },
+        { "line": "Z6 III", "year": "2024", "colors": ["black body"] },
+        { "line": "Zf", "year": "2023", "colors": ["black", "silver body", "retro design"] },
+        { "line": "NIKKOR Z 24-70mm f/2.8 S", "year": "2018-2024", "colors": ["black barrel", "gold S ring"] }
+      ]
+    },
+    {
+      "name": "Sony",
+      "aliases": ["Sony Alpha", "Sony Imaging"],
+      "signatureColors": ["black", "graphite gray", "white (select models)", "orange (Alpha logo accent)"],
+      "designCues": ["Alpha logo with orange accent", "E-mount", "minimalist design", "orange camera strap mount", "BIONZ processor branding"],
+      "identificationTips": [
+        "Alpha (α) logo on top plate",
+        "Orange accents on camera strap lugs",
+        "E-mount for all mirrorless cameras",
+        "a7/a9 = full-frame mirrorless",
+        "a6000 series = APS-C mirrorless",
+        "GM (Gold Master) = professional lenses with white ring",
+        "Compact button layout on right side"
+      ],
+      "recentColorways": [
+        { "line": "Alpha 1", "year": "2021-2024", "colors": ["black body"] },
+        { "line": "a7R V", "year": "2022-2024", "colors": ["black body"] },
+        { "line": "a7 IV", "year": "2021-2024", "colors": ["black body", "silver variant available"] },
+        { "line": "a6700", "year": "2023", "colors": ["black body"] },
+        { "line": "FE 24-70mm f/2.8 GM II", "year": "2022-2024", "colors": ["black barrel", "white GM ring"] }
+      ]
+    },
+    {
+      "name": "Fujifilm",
+      "aliases": ["Fuji", "FUJIFILM Corporation"],
+      "signatureColors": ["black", "silver", "graphite silver", "charcoal gray"],
+      "designCues": ["retro dials and controls", "X-Trans sensor branding", "red Fujifilm badge", "silver and black combo bodies", "mechanical dials"],
+      "identificationTips": [
+        "Retro styling with exposed dials = signature Fujifilm X series",
+        "Red Fujifilm script badge on front",
+        "X-mount for mirrorless",
+        "GF mount = medium format (GFX series)",
+        "Silver/black two-tone bodies common",
+        "Physical aperture/shutter/ISO dials on top",
+        "XF = X-mount lens, GF = medium format lens"
+      ],
+      "recentColorways": [
+        { "line": "X-T5", "year": "2022-2024", "colors": ["black body", "silver body"] },
+        { "line": "X-H2S", "year": "2022-2024", "colors": ["black body"] },
+        { "line": "X100VI", "year": "2024", "colors": ["black", "silver"] },
+        { "line": "X-Pro3", "year": "2019-2024", "colors": ["black", "dura silver", "dura black"] },
+        { "line": "GFX 100 II", "year": "2023", "colors": ["black body"] }
+      ]
+    },
+    {
+      "name": "Panasonic",
+      "aliases": ["Panasonic Lumix", "Lumix"],
+      "signatureColors": ["black", "silver"],
+      "designCues": ["Lumix branding in red", "L-mount alliance logo", "LEICA lens branding on collaborations", "video-focused design"],
+      "identificationTips": [
+        "LUMIX in red script on top plate",
+        "L-mount = full-frame (S series)",
+        "Micro Four Thirds mount = GH/G series",
+        "LEICA branding on select lenses",
+        "S5/S1 = full-frame mirrorless",
+        "GH series = video-focused MFT",
+        "Often features articulating screens"
+      ],
+      "recentColorways": [
+        { "line": "Lumix S5 II", "year": "2023-2024", "colors": ["black body"] },
+        { "line": "Lumix GH6", "year": "2022-2024", "colors": ["black body"] },
+        { "line": "Lumix G9 II", "year": "2023", "colors": ["black body"] },
+        { "line": "Lumix S9", "year": "2024", "colors": ["jet black", "dark olive", "crimson red", "night blue"] }
+      ]
+    },
+    {
+      "name": "OM System",
+      "aliases": ["Olympus", "OM Digital Solutions"],
+      "signatureColors": ["black", "silver"],
+      "designCues": ["OM-1 retro branding", "compact Micro Four Thirds design", "weather sealing badges", "blue Olympus legacy logo"],
+      "identificationTips": [
+        "OM SYSTEM branding (formerly Olympus)",
+        "Micro Four Thirds mount",
+        "Compact, lightweight bodies",
+        "Weather-sealed design common",
+        "Blue Olympus logo on older models",
+        "M.Zuiko lens branding",
+        "PRO designation for professional lenses"
+      ],
+      "recentColorways": [
+        { "line": "OM-1", "year": "2022-2024", "colors": ["black body", "silver body available"] },
+        { "line": "OM-5", "year": "2022-2024", "colors": ["black", "silver"] },
+        { "line": "M.Zuiko 40-150mm f/2.8 PRO", "year": "2014-2024", "colors": ["black barrel"] }
+      ]
+    },
+    {
+      "name": "Leica",
+      "aliases": ["Leica Camera AG"],
+      "signatureColors": ["black chrome", "silver chrome", "titanium", "red dot logo"],
+      "designCues": ["iconic red dot logo", "minimalist rangefinder design", "premium metal construction", "German craftsmanship badge", "engraved top plate"],
+      "identificationTips": [
+        "Red circular Leica logo = signature identifier",
+        "M-mount = rangefinder cameras",
+        "L-mount = SL mirrorless system",
+        "Q series = fixed lens premium compact",
+        "Silver chrome or black chrome finishes",
+        "Minimalist control layout",
+        "Premium pricing and build quality",
+        "Often features brass construction"
+      ],
+      "recentColorways": [
+        { "line": "M11", "year": "2022-2024", "colors": ["black chrome", "silver chrome"] },
+        { "line": "Q3", "year": "2023", "colors": ["black"] },
+        { "line": "SL3", "year": "2024", "colors": ["black"] },
+        { "line": "M11 Monochrom", "year": "2024", "colors": ["black chrome"] }
+      ]
+    },
+    {
+      "name": "Hasselblad",
+      "aliases": ["Hasselblad AB"],
+      "signatureColors": ["black", "silver", "lunar gray"],
+      "designCues": ["iconic orange shutter button", "modular medium format design", "Swedish flag badge", "H logo", "boxy medium format body"],
+      "identificationTips": [
+        "Orange shutter button = signature Hasselblad",
+        "Modular design for medium format",
+        "Swedish flag on camera body",
+        "H System = medium format DSLR-style",
+        "X System = mirrorless medium format",
+        "907X = digital back system",
+        "Premium medium format specialist"
+      ],
+      "recentColorways": [
+        { "line": "X2D 100C", "year": "2022-2024", "colors": ["black body", "orange button"] },
+        { "line": "907X CFV 100C", "year": "2022-2024", "colors": ["black/silver", "modular design"] },
+        { "line": "XCD Lenses", "year": "2016-2024", "colors": ["black barrel"] }
+      ]
+    },
+    {
+      "name": "Phase One",
+      "aliases": ["Phase One A/S"],
+      "signatureColors": ["black", "dark gray"],
+      "designCues": ["IQ digital back design", "modular medium format", "Capture One branding", "industrial design"],
+      "identificationTips": [
+        "IQ digital back system",
+        "Modular medium format specialist",
+        "Capture One software integration",
+        "Industrial, professional design",
+        "XF camera system",
+        "Highest resolution sensors available",
+        "Commercial/studio photography focus"
+      ],
+      "recentColorways": [
+        { "line": "IQ4 150MP", "year": "2018-2024", "colors": ["black body"] },
+        { "line": "XF Camera System", "year": "2015-2024", "colors": ["black/gray"] }
+      ]
+    },
+    {
+      "name": "Sigma",
+      "aliases": ["Sigma Corporation"],
+      "signatureColors": ["black", "silver accents"],
+      "designCues": ["Art/Contemporary/Sports line designations", "brass-colored mount ring", "ribbed focus rings", "angular lens design"],
+      "identificationTips": [
+        "Art line = gold/brass ring near mount (high optical quality)",
+        "Contemporary line = silver band (compact, versatile)",
+        "Sports line = white stripe (telephoto, action)",
+        "Angular, distinctive lens design",
+        "Available in multiple mounts (Canon, Nikon, Sony, L-mount)",
+        "I series = compact mirrorless lenses",
+        "DG DN = designed for mirrorless full-frame"
+      ],
+      "recentColorways": [
+        { "line": "Art 35mm f/1.4 DG DN", "year": "2021-2024", "colors": ["black barrel", "brass Art ring"] },
+        { "line": "Contemporary 18-50mm f/2.8", "year": "2021-2024", "colors": ["black barrel", "silver Contemporary band"] },
+        { "line": "Sports 100-400mm f/5-6.3", "year": "2022-2024", "colors": ["black barrel", "white Sports stripe"] }
+      ]
+    },
+    {
+      "name": "Tamron",
+      "aliases": ["Tamron Co., Ltd."],
+      "signatureColors": ["black", "gold ring accent"],
+      "designCues": ["gold/champagne ring near mount", "compact zoom designs", "ribbed zoom ring", "moisture-resistant construction badge"],
+      "identificationTips": [
+        "Gold/champagne ring near lens mount",
+        "Compact lens designs for portability",
+        "Di III = mirrorless full-frame",
+        "Di II = APS-C sensor",
+        "VC = Vibration Compensation (stabilization)",
+        "Often feature wide zoom ranges (28-200mm, etc.)",
+        "Value-oriented third-party manufacturer"
+      ],
+      "recentColorways": [
+        { "line": "28-75mm f/2.8 Di III VXD G2", "year": "2021-2024", "colors": ["black barrel", "gold ring"] },
+        { "line": "35-150mm f/2-2.8 Di III VXD", "year": "2022-2024", "colors": ["black barrel", "gold accent"] },
+        { "line": "50-400mm f/4.5-6.3 Di III VC VXD", "year": "2023", "colors": ["black barrel"] }
+      ]
+    },
+    {
+      "name": "Tokina",
+      "aliases": ["Kenko Tokina"],
+      "signatureColors": ["black"],
+      "designCues": ["red ring accent", "manual focus cine lenses", "wide-angle specialist branding"],
+      "identificationTips": [
+        "Red accent ring on lens barrel",
+        "Known for wide-angle lenses",
+        "atx-m = mirrorless mount",
+        "Opera series = premium full-frame",
+        "Firin = autofocus mirrorless",
+        "Cinema lenses with declicked aperture",
+        "Budget-friendly third-party option"
+      ],
+      "recentColorways": [
+        { "line": "atx-m 23mm f/1.4", "year": "2021-2024", "colors": ["black barrel"] },
+        { "line": "Opera 16-28mm f/2.8", "year": "2019-2024", "colors": ["black barrel", "red ring"] }
+      ]
+    },
+    {
+      "name": "Manfrotto",
+      "aliases": ["Manfrotto Tripods"],
+      "signatureColors": ["black", "red accent", "aluminum silver"],
+      "designCues": ["red Manfrotto logo", "twist leg locks", "aluminum or carbon fiber construction", "M logo badge"],
+      "identificationTips": [
+        "Red Manfrotto script logo",
+        "Befree = compact travel tripod series",
+        "MT prefix = tripod model numbers",
+        "190/055 = classic tripod series",
+        "Twist locks or flip locks for legs",
+        "Quick release plates (200PL, etc.)",
+        "Italian design heritage"
+      ],
+      "recentColorways": [
+        { "line": "Befree Advanced", "year": "2018-2024", "colors": ["black legs", "red accents"] },
+        { "line": "MT055", "year": "2020-2024", "colors": ["black aluminum", "carbon fiber option"] },
+        { "line": "Element Traveller", "year": "2019-2024", "colors": ["black", "red accents"] }
+      ]
+    },
+    {
+      "name": "Gitzo",
+      "aliases": ["Gitzo Tripods"],
+      "signatureColors": ["carbon fiber black", "red logo", "blue G logo"],
+      "designCues": ["premium carbon fiber tubes", "G-lock leg system", "blue G logo badge", "anti-rotation system"],
+      "identificationTips": [
+        "Blue G logo = signature Gitzo",
+        "Premium carbon fiber construction",
+        "G-lock twist leg locks",
+        "Systematic series = modular design",
+        "Mountaineer series = tall tripods",
+        "Traveler series = compact folding design",
+        "Professional-grade, premium pricing"
+      ],
+      "recentColorways": [
+        { "line": "Systematic Series 5", "year": "2020-2024", "colors": ["carbon fiber black", "blue G badge"] },
+        { "line": "Traveler Series 2", "year": "2019-2024", "colors": ["carbon fiber black"] },
+        { "line": "Mountaineer Series 3", "year": "2021-2024", "colors": ["carbon fiber black"] }
+      ]
+    },
+    {
+      "name": "Peak Design",
+      "aliases": ["Peak Design Inc."],
+      "signatureColors": ["charcoal black", "ash gray", "midnight blue", "sage green"],
+      "designCues": ["minimalist design", "Anchor Link system", "red accent stitching", "magnetic closures", "modular divider system"],
+      "identificationTips": [
+        "Anchor Link connection system for straps",
+        "Red accent stitching and tabs",
+        "Everyday series = bags and backpacks",
+        "Capture Clip = camera mounting system",
+        "Slide/Leash/Cuff = strap options",
+        "MagLatch magnetic closures",
+        "Modern, minimalist aesthetic",
+        "Lifetime guarantee"
+      ],
+      "recentColorways": [
+        { "line": "Everyday Backpack V2", "year": "2019-2024", "colors": ["black", "charcoal", "midnight", "bone"] },
+        { "line": "Travel Backpack", "year": "2021-2024", "colors": ["black", "sage"] },
+        { "line": "Everyday Sling V2", "year": "2019-2024", "colors": ["black", "ash", "midnight"] }
+      ]
+    },
+    {
+      "name": "Profoto",
+      "aliases": ["Profoto AB"],
+      "signatureColors": ["white", "black", "blue accent"],
+      "designCues": ["white flash heads", "blue power indicator ring", "Swedish design", "modular light shaping tools"],
+      "identificationTips": [
+        "White flash heads = signature Profoto",
+        "Blue LED ring for modeling light",
+        "Pro-10/Pro-11 = pack systems",
+        "B-series = battery-powered monolights",
+        "A-series = compact off-camera flash",
+        "OCF (Off-Camera Flash) accessories",
+        "Premium studio lighting brand",
+        "AirTTL wireless system"
+      ],
+      "recentColorways": [
+        { "line": "Pro-11", "year": "2022-2024", "colors": ["black pack", "white heads"] },
+        { "line": "B10X Plus", "year": "2020-2024", "colors": ["black body", "white accent"] },
+        { "line": "A2", "year": "2022-2024", "colors": ["black body"] }
+      ]
+    },
+    {
+      "name": "Godox",
+      "aliases": ["Godox Photo Equipment"],
+      "signatureColors": ["black", "white (AD series)", "orange accent"],
+      "designCues": ["orange brand accents", "AD series outdoor flash design", "V-series speedlights", "X wireless system"],
+      "identificationTips": [
+        "Orange accents and branding",
+        "AD series = all-in-one outdoor flash (white/black)",
+        "V-series = speedlight flashes",
+        "SL series = LED video lights",
+        "X1/X2 wireless trigger system",
+        "Budget-friendly professional lighting",
+        "Multiple brand names (Flashpoint in US)"
+      ],
+      "recentColorways": [
+        { "line": "AD600 Pro", "year": "2017-2024", "colors": ["black body", "white head option"] },
+        { "line": "V1", "year": "2019-2024", "colors": ["black body", "round head"] },
+        { "line": "SL-60W", "year": "2020-2024", "colors": ["black body"] }
+      ]
+    },
+    {
+      "name": "Neewer",
+      "aliases": ["Neewer Technology"],
+      "signatureColors": ["black", "orange accent"],
+      "designCues": ["orange brand logo", "budget-friendly design", "LED light panels", "basic flash units"],
+      "identificationTips": [
+        "Orange Neewer logo",
+        "Budget/entry-level lighting gear",
+        "LED light panels common",
+        "Softboxes and modifiers",
+        "Basic manual flash units",
+        "Affordable light stands and accessories",
+        "Often sold in kits on Amazon"
+      ],
+      "recentColorways": [
+        { "line": "660 LED Panel", "year": "2020-2024", "colors": ["black panel"] },
+        { "line": "TT560 Flash", "year": "2018-2024", "colors": ["black body"] }
+      ]
+    },
+    {
+      "name": "SanDisk",
+      "aliases": ["SanDisk Corporation", "Western Digital"],
+      "signatureColors": ["red and gray", "black"],
+      "designCues": ["red SanDisk logo", "Extreme series with red/gold accents", "Ultra series with gray/black design"],
+      "identificationTips": [
+        "Red SanDisk logo on all cards",
+        "Extreme Pro = red/gold (fastest speeds)",
+        "Extreme = red/orange (high performance)",
+        "Ultra = gray/black (standard performance)",
+        "SD/microSD/CFexpress cards",
+        "V30/V60/V90 video speed ratings",
+        "Market leader in memory cards"
+      ],
+      "recentColorways": [
+        { "line": "Extreme Pro SDXC UHS-II", "year": "2020-2024", "colors": ["red/gold design"] },
+        { "line": "Extreme CFexpress", "year": "2022-2024", "colors": ["red/gold"] },
+        { "line": "Ultra SDXC", "year": "2019-2024", "colors": ["gray/black"] }
+      ]
+    },
+    {
+      "name": "Lexar",
+      "aliases": ["Lexar Media"],
+      "signatureColors": ["blue", "silver", "black"],
+      "designCues": ["blue Lexar branding", "Professional series silver design", "vertical stripe pattern"],
+      "identificationTips": [
+        "Blue Lexar logo",
+        "Professional series = silver cards",
+        "PLAY series = gaming/action (blue/black)",
+        "CFexpress Professional cards",
+        "SD/microSD/CF cards",
+        "V60/V90 video ratings",
+        "Competing with SanDisk"
+      ],
+      "recentColorways": [
+        { "line": "Professional 2000x SDXC", "year": "2022-2024", "colors": ["silver card", "blue logo"] },
+        { "line": "Professional CFexpress", "year": "2021-2024", "colors": ["silver/blue"] },
+        { "line": "PLAY 1TB microSDXC", "year": "2023", "colors": ["blue/black"] }
+      ]
+    },
+    {
+      "name": "DJI",
+      "aliases": ["DJI Innovations", "Da-Jiang Innovations"],
+      "signatureColors": ["gray", "white", "black"],
+      "designCues": ["red DJI logo", "foldable drone arms", "gimbal design", "Mavic/Phantom series styling"],
+      "identificationTips": [
+        "Red DJI logo on body",
+        "Mavic series = foldable consumer drones",
+        "Phantom series = white professional drones (discontinued)",
+        "Mini series = ultra-compact (<250g)",
+        "Inspire series = professional cinematography",
+        "Ronin = gimbal stabilizer line",
+        "Gray is signature color for Mavic",
+        "Obstacle sensors visible on body"
+      ],
+      "recentColorways": [
+        { "line": "Mavic 3 Pro", "year": "2023-2024", "colors": ["gray body", "black gimbal"] },
+        { "line": "Mini 4 Pro", "year": "2023-2024", "colors": ["gray body"] },
+        { "line": "Air 3", "year": "2023", "colors": ["gray body"] },
+        { "line": "Inspire 3", "year": "2023", "colors": ["black/gray"] }
+      ]
+    },
+    {
+      "name": "Rode",
+      "aliases": ["Rode Microphones"],
+      "signatureColors": ["black", "red logo"],
+      "designCues": ["red Rode logo", "shock mount design", "professional microphone styling", "windshield accessories"],
+      "identificationTips": [
+        "Red Rode logo on microphone body",
+        "VideoMic series = on-camera mics",
+        "Wireless GO = compact wireless system",
+        "NT series = studio condenser mics",
+        "Shock mount suspension common",
+        "DeadCat windshield (furry cover)",
+        "Australian professional audio brand",
+        "Black metal construction typical"
+      ],
+      "recentColorways": [
+        { "line": "VideoMic NTG", "year": "2020-2024", "colors": ["black body", "red logo"] },
+        { "line": "Wireless GO II", "year": "2021-2024", "colors": ["black body"] },
+        { "line": "VideoMic Pro+", "year": "2018-2024", "colors": ["black metal"] }
+      ]
+    },
+    {
+      "name": "Deity",
+      "aliases": ["Deity Microphones"],
+      "signatureColors": ["black", "gold accent"],
+      "designCues": ["gold brand lettering", "V-Mic series design", "premium metal construction", "professional broadcast styling"],
+      "identificationTips": [
+        "Gold Deity lettering on mic body",
+        "V-Mic series = on-camera microphones",
+        "D3/D3 Pro = shotgun mics",
+        "Connect wireless system",
+        "All-metal construction",
+        "Budget-friendly pro audio",
+        "Often includes accessories in box",
+        "Rycote Lyre shock mounts included"
+      ],
+      "recentColorways": [
+        { "line": "V-Mic D4 Duo", "year": "2022-2024", "colors": ["black body", "gold lettering"] },
+        { "line": "S-Mic 2S", "year": "2021-2024", "colors": ["black metal"] },
+        { "line": "Connect Wireless", "year": "2022-2024", "colors": ["black body"] }
+      ]
+    }
+  ]
+}
