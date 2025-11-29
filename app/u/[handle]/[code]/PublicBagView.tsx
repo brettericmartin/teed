@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Share2, ExternalLink, User, X, Package, Trophy } from 'lucide-react';
+import { Share2, ExternalLink, User, X, Package, Trophy, Copy, CheckCheck, ChevronDown, Tag } from 'lucide-react';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 interface ItemLink {
@@ -17,11 +17,13 @@ interface ItemLink {
 interface Item {
   id: string;
   custom_name: string | null;
+  brand: string | null;
   custom_description: string | null;
   notes: string | null;
   quantity: number;
   sort_index: number;
   photo_url: string | null;
+  promo_codes: string | null;
   is_featured: boolean;
   links: ItemLink[];
 }
@@ -58,8 +60,44 @@ export default function PublicBagView({
   disclosureText,
 }: PublicBagViewProps) {
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [copiedPromoId, setCopiedPromoId] = useState<string | null>(null);
+  const [expandedLinks, setExpandedLinks] = useState<Set<string>>(new Set());
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+
+  // Helper to copy promo code
+  const handleCopyPromo = async (itemId: string, code: string) => {
+    await navigator.clipboard.writeText(code);
+    setCopiedPromoId(itemId);
+    setTimeout(() => setCopiedPromoId(null), 2000);
+  };
+
+  // Helper to toggle expanded links
+  const toggleExpandedLinks = (itemId: string) => {
+    setExpandedLinks(prev => {
+      const next = new Set(prev);
+      if (next.has(itemId)) {
+        next.delete(itemId);
+      } else {
+        next.add(itemId);
+      }
+      return next;
+    });
+  };
+
+  // Helper to get primary link (prefer 'product' type)
+  const getPrimaryLink = (links: ItemLink[]) => {
+    return links.find(l => l.kind === 'product') || links[0];
+  };
+
+  // Helper to get link domain for display
+  const getLinkDomain = (url: string) => {
+    try {
+      return new URL(url).hostname.replace('www.', '');
+    } catch {
+      return 'View';
+    }
+  };
 
   // Track page view
   useEffect(() => {
@@ -79,7 +117,6 @@ export default function PublicBagView({
           }),
         });
       } catch (error) {
-        // Silent failure - don't interrupt user experience
         console.log('[Analytics] View tracking failed:', error);
       }
     };
@@ -96,11 +133,9 @@ export default function PublicBagView({
           url: shareUrl,
         });
       } catch (err) {
-        // User cancelled or share failed
         console.log('Share cancelled');
       }
     } else {
-      // Fallback: copy to clipboard
       navigator.clipboard.writeText(shareUrl);
       alert('Link copied to clipboard!');
     }
@@ -254,62 +289,192 @@ export default function PublicBagView({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {items.map((item) => {
               const isHero = bag.hero_item_id === item.id;
+              const primaryLink = getPrimaryLink(item.links);
+              const secondaryLinks = item.links.filter(l => l.id !== primaryLink?.id);
+              const isLinksExpanded = expandedLinks.has(item.id);
+
               return (
-              <div
-                key={item.id}
-                onClick={() => setSelectedItem(item)}
-                className={`bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] overflow-hidden hover:shadow-[var(--shadow-3)] transition-all cursor-pointer active:scale-[0.98] relative ${
-                  isHero
-                    ? 'ring-2 ring-[var(--amber-8)] border-2 border-[var(--amber-6)]'
-                    : 'border border-[var(--border-subtle)]'
-                }`}
-              >
-                {/* Hero Badge */}
-                {isHero && (
-                  <div className="absolute top-3 right-3 z-10 bg-[var(--amber-3)] text-[var(--amber-11)] px-2 py-1 rounded-full flex items-center gap-1 shadow-sm">
-                    <Trophy className="w-3.5 h-3.5 fill-current" />
-                    <span className="text-xs font-medium">Hero</span>
-                  </div>
-                )}
-                {/* Item Photo */}
-                {item.photo_url && (
-                  <div className="aspect-square bg-[var(--sky-2)] overflow-hidden">
-                    <img
-                      src={item.photo_url}
-                      alt={item.custom_name || 'Item photo'}
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                )}
-
-                <div className="p-4 md:p-6">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-base md:text-lg font-semibold text-[var(--text-primary)] flex-1 leading-tight">
-                      {item.custom_name}
-                    </h3>
-                    {item.quantity > 1 && (
-                      <span className="ml-2 px-2 py-1 bg-[var(--sky-3)] text-[var(--evergreen-12)] text-xs font-medium rounded-lg">
-                        ×{item.quantity}
-                      </span>
-                    )}
-                  </div>
-
-                  {item.custom_description && (
-                    <p className="text-sm text-[var(--text-secondary)] mb-3 line-clamp-2">
-                      {item.custom_description}
-                    </p>
-                  )}
-
-                  {item.links.length > 0 && (
-                    <div className="flex items-center gap-1 text-xs text-[var(--text-tertiary)]">
-                      <ExternalLink className="w-3 h-3" />
-                      <span>
-                        {item.links.length} {item.links.length === 1 ? 'link' : 'links'}
-                      </span>
+                <article
+                  key={item.id}
+                  className={`bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] overflow-hidden hover:shadow-[var(--shadow-3)] transition-all relative flex flex-col card-lift ${
+                    isHero
+                      ? 'ring-2 ring-[var(--amber-8)] border-2 border-[var(--amber-6)]'
+                      : 'border border-[var(--border-subtle)]'
+                  }`}
+                >
+                  {/* Hero Badge */}
+                  {isHero && (
+                    <div className="absolute top-3 right-3 z-10 bg-[var(--amber-3)] text-[var(--amber-11)] px-2 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                      <Trophy className="w-3.5 h-3.5 fill-current" />
+                      <span className="text-xs font-medium">Hero</span>
                     </div>
                   )}
-                </div>
-              </div>
+
+                  {/* Quantity Badge */}
+                  {item.quantity > 1 && (
+                    <div className="absolute top-3 left-3 z-10 px-2.5 py-1 bg-[var(--sky-3)] text-[var(--evergreen-12)] text-xs font-medium rounded-lg shadow-sm">
+                      ×{item.quantity}
+                    </div>
+                  )}
+
+                  {/* Item Photo */}
+                  {item.photo_url && (
+                    <div
+                      className="aspect-square bg-[var(--sky-2)] overflow-hidden cursor-pointer"
+                      onClick={() => setSelectedItem(item)}
+                    >
+                      <img
+                        src={item.photo_url}
+                        alt={item.custom_name || 'Item photo'}
+                        className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+
+                  {/* Card Content */}
+                  <div className="p-4 md:p-5 flex flex-col flex-1 gap-2">
+                    {/* Brand Name */}
+                    {item.brand && (
+                      <p className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
+                        {item.brand}
+                      </p>
+                    )}
+
+                    {/* Product Name */}
+                    <h3
+                      className="text-base md:text-lg font-semibold text-[var(--text-primary)] leading-tight line-clamp-2 cursor-pointer hover:text-[var(--teed-green-9)] transition-colors"
+                      onClick={() => setSelectedItem(item)}
+                    >
+                      {item.custom_name}
+                    </h3>
+
+                    {/* Description/Specs */}
+                    {item.custom_description && (
+                      <p className="text-sm text-[var(--text-secondary)] line-clamp-2 leading-relaxed">
+                        {item.custom_description}
+                      </p>
+                    )}
+
+                    {/* Creator Notes Preview */}
+                    {item.notes && (
+                      <p className="text-sm text-[var(--text-tertiary)] italic line-clamp-2 border-l-2 border-[var(--teed-green-6)] pl-3 py-1">
+                        {item.notes}
+                      </p>
+                    )}
+
+                    {/* Promo Code */}
+                    {item.promo_codes && (
+                      <div className="mt-2 bg-gradient-to-r from-[var(--amber-2)] to-[var(--amber-3)] border border-dashed border-[var(--amber-6)] rounded-lg p-3">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Tag className="w-3.5 h-3.5 text-[var(--amber-11)]" />
+                          <span className="text-xs font-medium text-[var(--amber-11)] uppercase tracking-wide">
+                            Promo Code
+                          </span>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCopyPromo(item.id, item.promo_codes!);
+                          }}
+                          className="w-full flex items-center justify-between px-3 py-2 min-h-[44px] bg-white border border-[var(--amber-6)] rounded-lg font-mono font-bold text-sm text-[var(--text-primary)] tracking-wider transition-all active:scale-[0.98] hover:bg-[var(--amber-1)]"
+                        >
+                          <span>{item.promo_codes}</span>
+                          {copiedPromoId === item.id ? (
+                            <CheckCheck className="w-4 h-4 text-[var(--teed-green-9)]" />
+                          ) : (
+                            <Copy className="w-4 h-4 text-[var(--amber-11)]" />
+                          )}
+                        </button>
+                        {copiedPromoId === item.id && (
+                          <p className="text-xs text-[var(--teed-green-9)] font-medium mt-1 text-center">
+                            Copied!
+                          </p>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Spacer */}
+                    <div className="flex-1" />
+
+                    {/* Purchase Links Section */}
+                    {primaryLink && (
+                      <div className="space-y-2 pt-3 mt-2 border-t border-[var(--border-subtle)]">
+                        {/* Primary CTA */}
+                        <a
+                          href={primaryLink.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            trackLinkClick(primaryLink.id, item.id, primaryLink.url);
+                          }}
+                          className="flex items-center justify-center gap-2 w-full px-4 py-3 min-h-[48px] bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] text-white font-medium rounded-lg transition-all active:scale-[0.98] shadow-sm hover:shadow-md"
+                        >
+                          <span>Shop on {getLinkDomain(primaryLink.url)}</span>
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+
+                        {/* Secondary Links */}
+                        {secondaryLinks.length > 0 && (
+                          <>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleExpandedLinks(item.id);
+                              }}
+                              className="flex items-center justify-center gap-2 w-full px-4 py-2.5 min-h-[44px] bg-[var(--surface)] border border-[var(--border-subtle)] hover:bg-[var(--surface-hover)] text-[var(--text-secondary)] text-sm font-medium rounded-lg transition-colors"
+                            >
+                              <span>{secondaryLinks.length} more {secondaryLinks.length === 1 ? 'option' : 'options'}</span>
+                              <ChevronDown className={`w-4 h-4 transition-transform ${isLinksExpanded ? 'rotate-180' : ''}`} />
+                            </button>
+
+                            {isLinksExpanded && (
+                              <div className="space-y-2">
+                                {secondaryLinks.map((link) => (
+                                  <a
+                                    key={link.id}
+                                    href={link.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      trackLinkClick(link.id, item.id, link.url);
+                                    }}
+                                    className="flex items-center justify-between w-full px-4 py-2.5 min-h-[44px] bg-[var(--surface)] border border-[var(--border-subtle)] hover:border-[var(--teed-green-8)] hover:bg-[var(--surface-hover)] text-[var(--text-primary)] text-sm rounded-lg transition-all"
+                                  >
+                                    <span className="truncate">{getLinkDomain(link.url)}</span>
+                                    <ExternalLink className="w-4 h-4 flex-shrink-0 ml-2" />
+                                  </a>
+                                ))}
+                              </div>
+                            )}
+                          </>
+                        )}
+
+                        {/* View Details Link */}
+                        <button
+                          onClick={() => setSelectedItem(item)}
+                          className="w-full text-center text-xs text-[var(--text-tertiary)] hover:text-[var(--teed-green-9)] transition-colors py-1"
+                        >
+                          View full details →
+                        </button>
+                      </div>
+                    )}
+
+                    {/* No Links - Just View Details */}
+                    {item.links.length === 0 && (
+                      <div className="pt-3 mt-2 border-t border-[var(--border-subtle)]">
+                        <button
+                          onClick={() => setSelectedItem(item)}
+                          className="flex items-center justify-center gap-2 w-full px-4 py-3 min-h-[44px] bg-[var(--surface-hover)] hover:bg-[var(--grey-3)] text-[var(--text-primary)] font-medium rounded-lg border border-[var(--border-subtle)] transition-all"
+                        >
+                          View Details
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </article>
               );
             })}
           </div>
@@ -319,16 +484,21 @@ export default function PublicBagView({
       {/* Item Detail Modal */}
       {selectedItem && (
         <div
-          className="fixed inset-0 bg-[var(--overlay-bg)] flex items-center justify-center p-4 z-50 backdrop-blur-sm"
+          className="fixed inset-0 bg-[var(--overlay-bg)] flex items-center justify-center p-4 z-50 backdrop-blur-sm modal-backdrop-enter"
           onClick={() => setSelectedItem(null)}
         >
           <div
-            className="bg-[var(--modal-bg)] rounded-[var(--radius-2xl)] shadow-[var(--shadow-6)] border border-[var(--modal-border)] max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4"
+            className="bg-[var(--modal-bg)] rounded-[var(--radius-2xl)] shadow-[var(--shadow-6)] border border-[var(--modal-border)] max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4 modal-content-enter"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className="sticky top-0 bg-[var(--modal-bg)] border-b border-[var(--border-subtle)] px-4 sm:px-8 py-4 sm:py-6 flex items-start justify-between rounded-t-[var(--radius-2xl)]">
               <div className="flex-1">
+                {selectedItem.brand && (
+                  <p className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-1">
+                    {selectedItem.brand}
+                  </p>
+                )}
                 <div className="flex items-center gap-3">
                   <h2 className="text-[var(--font-size-6)] font-semibold text-[var(--text-primary)]">
                     {selectedItem.custom_name}
@@ -372,6 +542,37 @@ export default function PublicBagView({
                 <div>
                   <h3 className="text-sm font-medium text-[var(--text-primary)] mb-2">Notes</h3>
                   <p className="text-[var(--text-secondary)] whitespace-pre-wrap">{selectedItem.notes}</p>
+                </div>
+              )}
+
+              {/* Promo Code */}
+              {selectedItem.promo_codes && (
+                <div>
+                  <h3 className="text-sm font-medium text-[var(--text-primary)] mb-3">Promo Code</h3>
+                  <div className="bg-gradient-to-r from-[var(--amber-2)] to-[var(--amber-3)] border border-dashed border-[var(--amber-6)] rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Tag className="w-4 h-4 text-[var(--amber-11)]" />
+                      <span className="text-xs font-medium text-[var(--amber-11)] uppercase tracking-wide">
+                        Use at checkout
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => handleCopyPromo(selectedItem.id, selectedItem.promo_codes!)}
+                      className="w-full flex items-center justify-between px-4 py-3 min-h-[48px] bg-white border border-[var(--amber-6)] rounded-lg font-mono font-bold text-lg text-[var(--text-primary)] tracking-wider transition-all active:scale-[0.98] hover:bg-[var(--amber-1)]"
+                    >
+                      <span>{selectedItem.promo_codes}</span>
+                      {copiedPromoId === selectedItem.id ? (
+                        <CheckCheck className="w-5 h-5 text-[var(--teed-green-9)]" />
+                      ) : (
+                        <Copy className="w-5 h-5 text-[var(--amber-11)]" />
+                      )}
+                    </button>
+                    {copiedPromoId === selectedItem.id && (
+                      <p className="text-sm text-[var(--teed-green-9)] font-medium mt-2 text-center">
+                        Copied to clipboard!
+                      </p>
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -423,7 +624,7 @@ export default function PublicBagView({
                 </div>
               )}
 
-              {!selectedItem.notes && !selectedItem.photo_url && selectedItem.links.length === 0 && (
+              {!selectedItem.notes && !selectedItem.photo_url && selectedItem.links.length === 0 && !selectedItem.promo_codes && (
                 <p className="text-[var(--text-secondary)] text-center py-8">No additional details</p>
               )}
             </div>
