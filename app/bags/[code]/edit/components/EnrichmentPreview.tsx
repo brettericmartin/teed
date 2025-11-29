@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Check, X, ChevronLeft, ChevronRight, Edit2, ExternalLink, Loader2, Sparkles } from 'lucide-react';
+import { Check, X, ChevronLeft, ChevronRight, Edit2, ExternalLink, Sparkles } from 'lucide-react';
+import { LoadingBall } from '@/components/ui/LoadingBall';
 
 type EnrichmentSuggestion = {
   itemId: string;
@@ -288,8 +289,8 @@ export default function EnrichmentPreview({
             >
               {isApplying ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  Applying...
+                  <LoadingBall size="sm" variant="ai" />
+                  <span className="ml-1">Applying...</span>
                 </>
               ) : (
                 <>

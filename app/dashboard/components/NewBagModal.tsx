@@ -51,13 +51,13 @@ export default function NewBagModal({
     <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[var(--overlay-bg)] transition-opacity backdrop-blur-sm"
+        className="fixed inset-0 bg-[var(--overlay-bg)] transition-opacity backdrop-blur-sm modal-backdrop-enter"
         onClick={handleClose}
       />
 
       {/* Modal */}
       <div className="flex min-h-full items-center justify-center p-4">
-        <div className="relative bg-[var(--modal-bg)] rounded-[var(--radius-2xl)] shadow-[var(--shadow-6)] max-w-md w-full border border-[var(--modal-border)]">
+        <div className="relative bg-[var(--modal-bg)] rounded-[var(--radius-2xl)] shadow-[var(--shadow-6)] max-w-md w-full border border-[var(--modal-border)] modal-content-enter">
           {/* Header */}
           <div className="flex items-center justify-between px-4 sm:px-8 py-4 sm:py-6 border-b border-[var(--border-subtle)] gap-2">
             <h2 className="text-[var(--font-size-6)] font-semibold text-[var(--text-primary)] flex-1 min-w-0 truncate">

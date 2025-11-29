@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Link as LinkIcon, Loader2 } from 'lucide-react';
+import { Link as LinkIcon } from 'lucide-react';
+import { LoadingBall } from '@/components/ui/LoadingBall';
 import AISuggestions from './AISuggestions';
 import ItemPreview from './ItemPreview';
 
@@ -205,12 +206,12 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type item name or paste product URL..."
             disabled={isAdding || isScrapingUrl}
-            className="w-full px-4 py-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 pr-10"
+            className="w-full px-4 py-3 text-base border-2 border-[var(--border-default)] rounded-lg focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent disabled:bg-[var(--surface-hover)] pr-10"
             autoFocus
           />
           {isScrapingUrl && (
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-              <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />
+              <LoadingBall size="sm" variant="ai" />
             </div>
           )}
           {isUrl(input.trim()) && !isScrapingUrl && input.trim().length > 0 && (
@@ -235,8 +236,8 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
 
         {/* URL scraping status */}
         {isScrapingUrl && (
-          <p className="mt-2 text-xs text-blue-600 flex items-center gap-1">
-            <Loader2 className="w-3 h-3 animate-spin" />
+          <p className="mt-2 text-xs text-blue-600 flex items-center gap-2">
+            <LoadingBall size="sm" variant="ai" />
             Fetching product details from URL...
           </p>
         )}

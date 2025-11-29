@@ -48,6 +48,30 @@ export interface CategoryDetectionResult {
   processingTimeMs: number;
 }
 
+/**
+ * Census information from 3-phase identification
+ * Used to track object count before and after identification
+ */
+export interface ImageCensus {
+  totalObjectsCounted: number;
+  spatialDistribution: {
+    top: number;
+    middle: number;
+    bottom: number;
+  };
+}
+
+/**
+ * Verification result from 3-phase identification
+ * Compares census count to actual identified products
+ */
+export interface IdentificationVerification {
+  productsIdentified: number;
+  matchesCensus: boolean;
+  completenessConfidence: number;
+  missedItemsEstimate?: number;
+}
+
 export interface IdentifiedProduct {
   name: string; // MUST be specific model/product name, not generic
   brand?: string;
@@ -79,6 +103,8 @@ export interface VisionAnalysisResult {
   totalConfidence: number;
   processingTime: number;
   warnings?: string[];
+  census?: ImageCensus;
+  verification?: IdentificationVerification;
 }
 
 /**
@@ -291,17 +317,21 @@ export async function identifyProductsInImage(
   // === STAGE 1: Quick Category Detection ===
   let brandContext = '';
   let detectedCategories: string[] = [];
+  let stage1TotalObjects = 0; // Track expected object count from Stage 1
 
   if (!context?.skipCategoryDetection) {
     try {
       const categoryResult = await detectCategories(imageBase64);
       detectedCategories = categoryResult.categories.map(c => c.category);
+      stage1TotalObjects = categoryResult.totalObjects;
 
       // Load brand knowledge for detected categories
       if (detectedCategories.length > 0) {
         brandContext = generateBrandContext(detectedCategories, 'standard');
         console.log(`[Stage 2] Loaded brand knowledge for: ${detectedCategories.join(', ')}`);
       }
+
+      console.log(`[Stage 1] Detected ${stage1TotalObjects} objects across categories: ${detectedCategories.join(', ')}`);
     } catch (error) {
       console.warn('[Stage 1] Category detection failed, proceeding without brand context:', error);
     }
@@ -309,8 +339,39 @@ export async function identifyProductsInImage(
 
   // === STAGE 2: Detailed Product Identification ===
   // Build system prompt with optional brand context
+  // Include Stage 1 object count as a hint if available
+  const objectCountHint = stage1TotalObjects > 0
+    ? `\n\n🎯 PRE-SCAN HINT: Stage 1 analysis detected approximately ${stage1TotalObjects} objects in this image. Use this as a guide - you should find AT LEAST this many products.`
+    : '';
+
   const systemPrompt = `You are an expert product identifier with deep knowledge of specific product models, brands, and SKUs.
 ${brandContext}
+═══════════════════════════════════════════════════════════════
+🔄 MANDATORY THREE-PHASE IDENTIFICATION PROCESS
+═══════════════════════════════════════════════════════════════
+${objectCountHint}
+
+You MUST follow this exact 3-phase process for EVERY image:
+
+**PHASE 1: CENSUS (Count First)**
+Before identifying ANY products, you MUST:
+- Scan the ENTIRE image systematically
+- Count ALL distinct products/items visible
+- Note their spatial distribution (top/middle/bottom of image)
+- This count becomes your TARGET - you must identify this many products
+
+**PHASE 2: SYSTEMATIC GRID SWEEP (Identify)**
+- Start from top-left corner, sweep right, then move down row by row
+- Assign approximate position to each item (top-left, top-center, top-right, etc.)
+- Don't skip ANY item, even if partially visible or hard to identify
+- Use your Phase 1 count as your minimum target
+
+**PHASE 3: SELF-VERIFICATION (Verify)**
+- Count your identified products
+- Compare to Phase 1 census count
+- If MISMATCH: RE-SCAN for missed items
+- Report completeness confidence
+
 ═══════════════════════════════════════════════════════════════
 IDENTIFICATION REQUIREMENTS
 ═══════════════════════════════════════════════════════════════
@@ -373,14 +434,19 @@ BAD (NEVER DO THIS):
 ═══════════════════════════════════════════════════════════════
 JSON OUTPUT FORMAT
 ═══════════════════════════════════════════════════════════════
-Return your response as valid JSON:
+Return your response as valid JSON with census and verification:
 {
+  "census": {
+    "totalObjectsCounted": 14,
+    "spatialDistribution": { "top": 5, "middle": 6, "bottom": 3 }
+  },
   "products": [
     {
       "name": "Specific Product Name with Model",
       "brand": "Brand name",
       "category": "camping|golf|hiking|travel|sports|electronics|clothing|other",
       "confidence": 85,
+      "position": "top-left|top-center|top-right|middle-left|middle-center|middle-right|bottom-left|bottom-center|bottom-right",
       "modelNumber": "Model/SKU if visible",
       "estimatedPrice": "$XX-XX range",
       "color": "Primary color (simple string for backwards compatibility)",
@@ -412,9 +478,15 @@ Return your response as valid JSON:
         }
       ]
     }
-  ]
+  ],
+  "verification": {
+    "productsIdentified": 14,
+    "matchesCensus": true,
+    "completenessConfidence": 95
+  }
 }
 
+MANDATORY: Always include "census" and "verification" at root level.
 Include "alternatives" only when confidence < 70. Always include "colors" and "brandSignature".`;
 
   let userPrompt = '';
@@ -499,7 +571,11 @@ Requirements:
     }
 
     // Best Practice: Validate and parse JSON response with error handling
-    let parsed: { products: IdentifiedProduct[] };
+    let parsed: {
+      products: IdentifiedProduct[];
+      census?: { totalObjectsCounted: number; spatialDistribution?: { top: number; middle: number; bottom: number } };
+      verification?: { productsIdentified: number; matchesCensus: boolean; completenessConfidence: number };
+    };
     try {
       parsed = JSON.parse(content);
     } catch (parseError) {
@@ -510,6 +586,26 @@ Requirements:
     // Best Practice: Validate response structure
     if (!parsed.products || !Array.isArray(parsed.products)) {
       throw new Error('Invalid response structure from AI');
+    }
+
+    // Extract census and verification data
+    const census: ImageCensus | undefined = parsed.census ? {
+      totalObjectsCounted: parsed.census.totalObjectsCounted || 0,
+      spatialDistribution: parsed.census.spatialDistribution || { top: 0, middle: 0, bottom: 0 },
+    } : undefined;
+
+    const verification: IdentificationVerification | undefined = parsed.verification ? {
+      productsIdentified: parsed.verification.productsIdentified || parsed.products.length,
+      matchesCensus: parsed.verification.matchesCensus ?? true,
+      completenessConfidence: parsed.verification.completenessConfidence || 100,
+    } : undefined;
+
+    // Log census/verification for debugging
+    if (census) {
+      console.log(`[Stage 2] Census: ${census.totalObjectsCounted} objects (top: ${census.spatialDistribution.top}, middle: ${census.spatialDistribution.middle}, bottom: ${census.spatialDistribution.bottom})`);
+    }
+    if (verification) {
+      console.log(`[Stage 2] Verification: ${verification.productsIdentified} identified, matches census: ${verification.matchesCensus}, completeness: ${verification.completenessConfidence}%`);
     }
 
     // Best Practice: Sanitize and validate each product
@@ -581,11 +677,33 @@ Requirements:
       warnings.push(`Large image (${validation.sizeKB}KB) - consider compressing`);
     }
 
+    // Census/verification mismatch warnings
+    if (census && verification) {
+      if (!verification.matchesCensus) {
+        const missed = census.totalObjectsCounted - verification.productsIdentified;
+        if (missed > 0) {
+          warnings.push(`May have missed ${missed} item(s) - census counted ${census.totalObjectsCounted}, identified ${verification.productsIdentified}`);
+          // Add estimate to verification
+          verification.missedItemsEstimate = missed;
+        }
+      }
+      if (verification.completenessConfidence < 80) {
+        warnings.push(`Low completeness confidence (${verification.completenessConfidence}%) - some items may be missed`);
+      }
+    }
+
+    // Cross-check with Stage 1 if available
+    if (stage1TotalObjects > 0 && productsWithImages.length < stage1TotalObjects * 0.7) {
+      warnings.push(`Stage 1 detected ~${stage1TotalObjects} objects but only ${productsWithImages.length} identified - review for missed items`);
+    }
+
     return {
       products: productsWithImages,
       totalConfidence,
       processingTime,
       warnings: warnings.length > 0 ? warnings : undefined,
+      census,
+      verification,
     };
   } catch (error: any) {
     // Best Practice: Detailed error logging for debugging

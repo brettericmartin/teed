@@ -187,7 +187,7 @@ export default function AddItemForm({ onSubmit, onCancel, bagTitle }: AddItemFor
             required
             autoFocus
             disabled={isSubmitting}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent disabled:bg-gray-100"
           />
 
           {/* AI Suggestions */}
@@ -218,7 +218,7 @@ export default function AddItemForm({ onSubmit, onCancel, bagTitle }: AddItemFor
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Down-filled, -20°F rated"
             disabled={isSubmitting}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent disabled:bg-gray-100"
           />
         </div>
 
@@ -235,7 +235,7 @@ export default function AddItemForm({ onSubmit, onCancel, bagTitle }: AddItemFor
             placeholder="Personal notes about this item"
             rows={2}
             disabled={isSubmitting}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none disabled:bg-gray-100"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent resize-none disabled:bg-gray-100"
           />
         </div>
 
@@ -252,7 +252,7 @@ export default function AddItemForm({ onSubmit, onCancel, bagTitle }: AddItemFor
             onChange={(e) => setQuantity(e.target.value)}
             min="1"
             disabled={isSubmitting}
-            className="w-32 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+            className="w-32 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent disabled:bg-gray-100"
           />
         </div>
       </div>

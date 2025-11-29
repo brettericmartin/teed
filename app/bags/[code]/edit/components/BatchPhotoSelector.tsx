@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Check, Loader2, Image as ImageIcon, Images, RefreshCw, Search, ChevronDown, ChevronUp } from 'lucide-react';
+import { X, Check, Image as ImageIcon, Images, RefreshCw, Search, ChevronDown, ChevronUp } from 'lucide-react';
+import { LoadingBall } from '@/components/ui/LoadingBall';
 import { Button } from '@/components/ui/Button';
 
 interface ItemWithSuggestion {
@@ -290,10 +291,10 @@ export default function BatchPhotoSelector({
                 className="px-8 py-4 bg-[var(--teed-green-9)] text-white rounded-lg hover:bg-[var(--teed-green-10)] disabled:opacity-50 disabled:cursor-not-allowed text-lg font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
               >
                 {isSearching ? (
-                  <>
-                    <Loader2 className="animate-spin h-6 w-6 mr-3 inline" />
+                  <span className="inline-flex items-center gap-3">
+                    <LoadingBall size="md" variant="ai" />
                     Searching for Images...
-                  </>
+                  </span>
                 ) : (
                   <>
                     <Images className="w-6 h-6 mr-3 inline" />
@@ -355,7 +356,7 @@ export default function BatchPhotoSelector({
                   {/* Image Options */}
                   {item.isLoading ? (
                     <div className="flex items-center justify-center py-12">
-                      <Loader2 className="animate-spin h-8 w-8 text-[var(--text-tertiary)]" />
+                      <LoadingBall size="md" variant="ai" label="Searching..." />
                     </div>
                   ) : item.error ? (
                     <div className="py-6">
@@ -555,10 +556,10 @@ export default function BatchPhotoSelector({
                 className="flex-1 px-8 py-3 bg-[var(--teed-green-9)] text-white rounded-lg hover:bg-[var(--teed-green-10)] disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
               >
                 {isApplying ? (
-                  <>
-                    <Loader2 className="animate-spin h-5 w-5 mr-2 inline" />
+                  <span className="inline-flex items-center gap-2">
+                    <LoadingBall size="sm" variant="primary" />
                     Applying Photos...
-                  </>
+                  </span>
                 ) : (
                   <>
                     <Check className="w-5 h-5 mr-2 inline" />

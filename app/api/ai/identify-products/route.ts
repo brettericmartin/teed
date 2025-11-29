@@ -19,6 +19,7 @@ export const maxDuration = 60; // Allow up to 60 seconds for AI processing
  * POST /api/ai/identify-products
  *
  * Identifies products in one or more images using GPT-4 Vision
+ * Uses 3-phase census-first approach for accurate item counting
  *
  * Request body:
  * {
@@ -33,7 +34,9 @@ export const maxDuration = 60; // Allow up to 60 seconds for AI processing
  *   products: IdentifiedProduct[],
  *   totalConfidence: number,
  *   processingTime: number,
- *   warnings?: string[]
+ *   warnings?: string[],
+ *   census?: { totalObjectsCounted: number, spatialDistribution: {...} },
+ *   verification?: { productsIdentified: number, matchesCensus: boolean, completenessConfidence: number }
  * }
  */
 export async function POST(request: NextRequest) {
@@ -130,11 +133,37 @@ export async function POST(request: NextRequest) {
     const avgConfidence = results.reduce((sum, r) => sum + r.totalConfidence, 0) / results.length;
     const totalProcessingTime = Date.now() - startTime;
 
+    // Combine warnings from all images
+    const allWarnings = results.flatMap(r => r.warnings || []);
+
+    // Combine census data (sum up counts from all images)
+    const combinedCensus = results.some(r => r.census) ? {
+      totalObjectsCounted: results.reduce((sum, r) => sum + (r.census?.totalObjectsCounted || 0), 0),
+      spatialDistribution: {
+        top: results.reduce((sum, r) => sum + (r.census?.spatialDistribution?.top || 0), 0),
+        middle: results.reduce((sum, r) => sum + (r.census?.spatialDistribution?.middle || 0), 0),
+        bottom: results.reduce((sum, r) => sum + (r.census?.spatialDistribution?.bottom || 0), 0),
+      },
+    } : undefined;
+
+    // Combine verification data
+    const combinedVerification = results.some(r => r.verification) ? {
+      productsIdentified: results.reduce((sum, r) => sum + (r.verification?.productsIdentified || 0), 0),
+      matchesCensus: results.every(r => r.verification?.matchesCensus !== false),
+      completenessConfidence: Math.round(
+        results.reduce((sum, r) => sum + (r.verification?.completenessConfidence || 100), 0) / results.length
+      ),
+      missedItemsEstimate: results.reduce((sum, r) => sum + (r.verification?.missedItemsEstimate || 0), 0) || undefined,
+    } : undefined;
+
     const combinedResult = {
       products: allProducts,
       totalConfidence: Math.round(avgConfidence * 100) / 100,
       processingTime: totalProcessingTime,
       imagesProcessed: imageArray.length,
+      warnings: allWarnings.length > 0 ? allWarnings : undefined,
+      census: combinedCensus,
+      verification: combinedVerification,
     };
 
     // Best Practice: Log usage for monitoring
@@ -144,6 +173,17 @@ export async function POST(request: NextRequest) {
       productsFound: allProducts.length,
       avgConfidence: combinedResult.totalConfidence,
       processingTime: totalProcessingTime,
+      census: combinedCensus ? {
+        totalObjects: combinedCensus.totalObjectsCounted,
+        distribution: combinedCensus.spatialDistribution,
+      } : null,
+      verification: combinedVerification ? {
+        identified: combinedVerification.productsIdentified,
+        matchesCensus: combinedVerification.matchesCensus,
+        completeness: combinedVerification.completenessConfidence,
+        missed: combinedVerification.missedItemsEstimate,
+      } : null,
+      warnings: allWarnings.length,
     });
 
     // Return results

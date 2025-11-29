@@ -1,6 +1,7 @@
 'use client';
 
-import { Camera, Images, Sparkles, ChevronRight, Loader2, Bot } from 'lucide-react';
+import { Camera, Images, Sparkles, ChevronRight, Bot } from 'lucide-react';
+import { LoadingBall } from '@/components/ui/LoadingBall';
 
 type AIAction = {
   id: string;
@@ -50,7 +51,7 @@ function AIActionRow({
         <div className="relative flex-shrink-0">
           <div className="w-10 h-10 rounded-lg bg-[var(--sky-3)] flex items-center justify-center text-[var(--sky-11)] group-hover:bg-[var(--sky-4)] transition-colors">
             {isLoading ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
+              <LoadingBall size="sm" variant="ai" />
             ) : (
               icon
             )}
