@@ -39,21 +39,18 @@ export default async function UserBagPage({ params }: PageProps) {
       items:bag_items!bag_items_bag_id_fkey (
         id,
         custom_name,
-        brand,
         custom_description,
         notes,
         quantity,
         sort_index,
         custom_photo_id,
-        promo_codes,
         is_featured,
         links (
           id,
           url,
           kind,
           label,
-          metadata,
-          is_auto_generated
+          metadata
         )
       )
     `)

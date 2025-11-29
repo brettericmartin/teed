@@ -114,7 +114,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
           onChange={(e) => setInput(e.target.value)}
           placeholder="What do you want to add? (e.g., driver, lipstick, tent...)"
           disabled={isAdding}
-          className="w-full px-4 py-3 text-base border-2 border-[var(--border-default)] rounded-lg focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent disabled:bg-[var(--surface-hover)]"
+          className="w-full px-4 py-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
           autoFocus
         />
 

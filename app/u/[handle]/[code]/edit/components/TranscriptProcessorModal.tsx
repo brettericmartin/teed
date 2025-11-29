@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X, FileText, Youtube, Sparkles } from 'lucide-react';
-import { LoadingBall } from '@/components/ui/LoadingBall';
+import { X, FileText, Loader2, Youtube, Sparkles } from 'lucide-react';
 
 type TranscriptProcessorModalProps = {
   isOpen: boolean;
@@ -209,8 +208,8 @@ Example:
           >
             {isProcessing ? (
               <>
-                <LoadingBall size="sm" variant="ai" />
-                <span>Processing...</span>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Processing...
               </>
             ) : (
               <>

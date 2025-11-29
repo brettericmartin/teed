@@ -97,7 +97,7 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
   };
 
   return (
-    <div className="bg-[var(--surface)] border border-[var(--border-subtle)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] hover:shadow-[var(--shadow-3)] transition-all card-lift">
+    <div className="bg-[var(--surface)] border border-[var(--border-subtle)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] hover:shadow-[var(--shadow-3)] transition-all">
       {/* Item Header */}
       <div className="p-3 sm:p-4">
         {/* Photo thumbnail - full width on mobile, left side on desktop */}

@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, Check, X, Palette, Eye, Tag, AlertTriangle } from 'lucide-react';
-import { LoadingBall } from '@/components/ui/LoadingBall';
+import { ChevronDown, Check, X, Palette, Eye, Tag } from 'lucide-react';
 
 // Structured color information
 interface ProductColors {
@@ -55,24 +54,6 @@ export type IdentifiedProduct = {
   sourceImageIndex?: number;
 };
 
-// Census information from 3-phase identification
-interface ImageCensus {
-  totalObjectsCounted: number;
-  spatialDistribution: {
-    top: number;
-    middle: number;
-    bottom: number;
-  };
-}
-
-// Verification result from 3-phase identification
-interface IdentificationVerification {
-  productsIdentified: number;
-  matchesCensus: boolean;
-  completenessConfidence: number;
-  missedItemsEstimate?: number;
-}
-
 type ProductReviewModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -80,9 +61,6 @@ type ProductReviewModalProps = {
   totalConfidence: number;
   processingTime: number;
   onAddSelected: (selectedProducts: IdentifiedProduct[]) => Promise<void>;
-  warnings?: string[];
-  census?: ImageCensus;
-  verification?: IdentificationVerification;
 };
 
 export default function ProductReviewModal({
@@ -92,9 +70,6 @@ export default function ProductReviewModal({
   totalConfidence,
   processingTime,
   onAddSelected,
-  warnings,
-  census,
-  verification,
 }: ProductReviewModalProps) {
   const [selectedIds, setSelectedIds] = useState<Set<number>>(
     new Set(products.map((_, i) => i))
@@ -192,33 +167,6 @@ export default function ProductReviewModal({
             <X className="w-6 h-6 text-gray-500" />
           </button>
         </div>
-
-        {/* Warnings Banner - show if there are warnings about missed items */}
-        {(warnings && warnings.length > 0) || (verification && !verification.matchesCensus) ? (
-          <div className="flex-shrink-0 px-4 py-3 bg-amber-50 border-b border-amber-200">
-            <div className="flex items-start gap-2">
-              <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-amber-800">
-                  {verification?.missedItemsEstimate
-                    ? `We may have missed ${verification.missedItemsEstimate} item${verification.missedItemsEstimate > 1 ? 's' : ''}`
-                    : 'Some items may not have been detected'}
-                </p>
-                {census && (
-                  <p className="text-xs text-amber-700 mt-0.5">
-                    We counted ~{census.totalObjectsCounted} objects but identified {products.length}.
-                    {verification?.completenessConfidence && verification.completenessConfidence < 100 && (
-                      <span className="ml-1">({verification.completenessConfidence}% completeness)</span>
-                    )}
-                  </p>
-                )}
-                <p className="text-xs text-amber-600 mt-1">
-                  You can add items manually after reviewing these results.
-                </p>
-              </div>
-            </div>
-          </div>
-        ) : null}
 
         {/* Select All Bar */}
         <div className="flex-shrink-0 px-4 py-2.5 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
@@ -535,8 +483,11 @@ export default function ProductReviewModal({
             >
               {isAdding ? (
                 <>
-                  <LoadingBall size="sm" variant="ai" />
-                  <span>Adding...</span>
+                  <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  Adding...
                 </>
               ) : (
                 <>

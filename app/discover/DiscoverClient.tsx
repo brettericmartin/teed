@@ -3,7 +3,6 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Compass, Package, Search, Filter, X, Heart, Eye, Layers, ChevronDown, User, Tag, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
-import { LoadingBall } from '@/components/ui/LoadingBall';
 import { useState, useEffect, useRef, useCallback } from 'react';
 
 type BagItem = {
@@ -569,9 +568,8 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Loading State */}
         {isLoading && (
-          <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <LoadingBall size="lg" variant="primary" />
-            <p className="text-[var(--text-secondary)] font-medium">Discovering bags...</p>
+          <div className="flex items-center justify-center py-20">
+            <div className="w-8 h-8 border-4 border-[var(--teed-green-8)] border-t-transparent rounded-full animate-spin" />
           </div>
         )}
 

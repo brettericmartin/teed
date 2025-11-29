@@ -39,12 +39,12 @@ export default function ItemPreview({ suggestion, onConfirm, onCancel }: ItemPre
   const hasFunFactOptions = editedSuggestion.funFactOptions && editedSuggestion.funFactOptions.length > 1;
 
   return (
-    <div className="fixed inset-0 bg-[var(--overlay-bg)] flex items-center justify-center p-4 z-50 backdrop-blur-sm modal-backdrop-enter">
-      <div className="bg-[var(--modal-bg)] rounded-[var(--radius-xl)] max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-[var(--shadow-6)] border border-[var(--modal-border)] modal-content-enter">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
         {/* Header */}
-        <div className="sticky top-0 bg-[var(--modal-bg)] border-b border-[var(--border-subtle)] px-6 py-4 flex items-center justify-between">
+        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-[var(--text-primary)]">Review Item Details</h2>
+            <h2 className="text-xl font-bold text-gray-900">Review Item Details</h2>
             <p className="text-sm text-gray-600 mt-1">
               Confirm or edit the AI-generated information
             </p>
@@ -72,7 +72,7 @@ export default function ItemPreview({ suggestion, onConfirm, onCancel }: ItemPre
                 onChange={(e) =>
                   setEditedSuggestion({ ...editedSuggestion, brand: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             ) : (
               <div className="px-4 py-2 bg-gray-50 rounded-lg text-gray-900 font-medium">
@@ -93,7 +93,7 @@ export default function ItemPreview({ suggestion, onConfirm, onCancel }: ItemPre
                 onChange={(e) =>
                   setEditedSuggestion({ ...editedSuggestion, custom_name: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             ) : (
               <div className="px-4 py-2 bg-gray-50 rounded-lg text-gray-900 font-medium">
@@ -119,7 +119,7 @@ export default function ItemPreview({ suggestion, onConfirm, onCancel }: ItemPre
                   })
                 }
                 placeholder="e.g., 10.5° | Fujikura Ventus | Stiff"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             ) : (
               <div className="px-4 py-2 bg-gray-50 rounded-lg text-gray-700">
@@ -188,7 +188,7 @@ export default function ItemPreview({ suggestion, onConfirm, onCancel }: ItemPre
                     setEditedSuggestion({ ...editedSuggestion, notes: e.target.value })
                   }
                   rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               ) : (
                 <div className="px-4 py-3 bg-gray-50 rounded-lg text-sm text-gray-700 leading-relaxed">

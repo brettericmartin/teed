@@ -14,7 +14,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       'bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-lg transition-all duration-200';
 
     const hoverStyles = hoverable
-      ? 'shadow-sm hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-black/20 cursor-pointer card-lift'
+      ? 'shadow-sm hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-black/20 cursor-pointer'
       : 'shadow-sm';
 
     const combinedClassName = `${baseStyles} ${hoverStyles} ${className}`;
