@@ -136,11 +136,15 @@ export async function GET(
       };
     });
 
-    // Debug logging
-    console.log(`GET /api/bags/${code} - Items with photos:`, itemsWithLinks.map(i => ({
+    // Debug logging - check raw item.photo_url from database
+    console.log(`GET /api/bags/${code} - RAW items from DB:`, (items || []).slice(0, 5).map((i: any) => ({
       name: i.custom_name,
+      db_photo_url: i.photo_url,
       custom_photo_id: i.custom_photo_id,
-      has_photo_url: !!i.photo_url
+    })));
+    console.log(`GET /api/bags/${code} - PROCESSED items:`, itemsWithLinks.slice(0, 5).map(i => ({
+      name: i.custom_name,
+      final_photo_url: i.photo_url,
     })));
 
     // Fetch cover photo URL if present

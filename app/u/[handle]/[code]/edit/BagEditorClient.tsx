@@ -1462,8 +1462,8 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                   return videoPatterns.some(pattern => pattern.test(url));
                 };
 
-                // Create the item first (include photo_url if we have an image)
-                console.log('[QuickAddItem] Creating item with photo_url:', suggestion.imageUrl);
+                // Create the item first
+                console.log('[QuickAddItem] Creating item, imageUrl:', suggestion.imageUrl);
                 const response = await fetch(`/api/bags/${bag.code}/items`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
@@ -1473,7 +1473,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                     notes: suggestion.notes || undefined,
                     quantity: 1,
                     brand: suggestion.brand || undefined,
-                    photo_url: suggestion.imageUrl || undefined,
                   }),
                 });
 
@@ -1482,9 +1481,47 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 }
 
                 const newItem = await response.json();
-                console.log('[QuickAddItem] API returned item:', newItem);
-                console.log('[QuickAddItem] API returned photo_url:', newItem.photo_url);
-                let finalPhotoUrl = newItem.photo_url;
+                console.log('[QuickAddItem] Item created:', newItem.id);
+                let finalPhotoUrl: string | null = null;
+                let finalCustomPhotoId: string | null = null;
+
+                // If there's an imageUrl (e.g., YouTube thumbnail), upload it to storage
+                // This uses the same system as manual photo uploads for consistency
+                if (suggestion.imageUrl) {
+                  try {
+                    console.log('[QuickAddItem] Uploading image from URL:', suggestion.imageUrl);
+                    const uploadResponse = await fetch('/api/media/upload-from-url', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        imageUrl: suggestion.imageUrl,
+                        itemId: newItem.id,
+                        filename: `${suggestion.custom_name || 'product'}-thumbnail.jpg`,
+                      }),
+                    });
+
+                    if (uploadResponse.ok) {
+                      const uploadResult = await uploadResponse.json();
+                      console.log('[QuickAddItem] Image uploaded:', uploadResult);
+
+                      // Update item with the custom_photo_id
+                      await fetch(`/api/items/${newItem.id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          custom_photo_id: uploadResult.mediaAssetId,
+                        }),
+                      });
+
+                      finalPhotoUrl = uploadResult.url;
+                      finalCustomPhotoId = uploadResult.mediaAssetId;
+                    } else {
+                      console.error('[QuickAddItem] Failed to upload image:', await uploadResponse.text());
+                    }
+                  } catch (error) {
+                    console.error('[QuickAddItem] Error uploading image:', error);
+                  }
+                }
 
                 // If there's a product URL from scraping, add it as a link
                 let newLinks: any[] = [];
@@ -1505,11 +1542,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                     if (linkResponse.ok) {
                       const newLink = await linkResponse.json();
                       newLinks = [newLink];
-
-                      // If the link API auto-updated the photo (e.g., from video thumbnail), use that
-                      if (newLink.metadata?.item_photo_updated && newLink.metadata?.item_new_photo_url) {
-                        finalPhotoUrl = newLink.metadata.item_new_photo_url;
-                      }
                     }
                   } catch (error) {
                     console.error('Failed to add product link:', error);
@@ -1519,7 +1551,12 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 // Update local state with the new item and its links
                 setBag((prev) => ({
                   ...prev,
-                  items: [...prev.items, { ...newItem, photo_url: finalPhotoUrl, links: newLinks }],
+                  items: [...prev.items, {
+                    ...newItem,
+                    photo_url: finalPhotoUrl,
+                    custom_photo_id: finalCustomPhotoId,
+                    links: newLinks,
+                  }],
                 }));
               }}
               bagTitle={bag.title}
