@@ -98,6 +98,23 @@ export default function ItemPreview({ suggestion, onConfirm, onCancel }: ItemPre
 
         {/* Content */}
         <div className="p-6 space-y-6">
+          {/* Image Preview */}
+          {editedSuggestion.imageUrl && (
+            <div className="flex justify-center">
+              <div className="relative w-48 h-48 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                <img
+                  src={editedSuggestion.imageUrl}
+                  alt={editedSuggestion.custom_name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    // Hide image on error
+                    (e.target as HTMLImageElement).style.display = 'none';
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
           {/* Brand */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">

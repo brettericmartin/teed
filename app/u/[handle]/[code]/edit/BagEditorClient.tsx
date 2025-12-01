@@ -1448,7 +1448,21 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           {!showManualForm && (
             <QuickAddItem
               onAdd={async (suggestion) => {
-                // Create the item first
+                // Helper to detect video URLs
+                const isVideoUrl = (url: string): boolean => {
+                  const videoPatterns = [
+                    /youtube\.com\/watch/,
+                    /youtu\.be\//,
+                    /youtube\.com\/shorts\//,
+                    /tiktok\.com\/@.+\/video\//,
+                    /tiktok\.com\/t\//,
+                    /vm\.tiktok\.com\//,
+                    /instagram\.com\/(?:p|reel|reels)\//,
+                  ];
+                  return videoPatterns.some(pattern => pattern.test(url));
+                };
+
+                // Create the item first (include photo_url if we have an image)
                 const response = await fetch(`/api/bags/${bag.code}/items`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
@@ -1458,6 +1472,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                     notes: suggestion.notes || undefined,
                     quantity: 1,
                     brand: suggestion.brand || undefined,
+                    photo_url: suggestion.imageUrl || undefined,
                   }),
                 });
 
@@ -1466,23 +1481,32 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 }
 
                 const newItem = await response.json();
+                let finalPhotoUrl = newItem.photo_url;
 
                 // If there's a product URL from scraping, add it as a link
                 let newLinks: any[] = [];
                 if (suggestion.productUrl) {
                   try {
+                    // Determine the link kind based on URL type
+                    const linkKind = isVideoUrl(suggestion.productUrl) ? 'video' : 'product';
+
                     const linkResponse = await fetch(`/api/items/${newItem.id}/links`, {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify({
                         url: suggestion.productUrl,
-                        kind: 'product',
+                        kind: linkKind,
                         label: suggestion.custom_name || 'Product Link',
                       }),
                     });
                     if (linkResponse.ok) {
                       const newLink = await linkResponse.json();
                       newLinks = [newLink];
+
+                      // If the link API auto-updated the photo (e.g., from video thumbnail), use that
+                      if (newLink.metadata?.item_photo_updated && newLink.metadata?.item_new_photo_url) {
+                        finalPhotoUrl = newLink.metadata.item_new_photo_url;
+                      }
                     }
                   } catch (error) {
                     console.error('Failed to add product link:', error);
@@ -1492,7 +1516,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 // Update local state with the new item and its links
                 setBag((prev) => ({
                   ...prev,
-                  items: [...prev.items, { ...newItem, links: newLinks }],
+                  items: [...prev.items, { ...newItem, photo_url: finalPhotoUrl, links: newLinks }],
                 }));
               }}
               bagTitle={bag.title}
