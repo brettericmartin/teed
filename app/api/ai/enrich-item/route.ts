@@ -50,6 +50,44 @@ type EnrichmentResponse = {
 };
 
 // =============================================================================
+// Word Relevance Scoring - detect poor quality matches
+// =============================================================================
+
+function calculateWordRelevance(query: string, resultName: string, resultBrand?: string): number {
+  // Normalize and tokenize
+  const queryWords = query.toLowerCase().split(/\s+/).filter(w => w.length > 1);
+  const resultWords = `${resultBrand || ''} ${resultName}`.toLowerCase().split(/\s+/).filter(w => w.length > 1);
+
+  if (queryWords.length === 0) return 0;
+
+  // Count how many query words appear in the result
+  let matches = 0;
+  for (const queryWord of queryWords) {
+    // Check exact match or if result word contains query word
+    if (resultWords.some(rw => rw === queryWord || rw.includes(queryWord) || queryWord.includes(rw))) {
+      matches++;
+    }
+  }
+
+  return matches / queryWords.length;
+}
+
+function hasGoodWordRelevance(query: string, results: SearchResult[]): boolean {
+  if (results.length === 0) return false;
+
+  // Check if at least one result has > 50% word overlap
+  for (const result of results) {
+    const relevance = calculateWordRelevance(query, result.product.name, result.product.brand);
+    if (relevance >= 0.5) {
+      return true;
+    }
+  }
+
+  console.log(`[enrich-item] Poor word relevance detected for "${query}" - all results have < 50% word overlap`);
+  return false;
+}
+
+// =============================================================================
 // Category & Brand Detection
 // =============================================================================
 
@@ -396,9 +434,13 @@ export async function POST(request: NextRequest) {
     // Check if we have an EXACT match (confidence > 85%)
     const exactMatches = libraryResults.filter(r => r.confidence > 85);
 
-    // If we have exact matches and forceAI is NOT set, return them without AI
-    if (exactMatches.length >= 1 && !forceAI) {
-      console.log(`[enrich-item] Using TIER 1 exact matches (${exactMatches.length} matches)`);
+    // Also check word relevance - even high confidence matches might be irrelevant
+    // e.g., "fujikura blue 6x" matching "Cut Blue" on just "blue"
+    const hasGoodRelevance = hasGoodWordRelevance(userInput, exactMatches);
+
+    // If we have exact matches with good relevance and forceAI is NOT set, return them without AI
+    if (exactMatches.length >= 1 && hasGoodRelevance && !forceAI) {
+      console.log(`[enrich-item] Using TIER 1 exact matches (${exactMatches.length} matches with good relevance)`);
 
       const suggestions = libraryResultsToSuggestions(exactMatches.slice(0, 5));
 
@@ -410,9 +452,11 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Log if forceAI is being used
+    // Log why we're skipping library-only results
     if (forceAI) {
       console.log(`[enrich-item] forceAI=true, skipping library-only results`);
+    } else if (exactMatches.length >= 1 && !hasGoodRelevance) {
+      console.log(`[enrich-item] Library matches have poor word relevance, triggering AI search`);
     }
 
     // If we have partial matches but no exact match, we'll still call AI
