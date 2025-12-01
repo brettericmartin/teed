@@ -37,6 +37,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
   const [clarificationNeeded, setClarificationNeeded] = useState(false);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const [existingAnswers, setExistingAnswers] = useState<Record<string, string>>({});
+  const [searchTier, setSearchTier] = useState<'library' | 'library+ai' | 'ai' | 'fallback' | 'error' | undefined>();
   const [isAdding, setIsAdding] = useState(false);
   const [isScrapingUrl, setIsScrapingUrl] = useState(false);
   const [scrapedData, setScrapedData] = useState<any>(null);
@@ -97,7 +98,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
   }, []);
 
   // Fetch AI suggestions with debounce
-  const fetchSuggestions = useCallback(async (userInput: string, answers: Record<string, string> = {}) => {
+  const fetchSuggestions = useCallback(async (userInput: string, answers: Record<string, string> = {}, forceAI: boolean = false) => {
     if (userInput.trim().length < 2) {
       setSuggestions([]);
       setQuestions([]);
@@ -115,6 +116,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
           userInput,
           bagContext: bagTitle,
           existingAnswers: answers,
+          forceAI,
         }),
       });
 
@@ -123,6 +125,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
         setSuggestions(data.suggestions || []);
         setQuestions(data.questions || []);
         setClarificationNeeded(data.clarificationNeeded || false);
+        setSearchTier(data.searchTier);
       } else {
         console.error('Failed to fetch suggestions');
         setSuggestions([]);
@@ -182,6 +185,21 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
   const handleAnswerQuestion = (answers: Record<string, string>) => {
     setExistingAnswers(answers);
     fetchSuggestions(input, answers);
+  };
+
+  // Force AI search when user clicks "None of these"
+  const handleForceAI = () => {
+    if (input.trim().length >= 2) {
+      fetchSuggestions(input, existingAnswers, true);
+    }
+  };
+
+  // Allow user to manually add the item (dismiss suggestions)
+  const handleAddManually = () => {
+    setSuggestions([]);
+    setQuestions([]);
+    setClarificationNeeded(false);
+    onShowManualForm();
   };
 
   return (
@@ -251,6 +269,9 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
               onSelectSuggestion={handleSelectSuggestion}
               onAnswerQuestion={handleAnswerQuestion}
               isLoading={isLoadingSuggestions}
+              searchTier={searchTier}
+              onForceAI={handleForceAI}
+              onAddManually={handleAddManually}
             />
           </div>
         )}
