@@ -509,12 +509,15 @@ export async function POST(request: NextRequest) {
     } catch (aiError) {
       console.error('[enrich-item] AI failed, using fallback:', aiError);
 
-      // If AI fails, return library results + fallback
-      const suggestions = [
-        ...libraryResultsToSuggestions(libraryResults),
-        ...libraryResultsToSuggestions(relatedProducts),
-        ...generateFallbackSuggestions(userInput, brand, category),
-      ];
+      // If AI fails and forceAI is true, only return fallback (no library)
+      // Otherwise return library results + fallback
+      const suggestions = forceAI
+        ? generateFallbackSuggestions(userInput, brand, category)
+        : [
+            ...libraryResultsToSuggestions(libraryResults),
+            ...libraryResultsToSuggestions(relatedProducts),
+            ...generateFallbackSuggestions(userInput, brand, category),
+          ];
 
       return NextResponse.json({
         suggestions: suggestions.slice(0, 5),
