@@ -467,9 +467,10 @@ export async function POST(request: NextRequest) {
     try {
       const aiResult = await searchWithAI(userInput, bagContext, existingAnswers, category, brandContext);
 
-      // Merge library results with AI results
-      const librarysuggestions = libraryResultsToSuggestions(libraryResults);
-      const mergedSuggestions = [...librarysuggestions, ...aiResult.suggestions];
+      // When forceAI is true, SKIP library results entirely - user explicitly wants AI only
+      // Otherwise, put AI results FIRST (higher priority), then library as backup
+      const librarysuggestions = forceAI ? [] : libraryResultsToSuggestions(libraryResults);
+      const mergedSuggestions = [...aiResult.suggestions, ...librarysuggestions]; // AI first!
 
       // Deduplicate by brand + name
       const seen = new Set<string>();
@@ -483,8 +484,8 @@ export async function POST(request: NextRequest) {
       // Sort by confidence
       uniqueSuggestions.sort((a, b) => b.confidence - a.confidence);
 
-      // If still no results, add related products
-      if (uniqueSuggestions.length === 0 && relatedProducts.length > 0) {
+      // If still no results, add related products (but not if forceAI)
+      if (uniqueSuggestions.length === 0 && relatedProducts.length > 0 && !forceAI) {
         console.log(`[enrich-item] Adding ${relatedProducts.length} related products`);
         uniqueSuggestions.push(...libraryResultsToSuggestions(relatedProducts));
       }
@@ -496,13 +497,13 @@ export async function POST(request: NextRequest) {
         uniqueSuggestions.push(...fallbackSuggestions);
       }
 
-      console.log(`[enrich-item] Final result: ${uniqueSuggestions.length} suggestions`);
+      console.log(`[enrich-item] Final result: ${uniqueSuggestions.length} suggestions (forceAI=${forceAI})`);
 
       return NextResponse.json({
         suggestions: uniqueSuggestions.slice(0, 5),
         clarificationNeeded: aiResult.clarificationNeeded,
         questions: aiResult.questions || [],
-        searchTier: libraryResults.length > 0 ? 'library+ai' : 'ai',
+        searchTier: forceAI ? 'ai' : (libraryResults.length > 0 ? 'library+ai' : 'ai'),
         learning: aiResult.learning,
       });
     } catch (aiError) {
