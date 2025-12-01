@@ -225,16 +225,16 @@ export default function AISuggestions({
         })}
       </div>
 
-      {/* "None of these" and "Add manually" buttons */}
-      <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-100">
-        {/* Show "None of these - Try AI" when we're in library-only mode */}
-        {searchTier === 'library' && onForceAI && (
+      {/* "None of these" and "Add manually" buttons - ALWAYS visible */}
+      <div className="flex flex-wrap gap-2 pt-3 mt-3 border-t border-gray-200">
+        {/* Show "Try AI" when library-only, or "Search again" when AI was already used */}
+        {onForceAI && (
           <button
             onClick={onForceAI}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors"
           >
             <span>🤖</span>
-            <span>None of these? Try AI</span>
+            <span>{searchTier === 'library' ? 'None of these? Try AI' : 'Search again with AI'}</span>
           </button>
         )}
 
@@ -242,7 +242,7 @@ export default function AISuggestions({
         {onAddManually && (
           <button
             onClick={onAddManually}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
           >
             <span>✏️</span>
             <span>Add manually</span>
