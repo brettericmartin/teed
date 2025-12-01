@@ -125,7 +125,9 @@ export async function GET(
 
     // Organize links by item and include photo URL
     const itemsWithLinks = (items || []).map((item: any) => {
-      const photoUrl = item.custom_photo_id ? photoUrls[item.custom_photo_id] || null : null;
+      // Use item's direct photo_url first (e.g., YouTube thumbnails),
+      // then fall back to custom_photo_id (uploaded photos)
+      const photoUrl = item.photo_url || (item.custom_photo_id ? photoUrls[item.custom_photo_id] || null : null);
 
       return {
         ...item,
