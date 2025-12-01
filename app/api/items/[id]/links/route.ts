@@ -79,9 +79,93 @@ export async function POST(
       );
     }
 
-    // Enrich product links with AI analysis
+    // Enrich links with scraped data
     let enrichedMetadata = metadata || null;
     let enrichedLabel = label?.trim() || null;
+
+    // Helper to detect video URLs (YouTube, TikTok, Instagram)
+    const isVideoUrl = (urlString: string): boolean => {
+      const videoPatterns = [
+        /youtube\.com\/watch/,
+        /youtu\.be\//,
+        /youtube\.com\/shorts\//,
+        /tiktok\.com\/@.+\/video\//,
+        /tiktok\.com\/t\//,
+        /vm\.tiktok\.com\//,
+        /instagram\.com\/(?:p|reel|reels)\//,
+      ];
+      return videoPatterns.some(pattern => pattern.test(urlString));
+    };
+
+    // For video links OR detected video URLs, scrape to get thumbnail and title
+    const shouldProcessAsVideo = kind === 'video' || isVideoUrl(url);
+
+    if (shouldProcessAsVideo) {
+      try {
+        console.log(`[Link Add] Scraping video URL: ${url}`);
+
+        const scrapeResponse = await fetch(
+          `${request.nextUrl.origin}/api/scrape-url`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: url.trim() }),
+          }
+        );
+
+        if (scrapeResponse.ok) {
+          const scraped = await scrapeResponse.json();
+
+          // Store video metadata
+          enrichedMetadata = {
+            ...enrichedMetadata,
+            title: scraped.title,
+            description: scraped.description,
+            thumbnail: scraped.image,
+            videoType: scraped.videoType,
+            videoId: scraped.videoId,
+            channel: scraped.brand,
+          };
+
+          // Use video title as label if not provided
+          if (!enrichedLabel && scraped.title) {
+            enrichedLabel = scraped.title;
+          }
+
+          console.log(`[Link Add] Video scraped: ${scraped.videoType || 'unknown'} - ${scraped.title}`);
+
+          // If item has no photo and we have a thumbnail, set it as the item's photo
+          if (scraped.image) {
+            const { data: currentItem } = await supabase
+              .from('bag_items')
+              .select('photo_url')
+              .eq('id', itemId)
+              .single();
+
+            if (currentItem && !currentItem.photo_url) {
+              await supabase
+                .from('bag_items')
+                .update({ photo_url: scraped.image })
+                .eq('id', itemId);
+
+              // Store that we updated the photo so frontend can refresh
+              enrichedMetadata = {
+                ...enrichedMetadata,
+                item_photo_updated: true,
+                item_new_photo_url: scraped.image,
+              };
+
+              console.log(`[Link Add] Auto-set item photo from video thumbnail`);
+            }
+          }
+        } else {
+          console.warn('[Link Add] Video scraping failed, continuing without enrichment');
+        }
+      } catch (error) {
+        console.error('[Link Add] Video scraping error:', error);
+        // Continue without enrichment - don't fail the link creation
+      }
+    }
 
     if (kind === 'product') {
       try {

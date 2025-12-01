@@ -1468,9 +1468,10 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 const newItem = await response.json();
 
                 // If there's a product URL from scraping, add it as a link
+                let newLinks: any[] = [];
                 if (suggestion.productUrl) {
                   try {
-                    await fetch(`/api/items/${newItem.id}/links`, {
+                    const linkResponse = await fetch(`/api/items/${newItem.id}/links`, {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify({
@@ -1479,15 +1480,19 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                         label: suggestion.custom_name || 'Product Link',
                       }),
                     });
+                    if (linkResponse.ok) {
+                      const newLink = await linkResponse.json();
+                      newLinks = [newLink];
+                    }
                   } catch (error) {
                     console.error('Failed to add product link:', error);
                   }
                 }
 
-                // Update local state
+                // Update local state with the new item and its links
                 setBag((prev) => ({
                   ...prev,
-                  items: [...prev.items, { ...newItem, links: [] }],
+                  items: [...prev.items, { ...newItem, links: newLinks }],
                 }));
               }}
               bagTitle={bag.title}
@@ -1624,7 +1629,10 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           currentPhotoUrl: item.photo_url,
         }))}
         onConfirm={(selectedItems) => {
-          setSelectedItemsForPhotos(selectedItems as typeof bag.items);
+          // Look up full item data from bag.items to get links property
+          const selectedIds = new Set(selectedItems.map(i => i.id));
+          const fullItems = bag.items.filter(item => selectedIds.has(item.id));
+          setSelectedItemsForPhotos(fullItems);
           setShowItemSelection(false);
           setShowBatchPhotoSelector(true);
         }}
@@ -1645,6 +1653,8 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           brand: item.brand,
           custom_description: item.custom_description,
           currentPhotoUrl: item.photo_url,
+          // Get the first product URL from item links for image extraction
+          productUrl: item.links?.find(link => link.url)?.url || null,
         }))}
         onApplyPhotos={handleApplyBatchPhotos}
       />

@@ -91,12 +91,120 @@ function hasGoodWordRelevance(query: string, results: SearchResult[]): boolean {
 // Category & Brand Detection
 // =============================================================================
 
-const KNOWN_BRANDS: Record<string, Category> = {
+// Map URL domains to brand names - for brand-owned stores
+const DOMAIN_TO_BRAND: Record<string, string> = {
   // Golf
+  'goodgoodgolf.com': 'Good Good Golf',
+  'taylormadegolf.com': 'TaylorMade',
+  'callawaygolf.com': 'Callaway',
+  'titleist.com': 'Titleist',
+  'ping.com': 'PING',
+  'cobragolf.com': 'Cobra',
+  'clevelandgolf.com': 'Cleveland',
+  'srixon.com': 'Srixon',
+  'mizunogolf.com': 'Mizuno',
+  'bridgestonegolf.com': 'Bridgestone',
+  'travisMathew.com': 'Travis Mathew',
+  'gforegolf.com': 'G/FORE',
+  'petermillar.com': 'Peter Millar',
+  'greysonclothiers.com': 'Greyson',
+  'malbongolf.com': 'Malbon Golf',
+  'eastsidegolf.com': 'Eastside Golf',
+  'badbirdie.com': 'Bad Birdie',
+  // Makeup
+  'charlottetilbury.com': 'Charlotte Tilbury',
+  'maccosmetics.com': 'MAC',
+  'fentybeauty.com': 'Fenty Beauty',
+  'rarebeauty.com': 'Rare Beauty',
+  'glossier.com': 'Glossier',
+  'rhodeskin.com': 'Rhode',
+  // Tech
+  'apple.com': 'Apple',
+  'samsung.com': 'Samsung',
+  'sony.com': 'Sony',
+  'bose.com': 'Bose',
+  // Fashion
+  'nike.com': 'Nike',
+  'adidas.com': 'Adidas',
+  'patagonia.com': 'Patagonia',
+  'thenorthface.com': 'The North Face',
+  'arcteryx.com': "Arc'teryx",
+  'lululemon.com': 'Lululemon',
+  'underarmour.com': 'Under Armour',
+  // EDC
+  'benchmade.com': 'Benchmade',
+  'spyderco.com': 'Spyderco',
+  'leatherman.com': 'Leatherman',
+};
+
+// Extract brand from URL domain
+function extractBrandFromUrl(url: string): string | null {
+  try {
+    const urlObj = new URL(url);
+    const hostname = urlObj.hostname.toLowerCase().replace(/^www\./, '');
+
+    // Direct domain match
+    if (DOMAIN_TO_BRAND[hostname]) {
+      console.log(`[extractBrandFromUrl] Found brand "${DOMAIN_TO_BRAND[hostname]}" from domain "${hostname}"`);
+      return DOMAIN_TO_BRAND[hostname];
+    }
+
+    // Check if domain contains known brand name (e.g., shop.goodgood.golf)
+    for (const [domain, brand] of Object.entries(DOMAIN_TO_BRAND)) {
+      if (hostname.includes(domain.replace('.com', '').replace('.', ''))) {
+        console.log(`[extractBrandFromUrl] Found brand "${brand}" from partial domain match "${hostname}"`);
+        return brand;
+      }
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+// Extract brand from product name/description by scanning for known brand names
+function extractBrandFromText(text: string): string | null {
+  if (!text) return null;
+
+  const textLower = text.toLowerCase();
+
+  // Check for known brands in the text
+  const matches: { brand: string; position: number }[] = [];
+
+  for (const brand of Object.keys(KNOWN_BRANDS)) {
+    const position = textLower.indexOf(brand);
+    if (position !== -1) {
+      matches.push({ brand, position });
+    }
+  }
+
+  if (matches.length > 0) {
+    // Pick the first matching brand (earliest in text - usually at the start)
+    matches.sort((a, b) => a.position - b.position);
+    const bestMatch = matches[0].brand;
+
+    // Capitalize properly
+    const capitalizedBrand = bestMatch.split(' ').map(word =>
+      word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(' ');
+
+    console.log(`[extractBrandFromText] Found brand "${capitalizedBrand}" in text`);
+    return capitalizedBrand;
+  }
+
+  return null;
+}
+
+const KNOWN_BRANDS: Record<string, Category> = {
+  // Golf - Equipment
   'taylormade': 'golf', 'callaway': 'golf', 'titleist': 'golf', 'ping': 'golf', 'cobra': 'golf',
   'mizuno': 'golf', 'srixon': 'golf', 'cleveland': 'golf', 'bridgestone': 'golf', 'wilson': 'golf',
   'vice golf': 'golf', 'kirkland': 'golf', 'bushnell': 'golf', 'garmin': 'golf', 'blue tees': 'golf',
+  // Golf - Apparel
   'travis mathew': 'golf', 'g/fore': 'golf', 'peter millar': 'golf', 'greyson': 'golf',
+  'good good': 'golf', 'good good golf': 'golf', 'ace high': 'golf', 'bad birdie': 'golf',
+  'malbon': 'golf', 'eastside golf': 'golf', 'nocturnal': 'golf',
   // Makeup
   'charlotte tilbury': 'makeup', 'mac': 'makeup', 'fenty beauty': 'makeup', 'rare beauty': 'makeup',
   'nars': 'makeup', 'urban decay': 'makeup', 'too faced': 'makeup', 'tarte': 'makeup', 'benefit': 'makeup',
@@ -117,10 +225,25 @@ const KNOWN_BRANDS: Record<string, Category> = {
 function detectBrandAndCategory(query: string): { brand: string | null; category: Category | null } {
   const queryLower = query.toLowerCase();
 
+  // Find ALL matching brands and their positions in the query
+  const matchingBrands: { brand: string; category: Category; position: number }[] = [];
+
   for (const [brand, category] of Object.entries(KNOWN_BRANDS)) {
-    if (queryLower.includes(brand)) {
-      return { brand, category };
+    const position = queryLower.indexOf(brand);
+    if (position !== -1) {
+      matchingBrands.push({ brand, category, position });
     }
+  }
+
+  // If we have multiple brand matches, prefer the one that appears LAST in the query
+  // This is because users typically write "Product Line Brand" (e.g., "ace high polo good good")
+  // where the actual brand (Good Good) comes after the product line name (Ace High)
+  if (matchingBrands.length > 0) {
+    // Sort by position (descending) and pick the last-appearing brand
+    matchingBrands.sort((a, b) => b.position - a.position);
+    const bestMatch = matchingBrands[0];
+    console.log(`[detectBrandAndCategory] Found ${matchingBrands.length} brand(s): ${matchingBrands.map(m => m.brand).join(', ')}. Selected: "${bestMatch.brand}" (last in query)`);
+    return { brand: bestMatch.brand, category: bestMatch.category };
   }
 
   // Category-only detection
@@ -195,7 +318,8 @@ async function searchWithAI(
   bagContext: string | undefined,
   existingAnswers: Record<string, string>,
   category: Category | null,
-  brandContext: string
+  brandContext: string,
+  detectedBrand: string | null // The brand we detected from the user's query
 ): Promise<EnrichmentResponse> {
   console.log(`[enrich-item] TIER 2: Using AI with web knowledge for "${userInput}"`);
 
@@ -204,8 +328,13 @@ async function searchWithAI(
     ? `User has answered:\n${JSON.stringify(existingAnswers, null, 2)}\n`
     : '';
 
+  // If we detected a specific brand, tell the AI to use it
+  const brandHint = detectedBrand
+    ? `\nIMPORTANT: The user is searching for a "${detectedBrand.toUpperCase()}" brand product. ALL suggestions should use this brand. Other words in their query (like product line names) should NOT be used as the brand.\n`
+    : '';
+
   const systemPrompt = `You are a product enrichment assistant for Teed, an app that helps users catalog their belongings.
-${brandContext}
+${brandContext}${brandHint}
 
 CRITICAL: The user is searching for a product. You MUST provide suggestions even if the product is:
 - Very new (2024-2025 releases)
@@ -219,17 +348,24 @@ If you're not 100% sure about the product:
 2. Include similar/related products from the same brand
 3. Include variations that might match what they meant
 
-Product verticals and their SMART DEFAULT formatting:
-- Golf: custom_description = "Loft | Shaft | Flex" (e.g., "10.5° | Fujikura Ventus | Stiff")
-- Makeup: custom_description = "Shade | Finish | Size" (e.g., "Ruby Woo | Matte | 3g")
-- Fashion: custom_description = "Size | Color | Material"
-- Tech: custom_description = "Storage | Key Feature | Connectivity"
-- Outdoor: custom_description = "Weight | Rating | Capacity"
+Product verticals and their spec formatting (ONLY if you know the actual specs):
+- Golf equipment: "Loft | Shaft | Flex" (e.g., "10.5° | Fujikura Ventus | Stiff")
+- Golf apparel: Leave empty unless you know actual colors/sizes from the product name
+- Makeup: "Shade | Finish | Size" (e.g., "Ruby Woo | Matte | 3g")
+- Fashion: Leave empty - user will fill in their size/color
+- Tech: "Storage | Key Feature" only if actually known
+- Outdoor: "Weight | Rating" only if actually known
+
+CRITICAL: DO NOT MAKE UP SPECS. If you don't know the actual product specifications:
+- Leave custom_description as an empty string ""
+- Do NOT invent colors, sizes, materials, or other details
+- It's better to leave specs empty than to guess wrong
+- Only include specs you are CONFIDENT are accurate for this specific product
 
 Format enriched details as:
 - brand: Brand name ONLY (e.g., "TaylorMade", "MAC", "Patagonia") - REQUIRED
 - custom_name: Product Name without brand (2-6 words, concise)
-- custom_description: Formatted specs using pipe separator
+- custom_description: Formatted specs using pipe separator - LEAVE EMPTY IF UNKNOWN
 - notes: Product differentiation, fun facts, or why this matters (2-3 sentences)
 - funFactOptions: 3 different fun fact variations
 
@@ -419,9 +555,23 @@ export async function POST(request: NextRequest) {
 
     console.log(`[enrich-item] Processing: "${userInput}"`);
 
-    // Detect brand and category
-    const { brand, category } = detectBrandAndCategory(userInput);
-    console.log(`[enrich-item] Detected brand: ${brand}, category: ${category}`);
+    // Detect brand and category from the text
+    const { brand: textBrand, category } = detectBrandAndCategory(userInput);
+
+    // Try to extract brand from URL if the input contains a URL
+    const urlMatch = userInput.match(/https?:\/\/[^\s]+/);
+    let urlBrand: string | null = null;
+    if (urlMatch) {
+      urlBrand = extractBrandFromUrl(urlMatch[0]);
+      console.log(`[enrich-item] URL found: ${urlMatch[0]}, brand from URL: ${urlBrand || 'none'}`);
+    }
+
+    // Try to extract brand from the product name/description in userInput
+    const textExtractedBrand = extractBrandFromText(userInput);
+
+    // Priority: URL brand > text-detected brand > text-extracted brand
+    const brand = urlBrand || textBrand || textExtractedBrand;
+    console.log(`[enrich-item] Final brand: ${brand || 'none'} (url: ${urlBrand}, detected: ${textBrand}, extracted: ${textExtractedBrand}), category: ${category}`);
 
     // Load brand context for AI
     const brandContext = category
@@ -465,11 +615,20 @@ export async function POST(request: NextRequest) {
 
     // TIER 2: Use AI for enrichment (especially for new/unknown products)
     try {
-      const aiResult = await searchWithAI(userInput, bagContext, existingAnswers, category, brandContext);
+      const aiResult = await searchWithAI(userInput, bagContext, existingAnswers, category, brandContext, brand);
 
       // When forceAI is true, SKIP library results entirely - user explicitly wants AI only
-      // Otherwise, put AI results FIRST (higher priority), then library as backup
-      const librarysuggestions = forceAI ? [] : libraryResultsToSuggestions(libraryResults);
+      // Otherwise, filter library results by word relevance before including
+      // This prevents low-relevance library results from appearing above AI results after confidence sort
+      let librarysuggestions: ProductSuggestion[] = [];
+      if (!forceAI) {
+        const relevantLibraryResults = libraryResults.filter(result => {
+          const relevance = calculateWordRelevance(userInput, result.product.name, result.product.brand);
+          return relevance >= 0.5; // Only include library results with >50% word relevance
+        });
+        librarysuggestions = libraryResultsToSuggestions(relevantLibraryResults);
+        console.log(`[enrich-item] Filtered library: ${libraryResults.length} → ${relevantLibraryResults.length} with good relevance`);
+      }
       const mergedSuggestions = [...aiResult.suggestions, ...librarysuggestions]; // AI first!
 
       // Deduplicate by brand + name
@@ -483,6 +642,16 @@ export async function POST(request: NextRequest) {
 
       // Sort by confidence
       uniqueSuggestions.sort((a, b) => b.confidence - a.confidence);
+
+      // Apply extracted brand to suggestions that don't have one
+      if (brand) {
+        for (const suggestion of uniqueSuggestions) {
+          if (!suggestion.brand || suggestion.brand === 'Unknown' || suggestion.brand === 'Not specified') {
+            console.log(`[enrich-item] Filling in missing brand "${brand}" for "${suggestion.custom_name}"`);
+            suggestion.brand = brand;
+          }
+        }
+      }
 
       // If still no results, add related products (but not if forceAI)
       if (uniqueSuggestions.length === 0 && relatedProducts.length > 0 && !forceAI) {
@@ -509,13 +678,25 @@ export async function POST(request: NextRequest) {
     } catch (aiError) {
       console.error('[enrich-item] AI failed, using fallback:', aiError);
 
+      // Filter library results to only include those with good word relevance
+      // Don't show irrelevant results just because AI failed
+      const relevantLibraryResults = libraryResults.filter(result => {
+        const relevance = calculateWordRelevance(userInput, result.product.name, result.product.brand);
+        return relevance >= 0.5;
+      });
+
+      const relevantRelatedProducts = relatedProducts.filter(result => {
+        const relevance = calculateWordRelevance(userInput, result.product.name, result.product.brand);
+        return relevance >= 0.3; // Slightly lower threshold for related products
+      });
+
       // If AI fails and forceAI is true, only return fallback (no library)
-      // Otherwise return library results + fallback
+      // Otherwise return RELEVANT library results + fallback
       const suggestions = forceAI
         ? generateFallbackSuggestions(userInput, brand, category)
         : [
-            ...libraryResultsToSuggestions(libraryResults),
-            ...libraryResultsToSuggestions(relatedProducts),
+            ...libraryResultsToSuggestions(relevantLibraryResults),
+            ...libraryResultsToSuggestions(relevantRelatedProducts),
             ...generateFallbackSuggestions(userInput, brand, category),
           ];
 

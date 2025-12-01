@@ -4,6 +4,69 @@ import { useState } from 'react';
 import { X, Check, Loader2, Image as ImageIcon, Images, RefreshCw, Search, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
+/**
+ * Builds an intentional search query for product images.
+ * Prioritizes: Brand (exact match) + Product Name + Description (including colors for variant matching)
+ */
+function buildProductSearchQuery(
+  brand: string | null,
+  productName: string,
+  description: string | null
+): string {
+  const queryParts: string[] = [];
+
+  // 1. Brand is MOST important - use exact match with quotes if it contains spaces
+  if (brand && brand.trim()) {
+    const brandClean = brand.trim();
+    // Use quotes for multi-word brands to ensure exact match
+    if (brandClean.includes(' ')) {
+      queryParts.push(`"${brandClean}"`);
+    } else {
+      queryParts.push(brandClean);
+    }
+  }
+
+  // 2. Product name is second most important
+  if (productName && productName.trim()) {
+    queryParts.push(productName.trim());
+  }
+
+  // 3. Extract useful keywords from description (keep colors - they're important for variant matching!)
+  if (description && description.trim()) {
+    // Words to skip - only truly generic terms that don't help identify the product
+    const skipWords = new Set([
+      // Sizes (these don't affect image appearance much)
+      'xs', 'small', 'medium', 'large', 'xl', 'xxl', 's', 'm', 'l',
+      // Generic materials (usually not visible)
+      'cotton', 'polyester', 'nylon', 'synthetic', 'fabric',
+      // Generic terms
+      'new', 'used', 'vintage', 'original', 'authentic', 'genuine', 'the', 'and', 'for', 'with',
+      // Punctuation-like
+      '|', '-', '/', '&',
+    ]);
+
+    // Extract meaningful words from description (keep colors for variant matching!)
+    const descWords = description
+      .toLowerCase()
+      .split(/[\s|,;\/\-]+/)
+      .filter(word => {
+        const cleaned = word.trim();
+        return cleaned.length > 2 && !skipWords.has(cleaned) && !/^\d+$/.test(cleaned);
+      });
+
+    // Take up to 4 meaningful keywords from description (increased to capture color + other specs)
+    const meaningfulKeywords = descWords.slice(0, 4);
+    if (meaningfulKeywords.length > 0) {
+      queryParts.push(...meaningfulKeywords);
+    }
+  }
+
+  // Combine parts, limiting total query length for Google
+  const query = queryParts.join(' ').slice(0, 120);
+
+  return query || productName || 'product';
+}
+
 interface ItemWithSuggestion {
   id: string;
   custom_name: string;
@@ -25,6 +88,7 @@ interface BatchPhotoSelectorProps {
     brand: string | null;
     custom_description: string | null;
     currentPhotoUrl?: string | null;
+    productUrl?: string | null;  // Product page URL to extract images from
   }>;
   onApplyPhotos: (selections: Array<{ itemId: string; imageUrl: string }>) => Promise<void>;
 }
@@ -60,29 +124,59 @@ export default function BatchPhotoSelector({
     const results = await Promise.all(
       items.map(async (item) => {
         try {
-          // Build search query from item details
-          const queryParts = [item.custom_name];
-          if (item.brand) queryParts.unshift(item.brand);
-          const query = queryParts.join(' ');
+          let imageUrls: string[] = [];
 
-          const response = await fetch('/api/ai/find-product-image', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query }),
-          });
+          // STRATEGY 1: If item has a product URL, try to extract images from it first
+          if (item.productUrl) {
+            console.log(`[BatchPhotoSelector] Trying to extract images from product URL for ${item.custom_name}:`, item.productUrl);
 
-          if (!response.ok) {
-            const errorData = await response.json();
-            const errorMessage = errorData.details
-              ? `${errorData.error}: ${errorData.details}`
-              : errorData.error || 'Failed to find image';
-            throw new Error(errorMessage);
+            const extractResponse = await fetch('/api/ai/extract-product-images', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                url: item.productUrl,
+                productName: item.custom_name,
+                brand: item.brand,
+              }),
+            });
+
+            if (extractResponse.ok) {
+              const extractData = await extractResponse.json();
+              if (extractData.images && extractData.images.length > 0) {
+                console.log(`[BatchPhotoSelector] Found ${extractData.images.length} images from product URL (source: ${extractData.source})`);
+                imageUrls = extractData.images.slice(0, 4);
+              }
+            }
           }
 
-          const data = await response.json();
+          // STRATEGY 2: Fall back to Google Image Search if no images found from URL
+          if (imageUrls.length === 0) {
+            // Build an intentional search query using brand, product name, and description
+            const query = buildProductSearchQuery(
+              item.brand,
+              item.custom_name,
+              item.custom_description
+            );
 
-          // Get up to 4 images
-          const imageUrls = (data.images || []).slice(0, 4);
+            console.log(`[BatchPhotoSelector] Searching Google Images for: "${query}"`);
+
+            const response = await fetch('/api/ai/find-product-image', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ query }),
+            });
+
+            if (!response.ok) {
+              const errorData = await response.json();
+              const errorMessage = errorData.details
+                ? `${errorData.error}: ${errorData.details}`
+                : errorData.error || 'Failed to find image';
+              throw new Error(errorMessage);
+            }
+
+            const data = await response.json();
+            imageUrls = (data.images || []).slice(0, 4);
+          }
 
           return {
             ...item,
@@ -251,6 +345,37 @@ export default function BatchPhotoSelector({
 
   const selectedCount = itemsWithSuggestions.filter(item => item.selectedImageUrl).length;
   const foundCount = itemsWithSuggestions.filter(item => item.suggestedImageUrls.length > 0).length;
+  const itemsWithExistingPhotos = items.filter(i => i.currentPhotoUrl);
+  const itemsWithExistingPhotosCount = itemsWithExistingPhotos.length;
+
+  // Batch selection handlers
+  const handleSelectAll = () => {
+    setItemsWithSuggestions(prev =>
+      prev.map(item => ({
+        ...item,
+        selectedImageUrl: item.suggestedImageUrls.length > 0 ? item.suggestedImageUrls[0] : null,
+      }))
+    );
+  };
+
+  const handleDeselectAll = () => {
+    setItemsWithSuggestions(prev =>
+      prev.map(item => ({
+        ...item,
+        selectedImageUrl: null,
+      }))
+    );
+  };
+
+  const handleSkipItemsWithPhotos = () => {
+    const idsWithPhotos = new Set(itemsWithExistingPhotos.map(i => i.id));
+    setItemsWithSuggestions(prev =>
+      prev.map(item => ({
+        ...item,
+        selectedImageUrl: idsWithPhotos.has(item.id) ? null : item.selectedImageUrl,
+      }))
+    );
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -539,6 +664,32 @@ export default function BatchPhotoSelector({
             <div className="flex items-center justify-between gap-4 mb-4">
               <div className="text-sm text-[var(--text-secondary)]">
                 <span className="font-semibold text-[var(--text-primary)]">{selectedCount}</span> of {foundCount} images selected
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleSelectAll}
+                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:underline transition-colors"
+                >
+                  Select All
+                </button>
+                <span className="text-[var(--text-tertiary)]">|</span>
+                <button
+                  onClick={handleDeselectAll}
+                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:underline transition-colors"
+                >
+                  Deselect All
+                </button>
+                {itemsWithExistingPhotosCount > 0 && (
+                  <>
+                    <span className="text-[var(--text-tertiary)]">|</span>
+                    <button
+                      onClick={handleSkipItemsWithPhotos}
+                      className="text-sm text-[var(--sky-11)] hover:text-[var(--sky-12)] hover:underline transition-colors"
+                    >
+                      Skip {itemsWithExistingPhotosCount} with photos
+                    </button>
+                  </>
+                )}
               </div>
             </div>
             <div className="flex gap-3">

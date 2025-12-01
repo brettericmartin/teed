@@ -467,6 +467,10 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
         itemName={item.custom_name || 'Item'}
         links={itemLinks}
         onLinksChange={setItemLinks}
+        onItemPhotoUpdated={(newPhotoUrl) => {
+          // Update the item's photo in the parent state when a video thumbnail is auto-set
+          onUpdate(item.id, { photo_url: newPhotoUrl });
+        }}
       />
     </div>
   );

@@ -85,13 +85,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify user owns the item
+    // Use explicit foreign key reference to avoid ambiguity with hero_item_id relationship
     const { data: item, error: itemError } = await supabase
       .from('bag_items')
-      .select('bag_id, bags!inner(owner_id)')
+      .select('bag_id, bags!bag_items_bag_id_fkey(owner_id)')
       .eq('id', itemId)
       .single();
 
     if (itemError || !item) {
+      console.error('[upload] Item lookup failed:', { itemId, error: itemError });
       return NextResponse.json(
         { error: 'Item not found' },
         { status: 404 }

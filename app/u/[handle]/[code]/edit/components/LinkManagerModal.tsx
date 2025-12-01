@@ -19,6 +19,7 @@ interface LinkManagerModalProps {
   itemName: string;
   links: Link[];
   onLinksChange: (links: Link[]) => void;
+  onItemPhotoUpdated?: (newPhotoUrl: string) => void;
 }
 
 export default function LinkManagerModal({
@@ -28,6 +29,7 @@ export default function LinkManagerModal({
   itemName,
   links,
   onLinksChange,
+  onItemPhotoUpdated,
 }: LinkManagerModalProps) {
   const [newUrl, setNewUrl] = useState('');
   const [newKind, setNewKind] = useState('product');
@@ -51,6 +53,15 @@ export default function LinkManagerModal({
 
   if (!isOpen) return null;
 
+  // Normalize URL by adding https:// if missing
+  const normalizeUrl = (url: string): string => {
+    const trimmed = url.trim();
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      return trimmed;
+    }
+    return `https://${trimmed}`;
+  };
+
   const validateUrl = (url: string): boolean => {
     try {
       new URL(url);
@@ -68,8 +79,10 @@ export default function LinkManagerModal({
       return;
     }
 
-    if (!validateUrl(newUrl)) {
-      setError('Please enter a valid URL (include https://)');
+    const normalizedUrl = normalizeUrl(newUrl);
+
+    if (!validateUrl(normalizedUrl)) {
+      setError('Please enter a valid URL');
       return;
     }
 
@@ -80,7 +93,7 @@ export default function LinkManagerModal({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          url: newUrl,
+          url: normalizedUrl,
           kind: newKind,
         }),
       });
@@ -91,6 +104,12 @@ export default function LinkManagerModal({
 
       const newLink = await response.json();
       onLinksChange([...links, newLink]);
+
+      // Check if the API auto-updated the item's photo (e.g., from video thumbnail)
+      if (newLink.metadata?.item_photo_updated && newLink.metadata?.item_new_photo_url) {
+        onItemPhotoUpdated?.(newLink.metadata.item_new_photo_url);
+      }
+
       setNewUrl('');
       setNewKind('product');
       // Re-focus the input after adding
@@ -112,8 +131,10 @@ export default function LinkManagerModal({
       return;
     }
 
-    if (!validateUrl(editUrl)) {
-      setError('Please enter a valid URL (include https://)');
+    const normalizedUrl = normalizeUrl(editUrl);
+
+    if (!validateUrl(normalizedUrl)) {
+      setError('Please enter a valid URL');
       return;
     }
 
@@ -124,7 +145,7 @@ export default function LinkManagerModal({
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          url: editUrl,
+          url: normalizedUrl,
           kind: editKind,
         }),
       });
@@ -249,10 +270,10 @@ export default function LinkManagerModal({
                           URL
                         </label>
                         <input
-                          type="url"
+                          type="text"
                           value={editUrl}
                           onChange={(e) => setEditUrl(e.target.value)}
-                          placeholder="https://example.com/product"
+                          placeholder="example.com/product"
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--teed-green-6)] focus:border-transparent"
                         />
                       </div>
@@ -337,7 +358,7 @@ export default function LinkManagerModal({
               </label>
               <input
                 ref={urlInputRef}
-                type="url"
+                type="text"
                 value={newUrl}
                 onChange={(e) => setNewUrl(e.target.value)}
                 onKeyDown={(e) => {
@@ -345,7 +366,7 @@ export default function LinkManagerModal({
                     handleAddLink();
                   }
                 }}
-                placeholder="https://example.com/product"
+                placeholder="example.com/product"
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--teed-green-6)] focus:border-transparent"
               />
             </div>

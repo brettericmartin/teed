@@ -1,7 +1,7 @@
 {
   "category": "golf",
   "schemaVersion": "1.0.0",
-  "lastUpdated": "2025-12-01T01:26:32.348Z",
+  "lastUpdated": "2025-12-01T06:54:33.632Z",
   "brands": [
     {
       "name": "TaylorMade",
@@ -23115,9 +23115,490 @@
           ],
           "source": "inthegolfbag",
           "dataConfidence": 70
+        },
+        {
+          "id": "callaway-patriotic-tour-staff-bag",
+          "name": "Patriotic Tour Staff Bag",
+          "brand": "Callaway",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "A premium staff bag featuring a patriotic color scheme, perfect for showing off your national pride on the course.",
+          "searchKeywords": [
+            "callaway",
+            "patriotic",
+            "tour",
+            "staff",
+            "bag",
+            "patriotic tour staff bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "callaway-patriotic-tour-staff-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:41:50.738Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "callaway-us-open-limited-edition-staff-bag",
+          "name": "US Open Limited Edition Staff Bag",
+          "brand": "Callaway",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "A limited edition bag released to commemorate the US Open, featuring colors that celebrate the American spirit.",
+          "searchKeywords": [
+            "callaway",
+            "open",
+            "limited",
+            "edition",
+            "staff",
+            "bag",
+            "us open limited edition staff bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "callaway-us-open-limited-edition-staff-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:41:50.768Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "callaway-stars-and-stripes-staff-bag",
+          "name": "Stars and Stripes Staff Bag",
+          "brand": "Callaway",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "A durable and stylish staff bag that showcases a stars and stripes theme, ideal for those who love classic American motifs.",
+          "searchKeywords": [
+            "callaway",
+            "stars",
+            "and",
+            "stripes",
+            "staff",
+            "bag",
+            "stars and stripes staff bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "callaway-stars-and-stripes-staff-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:41:50.803Z",
+          "source": "ai",
+          "dataConfidence": 78
+        },
+        {
+          "id": "callaway-american-heritage-staff-bag",
+          "name": "American Heritage Staff Bag",
+          "brand": "Callaway",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Combines Callaway's superior craftsmanship with an American heritage design, providing functionality and style.",
+          "searchKeywords": [
+            "callaway",
+            "american",
+            "heritage",
+            "staff",
+            "bag",
+            "american heritage staff bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "callaway-american-heritage-staff-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:41:50.836Z",
+          "source": "ai",
+          "dataConfidence": 82
+        },
+        {
+          "id": "callaway-patriot-edition-staff-bag",
+          "name": "Patriot Edition Staff Bag",
+          "brand": "Callaway",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "A staff bag that showcases Callaway's commitment to quality with a patriotic twist, perfect for tour professionals.",
+          "searchKeywords": [
+            "callaway",
+            "patriot",
+            "edition",
+            "staff",
+            "bag",
+            "patriot edition staff bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "callaway-patriot-edition-staff-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:41:50.866Z",
+          "source": "ai",
+          "dataConfidence": 77
+        },
+        {
+          "id": "callaway-fairway-c-stand-bag",
+          "name": "Fairway C Stand Bag",
+          "brand": "Callaway",
+          "category": "golf",
+          "subcategory": "fairway-woods",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The Fairway C Stand Bag is designed for golfers seeking a lightweight yet durable stand bag. It features ample storage and comfortable carrying options.",
+          "searchKeywords": [
+            "callaway",
+            "fairway",
+            "stand",
+            "bag",
+            "fairway c stand bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "callaway-fairway-c-stand-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T06:34:32.396Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "callaway-hyper-lite-zero-stand-bag",
+          "name": "Hyper-Lite Zero Stand Bag",
+          "brand": "Callaway",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "One of the lightest bags in the Callaway lineup, the Hyper-Lite Zero is ideal for golfers who prefer carrying their bag over using a cart.",
+          "searchKeywords": [
+            "callaway",
+            "hyper-lite",
+            "zero",
+            "stand",
+            "bag",
+            "hyper-lite zero stand bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "callaway-hyper-lite-zero-stand-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T06:34:32.532Z",
+          "source": "ai",
+          "dataConfidence": 82
+        },
+        {
+          "id": "callaway-x-series-stand-bag",
+          "name": "X-Series Stand Bag",
+          "brand": "Callaway",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The X-Series Stand Bag provides a versatile and durable option for golfers who need a reliable bag for all course conditions.",
+          "searchKeywords": [
+            "callaway",
+            "x-series",
+            "stand",
+            "bag",
+            "x-series stand bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "callaway-x-series-stand-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T06:34:32.580Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "callaway-square-to-square-le-max-stripe-putter",
+          "name": "Square-to-Square LE Max Stripe Putter",
+          "brand": "Callaway",
+          "category": "golf",
+          "subcategory": "putters",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The 2025 Square-to-Square LE Max Stripe is designed for precision putting with visual alignment aids. Ideal for players looking to square the face at impact.",
+          "searchKeywords": [
+            "callaway",
+            "square-to-square",
+            "max",
+            "stripe",
+            "putter",
+            "square-to-square le max stripe putter"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "callaway-square-to-square-le-max-stripe-putter",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T06:54:33.516Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "callaway-odyssey-eleven-triple-track-putter",
+          "name": "Odyssey Eleven Triple Track Putter",
+          "brand": "Callaway",
+          "category": "golf",
+          "subcategory": "putters",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Incorporates Triple Track alignment technology for better accuracy. Great for golfers who use visual cues to line up putts.",
+          "searchKeywords": [
+            "callaway",
+            "odyssey",
+            "eleven",
+            "triple",
+            "track",
+            "putter",
+            "odyssey eleven triple track putter"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "callaway-odyssey-eleven-triple-track-putter",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T06:54:33.631Z",
+          "source": "ai",
+          "dataConfidence": 75
         }
       ],
-      "lastUpdated": "2025-11-30T03:31:30.037Z"
+      "lastUpdated": "2025-12-01T06:54:33.631Z"
     },
     {
       "name": "Ping",
@@ -32886,9 +33367,55 @@
           ],
           "source": "inthegolfbag",
           "dataConfidence": 70
+        },
+        {
+          "id": "cobra-aerojet-driver",
+          "name": "Aerojet Driver",
+          "brand": "Cobra",
+          "category": "golf",
+          "subcategory": "drivers",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The Aerojet Driver is designed for maximum aerodynamics and speed, featuring Cobra's proprietary Baffler technology.",
+          "searchKeywords": [
+            "cobra",
+            "aerojet",
+            "driver",
+            "aerojet driver"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "cobra-aerojet-driver",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:52:52.935Z",
+          "source": "ai",
+          "dataConfidence": 77
         }
       ],
-      "lastUpdated": "2025-11-30T03:06:09.023Z"
+      "lastUpdated": "2025-12-01T05:52:52.935Z"
     },
     {
       "name": "Mizuno",
@@ -76426,9 +76953,103 @@
           ],
           "source": "inthegolfbag",
           "dataConfidence": 70
+        },
+        {
+          "id": "ai-one-jailbird-squareback-putter",
+          "name": "Jailbird Squareback Putter",
+          "brand": "AI-One",
+          "category": "golf",
+          "subcategory": "putters",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The Jailbird Squareback is known for its unique alignment aid and stability on off-center hits. Ideal for golfers seeking precision on the greens.",
+          "searchKeywords": [
+            "ai-one",
+            "jailbird",
+            "squareback",
+            "putter",
+            "jailbird squareback putter"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "ai-one-jailbird-squareback-putter",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:40:59.022Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "ai-one-jailbird-mallet-putter",
+          "name": "Jailbird Mallet Putter",
+          "brand": "AI-One",
+          "category": "golf",
+          "subcategory": "putters",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "This mallet putter is designed for golfers who prefer a face-balanced option with a larger sweet spot.",
+          "searchKeywords": [
+            "ai-one",
+            "jailbird",
+            "mallet",
+            "putter",
+            "jailbird mallet putter"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "ai-one-jailbird-mallet-putter",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:40:59.051Z",
+          "source": "ai",
+          "dataConfidence": 75
         }
       ],
-      "lastUpdated": "2025-12-01T01:18:24.106Z"
+      "lastUpdated": "2025-12-01T05:40:59.051Z"
     },
     {
       "name": "Swag",
@@ -78276,8 +78897,1913 @@
         }
       ],
       "lastUpdated": "2025-12-01T01:19:21.023Z"
+    },
+    {
+      "name": "Fujikura",
+      "aliases": [],
+      "products": [
+        {
+          "id": "fujikura-ventus-blue-6x-shaft",
+          "name": "Ventus Blue 6X Shaft",
+          "brand": "Fujikura",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The Fujikura Ventus Blue 6X is designed for golfers seeking a stable, mid-launch shaft with excellent control. Ideal for players with fast swing speeds.",
+          "searchKeywords": [
+            "fujikura",
+            "ventus",
+            "blue",
+            "shaft",
+            "ventus blue 6x shaft"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "fujikura-ventus-blue-6x-shaft",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T03:42:19.749Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "fujikura-ventus-black-6x-shaft",
+          "name": "Ventus Black 6X Shaft",
+          "brand": "Fujikura",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Designed for maximum energy transfer, the Ventus Black 6X offers a low launch for players who favor penetrating ball flights.",
+          "searchKeywords": [
+            "fujikura",
+            "ventus",
+            "black",
+            "shaft",
+            "ventus black 6x shaft"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "fujikura-ventus-black-6x-shaft",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T03:42:19.789Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "fujikura-ventus-red-6x-shaft",
+          "name": "Ventus Red 6X Shaft",
+          "brand": "Fujikura",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "For golfers seeking a higher launch angle, the Ventus Red 6X provides a softer tip for easier elevation.",
+          "searchKeywords": [
+            "fujikura",
+            "ventus",
+            "red",
+            "shaft",
+            "ventus red 6x shaft"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "fujikura-ventus-red-6x-shaft",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T03:42:19.824Z",
+          "source": "ai",
+          "dataConfidence": 83
+        },
+        {
+          "id": "fujikura-speeder-evolution-vii-661-x-shaft",
+          "name": "Speeder Evolution VII 661 X Shaft",
+          "brand": "Fujikura",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "An alternative to the Ventus series, the Speeder Evolution VII offers a blend of speed and stability with a mid-launch profile.",
+          "searchKeywords": [
+            "fujikura",
+            "speeder",
+            "evolution",
+            "vii",
+            "661",
+            "shaft",
+            "speeder evolution vii 661 x shaft"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "fujikura-speeder-evolution-vii-661-x-shaft",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T03:42:19.858Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "fujikura-motore-x-f3-6x-shaft",
+          "name": "Motore X F3 6X Shaft",
+          "brand": "Fujikura",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The Motore X F3 series provides a powerful blend of speed and stability, catering to those who need a mid-high launch with X-stiff flex.",
+          "searchKeywords": [
+            "fujikura",
+            "motore",
+            "shaft",
+            "motore x f3 6x shaft"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "fujikura-motore-x-f3-6x-shaft",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T03:42:19.883Z",
+          "source": "ai",
+          "dataConfidence": 78
+        },
+        {
+          "id": "fujikura-atmos-ts-black-6x-shaft",
+          "name": "Atmos TS Black 6X Shaft",
+          "brand": "Fujikura",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The Atmos TS Black 6X provides a low launch and low spin, ideal for those with fast swing speeds seeking penetrating ball flights.",
+          "searchKeywords": [
+            "fujikura",
+            "atmos",
+            "black",
+            "shaft",
+            "atmos ts black 6x shaft"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "fujikura-atmos-ts-black-6x-shaft",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T03:42:35.552Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "fujikura-ventus-blue-5x-shaft",
+          "name": "Ventus Blue 5X Shaft",
+          "brand": "Fujikura",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "A lighter version of the 6X, the Ventus Blue 5X retains the same stability and performance benefits with a slightly lighter feel.",
+          "searchKeywords": [
+            "fujikura",
+            "ventus",
+            "blue",
+            "shaft",
+            "ventus blue 5x shaft"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "fujikura-ventus-blue-5x-shaft",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T04:16:51.435Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "fujikura-ventus-tr-blue-6x-shaft",
+          "name": "Ventus TR Blue 6X Shaft",
+          "brand": "Fujikura",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The TR version of the Ventus Blue 6X includes additional torsional reinforcement for even more stability and control.",
+          "searchKeywords": [
+            "fujikura",
+            "ventus",
+            "blue",
+            "shaft",
+            "ventus tr blue 6x shaft"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "fujikura-ventus-tr-blue-6x-shaft",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T04:16:51.470Z",
+          "source": "ai",
+          "dataConfidence": 75
+        }
+      ],
+      "lastUpdated": "2025-12-01T04:16:51.470Z"
+    },
+    {
+      "name": "Good Good",
+      "aliases": [],
+      "products": [
+        {
+          "id": "good-good-usa-stars-break-50-bag",
+          "name": "USA Stars Break 50 Bag",
+          "brand": "Good Good",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "A patriotic-themed golf bag designed in collaboration with Sean Walsh, known for its stylish representation of stars and stripes.",
+          "searchKeywords": [
+            "good good",
+            "usa",
+            "stars",
+            "break",
+            "bag",
+            "usa stars break 50 bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-usa-stars-break-50-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:42:22.498Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "good-good-patriot-edition-bag",
+          "name": "Patriot Edition Bag",
+          "brand": "Good Good",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "A distinctive bag featuring the classic American colors, perfect for showing off your national pride on the golf course.",
+          "searchKeywords": [
+            "good good",
+            "patriot",
+            "edition",
+            "bag",
+            "patriot edition bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-patriot-edition-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:42:22.611Z",
+          "source": "ai",
+          "dataConfidence": 75
+        },
+        {
+          "id": "good-good-stars-and-stripes-stand-bag",
+          "name": "Stars and Stripes Stand Bag",
+          "brand": "Good Good",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "A lightweight stand bag perfect for those who love to walk the course, featuring an iconic stars and stripes design.",
+          "searchKeywords": [
+            "good good",
+            "stars",
+            "and",
+            "stripes",
+            "stand",
+            "bag",
+            "stars and stripes stand bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-stars-and-stripes-stand-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:42:22.646Z",
+          "source": "ai",
+          "dataConfidence": 78
+        },
+        {
+          "id": "good-good-stars-stripes-driver-headcover",
+          "name": "Stars & Stripes Driver Headcover",
+          "brand": "Good Good",
+          "category": "golf",
+          "subcategory": "drivers",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Celebrate patriotism on the golf course with this vibrant headcover. It fits most standard drivers and adds a touch of style to your golf bag.",
+          "searchKeywords": [
+            "good good",
+            "stars",
+            "stripes",
+            "driver",
+            "headcover",
+            "stars & stripes driver headcover"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-stars-stripes-driver-headcover",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:42:25.887Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "good-good-stars-stripes-fairway-wood-headcover",
+          "name": "Stars & Stripes Fairway Wood Headcover",
+          "brand": "Good Good",
+          "category": "golf",
+          "subcategory": "fairway-woods",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "This headcover is designed to fit most fairway woods, offering protection and a classic American design.",
+          "searchKeywords": [
+            "good good",
+            "stars",
+            "stripes",
+            "fairway",
+            "wood",
+            "headcover",
+            "stars & stripes fairway wood headcover"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-stars-stripes-fairway-wood-headcover",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:42:25.918Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "good-good-stars-stripes-putter-headcover",
+          "name": "Stars & Stripes Putter Headcover",
+          "brand": "Good Good",
+          "category": "golf",
+          "subcategory": "putters",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Keep your putter protected with this stylish headcover that showcases the iconic stars and stripes design.",
+          "searchKeywords": [
+            "good good",
+            "stars",
+            "stripes",
+            "putter",
+            "headcover",
+            "stars & stripes putter headcover"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-stars-stripes-putter-headcover",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:42:25.953Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "good-good-usa-stars-stripes-hybrid-headcover",
+          "name": "USA Stars & Stripes Hybrid Headcover",
+          "brand": "Good Good",
+          "category": "golf",
+          "subcategory": "hybrids",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Designed to fit most hybrid clubs, this headcover features a patriotic design and durable construction.",
+          "searchKeywords": [
+            "good good",
+            "usa",
+            "stars",
+            "stripes",
+            "hybrid",
+            "headcover",
+            "usa stars & stripes hybrid headcover"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-usa-stars-stripes-hybrid-headcover",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:42:25.988Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "good-good-patriotic-stars-stripes-golf-towel",
+          "name": "Patriotic Stars & Stripes Golf Towel",
+          "brand": "Good Good",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Complement your headcovers with this matching golf towel, designed to keep your clubs clean and dry while showcasing your American pride.",
+          "searchKeywords": [
+            "good good",
+            "patriotic",
+            "stars",
+            "stripes",
+            "golf",
+            "towel",
+            "patriotic stars & stripes golf towel"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-patriotic-stars-stripes-golf-towel",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:42:26.018Z",
+          "source": "ai",
+          "dataConfidence": 75
+        },
+        {
+          "id": "good-good-stars-and-stripes-golf-bag",
+          "name": "Stars and Stripes Golf Bag",
+          "brand": "Good Good",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "A patriotic-themed golf bag perfect for showcasing your love for the game and country. It features a 14-way divider for organized club storage.",
+          "searchKeywords": [
+            "good good",
+            "stars",
+            "and",
+            "stripes",
+            "golf",
+            "bag",
+            "stars and stripes golf bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-stars-and-stripes-golf-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:43:03.070Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "good-good-patriot-stand-bag",
+          "name": "Patriot Stand Bag",
+          "brand": "Good Good",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "A lightweight stand bag ideal for walking golfers who want functionality and style with a patriotic flair.",
+          "searchKeywords": [
+            "good good",
+            "patriot",
+            "stand",
+            "bag",
+            "patriot stand bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-patriot-stand-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:43:03.100Z",
+          "source": "ai",
+          "dataConfidence": 75
+        },
+        {
+          "id": "good-good-usa-edition-cart-bag",
+          "name": "USA Edition Cart Bag",
+          "brand": "Good Good",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "This cart bag showcases a bold USA theme, making it perfect for golfers who enjoy riding and need plenty of storage space.",
+          "searchKeywords": [
+            "good good",
+            "usa",
+            "edition",
+            "cart",
+            "bag",
+            "usa edition cart bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-usa-edition-cart-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:43:03.135Z",
+          "source": "ai",
+          "dataConfidence": 78
+        },
+        {
+          "id": "good-good-freedom-golf-stand-bag",
+          "name": "Freedom Golf Stand Bag",
+          "brand": "Good Good",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Designed for the golfer who values freedom of movement, this stand bag is lightweight and sturdy with a striking design.",
+          "searchKeywords": [
+            "good good",
+            "freedom",
+            "golf",
+            "stand",
+            "bag",
+            "freedom golf stand bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-freedom-golf-stand-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:43:03.165Z",
+          "source": "ai",
+          "dataConfidence": 76
+        },
+        {
+          "id": "good-good-ace-high-polo",
+          "name": "Ace High Polo",
+          "brand": "Good Good",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The Ace High Polo is designed for comfort and style on the golf course, featuring a breathable cotton material.",
+          "searchKeywords": [
+            "good good",
+            "ace",
+            "high",
+            "polo",
+            "ace high polo"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-ace-high-polo",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:52:59.167Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ],
+      "lastUpdated": "2025-12-01T05:52:59.167Z"
+    },
+    {
+      "name": "Good Good USA",
+      "aliases": [],
+      "products": [
+        {
+          "id": "good-good-usa-stars-stripes-driver-headcover",
+          "name": "Stars & Stripes Driver Headcover",
+          "brand": "Good Good USA",
+          "category": "golf",
+          "subcategory": "drivers",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "This patriotic headcover is perfect for showing your American pride on the golf course. It fits most standard drivers.",
+          "searchKeywords": [
+            "good good usa",
+            "stars",
+            "stripes",
+            "driver",
+            "headcover",
+            "stars & stripes driver headcover"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-usa-stars-stripes-driver-headcover",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:42:34.609Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "good-good-usa-stars-stripes-fairway-wood-headcover",
+          "name": "Stars & Stripes Fairway Wood Headcover",
+          "brand": "Good Good USA",
+          "category": "golf",
+          "subcategory": "fairway-woods",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Designed to match the driver headcover, this piece provides protection and style for your fairway woods.",
+          "searchKeywords": [
+            "good good usa",
+            "stars",
+            "stripes",
+            "fairway",
+            "wood",
+            "headcover",
+            "stars & stripes fairway wood headcover"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-usa-stars-stripes-fairway-wood-headcover",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:42:34.635Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "good-good-usa-stars-stripes-putter-headcover",
+          "name": "Stars & Stripes Putter Headcover",
+          "brand": "Good Good USA",
+          "category": "golf",
+          "subcategory": "putters",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "This headcover completes the Stars & Stripes set, offering protection for your putter while showcasing your style.",
+          "searchKeywords": [
+            "good good usa",
+            "stars",
+            "stripes",
+            "putter",
+            "headcover",
+            "stars & stripes putter headcover"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-usa-stars-stripes-putter-headcover",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:42:34.671Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "good-good-usa-patriotic-golf-towel",
+          "name": "Patriotic Golf Towel",
+          "brand": "Good Good USA",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Complement your Stars & Stripes headcovers with this microfiber towel, perfect for keeping your clubs clean.",
+          "searchKeywords": [
+            "good good usa",
+            "patriotic",
+            "golf",
+            "towel",
+            "patriotic golf towel"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-usa-patriotic-golf-towel",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:42:34.699Z",
+          "source": "ai",
+          "dataConfidence": 75
+        },
+        {
+          "id": "good-good-usa-stars-stripes-bag-tag",
+          "name": "Stars & Stripes Bag Tag",
+          "brand": "Good Good USA",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Add a personal touch to your golf bag with this patriotic bag tag, featuring a vibrant Stars & Stripes design.",
+          "searchKeywords": [
+            "good good usa",
+            "stars",
+            "stripes",
+            "bag",
+            "tag",
+            "stars & stripes bag tag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-usa-stars-stripes-bag-tag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:42:34.730Z",
+          "source": "ai",
+          "dataConfidence": 75
+        }
+      ],
+      "lastUpdated": "2025-12-01T05:42:34.730Z"
+    },
+    {
+      "name": "Good Good Golf",
+      "aliases": [],
+      "products": [
+        {
+          "id": "good-good-golf-stars-and-stripes-headcover",
+          "name": "Stars and Stripes Headcover",
+          "brand": "Good Good Golf",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "This headcover features a vibrant stars and stripes pattern, perfect for golfers who want to showcase their patriotic spirit on the course.",
+          "searchKeywords": [
+            "good good golf",
+            "stars",
+            "and",
+            "stripes",
+            "headcover",
+            "stars and stripes headcover"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-golf-stars-and-stripes-headcover",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:43:05.821Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "good-good-golf-stars-and-stripes-fairway-cover",
+          "name": "Stars and Stripes Fairway Cover",
+          "brand": "Good Good Golf",
+          "category": "golf",
+          "subcategory": "fairway-woods",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "This headcover is crafted to provide both style and protection for your fairway woods, featuring the iconic stars and stripes design.",
+          "searchKeywords": [
+            "good good golf",
+            "stars",
+            "and",
+            "stripes",
+            "fairway",
+            "cover",
+            "stars and stripes fairway cover"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-golf-stars-and-stripes-fairway-cover",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:43:05.930Z",
+          "source": "ai",
+          "dataConfidence": 75
+        },
+        {
+          "id": "good-good-golf-stars-and-stripes-fairway-headcover",
+          "name": "Stars and Stripes Fairway Headcover",
+          "brand": "Good Good Golf",
+          "category": "golf",
+          "subcategory": "fairway-woods",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Designed to protect your fairway wood while showing off a stars and stripes motif.",
+          "searchKeywords": [
+            "good good golf",
+            "stars",
+            "and",
+            "stripes",
+            "fairway",
+            "headcover",
+            "stars and stripes fairway headcover"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-golf-stars-and-stripes-fairway-headcover",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:45:07.297Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "good-good-golf-stars-and-stripes-putter-cover",
+          "name": "Stars and Stripes Putter Cover",
+          "brand": "Good Good Golf",
+          "category": "golf",
+          "subcategory": "putters",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Keep your putter protected and stylish with this stars and stripes cover.",
+          "searchKeywords": [
+            "good good golf",
+            "stars",
+            "and",
+            "stripes",
+            "putter",
+            "cover",
+            "stars and stripes putter cover"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-golf-stars-and-stripes-putter-cover",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:45:07.414Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "good-good-golf-patriotic-stars-and-stripes-set",
+          "name": "Patriotic Stars and Stripes Set",
+          "brand": "Good Good Golf",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "A complete set of headcovers featuring a patriotic stars and stripes design.",
+          "searchKeywords": [
+            "good good golf",
+            "patriotic",
+            "stars",
+            "and",
+            "stripes",
+            "set",
+            "patriotic stars and stripes set"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-golf-patriotic-stars-and-stripes-set",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:45:07.451Z",
+          "source": "ai",
+          "dataConfidence": 78
+        },
+        {
+          "id": "good-good-golf-american-flag-driver-headcover",
+          "name": "American Flag Driver Headcover",
+          "brand": "Good Good Golf",
+          "category": "golf",
+          "subcategory": "drivers",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Celebrate America with this stylish and protective driver headcover.",
+          "searchKeywords": [
+            "good good golf",
+            "american",
+            "flag",
+            "driver",
+            "headcover",
+            "american flag driver headcover"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-golf-american-flag-driver-headcover",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T05:45:07.476Z",
+          "source": "ai",
+          "dataConfidence": 75
+        }
+      ],
+      "lastUpdated": "2025-12-01T05:45:07.476Z"
+    },
+    {
+      "name": "Noble",
+      "aliases": [],
+      "products": [
+        {
+          "id": "noble-grass-fed-whey-protein",
+          "name": "Grass-Fed Whey Protein",
+          "brand": "Noble",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Noble's Grass-Fed Whey Protein offers a high-quality protein source derived from grass-fed cows, known for better omega-3 content.",
+          "searchKeywords": [
+            "noble",
+            "grass-fed",
+            "whey",
+            "protein",
+            "grass-fed whey protein"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "noble-grass-fed-whey-protein",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T06:26:21.737Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "noble-grass-fed-beef-jerky",
+          "name": "Grass-Fed Beef Jerky",
+          "brand": "Noble",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Noble's Beef Jerky is made from grass-fed beef, offering a savory snack option for those seeking high-protein, low-carb treats.",
+          "searchKeywords": [
+            "noble",
+            "grass-fed",
+            "beef",
+            "jerky",
+            "grass-fed beef jerky"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "noble-grass-fed-beef-jerky",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T06:26:21.857Z",
+          "source": "ai",
+          "dataConfidence": 75
+        },
+        {
+          "id": "noble-plant-based-protein-powder",
+          "name": "Plant-Based Protein Powder",
+          "brand": "Noble",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Noble offers a plant-based protein option for those seeking a vegan or dairy-free alternative. This protein is typically derived from peas, rice, or hemp.",
+          "searchKeywords": [
+            "noble",
+            "plant-based",
+            "protein",
+            "powder",
+            "plant-based protein powder"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "noble-plant-based-protein-powder",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T06:26:23.641Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "noble-collagen-peptides",
+          "name": "Collagen Peptides",
+          "brand": "Noble",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Collagen peptides support skin, hair, nail, and joint health. Noble's version is often sourced from grass-fed bovine, aligning with their quality standards.",
+          "searchKeywords": [
+            "noble",
+            "collagen",
+            "peptides",
+            "collagen peptides"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "noble-collagen-peptides",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T06:26:23.674Z",
+          "source": "ai",
+          "dataConfidence": 75
+        }
+      ],
+      "lastUpdated": "2025-12-01T06:26:23.674Z"
+    },
+    {
+      "name": "Break 50",
+      "aliases": [],
+      "products": [
+        {
+          "id": "break-50-grass-fed-whey-protein",
+          "name": "Grass-Fed Whey Protein",
+          "brand": "Break 50",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "This protein supplement is designed for those seeking high-quality, grass-fed whey to support muscle recovery and growth.",
+          "searchKeywords": [
+            "break 50",
+            "grass-fed",
+            "whey",
+            "protein",
+            "grass-fed whey protein"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "break-50-grass-fed-whey-protein",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T06:26:32.103Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "break-50-pre-workout-formula",
+          "name": "Pre-Workout Formula",
+          "brand": "Break 50",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Provides energy and focus to power through workouts, combining caffeine and other performance-enhancing ingredients.",
+          "searchKeywords": [
+            "break 50",
+            "pre-workout",
+            "formula",
+            "pre-workout formula"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "break-50-pre-workout-formula",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T06:26:32.209Z",
+          "source": "ai",
+          "dataConfidence": 75
+        },
+        {
+          "id": "break-50-organic-grass-fed-whey-isolate",
+          "name": "Organic Grass-Fed Whey Isolate",
+          "brand": "Break 50",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "This isolate version offers a more concentrated protein source, perfect for post-workout nutrition.",
+          "searchKeywords": [
+            "break 50",
+            "organic",
+            "grass-fed",
+            "whey",
+            "isolate",
+            "organic grass-fed whey isolate"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "break-50-organic-grass-fed-whey-isolate",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-01T06:26:33.782Z",
+          "source": "ai",
+          "dataConfidence": 75
+        }
+      ],
+      "lastUpdated": "2025-12-01T06:26:33.782Z"
     }
   ],
-  "productCount": 1568,
-  "variantCount": 2075
+  "productCount": 1620,
+  "variantCount": 2127
 }

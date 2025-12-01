@@ -53,6 +53,18 @@ export default function ItemSelectionModal({
     }
   };
 
+  const deselectItemsWithPhotos = () => {
+    const newSelected = new Set(selectedIds);
+    items.forEach(item => {
+      if (item.currentPhotoUrl) {
+        newSelected.delete(item.id);
+      }
+    });
+    setSelectedIds(newSelected);
+  };
+
+  const itemsWithPhotosCount = items.filter(item => item.currentPhotoUrl).length;
+
   const handleConfirm = () => {
     const selectedItems = items.filter(item => selectedIds.has(item.id));
     onConfirm(selectedItems);
@@ -93,17 +105,27 @@ export default function ItemSelectionModal({
 
           {/* Select All */}
           <div className="px-6 py-3 bg-[var(--sky-2)] border-b border-[var(--border-subtle)] flex items-center justify-between">
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={allSelected}
-                onChange={toggleSelectAll}
-                className="w-5 h-5 text-[var(--teed-green-9)] rounded border-[var(--border-default)] focus:ring-2 focus:ring-[var(--focus-ring)]"
-              />
-              <span className="text-sm font-medium text-[var(--text-primary)]">
-                Select All ({items.length})
-              </span>
-            </label>
+            <div className="flex items-center gap-4">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={allSelected}
+                  onChange={toggleSelectAll}
+                  className="w-5 h-5 text-[var(--teed-green-9)] rounded border-[var(--border-default)] focus:ring-2 focus:ring-[var(--focus-ring)]"
+                />
+                <span className="text-sm font-medium text-[var(--text-primary)]">
+                  Select All ({items.length})
+                </span>
+              </label>
+              {itemsWithPhotosCount > 0 && (
+                <button
+                  onClick={deselectItemsWithPhotos}
+                  className="text-sm text-[var(--sky-11)] hover:text-[var(--sky-12)] hover:underline transition-colors"
+                >
+                  Skip {itemsWithPhotosCount} with photos
+                </button>
+              )}
+            </div>
             <span className="text-sm text-[var(--text-secondary)]">
               {selectedCount} selected
             </span>

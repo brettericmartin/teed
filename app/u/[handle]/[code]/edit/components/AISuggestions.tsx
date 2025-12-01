@@ -8,6 +8,7 @@ type ProductSuggestion = {
   notes: string;
   category: string;
   confidence: number;
+  brand?: string;
   source?: 'library' | 'ai' | 'web';
 };
 
@@ -24,7 +25,7 @@ type AISuggestionsProps = {
   onSelectSuggestion: (suggestion: ProductSuggestion) => void;
   onAnswerQuestion: (answers: Record<string, string>) => void;
   isLoading?: boolean;
-  searchTier?: 'library' | 'library+ai' | 'ai' | 'fallback' | 'error';
+  searchTier?: 'library' | 'library+ai' | 'ai' | 'vision' | 'fallback' | 'error';
   onForceAI?: () => void; // Trigger AI search when "None of these" is clicked
   onAddManually?: () => void; // Allow user to add item manually
 };
@@ -148,6 +149,8 @@ export default function AISuggestions({
         return { text: 'Library + AI', icon: '📚🤖', color: 'text-blue-600 bg-blue-50' };
       case 'ai':
         return { text: 'AI identified', icon: '🤖', color: 'text-purple-600 bg-purple-50' };
+      case 'vision':
+        return { text: 'Vision AI', icon: '👁️', color: 'text-indigo-600 bg-indigo-50' };
       case 'fallback':
         return { text: 'Best guess', icon: '❓', color: 'text-amber-600 bg-amber-50' };
       default:
@@ -195,7 +198,12 @@ export default function AISuggestions({
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {suggestion.brand && (
+                      <span className="text-xs px-1.5 py-0.5 rounded font-semibold bg-gray-800 text-white">
+                        {suggestion.brand}
+                      </span>
+                    )}
                     <span className="font-semibold text-gray-900 group-hover:text-[var(--sky-11)]">
                       {suggestion.custom_name}
                     </span>
@@ -234,7 +242,7 @@ export default function AISuggestions({
             className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors"
           >
             <span>🤖</span>
-            <span>{searchTier === 'library' ? 'None of these? Try AI' : 'Search again with AI'}</span>
+            <span>{searchTier === 'library' ? 'None of these? Try AI' : 'Find more'}</span>
           </button>
         )}
 
