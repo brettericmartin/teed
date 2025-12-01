@@ -14,6 +14,7 @@ import { createServerSupabase } from '@/lib/serverSupabase';
  *   quantity?: number (default: 1)
  *   catalog_item_id?: uuid
  *   custom_photo_id?: uuid
+ *   photo_url?: string (external image URL)
  * }
  *
  * Returns: Created item object
@@ -61,6 +62,7 @@ export async function POST(
       quantity = 1,
       catalog_item_id,
       custom_photo_id,
+      photo_url,
     } = body;
 
     // Validate required fields
@@ -94,6 +96,7 @@ export async function POST(
         quantity: quantity || 1,
         catalog_item_id: catalog_item_id || null,
         custom_photo_id: custom_photo_id || null,
+        photo_url: photo_url || null,
         sort_index: nextSortIndex,
       })
       .select()
