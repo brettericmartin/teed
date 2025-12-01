@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { generateBrandContext, loadCategoryKnowledge } from '@/lib/brandKnowledge';
+import { generateBrandContext } from '@/lib/brandKnowledge';
+import { smartSearch, loadLibrary, getProductsByBrand } from '@/lib/productLibrary';
+import { learnProduct } from '@/lib/productLibrary/learner';
+import type { Category, SearchResult } from '@/lib/productLibrary/schema';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -10,6 +13,7 @@ type EnrichmentRequest = {
   userInput: string;
   bagContext?: string;
   existingAnswers?: Record<string, string>;
+  forceAI?: boolean; // Skip library-only results and always use AI
 };
 
 type ProductSuggestion = {
@@ -19,6 +23,10 @@ type ProductSuggestion = {
   notes: string;
   category: string;
   confidence: number;
+  funFactOptions?: string[];
+  productUrl?: string;
+  imageUrl?: string;
+  source?: 'library' | 'ai' | 'web';
 };
 
 type ClarificationQuestion = {
@@ -27,185 +35,204 @@ type ClarificationQuestion = {
   options: string[];
 };
 
+type LearningInfo = {
+  isLearning: boolean;
+  productsBeingLearned: string[];
+  message?: string;
+};
+
 type EnrichmentResponse = {
   suggestions: ProductSuggestion[];
   clarificationNeeded: boolean;
   questions: ClarificationQuestion[];
+  searchTier?: string;
+  learning?: LearningInfo;
 };
 
-/**
- * Detect likely category from bag context and user input
- * Returns array of detected categories for brand knowledge loading
- */
-function detectCategories(bagContext?: string, userInput?: string): string[] {
-  const categories: string[] = [];
-  const text = `${bagContext || ''} ${userInput || ''}`.toLowerCase();
+// =============================================================================
+// Category & Brand Detection
+// =============================================================================
 
-  // Category detection patterns
-  const categoryPatterns: Record<string, string[]> = {
-    golf: ['golf', 'driver', 'iron', 'wedge', 'putter', 'taylormade', 'callaway', 'titleist', 'ping', 'cobra', 'mizuno'],
-    makeup: ['makeup', 'beauty', 'cosmetic', 'lipstick', 'eyeshadow', 'foundation', 'mac', 'nars', 'fenty', 'dior'],
-    tech: ['tech', 'electronics', 'phone', 'laptop', 'tablet', 'airpods', 'apple', 'samsung', 'sony'],
-    fashion: ['fashion', 'clothing', 'shirt', 'pants', 'dress', 'jacket', 'nike', 'adidas', 'patagonia'],
-    outdoor: ['outdoor', 'camping', 'hiking', 'tent', 'sleeping bag', 'backpack', 'arc\'teryx', 'rei'],
-    photography: ['camera', 'lens', 'photography', 'photo', 'canon', 'nikon', 'sony'],
-    gaming: ['gaming', 'game', 'console', 'controller', 'playstation', 'xbox', 'nintendo'],
-    music: ['music', 'guitar', 'instrument', 'audio', 'speaker', 'fender', 'gibson'],
-    fitness: ['fitness', 'gym', 'workout', 'exercise', 'crossfit', 'sports'],
-    travel: ['travel', 'luggage', 'suitcase', 'bag'],
-    edc: ['edc', 'knife', 'flashlight', 'wallet', 'everyday carry'],
-  };
+const KNOWN_BRANDS: Record<string, Category> = {
+  // Golf
+  'taylormade': 'golf', 'callaway': 'golf', 'titleist': 'golf', 'ping': 'golf', 'cobra': 'golf',
+  'mizuno': 'golf', 'srixon': 'golf', 'cleveland': 'golf', 'bridgestone': 'golf', 'wilson': 'golf',
+  'vice golf': 'golf', 'kirkland': 'golf', 'bushnell': 'golf', 'garmin': 'golf', 'blue tees': 'golf',
+  'travis mathew': 'golf', 'g/fore': 'golf', 'peter millar': 'golf', 'greyson': 'golf',
+  // Makeup
+  'charlotte tilbury': 'makeup', 'mac': 'makeup', 'fenty beauty': 'makeup', 'rare beauty': 'makeup',
+  'nars': 'makeup', 'urban decay': 'makeup', 'too faced': 'makeup', 'tarte': 'makeup', 'benefit': 'makeup',
+  'glossier': 'makeup', 'clinique': 'makeup', 'elf': 'makeup', 'maybelline': 'makeup', 'rhode': 'makeup',
+  'summer fridays': 'makeup', 'drunk elephant': 'makeup', 'the ordinary': 'makeup', 'cerave': 'makeup',
+  // Tech
+  'apple': 'tech', 'samsung': 'tech', 'sony': 'tech', 'bose': 'tech', 'google': 'tech',
+  'microsoft': 'tech', 'dell': 'tech', 'lenovo': 'tech', 'asus': 'tech', 'lg': 'tech',
+  // Fashion
+  'nike': 'fashion', 'adidas': 'fashion', 'patagonia': 'fashion', 'north face': 'fashion',
+  'arc\'teryx': 'fashion', 'lululemon': 'fashion', 'under armour': 'fashion',
+  // EDC
+  'benchmade': 'edc', 'spyderco': 'edc', 'chris reeve': 'edc', 'leatherman': 'edc', 'victorinox': 'edc',
+  // Photography
+  'canon': 'photography', 'nikon': 'photography', 'fujifilm': 'photography', 'leica': 'photography',
+};
 
-  // Check each category's patterns
-  for (const [category, patterns] of Object.entries(categoryPatterns)) {
-    if (patterns.some(pattern => text.includes(pattern))) {
-      categories.push(category);
+function detectBrandAndCategory(query: string): { brand: string | null; category: Category | null } {
+  const queryLower = query.toLowerCase();
+
+  for (const [brand, category] of Object.entries(KNOWN_BRANDS)) {
+    if (queryLower.includes(brand)) {
+      return { brand, category };
     }
   }
 
-  return categories;
+  // Category-only detection
+  const categoryPatterns: Record<Category, string[]> = {
+    golf: ['driver', 'iron', 'wedge', 'putter', 'fairway', 'hybrid', 'golf', 'shaft', 'ball', 'grip', 'bag'],
+    makeup: ['lipstick', 'eyeshadow', 'foundation', 'mascara', 'blush', 'concealer', 'beauty'],
+    tech: ['phone', 'laptop', 'tablet', 'airpods', 'headphones', 'earbuds', 'speaker'],
+    fashion: ['shirt', 'pants', 'jacket', 'dress', 'shoes', 'sneakers'],
+    outdoor: ['tent', 'sleeping bag', 'backpack', 'camping', 'hiking'],
+    photography: ['camera', 'lens', 'flash', 'tripod'],
+    gaming: ['console', 'controller', 'playstation', 'xbox', 'nintendo'],
+    music: ['guitar', 'piano', 'drum', 'amp', 'instrument'],
+    fitness: ['dumbbell', 'kettlebell', 'treadmill', 'workout'],
+    travel: ['luggage', 'suitcase', 'carry-on'],
+    edc: ['knife', 'flashlight', 'wallet', 'pen'],
+  };
+
+  for (const [category, patterns] of Object.entries(categoryPatterns)) {
+    if (patterns.some(p => queryLower.includes(p))) {
+      return { brand: null, category: category as Category };
+    }
+  }
+
+  return { brand: null, category: null };
 }
 
-/**
- * POST /api/ai/enrich-item
- *
- * Generates product suggestions and clarification questions based on user input
- *
- * Body:
- * {
- *   userInput: string          // User's item description
- *   bagContext?: string        // Optional: bag title/category for context
- *   existingAnswers?: object   // Optional: answers from previous clarifications
- * }
- *
- * Returns:
- * {
- *   suggestions: ProductSuggestion[]       // 3-5 enriched product suggestions
- *   clarificationNeeded: boolean           // Whether to show questions
- *   questions: ClarificationQuestion[]     // Questions if needed
- * }
- */
-export async function POST(request: NextRequest) {
-  try {
-    const body: EnrichmentRequest = await request.json();
-    const { userInput, bagContext, existingAnswers = {} } = body;
+// =============================================================================
+// TIER 1: Product Library Search
+// =============================================================================
 
-    if (!userInput || userInput.trim().length === 0) {
-      return NextResponse.json(
-        { error: 'userInput is required' },
-        { status: 400 }
-      );
+async function searchProductLibrary(
+  query: string,
+  category: Category | null
+): Promise<{ results: SearchResult[]; relatedProducts: SearchResult[] }> {
+  console.log(`[enrich-item] TIER 1: Searching product library for "${query}"`);
+
+  let results = smartSearch(query, {
+    category: category || undefined,
+    limit: 10,
+  });
+
+  // If no results but we have a category, try broader search
+  let relatedProducts: SearchResult[] = [];
+
+  if (results.length === 0 && category) {
+    // Get related products from the same brand if detected
+    const { brand } = detectBrandAndCategory(query);
+    if (brand) {
+      const library = loadLibrary(category);
+      if (library) {
+        const brandProducts = getProductsByBrand(library, brand);
+        relatedProducts = brandProducts.slice(0, 5).map(p => ({
+          product: p,
+          confidence: 50,
+          matchReasons: [`Related ${brand} product`],
+        }));
+        console.log(`[enrich-item] Found ${relatedProducts.length} related products from ${brand}`);
+      }
     }
+  }
 
-    // Detect categories and load brand knowledge
-    const detectedCategories = detectCategories(bagContext, userInput);
-    let brandContext = '';
+  console.log(`[enrich-item] TIER 1 Results: ${results.length} exact matches, ${relatedProducts.length} related`);
+  return { results, relatedProducts };
+}
 
-    if (detectedCategories.length > 0) {
-      brandContext = generateBrandContext(detectedCategories, 'standard');
-      console.log(`[enrich-item] Loaded brand knowledge for: ${detectedCategories.join(', ')}`);
-    } else {
-      console.log('[enrich-item] No specific categories detected, proceeding without brand knowledge');
-    }
+// =============================================================================
+// TIER 2: AI with Web Search (for unknown/new products)
+// =============================================================================
 
-    // Build context for AI
-    let contextPrompt = '';
-    if (bagContext) {
-      contextPrompt += `Bag context: "${bagContext}"\n`;
-    }
-    if (Object.keys(existingAnswers).length > 0) {
-      contextPrompt += `User has answered:\n${JSON.stringify(existingAnswers, null, 2)}\n`;
-    }
+async function searchWithAI(
+  userInput: string,
+  bagContext: string | undefined,
+  existingAnswers: Record<string, string>,
+  category: Category | null,
+  brandContext: string
+): Promise<EnrichmentResponse> {
+  console.log(`[enrich-item] TIER 2: Using AI with web knowledge for "${userInput}"`);
 
-    const systemPrompt = `You are a product enrichment assistant for Teed, an app that helps users catalog their belongings.
+  const contextPrompt = bagContext ? `Bag context: "${bagContext}"\n` : '';
+  const answersPrompt = Object.keys(existingAnswers).length > 0
+    ? `User has answered:\n${JSON.stringify(existingAnswers, null, 2)}\n`
+    : '';
+
+  const systemPrompt = `You are a product enrichment assistant for Teed, an app that helps users catalog their belongings.
 ${brandContext}
-${brandContext ? `
-IMPORTANT: Use the Brand Knowledge Base above to:
-- Recognize brand-specific terminology and colorway names
-- Identify specific model names and variations
-- Use correct color terms (e.g., "Qi10 Blue" instead of just "blue")
-- Provide accurate product details based on brand signature features
-- Match visual cues and design elements to specific brands
 
-` : ''}
-Your job is to:
-1. Detect the product vertical (makeup/beauty, golf equipment, fashion, tech/EDC, outdoor/camping)
-2. Generate 3-5 specific product suggestions with enriched details
-3. Determine if clarification questions are needed
-4. Generate clarification questions if confidence is low
+CRITICAL: The user is searching for a product. You MUST provide suggestions even if the product is:
+- Very new (2024-2025 releases)
+- Uncommon or niche
+- Potentially misspelled
+
+YOUR #1 PRIORITY: ALWAYS RETURN AT LEAST 3-5 SUGGESTIONS. NEVER return empty suggestions.
+
+If you're not 100% sure about the product:
+1. Make your best guess based on the brand and product type
+2. Include similar/related products from the same brand
+3. Include variations that might match what they meant
 
 Product verticals and their SMART DEFAULT formatting:
 - Golf: custom_description = "Loft | Shaft | Flex" (e.g., "10.5° | Fujikura Ventus | Stiff")
 - Makeup: custom_description = "Shade | Finish | Size" (e.g., "Ruby Woo | Matte | 3g")
-- Fashion: custom_description = "Size | Color | Material" (e.g., "Medium | Black | 100% Cotton")
-- Tech: custom_description = "Storage | Key Feature | Connectivity" (e.g., "256GB | A17 Pro | USB-C")
-- Outdoor: custom_description = "Weight | Rating | Capacity" (e.g., "12.6oz | 20°F | 2-person")
+- Fashion: custom_description = "Size | Color | Material"
+- Tech: custom_description = "Storage | Key Feature | Connectivity"
+- Outdoor: custom_description = "Weight | Rating | Capacity"
 
 Format enriched details as:
 - brand: Brand name ONLY (e.g., "TaylorMade", "MAC", "Patagonia") - REQUIRED
-- custom_name: Product Name without brand (2-6 words, concise, e.g., "Stealth 2 Plus Driver")
-- custom_description: Formatted specs using pipe separator (adapt to available info, don't guess)
-- notes: Product differentiation, fun facts, or why this matters (2-3 sentences, be interesting!)
+- custom_name: Product Name without brand (2-6 words, concise)
+- custom_description: Formatted specs using pipe separator
+- notes: Product differentiation, fun facts, or why this matters (2-3 sentences)
+- funFactOptions: 3 different fun fact variations
 
 Confidence scoring:
-- 0.9+: Very confident, no questions needed
-- 0.7-0.89: Moderately confident, show suggestions but offer questions
-- <0.7: Low confidence, definitely need clarification
+- 0.9+: Very confident
+- 0.7-0.89: Moderately confident
+- <0.7: Low confidence but STILL PROVIDE SUGGESTIONS
 
-NOTES SHOULD BE INTERESTING AND USEFUL:
-- Include what makes this product special or different from competitors
-- Add fun facts, history, or unique features
-- Mention typical use cases or who it's for
-- Be enthusiastic but genuine - avoid generic marketing speak
-- 2-3 sentences max
-
-EXAMPLES OF GOOD NOTES:
-✅ "Tour-proven distance with revolutionary carbon face technology. Dustin Johnson used this exact model to win his first Masters. Perfect for high swing speeds looking to maximize ball speed."
-✅ "MAC's bestselling lipstick shade worn by everyone from Rihanna to your mom. The Retro Matte formula stays put for 8+ hours without drying. A true makeup icon since 1999."
-✅ "The gold standard for ultralight backpacking tents. Weighs less than 3 pounds yet survived a night on Everest. REI's most-returned item because people underestimate how small it packs."
-
-❌ "A good driver for golfers" - too generic!
-❌ "Quality lipstick" - boring!
-❌ "Nice tent" - useless!
+IMPORTANT FOR NEW/UNKNOWN PRODUCTS:
+- If you recognize the brand but not the exact model, return what you know about similar models
+- "Callaway Elyte" = 2025 Callaway driver line, if unknown use Paradym or Ai Smoke as similar suggestions
+- Always include at least one "exact match" attempt and several "similar products"
 
 Return ONLY valid JSON in this exact format:
 {
   "suggestions": [
     {
-      "brand": "TaylorMade",
-      "custom_name": "Stealth 2 Plus Driver",
-      "custom_description": "10.5° | Fujikura Ventus | Stiff",
-      "notes": "Revolutionary 60-layer carbon face is 24% lighter than titanium. Tour players saw 2mph more ball speed versus SIM2. Built for low-spin bombers who shape shots.",
+      "brand": "Callaway",
+      "custom_name": "Elyte Triple Diamond Driver",
+      "custom_description": "9° | Project X HZRDUS | Stiff",
+      "notes": "Callaway's 2025 flagship driver for low-spin, high-speed players. Designed for tour pros who shape shots.",
       "funFactOptions": [
-        "Revolutionary 60-layer carbon face is 24% lighter than titanium. Tour players saw 2mph more ball speed versus SIM2. Built for low-spin bombers who shape shots.",
-        "First carbon-faced driver to be legal by USGA/R&A. Tiger Woods won the 2023 Genesis Invitational with this exact model.",
-        "The Stealth name comes from the blackout finish that reduces glare. Carbon Twist Face tech maintains ball speed on mis-hits better than any previous TaylorMade driver."
+        "Callaway's 2025 tour-level driver with the lowest spin profile in their lineup.",
+        "The Triple Diamond designation indicates the tour-preferred, compact head shape.",
+        "Successor to the Paradym Triple Diamond, built for elite ball strikers."
       ],
       "category": "Golf Equipment",
-      "confidence": 0.85
+      "confidence": 0.75
     }
   ],
-  "clarificationNeeded": true,
-  "questions": [
-    {
-      "id": "type",
-      "question": "What type of [item]?",
-      "options": ["Option 1", "Option 2", "Option 3", "Other"]
-    }
-  ]
+  "clarificationNeeded": false,
+  "questions": []
 }
 
-IMPORTANT: Each suggestion MUST include funFactOptions array with 3 different fun fact variations.
-- First option: Technical/performance focused
-- Second option: Celebrity/tour player usage focused
-- Third option: Historical/innovation focused
+NEVER return empty suggestions. If unsure, make educated guesses based on brand and context.`;
 
-Order suggestions by confidence (highest first). Limit to max 2 questions.`;
+  const userPrompt = `${contextPrompt}${answersPrompt}User input: "${userInput}"
 
-    const userPrompt = `${contextPrompt}User input: "${userInput}"
+Generate product suggestions. Remember: ALWAYS return at least 3-5 suggestions, even if you have to guess.`;
 
-Generate product suggestions and determine if clarification is needed.`;
-
+  try {
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [
@@ -223,37 +250,251 @@ Generate product suggestions and determine if clarification is needed.`;
 
     const result: EnrichmentResponse = JSON.parse(responseText);
 
-    // Validate response structure
-    if (!result.suggestions || !Array.isArray(result.suggestions)) {
-      throw new Error('Invalid response format: missing suggestions array');
+    // Mark all as AI-sourced
+    result.suggestions = result.suggestions.map(s => ({ ...s, source: 'ai' as const }));
+
+    // Track products being learned for visual feedback
+    const productsBeingLearned: string[] = [];
+
+    // Learn high-confidence AI suggestions for future library lookups
+    for (const suggestion of result.suggestions) {
+      if (suggestion.confidence >= 0.75 && suggestion.brand && suggestion.custom_name) {
+        const productName = `${suggestion.brand} ${suggestion.custom_name}`;
+        productsBeingLearned.push(productName);
+
+        // Fire-and-forget learning - don't block the response
+        learnProduct({
+          brand: suggestion.brand,
+          name: suggestion.custom_name,
+          category: suggestion.category || 'golf',
+          description: suggestion.notes || suggestion.custom_description,
+          confidence: suggestion.confidence,
+          source: 'ai',
+          productUrl: suggestion.productUrl,
+          imageUrl: suggestion.imageUrl,
+        }).then(learnResult => {
+          if (learnResult.added) {
+            console.log(`[enrich-item] Learned: ${productName}`);
+          }
+        }).catch(err => {
+          console.error(`[enrich-item] Learning error:`, err);
+        });
+      }
     }
 
-    // Sort suggestions by confidence
-    result.suggestions.sort((a, b) => b.confidence - a.confidence);
+    // Add learning info to response
+    if (productsBeingLearned.length > 0) {
+      result.learning = {
+        isLearning: true,
+        productsBeingLearned,
+        message: productsBeingLearned.length === 1
+          ? `Learning "${productsBeingLearned[0]}" for faster lookups`
+          : `Learning ${productsBeingLearned.length} new products for faster lookups`,
+      };
+    }
 
-    // Determine if clarification is truly needed
-    const topConfidence = result.suggestions[0]?.confidence || 0;
-    result.clarificationNeeded = topConfidence < 0.9 && result.questions && result.questions.length > 0;
+    console.log(`[enrich-item] TIER 2 Results: ${result.suggestions.length} AI suggestions, ${productsBeingLearned.length} being learned`);
+    return result;
+  } catch (error) {
+    console.error('[enrich-item] TIER 2 Error:', error);
+    throw error;
+  }
+}
 
-    console.log('AI Enrichment Result:', {
-      input: userInput,
-      suggestionsCount: result.suggestions.length,
-      topConfidence,
-      clarificationNeeded: result.clarificationNeeded,
-      questionsCount: result.questions?.length || 0,
+// =============================================================================
+// TIER 3: Fallback - Always return SOMETHING
+// =============================================================================
+
+function generateFallbackSuggestions(
+  userInput: string,
+  brand: string | null,
+  category: Category | null
+): ProductSuggestion[] {
+  console.log(`[enrich-item] TIER 3: Generating fallback suggestions`);
+
+  const suggestions: ProductSuggestion[] = [];
+
+  // Create a suggestion based on what we know
+  if (brand) {
+    suggestions.push({
+      brand: brand.charAt(0).toUpperCase() + brand.slice(1),
+      custom_name: userInput.replace(new RegExp(brand, 'gi'), '').trim() || 'Product',
+      custom_description: 'Details to be added',
+      notes: `This appears to be a ${brand} product. Add more details to help identify it.`,
+      category: category || 'Other',
+      confidence: 0.3,
+      source: 'web',
     });
+  } else {
+    suggestions.push({
+      brand: 'Unknown',
+      custom_name: userInput,
+      custom_description: 'Details to be added',
+      notes: 'We couldn\'t find an exact match. You can add this item manually and we\'ll enrich it later.',
+      category: category || 'Other',
+      confidence: 0.2,
+      source: 'web',
+    });
+  }
 
-    return NextResponse.json(result);
+  return suggestions;
+}
+
+// =============================================================================
+// Convert Library Results to Suggestions
+// =============================================================================
+
+function libraryResultsToSuggestions(results: SearchResult[]): ProductSuggestion[] {
+  return results.map(r => ({
+    brand: r.product.brand,
+    custom_name: r.product.name,
+    custom_description: r.product.description || '',
+    notes: r.product.description || `${r.product.brand} ${r.product.name} - ${r.product.releaseYear}`,
+    category: r.product.category,
+    confidence: r.confidence / 100,
+    productUrl: r.product.productUrl,
+    imageUrl: r.product.referenceImages?.primary,
+    source: 'library' as const,
+    funFactOptions: [
+      `${r.product.brand} ${r.product.name} - Released in ${r.product.releaseYear}`,
+      `Part of ${r.product.brand}'s ${r.product.subcategory || 'lineup'}`,
+      r.product.description || `A quality ${r.product.category} product from ${r.product.brand}`,
+    ],
+  }));
+}
+
+// =============================================================================
+// Main Handler
+// =============================================================================
+
+export async function POST(request: NextRequest) {
+  try {
+    const body: EnrichmentRequest = await request.json();
+    const { userInput, bagContext, existingAnswers = {}, forceAI = false } = body;
+
+    if (!userInput || userInput.trim().length === 0) {
+      return NextResponse.json(
+        { error: 'userInput is required' },
+        { status: 400 }
+      );
+    }
+
+    console.log(`[enrich-item] Processing: "${userInput}"`);
+
+    // Detect brand and category
+    const { brand, category } = detectBrandAndCategory(userInput);
+    console.log(`[enrich-item] Detected brand: ${brand}, category: ${category}`);
+
+    // Load brand context for AI
+    const brandContext = category
+      ? generateBrandContext([category], 'standard')
+      : '';
+
+    // TIER 1: Search product library
+    const { results: libraryResults, relatedProducts } = await searchProductLibrary(userInput, category);
+
+    // Check if we have an EXACT match (confidence > 85%)
+    const exactMatches = libraryResults.filter(r => r.confidence > 85);
+
+    // If we have exact matches and forceAI is NOT set, return them without AI
+    if (exactMatches.length >= 1 && !forceAI) {
+      console.log(`[enrich-item] Using TIER 1 exact matches (${exactMatches.length} matches)`);
+
+      const suggestions = libraryResultsToSuggestions(exactMatches.slice(0, 5));
+
+      return NextResponse.json({
+        suggestions,
+        clarificationNeeded: false,
+        questions: [],
+        searchTier: 'library',
+      });
+    }
+
+    // Log if forceAI is being used
+    if (forceAI) {
+      console.log(`[enrich-item] forceAI=true, skipping library-only results`);
+    }
+
+    // If we have partial matches but no exact match, we'll still call AI
+    // to try to identify unknown products (like "Elyte" which is 2025)
+    const hasPartialMatches = libraryResults.length > 0;
+
+    // TIER 2: Use AI for enrichment (especially for new/unknown products)
+    try {
+      const aiResult = await searchWithAI(userInput, bagContext, existingAnswers, category, brandContext);
+
+      // Merge library results with AI results
+      const librarysuggestions = libraryResultsToSuggestions(libraryResults);
+      const mergedSuggestions = [...librarysuggestions, ...aiResult.suggestions];
+
+      // Deduplicate by brand + name
+      const seen = new Set<string>();
+      const uniqueSuggestions = mergedSuggestions.filter(s => {
+        const key = `${s.brand.toLowerCase()}-${s.custom_name.toLowerCase()}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+
+      // Sort by confidence
+      uniqueSuggestions.sort((a, b) => b.confidence - a.confidence);
+
+      // If still no results, add related products
+      if (uniqueSuggestions.length === 0 && relatedProducts.length > 0) {
+        console.log(`[enrich-item] Adding ${relatedProducts.length} related products`);
+        uniqueSuggestions.push(...libraryResultsToSuggestions(relatedProducts));
+      }
+
+      // TIER 3: Last resort fallback
+      if (uniqueSuggestions.length === 0) {
+        console.log(`[enrich-item] Using TIER 3 fallback`);
+        const fallbackSuggestions = generateFallbackSuggestions(userInput, brand, category);
+        uniqueSuggestions.push(...fallbackSuggestions);
+      }
+
+      console.log(`[enrich-item] Final result: ${uniqueSuggestions.length} suggestions`);
+
+      return NextResponse.json({
+        suggestions: uniqueSuggestions.slice(0, 5),
+        clarificationNeeded: aiResult.clarificationNeeded,
+        questions: aiResult.questions || [],
+        searchTier: libraryResults.length > 0 ? 'library+ai' : 'ai',
+        learning: aiResult.learning,
+      });
+    } catch (aiError) {
+      console.error('[enrich-item] AI failed, using fallback:', aiError);
+
+      // If AI fails, return library results + fallback
+      const suggestions = [
+        ...libraryResultsToSuggestions(libraryResults),
+        ...libraryResultsToSuggestions(relatedProducts),
+        ...generateFallbackSuggestions(userInput, brand, category),
+      ];
+
+      return NextResponse.json({
+        suggestions: suggestions.slice(0, 5),
+        clarificationNeeded: false,
+        questions: [],
+        searchTier: 'fallback',
+      });
+    }
   } catch (error) {
     console.error('Error in AI enrichment:', error);
 
-    // Return a fallback response
-    return NextResponse.json(
-      {
-        error: 'Failed to generate suggestions',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    );
+    // Even on total failure, return something useful
+    return NextResponse.json({
+      suggestions: [{
+        brand: 'Manual Entry',
+        custom_name: 'Add your item',
+        custom_description: 'Enter details manually',
+        notes: 'We couldn\'t process your request automatically. Please add details manually.',
+        category: 'Other',
+        confidence: 0.1,
+        source: 'web',
+      }],
+      clarificationNeeded: false,
+      questions: [],
+      searchTier: 'error',
+    });
   }
 }

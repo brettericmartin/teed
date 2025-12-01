@@ -1,0 +1,18 @@
+{
+  "executionId": "exec-20251130-040934",
+  "startedAt": "2025-11-30T04:09:34.110Z",
+  "lastUpdatedAt": "2025-11-30T04:20:40.127Z",
+  "phase": "completed",
+  "provider": "openai",
+  "config": {
+    "concurrency": 3,
+    "categories": [
+      "edc"
+    ]
+  },
+  "metrics": {
+    "totalProducts": 756,
+    "totalVariants": 871,
+    "tokensUsed": 270749
+  }
+}

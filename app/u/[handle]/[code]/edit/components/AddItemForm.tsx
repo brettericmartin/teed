@@ -17,6 +17,12 @@ type ClarificationQuestion = {
   options: string[];
 };
 
+type LearningInfo = {
+  isLearning: boolean;
+  productsBeingLearned: string[];
+  message?: string;
+};
+
 type AddItemFormProps = {
   onSubmit: (data: {
     custom_name: string;
@@ -41,9 +47,11 @@ export default function AddItemForm({ onSubmit, onCancel, bagTitle }: AddItemFor
   const [clarificationNeeded, setClarificationNeeded] = useState(false);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const [existingAnswers, setExistingAnswers] = useState<Record<string, string>>({});
+  const [learningInfo, setLearningInfo] = useState<LearningInfo | null>(null);
+  const [searchTier, setSearchTier] = useState<'library' | 'library+ai' | 'ai' | 'fallback' | 'error' | undefined>();
 
   // Fetch AI suggestions with debounce
-  const fetchSuggestions = useCallback(async (input: string, answers: Record<string, string> = {}) => {
+  const fetchSuggestions = useCallback(async (input: string, answers: Record<string, string> = {}, forceAI: boolean = false) => {
     if (input.trim().length < 2) {
       setSuggestions([]);
       setQuestions([]);
@@ -61,6 +69,7 @@ export default function AddItemForm({ onSubmit, onCancel, bagTitle }: AddItemFor
           userInput: input,
           bagContext: bagTitle,
           existingAnswers: answers,
+          forceAI,
         }),
       });
 
@@ -69,6 +78,14 @@ export default function AddItemForm({ onSubmit, onCancel, bagTitle }: AddItemFor
         setSuggestions(data.suggestions || []);
         setQuestions(data.questions || []);
         setClarificationNeeded(data.clarificationNeeded || false);
+        setSearchTier(data.searchTier);
+
+        // Handle learning info
+        if (data.learning?.isLearning) {
+          setLearningInfo(data.learning);
+          // Clear learning message after 4 seconds
+          setTimeout(() => setLearningInfo(null), 4000);
+        }
       } else {
         console.error('Failed to fetch suggestions');
         setSuggestions([]);
@@ -131,6 +148,21 @@ export default function AddItemForm({ onSubmit, onCancel, bagTitle }: AddItemFor
   const handleAnswerQuestion = (answers: Record<string, string>) => {
     setExistingAnswers(answers);
     fetchSuggestions(name, answers);
+  };
+
+  // Force AI search when user clicks "None of these"
+  const handleForceAI = () => {
+    if (name.trim().length >= 2) {
+      fetchSuggestions(name, existingAnswers, true);
+    }
+  };
+
+  // Allow user to manually add the item (dismiss suggestions)
+  const handleAddManually = () => {
+    setSuggestions([]);
+    setQuestions([]);
+    setClarificationNeeded(false);
+    // Focus stays on form for manual entry
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -200,7 +232,21 @@ export default function AddItemForm({ onSubmit, onCancel, bagTitle }: AddItemFor
                 onSelectSuggestion={handleSelectSuggestion}
                 onAnswerQuestion={handleAnswerQuestion}
                 isLoading={isLoadingSuggestions}
+                searchTier={searchTier}
+                onForceAI={handleForceAI}
+                onAddManually={handleAddManually}
               />
+            </div>
+          )}
+
+          {/* Learning Notification */}
+          {learningInfo && (
+            <div className="mt-2 flex items-center gap-2 text-xs text-emerald-600 bg-emerald-50 px-3 py-2 rounded-lg animate-pulse">
+              <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>{learningInfo.message}</span>
             </div>
           )}
         </div>

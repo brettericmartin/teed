@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Share2, ExternalLink, User, X, Package, Trophy, Copy, CheckCheck, ChevronDown, Tag } from 'lucide-react';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import QRCodeDisplay from '@/components/ui/QRCodeDisplay';
+import PublicShareModal from './PublicShareModal';
 
 interface ItemLink {
   id: string;
@@ -62,6 +64,7 @@ export default function PublicBagView({
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [copiedPromoId, setCopiedPromoId] = useState<string | null>(null);
   const [expandedLinks, setExpandedLinks] = useState<Set<string>>(new Set());
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
 
@@ -124,21 +127,8 @@ export default function PublicBagView({
     trackView();
   }, [bag.id, bag.code, ownerHandle]);
 
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: bag.title,
-          text: bag.description || `Check out ${ownerName}'s ${bag.title} on Teed`,
-          url: shareUrl,
-        });
-      } catch (err) {
-        console.log('Share cancelled');
-      }
-    } else {
-      navigator.clipboard.writeText(shareUrl);
-      alert('Link copied to clipboard!');
-    }
+  const handleShare = () => {
+    setIsShareModalOpen(true);
   };
 
   // Track link click
@@ -187,7 +177,7 @@ export default function PublicBagView({
             showHome={false}
           />
 
-          <div className="flex items-start justify-between mt-4">
+          <div className="flex flex-col md:flex-row items-start justify-between gap-6 mt-4">
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
                 <h1 className="text-[var(--font-size-9)] font-semibold text-[var(--text-primary)]">
@@ -231,6 +221,29 @@ export default function PublicBagView({
                 </div>
               )}
             </div>
+
+            {/* QR Code Section */}
+            <div className="flex-shrink-0 hidden md:block">
+              <QRCodeDisplay
+                url={shareUrl}
+                size={100}
+                downloadable={true}
+                label="Scan to view"
+                downloadFileName={`${ownerHandle}-${bag.code}-qr`}
+                compact={true}
+              />
+            </div>
+          </div>
+
+          {/* Mobile QR Code */}
+          <div className="mt-6 flex justify-center md:hidden">
+            <QRCodeDisplay
+              url={shareUrl}
+              size={120}
+              downloadable={true}
+              label="Scan to view this bag"
+              downloadFileName={`${ownerHandle}-${bag.code}-qr`}
+            />
           </div>
         </div>
       </div>
@@ -665,6 +678,16 @@ export default function PublicBagView({
           </div>
         </div>
       </div>
+
+      {/* Share Modal */}
+      <PublicShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        bagCode={bag.code}
+        bagTitle={bag.title}
+        ownerHandle={ownerHandle}
+        ownerName={ownerName}
+      />
     </div>
   );
 }

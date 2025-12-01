@@ -35,9 +35,9 @@ export default function ShareModal({
     }
   }, [bagCode, ownerHandle]);
 
-  // Generate QR code when URL changes
+  // Generate QR code when URL changes or modal opens
   useEffect(() => {
-    if (shareUrl && canvasRef.current) {
+    if (shareUrl && canvasRef.current && isOpen) {
       QRCode.toCanvas(
         canvasRef.current,
         shareUrl,
@@ -67,7 +67,7 @@ export default function ShareModal({
         }
       );
     }
-  }, [shareUrl]);
+  }, [shareUrl, isOpen]);
 
   if (!isOpen) return null;
 

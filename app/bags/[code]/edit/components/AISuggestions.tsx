@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type ProductSuggestion = {
   custom_name: string;
@@ -8,6 +8,7 @@ type ProductSuggestion = {
   notes: string;
   category: string;
   confidence: number;
+  source?: 'library' | 'ai' | 'web';
 };
 
 type ClarificationQuestion = {
@@ -23,7 +24,16 @@ type AISuggestionsProps = {
   onSelectSuggestion: (suggestion: ProductSuggestion) => void;
   onAnswerQuestion: (answers: Record<string, string>) => void;
   isLoading?: boolean;
+  searchTier?: 'library' | 'library+ai' | 'ai' | 'fallback' | 'error';
+  onForceAI?: () => void; // Trigger AI search when "None of these" is clicked
+  onAddManually?: () => void; // Allow user to add item manually
 };
+
+// Staged loading messages
+const LOADING_STAGES = [
+  { message: 'Searching library...', icon: '📚', duration: 400 },
+  { message: 'Using AI to identify...', icon: '🤖', duration: 2000 },
+];
 
 export default function AISuggestions({
   suggestions,
@@ -32,9 +42,29 @@ export default function AISuggestions({
   onSelectSuggestion,
   onAnswerQuestion,
   isLoading = false,
+  searchTier,
+  onForceAI,
+  onAddManually,
 }: AISuggestionsProps) {
   const [showClarification, setShowClarification] = useState(false);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [loadingStage, setLoadingStage] = useState(0);
+
+  // Progress through loading stages
+  useEffect(() => {
+    if (!isLoading) {
+      setLoadingStage(0);
+      return;
+    }
+
+    // Move to next stage after delay
+    if (loadingStage < LOADING_STAGES.length - 1) {
+      const timer = setTimeout(() => {
+        setLoadingStage(prev => prev + 1);
+      }, LOADING_STAGES[loadingStage].duration);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading, loadingStage]);
 
   const handleAnswerChange = (questionId: string, answer: string) => {
     const newAnswers = { ...answers, [questionId]: answer };
@@ -48,10 +78,51 @@ export default function AISuggestions({
   };
 
   if (isLoading) {
+    const currentStage = LOADING_STAGES[loadingStage];
     return (
       <div className="space-y-3">
-        <div className="text-sm text-gray-600 mb-2">AI is thinking...</div>
-        {[1, 2, 3].map((i) => (
+        {/* Progress indicator */}
+        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+          <div className="flex items-center gap-2">
+            {LOADING_STAGES.map((stage, idx) => (
+              <div
+                key={idx}
+                className={`flex items-center gap-1.5 text-xs font-medium transition-all duration-300 ${
+                  idx < loadingStage
+                    ? 'text-emerald-600'
+                    : idx === loadingStage
+                    ? 'text-blue-600'
+                    : 'text-gray-400'
+                }`}
+              >
+                <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs ${
+                  idx < loadingStage
+                    ? 'bg-emerald-100'
+                    : idx === loadingStage
+                    ? 'bg-blue-100 animate-pulse'
+                    : 'bg-gray-100'
+                }`}>
+                  {idx < loadingStage ? '✓' : stage.icon}
+                </span>
+                <span className="hidden sm:inline">{stage.message.replace('...', '')}</span>
+                {idx < LOADING_STAGES.length - 1 && (
+                  <span className={`w-8 h-0.5 mx-1 ${
+                    idx < loadingStage ? 'bg-emerald-300' : 'bg-gray-200'
+                  }`} />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Current stage message (mobile) */}
+        <div className="sm:hidden text-sm text-gray-600 flex items-center gap-2">
+          <span className="animate-pulse">{currentStage.icon}</span>
+          {currentStage.message}
+        </div>
+
+        {/* Loading skeletons */}
+        {[1, 2].map((i) => (
           <div
             key={i}
             className="p-4 border border-gray-200 rounded-lg bg-gray-50 animate-pulse"
@@ -68,42 +139,115 @@ export default function AISuggestions({
     return null;
   }
 
+  // Get tier label
+  const getTierLabel = () => {
+    switch (searchTier) {
+      case 'library':
+        return { text: 'Found in library', icon: '📚', color: 'text-emerald-600 bg-emerald-50' };
+      case 'library+ai':
+        return { text: 'Library + AI', icon: '📚🤖', color: 'text-blue-600 bg-blue-50' };
+      case 'ai':
+        return { text: 'AI identified', icon: '🤖', color: 'text-purple-600 bg-purple-50' };
+      case 'fallback':
+        return { text: 'Best guess', icon: '❓', color: 'text-amber-600 bg-amber-50' };
+      default:
+        return null;
+    }
+  };
+
+  const getSourceBadge = (source?: 'library' | 'ai' | 'web') => {
+    switch (source) {
+      case 'library':
+        return { text: 'Library', color: 'bg-emerald-100 text-emerald-700' };
+      case 'ai':
+        return { text: 'AI', color: 'bg-purple-100 text-purple-700' };
+      case 'web':
+        return { text: 'Web', color: 'bg-amber-100 text-amber-700' };
+      default:
+        return null;
+    }
+  };
+
+  const tierInfo = getTierLabel();
+
   return (
     <div className="space-y-3">
-      <div className="text-sm text-gray-600">
-        AI Suggestions (click to add):
+      <div className="flex items-center justify-between">
+        <div className="text-sm text-gray-600">
+          Suggestions (click to add):
+        </div>
+        {tierInfo && (
+          <span className={`text-xs px-2 py-1 rounded-full font-medium ${tierInfo.color}`}>
+            {tierInfo.icon} {tierInfo.text}
+          </span>
+        )}
       </div>
 
       {/* Suggestions */}
       <div className="space-y-2">
-        {suggestions.map((suggestion, index) => (
-          <button
-            key={index}
-            onClick={() => onSelectSuggestion(suggestion)}
-            className="w-full text-left p-4 border-2 border-gray-200 rounded-lg hover:border-[var(--sky-6)] hover:bg-[var(--sky-2)] transition-all group"
-          >
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <div className="font-semibold text-gray-900 group-hover:text-[var(--sky-11)]">
-                  {suggestion.custom_name}
-                </div>
-                <div className="text-sm text-gray-600 mt-1">
-                  {suggestion.custom_description}
-                </div>
-                {suggestion.notes && (
-                  <div className="text-xs text-gray-500 mt-2 italic">
-                    {suggestion.notes}
+        {suggestions.map((suggestion, index) => {
+          const sourceBadge = getSourceBadge(suggestion.source);
+          return (
+            <button
+              key={index}
+              onClick={() => onSelectSuggestion(suggestion)}
+              className="w-full text-left p-4 border-2 border-gray-200 rounded-lg hover:border-[var(--sky-6)] hover:bg-[var(--sky-2)] transition-all group"
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-gray-900 group-hover:text-[var(--sky-11)]">
+                      {suggestion.custom_name}
+                    </span>
+                    {sourceBadge && (
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${sourceBadge.color}`}>
+                        {sourceBadge.text}
+                      </span>
+                    )}
                   </div>
-                )}
+                  <div className="text-sm text-gray-600 mt-1">
+                    {suggestion.custom_description}
+                  </div>
+                  {suggestion.notes && (
+                    <div className="text-xs text-gray-500 mt-2 italic">
+                      {suggestion.notes}
+                    </div>
+                  )}
+                </div>
+                <div className="ml-3 flex-shrink-0">
+                  <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700">
+                    {suggestion.category}
+                  </span>
+                </div>
               </div>
-              <div className="ml-3 flex-shrink-0">
-                <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700">
-                  {suggestion.category}
-                </span>
-              </div>
-            </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* "None of these" and "Add manually" buttons */}
+      <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-100">
+        {/* Show "None of these - Try AI" when we're in library-only mode */}
+        {searchTier === 'library' && onForceAI && (
+          <button
+            onClick={onForceAI}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors"
+          >
+            <span>🤖</span>
+            <span>None of these? Try AI</span>
           </button>
-        ))}
+        )}
+
+        {/* Always show manual add option */}
+        {onAddManually && (
+          <button
+            onClick={onAddManually}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <span>✏️</span>
+            <span>Add manually</span>
+          </button>
+        )}
       </div>
 
       {/* Clarification Toggle */}
@@ -113,7 +257,7 @@ export default function AISuggestions({
             onClick={() => setShowClarification(!showClarification)}
             className="w-full text-center py-2 px-4 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors"
           >
-            {showClarification ? '▲ Hide questions' : "▼ None of these? Tell us more"}
+            {showClarification ? '▲ Hide questions' : "▼ Tell us more to refine suggestions"}
           </button>
 
           {/* Clarification Questions */}

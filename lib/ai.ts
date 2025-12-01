@@ -1,5 +1,11 @@
 import { openai } from './openaiClient';
 import { generateBrandContext, loadCategoryKnowledge } from './brandKnowledge';
+import {
+  generateProductLibraryContext,
+  matchAgainstLibrary,
+  type LibraryMatchResult,
+} from './productLibrary/integration';
+import type { Category } from './productLibrary/schema';
 
 /**
  * Best Practice: Define TypeScript interfaces for all AI responses
@@ -278,8 +284,15 @@ Rules:
  */
 export async function identifyProductsInImage(
   imageBase64: string,
-  context?: { bagType?: string; expectedCategories?: string[]; focusCategories?: string[]; skipCategoryDetection?: boolean }
-): Promise<VisionAnalysisResult> {
+  context?: {
+    bagType?: string;
+    expectedCategories?: string[];
+    focusCategories?: string[];
+    skipCategoryDetection?: boolean;
+    useProductLibrary?: boolean;
+    validateAgainstLibrary?: boolean;
+  }
+): Promise<VisionAnalysisResult & { libraryMatches?: LibraryMatchResult[] }> {
   const startTime = Date.now();
 
   // Best Practice: Validate input before expensive API call
@@ -301,6 +314,24 @@ export async function identifyProductsInImage(
       if (detectedCategories.length > 0) {
         brandContext = generateBrandContext(detectedCategories, 'standard');
         console.log(`[Stage 2] Loaded brand knowledge for: ${detectedCategories.join(', ')}`);
+
+        // Also load product library context if enabled
+        if (context?.useProductLibrary) {
+          const libraryCategories = detectedCategories.filter(
+            (c): c is Category =>
+              ['golf', 'tech', 'fashion', 'makeup', 'outdoor', 'photography', 'gaming', 'music', 'fitness', 'travel', 'edc'].includes(c)
+          );
+          if (libraryCategories.length > 0) {
+            const libraryContext = generateProductLibraryContext(libraryCategories, {
+              maxProductsPerCategory: 15,
+              includeVariants: false,
+            });
+            if (libraryContext.productContext) {
+              brandContext += '\n' + libraryContext.productContext;
+              console.log(`[Stage 2] Added ${libraryContext.productCount} products from library`);
+            }
+          }
+        }
       }
     } catch (error) {
       console.warn('[Stage 1] Category detection failed, proceeding without brand context:', error);
@@ -581,11 +612,27 @@ Requirements:
       warnings.push(`Large image (${validation.sizeKB}KB) - consider compressing`);
     }
 
+    // Optional: Validate against product library
+    let libraryMatches: LibraryMatchResult[] | undefined;
+    if (context?.validateAgainstLibrary && productsWithImages.length > 0) {
+      try {
+        libraryMatches = matchAgainstLibrary(productsWithImages, {
+          confidenceThreshold: 60,
+          autoCorrect: true,
+        });
+        const validatedCount = libraryMatches.filter(m => m.validated).length;
+        console.log(`[Library] Validated ${validatedCount}/${productsWithImages.length} products against catalog`);
+      } catch (error) {
+        console.warn('[Library] Validation failed:', error);
+      }
+    }
+
     return {
       products: productsWithImages,
       totalConfidence,
       processingTime,
       warnings: warnings.length > 0 ? warnings : undefined,
+      libraryMatches,
     };
   } catch (error: any) {
     // Best Practice: Detailed error logging for debugging

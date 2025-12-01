@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Check, Edit2, X } from 'lucide-react';
+import { Check, Edit2, X, Sparkles } from 'lucide-react';
 
 type ProductSuggestion = {
   custom_name: string;
@@ -25,18 +25,56 @@ type ItemPreviewProps = {
 export default function ItemPreview({ suggestion, onConfirm, onCancel }: ItemPreviewProps) {
   const [editedSuggestion, setEditedSuggestion] = useState<ProductSuggestion>(suggestion);
   const [isEditing, setIsEditing] = useState(false);
-  const [selectedFactIndex, setSelectedFactIndex] = useState(0);
+  const [selectedFactIndex, setSelectedFactIndex] = useState<number | null>(null); // null = no fact selected
+  const [showFactOptions, setShowFactOptions] = useState(false);
+  const [isGeneratingFacts, setIsGeneratingFacts] = useState(false);
+  const [customNote, setCustomNote] = useState('');
 
   const handleConfirm = () => {
-    // Use the selected fun fact as the notes
+    // Use selected fun fact, custom note, or empty
+    let notes = '';
+    if (selectedFactIndex !== null && editedSuggestion.funFactOptions?.[selectedFactIndex]) {
+      notes = editedSuggestion.funFactOptions[selectedFactIndex];
+    } else if (customNote.trim()) {
+      notes = customNote.trim();
+    }
+
     const finalSuggestion = {
       ...editedSuggestion,
-      notes: editedSuggestion.funFactOptions?.[selectedFactIndex] || editedSuggestion.notes,
+      notes,
     };
     onConfirm(finalSuggestion);
   };
 
-  const hasFunFactOptions = editedSuggestion.funFactOptions && editedSuggestion.funFactOptions.length > 1;
+  const generateFunFacts = async () => {
+    setIsGeneratingFacts(true);
+    try {
+      const response = await fetch('/api/ai/generate-fun-facts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          brand: editedSuggestion.brand,
+          productName: editedSuggestion.custom_name,
+          category: editedSuggestion.category,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setEditedSuggestion({
+          ...editedSuggestion,
+          funFactOptions: data.funFacts || [],
+        });
+        setShowFactOptions(true);
+      }
+    } catch (error) {
+      console.error('Failed to generate fun facts:', error);
+    } finally {
+      setIsGeneratingFacts(false);
+    }
+  };
+
+  const hasFunFactOptions = editedSuggestion.funFactOptions && editedSuggestion.funFactOptions.length > 0;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
@@ -128,75 +166,98 @@ export default function ItemPreview({ suggestion, onConfirm, onCancel }: ItemPre
             )}
           </div>
 
-          {/* Fun Facts Selection */}
-          {hasFunFactOptions && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Choose Your Favorite Fun Fact
-                <span className="text-xs text-gray-500 ml-2">
-                  ({editedSuggestion.funFactOptions?.length} options)
-                </span>
-              </label>
-              <div className="space-y-3">
-                {editedSuggestion.funFactOptions?.map((fact, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedFactIndex(index)}
-                    className={`w-full text-left p-4 border-2 rounded-lg transition-all ${
-                      selectedFactIndex === index
-                        ? 'border-blue-500 bg-blue-50'
-                        : 'border-gray-200 hover:border-gray-300 bg-white'
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div
-                        className={`flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center mt-0.5 ${
-                          selectedFactIndex === index
-                            ? 'border-blue-500 bg-blue-500'
-                            : 'border-gray-300'
-                        }`}
-                      >
-                        {selectedFactIndex === index && (
-                          <Check className="w-3 h-3 text-white" />
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <div className="text-xs font-medium text-gray-500 mb-1">
-                          {index === 0 && '⚡ Technical/Performance'}
-                          {index === 1 && '⭐ Celebrity/Tour Usage'}
-                          {index === 2 && '📚 Historical/Innovation'}
-                        </div>
-                        <p className="text-sm text-gray-700 leading-relaxed">{fact}</p>
-                      </div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+          {/* Notes Section - Optional */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Notes
+              <span className="text-xs text-gray-400 ml-2">(optional)</span>
+            </label>
 
-          {/* Single Note (no options) */}
-          {!hasFunFactOptions && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Notes / Fun Facts
-              </label>
-              {isEditing ? (
-                <textarea
-                  value={editedSuggestion.notes}
-                  onChange={(e) =>
-                    setEditedSuggestion({ ...editedSuggestion, notes: e.target.value })
-                  }
-                  rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              ) : (
-                <div className="px-4 py-3 bg-gray-50 rounded-lg text-sm text-gray-700 leading-relaxed">
-                  {editedSuggestion.notes || 'No notes provided'}
+            {/* Custom note input */}
+            <textarea
+              value={customNote}
+              onChange={(e) => setCustomNote(e.target.value)}
+              placeholder="Add your own notes about this item..."
+              rows={2}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-3"
+            />
+
+            {/* AI Generate button or Fun Fact options */}
+            {!showFactOptions && !hasFunFactOptions ? (
+              <button
+                onClick={generateFunFacts}
+                disabled={isGeneratingFacts}
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors disabled:opacity-50"
+              >
+                {isGeneratingFacts ? (
+                  <>
+                    <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4" />
+                    Generate AI Fun Fact
+                  </>
+                )}
+              </button>
+            ) : hasFunFactOptions && (showFactOptions || selectedFactIndex !== null) ? (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-medium text-gray-600">
+                    Or choose an AI-generated fact:
+                  </p>
+                  {selectedFactIndex !== null && (
+                    <button
+                      onClick={() => setSelectedFactIndex(null)}
+                      className="text-xs text-gray-500 hover:text-gray-700"
+                    >
+                      Clear selection
+                    </button>
+                  )}
                 </div>
-              )}
-            </div>
-          )}
+                <div className="space-y-2">
+                  {editedSuggestion.funFactOptions?.map((fact, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedFactIndex(selectedFactIndex === index ? null : index)}
+                      className={`w-full text-left p-3 border-2 rounded-lg transition-all text-sm ${
+                        selectedFactIndex === index
+                          ? 'border-purple-500 bg-purple-50'
+                          : 'border-gray-200 hover:border-gray-300 bg-white'
+                      }`}
+                    >
+                      <div className="flex items-start gap-2">
+                        <div
+                          className={`flex-shrink-0 w-4 h-4 rounded-full border-2 flex items-center justify-center mt-0.5 ${
+                            selectedFactIndex === index
+                              ? 'border-purple-500 bg-purple-500'
+                              : 'border-gray-300'
+                          }`}
+                        >
+                          {selectedFactIndex === index && (
+                            <Check className="w-2.5 h-2.5 text-white" />
+                          )}
+                        </div>
+                        <p className="text-gray-700 leading-relaxed">{fact}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : hasFunFactOptions ? (
+              <button
+                onClick={() => setShowFactOptions(true)}
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors"
+              >
+                <Sparkles className="w-4 h-4" />
+                Show AI Fun Facts ({editedSuggestion.funFactOptions?.length})
+              </button>
+            ) : null}
+          </div>
 
           {/* Category */}
           <div>
