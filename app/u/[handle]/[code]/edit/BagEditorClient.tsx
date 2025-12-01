@@ -1463,6 +1463,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 };
 
                 // Create the item first (include photo_url if we have an image)
+                console.log('[QuickAddItem] Creating item with photo_url:', suggestion.imageUrl);
                 const response = await fetch(`/api/bags/${bag.code}/items`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },

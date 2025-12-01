@@ -54,6 +54,7 @@ export async function POST(
 
     // Parse request body
     const body = await request.json();
+    console.log('[Items API] Received body:', JSON.stringify(body, null, 2));
     const {
       custom_name,
       custom_description,
@@ -64,6 +65,7 @@ export async function POST(
       custom_photo_id,
       photo_url,
     } = body;
+    console.log('[Items API] Extracted photo_url:', photo_url);
 
     // Validate required fields
     if (!custom_name || typeof custom_name !== 'string' || custom_name.trim().length === 0) {
@@ -109,6 +111,8 @@ export async function POST(
         { status: 500 }
       );
     }
+
+    console.log('[Items API] Created item with photo_url:', item?.photo_url);
 
     // Update bag's updated_at timestamp
     await supabase
