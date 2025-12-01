@@ -1482,6 +1482,8 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 }
 
                 const newItem = await response.json();
+                console.log('[QuickAddItem] API returned item:', newItem);
+                console.log('[QuickAddItem] API returned photo_url:', newItem.photo_url);
                 let finalPhotoUrl = newItem.photo_url;
 
                 // If there's a product URL from scraping, add it as a link
