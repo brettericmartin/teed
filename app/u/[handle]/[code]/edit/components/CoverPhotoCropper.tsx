@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Cropper from 'react-easy-crop';
-import { X, Check, RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';
+import { X, Check, RotateCcw, ZoomIn, ZoomOut, Monitor, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
 type Area = {
@@ -17,6 +17,15 @@ type CoverPhotoCropperProps = {
   onComplete: (croppedBlob: Blob) => void;
   onCancel: () => void;
 };
+
+// Aspect ratios matching PublicBagView
+const ASPECT_RATIOS = {
+  desktop: 3 / 1,    // 3:1 for desktop
+  mobile: 21 / 9,    // 21:9 for mobile
+};
+
+// We'll crop at the mobile ratio (taller) to ensure full coverage on both
+const CROP_ASPECT = ASPECT_RATIOS.mobile;
 
 // Helper function to create a cropped image from the original
 async function getCroppedImg(imageSrc: string, pixelCrop: Area): Promise<Blob> {
@@ -67,6 +76,20 @@ async function getCroppedImg(imageSrc: string, pixelCrop: Area): Promise<Blob> {
   });
 }
 
+// Generate a preview URL from the cropped area
+function getPreviewStyle(imageSrc: string, crop: { x: number; y: number }, zoom: number) {
+  // Calculate background position based on crop
+  const offsetX = -crop.x * zoom;
+  const offsetY = -crop.y * zoom;
+
+  return {
+    backgroundImage: `url(${imageSrc})`,
+    backgroundSize: `${zoom * 100}%`,
+    backgroundPosition: `${offsetX}px ${offsetY}px`,
+    backgroundRepeat: 'no-repeat',
+  };
+}
+
 export default function CoverPhotoCropper({
   imageSrc,
   onComplete,
@@ -75,10 +98,42 @@ export default function CoverPhotoCropper({
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+  const [croppedArea, setCroppedArea] = useState<Area | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  const onCropComplete = useCallback((_croppedArea: Area, croppedAreaPixels: Area) => {
+  const onCropComplete = useCallback((croppedArea: Area, croppedAreaPixels: Area) => {
     setCroppedAreaPixels(croppedAreaPixels);
+    setCroppedArea(croppedArea);
+  }, []);
+
+  // Generate preview when crop changes
+  useEffect(() => {
+    if (!croppedAreaPixels) return;
+
+    const generatePreview = async () => {
+      try {
+        const blob = await getCroppedImg(imageSrc, croppedAreaPixels);
+        const url = URL.createObjectURL(blob);
+        setPreviewUrl((prev) => {
+          if (prev) URL.revokeObjectURL(prev);
+          return url;
+        });
+      } catch (e) {
+        // Ignore preview errors
+      }
+    };
+
+    // Debounce preview generation
+    const timeout = setTimeout(generatePreview, 150);
+    return () => clearTimeout(timeout);
+  }, [croppedAreaPixels, imageSrc]);
+
+  // Cleanup preview URL on unmount
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
   }, []);
 
   const handleSave = async () => {
@@ -102,10 +157,10 @@ export default function CoverPhotoCropper({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
-      <div className="relative w-full max-w-3xl mx-4 bg-[var(--surface)] rounded-xl shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
+      <div className="relative w-full max-w-4xl bg-[var(--surface)] rounded-xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-subtle)]">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-subtle)] flex-shrink-0">
           <h2 className="text-lg font-semibold text-[var(--text-primary)]">
             Crop Cover Photo
           </h2>
@@ -117,30 +172,90 @@ export default function CoverPhotoCropper({
           </button>
         </div>
 
-        {/* Cropper Area */}
-        <div className="relative h-[400px] bg-black">
-          <Cropper
-            image={imageSrc}
-            crop={crop}
-            zoom={zoom}
-            aspect={16 / 9}
-            onCropChange={setCrop}
-            onZoomChange={setZoom}
-            onCropComplete={onCropComplete}
-            showGrid={true}
-            style={{
-              containerStyle: {
-                backgroundColor: '#000',
-              },
-              cropAreaStyle: {
-                border: '2px solid var(--teed-green-8)',
-              },
-            }}
-          />
+        {/* Main Content - Scrollable */}
+        <div className="flex-1 overflow-y-auto">
+          {/* Cropper Area */}
+          <div className="relative h-[300px] md:h-[350px] bg-black">
+            <Cropper
+              image={imageSrc}
+              crop={crop}
+              zoom={zoom}
+              aspect={CROP_ASPECT}
+              onCropChange={setCrop}
+              onZoomChange={setZoom}
+              onCropComplete={onCropComplete}
+              showGrid={true}
+              style={{
+                containerStyle: {
+                  backgroundColor: '#000',
+                },
+                cropAreaStyle: {
+                  border: '2px solid var(--teed-green-8)',
+                },
+              }}
+            />
+          </div>
+
+          {/* Preview Section */}
+          <div className="px-4 py-4 bg-[var(--grey-1)] border-t border-[var(--border-subtle)]">
+            <p className="text-sm font-medium text-[var(--text-primary)] mb-3">
+              Preview how your cover will appear:
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Desktop Preview */}
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <Monitor className="w-4 h-4 text-[var(--text-secondary)]" />
+                  <span className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wide">
+                    Desktop (3:1)
+                  </span>
+                </div>
+                <div
+                  className="relative w-full rounded-lg overflow-hidden bg-[var(--grey-3)] border border-[var(--border-subtle)]"
+                  style={{ aspectRatio: '3 / 1' }}
+                >
+                  {previewUrl && (
+                    <img
+                      src={previewUrl}
+                      alt="Desktop preview"
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  )}
+                </div>
+              </div>
+
+              {/* Mobile Preview */}
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <Smartphone className="w-4 h-4 text-[var(--text-secondary)]" />
+                  <span className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wide">
+                    Mobile (21:9)
+                  </span>
+                </div>
+                <div
+                  className="relative w-full rounded-lg overflow-hidden bg-[var(--grey-3)] border border-[var(--border-subtle)]"
+                  style={{ aspectRatio: '21 / 9' }}
+                >
+                  {previewUrl && (
+                    <img
+                      src={previewUrl}
+                      alt="Mobile preview"
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <p className="text-xs text-[var(--text-tertiary)] mt-3 text-center">
+              The image will be cropped differently on each device to fill the space
+            </p>
+          </div>
         </div>
 
-        {/* Controls */}
-        <div className="px-4 py-4 border-t border-[var(--border-subtle)]">
+        {/* Controls - Fixed at bottom */}
+        <div className="px-4 py-4 border-t border-[var(--border-subtle)] bg-[var(--surface)] flex-shrink-0">
           {/* Zoom Control */}
           <div className="flex items-center gap-4 mb-4">
             <ZoomOut className="w-4 h-4 text-[var(--text-secondary)]" />
@@ -192,13 +307,6 @@ export default function CoverPhotoCropper({
               )}
             </Button>
           </div>
-        </div>
-
-        {/* Instructions */}
-        <div className="px-4 pb-4">
-          <p className="text-xs text-[var(--text-tertiary)] text-center">
-            Drag to reposition • Pinch or use slider to zoom • 16:9 aspect ratio
-          </p>
         </div>
       </div>
     </div>

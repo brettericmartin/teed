@@ -102,6 +102,31 @@ export default function PublicBagView({
     }
   };
 
+  // Helper to get the CTA verb based on link type/domain
+  const getLinkCTA = (link: ItemLink) => {
+    const domain = getLinkDomain(link.url).toLowerCase();
+
+    // Video platforms
+    const videoHosts = ['youtube.com', 'youtu.be', 'vimeo.com', 'twitch.tv', 'dailymotion.com', 'tiktok.com'];
+    if (link.kind === 'video' || videoHosts.some(host => domain.includes(host.replace('.com', '').replace('.tv', '')))) {
+      return 'Watch on';
+    }
+
+    // Article/blog platforms
+    const articleHosts = ['medium.com', 'substack.com', 'blog.', 'news.'];
+    if (link.kind === 'article' || articleHosts.some(host => domain.includes(host.replace('.com', '')))) {
+      return 'Read on';
+    }
+
+    // Review sites
+    if (link.kind === 'review') {
+      return 'Read review on';
+    }
+
+    // Default to shop for products and everything else
+    return 'Shop on';
+  };
+
   // Track page view
   useEffect(() => {
     const trackView = async () => {
@@ -163,9 +188,11 @@ export default function PublicBagView({
     return colors[kind] || colors.other;
   };
 
+  const hasCover = Boolean(bag.cover_photo_url);
+
   return (
     <div className="min-h-screen">
-      {/* Header */}
+      {/* Header Section - Always the same layout */}
       <div className="bg-[var(--surface)] shadow-[var(--shadow-2)] border-b border-[var(--border-subtle)]">
         <div className="max-w-5xl mx-auto px-4 py-6">
           {/* Breadcrumbs */}
@@ -248,6 +275,20 @@ export default function PublicBagView({
         </div>
       </div>
 
+      {/* Cover Photo Banner - Between header and items */}
+      {hasCover && (
+        <div className="max-w-5xl mx-auto px-4 pt-6">
+          <div className="relative w-full aspect-[21/9] md:aspect-[3/1] rounded-[var(--radius-xl)] overflow-hidden shadow-[var(--shadow-3)]">
+            <img
+              src={bag.cover_photo_url!}
+              alt={`${bag.title} cover`}
+              className="absolute inset-0 w-full h-full object-cover"
+              loading="eager"
+            />
+          </div>
+        </div>
+      )}
+
       {/* FTC Affiliate Disclosure */}
       {hasAffiliateLinks && (
         <div className="bg-[var(--copper-2)] border-y border-[var(--copper-6)]">
@@ -272,19 +313,6 @@ export default function PublicBagView({
                 </p>
               </div>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Cover Photo Banner */}
-      {bag.cover_photo_url && (
-        <div className="max-w-5xl mx-auto px-4 pt-8">
-          <div className="rounded-[var(--radius-xl)] overflow-hidden shadow-[var(--shadow-3)]">
-            <img
-              src={bag.cover_photo_url}
-              alt={`${bag.title} cover`}
-              className="w-full h-48 md:h-64 object-cover"
-            />
           </div>
         </div>
       )}
@@ -424,7 +452,7 @@ export default function PublicBagView({
                           }}
                           className="flex items-center justify-center gap-2 w-full px-4 py-3 min-h-[48px] bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] text-white font-medium rounded-lg transition-all active:scale-[0.98] shadow-sm hover:shadow-md"
                         >
-                          <span>Shop on {getLinkDomain(primaryLink.url)}</span>
+                          <span>{getLinkCTA(primaryLink)} {getLinkDomain(primaryLink.url)}</span>
                           <ExternalLink className="w-4 h-4" />
                         </a>
 

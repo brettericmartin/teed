@@ -72,6 +72,11 @@ export default async function UserBagPage({ params }: PageProps) {
     ?.map((item: any) => item.custom_photo_id)
     .filter((id: string | null): id is string => id !== null) || [];
 
+  // Also include cover photo if present
+  if (bag.cover_photo_id) {
+    photoIds.push(bag.cover_photo_id);
+  }
+
   let photoUrls: Record<string, string> = {};
 
   if (photoIds.length > 0) {
@@ -95,6 +100,9 @@ export default async function UserBagPage({ params }: PageProps) {
       photo_url: item.custom_photo_id ? photoUrls[item.custom_photo_id] || null : null,
     }))
     .sort((a: any, b: any) => a.sort_index - b.sort_index) || [];
+
+  // Get cover photo URL if present
+  const coverPhotoUrl = bag.cover_photo_id ? photoUrls[bag.cover_photo_id] || null : null;
 
   // Check if bag has affiliate links
   const itemIds = bag.items?.map((item: any) => item.id) || [];
@@ -124,9 +132,15 @@ export default async function UserBagPage({ params }: PageProps) {
     }
   }
 
+  // Create bag object with cover photo URL
+  const bagWithCover = {
+    ...bag,
+    cover_photo_url: coverPhotoUrl,
+  };
+
   return (
     <PublicBagView
-      bag={bag}
+      bag={bagWithCover}
       items={sortedItems}
       ownerHandle={profile.handle}
       ownerName={profile.display_name}
