@@ -9,34 +9,53 @@ export async function GET(request: NextRequest) {
 
     // Get filter parameters
     const following = searchParams.get('following') === 'true';
+    const saved = searchParams.get('saved') === 'true';
     const category = searchParams.get('category');
     const search = searchParams.get('search');
     const tags = searchParams.get('tags')?.split(',').filter(Boolean); // Comma-separated tags
     const sort = searchParams.get('sort') || 'newest'; // newest, popular, most_items
     const trending = searchParams.get('trending') === 'true'; // Get trending bags only
 
-    // Check authentication for "following" filter
+    // Check authentication for "following" or "saved" filter
     let followingIds: string[] = [];
-    if (following) {
+    let savedBagIds: string[] = [];
+
+    if (following || saved) {
       const {
         data: { user },
         error: authError,
       } = await supabase.auth.getUser();
 
       if (authError || !user) {
-        return NextResponse.json({ error: 'Must be logged in to filter by following' }, { status: 401 });
+        return NextResponse.json({ error: 'Must be logged in to filter by following or saved' }, { status: 401 });
       }
 
-      // Get list of users the current user follows
-      const { data: follows } = await supabase
-        .from('follows')
-        .select('following_id')
-        .eq('follower_id', user.id);
+      // Get list of users the current user follows (for following filter)
+      if (following) {
+        const { data: follows } = await supabase
+          .from('follows')
+          .select('following_id')
+          .eq('follower_id', user.id);
 
-      followingIds = follows?.map(f => f.following_id) || [];
+        followingIds = follows?.map(f => f.following_id) || [];
 
-      if (followingIds.length === 0) {
-        return NextResponse.json({ bags: [] }, { status: 200 });
+        if (followingIds.length === 0 && !saved) {
+          return NextResponse.json({ bags: [] }, { status: 200 });
+        }
+      }
+
+      // Get list of saved bag IDs (for saved filter)
+      if (saved) {
+        const { data: savedBags } = await supabase
+          .from('saved_bags')
+          .select('bag_id')
+          .eq('user_id', user.id);
+
+        savedBagIds = savedBags?.map(s => s.bag_id) || [];
+
+        if (savedBagIds.length === 0 && !following) {
+          return NextResponse.json({ bags: [] }, { status: 200 });
+        }
       }
     }
 
@@ -73,6 +92,10 @@ export async function GET(request: NextRequest) {
     // Apply filters
     if (following && followingIds.length > 0) {
       query = query.in('owner_id', followingIds);
+    }
+
+    if (saved && savedBagIds.length > 0) {
+      query = query.in('id', savedBagIds);
     }
 
     if (category) {

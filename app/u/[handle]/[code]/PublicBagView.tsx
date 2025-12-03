@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Share2, ExternalLink, User, X, Package, Trophy, Copy, CheckCheck, ChevronDown, Tag } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Share2, ExternalLink, User, X, Package, Trophy, Copy, CheckCheck, ChevronDown, Tag, Bookmark, UserPlus, UserCheck, Loader2 } from 'lucide-react';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import QRCodeDisplay from '@/components/ui/QRCodeDisplay';
 import PublicShareModal from './PublicShareModal';
@@ -49,6 +50,7 @@ interface PublicBagViewProps {
   items: Item[];
   ownerHandle: string;
   ownerName: string;
+  ownerId: string;
   hasAffiliateLinks?: boolean;
   disclosureText?: string;
 }
@@ -58,15 +60,26 @@ export default function PublicBagView({
   items,
   ownerHandle,
   ownerName,
+  ownerId,
   hasAffiliateLinks = false,
   disclosureText,
 }: PublicBagViewProps) {
+  const router = useRouter();
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [copiedPromoId, setCopiedPromoId] = useState<string | null>(null);
   const [expandedLinks, setExpandedLinks] = useState<Set<string>>(new Set());
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
+  // Engagement states
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isSaveLoading, setIsSaveLoading] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [isFollowLoading, setIsFollowLoading] = useState(false);
+
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const isOwnBag = currentUserId === ownerId;
 
   // Helper to copy promo code
   const handleCopyPromo = async (itemId: string, code: string) => {
@@ -152,8 +165,116 @@ export default function PublicBagView({
     trackView();
   }, [bag.id, bag.code, ownerHandle]);
 
+  // Check auth, save, and follow status
+  useEffect(() => {
+    const checkEngagementStatus = async () => {
+      try {
+        // Check if user is authenticated
+        const sessionResponse = await fetch('/api/auth/session');
+        if (!sessionResponse.ok) {
+          setIsAuthenticated(false);
+          return;
+        }
+
+        const sessionData = await sessionResponse.json();
+        setIsAuthenticated(!!sessionData.user);
+        setCurrentUserId(sessionData.user?.id || null);
+
+        if (sessionData.user) {
+          // Check save status
+          const saveResponse = await fetch(`/api/bags/${bag.code}/save`);
+          if (saveResponse.ok) {
+            const saveData = await saveResponse.json();
+            setIsSaved(saveData.isSaved);
+          }
+
+          // Check follow status (if not own profile)
+          if (sessionData.user.id !== ownerId) {
+            const followResponse = await fetch(`/api/follows/${ownerId}`);
+            if (followResponse.ok) {
+              const followData = await followResponse.json();
+              setIsFollowing(followData.isFollowing);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error checking engagement status:', error);
+      }
+    };
+
+    checkEngagementStatus();
+  }, [bag.id, ownerId]);
+
   const handleShare = () => {
     setIsShareModalOpen(true);
+  };
+
+  // Handle save/unsave
+  const handleSaveToggle = async () => {
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
+    setIsSaveLoading(true);
+    try {
+      if (isSaved) {
+        // Unsave
+        const response = await fetch(`/api/bags/${bag.code}/save`, {
+          method: 'DELETE',
+        });
+        if (response.ok) {
+          setIsSaved(false);
+        }
+      } else {
+        // Save
+        const response = await fetch(`/api/bags/${bag.code}/save`, {
+          method: 'POST',
+        });
+        if (response.ok) {
+          setIsSaved(true);
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling save:', error);
+    } finally {
+      setIsSaveLoading(false);
+    }
+  };
+
+  // Handle follow/unfollow
+  const handleFollowToggle = async () => {
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
+    setIsFollowLoading(true);
+    try {
+      if (isFollowing) {
+        // Unfollow
+        const response = await fetch(`/api/follows/${ownerId}`, {
+          method: 'DELETE',
+        });
+        if (response.ok) {
+          setIsFollowing(false);
+        }
+      } else {
+        // Follow
+        const response = await fetch('/api/follows', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ following_id: ownerId }),
+        });
+        if (response.ok) {
+          setIsFollowing(true);
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling follow:', error);
+    } finally {
+      setIsFollowLoading(false);
+    }
   };
 
   // Track link click
@@ -206,10 +327,29 @@ export default function PublicBagView({
 
           <div className="flex flex-col md:flex-row items-start justify-between gap-6 mt-4">
             <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
+              <div className="flex items-center gap-2 mb-2">
                 <h1 className="text-[var(--font-size-9)] font-semibold text-[var(--text-primary)]">
                   {bag.title}
                 </h1>
+                {/* Save Button */}
+                <button
+                  onClick={handleSaveToggle}
+                  disabled={isSaveLoading}
+                  className={`p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-[var(--radius-md)] transition-all ${
+                    isSaved
+                      ? 'text-[var(--amber-9)] hover:text-[var(--amber-10)]'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                  } hover:bg-[var(--surface-hover)]`}
+                  title={isSaved ? 'Unsave' : 'Save'}
+                  aria-label={isSaved ? 'Unsave this bag' : 'Save this bag'}
+                >
+                  {isSaveLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`} />
+                  )}
+                </button>
+                {/* Share Button */}
                 <button
                   onClick={handleShare}
                   className="p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] rounded-[var(--radius-md)] transition-colors"
@@ -231,6 +371,28 @@ export default function PublicBagView({
                 >
                   @{ownerHandle}
                 </Link>
+                {/* Follow Button - only show if not own bag */}
+                {!isOwnBag && (
+                  <button
+                    onClick={handleFollowToggle}
+                    disabled={isFollowLoading}
+                    className={`ml-1 p-1.5 min-h-[32px] min-w-[32px] flex items-center justify-center rounded-full transition-all ${
+                      isFollowing
+                        ? 'text-[var(--teed-green-9)] bg-[var(--teed-green-2)] hover:bg-[var(--teed-green-3)]'
+                        : 'text-[var(--text-secondary)] hover:text-[var(--teed-green-9)] hover:bg-[var(--teed-green-2)]'
+                    }`}
+                    title={isFollowing ? 'Unfollow' : 'Follow'}
+                    aria-label={isFollowing ? `Unfollow @${ownerHandle}` : `Follow @${ownerHandle}`}
+                  >
+                    {isFollowLoading ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : isFollowing ? (
+                      <UserCheck className="w-4 h-4" />
+                    ) : (
+                      <UserPlus className="w-4 h-4" />
+                    )}
+                  </button>
+                )}
               </div>
 
               {/* Tags */}

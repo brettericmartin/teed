@@ -144,6 +144,7 @@ export default async function UserBagPage({ params }: PageProps) {
       items={sortedItems}
       ownerHandle={profile.handle}
       ownerName={profile.display_name}
+      ownerId={profile.id}
       hasAffiliateLinks={hasAffiliateLinks}
       disclosureText={disclosureText}
     />

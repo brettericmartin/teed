@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Compass, Package, Search, Filter, X, Heart, Eye, Layers, ChevronDown, User, Tag, TrendingUp } from 'lucide-react';
+import { Compass, Package, Search, Filter, X, Heart, Eye, Layers, ChevronDown, User, Tag, TrendingUp, Bookmark } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect, useRef, useCallback } from 'react';
 
@@ -142,6 +142,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
 
   // Filter states
   const [showFollowing, setShowFollowing] = useState(searchParams.get('following') === 'true');
+  const [showSaved, setShowSaved] = useState(searchParams.get('saved') === 'true');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(searchParams.get('category'));
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
@@ -164,7 +165,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
 
   useEffect(() => {
     fetchBags();
-  }, [showFollowing, selectedCategory, searchQuery, selectedTags, sortBy]);
+  }, [showFollowing, showSaved, selectedCategory, searchQuery, selectedTags, sortBy]);
 
   // Debounced autocomplete
   useEffect(() => {
@@ -239,6 +240,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
     try {
       const params = new URLSearchParams();
       if (showFollowing) params.append('following', 'true');
+      if (showSaved) params.append('saved', 'true');
       if (selectedCategory) params.append('category', selectedCategory);
       if (searchQuery) params.append('search', searchQuery);
       if (selectedTags.length > 0) params.append('tags', selectedTags.join(','));
@@ -276,6 +278,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
 
   const clearFilters = () => {
     setShowFollowing(false);
+    setShowSaved(false);
     setSelectedCategory(null);
     setSearchQuery('');
     setSearchInput('');
@@ -291,7 +294,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
     );
   };
 
-  const hasActiveFilters = showFollowing || selectedCategory || searchQuery || selectedTags.length > 0 || sortBy !== 'newest';
+  const hasActiveFilters = showFollowing || showSaved || selectedCategory || searchQuery || selectedTags.length > 0 || sortBy !== 'newest';
 
   const hasSuggestions = suggestions && (
     suggestions.bags.length > 0 ||
@@ -482,6 +485,21 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                   >
                     <Heart className={`w-4 h-4 ${showFollowing ? 'fill-current' : ''}`} />
                     <span>Following</span>
+                  </button>
+                )}
+
+                {/* Saved Toggle */}
+                {isAuthenticated && (
+                  <button
+                    onClick={() => setShowSaved(!showSaved)}
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all whitespace-nowrap ${
+                      showSaved
+                        ? 'bg-[var(--amber-9)] text-white'
+                        : 'bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] hover:bg-[var(--surface-hover)]'
+                    }`}
+                  >
+                    <Bookmark className={`w-4 h-4 ${showSaved ? 'fill-current' : ''}`} />
+                    <span>Saved</span>
                   </button>
                 )}
 
