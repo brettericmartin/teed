@@ -482,6 +482,34 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     }
   };
 
+  // Batch reorder items - only sends changed items to API
+  const handleReorderItems = async (items: Array<{ id: string; sort_index: number }>) => {
+    try {
+      const response = await fetch(`/api/bags/${bag.code}/items`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to reorder items');
+      }
+
+      // Update local state with new sort indices
+      setBag((prev) => ({
+        ...prev,
+        items: prev.items.map((item) => {
+          const update = items.find((u) => u.id === item.id);
+          return update ? { ...item, sort_index: update.sort_index } : item;
+        }),
+      }));
+    } catch (error: any) {
+      console.error('[ReorderItems] Error:', error);
+      throw error; // Re-throw so ItemList can handle revert
+    }
+  };
+
   const handleUpdateItem = async (
     itemId: string,
     updates: Partial<Omit<Item, 'id' | 'bag_id' | 'links'>>
@@ -1612,6 +1640,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             items={bag.items}
             onDelete={handleDeleteItem}
             onUpdate={handleUpdateItem}
+            onReorder={handleReorderItems}
             bagCode={bag.code}
             heroItemId={bag.hero_item_id}
             onToggleHero={handleToggleHero}

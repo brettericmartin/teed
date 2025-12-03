@@ -43,16 +43,19 @@ export type Item = {
   links: Link[];
 };
 
+type ReorderItem = { id: string; sort_index: number };
+
 type ItemListProps = {
   items: Item[];
   onDelete: (itemId: string) => void;
   onUpdate: (itemId: string, updates: Partial<Omit<Item, 'id' | 'bag_id' | 'links'>>) => void;
+  onReorder: (items: ReorderItem[]) => Promise<void>;
   bagCode: string;
   heroItemId?: string | null;
   onToggleHero?: (itemId: string) => void;
 };
 
-export default function ItemList({ items, onDelete, onUpdate, bagCode, heroItemId, onToggleHero }: ItemListProps) {
+export default function ItemList({ items, onDelete, onUpdate, onReorder, bagCode, heroItemId, onToggleHero }: ItemListProps) {
   // Sort items by sort_index
   const [sortedItems, setSortedItems] = useState([...items].sort((a, b) => a.sort_index - b.sort_index));
   const [isMounted, setIsMounted] = useState(false);
@@ -90,17 +93,28 @@ export default function ItemList({ items, onDelete, onUpdate, bagCode, heroItemI
     const newIndex = sortedItems.findIndex((item) => item.id === over.id);
 
     const newItems = arrayMove(sortedItems, oldIndex, newIndex);
+
+    // Optimistically update UI immediately
     setSortedItems(newItems);
 
-    // Update sort_index for all affected items
-    const updates = newItems.map((item, index) => ({
-      id: item.id,
-      sort_index: index,
-    }));
+    // Only update items whose sort_index actually changed
+    const changedItems = newItems
+      .map((item, index) => ({
+        id: item.id,
+        sort_index: index,
+        oldSortIndex: item.sort_index,
+      }))
+      .filter((item) => item.sort_index !== item.oldSortIndex)
+      .map(({ id, sort_index }) => ({ id, sort_index }));
 
-    // Update each item's sort_index
-    for (const update of updates) {
-      await onUpdate(update.id, { sort_index: update.sort_index });
+    if (changedItems.length > 0) {
+      try {
+        await onReorder(changedItems);
+      } catch (error) {
+        console.error('Failed to reorder items:', error);
+        // Revert on error
+        setSortedItems([...items].sort((a, b) => a.sort_index - b.sort_index));
+      }
     }
   };
 

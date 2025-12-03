@@ -2,6 +2,130 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
 
 /**
+ * PATCH /api/bags/[code]/items
+ * Batch reorder items - updates sort_index for multiple items in one request
+ *
+ * Body:
+ * {
+ *   items: Array<{ id: string, sort_index: number }>
+ * }
+ *
+ * Returns: { success: true, updated: number }
+ */
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ code: string }> }
+) {
+  try {
+    const { code } = await params;
+    const supabase = await createServerSupabase();
+
+    // Get authenticated user
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Get the bag and verify ownership
+    const { data: bag, error: bagError } = await supabase
+      .from('bags')
+      .select('id, owner_id')
+      .eq('code', code)
+      .single();
+
+    if (bagError || !bag) {
+      return NextResponse.json({ error: 'Bag not found' }, { status: 404 });
+    }
+
+    if (bag.owner_id !== user.id) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    // Parse request body
+    const body = await request.json();
+    const { items } = body;
+
+    if (!Array.isArray(items) || items.length === 0) {
+      return NextResponse.json(
+        { error: 'items must be a non-empty array' },
+        { status: 400 }
+      );
+    }
+
+    // Validate each item has id and sort_index
+    for (const item of items) {
+      if (!item.id || typeof item.sort_index !== 'number') {
+        return NextResponse.json(
+          { error: 'Each item must have id and sort_index' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Verify all items belong to this bag
+    const itemIds = items.map((i: { id: string }) => i.id);
+    const { data: existingItems, error: verifyError } = await supabase
+      .from('bag_items')
+      .select('id')
+      .eq('bag_id', bag.id)
+      .in('id', itemIds);
+
+    if (verifyError) {
+      console.error('Error verifying items:', verifyError);
+      return NextResponse.json(
+        { error: 'Failed to verify items' },
+        { status: 500 }
+      );
+    }
+
+    if (!existingItems || existingItems.length !== itemIds.length) {
+      return NextResponse.json(
+        { error: 'Some items do not belong to this bag' },
+        { status: 400 }
+      );
+    }
+
+    // Batch update all items using Promise.all for parallel execution
+    const updatePromises = items.map((item: { id: string; sort_index: number }) =>
+      supabase
+        .from('bag_items')
+        .update({ sort_index: item.sort_index })
+        .eq('id', item.id)
+    );
+
+    const results = await Promise.all(updatePromises);
+
+    // Check for any errors
+    const errors = results.filter(r => r.error);
+    if (errors.length > 0) {
+      console.error('Errors updating items:', errors.map(e => e.error));
+      return NextResponse.json(
+        { error: 'Failed to update some items' },
+        { status: 500 }
+      );
+    }
+
+    // Update bag's updated_at timestamp once
+    await supabase
+      .from('bags')
+      .update({ updated_at: new Date().toISOString() })
+      .eq('id', bag.id);
+
+    return NextResponse.json({ success: true, updated: items.length });
+  } catch (error) {
+    console.error('Unexpected error in PATCH /api/bags/[code]/items:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+/**
  * POST /api/bags/[code]/items
  * Add a new item to a bag
  *
