@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Loader2, Share2, Trash2, Camera, ChevronLeft, Package, Images, Link, Sparkles, Upload, Image, X } from 'lucide-react';
+import { ArrowLeft, Loader2, Share2, Trash2, Camera, ChevronLeft, Package, Images, Link, Sparkles, Upload, Image, X, Eye } from 'lucide-react';
+import NextLink from 'next/link';
 import ItemList from './components/ItemList';
 import QuickAddItem from './components/QuickAddItem';
 import AddItemForm from './components/AddItemForm';
@@ -1280,6 +1281,18 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
 
             {/* Action Buttons */}
             <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+              {/* View Public Page Button */}
+              <NextLink href={`/u/${ownerHandle}/${bag.code}`}>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="min-h-[44px] min-w-[44px] p-2.5"
+                >
+                  <Eye className="w-4 h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">View</span>
+                </Button>
+              </NextLink>
+
               {/* Share Button */}
               <Button
                 onClick={() => setShowShareModal(true)}
