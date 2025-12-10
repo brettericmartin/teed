@@ -391,8 +391,37 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       }
 
       // Create items from extracted products
-      const createdItems: Array<{ id: string; name: string; brand: string | null; isHero: boolean }> = [];
+      const createdItems: Array<{ id: string; name: string; brand: string | null; isHero: boolean; isVideo?: boolean }> = [];
       const itemLinkMap: Map<string, string[]> = new Map(); // item id -> link URLs
+
+      // First, create the source video as an item
+      if (idea.source_url && youtube?.title) {
+        const { data: videoItem, error: videoItemError } = await supabaseAdmin
+          .from('bag_items')
+          .insert({
+            bag_id: newBag.id,
+            custom_name: youtube.title,
+            custom_description: 'Source video for this collection',
+            brand: idea.source_channel_name || null,
+            notes: `Channel: ${idea.source_channel_name || 'Unknown'}\nPublished: ${youtube.publishedAt ? new Date(youtube.publishedAt).toLocaleDateString() : 'Unknown'}`,
+            sort_index: 0,
+            is_featured: false,
+          })
+          .select('id')
+          .single();
+
+        if (!videoItemError && videoItem) {
+          createdItems.push({
+            id: videoItem.id,
+            name: youtube.title,
+            brand: idea.source_channel_name || null,
+            isHero: false,
+            isVideo: true,
+          });
+          // Add the YouTube link
+          itemLinkMap.set(videoItem.id, [idea.source_url]);
+        }
+      }
 
       // Try to match extracted links to products
       const linkProductMatches = new Map<string, string[]>();
@@ -453,7 +482,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
             custom_description: product.category || null,
             brand: product.brand || null,
             notes: notesParts.join('\n') || null,
-            sort_index: i,
+            sort_index: i + 1, // Start at 1, video is at 0
             is_featured: isHeroItem, // Only hero item is featured in single-hero videos
           })
           .select('id')
