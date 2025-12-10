@@ -82,6 +82,36 @@ export default function AnalyzeUrlClient({ adminRole }: Props) {
   const [copiedHook, setCopiedHook] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<'clips' | 'hooks' | 'outline' | 'shortform'>('clips');
   const [expandedClips, setExpandedClips] = useState<Set<number>>(new Set([0, 1, 2]));
+  const [saving, setSaving] = useState(false);
+
+  const handleSaveToDatabase = async () => {
+    if (!url.trim() || !result) return;
+
+    setSaving(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/admin/content-ideas/analyze-url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, vertical, saveToDatabase: true }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        const errorMsg = data.details ? `${data.error}: ${data.details}` : data.error || 'Save failed';
+        throw new Error(errorMsg);
+      }
+
+      // Update result with the savedIdeaId
+      setResult({ ...result, savedIdeaId: data.savedIdeaId });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Save failed');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const handleAnalyze = async () => {
     if (!url.trim()) {
@@ -319,14 +349,32 @@ export default function AnalyzeUrlClient({ adminRole }: Props) {
                     <span className="text-sm text-gray-500">
                       {result.clipOpportunities.length} clip opportunities
                     </span>
-                    {result.savedIdeaId && (
+                    {result.savedIdeaId ? (
                       <Link
                         href={`/admin/content-ideas/${result.savedIdeaId}`}
-                        className="inline-flex items-center gap-1 text-sm text-purple-600 hover:underline"
+                        className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700"
                       >
-                        <Bookmark className="w-4 h-4" />
-                        View saved idea
+                        <Sparkles className="w-4 h-4" />
+                        Open for AI Review
                       </Link>
+                    ) : (
+                      <button
+                        onClick={handleSaveToDatabase}
+                        disabled={saving}
+                        className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 disabled:opacity-50"
+                      >
+                        {saving ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Saving...
+                          </>
+                        ) : (
+                          <>
+                            <Bookmark className="w-4 h-4" />
+                            Save for AI Review
+                          </>
+                        )}
+                      </button>
                     )}
                   </div>
                 </div>
