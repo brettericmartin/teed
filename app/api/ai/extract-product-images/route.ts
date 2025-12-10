@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { trackApiUsage } from '@/lib/apiUsageTracker';
 
 /**
  * Extract product images from a given URL by fetching the page and parsing Open Graph / meta images
@@ -9,6 +10,8 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 
 export async function POST(request: NextRequest) {
+  const startTime = Date.now();
+  let usedGoogleSearch = false;
   try {
     const body = await request.json();
     const { url, productName, brand } = body;
@@ -118,10 +121,24 @@ export async function POST(request: NextRequest) {
       if (googleImages.length > 0) {
         images.push(...googleImages);
         source = 'google';
+        usedGoogleSearch = true;
       }
     }
 
     console.log(`[extract-product-images] Found ${images.length} images from ${source}`);
+
+    // Track API usage (only if Google search was used)
+    if (usedGoogleSearch) {
+      const durationMs = Date.now() - startTime;
+      trackApiUsage({
+        userId: null,
+        endpoint: '/api/ai/extract-product-images',
+        model: 'google-search',
+        operationType: 'search',
+        durationMs,
+        status: 'success',
+      }).catch(console.error);
+    }
 
     return NextResponse.json({
       images: images.slice(0, 6),
@@ -131,6 +148,21 @@ export async function POST(request: NextRequest) {
 
   } catch (error: any) {
     console.error('[extract-product-images] Error:', error);
+
+    // Track error only if Google search was attempted
+    if (usedGoogleSearch) {
+      trackApiUsage({
+        userId: null,
+        endpoint: '/api/ai/extract-product-images',
+        model: 'google-search',
+        operationType: 'search',
+        durationMs: Date.now() - startTime,
+        status: error?.status === 429 ? 'rate_limited' : 'error',
+        errorCode: error?.code,
+        errorMessage: error?.message,
+      }).catch(console.error);
+    }
+
     return NextResponse.json(
       { error: error.message || 'Failed to extract product images' },
       { status: 500 }

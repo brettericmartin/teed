@@ -26,11 +26,12 @@ export default function PublicShareModal({
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState('');
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  // Update share URL when modal opens (to capture current view mode from URL)
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && isOpen) {
       setShareUrl(window.location.href);
     }
-  }, []);
+  }, [isOpen]);
 
   // Generate QR code when URL changes
   useEffect(() => {

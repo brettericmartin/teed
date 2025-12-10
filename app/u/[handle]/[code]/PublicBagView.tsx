@@ -2,11 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { Share2, ExternalLink, User, X, Package, Trophy, Copy, CheckCheck, ChevronDown, Tag, Bookmark, UserPlus, UserCheck, Loader2 } from 'lucide-react';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { Share2, ExternalLink, User, X, Package, Trophy, Copy, CheckCheck, ChevronDown, Tag, Bookmark, UserPlus, UserCheck, Loader2, LayoutGrid, List, Plus } from 'lucide-react';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import QRCodeDisplay from '@/components/ui/QRCodeDisplay';
 import PublicShareModal from './PublicShareModal';
+import ViewToggle from './components/ViewToggle';
+import ListViewItem from './components/ListViewItem';
+import AddToBagModal from './components/AddToBagModal';
+import { useToast } from '@/components/ui/Toast';
 
 interface ItemLink {
   id: string;
@@ -65,6 +69,23 @@ export default function PublicBagView({
   disclosureText,
 }: PublicBagViewProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  // View mode from URL parameter (default: grid)
+  const viewMode = searchParams.get('view') === 'list' ? 'list' : 'grid';
+
+  const handleViewToggle = (newView: 'grid' | 'list') => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (newView === 'grid') {
+      params.delete('view'); // Grid is default, clean URL
+    } else {
+      params.set('view', 'list');
+    }
+    const queryString = params.toString();
+    router.replace(`${pathname}${queryString ? `?${queryString}` : ''}`, { scroll: false });
+  };
+
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [copiedPromoId, setCopiedPromoId] = useState<string | null>(null);
   const [expandedLinks, setExpandedLinks] = useState<Set<string>>(new Set());
@@ -77,7 +98,10 @@ export default function PublicBagView({
   const [isSaveLoading, setIsSaveLoading] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
   const [isFollowLoading, setIsFollowLoading] = useState(false);
+  const [isCopyLoading, setIsCopyLoading] = useState(false);
+  const [isAddToBagModalOpen, setIsAddToBagModalOpen] = useState(false);
 
+  const { showSuccess, showError } = useToast();
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
   const isOwnBag = currentUserId === ownerId;
 
@@ -209,6 +233,35 @@ export default function PublicBagView({
     setIsShareModalOpen(true);
   };
 
+  // Handle copy bag
+  const handleCopyBag = async () => {
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
+    setIsCopyLoading(true);
+    try {
+      const response = await fetch(`/api/bags/${bag.code}/copy`, {
+        method: 'POST',
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // Redirect to the new copied bag's edit page
+        router.push(`/u/${data.ownerHandle}/${data.code}/edit`);
+      } else {
+        const errorData = await response.json();
+        console.error('Copy error:', errorData.error);
+        // Could show a toast here
+      }
+    } catch (error) {
+      console.error('Error copying bag:', error);
+    } finally {
+      setIsCopyLoading(false);
+    }
+  };
+
   // Handle save/unsave
   const handleSaveToggle = async () => {
     if (!isAuthenticated) {
@@ -275,6 +328,15 @@ export default function PublicBagView({
     } finally {
       setIsFollowLoading(false);
     }
+  };
+
+  // Handle add to bag
+  const handleAddToBag = () => {
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+    setIsAddToBagModalOpen(true);
   };
 
   // Track link click
@@ -358,6 +420,22 @@ export default function PublicBagView({
                 >
                   <Share2 className="w-5 h-5" />
                 </button>
+                {/* Copy Button - only show if not own bag */}
+                {!isOwnBag && (
+                  <button
+                    onClick={handleCopyBag}
+                    disabled={isCopyLoading}
+                    className="p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--teed-green-9)] hover:bg-[var(--teed-green-2)] rounded-[var(--radius-md)] transition-colors disabled:opacity-50"
+                    title="Copy this bag to your account"
+                    aria-label="Copy this bag to your account"
+                  >
+                    {isCopyLoading ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <Copy className="w-5 h-5" />
+                    )}
+                  </button>
+                )}
               </div>
               {bag.description && (
                 <p className="text-[var(--text-secondary)] text-lg">{bag.description}</p>
@@ -479,8 +557,18 @@ export default function PublicBagView({
         </div>
       )}
 
-      {/* Items Grid */}
+      {/* Items Section */}
       <div className="max-w-5xl mx-auto px-4 py-8">
+        {/* View Toggle Header */}
+        {items.length > 0 && (
+          <div className="flex items-center justify-between mb-6">
+            <p className="text-sm text-[var(--text-secondary)]">
+              {items.length} {items.length === 1 ? 'item' : 'items'}
+            </p>
+            <ViewToggle viewMode={viewMode} onViewChange={handleViewToggle} />
+          </div>
+        )}
+
         {items.length === 0 ? (
           <div className="text-center py-20">
             <div className="bg-[var(--sky-3)] w-20 h-20 rounded-full mx-auto flex items-center justify-center">
@@ -488,7 +576,23 @@ export default function PublicBagView({
             </div>
             <p className="text-[var(--text-secondary)] text-lg mt-6">No items in this bag yet</p>
           </div>
+        ) : viewMode === 'list' ? (
+          /* List View */
+          <div className="flex flex-col bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden">
+            {items.map((item) => (
+              <ListViewItem
+                key={item.id}
+                item={item}
+                isHero={bag.hero_item_id === item.id}
+                onItemClick={() => setSelectedItem(item)}
+                onLinkClick={trackLinkClick}
+                getLinkCTA={getLinkCTA}
+                getLinkDomain={getLinkDomain}
+              />
+            ))}
+          </div>
         ) : (
+          /* Grid View */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {items.map((item) => {
               const isHero = bag.hero_item_id === item.id;
@@ -830,6 +934,19 @@ export default function PublicBagView({
               {!selectedItem.notes && !selectedItem.photo_url && selectedItem.links.length === 0 && !selectedItem.promo_codes && (
                 <p className="text-[var(--text-secondary)] text-center py-8">No additional details</p>
               )}
+
+              {/* Add to My Bag Action */}
+              {!isOwnBag && (
+                <div className="border-t border-[var(--border-subtle)] pt-6 mt-6">
+                  <button
+                    onClick={handleAddToBag}
+                    className="flex items-center justify-center gap-2 w-full px-4 py-3 min-h-[48px] bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] text-white font-medium rounded-lg transition-all active:scale-[0.98] shadow-sm hover:shadow-md"
+                  >
+                    <Plus className="w-5 h-5" />
+                    Add to My Bag
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -877,6 +994,18 @@ export default function PublicBagView({
         bagTitle={bag.title}
         ownerHandle={ownerHandle}
         ownerName={ownerName}
+      />
+
+      {/* Add to Bag Modal */}
+      <AddToBagModal
+        isOpen={isAddToBagModalOpen}
+        onClose={() => setIsAddToBagModalOpen(false)}
+        item={selectedItem}
+        onSuccess={(bagTitle) => {
+          showSuccess(`Item added to ${bagTitle}`);
+          setIsAddToBagModalOpen(false);
+          setSelectedItem(null);
+        }}
       />
     </div>
   );

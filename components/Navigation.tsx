@@ -3,15 +3,16 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { User, Settings, LogOut, ChevronDown, Compass, LayoutDashboard } from 'lucide-react';
+import { User, Settings, LogOut, ChevronDown, Compass, LayoutDashboard, Shield } from 'lucide-react';
 
 interface NavigationProps {
   userHandle?: string;
   displayName?: string;
   isAuthenticated?: boolean;
+  isAdmin?: boolean;
 }
 
-export default function Navigation({ userHandle, displayName, isAuthenticated }: NavigationProps) {
+export default function Navigation({ userHandle, displayName, isAuthenticated, isAdmin }: NavigationProps) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -108,6 +109,19 @@ export default function Navigation({ userHandle, displayName, isAuthenticated }:
                   <Compass className="w-4 h-4" />
                   <span>Discover</span>
                 </Link>
+                {isAdmin && (
+                  <Link
+                    href="/admin"
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      pathname?.startsWith('/admin')
+                        ? 'bg-[var(--amber-4)] text-[var(--amber-11)]'
+                        : 'text-[var(--text-secondary)] hover:text-[var(--amber-11)] hover:bg-[var(--amber-4)]'
+                    }`}
+                  >
+                    <Shield className="w-4 h-4" />
+                    <span>Admin</span>
+                  </Link>
+                )}
               </nav>
             )}
           </div>
@@ -176,6 +190,15 @@ export default function Navigation({ userHandle, displayName, isAuthenticated }:
                         <Compass className="w-4 h-4 text-[var(--text-secondary)]" />
                         Discover
                       </Link>
+                      {isAdmin && (
+                        <Link
+                          href="/admin"
+                          className="flex items-center gap-3 px-4 py-3 min-h-[48px] text-sm text-[var(--amber-11)] hover:bg-[var(--amber-4)] transition-colors"
+                        >
+                          <Shield className="w-4 h-4" />
+                          Admin
+                        </Link>
+                      )}
                     </div>
 
                     <Link

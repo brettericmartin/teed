@@ -3,6 +3,7 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { openai } from '@/lib/openaiClient';
 import { generateBrandContext, loadCategoryKnowledge } from '@/lib/brandKnowledge';
+import { trackApiUsage } from '@/lib/apiUsageTracker';
 
 export const maxDuration = 60; // Transcripts can be long
 
@@ -271,6 +272,19 @@ ${transcript.trim()}`,
       usedBrandKnowledge: !!brandContext,
     });
 
+    // Track API usage
+    trackApiUsage({
+      userId: user.id,
+      endpoint: '/api/ai/process-transcript',
+      model: 'gpt-4o',
+      operationType: 'transcript',
+      inputTokens: completion.usage?.prompt_tokens || 0,
+      outputTokens: completion.usage?.completion_tokens || 0,
+      requestSizeBytes: transcriptLength,
+      durationMs: processingTime,
+      status: 'success',
+    }).catch(console.error);
+
     return NextResponse.json(response, { status: 200 });
 
   } catch (error: any) {
@@ -279,6 +293,18 @@ ${transcript.trim()}`,
       status: error?.status,
       code: error?.code,
     });
+
+    // Track error
+    trackApiUsage({
+      userId: null,
+      endpoint: '/api/ai/process-transcript',
+      model: 'gpt-4o',
+      operationType: 'transcript',
+      durationMs: 0,
+      status: error?.status === 429 ? 'rate_limited' : 'error',
+      errorCode: error?.code,
+      errorMessage: error?.message,
+    }).catch(console.error);
 
     const errorMessage = error.message || 'Failed to process transcript';
     const statusCode = error?.status === 429 ? 429 : 500;

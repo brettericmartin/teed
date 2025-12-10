@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { trackApiUsage } from '@/lib/apiUsageTracker';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -12,6 +13,7 @@ type FunFactRequest = {
 };
 
 export async function POST(request: NextRequest) {
+  const startTime = Date.now();
   try {
     const body: FunFactRequest = await request.json();
     const { brand, productName, category } = body;
@@ -75,12 +77,38 @@ If you're not confident about this specific product, set confidence low and note
 
     const result = JSON.parse(responseText);
 
+    // Track API usage
+    const durationMs = Date.now() - startTime;
+    trackApiUsage({
+      userId: null,
+      endpoint: '/api/ai/generate-fun-facts',
+      model: 'gpt-4o',
+      operationType: 'generate',
+      inputTokens: completion.usage?.prompt_tokens || 0,
+      outputTokens: completion.usage?.completion_tokens || 0,
+      durationMs,
+      status: 'success',
+    }).catch(console.error);
+
     return NextResponse.json({
       funFacts: result.funFacts || [],
       confidence: result.confidence || 0.5,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error generating fun facts:', error);
+
+    // Track error
+    trackApiUsage({
+      userId: null,
+      endpoint: '/api/ai/generate-fun-facts',
+      model: 'gpt-4o',
+      operationType: 'generate',
+      durationMs: Date.now() - startTime,
+      status: error?.status === 429 ? 'rate_limited' : 'error',
+      errorCode: error?.code,
+      errorMessage: error?.message,
+    }).catch(console.error);
+
     return NextResponse.json(
       { error: 'Failed to generate fun facts', funFacts: [] },
       { status: 500 }

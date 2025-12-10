@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { openai } from '@/lib/openaiClient';
 import * as cheerio from 'cheerio';
+import { trackApiUsage } from '@/lib/apiUsageTracker';
 
 export const maxDuration = 30;
 
@@ -11,6 +12,7 @@ export const maxDuration = 30;
  * Fetches the page, extracts text/metadata, then uses AI to understand the product
  */
 export async function POST(request: NextRequest) {
+  const startTime = Date.now();
   try {
     const body = await request.json();
     const { url } = body;
@@ -139,6 +141,19 @@ Extract accurate product information. Be conservative with confidence if anythin
       confidence: result.confidence,
     });
 
+    // Track API usage
+    const durationMs = Date.now() - startTime;
+    trackApiUsage({
+      userId: null,
+      endpoint: '/api/ai/analyze-product-url',
+      model: 'gpt-4o',
+      operationType: 'analyze',
+      inputTokens: completion.usage?.prompt_tokens || 0,
+      outputTokens: completion.usage?.completion_tokens || 0,
+      durationMs,
+      status: 'success',
+    }).catch(console.error);
+
     // Add metadata
     const enrichedResult = {
       ...result,
@@ -148,8 +163,21 @@ Extract accurate product information. Be conservative with confidence if anythin
     };
 
     return NextResponse.json(enrichedResult, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
     console.error('[AI URL Analyze] Error:', error);
+
+    // Track error
+    trackApiUsage({
+      userId: null,
+      endpoint: '/api/ai/analyze-product-url',
+      model: 'gpt-4o',
+      operationType: 'analyze',
+      durationMs: Date.now() - startTime,
+      status: error?.status === 429 ? 'rate_limited' : 'error',
+      errorCode: error?.code,
+      errorMessage: error?.message,
+    }).catch(console.error);
+
     return NextResponse.json(
       {
         error: 'Failed to analyze product URL',

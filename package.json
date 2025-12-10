@@ -37,6 +37,7 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-easy-crop": "^5.5.3",
+    "recharts": "^3.5.1",
     "tsx": "^4.20.6"
   },
   "devDependencies": {

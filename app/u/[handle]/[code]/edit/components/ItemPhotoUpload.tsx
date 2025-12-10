@@ -24,6 +24,7 @@ export default function ItemPhotoUpload({
 }: ItemPhotoUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [isFindingImage, setIsFindingImage] = useState(false);
+  const [isLoadingForCrop, setIsLoadingForCrop] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(currentPhotoUrl || null);
   const [isCropModalOpen, setIsCropModalOpen] = useState(false);
@@ -264,6 +265,49 @@ export default function ItemPhotoUpload({
     }
   };
 
+  const handleCropExistingPhoto = async () => {
+    if (!preview) return;
+
+    setIsLoadingForCrop(true);
+    setError(null);
+    setShowPhotoMenu(false);
+
+    try {
+      // Fetch the image through our proxy to avoid CORS issues
+      const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(preview)}`;
+      const response = await fetch(proxyUrl);
+
+      if (!response.ok) {
+        throw new Error('Failed to load image for cropping');
+      }
+
+      const blob = await response.blob();
+
+      // Convert blob to data URL for the cropper
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result;
+        if (!result || typeof result !== 'string' || !result.startsWith('data:image/')) {
+          setError('Failed to process image for cropping');
+          setIsLoadingForCrop(false);
+          return;
+        }
+        setSelectedImageUrl(result);
+        setIsCropModalOpen(true);
+        setIsLoadingForCrop(false);
+      };
+      reader.onerror = () => {
+        setError('Failed to read image for cropping');
+        setIsLoadingForCrop(false);
+      };
+      reader.readAsDataURL(blob);
+    } catch (err: any) {
+      console.error('Error loading image for crop:', err);
+      setError(err.message || 'Failed to load image for cropping');
+      setIsLoadingForCrop(false);
+    }
+  };
+
   return (
     <div className="space-y-2">
       {/* Hidden file input */}
@@ -285,63 +329,48 @@ export default function ItemPhotoUpload({
               alt="Item photo"
               className="w-full h-32 object-contain bg-[var(--surface)] rounded-lg border-2 border-[var(--border-subtle)]"
             />
-            <div className="absolute top-2 right-2 flex gap-2">
-              {/* Camera button with dropdown menu */}
-              <div className="relative" ref={menuRef}>
-                <button
-                  onClick={() => setShowPhotoMenu(!showPhotoMenu)}
-                  disabled={isUploading}
-                  className="p-1.5 bg-[var(--surface)] rounded-full shadow-[var(--shadow-2)] hover:bg-[var(--surface-hover)] transition-colors disabled:opacity-50"
-                  title="Change photo"
-                >
-                  <svg className="w-4 h-4 text-[var(--text-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                </button>
+            <div className="absolute top-2 right-2 flex gap-1.5">
+              {/* Crop button */}
+              <button
+                onClick={handleCropExistingPhoto}
+                disabled={isUploading || isLoadingForCrop}
+                className="p-1.5 bg-[var(--surface)] rounded-full shadow-[var(--shadow-2)] hover:bg-[var(--teed-green-2)] transition-colors disabled:opacity-50"
+                title="Crop photo"
+              >
+                <svg className="w-4 h-4 text-[var(--text-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M7 3v4M3 7h4m10 0h4m-4 10v4m0-4h4M7 21v-4m0 0H3m4 0V7m10 10V7M7 7h10v10H7z"
+                  />
+                </svg>
+              </button>
 
-                {/* Dropdown menu */}
-                {showPhotoMenu && (
-                  <div className="absolute top-full right-0 mt-1 w-48 bg-[var(--surface)] border border-[var(--border-subtle)] rounded-lg shadow-[var(--shadow-4)] z-10">
-                    <button
-                      onClick={() => {
-                        setShowPhotoMenu(false);
-                        handleFindProductImage();
-                      }}
-                      disabled={isFindingImage}
-                      className="w-full px-4 py-2.5 text-left text-sm hover:bg-[var(--teed-green-2)] hover:text-[var(--teed-green-11)] transition-colors flex items-center gap-2 disabled:opacity-50"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                      </svg>
-                      <span>{isFindingImage ? 'Searching...' : 'Search with AI'}</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        setShowPhotoMenu(false);
-                        fileInputRef.current?.click();
-                      }}
-                      className="w-full px-4 py-2.5 text-left text-sm hover:bg-[var(--surface-hover)] transition-colors flex items-center gap-2 border-t border-[var(--border-subtle)]"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                      </svg>
-                      <span>Upload from Device</span>
-                    </button>
-                  </div>
-                )}
-              </div>
+              {/* Change photo button */}
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploading}
+                className="p-1.5 bg-[var(--surface)] rounded-full shadow-[var(--shadow-2)] hover:bg-[var(--surface-hover)] transition-colors disabled:opacity-50"
+                title="Change photo"
+              >
+                <svg className="w-4 h-4 text-[var(--text-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+              </button>
 
+              {/* Remove photo button */}
               <button
                 onClick={handleRemovePhoto}
                 disabled={isUploading}
@@ -358,7 +387,7 @@ export default function ItemPhotoUpload({
                 </svg>
               </button>
             </div>
-            {isUploading && (
+            {(isUploading || isLoadingForCrop) && (
               <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center">
                 <div className="flex items-center gap-2 text-white">
                   <svg
@@ -380,7 +409,7 @@ export default function ItemPhotoUpload({
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     />
                   </svg>
-                  <span className="text-sm font-medium">Uploading...</span>
+                  <span className="text-sm font-medium">{isLoadingForCrop ? 'Loading...' : 'Uploading...'}</span>
                 </div>
               </div>
             )}

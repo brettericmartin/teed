@@ -84,16 +84,32 @@ export default async function DashboardPage() {
 
   // Profile already fetched above for beta check
 
+  // Use actual bag count instead of cached value
+  const actualBagCount = bagsWithPhotos?.length || 0;
+
+  // Get actual view count from user_activity table
+  const { count: viewCount } = await supabase
+    .from('user_activity')
+    .select('*', { count: 'exact', head: true })
+    .eq('event_type', 'bag_viewed')
+    .filter('event_data->>owner_id', 'eq', user.id);
+
+  // Get actual follower count
+  const { count: followerCount } = await supabase
+    .from('follows')
+    .select('*', { count: 'exact', head: true })
+    .eq('followed_id', user.id);
+
   return (
     <DashboardClient
       initialBags={bagsWithPhotos || []}
       userHandle={profile?.handle || ''}
       displayName={profile?.display_name || ''}
       profileStats={{
-        totalViews: profile?.total_views || 0,
-        totalBags: profile?.total_bags || 0,
-        totalFollowers: profile?.total_followers || 0,
-        statsUpdatedAt: profile?.stats_updated_at || null,
+        totalViews: viewCount || 0,
+        totalBags: actualBagCount,
+        totalFollowers: followerCount || 0,
+        statsUpdatedAt: null,
       }}
     />
   );

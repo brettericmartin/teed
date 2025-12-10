@@ -11,8 +11,8 @@ export default function FeedbackWidget({ position = 'bottom-right' }: FeedbackWi
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [type, setType] = useState<'bug' | 'feature' | 'question'>('bug');
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [subject, setSubject] = useState('');
+  const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
@@ -33,8 +33,8 @@ export default function FeedbackWidget({ position = 'bottom-right' }: FeedbackWi
       await supabase.from('feedback').insert({
         user_id: userId,
         type,
-        title,
-        description,
+        subject,
+        message,
         page_url: window.location.href,
         user_agent: navigator.userAgent,
         status: 'new',
@@ -56,8 +56,8 @@ export default function FeedbackWidget({ position = 'bottom-right' }: FeedbackWi
         setIsOpen(false);
         setIsExpanded(false);
         setIsSuccess(false);
-        setTitle('');
-        setDescription('');
+        setSubject('');
+        setMessage('');
       }, 2000);
     } catch (err) {
       console.error('Feedback error:', err);
@@ -153,16 +153,16 @@ export default function FeedbackWidget({ position = 'bottom-right' }: FeedbackWi
 
               <input
                 type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
                 placeholder="Brief summary"
                 required
                 className="w-full px-3 py-2 mb-3 text-sm rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-[var(--text-primary)] placeholder:text-gray-400"
               />
 
               <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
                 placeholder="Tell us more..."
                 rows={3}
                 required
@@ -171,7 +171,7 @@ export default function FeedbackWidget({ position = 'bottom-right' }: FeedbackWi
 
               <button
                 type="submit"
-                disabled={isSubmitting || !title || !description}
+                disabled={isSubmitting || !subject || !message}
                 className="w-full py-2 px-4 bg-[var(--teed-green-9)] text-white text-sm font-medium rounded-lg hover:bg-[var(--teed-green-10)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isSubmitting ? 'Sending...' : 'Send Feedback'}

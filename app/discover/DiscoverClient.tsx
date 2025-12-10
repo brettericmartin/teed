@@ -161,6 +161,16 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   useEffect(() => {
     checkAuth();
     fetchPopularTags();
+
+    // Track discover page view
+    fetch('/api/analytics/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event_type: 'page_viewed',
+        event_data: { page: 'discover' },
+      }),
+    }).catch(() => {});
   }, []);
 
   useEffect(() => {

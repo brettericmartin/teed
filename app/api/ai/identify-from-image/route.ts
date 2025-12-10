@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { trackApiUsage } from '@/lib/apiUsageTracker';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -57,6 +58,7 @@ function detectBrandFromHint(hint: string): string | null {
 }
 
 export async function POST(request: NextRequest) {
+  const startTime = Date.now();
   try {
     const { imageBase64, textHint, bagContext } = await request.json();
 
@@ -204,6 +206,19 @@ Always respond with valid JSON in this format:
 
     console.log(`[identify-from-image] Identified ${suggestions.length} products`);
 
+    // Track API usage
+    const durationMs = Date.now() - startTime;
+    trackApiUsage({
+      userId: null,
+      endpoint: '/api/ai/identify-from-image',
+      model: 'gpt-4o',
+      operationType: 'identify',
+      inputTokens: response.usage?.prompt_tokens || 1500, // Vision uses ~1500 tokens per image
+      outputTokens: response.usage?.completion_tokens || 0,
+      durationMs,
+      status: 'success',
+    }).catch(console.error);
+
     return NextResponse.json({
       suggestions,
       searchTier: 'vision',
@@ -211,6 +226,18 @@ Always respond with valid JSON in this format:
 
   } catch (error: any) {
     console.error('[identify-from-image] Error:', error);
+
+    // Track error
+    trackApiUsage({
+      userId: null,
+      endpoint: '/api/ai/identify-from-image',
+      model: 'gpt-4o',
+      operationType: 'identify',
+      durationMs: Date.now() - startTime,
+      status: error?.status === 429 ? 'rate_limited' : 'error',
+      errorCode: error?.code,
+      errorMessage: error?.message,
+    }).catch(console.error);
 
     if (error?.status === 429 || error?.code === 'insufficient_quota') {
       return NextResponse.json(

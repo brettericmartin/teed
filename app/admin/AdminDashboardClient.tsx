@@ -1,100 +1,310 @@
 'use client';
 
 import Link from 'next/link';
-import { Settings, BookOpen, DollarSign, Users, BarChart3 } from 'lucide-react';
+import {
+  Settings,
+  BookOpen,
+  DollarSign,
+  Users,
+  BarChart3,
+  Shield,
+  FileText,
+  Package,
+  TrendingUp,
+  Sparkles,
+  Palette,
+  MessageSquare,
+  Video,
+} from 'lucide-react';
+import { ROLE_PERMISSIONS, getRoleDisplayName, type AdminRole } from '@/lib/types/admin';
 
-export default function AdminDashboardClient() {
+interface Props {
+  adminRole: AdminRole;
+  adminEmail: string;
+  adminHandle: string;
+}
+
+interface AdminCard {
+  href: string;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  gradient: string;
+  borderHover: string;
+  permission?: keyof typeof ROLE_PERMISSIONS.super_admin;
+  comingSoon?: boolean;
+}
+
+export default function AdminDashboardClient({
+  adminRole,
+  adminEmail,
+  adminHandle,
+}: Props) {
+  const permissions = ROLE_PERMISSIONS[adminRole];
+
+  const adminCards: AdminCard[] = [
+    {
+      href: '/admin/users',
+      title: 'User Management',
+      description: 'View users, manage roles, and handle moderation',
+      icon: <Users className="w-6 h-6 text-[var(--sky-11)]" />,
+      gradient: 'from-[var(--sky-4)] to-[var(--sky-6)]',
+      borderHover: 'hover:border-[var(--sky-6)]',
+      permission: 'canManageUsers',
+    },
+    {
+      href: '/admin/affiliate-settings',
+      title: 'Affiliate Settings',
+      description: 'Configure platform affiliate tags for Amazon, Impact, CJ, and more',
+      icon: <DollarSign className="w-6 h-6 text-[var(--teed-green-11)]" />,
+      gradient: 'from-[var(--teed-green-4)] to-[var(--teed-green-6)]',
+      borderHover: 'hover:border-[var(--teed-green-6)]',
+      permission: 'canConfigureAffiliate',
+    },
+    {
+      href: '/admin/analytics',
+      title: 'Analytics',
+      description: 'Platform metrics, AI usage, user activity, and costs',
+      icon: <BarChart3 className="w-6 h-6 text-[var(--amber-11)]" />,
+      gradient: 'from-[var(--amber-4)] to-[var(--amber-6)]',
+      borderHover: 'hover:border-[var(--amber-6)]',
+      permission: 'canViewAnalytics',
+    },
+    {
+      href: '/admin/bags',
+      title: 'Bag Control',
+      description: 'Manage bags, feature content, handle flags',
+      icon: <Package className="w-6 h-6 text-[var(--copper-11)]" />,
+      gradient: 'from-[var(--copper-4)] to-[var(--copper-6)]',
+      borderHover: 'hover:border-[var(--copper-6)]',
+      permission: 'canHideContent',
+    },
+    {
+      href: '/admin/items',
+      title: 'Item Analytics',
+      description: 'Global items, duplicates, brand rankings',
+      icon: <TrendingUp className="w-6 h-6 text-[var(--sand-11)]" />,
+      gradient: 'from-[var(--sand-4)] to-[var(--sand-6)]',
+      borderHover: 'hover:border-[var(--sand-6)]',
+      permission: 'canViewAnalytics',
+    },
+    {
+      href: '/admin/audit-logs',
+      title: 'Audit Logs',
+      description: 'View history of all admin actions',
+      icon: <FileText className="w-6 h-6 text-[var(--grey-11)]" />,
+      gradient: 'from-[var(--grey-4)] to-[var(--grey-6)]',
+      borderHover: 'hover:border-[var(--grey-6)]',
+      permission: 'canViewAuditLogs',
+    },
+    {
+      href: '/admin/feedback',
+      title: 'Feedback',
+      description: 'Bug reports, feature requests, and user questions',
+      icon: <MessageSquare className="w-6 h-6 text-[var(--sky-11)]" />,
+      gradient: 'from-[var(--sky-4)] to-[var(--sky-6)]',
+      borderHover: 'hover:border-[var(--sky-6)]',
+      permission: 'canViewAnalytics',
+    },
+    {
+      href: '/admin/setup-guides',
+      title: 'Setup Guides',
+      description: 'Step-by-step instructions for affiliate programs',
+      icon: <BookOpen className="w-6 h-6 text-[var(--sky-11)]" />,
+      gradient: 'from-[var(--sky-4)] to-[var(--sky-6)]',
+      borderHover: 'hover:border-[var(--sky-6)]',
+    },
+    {
+      href: '/admin/design-system',
+      title: 'Design System',
+      description: 'Colors, typography, and component library',
+      icon: <Palette className="w-6 h-6 text-[var(--evergreen-11)]" />,
+      gradient: 'from-[var(--evergreen-4)] to-[var(--evergreen-6)]',
+      borderHover: 'hover:border-[var(--evergreen-6)]',
+    },
+    {
+      href: '/admin/content-ideas',
+      title: 'Content Ideas',
+      description: 'Social media manager - discover and curate content from YouTube',
+      icon: <Video className="w-6 h-6 text-[var(--copper-11)]" />,
+      gradient: 'from-[var(--copper-4)] to-[var(--copper-6)]',
+      borderHover: 'hover:border-[var(--copper-6)]',
+      permission: 'canViewAnalytics',
+    },
+    {
+      href: '/admin/ai-assistant',
+      title: 'AI Curation',
+      description: 'Quality scoring, moderation, bulk AI operations',
+      icon: <Sparkles className="w-6 h-6 text-[var(--amber-11)]" />,
+      gradient: 'from-[var(--amber-4)] to-[var(--amber-6)]',
+      borderHover: 'hover:border-[var(--amber-6)]',
+      permission: 'canViewAnalytics',
+      comingSoon: true,
+    },
+  ];
+
   return (
     <div className="min-h-screen pt-16">
-      {/* Header */}
+      {/* Header with role badge */}
       <header className="bg-[var(--surface)] border-b border-[var(--border-subtle)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <h1 className="text-3xl font-bold text-[var(--text-primary)]">
-            Admin Dashboard
-          </h1>
-          <p className="text-sm text-[var(--text-secondary)] mt-2">
-            Platform administration and configuration
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-[var(--text-primary)]">
+                Admin Dashboard
+              </h1>
+              <p className="text-sm text-[var(--text-secondary)] mt-2">
+                Platform administration and configuration
+              </p>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-[var(--amber-4)] rounded-full">
+              <Shield className="w-4 h-4 text-[var(--amber-11)]" />
+              <span className="text-sm font-medium text-[var(--amber-11)]">
+                {getRoleDisplayName(adminRole)}
+              </span>
+            </div>
+          </div>
         </div>
       </header>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Affiliate Settings */}
-          <Link
-            href="/admin/affiliate-settings"
-            className="group block p-6 bg-[var(--surface)] rounded-[var(--radius-xl)] border border-[var(--border-subtle)] hover:border-[var(--teed-green-6)] hover:shadow-[var(--shadow-3)] transition-all"
-          >
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-[var(--teed-green-4)] to-[var(--teed-green-6)] rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                <DollarSign className="w-6 h-6 text-[var(--teed-green-11)]" />
-              </div>
-              <h2 className="text-xl font-semibold text-[var(--text-primary)]">
-                Affiliate Settings
-              </h2>
-            </div>
-            <p className="text-sm text-[var(--text-secondary)]">
-              Configure platform affiliate tags for Amazon, Impact, CJ, and more
-            </p>
-          </Link>
+          {adminCards.map((card) => {
+            const hasPermission = card.permission
+              ? permissions[card.permission]
+              : true;
 
-          {/* Setup Guides */}
-          <Link
-            href="/admin/setup-guides"
-            className="group block p-6 bg-[var(--surface)] rounded-[var(--radius-xl)] border border-[var(--border-subtle)] hover:border-[var(--sky-6)] hover:shadow-[var(--shadow-3)] transition-all"
-          >
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-[var(--sky-4)] to-[var(--sky-6)] rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                <BookOpen className="w-6 h-6 text-[var(--sky-11)]" />
-              </div>
-              <h2 className="text-xl font-semibold text-[var(--text-primary)]">
-                Setup Guides
-              </h2>
-            </div>
-            <p className="text-sm text-[var(--text-secondary)]">
-              Step-by-step instructions for signing up to affiliate programs
-            </p>
-          </Link>
+            if (!hasPermission) {
+              return (
+                <div
+                  key={card.title}
+                  className="p-6 bg-[var(--surface-elevated)] rounded-[var(--radius-xl)] border border-[var(--border-subtle)] opacity-50"
+                >
+                  <div className="flex items-center gap-4 mb-4">
+                    <div
+                      className={`w-12 h-12 bg-gradient-to-br ${card.gradient} rounded-lg flex items-center justify-center`}
+                    >
+                      {card.icon}
+                    </div>
+                    <h2 className="text-xl font-semibold text-[var(--text-primary)]">
+                      {card.title}
+                    </h2>
+                  </div>
+                  <p className="text-sm text-[var(--text-secondary)]">
+                    Requires higher permission level
+                  </p>
+                </div>
+              );
+            }
 
-          {/* Analytics (Coming Soon) */}
-          <div className="p-6 bg-[var(--surface-elevated)] rounded-[var(--radius-xl)] border border-[var(--border-subtle)] opacity-60">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-[var(--amber-4)] to-[var(--amber-6)] rounded-lg flex items-center justify-center">
-                <BarChart3 className="w-6 h-6 text-[var(--amber-11)]" />
-              </div>
-              <h2 className="text-xl font-semibold text-[var(--text-primary)]">
-                Analytics
-              </h2>
-            </div>
-            <p className="text-sm text-[var(--text-secondary)]">
-              Coming soon: Affiliate click and revenue tracking
-            </p>
-          </div>
+            if (card.comingSoon) {
+              return (
+                <div
+                  key={card.title}
+                  className="p-6 bg-[var(--surface-elevated)] rounded-[var(--radius-xl)] border border-[var(--border-subtle)] opacity-60"
+                >
+                  <div className="flex items-center gap-4 mb-4">
+                    <div
+                      className={`w-12 h-12 bg-gradient-to-br ${card.gradient} rounded-lg flex items-center justify-center`}
+                    >
+                      {card.icon}
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-semibold text-[var(--text-primary)]">
+                        {card.title}
+                      </h2>
+                      <span className="text-xs text-[var(--amber-11)] bg-[var(--amber-4)] px-2 py-0.5 rounded-full">
+                        Coming Soon
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-sm text-[var(--text-secondary)]">
+                    {card.description}
+                  </p>
+                </div>
+              );
+            }
+
+            return (
+              <Link
+                key={card.title}
+                href={card.href}
+                className={`group block p-6 bg-[var(--surface)] rounded-[var(--radius-xl)] border border-[var(--border-subtle)] ${card.borderHover} hover:shadow-[var(--shadow-3)] transition-all`}
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div
+                    className={`w-12 h-12 bg-gradient-to-br ${card.gradient} rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform`}
+                  >
+                    {card.icon}
+                  </div>
+                  <h2 className="text-xl font-semibold text-[var(--text-primary)]">
+                    {card.title}
+                  </h2>
+                </div>
+                <p className="text-sm text-[var(--text-secondary)]">
+                  {card.description}
+                </p>
+              </Link>
+            );
+          })}
         </div>
 
-        {/* Quick Stats */}
+        {/* Admin Info */}
         <div className="mt-8 p-6 bg-[var(--surface)] rounded-[var(--radius-xl)] border border-[var(--border-subtle)]">
           <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4">
-            Platform Overview
+            Your Admin Access
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
             <div>
-              <p className="text-sm text-[var(--text-secondary)] mb-1">Affiliate Networks</p>
-              <p className="text-2xl font-bold text-[var(--text-primary)]">5</p>
-              <p className="text-xs text-[var(--text-tertiary)] mt-1">Amazon, Impact, CJ, Rakuten, ShareASale</p>
+              <p className="text-sm text-[var(--text-secondary)] mb-1">Role</p>
+              <p className="text-xl font-bold text-[var(--text-primary)]">
+                {getRoleDisplayName(adminRole)}
+              </p>
             </div>
             <div>
-              <p className="text-sm text-[var(--text-secondary)] mb-1">Admin Email</p>
-              <p className="text-sm font-medium text-[var(--text-primary)] break-all">brett.eric.martin@gmail.com</p>
+              <p className="text-sm text-[var(--text-secondary)] mb-1">Handle</p>
+              <p className="text-sm font-medium text-[var(--text-primary)]">
+                @{adminHandle}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-[var(--text-secondary)] mb-1">Email</p>
+              <p className="text-sm font-medium text-[var(--text-primary)] break-all">
+                {adminEmail}
+              </p>
             </div>
             <div>
               <p className="text-sm text-[var(--text-secondary)] mb-1">Status</p>
               <div className="flex items-center gap-2 mt-1">
                 <div className="w-2 h-2 bg-[var(--teed-green-9)] rounded-full" />
-                <span className="text-sm font-medium text-[var(--text-primary)]">Active</span>
+                <span className="text-sm font-medium text-[var(--text-primary)]">
+                  Active
+                </span>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Permission Overview */}
+        <div className="mt-6 p-6 bg-[var(--surface)] rounded-[var(--radius-xl)] border border-[var(--border-subtle)]">
+          <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4">
+            Your Permissions
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {Object.entries(permissions).map(([key, value]) => (
+              <span
+                key={key}
+                className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  value
+                    ? 'bg-[var(--teed-green-4)] text-[var(--teed-green-11)]'
+                    : 'bg-[var(--grey-4)] text-[var(--grey-11)]'
+                }`}
+              >
+                {key.replace('can', '').replace(/([A-Z])/g, ' $1').trim()}
+                {value ? ' ✓' : ' ✗'}
+              </span>
+            ))}
           </div>
         </div>
       </main>

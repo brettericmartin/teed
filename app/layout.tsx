@@ -29,16 +29,18 @@ export default async function RootLayout({
 
   let userHandle: string | undefined;
   let displayName: string | undefined;
+  let isAdmin = false;
 
   if (user) {
     const { data: profile } = await supabase
       .from('profiles')
-      .select('handle, display_name')
+      .select('handle, display_name, admin_role')
       .eq('id', user.id)
       .single();
 
     userHandle = profile?.handle;
     displayName = profile?.display_name;
+    isAdmin = !!profile?.admin_role;
   }
 
   return (
@@ -49,6 +51,7 @@ export default async function RootLayout({
             userHandle={userHandle}
             displayName={displayName}
             isAuthenticated={!!user}
+            isAdmin={isAdmin}
           />
 
           <main className="pt-nav-safe pb-20 md:pb-0">

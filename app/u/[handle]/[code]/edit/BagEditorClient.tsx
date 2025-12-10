@@ -11,6 +11,7 @@ import ShareModal from './components/ShareModal';
 import PhotoUploadModal from './components/PhotoUploadModal';
 import BulkPhotoUploadModal from './components/BulkPhotoUploadModal';
 import TranscriptProcessorModal from './components/TranscriptProcessorModal';
+import BulkLinkImportModal from './components/BulkLinkImportModal';
 import ProductReviewModal, { IdentifiedProduct } from './components/ProductReviewModal';
 import BatchPhotoSelector from './components/BatchPhotoSelector';
 import ItemSelectionModal from './components/ItemSelectionModal';
@@ -156,6 +157,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [showShareModal, setShowShareModal] = useState(false);
   const [showPhotoUpload, setShowPhotoUpload] = useState(false);
   const [showTranscriptProcessor, setShowTranscriptProcessor] = useState(false);
+  const [showBulkLinkImport, setShowBulkLinkImport] = useState(false);
   const [showProductReview, setShowProductReview] = useState(false);
   const [showItemSelection, setShowItemSelection] = useState(false);
   const [showBatchPhotoSelector, setShowBatchPhotoSelector] = useState(false);
@@ -1611,6 +1613,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             itemsWithoutPhotos={bag.items.filter(item => !item.photo_url).length}
             onAddFromPhoto={() => setShowPhotoUpload(true)}
             onAddFromTranscript={() => setShowTranscriptProcessor(true)}
+            onAddFromLinks={() => setShowBulkLinkImport(true)}
             onFindPhotos={() => setShowItemSelection(true)}
             onFillProductInfo={handleFillLinks}
             isIdentifying={isIdentifying}
@@ -1706,6 +1709,29 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         onClose={() => setShowTranscriptProcessor(false)}
         onProductsExtracted={handleTranscriptProductsExtracted}
         bagType={bag.title}
+      />
+
+      {/* Bulk Link Import Modal */}
+      <BulkLinkImportModal
+        isOpen={showBulkLinkImport}
+        onClose={() => setShowBulkLinkImport(false)}
+        bagCode={bag.code}
+        onItemsAdded={(count) => {
+          // Refresh the bag data to get new items
+          toast.showAI(`Added ${count} item${count !== 1 ? 's' : ''} from links!`);
+          // Trigger a refresh by fetching updated bag data
+          fetch(`/api/bags/${bag.code}`)
+            .then(res => res.json())
+            .then(updatedBag => {
+              if (updatedBag && updatedBag.items) {
+                setBag(prev => ({
+                  ...prev,
+                  items: updatedBag.items,
+                }));
+              }
+            })
+            .catch(err => console.error('Error refreshing bag:', err));
+        }}
       />
 
       {/* Product Review Modal */}

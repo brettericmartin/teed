@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { identifyProductsInImage } from '@/lib/ai';
+import { trackApiUsage, type ApiStatus } from '@/lib/apiUsageTracker';
 
 // Increase body size limit for large images (iPhone photos can be 5-10MB)
 export const config = {
@@ -146,6 +147,23 @@ export async function POST(request: NextRequest) {
       processingTime: totalProcessingTime,
     });
 
+    // Track API usage for cost monitoring
+    // GPT-4o Vision: ~1000 tokens input per image + ~500-2000 output tokens
+    const estimatedInputTokens = imageArray.length * 1500; // Conservative estimate
+    const estimatedOutputTokens = allProducts.length * 300 + 500; // Per product + overhead
+    trackApiUsage({
+      userId: user.id,
+      endpoint: '/api/ai/identify-products',
+      model: 'gpt-4o',
+      operationType: 'identify',
+      inputTokens: estimatedInputTokens,
+      outputTokens: estimatedOutputTokens,
+      requestSizeBytes: JSON.stringify(body).length,
+      responseSizeBytes: JSON.stringify(combinedResult).length,
+      durationMs: totalProcessingTime,
+      status: 'success',
+    }).catch(console.error);
+
     // Return results
     return NextResponse.json(combinedResult, { status: 200 });
 
@@ -156,6 +174,19 @@ export async function POST(request: NextRequest) {
       status: error?.status,
       code: error?.code,
     });
+
+    // Track error for monitoring
+    const isRateLimit = error?.status === 429 || error?.code === 'rate_limit_exceeded';
+    trackApiUsage({
+      userId: null, // May not have user context at this point
+      endpoint: '/api/ai/identify-products',
+      model: 'gpt-4o',
+      operationType: 'identify',
+      durationMs: 0,
+      status: isRateLimit ? 'rate_limited' : 'error',
+      errorCode: error?.code,
+      errorMessage: error.message,
+    }).catch(console.error);
 
     // Best Practice: User-friendly error messages
     const errorMessage = error.message || 'Failed to identify products';

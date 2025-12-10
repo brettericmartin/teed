@@ -1,6 +1,6 @@
 'use client';
 
-import { Camera, Images, Sparkles, ChevronRight, Loader2, Bot, FileText } from 'lucide-react';
+import { Camera, Images, Sparkles, ChevronRight, Loader2, Bot, FileText, Link } from 'lucide-react';
 
 type AIAction = {
   id: string;
@@ -21,10 +21,12 @@ type AIAssistantHubProps = {
   itemsWithoutPhotos: number;
   onAddFromPhoto: () => void;
   onAddFromTranscript: () => void;
+  onAddFromLinks: () => void;
   onFindPhotos: () => void;
   onFillProductInfo: () => void;
   isIdentifying?: boolean;
   isFillingInfo?: boolean;
+  isImportingLinks?: boolean;
 };
 
 function AIActionRow({
@@ -91,10 +93,12 @@ export default function AIAssistantHub({
   itemsWithoutPhotos,
   onAddFromPhoto,
   onAddFromTranscript,
+  onAddFromLinks,
   onFindPhotos,
   onFillProductInfo,
   isIdentifying = false,
   isFillingInfo = false,
+  isImportingLinks = false,
 }: AIAssistantHubProps) {
   const actions: (AIAction & { delay: number })[] = [
     {
@@ -117,6 +121,17 @@ export default function AIAssistantHub({
       delay: 150,
     },
     {
+      id: 'add-from-links',
+      icon: <Link className="w-5 h-5" />,
+      title: 'Add from Links',
+      description: 'Bulk import from product URLs',
+      onClick: onAddFromLinks,
+      isLoading: isImportingLinks,
+      loadingText: 'Importing...',
+      disabled: isImportingLinks,
+      delay: 175,
+    },
+    {
       id: 'find-photos',
       icon: <Images className="w-5 h-5" />,
       title: 'Smart Photo Match',
@@ -125,7 +140,7 @@ export default function AIAssistantHub({
       countLabel: itemsWithoutPhotos > 0 ? 'need photos' : 'items',
       onClick: onFindPhotos,
       hidden: itemCount === 0,
-      delay: 200,
+      delay: 225,
     },
     {
       id: 'fill-info',
@@ -138,7 +153,7 @@ export default function AIAssistantHub({
       loadingText: 'Filling info...',
       disabled: isFillingInfo,
       hidden: itemCount === 0,
-      delay: 300,
+      delay: 275,
     },
   ];
 

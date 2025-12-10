@@ -4,6 +4,7 @@ import { generateBrandContext } from '@/lib/brandKnowledge';
 import { smartSearch, loadLibrary, getProductsByBrand } from '@/lib/productLibrary';
 import { learnProduct } from '@/lib/productLibrary/learner';
 import type { Category, SearchResult } from '@/lib/productLibrary/schema';
+import { trackApiUsage } from '@/lib/apiUsageTracker';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -407,6 +408,7 @@ NEVER return empty suggestions. If unsure, make educated guesses based on brand 
 Generate product suggestions. Remember: ALWAYS return at least 3-5 suggestions, even if you have to guess.`;
 
   try {
+    const startTime = Date.now();
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [
@@ -423,6 +425,19 @@ Generate product suggestions. Remember: ALWAYS return at least 3-5 suggestions, 
     }
 
     const result: EnrichmentResponse = JSON.parse(responseText);
+
+    // Track API usage
+    const durationMs = Date.now() - startTime;
+    trackApiUsage({
+      userId: null, // enrich-item doesn't require auth
+      endpoint: '/api/ai/enrich-item',
+      model: 'gpt-4o',
+      operationType: 'enrich',
+      inputTokens: completion.usage?.prompt_tokens || 0,
+      outputTokens: completion.usage?.completion_tokens || 0,
+      durationMs,
+      status: 'success',
+    }).catch(console.error);
 
     // Mark all as AI-sourced
     result.suggestions = result.suggestions.map(s => ({ ...s, source: 'ai' as const }));
@@ -469,8 +484,19 @@ Generate product suggestions. Remember: ALWAYS return at least 3-5 suggestions, 
 
     console.log(`[enrich-item] TIER 2 Results: ${result.suggestions.length} AI suggestions, ${productsBeingLearned.length} being learned`);
     return result;
-  } catch (error) {
+  } catch (error: any) {
     console.error('[enrich-item] TIER 2 Error:', error);
+    // Track error
+    trackApiUsage({
+      userId: null,
+      endpoint: '/api/ai/enrich-item',
+      model: 'gpt-4o',
+      operationType: 'enrich',
+      durationMs: 0,
+      status: error?.status === 429 ? 'rate_limited' : 'error',
+      errorCode: error?.code,
+      errorMessage: error?.message,
+    }).catch(console.error);
     throw error;
   }
 }

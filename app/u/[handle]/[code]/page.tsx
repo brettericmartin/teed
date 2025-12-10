@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 import PublicBagView from './PublicBagView';
@@ -45,6 +46,7 @@ export default async function UserBagPage({ params }: PageProps) {
         quantity,
         sort_index,
         custom_photo_id,
+        photo_url,
         promo_codes,
         is_featured,
         links (
@@ -94,10 +96,13 @@ export default async function UserBagPage({ params }: PageProps) {
   }
 
   // Sort items by sort_index and add photo URLs
+  // Priority: custom_photo_id (uploaded) > photo_url (external URL)
   const sortedItems = bag.items
     ?.map((item: any) => ({
       ...item,
-      photo_url: item.custom_photo_id ? photoUrls[item.custom_photo_id] || null : null,
+      photo_url: item.custom_photo_id
+        ? photoUrls[item.custom_photo_id] || item.photo_url || null
+        : item.photo_url || null,
     }))
     .sort((a: any, b: any) => a.sort_index - b.sort_index) || [];
 
@@ -139,14 +144,43 @@ export default async function UserBagPage({ params }: PageProps) {
   };
 
   return (
-    <PublicBagView
-      bag={bagWithCover}
-      items={sortedItems}
-      ownerHandle={profile.handle}
-      ownerName={profile.display_name}
-      ownerId={profile.id}
-      hasAffiliateLinks={hasAffiliateLinks}
-      disclosureText={disclosureText}
-    />
+    <Suspense fallback={<BagViewSkeleton />}>
+      <PublicBagView
+        bag={bagWithCover}
+        items={sortedItems}
+        ownerHandle={profile.handle}
+        ownerName={profile.display_name}
+        ownerId={profile.id}
+        hasAffiliateLinks={hasAffiliateLinks}
+        disclosureText={disclosureText}
+      />
+    </Suspense>
+  );
+}
+
+function BagViewSkeleton() {
+  return (
+    <div className="min-h-screen animate-pulse">
+      <div className="bg-[var(--surface)] border-b border-[var(--border-subtle)]">
+        <div className="max-w-5xl mx-auto px-4 py-6">
+          <div className="h-4 w-32 bg-[var(--grey-3)] rounded mb-4" />
+          <div className="h-8 w-64 bg-[var(--grey-3)] rounded mb-2" />
+          <div className="h-4 w-48 bg-[var(--grey-3)] rounded" />
+        </div>
+      </div>
+      <div className="max-w-5xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="bg-[var(--surface)] rounded-[var(--radius-xl)] overflow-hidden border border-[var(--border-subtle)]">
+              <div className="aspect-square bg-[var(--grey-3)]" />
+              <div className="p-4 space-y-2">
+                <div className="h-3 w-16 bg-[var(--grey-3)] rounded" />
+                <div className="h-5 w-32 bg-[var(--grey-3)] rounded" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }

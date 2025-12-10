@@ -203,7 +203,7 @@ export default function DashboardClient({
       {/* Profile Stats */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <ProfileStats
-          totalBags={profileStats.totalBags}
+          totalBags={bags.length}
           totalViews={profileStats.totalViews}
           totalFollowers={profileStats.totalFollowers}
           statsUpdatedAt={profileStats.statsUpdatedAt}

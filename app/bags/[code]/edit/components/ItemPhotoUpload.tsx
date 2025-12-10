@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, ChangeEvent } from 'react';
+import { useState, useRef, useEffect, ChangeEvent } from 'react';
 import ImageCropModal from './ImageCropModal';
 
 type ItemPhotoUploadProps = {
@@ -24,16 +24,33 @@ export default function ItemPhotoUpload({
 }: ItemPhotoUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [isFindingImage, setIsFindingImage] = useState(false);
+  const [isLoadingForCrop, setIsLoadingForCrop] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(currentPhotoUrl || null);
   const [isCropModalOpen, setIsCropModalOpen] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
   const [imageSuggestions, setImageSuggestions] = useState<string[]>([]);
   const [showImagePicker, setShowImagePicker] = useState(false);
+  const [showPhotoMenu, setShowPhotoMenu] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const MAX_SIZE_MB = 10;
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowPhotoMenu(false);
+      }
+    };
+
+    if (showPhotoMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showPhotoMenu]);
 
   const handleFileSelect = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -248,6 +265,49 @@ export default function ItemPhotoUpload({
     }
   };
 
+  const handleCropExistingPhoto = async () => {
+    if (!preview) return;
+
+    setIsLoadingForCrop(true);
+    setError(null);
+    setShowPhotoMenu(false);
+
+    try {
+      // Fetch the image through our proxy to avoid CORS issues
+      const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(preview)}`;
+      const response = await fetch(proxyUrl);
+
+      if (!response.ok) {
+        throw new Error('Failed to load image for cropping');
+      }
+
+      const blob = await response.blob();
+
+      // Convert blob to data URL for the cropper
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result;
+        if (!result || typeof result !== 'string' || !result.startsWith('data:image/')) {
+          setError('Failed to process image for cropping');
+          setIsLoadingForCrop(false);
+          return;
+        }
+        setSelectedImageUrl(result);
+        setIsCropModalOpen(true);
+        setIsLoadingForCrop(false);
+      };
+      reader.onerror = () => {
+        setError('Failed to read image for cropping');
+        setIsLoadingForCrop(false);
+      };
+      reader.readAsDataURL(blob);
+    } catch (err: any) {
+      console.error('Error loading image for crop:', err);
+      setError(err.message || 'Failed to load image for cropping');
+      setIsLoadingForCrop(false);
+    }
+  };
+
   return (
     <div className="space-y-2">
       {/* Hidden file input */}
@@ -268,7 +328,25 @@ export default function ItemPhotoUpload({
             alt="Item photo"
             className="w-full h-32 object-contain bg-gray-50 rounded-lg border-2 border-gray-200"
           />
-          <div className="absolute top-2 right-2 flex gap-2">
+          <div className="absolute top-2 right-2 flex gap-1.5">
+            {/* Crop button */}
+            <button
+              onClick={handleCropExistingPhoto}
+              disabled={isUploading || isLoadingForCrop}
+              className="p-1.5 bg-white rounded-full shadow-lg hover:bg-blue-50 transition-colors disabled:opacity-50"
+              title="Crop photo"
+            >
+              <svg className="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 3v4M3 7h4m10 0h4m-4 10v4m0-4h4M7 21v-4m0 0H3m4 0V7m10 10V7M7 7h10v10H7z"
+                />
+              </svg>
+            </button>
+
+            {/* Change photo button */}
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
@@ -290,6 +368,8 @@ export default function ItemPhotoUpload({
                 />
               </svg>
             </button>
+
+            {/* Remove photo button */}
             <button
               onClick={handleRemovePhoto}
               disabled={isUploading}
@@ -306,7 +386,7 @@ export default function ItemPhotoUpload({
               </svg>
             </button>
           </div>
-          {isUploading && (
+          {(isUploading || isLoadingForCrop) && (
             <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center">
               <div className="flex items-center gap-2 text-white">
                 <svg
@@ -328,7 +408,7 @@ export default function ItemPhotoUpload({
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   />
                 </svg>
-                <span className="text-sm font-medium">Uploading...</span>
+                <span className="text-sm font-medium">{isLoadingForCrop ? 'Loading...' : 'Uploading...'}</span>
               </div>
             </div>
           )}

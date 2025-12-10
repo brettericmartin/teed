@@ -51,8 +51,8 @@ const PRIORITY_OPTIONS = [
 
 export default function FeedbackModal({ type, userId, onClose }: FeedbackModalProps) {
   const config = TYPE_CONFIG[type];
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [subject, setSubject] = useState('');
+  const [message, setMessage] = useState('');
   const [priority, setPriority] = useState('medium');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -73,8 +73,8 @@ export default function FeedbackModal({ type, userId, onClose }: FeedbackModalPr
       const { error: insertError } = await supabase.from('feedback').insert({
         user_id: userId,
         type,
-        title,
-        description,
+        subject,
+        message,
         priority: type === 'bug' ? priority : null,
         page_url: pageUrl,
         user_agent: userAgent,
@@ -150,20 +150,20 @@ export default function FeedbackModal({ type, userId, onClose }: FeedbackModalPr
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-4 space-y-4">
           <Input
-            label="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            label="Subject"
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
             placeholder={config.titlePlaceholder}
             required
           />
 
           <div>
             <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
-              Description
+              Message
             </label>
             <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
               placeholder={config.placeholder}
               rows={4}
               required
@@ -203,7 +203,7 @@ export default function FeedbackModal({ type, userId, onClose }: FeedbackModalPr
             <Button
               type="submit"
               variant="create"
-              disabled={isSubmitting || !title || !description}
+              disabled={isSubmitting || !subject || !message}
               className="flex-1"
             >
               {isSubmitting ? 'Submitting...' : `Submit (+${config.points} pts)`}

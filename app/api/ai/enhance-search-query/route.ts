@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { openai } from '@/lib/openaiClient';
+import { trackApiUsage } from '@/lib/apiUsageTracker';
 
 /**
  * Enhance a user's product description into an optimized Google Image Search query
@@ -10,6 +11,7 @@ import { openai } from '@/lib/openaiClient';
  */
 
 export async function POST(request: NextRequest) {
+  const startTime = Date.now();
   try {
     const body = await request.json();
     const { description, productName, brand } = body;
@@ -78,12 +80,38 @@ Generate the optimal Google Image Search query:`;
 
     console.log('Enhanced search query:', enhancedQuery);
 
+    // Track API usage
+    const durationMs = Date.now() - startTime;
+    trackApiUsage({
+      userId: null,
+      endpoint: '/api/ai/enhance-search-query',
+      model: 'gpt-4o-mini',
+      operationType: 'generate',
+      inputTokens: completion.usage?.prompt_tokens || 0,
+      outputTokens: completion.usage?.completion_tokens || 0,
+      durationMs,
+      status: 'success',
+    }).catch(console.error);
+
     return NextResponse.json({
       query: enhancedQuery,
     });
 
   } catch (error: any) {
     console.error('Enhance search query error:', error);
+
+    // Track error
+    trackApiUsage({
+      userId: null,
+      endpoint: '/api/ai/enhance-search-query',
+      model: 'gpt-4o-mini',
+      operationType: 'generate',
+      durationMs: Date.now() - startTime,
+      status: error?.status === 429 ? 'rate_limited' : 'error',
+      errorCode: error?.code,
+      errorMessage: error?.message,
+    }).catch(console.error);
+
     return NextResponse.json(
       { error: error.message || 'Failed to enhance search query' },
       { status: 500 }

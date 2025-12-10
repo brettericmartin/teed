@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { openai } from '@/lib/openaiClient';
+import { trackApiUsage } from '@/lib/apiUsageTracker';
 
 /**
  * POST /api/ai/enrich-product-details
@@ -33,6 +34,7 @@ import { openai } from '@/lib/openaiClient';
  * }
  */
 export async function POST(request: NextRequest) {
+  const startTime = Date.now();
   try {
     const body = await request.json();
     const { productName, brand, category, url, existingDetails } = body;
@@ -126,14 +128,39 @@ Provide brand, formatted specifications, product differentiation notes, and fun 
       hasFunFacts: result.fun_facts?.length > 0,
     });
 
+    // Track API usage
+    const durationMs = Date.now() - startTime;
+    trackApiUsage({
+      userId: null,
+      endpoint: '/api/ai/enrich-product-details',
+      model: 'gpt-4o',
+      operationType: 'enrich',
+      inputTokens: response.usage?.prompt_tokens || 0,
+      outputTokens: response.usage?.completion_tokens || 0,
+      durationMs,
+      status: 'success',
+    }).catch(console.error);
+
     return NextResponse.json({
       brand: result.brand || brand || 'Unknown',
       custom_description: result.custom_description || '',
       notes: result.notes || '',
       fun_facts: result.fun_facts || [],
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error enriching product details:', error);
+
+    // Track error
+    trackApiUsage({
+      userId: null,
+      endpoint: '/api/ai/enrich-product-details',
+      model: 'gpt-4o',
+      operationType: 'enrich',
+      durationMs: Date.now() - startTime,
+      status: error?.status === 429 ? 'rate_limited' : 'error',
+      errorCode: error?.code,
+      errorMessage: error?.message,
+    }).catch(console.error);
 
     return NextResponse.json(
       {

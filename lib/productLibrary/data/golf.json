@@ -1,7 +1,7 @@
 {
   "category": "golf",
   "schemaVersion": "1.0.0",
-  "lastUpdated": "2025-12-01T06:54:33.632Z",
+  "lastUpdated": "2025-12-09T21:25:51.931Z",
   "brands": [
     {
       "name": "TaylorMade",
@@ -8096,9 +8096,56 @@
           ],
           "source": "inthegolfbag",
           "dataConfidence": 70
+        },
+        {
+          "id": "taylormade-stealth-2-0-driver",
+          "name": "Stealth 2.0 Driver",
+          "brand": "TaylorMade",
+          "category": "golf",
+          "subcategory": "drivers",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The Stealth 2.0 Driver features a white crown with a carbon sole, designed to enhance speed and distance.",
+          "searchKeywords": [
+            "taylormade",
+            "stealth",
+            "2.0",
+            "driver",
+            "stealth 2.0 driver"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "taylormade-stealth-2-0-driver",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-09T21:25:49.880Z",
+          "source": "ai",
+          "dataConfidence": 80
         }
       ],
-      "lastUpdated": "2025-11-30T03:31:39.800Z"
+      "lastUpdated": "2025-12-09T21:25:49.880Z"
     },
     {
       "name": "Titleist",
@@ -29061,9 +29108,55 @@
           ],
           "source": "inthegolfbag",
           "dataConfidence": 70
+        },
+        {
+          "id": "ping-g430-driver",
+          "name": "G430 Driver",
+          "brand": "Ping",
+          "category": "golf",
+          "subcategory": "drivers",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Ping's G430 Driver is designed for golfers seeking maximum forgiveness and distance, featuring a new face design and enhanced adjustability.",
+          "searchKeywords": [
+            "ping",
+            "g430",
+            "driver",
+            "g430 driver"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "ping-g430-driver",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-09T21:25:51.825Z",
+          "source": "ai",
+          "dataConfidence": 80
         }
       ],
-      "lastUpdated": "2025-11-30T03:31:48.408Z"
+      "lastUpdated": "2025-12-09T21:25:51.825Z"
     },
     {
       "name": "Cobra",
@@ -33413,9 +33506,102 @@
           "lastUpdated": "2025-12-01T05:52:52.935Z",
           "source": "ai",
           "dataConfidence": 77
+        },
+        {
+          "id": "cobra-king-ltdx-driver",
+          "name": "King LTDx Driver",
+          "brand": "Cobra",
+          "category": "golf",
+          "subcategory": "drivers",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Cobra's King LTDx Driver stands out with its unique design, featuring a low CG and high MOI for maximum distance.",
+          "searchKeywords": [
+            "cobra",
+            "king",
+            "ltdx",
+            "driver",
+            "king ltdx driver"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "cobra-king-ltdx-driver",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-09T21:23:48.771Z",
+          "source": "ai",
+          "dataConfidence": 77
+        },
+        {
+          "id": "cobra-ltdx-driver",
+          "name": "LTDx Driver",
+          "brand": "Cobra",
+          "category": "golf",
+          "subcategory": "drivers",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Cobra's LTDx Driver offers maximum distance and accuracy, featuring innovative weighting and aerodynamics to enhance player performance.",
+          "searchKeywords": [
+            "cobra",
+            "ltdx",
+            "driver",
+            "ltdx driver"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "cobra-ltdx-driver",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-09T21:25:51.930Z",
+          "source": "ai",
+          "dataConfidence": 75
         }
       ],
-      "lastUpdated": "2025-12-01T05:52:52.935Z"
+      "lastUpdated": "2025-12-09T21:25:51.930Z"
     },
     {
       "name": "Mizuno",
@@ -80802,8 +80988,252 @@
         }
       ],
       "lastUpdated": "2025-12-01T06:26:33.782Z"
+    },
+    {
+      "name": "Test Brand",
+      "aliases": [],
+      "products": [
+        {
+          "id": "test-brand-auth-test-item-1",
+          "name": "Auth Test Item 1",
+          "brand": "Test Brand",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "This is a placeholder item for testing purposes, often used in product development.",
+          "searchKeywords": [
+            "test brand",
+            "auth",
+            "test",
+            "item",
+            "auth test item 1"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "test-brand-auth-test-item-1",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-09T21:23:45.591Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "test-brand-auth-test-item-2",
+          "name": "Auth Test Item 2",
+          "brand": "Test Brand",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Another variant of a test item, useful for stress-testing systems.",
+          "searchKeywords": [
+            "test brand",
+            "auth",
+            "test",
+            "item",
+            "auth test item 2"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "test-brand-auth-test-item-2",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-09T21:23:45.631Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "test-brand-auth-test-item-3",
+          "name": "Auth Test Item 3",
+          "brand": "Test Brand",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Used in testing environments worldwide to simulate product entries.",
+          "searchKeywords": [
+            "test brand",
+            "auth",
+            "test",
+            "item",
+            "auth test item 3"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "test-brand-auth-test-item-3",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-09T21:23:45.668Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "test-brand-auth-test-item-deluxe",
+          "name": "Auth Test Item Deluxe",
+          "brand": "Test Brand",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "A more complex test item used to simulate premium product entries.",
+          "searchKeywords": [
+            "test brand",
+            "auth",
+            "test",
+            "item",
+            "deluxe",
+            "auth test item deluxe"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "test-brand-auth-test-item-deluxe",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-09T21:23:45.706Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "test-brand-auth-test-item-pro",
+          "name": "Auth Test Item Pro",
+          "brand": "Test Brand",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Advanced test item for pushing system capabilities.",
+          "searchKeywords": [
+            "test brand",
+            "auth",
+            "test",
+            "item",
+            "pro",
+            "auth test item pro"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "test-brand-auth-test-item-pro",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-09T21:23:45.739Z",
+          "source": "ai",
+          "dataConfidence": 80
+        }
+      ],
+      "lastUpdated": "2025-12-09T21:23:45.739Z"
     }
   ],
-  "productCount": 1620,
-  "variantCount": 2127
+  "productCount": 1629,
+  "variantCount": 2136
 }

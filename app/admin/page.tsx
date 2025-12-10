@@ -1,34 +1,35 @@
 import { redirect } from 'next/navigation';
-import { isAdmin } from '@/lib/adminAuth';
+import { getAdminUser, logAdminAction } from '@/lib/adminAuth';
 import Navigation from '@/components/Navigation';
-import { createServerSupabase } from '@/lib/serverSupabase';
 import AdminDashboardClient from './AdminDashboardClient';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboardPage() {
-  // Check if user is admin
-  if (!(await isAdmin())) {
+  const admin = await getAdminUser();
+
+  if (!admin) {
     redirect('/dashboard');
   }
 
-  const supabase = await createServerSupabase();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('handle, display_name')
-    .eq('id', user!.id)
-    .single();
+  // Log admin access
+  await logAdminAction(admin, 'admin.login', null, null, {
+    page: 'dashboard',
+  });
 
   return (
     <>
       <Navigation
-        userHandle={profile?.handle || ''}
-        displayName={profile?.display_name || ''}
+        userHandle={admin.handle}
+        displayName={admin.displayName}
         isAuthenticated={true}
+        isAdmin={true}
       />
-      <AdminDashboardClient />
+      <AdminDashboardClient
+        adminRole={admin.role}
+        adminEmail={admin.email}
+        adminHandle={admin.handle}
+      />
     </>
   );
 }

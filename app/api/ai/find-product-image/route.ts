@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { trackApiUsage } from '@/lib/apiUsageTracker';
 
 /**
  * Find product images using Google Custom Search API
@@ -9,6 +10,7 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 
 export async function POST(request: NextRequest) {
+  const startTime = Date.now();
   try {
     const body = await request.json();
     const { query } = body;
@@ -103,6 +105,17 @@ export async function POST(request: NextRequest) {
     const images = data.items.map((item: any) => item.link);
     console.log(`Found ${images.length} images for query:`, query);
 
+    // Track API usage - Google Custom Search ($5 per 1000 queries)
+    const durationMs = Date.now() - startTime;
+    trackApiUsage({
+      userId: null,
+      endpoint: '/api/ai/find-product-image',
+      model: 'google-search',
+      operationType: 'search',
+      durationMs,
+      status: 'success',
+    }).catch(console.error);
+
     return NextResponse.json({
       images,
       count: images.length,
@@ -110,6 +123,19 @@ export async function POST(request: NextRequest) {
 
   } catch (error: any) {
     console.error('Find product image error:', error);
+
+    // Track error
+    trackApiUsage({
+      userId: null,
+      endpoint: '/api/ai/find-product-image',
+      model: 'google-search',
+      operationType: 'search',
+      durationMs: Date.now() - startTime,
+      status: error?.status === 429 ? 'rate_limited' : 'error',
+      errorCode: error?.code,
+      errorMessage: error?.message,
+    }).catch(console.error);
+
     return NextResponse.json(
       { error: error.message || 'Failed to find product images' },
       { status: 500 }
