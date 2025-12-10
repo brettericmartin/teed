@@ -16,6 +16,7 @@ type ProductSuggestion = {
   productUrl?: string;
   imageUrl?: string;
   price?: string;
+  uploadedImageBase64?: string; // User's uploaded photo (base64 data URL)
 };
 
 type ClarificationQuestion = {
@@ -174,7 +175,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
       }, 800);
       return () => clearTimeout(timer);
     }
-  }, [selectedImage, input]); // Re-analyze when input changes (text hint)
+  }, [selectedImage, input, analyzeImage]); // Re-analyze when input changes (text hint)
 
   // Re-analyze when user provides text hint after image
   const handleAnalyzeWithHint = () => {
@@ -272,7 +273,12 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
   const handleConfirmPreview = async (editedSuggestion: ProductSuggestion) => {
     setIsAdding(true);
     try {
-      await onAdd(editedSuggestion);
+      // Include the user's uploaded photo if present
+      const suggestionWithPhoto = selectedImage
+        ? { ...editedSuggestion, uploadedImageBase64: selectedImage }
+        : editedSuggestion;
+
+      await onAdd(suggestionWithPhoto);
 
       // Reset form
       setInput('');

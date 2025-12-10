@@ -10,6 +10,9 @@ type ProductSuggestion = {
   confidence: number;
   brand?: string;
   source?: 'library' | 'ai' | 'web';
+  imageUrl?: string;
+  productUrl?: string;
+  price?: string;
 };
 
 type ClarificationQuestion = {
@@ -196,36 +199,56 @@ export default function AISuggestions({
               onClick={() => onSelectSuggestion(suggestion)}
               className="w-full text-left p-4 border-2 border-gray-200 rounded-lg hover:border-[var(--sky-6)] hover:bg-[var(--sky-2)] transition-all group"
             >
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    {suggestion.brand && (
-                      <span className="text-xs px-1.5 py-0.5 rounded font-semibold bg-gray-800 text-white">
-                        {suggestion.brand}
-                      </span>
-                    )}
-                    <span className="font-semibold text-gray-900 group-hover:text-[var(--sky-11)]">
-                      {suggestion.custom_name}
-                    </span>
-                    {sourceBadge && (
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${sourceBadge.color}`}>
-                        {sourceBadge.text}
-                      </span>
-                    )}
+              <div className="flex items-start gap-3">
+                {/* Product thumbnail */}
+                {suggestion.imageUrl && (
+                  <div className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                    <img
+                      src={`/api/proxy-image?url=${encodeURIComponent(suggestion.imageUrl)}`}
+                      alt={suggestion.custom_name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        // Hide image on error
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
                   </div>
-                  <div className="text-sm text-gray-600 mt-1">
-                    {suggestion.custom_description}
-                  </div>
-                  {suggestion.notes && (
-                    <div className="text-xs text-gray-500 mt-2 italic">
-                      {suggestion.notes}
+                )}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {suggestion.brand && (
+                          <span className="text-xs px-1.5 py-0.5 rounded font-semibold bg-gray-800 text-white">
+                            {suggestion.brand}
+                          </span>
+                        )}
+                        <span className="font-semibold text-gray-900 group-hover:text-[var(--sky-11)]">
+                          {suggestion.custom_name}
+                        </span>
+                        {sourceBadge && (
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${sourceBadge.color}`}>
+                            {sourceBadge.text}
+                          </span>
+                        )}
+                      </div>
+                      {suggestion.custom_description && (
+                        <div className="text-sm text-gray-600 mt-1">
+                          {suggestion.custom_description}
+                        </div>
+                      )}
+                      {suggestion.notes && (
+                        <div className="text-xs text-gray-500 mt-2 italic">
+                          {suggestion.notes}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div className="ml-3 flex-shrink-0">
-                  <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700">
-                    {suggestion.category}
-                  </span>
+                    <div className="ml-3 flex-shrink-0">
+                      <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700">
+                        {suggestion.category}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </button>

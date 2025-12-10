@@ -82,13 +82,20 @@ export async function POST(request: NextRequest) {
       : '';
 
     if (textHint && textHint.trim()) {
-      userPrompt = `The user has provided a hint to help identify this product: "${textHint}"
+      userPrompt = `The user is looking for a specific product and has provided this description: "${textHint}"
 ${brandInstruction}
 
-Use the hint combined with the image to identify the specific product. The hint may contain:
-- Brand name (use this as the brand for ALL suggestions)
-- Product line or model name
-- Product type or description
+IMPORTANT: The user's text description is the PRIMARY source of truth. Use it to identify the EXACT product they want.
+- If the hint says "TaylorMade Qi10 driver" - find that exact product
+- If the hint says "green Nike polo" - focus on that specific item
+- Use the image to confirm/validate but prioritize the text description
+
+The hint typically contains:
+- Brand name (MUST use this brand for all suggestions)
+- Product name or model (use this exact product line)
+- Product type, color, or other details
+
+Return products that BEST MATCH the user's description. If you can identify the exact product, return it with high confidence.
 
 ${bagContext ? `Context: This is for a "${bagContext}" collection.` : ''}`;
     } else {
@@ -206,6 +213,62 @@ Always respond with valid JSON in this format:
 
     console.log(`[identify-from-image] Identified ${suggestions.length} products`);
 
+    // Fetch product images for suggestions that don't have one
+    // Do this in parallel for speed
+    const suggestionsWithImages = await Promise.all(
+      suggestions.map(async (suggestion) => {
+        // If already has an image URL, keep it
+        if (suggestion.imageUrl) {
+          return suggestion;
+        }
+
+        // Search for a product image
+        try {
+          const searchQuery = suggestion.brand
+            ? `${suggestion.brand} ${suggestion.custom_name} product`
+            : `${suggestion.custom_name} product`;
+
+          const apiKey = process.env.GOOGLE_SEARCH_API_KEY;
+          const searchEngineId = process.env.GOOGLE_SEARCH_ENGINE_ID;
+
+          if (!apiKey || !searchEngineId) {
+            return suggestion; // Skip image search if not configured
+          }
+
+          const searchParams = new URLSearchParams({
+            key: apiKey,
+            cx: searchEngineId,
+            q: searchQuery,
+            searchType: 'image',
+            num: '1', // Just get the top result
+            imgSize: 'medium',
+            imgType: 'photo',
+            safe: 'active',
+          });
+
+          const imgResponse = await fetch(
+            `https://www.googleapis.com/customsearch/v1?${searchParams.toString()}`
+          );
+
+          if (imgResponse.ok) {
+            const imgData = await imgResponse.json();
+            if (imgData.items && imgData.items.length > 0) {
+              return {
+                ...suggestion,
+                imageUrl: imgData.items[0].link,
+              };
+            }
+          }
+        } catch (imgError) {
+          console.error(`[identify-from-image] Failed to find image for ${suggestion.custom_name}:`, imgError);
+        }
+
+        return suggestion;
+      })
+    );
+
+    console.log(`[identify-from-image] Added images to ${suggestionsWithImages.filter(s => s.imageUrl).length}/${suggestionsWithImages.length} suggestions`);
+
     // Track API usage
     const durationMs = Date.now() - startTime;
     trackApiUsage({
@@ -220,7 +283,7 @@ Always respond with valid JSON in this format:
     }).catch(console.error);
 
     return NextResponse.json({
-      suggestions,
+      suggestions: suggestionsWithImages,
       searchTier: 'vision',
     });
 

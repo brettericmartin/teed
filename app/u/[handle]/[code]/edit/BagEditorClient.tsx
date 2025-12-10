@@ -1528,9 +1528,61 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 let finalPhotoUrl: string | null = null;
                 let finalCustomPhotoId: string | null = null;
 
-                // If there's an imageUrl (e.g., YouTube thumbnail), upload it to storage
+                // Helper function to convert base64 data URL to Blob
+                const base64ToBlob = (base64DataUrl: string): Blob => {
+                  const [header, data] = base64DataUrl.split(',');
+                  const mimeMatch = header.match(/data:([^;]+);/);
+                  const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+                  const byteString = atob(data);
+                  const arrayBuffer = new ArrayBuffer(byteString.length);
+                  const uint8Array = new Uint8Array(arrayBuffer);
+                  for (let i = 0; i < byteString.length; i++) {
+                    uint8Array[i] = byteString.charCodeAt(i);
+                  }
+                  return new Blob([uint8Array], { type: mimeType });
+                };
+
+                // Priority 1: User's uploaded photo (base64)
+                if (suggestion.uploadedImageBase64) {
+                  try {
+                    console.log('[QuickAddItem] Uploading user photo (base64)...');
+                    const blob = base64ToBlob(suggestion.uploadedImageBase64);
+                    const file = new File([blob], `${suggestion.custom_name || 'product'}-photo.jpg`, { type: blob.type });
+
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('itemId', newItem.id);
+
+                    const uploadResponse = await fetch('/api/media/upload', {
+                      method: 'POST',
+                      body: formData,
+                    });
+
+                    if (uploadResponse.ok) {
+                      const uploadResult = await uploadResponse.json();
+                      console.log('[QuickAddItem] User photo uploaded:', uploadResult);
+
+                      // Update item with the custom_photo_id
+                      await fetch(`/api/items/${newItem.id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          custom_photo_id: uploadResult.mediaAssetId,
+                        }),
+                      });
+
+                      finalPhotoUrl = uploadResult.url;
+                      finalCustomPhotoId = uploadResult.mediaAssetId;
+                    } else {
+                      console.error('[QuickAddItem] Failed to upload user photo:', await uploadResponse.text());
+                    }
+                  } catch (error) {
+                    console.error('[QuickAddItem] Error uploading user photo:', error);
+                  }
+                }
+                // Priority 2: If there's an imageUrl (e.g., YouTube thumbnail), upload it to storage
                 // This uses the same system as manual photo uploads for consistency
-                if (suggestion.imageUrl) {
+                else if (suggestion.imageUrl) {
                   try {
                     console.log('[QuickAddItem] Uploading image from URL:', suggestion.imageUrl);
                     const uploadResponse = await fetch('/api/media/upload-from-url', {
