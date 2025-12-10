@@ -209,12 +209,12 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
 /**
  * DELETE /api/admin/content-ideas/[id]
- * Delete a content idea (super_admin only)
+ * Delete a content idea
  */
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
-    // Check admin authorization (super_admin only)
-    const authResult = await withAdminApi('super_admin');
+    // Check admin authorization
+    const authResult = await withAdminApi('admin');
     if ('error' in authResult) {
       return authResult.error;
     }

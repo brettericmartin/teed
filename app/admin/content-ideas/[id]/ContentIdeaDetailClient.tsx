@@ -219,6 +219,29 @@ export default function ContentIdeaDetailClient({ adminRole, adminId, ideaId }: 
     }
   };
 
+  const handleDelete = async () => {
+    if (!idea) return;
+    const confirmed = window.confirm(
+      `Are you sure you want to delete this content idea?\n\n"${idea.idea_title || idea.source_url}"\n\nThis action cannot be undone.`
+    );
+    if (!confirmed) return;
+
+    try {
+      const response = await fetch(`/api/admin/content-ideas/${ideaId}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        window.location.href = '/admin/content-ideas';
+      } else {
+        const data = await response.json();
+        alert(`Failed to delete: ${data.error}`);
+      }
+    } catch (error) {
+      console.error('Failed to delete:', error);
+      alert('Failed to delete content idea');
+    }
+  };
+
   const handleCreateBag = async () => {
     if (!idea) return;
 
@@ -490,6 +513,13 @@ export default function ContentIdeaDetailClient({ adminRole, adminId, ideaId }: 
                     Archive
                   </button>
                 )}
+                <button
+                  onClick={handleDelete}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 border border-red-200"
+                >
+                  <XCircle className="w-4 h-4" />
+                  Delete Permanently
+                </button>
               </div>
             </div>
 
