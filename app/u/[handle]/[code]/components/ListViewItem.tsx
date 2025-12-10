@@ -44,6 +44,19 @@ export default function ListViewItem({
 }: ListViewItemProps) {
   const primaryLink = item.links.find(l => l.kind === 'product') || item.links[0];
 
+  // Get short CTA for mobile based on link type
+  const getShortCTA = (link: ItemLink) => {
+    const url = link.url.toLowerCase();
+    const videoPatterns = ['youtube.com', 'youtu.be', 'vimeo.com', 'twitch.tv', 'tiktok.com'];
+    if (link.kind === 'video' || link.kind === 'youtube' || videoPatterns.some(p => url.includes(p))) {
+      return 'Watch';
+    }
+    if (link.kind === 'article' || url.includes('medium.com') || url.includes('substack.com')) {
+      return 'Read';
+    }
+    return 'Shop';
+  };
+
   return (
     <article
       className={`flex items-center gap-4 p-4 bg-[var(--surface)] border-b border-[var(--border-subtle)] hover:bg-[var(--surface-hover)] transition-colors cursor-pointer ${
@@ -110,7 +123,7 @@ export default function ListViewItem({
           className="flex items-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2.5 min-h-[40px] bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] text-white text-sm font-medium rounded-lg transition-colors whitespace-nowrap flex-shrink-0"
         >
           <span className="hidden sm:inline">{getLinkCTA(primaryLink)}</span>
-          <span className="sm:hidden">Shop</span>
+          <span className="sm:hidden">{getShortCTA(primaryLink)}</span>
           <span className="hidden xs:inline sm:inline">{getLinkDomain(primaryLink.url)}</span>
           <ExternalLink className="w-3.5 h-3.5" />
         </a>

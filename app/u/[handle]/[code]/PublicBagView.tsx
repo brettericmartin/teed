@@ -142,10 +142,12 @@ export default function PublicBagView({
   // Helper to get the CTA verb based on link type/domain
   const getLinkCTA = (link: ItemLink) => {
     const domain = getLinkDomain(link.url).toLowerCase();
+    const url = link.url.toLowerCase();
 
-    // Video platforms
-    const videoHosts = ['youtube.com', 'youtu.be', 'vimeo.com', 'twitch.tv', 'dailymotion.com', 'tiktok.com'];
-    if (link.kind === 'video' || videoHosts.some(host => domain.includes(host.replace('.com', '').replace('.tv', '')))) {
+    // Video platforms - check both kind and URL
+    const videoKinds = ['video', 'youtube'];
+    const videoPatterns = ['youtube.com', 'youtu.be', 'vimeo.com', 'twitch.tv', 'dailymotion.com', 'tiktok.com'];
+    if (videoKinds.includes(link.kind) || videoPatterns.some(pattern => url.includes(pattern))) {
       return 'Watch on';
     }
 
