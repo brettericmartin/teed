@@ -103,7 +103,8 @@ export default function AnalyzeUrlClient({ adminRole }: Props) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Analysis failed');
+        const errorMsg = data.details ? `${data.error}: ${data.details}` : data.error || 'Analysis failed';
+        throw new Error(errorMsg);
       }
 
       setResult(data);
