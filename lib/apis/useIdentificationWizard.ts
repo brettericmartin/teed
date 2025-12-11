@@ -350,7 +350,7 @@ export function useIdentificationWizard() {
     const validatedObjects = (state.detectedObjects || [])
       .filter(obj => selectedIds.includes(obj.id));
 
-    const allObjects = [
+    const allObjects: DetectedObject[] = [
       ...validatedObjects,
       ...(addedObjects || []).map((obj, idx) => ({
         id: `user_added_${idx}`,
@@ -359,7 +359,8 @@ export function useIdentificationWizard() {
         boundingDescription: 'user specified',
         visualCues: obj.visualCues || [],
         certainty: 'definite' as const,
-        selected: true
+        selected: true,
+        sourceImageIndex: undefined
       }))
     ];
 
@@ -373,7 +374,8 @@ export function useIdentificationWizard() {
         boundingDescription: 'user specified via correction',
         visualCues: [],
         certainty: 'definite' as const,
-        selected: true
+        selected: true,
+        sourceImageIndex: undefined
       });
     }
 
