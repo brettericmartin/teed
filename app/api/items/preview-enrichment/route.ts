@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { bagId, clarificationAnswers } = body; // Accept answers to previous questions
+    const { bagId, clarificationAnswers, itemIds: selectedItemIds } = body; // Accept answers and optional item filter
 
     if (!bagId) {
       return NextResponse.json({ error: 'bagId is required' }, { status: 400 });
@@ -81,11 +81,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Bag not found or unauthorized' }, { status: 404 });
     }
 
-    // Get all items
-    const { data: items, error: itemsError } = await supabase
+    // Get items (filtered by itemIds if provided)
+    let itemsQuery = supabase
       .from('bag_items')
       .select('id, custom_name, brand, custom_description, notes')
       .eq('bag_id', bagId);
+
+    // Filter to specific items if selectedItemIds provided
+    if (selectedItemIds && Array.isArray(selectedItemIds) && selectedItemIds.length > 0) {
+      itemsQuery = itemsQuery.in('id', selectedItemIds);
+    }
+
+    const { data: items, error: itemsError } = await itemsQuery;
 
     if (itemsError) {
       console.error('[preview-enrichment] Error fetching items:', itemsError);
@@ -93,7 +100,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!items || items.length === 0) {
-      console.log('[preview-enrichment] No items in bag');
+      console.log('[preview-enrichment] No items to process');
       return NextResponse.json({ suggestions: [] });
     }
 

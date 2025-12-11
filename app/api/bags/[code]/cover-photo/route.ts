@@ -74,10 +74,15 @@ export async function POST(request: NextRequest, context: RouteContext) {
     // Parse form data
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
+    const aspectRatio = formData.get('aspectRatio') as string | null;
 
     if (!file) {
       return NextResponse.json({ error: 'File is required' }, { status: 400 });
     }
+
+    // Validate aspect ratio if provided
+    const validAspectRatios = ['4/1', '21/9', '16/9', '3/2', '4/3'];
+    const coverPhotoAspect = aspectRatio && validAspectRatios.includes(aspectRatio) ? aspectRatio : '21/9';
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
@@ -133,11 +138,12 @@ export async function POST(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: 'Failed to create media record' }, { status: 500 });
     }
 
-    // Update bag with cover photo
+    // Update bag with cover photo and aspect ratio
     const { error: updateError } = await supabaseAdmin
       .from('bags')
       .update({
         cover_photo_id: mediaAsset.id,
+        cover_photo_aspect: coverPhotoAspect,
         updated_at: new Date().toISOString(),
       })
       .eq('id', bag.id);
@@ -150,6 +156,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
     return NextResponse.json({
       mediaAssetId: mediaAsset.id,
       url: publicUrl,
+      aspectRatio: coverPhotoAspect,
     });
   } catch (error: any) {
     console.error('Cover photo upload error:', error);
@@ -200,12 +207,13 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    // Update bag to remove cover photo
+    // Update bag to remove cover photo and reset aspect ratio
     const supabaseAdmin = getSupabaseAdmin();
     const { error: updateError } = await supabaseAdmin
       .from('bags')
       .update({
         cover_photo_id: null,
+        cover_photo_aspect: '21/9',
         updated_at: new Date().toISOString(),
       })
       .eq('id', bag.id);

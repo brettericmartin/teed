@@ -20,7 +20,7 @@ import type {
 export async function POST(request: NextRequest): Promise<NextResponse<IdentifyProductsResponse>> {
   try {
     const body: IdentifyProductsRequest = await request.json();
-    const { imageBase64, imageUrl, validatedObjects, userContext, bagContext } = body;
+    const { imageBase64, imageUrl, validatedObjects, userContext, bagContext, productHints } = body;
 
     if (!imageBase64 && !imageUrl) {
       return NextResponse.json(
@@ -72,6 +72,21 @@ USER HAS VALIDATED THESE OBJECTS
 ${objectContext}
 ${userContext ? `\nUSER CONTEXT/CORRECTION: "${userContext}"` : ''}
 ${bagContext ? `\nBAG TYPE: ${bagContext}` : ''}
+${productHints ? `
+═══════════════════════════════════════════════════════════════
+USER-PROVIDED HINTS (PRIORITIZE THESE)
+═══════════════════════════════════════════════════════════════
+The user has provided the following information about the product.
+THESE HINTS TAKE PRIORITY over visual inference. Use them to guide identification:
+${productHints.brand ? `- Brand: ${productHints.brand}` : ''}
+${productHints.model ? `- Model: ${productHints.model}` : ''}
+${productHints.color ? `- Color: ${productHints.color}` : ''}
+${productHints.year ? `- Year: ${productHints.year}` : ''}
+${productHints.additionalInfo ? `- Additional info: ${productHints.additionalInfo}` : ''}
+
+When user provides brand/model hints, STRONGLY prefer matching that brand/model.
+Only suggest alternatives if the visual evidence clearly contradicts the hint.
+` : ''}
 
 ═══════════════════════════════════════════════════════════════
 YOUR TASK

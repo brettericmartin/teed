@@ -1,15 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { Check, X, Plus, AlertCircle, Eye } from 'lucide-react';
-import type { DetectedObject } from '@/lib/apis/types';
+import { Check, X, Plus, AlertCircle, Eye, Lightbulb } from 'lucide-react';
+import type { DetectedObject, ProductHints } from '@/lib/apis/types';
 
 interface ObjectValidationCheckpointProps {
   objects: DetectedObject[];
   onValidate: (
     selectedIds: string[],
     corrections?: string,
-    addedObjects?: Partial<DetectedObject>[]
+    addedObjects?: Partial<DetectedObject>[],
+    productHints?: ProductHints
   ) => void;
   onCancel: () => void;
   sourceImages?: string[];  // For bulk mode - thumbnails of source images
@@ -30,6 +31,14 @@ export default function ObjectValidationCheckpoint({
   const [newObjectType, setNewObjectType] = useState('');
   const [newObjectCategory, setNewObjectCategory] = useState('');
   const [addedObjects, setAddedObjects] = useState<Partial<DetectedObject>[]>([]);
+
+  // Product hints state
+  const [showHints, setShowHints] = useState(false);
+  const [hintBrand, setHintBrand] = useState('');
+  const [hintModel, setHintModel] = useState('');
+  const [hintColor, setHintColor] = useState('');
+  const [hintYear, setHintYear] = useState('');
+  const [hintAdditional, setHintAdditional] = useState('');
 
   const toggleSelection = (id: string) => {
     setSelectedIds(prev =>
@@ -58,10 +67,22 @@ export default function ObjectValidationCheckpoint({
   };
 
   const handleContinue = () => {
+    // Collect product hints if any were provided
+    const hints = (hintBrand || hintModel || hintColor || hintYear || hintAdditional)
+      ? {
+          brand: hintBrand.trim() || undefined,
+          model: hintModel.trim() || undefined,
+          color: hintColor.trim() || undefined,
+          year: hintYear.trim() || undefined,
+          additionalInfo: hintAdditional.trim() || undefined
+        }
+      : undefined;
+
     onValidate(
       selectedIds,
       correctionText.trim() || undefined,
-      addedObjects.length > 0 ? addedObjects : undefined
+      addedObjects.length > 0 ? addedObjects : undefined,
+      hints
     );
   };
 
@@ -284,6 +305,66 @@ export default function ObjectValidationCheckpoint({
             >
               Add
             </button>
+          </div>
+        )}
+
+        {/* Product hints section */}
+        <button
+          onClick={() => setShowHints(!showHints)}
+          className={`
+            w-full flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors
+            ${showHints
+              ? 'border-blue-300 bg-blue-50 text-blue-700'
+              : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-gray-600 hover:text-blue-700'
+            }
+          `}
+        >
+          <Lightbulb className="w-4 h-4" />
+          <span className="text-sm font-medium">I know what this is (add hints)</span>
+        </button>
+
+        {showHints && (
+          <div className="space-y-2 p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <p className="text-xs text-blue-600 mb-2">
+              Add any details you know to help us identify the product more accurately:
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              <input
+                type="text"
+                value={hintBrand}
+                onChange={(e) => setHintBrand(e.target.value)}
+                placeholder="Brand (e.g., Good Good)"
+                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              <input
+                type="text"
+                value={hintModel}
+                onChange={(e) => setHintModel(e.target.value)}
+                placeholder="Model (e.g., Ace High Polo)"
+                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              <input
+                type="text"
+                value={hintColor}
+                onChange={(e) => setHintColor(e.target.value)}
+                placeholder="Color (e.g., Navy)"
+                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              <input
+                type="text"
+                value={hintYear}
+                onChange={(e) => setHintYear(e.target.value)}
+                placeholder="Year (e.g., 2024)"
+                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            <input
+              type="text"
+              value={hintAdditional}
+              onChange={(e) => setHintAdditional(e.target.value)}
+              placeholder="Any other details..."
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
           </div>
         )}
       </div>

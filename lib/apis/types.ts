@@ -323,12 +323,22 @@ export interface DetectObjectsResponse {
   error?: string;
 }
 
+// User-provided hints to assist identification
+export interface ProductHints {
+  brand?: string;               // "Good Good", "TaylorMade", etc.
+  model?: string;               // "Ace High Polo", "Qi10 Max"
+  color?: string;               // "Navy", "Black/White"
+  year?: string;                // "2024", "2023"
+  additionalInfo?: string;      // Any other details
+}
+
 export interface IdentifyProductsRequest {
   imageBase64?: string;
   imageUrl?: string;
   validatedObjects: DetectedObject[];
   userContext?: string;         // User corrections/additions from checkpoint 1
   bagContext?: string;          // Bag type for context
+  productHints?: ProductHints;  // User-provided hints to assist identification
 }
 
 export interface IdentifyProductsResponse {

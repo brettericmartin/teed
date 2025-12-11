@@ -19,7 +19,7 @@ import EnrichmentPreview from './components/EnrichmentPreview';
 import ClarificationModal from './components/ClarificationModal';
 import AIAssistantHub from './components/AIAssistantHub';
 import BagAnalytics from './components/BagAnalytics';
-import CoverPhotoCropper from './components/CoverPhotoCropper';
+import CoverPhotoCropper, { type AspectRatioId } from './components/CoverPhotoCropper';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
@@ -133,6 +133,7 @@ type Bag = {
   hero_item_id: string | null;
   cover_photo_id: string | null;
   cover_photo_url: string | null;
+  cover_photo_aspect: string | null;
   created_at: string;
   updated_at: string | null;
   items: Item[];
@@ -182,6 +183,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [clarificationAnswers, setClarificationAnswers] = useState<Record<string, Record<string, string>>>({});
   const [showCoverCropper, setShowCoverCropper] = useState(false);
   const [coverImageToCrop, setCoverImageToCrop] = useState<string | null>(null);
+  const [showEnrichmentItemSelection, setShowEnrichmentItemSelection] = useState(false);
 
   // Auto-save bag metadata (debounced)
   useEffect(() => {
@@ -648,13 +650,14 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   };
 
   // Handle cropped cover photo upload
-  const handleCroppedCoverPhotoUpload = async (croppedBlob: Blob) => {
+  const handleCroppedCoverPhotoUpload = async (croppedBlob: Blob, aspectRatio: AspectRatioId) => {
     setShowCoverCropper(false);
     setCoverImageToCrop(null);
 
     try {
       const formData = new FormData();
       formData.append('file', croppedBlob, 'cover-photo.jpg');
+      formData.append('aspectRatio', aspectRatio);
 
       const uploadResponse = await fetch(`/api/bags/${bag.code}/cover-photo`, {
         method: 'POST',
@@ -672,6 +675,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         ...prev,
         cover_photo_id: uploadData.mediaAssetId,
         cover_photo_url: uploadData.url,
+        cover_photo_aspect: uploadData.aspectRatio,
       }));
 
       toast.showSuccess('Cover photo updated!');
@@ -693,6 +697,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           ...prev,
           cover_photo_id: null,
           cover_photo_url: null,
+          cover_photo_aspect: '21/9',
         }));
       }
     } catch (error) {
@@ -1027,17 +1032,18 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   };
 
   // Fill product info handler - shows preview modal (or clarification questions first)
-  const handleFillLinks = async (withAnswers?: Record<string, Record<string, string>>) => {
+  const handleFillLinks = async (withAnswers?: Record<string, Record<string, string>>, itemIds?: string[]) => {
     setIsFillingLinks(true);
 
     try {
-      // Get preview suggestions (include answers if provided)
+      // Get preview suggestions (include answers if provided, and optional itemIds filter)
       const response = await fetch('/api/items/preview-enrichment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           bagId: bag.id,
           clarificationAnswers: withAnswers || clarificationAnswers,
+          itemIds: itemIds, // Only process selected items if provided
         }),
       });
 
@@ -1655,7 +1661,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             onAddFromTranscript={() => setShowTranscriptProcessor(true)}
             onAddFromLinks={() => setShowBulkLinkImport(true)}
             onFindPhotos={() => setShowItemSelection(true)}
-            onFillProductInfo={handleFillLinks}
+            onFillProductInfo={() => setShowEnrichmentItemSelection(true)}
             isIdentifying={isIdentifying}
             isFillingInfo={isFillingLinks}
           />
@@ -1806,7 +1812,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         </div>
       )}
 
-      {/* Item Selection Modal */}
+      {/* Item Selection Modal for Photos */}
       <ItemSelectionModal
         isOpen={showItemSelection}
         onClose={() => setShowItemSelection(false)}
@@ -1827,6 +1833,28 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         }}
         title="Select Items for Photo Search"
         description="Choose which items you want to search for photos"
+      />
+
+      {/* Item Selection Modal for Auto-Fill Details */}
+      <ItemSelectionModal
+        isOpen={showEnrichmentItemSelection}
+        onClose={() => setShowEnrichmentItemSelection(false)}
+        items={bag.items.map(item => ({
+          id: item.id,
+          custom_name: item.custom_name || 'Unnamed Item',
+          brand: item.brand,
+          custom_description: item.custom_description,
+          currentPhotoUrl: item.photo_url,
+          hasDetails: !!(item.brand && item.custom_description && item.notes),
+        }))}
+        onConfirm={(selectedItems) => {
+          const selectedIds = selectedItems.map(i => i.id);
+          setShowEnrichmentItemSelection(false);
+          handleFillLinks(undefined, selectedIds);
+        }}
+        title="Select Items to Auto-Fill"
+        description="Choose which items you want to generate details for"
+        mode="enrichment"
       />
 
       {/* Batch Photo Selector Modal */}
@@ -1883,6 +1911,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             setShowCoverCropper(false);
             setCoverImageToCrop(null);
           }}
+          initialAspectRatio={(bag.cover_photo_aspect as AspectRatioId) || '21/9'}
         />
       )}
     </div>

@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import Cropper from 'react-easy-crop';
-import { X, Check, RotateCcw, ZoomIn, ZoomOut, Monitor, Smartphone } from 'lucide-react';
+import { X, Check, RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
 type Area = {
@@ -12,20 +12,23 @@ type Area = {
   height: number;
 };
 
+// Aspect ratio presets - from widest/skinniest to tallest/thickest
+export const ASPECT_RATIO_PRESETS = [
+  { id: '4/1', label: 'Ultra Wide', ratio: 4 / 1, description: 'Skinny banner' },
+  { id: '21/9', label: 'Cinematic', ratio: 21 / 9, description: 'Wide banner' },
+  { id: '16/9', label: 'Standard', ratio: 16 / 9, description: 'HD format' },
+  { id: '3/2', label: 'Classic', ratio: 3 / 2, description: 'Photo format' },
+  { id: '4/3', label: 'Tall', ratio: 4 / 3, description: 'Thick banner' },
+] as const;
+
+export type AspectRatioId = typeof ASPECT_RATIO_PRESETS[number]['id'];
+
 type CoverPhotoCropperProps = {
   imageSrc: string;
-  onComplete: (croppedBlob: Blob) => void;
+  onComplete: (croppedBlob: Blob, aspectRatio: AspectRatioId) => void;
   onCancel: () => void;
+  initialAspectRatio?: AspectRatioId;
 };
-
-// Aspect ratios matching PublicBagView
-const ASPECT_RATIOS = {
-  desktop: 3 / 1,    // 3:1 for desktop
-  mobile: 21 / 9,    // 21:9 for mobile
-};
-
-// We'll crop at the mobile ratio (taller) to ensure full coverage on both
-const CROP_ASPECT = ASPECT_RATIOS.mobile;
 
 // Helper function to create a cropped image from the original
 async function getCroppedImg(imageSrc: string, pixelCrop: Area): Promise<Blob> {
@@ -76,36 +79,30 @@ async function getCroppedImg(imageSrc: string, pixelCrop: Area): Promise<Blob> {
   });
 }
 
-// Generate a preview URL from the cropped area
-function getPreviewStyle(imageSrc: string, crop: { x: number; y: number }, zoom: number) {
-  // Calculate background position based on crop
-  const offsetX = -crop.x * zoom;
-  const offsetY = -crop.y * zoom;
-
-  return {
-    backgroundImage: `url(${imageSrc})`,
-    backgroundSize: `${zoom * 100}%`,
-    backgroundPosition: `${offsetX}px ${offsetY}px`,
-    backgroundRepeat: 'no-repeat',
-  };
-}
-
 export default function CoverPhotoCropper({
   imageSrc,
   onComplete,
   onCancel,
+  initialAspectRatio = '21/9',
 }: CoverPhotoCropperProps) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-  const [croppedArea, setCroppedArea] = useState<Area | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [selectedAspectRatio, setSelectedAspectRatio] = useState<AspectRatioId>(initialAspectRatio);
+
+  const currentPreset = ASPECT_RATIO_PRESETS.find(p => p.id === selectedAspectRatio) || ASPECT_RATIO_PRESETS[1];
 
   const onCropComplete = useCallback((croppedArea: Area, croppedAreaPixels: Area) => {
     setCroppedAreaPixels(croppedAreaPixels);
-    setCroppedArea(croppedArea);
   }, []);
+
+  // Reset crop when aspect ratio changes
+  useEffect(() => {
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+  }, [selectedAspectRatio]);
 
   // Generate preview when crop changes
   useEffect(() => {
@@ -142,7 +139,7 @@ export default function CoverPhotoCropper({
     setIsProcessing(true);
     try {
       const croppedBlob = await getCroppedImg(imageSrc, croppedAreaPixels);
-      onComplete(croppedBlob);
+      onComplete(croppedBlob, selectedAspectRatio);
     } catch (error) {
       console.error('Error cropping image:', error);
       alert('Failed to crop image. Please try again.');
@@ -174,13 +171,47 @@ export default function CoverPhotoCropper({
 
         {/* Main Content - Scrollable */}
         <div className="flex-1 overflow-y-auto">
+          {/* Aspect Ratio Selector */}
+          <div className="px-4 py-3 bg-[var(--grey-1)] border-b border-[var(--border-subtle)]">
+            <p className="text-sm font-medium text-[var(--text-primary)] mb-2">
+              Choose cover height:
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {ASPECT_RATIO_PRESETS.map((preset) => (
+                <button
+                  key={preset.id}
+                  onClick={() => setSelectedAspectRatio(preset.id)}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all ${
+                    selectedAspectRatio === preset.id
+                      ? 'bg-[var(--teed-green-3)] border-[var(--teed-green-8)] text-[var(--teed-green-11)]'
+                      : 'bg-[var(--surface)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:border-[var(--border-strong)]'
+                  }`}
+                >
+                  {/* Visual ratio indicator */}
+                  <div
+                    className={`h-3 rounded-sm ${
+                      selectedAspectRatio === preset.id
+                        ? 'bg-[var(--teed-green-9)]'
+                        : 'bg-[var(--grey-6)]'
+                    }`}
+                    style={{ width: `${Math.min(preset.ratio * 12, 48)}px` }}
+                  />
+                  <div className="text-left">
+                    <span className="text-sm font-medium">{preset.label}</span>
+                    <span className="text-xs opacity-70 ml-1">({preset.description})</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Cropper Area */}
           <div className="relative h-[300px] md:h-[350px] bg-black">
             <Cropper
               image={imageSrc}
               crop={crop}
               zoom={zoom}
-              aspect={CROP_ASPECT}
+              aspect={currentPreset.ratio}
               onCropChange={setCrop}
               onZoomChange={setZoom}
               onCropComplete={onCropComplete}
@@ -199,57 +230,26 @@ export default function CoverPhotoCropper({
           {/* Preview Section */}
           <div className="px-4 py-4 bg-[var(--grey-1)] border-t border-[var(--border-subtle)]">
             <p className="text-sm font-medium text-[var(--text-primary)] mb-3">
-              Preview how your cover will appear:
+              Preview:
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Desktop Preview */}
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <Monitor className="w-4 h-4 text-[var(--text-secondary)]" />
-                  <span className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wide">
-                    Desktop (3:1)
-                  </span>
-                </div>
-                <div
-                  className="relative w-full rounded-lg overflow-hidden bg-[var(--grey-3)] border border-[var(--border-subtle)]"
-                  style={{ aspectRatio: '3 / 1' }}
-                >
-                  {previewUrl && (
-                    <img
-                      src={previewUrl}
-                      alt="Desktop preview"
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                  )}
-                </div>
-              </div>
-
-              {/* Mobile Preview */}
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <Smartphone className="w-4 h-4 text-[var(--text-secondary)]" />
-                  <span className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wide">
-                    Mobile (21:9)
-                  </span>
-                </div>
-                <div
-                  className="relative w-full rounded-lg overflow-hidden bg-[var(--grey-3)] border border-[var(--border-subtle)]"
-                  style={{ aspectRatio: '21 / 9' }}
-                >
-                  {previewUrl && (
-                    <img
-                      src={previewUrl}
-                      alt="Mobile preview"
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                  )}
-                </div>
+            <div className="max-w-md mx-auto">
+              <div
+                className="relative w-full rounded-lg overflow-hidden bg-[var(--grey-3)] border border-[var(--border-subtle)]"
+                style={{ aspectRatio: selectedAspectRatio.replace('/', ' / ') }}
+              >
+                {previewUrl && (
+                  <img
+                    src={previewUrl}
+                    alt="Cover preview"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                )}
               </div>
             </div>
 
             <p className="text-xs text-[var(--text-tertiary)] mt-3 text-center">
-              The image will be cropped differently on each device to fill the space
+              This is how your cover photo will appear on your bag page
             </p>
           </div>
         </div>

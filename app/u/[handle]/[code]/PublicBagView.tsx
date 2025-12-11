@@ -44,6 +44,7 @@ interface Bag {
   hero_item_id: string | null;
   cover_photo_id: string | null;
   cover_photo_url: string | null;
+  cover_photo_aspect: string | null;
   created_at: string;
   tags?: string[];
   category?: string;
@@ -520,7 +521,10 @@ export default function PublicBagView({
       {/* Cover Photo Banner - Between header and items */}
       {hasCover && (
         <div className="max-w-5xl mx-auto px-4 pt-6">
-          <div className="relative w-full aspect-[21/9] md:aspect-[3/1] rounded-[var(--radius-xl)] overflow-hidden shadow-[var(--shadow-3)]">
+          <div
+            className="relative w-full rounded-[var(--radius-xl)] overflow-hidden shadow-[var(--shadow-3)]"
+            style={{ aspectRatio: (bag.cover_photo_aspect || '21/9').replace('/', ' / ') }}
+          >
             <img
               src={bag.cover_photo_url!}
               alt={`${bag.title} cover`}

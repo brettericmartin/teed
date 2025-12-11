@@ -10,7 +10,8 @@ import type {
   EnrichedProduct,
   ValidatedProduct,
   UserCorrection,
-  ObjectDetectionResult
+  ObjectDetectionResult,
+  ProductHints
 } from './types';
 
 // ============================================================================
@@ -342,7 +343,8 @@ export function useIdentificationWizard() {
   const validateObjects = useCallback(async (
     selectedIds: string[],
     corrections?: string,
-    addedObjects?: Partial<DetectedObject>[]
+    addedObjects?: Partial<DetectedObject>[],
+    productHints?: ProductHints
   ) => {
     dispatch({ type: 'USER_VALIDATED_OBJECTS', selectedIds, corrections, addedObjects });
 
@@ -412,7 +414,8 @@ export function useIdentificationWizard() {
           imageBase64,
           imageUrl,
           validatedObjects: allObjects,
-          userContext: corrections
+          userContext: corrections,
+          productHints
         })
       });
 

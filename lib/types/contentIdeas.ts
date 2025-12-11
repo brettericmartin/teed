@@ -252,6 +252,37 @@ export type ContentTag =
   | 'seasonal';
 
 // ═══════════════════════════════════════════════════════════════════
+// Extraction Metadata Types
+// ═══════════════════════════════════════════════════════════════════
+
+export interface ExtractionMetadata {
+  // Content type detection
+  contentType?: 'single_hero' | 'roundup' | 'comparison';
+  contentTypeSignals?: {
+    titleSignals: string[];
+    transcriptSignals: string[];
+    detectedType: string;
+    confidence: number;
+  };
+  // Extraction sources used
+  extractionSources?: {
+    description: boolean;
+    transcript: boolean;
+    frames: boolean;
+  };
+  transcriptAvailable?: boolean;
+  framesAnalyzed?: number;
+  // Validation metadata
+  objectValidationAt?: string;
+  objectValidationNotes?: string;
+  productValidationAt?: string;
+  productValidationNotes?: string;
+  validationComplete?: boolean;
+  // Extraction timestamp
+  extractedAt?: string;
+}
+
+// ═══════════════════════════════════════════════════════════════════
 // Main Content Idea Type
 // ═══════════════════════════════════════════════════════════════════
 
@@ -302,6 +333,13 @@ export interface ContentIdea {
   screened_by_admin_id: string | null;
   screening_notes: string | null;
   extracted_products: ExtractedProduct[];
+
+  // Unified extraction (multi-source)
+  extraction_metadata?: ExtractionMetadata;
+  validated_products?: ExtractedProduct[];
+  validation_status?: 'pending' | 'object_validated' | 'product_validated' | 'completed';
+  validated_at?: string;
+  validated_by_admin_id?: string;
 
   // Timestamps
   created_at: string;
@@ -462,6 +500,7 @@ export interface ExtractedProduct {
   heroScore?: number; // 0-100, based on story/novelty/viral potential
   storySignals?: string[]; // e.g., "creator mentioned personal story", "vintage/discontinued"
   matchedCatalogItemId?: string;
+  links?: ExtractedLink[]; // Affiliate/purchase links associated with this product
 }
 
 // ═══════════════════════════════════════════════════════════════════

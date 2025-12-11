@@ -8,11 +8,12 @@ import { User, Settings, LogOut, ChevronDown, Compass, LayoutDashboard, Shield }
 interface NavigationProps {
   userHandle?: string;
   displayName?: string;
+  avatarUrl?: string;
   isAuthenticated?: boolean;
   isAdmin?: boolean;
 }
 
-export default function Navigation({ userHandle, displayName, isAuthenticated, isAdmin }: NavigationProps) {
+export default function Navigation({ userHandle, displayName, avatarUrl, isAuthenticated, isAdmin }: NavigationProps) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -136,10 +137,18 @@ export default function Navigation({ userHandle, displayName, isAuthenticated, i
                 aria-haspopup="true"
                 aria-label="User menu"
               >
-                {/* Avatar Circle with Initials */}
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--teed-green-7)] to-[var(--teed-green-9)] flex items-center justify-center text-white text-sm font-medium">
-                  {getInitials(displayName || userHandle)}
-                </div>
+                {/* Avatar Circle */}
+                {avatarUrl ? (
+                  <img
+                    src={avatarUrl}
+                    alt={displayName || userHandle || 'User avatar'}
+                    className="w-8 h-8 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--teed-green-7)] to-[var(--teed-green-9)] flex items-center justify-center text-white text-sm font-medium">
+                    {getInitials(displayName || userHandle || '')}
+                  </div>
+                )}
 
                 {/* User Info (hidden on mobile) */}
                 <div className="hidden sm:flex flex-col items-start">

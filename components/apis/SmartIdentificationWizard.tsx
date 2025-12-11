@@ -7,7 +7,7 @@ import IdentificationProgress from './IdentificationProgress';
 import ObjectValidationCheckpoint from './ObjectValidationCheckpoint';
 import ProductValidationCheckpoint from './ProductValidationCheckpoint';
 import FinalReview from './FinalReview';
-import type { ValidatedProduct, IdentifiedProduct, UserCorrection } from '@/lib/apis/types';
+import type { ValidatedProduct, IdentifiedProduct, UserCorrection, ProductHints } from '@/lib/apis/types';
 
 interface SmartIdentificationWizardProps {
   // Single image mode
@@ -61,9 +61,10 @@ export default function SmartIdentificationWizard({
   const handleObjectValidation = useCallback((
     selectedIds: string[],
     corrections?: string,
-    addedObjects?: any[]
+    addedObjects?: any[],
+    productHints?: ProductHints
   ) => {
-    wizard.validateObjects(selectedIds, corrections, addedObjects);
+    wizard.validateObjects(selectedIds, corrections, addedObjects, productHints);
   }, [wizard]);
 
   // Handle product validation

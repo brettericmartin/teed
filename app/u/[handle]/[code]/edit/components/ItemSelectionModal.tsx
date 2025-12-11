@@ -10,6 +10,7 @@ interface Item {
   brand: string | null;
   custom_description: string | null;
   currentPhotoUrl?: string | null;
+  hasDetails?: boolean; // For enrichment mode - indicates item already has details
 }
 
 interface ItemSelectionModalProps {
@@ -19,6 +20,7 @@ interface ItemSelectionModalProps {
   onConfirm: (selectedItems: Item[]) => void;
   title?: string;
   description?: string;
+  mode?: 'photo' | 'enrichment'; // Mode for different behaviors
 }
 
 export default function ItemSelectionModal({
@@ -28,6 +30,7 @@ export default function ItemSelectionModal({
   onConfirm,
   title = 'Select Items',
   description = 'Choose which items you want to search for photos',
+  mode = 'photo',
 }: ItemSelectionModalProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(
     new Set(items.map(item => item.id)) // All selected by default
@@ -63,7 +66,18 @@ export default function ItemSelectionModal({
     setSelectedIds(newSelected);
   };
 
+  const deselectItemsWithDetails = () => {
+    const newSelected = new Set(selectedIds);
+    items.forEach(item => {
+      if (item.hasDetails) {
+        newSelected.delete(item.id);
+      }
+    });
+    setSelectedIds(newSelected);
+  };
+
   const itemsWithPhotosCount = items.filter(item => item.currentPhotoUrl).length;
+  const itemsWithDetailsCount = items.filter(item => item.hasDetails).length;
 
   const handleConfirm = () => {
     const selectedItems = items.filter(item => selectedIds.has(item.id));
@@ -117,12 +131,20 @@ export default function ItemSelectionModal({
                   Select All ({items.length})
                 </span>
               </label>
-              {itemsWithPhotosCount > 0 && (
+              {mode === 'photo' && itemsWithPhotosCount > 0 && (
                 <button
                   onClick={deselectItemsWithPhotos}
                   className="text-sm text-[var(--sky-11)] hover:text-[var(--sky-12)] hover:underline transition-colors"
                 >
                   Skip {itemsWithPhotosCount} with photos
+                </button>
+              )}
+              {mode === 'enrichment' && itemsWithDetailsCount > 0 && (
+                <button
+                  onClick={deselectItemsWithDetails}
+                  className="text-sm text-[var(--sky-11)] hover:text-[var(--sky-12)] hover:underline transition-colors"
+                >
+                  Skip {itemsWithDetailsCount} with details
                 </button>
               )}
             </div>
@@ -178,9 +200,14 @@ export default function ItemSelectionModal({
                           {item.custom_description}
                         </p>
                       )}
-                      {item.currentPhotoUrl && (
+                      {mode === 'photo' && item.currentPhotoUrl && (
                         <span className="inline-block mt-1 text-xs px-2 py-0.5 bg-[var(--copper-3)] text-[var(--copper-11)] rounded">
                           Has photo - will replace
+                        </span>
+                      )}
+                      {mode === 'enrichment' && item.hasDetails && (
+                        <span className="inline-block mt-1 text-xs px-2 py-0.5 bg-[var(--teed-green-3)] text-[var(--teed-green-11)] rounded">
+                          Has details - will regenerate
                         </span>
                       )}
                     </div>
@@ -206,7 +233,10 @@ export default function ItemSelectionModal({
               className="flex-1 sm:flex-none"
             >
               <Check className="w-4 h-4 mr-2" />
-              Search for {selectedCount} {selectedCount === 1 ? 'Photo' : 'Photos'}
+              {mode === 'photo'
+                ? `Search for ${selectedCount} ${selectedCount === 1 ? 'Photo' : 'Photos'}`
+                : `Auto-Fill ${selectedCount} ${selectedCount === 1 ? 'Item' : 'Items'}`
+              }
             </Button>
           </div>
         </div>

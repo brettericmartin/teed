@@ -1,7 +1,7 @@
 {
   "category": "golf",
   "schemaVersion": "1.0.0",
-  "lastUpdated": "2025-12-11T16:38:36.719Z",
+  "lastUpdated": "2025-12-11T21:47:34.015Z",
   "brands": [
     {
       "name": "TaylorMade",
@@ -8143,9 +8143,57 @@
           "lastUpdated": "2025-12-09T21:25:49.880Z",
           "source": "ai",
           "dataConfidence": 80
+        },
+        {
+          "id": "taylormade-flextech-crossover-stand-bag",
+          "name": "FlexTech Crossover Stand Bag",
+          "brand": "TaylorMade",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Offers a unique strap system and superior organization for golfers who walk the course.",
+          "searchKeywords": [
+            "taylormade",
+            "flextech",
+            "crossover",
+            "stand",
+            "bag",
+            "flextech crossover stand bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "taylormade-flextech-crossover-stand-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-11T21:47:33.950Z",
+          "source": "ai",
+          "dataConfidence": 78
         }
       ],
-      "lastUpdated": "2025-12-09T21:25:49.880Z"
+      "lastUpdated": "2025-12-11T21:47:33.950Z"
     },
     {
       "name": "Titleist",
@@ -14655,9 +14703,57 @@
           ],
           "source": "inthegolfbag",
           "dataConfidence": 70
+        },
+        {
+          "id": "titleist-players-4-carbon-stand-bag",
+          "name": "Players 4 Carbon Stand Bag",
+          "brand": "Titleist",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Lightweight yet sturdy, this bag is perfect for golfers who prioritize minimalism without sacrificing storage.",
+          "searchKeywords": [
+            "titleist",
+            "players",
+            "carbon",
+            "stand",
+            "bag",
+            "players 4 carbon stand bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "titleist-players-4-carbon-stand-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-11T21:47:33.981Z",
+          "source": "ai",
+          "dataConfidence": 77
         }
       ],
-      "lastUpdated": "2025-11-30T03:31:18.505Z"
+      "lastUpdated": "2025-12-11T21:47:33.981Z"
     },
     {
       "name": "Callaway",
@@ -67240,9 +67336,56 @@
           "source": "ai",
           "dataConfidence": 86,
           "lastUpdated": "2025-11-30T03:31:58.262Z"
+        },
+        {
+          "id": "sun-mountain-3-5-ls-stand-bag",
+          "name": "3.5 LS Stand Bag",
+          "brand": "Sun Mountain",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Known for its lightweight design and robust construction, ideal for any golf enthusiast.",
+          "searchKeywords": [
+            "sun mountain",
+            "3.5",
+            "stand",
+            "bag",
+            "3.5 ls stand bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "sun-mountain-3-5-ls-stand-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-11T21:47:34.014Z",
+          "source": "ai",
+          "dataConfidence": 76
         }
       ],
-      "lastUpdated": "2025-11-30T03:31:58.262Z"
+      "lastUpdated": "2025-12-11T21:47:34.014Z"
     },
     {
       "name": "Ogio",
@@ -81764,8 +81907,63 @@
         }
       ],
       "lastUpdated": "2025-12-11T16:38:33.520Z"
+    },
+    {
+      "name": "Ryder Rivadeneyra",
+      "aliases": [],
+      "products": [
+        {
+          "id": "ryder-rivadeneyra-golf-filming-master-bag",
+          "name": "Golf Filming Master Bag",
+          "brand": "Ryder Rivadeneyra",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "A specialized golf bag designed to accommodate filming equipment, perfect for content creators on the golf course.",
+          "searchKeywords": [
+            "ryder rivadeneyra",
+            "golf",
+            "filming",
+            "master",
+            "bag",
+            "golf filming master bag"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "ryder-rivadeneyra-golf-filming-master-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-11T21:47:33.834Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ],
+      "lastUpdated": "2025-12-11T21:47:33.834Z"
     }
   ],
-  "productCount": 1640,
-  "variantCount": 2147
+  "productCount": 1644,
+  "variantCount": 2151
 }

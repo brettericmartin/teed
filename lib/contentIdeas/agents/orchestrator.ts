@@ -450,18 +450,16 @@ async function runWave3(
     });
   }
 
-  // Run all Wave 3 agents in parallel
-  // Separate platform agents from bag QA to avoid type issues
-  const platformPromises = [
+  // Run ALL Wave 3 agents in TRUE parallel using Promise.all
+  // This ensures bagQA runs alongside platform agents, not after them
+  const allWave3Promises = [
     tiktokAgent.execute(context),
     reelsAgent.execute(context),
     shortsAgent.execute(context),
+    hasBag ? bagQAAgent.execute(context) : Promise.resolve(null),
   ] as const;
 
-  const bagQAPromise = hasBag ? bagQAAgent.execute(context) : null;
-
-  const [tiktokResult, reelsResult, shortsResult] = await Promise.all(platformPromises);
-  const bagQAResult = bagQAPromise ? await bagQAPromise : null;
+  const [tiktokResult, reelsResult, shortsResult, bagQAResult] = await Promise.all(allWave3Promises);
 
   // Report TikTok result
   if (tiktokResult.success && tiktokResult.data) {
@@ -518,7 +516,7 @@ async function runWave3(
   }
 
   // Report Bag QA result
-  if (hasBag && bagQAResult) {
+  if (hasBag && bagQAResult && bagQAResult !== null && typeof bagQAResult === 'object' && 'success' in bagQAResult) {
     if (bagQAResult.success && bagQAResult.data) {
       onProgress({
         type: 'agent_complete',
@@ -569,11 +567,20 @@ async function runWave3(
     descriptionTemplate: '',
   };
 
+  // Handle bagQA result - it could be null (when no bag) or an AgentResult
+  const bagQAData = hasBag &&
+    bagQAResult &&
+    typeof bagQAResult === 'object' &&
+    'success' in bagQAResult &&
+    bagQAResult.success
+      ? bagQAResult.data
+      : undefined;
+
   return {
     tiktok: (tiktokResult.data as typeof emptyTikTok) || emptyTikTok,
     reels: (reelsResult.data as typeof emptyReels) || emptyReels,
     shorts: (shortsResult.data as typeof emptyShorts) || emptyShorts,
-    bagQA: hasBag && bagQAResult?.success ? bagQAResult.data : undefined,
+    bagQA: bagQAData,
     tokenUsage,
   };
 }

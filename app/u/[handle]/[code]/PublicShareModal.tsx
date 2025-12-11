@@ -106,11 +106,11 @@ export default function PublicShareModal({
 
   return (
     <div
-      className="fixed inset-0 bg-[var(--overlay-bg)] flex items-center justify-center p-4 z-50 backdrop-blur-sm modal-backdrop-enter"
+      className="fixed inset-0 bg-[var(--overlay-bg)] flex items-end sm:items-center justify-center p-0 sm:p-4 z-50 backdrop-blur-sm modal-backdrop-enter"
       onClick={onClose}
     >
       <div
-        className="bg-[var(--modal-bg)] rounded-[var(--radius-2xl)] shadow-[var(--shadow-6)] max-w-md w-full border border-[var(--modal-border)] modal-content-enter"
+        className="bg-[var(--modal-bg)] rounded-t-[var(--radius-2xl)] sm:rounded-[var(--radius-2xl)] shadow-[var(--shadow-6)] max-w-md w-full border border-[var(--modal-border)] modal-content-enter max-h-[85vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -192,7 +192,7 @@ export default function PublicShareModal({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 bg-[var(--sky-1)] border-t border-[var(--border-subtle)] rounded-b-[var(--radius-2xl)]">
+        <div className="px-6 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] sm:pb-4 bg-[var(--sky-1)] border-t border-[var(--border-subtle)] sm:rounded-b-[var(--radius-2xl)]">
           <button
             onClick={onClose}
             className="w-full px-4 py-2.5 min-h-[44px] text-[var(--text-primary)] hover:bg-[var(--surface-hover)] rounded-lg transition-colors font-medium"
