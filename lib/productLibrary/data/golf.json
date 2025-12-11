@@ -1,7 +1,7 @@
 {
   "category": "golf",
   "schemaVersion": "1.0.0",
-  "lastUpdated": "2025-12-09T21:25:51.931Z",
+  "lastUpdated": "2025-12-11T16:38:36.719Z",
   "brands": [
     {
       "name": "TaylorMade",
@@ -80097,9 +80097,105 @@
           "lastUpdated": "2025-12-01T05:52:59.167Z",
           "source": "ai",
           "dataConfidence": 85
+        },
+        {
+          "id": "good-good-classic-logo-golf-cap",
+          "name": "Classic Logo Golf Cap",
+          "brand": "GOOD GOOD",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The Classic Logo Golf Cap by GOOD GOOD is a staple for any golfer, offering both style and sun protection on the course.",
+          "searchKeywords": [
+            "good good",
+            "classic",
+            "logo",
+            "golf",
+            "cap",
+            "classic logo golf cap"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-classic-logo-golf-cap",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-11T16:38:36.694Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "good-good-tour-flexfit-golf-cap",
+          "name": "Tour Flexfit Golf Cap",
+          "brand": "GOOD GOOD",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The Tour Flexfit Golf Cap offers a snug fit with stretchable fabric, providing comfort throughout your game.",
+          "searchKeywords": [
+            "good good",
+            "tour",
+            "flexfit",
+            "golf",
+            "cap",
+            "tour flexfit golf cap"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "good-good-tour-flexfit-golf-cap",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-11T16:38:36.718Z",
+          "source": "ai",
+          "dataConfidence": 75
         }
       ],
-      "lastUpdated": "2025-12-01T05:52:59.167Z"
+      "lastUpdated": "2025-12-11T16:38:36.718Z"
     },
     {
       "name": "Good Good USA",
@@ -81232,8 +81328,444 @@
         }
       ],
       "lastUpdated": "2025-12-09T21:23:45.739Z"
+    },
+    {
+      "name": "SuperStroke",
+      "aliases": [],
+      "products": [
+        {
+          "id": "superstroke-hulk-edition-putter-grip",
+          "name": "Hulk Edition Putter Grip",
+          "brand": "SuperStroke",
+          "category": "golf",
+          "subcategory": "putters",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The Hulk Edition is a limited release featuring distinctive green and purple colors inspired by the iconic superhero, offering a bold statement on the greens.",
+          "searchKeywords": [
+            "superstroke",
+            "hulk",
+            "edition",
+            "putter",
+            "grip",
+            "hulk edition putter grip"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "superstroke-hulk-edition-putter-grip",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-11T16:38:33.109Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "superstroke-traxion-tour-putter-grip",
+          "name": "Traxion Tour Putter Grip",
+          "brand": "SuperStroke",
+          "category": "golf",
+          "subcategory": "putters",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The Traxion Tour series is known for its enhanced feel and feedback, helping golfers improve their putting control.",
+          "searchKeywords": [
+            "superstroke",
+            "traxion",
+            "tour",
+            "putter",
+            "grip",
+            "traxion tour putter grip"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "superstroke-traxion-tour-putter-grip",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-11T16:38:33.144Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "superstroke-pistol-gt-putter-grip",
+          "name": "Pistol GT Putter Grip",
+          "brand": "SuperStroke",
+          "category": "golf",
+          "subcategory": "putters",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Designed with a pistol shape that fits a variety of hands, the Pistol GT provides a classic feel with modern materials.",
+          "searchKeywords": [
+            "superstroke",
+            "pistol",
+            "putter",
+            "grip",
+            "pistol gt putter grip"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "superstroke-pistol-gt-putter-grip",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-11T16:38:33.178Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "superstroke-flatso-putter-grip",
+          "name": "Flatso Putter Grip",
+          "brand": "SuperStroke",
+          "category": "golf",
+          "subcategory": "putters",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The Flatso series is favored for its flat-top design which promotes a consistent hand placement and stroke.",
+          "searchKeywords": [
+            "superstroke",
+            "flatso",
+            "putter",
+            "grip",
+            "flatso putter grip"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "superstroke-flatso-putter-grip",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-11T16:38:33.208Z",
+          "source": "ai",
+          "dataConfidence": 87
+        },
+        {
+          "id": "superstroke-claw-2-0-putter-grip",
+          "name": "Claw 2.0 Putter Grip",
+          "brand": "SuperStroke",
+          "category": "golf",
+          "subcategory": "putters",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The Claw 2.0 is specifically designed for golfers using a claw-style grip, offering enhanced control and stability.",
+          "searchKeywords": [
+            "superstroke",
+            "claw",
+            "2.0",
+            "putter",
+            "grip",
+            "claw 2.0 putter grip"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "superstroke-claw-2-0-putter-grip",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-11T16:38:33.241Z",
+          "source": "ai",
+          "dataConfidence": 82
+        },
+        {
+          "id": "superstroke-putter-grip-hulk-edition",
+          "name": "Putter Grip Hulk Edition",
+          "brand": "SuperStroke",
+          "category": "golf",
+          "subcategory": "putters",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The Hulk Edition putter grip is a special variant with a unique design inspired by the iconic Marvel character. Known for its oversized grip for better control.",
+          "searchKeywords": [
+            "superstroke",
+            "putter",
+            "grip",
+            "hulk",
+            "edition",
+            "putter grip hulk edition"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "superstroke-putter-grip-hulk-edition",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-11T16:38:33.362Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "superstroke-flatso-1-0-putter-grip",
+          "name": "Flatso 1.0 Putter Grip",
+          "brand": "SuperStroke",
+          "category": "golf",
+          "subcategory": "putters",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The Flatso 1.0 is a narrower grip that offers a flat-top design to promote proper wrist alignment.",
+          "searchKeywords": [
+            "superstroke",
+            "flatso",
+            "1.0",
+            "putter",
+            "grip",
+            "flatso 1.0 putter grip"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "superstroke-flatso-1-0-putter-grip",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-11T16:38:33.410Z",
+          "source": "ai",
+          "dataConfidence": 78
+        },
+        {
+          "id": "superstroke-pistol-gt-2-0-putter-grip",
+          "name": "Pistol GT 2.0 Putter Grip",
+          "brand": "SuperStroke",
+          "category": "golf",
+          "subcategory": "putters",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "The Pistol GT 2.0 combines a classic pistol shape with modern technologies to improve putting consistency.",
+          "searchKeywords": [
+            "superstroke",
+            "pistol",
+            "2.0",
+            "putter",
+            "grip",
+            "pistol gt 2.0 putter grip"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "superstroke-pistol-gt-2-0-putter-grip",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-11T16:38:33.443Z",
+          "source": "ai",
+          "dataConfidence": 77
+        },
+        {
+          "id": "superstroke-traxion-pistol-gt-tour",
+          "name": "Traxion Pistol GT Tour",
+          "brand": "SuperStroke",
+          "category": "golf",
+          "subcategory": "other",
+          "releaseYear": 2025,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "secondaryColors": [
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [],
+            "distinguishingFeatures": []
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {},
+          "description": "Offers a classic pistol shape with Traxion Control for enhanced feel and feedback.",
+          "searchKeywords": [
+            "superstroke",
+            "traxion",
+            "pistol",
+            "tour",
+            "traxion pistol gt tour"
+          ],
+          "aliases": [],
+          "variants": [
+            {
+              "sku": "superstroke-traxion-pistol-gt-tour",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "lastUpdated": "2025-12-11T16:38:33.520Z",
+          "source": "ai",
+          "dataConfidence": 75
+        }
+      ],
+      "lastUpdated": "2025-12-11T16:38:33.520Z"
     }
   ],
-  "productCount": 1629,
-  "variantCount": 2136
+  "productCount": 1640,
+  "variantCount": 2147
 }

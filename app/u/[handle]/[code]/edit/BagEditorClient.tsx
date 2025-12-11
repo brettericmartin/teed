@@ -23,6 +23,8 @@ import CoverPhotoCropper from './components/CoverPhotoCropper';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
+import { SmartIdentificationWizard } from '@/components/apis';
+import type { ValidatedProduct } from '@/lib/apis/types';
 
 /**
  * Robust data URL to Blob converter that handles mobile browser quirks.
@@ -159,6 +161,8 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [showTranscriptProcessor, setShowTranscriptProcessor] = useState(false);
   const [showBulkLinkImport, setShowBulkLinkImport] = useState(false);
   const [showProductReview, setShowProductReview] = useState(false);
+  const [showBulkSmartWizard, setShowBulkSmartWizard] = useState(false);
+  const [bulkWizardImages, setBulkWizardImages] = useState<string[]>([]);
   const [showItemSelection, setShowItemSelection] = useState(false);
   const [showBatchPhotoSelector, setShowBatchPhotoSelector] = useState(false);
   const [selectedItemsForPhotos, setSelectedItemsForPhotos] = useState<typeof bag.items>([]);
@@ -759,83 +763,63 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     }
   };
 
-  // Bulk photo upload handler (for 2-10 photos)
+  // Bulk photo upload handler (for 2-10 photos) - Now uses APIS
   const handleBulkPhotosCapture = async (base64Images: string[]) => {
-    setIsIdentifying(true);
     setShowPhotoUpload(false);
-    // Store the photos array for mapping to identified products later
+    // Store the photos array for APIS
     setCapturedPhotosArray(base64Images);
+    setBulkWizardImages(base64Images);
+    setShowBulkSmartWizard(true);
 
-    // Calculate total payload size
-    const totalSizeKB = base64Images.reduce((sum, img) => {
-      return sum + Math.round((img.length * 3) / 4 / 1024);
-    }, 0);
+    console.log('[BulkUpload] Launching APIS with', base64Images.length, 'images');
+  };
 
-    console.log('[BulkUpload] Sending:', {
-      imageCount: base64Images.length,
-      totalSizeKB,
-      images: base64Images.map((img, i) => ({
-        index: i,
-        prefix: img.substring(0, 50),
-        sizeKB: Math.round((img.length * 3) / 4 / 1024),
-      })),
-    });
+  // Handler for APIS bulk completion
+  const handleBulkSmartWizardComplete = async (products: ValidatedProduct[]) => {
+    setShowBulkSmartWizard(false);
+    setBulkWizardImages([]);
 
-    // Warn if payload is very large (over 15MB)
-    if (totalSizeKB > 15000) {
-      console.warn('[BulkUpload] Warning: Large payload', totalSizeKB, 'KB');
+    console.log('[BulkUpload] APIS completed with', products.length, 'products');
+
+    // Add each validated product to the bag
+    for (const product of products) {
+      const suggestion = {
+        custom_name: product.name,
+        custom_description: product.specs || product.specifications?.join(' | ') || '',
+        notes: '',
+        category: product.category,
+        confidence: product.finalConfidence / 100,
+        brand: product.brand,
+        funFactOptions: product.funFacts,
+        productUrl: product.links?.[0]?.url,
+        imageUrl: product.productImage?.imageUrl,
+        price: product.estimatedPrice,
+      };
+
+      await handleAddItem(suggestion);
     }
 
-    try {
-      // Build request body
-      const requestBody = JSON.stringify({
-        images: base64Images,
-        bagType: bag.title,
-      });
+    setCapturedPhotosArray([]);
+    toast.showSuccess(`Added ${products.length} item${products.length !== 1 ? 's' : ''} to bag`);
+  };
 
-      console.log('[BulkUpload] Request body size:', Math.round(requestBody.length / 1024), 'KB');
+  // Handler for single product from bulk APIS (when user adds one at a time)
+  const handleBulkSmartWizardSingleComplete = async (product: ValidatedProduct) => {
+    const suggestion = {
+      custom_name: product.name,
+      custom_description: product.specs || product.specifications?.join(' | ') || '',
+      notes: '',
+      category: product.category,
+      confidence: product.finalConfidence / 100,
+      brand: product.brand,
+      funFactOptions: product.funFacts,
+      productUrl: product.links?.[0]?.url,
+      imageUrl: product.productImage?.imageUrl,
+      price: product.estimatedPrice,
+    };
 
-      const response = await fetch('/api/ai/identify-products', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: requestBody,
-      });
-
-      if (!response.ok) {
-        let errorMessage = 'Failed to identify products';
-        try {
-          const error = await response.json();
-          console.error('[BulkUpload] API error:', error);
-          errorMessage = error.error || errorMessage;
-        } catch {
-          console.error('[BulkUpload] Failed to parse error response');
-        }
-        throw new Error(errorMessage);
-      }
-
-      const result = await response.json();
-      console.log('[BulkUpload] Success:', result.products?.length, 'products found');
-
-      setIdentifiedProducts(result);
-      setShowProductReview(true);
-    } catch (error: any) {
-      console.error('[BulkUpload] Error:', error);
-      setCapturedPhotosArray([]); // Clear on error
-
-      // Provide user-friendly error messages
-      let message = error.message || 'Failed to identify products';
-      if (message.includes('string') && message.includes('pattern')) {
-        message = 'The images are too large. Please try with fewer or smaller images.';
-      } else if (message.includes('413') || message.includes('too large')) {
-        message = 'The images are too large. Please try with fewer images.';
-      } else if (message.includes('Failed to fetch') || message.includes('NetworkError')) {
-        message = 'Network error. Please check your connection and try again.';
-      }
-
-      alert(message);
-    } finally {
-      setIsIdentifying(false);
-    }
+    await handleAddItem(suggestion);
+    toast.showSuccess(`Added ${product.name} to bag`);
   };
 
   // Transcript processing handler
@@ -1506,7 +1490,11 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 };
 
                 // Create the item first
-                console.log('[QuickAddItem] Creating item, imageUrl:', suggestion.imageUrl);
+                console.log('[QuickAddItem] Creating item:', {
+                  imageUrl: suggestion.imageUrl,
+                  productUrl: suggestion.productUrl,
+                  uploadedImageBase64: !!suggestion.uploadedImageBase64,
+                });
                 const response = await fetch(`/api/bags/${bag.code}/items`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
@@ -1799,6 +1787,23 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           processingTime={identifiedProducts.processingTime}
           onAddSelected={handleAddSelectedProducts}
         />
+      )}
+
+      {/* Bulk Smart Identification Wizard (APIS) */}
+      {showBulkSmartWizard && bulkWizardImages.length > 0 && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
+          <SmartIdentificationWizard
+            initialImages={bulkWizardImages}
+            bagContext={bag.title}
+            onComplete={handleBulkSmartWizardSingleComplete}
+            onCompleteAll={handleBulkSmartWizardComplete}
+            onCancel={() => {
+              setShowBulkSmartWizard(false);
+              setBulkWizardImages([]);
+              setCapturedPhotosArray([]);
+            }}
+          />
+        </div>
       )}
 
       {/* Item Selection Modal */}
