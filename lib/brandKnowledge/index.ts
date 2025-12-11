@@ -274,3 +274,68 @@ export function getAvailableCategories(): string[] {
 export function clearCache(): void {
   categoryCache.clear();
 }
+
+// Cache for all brand names across categories
+let allBrandsCache: string[] | null = null;
+
+/**
+ * Get all brand names from all category files
+ * Returns brands sorted by length (longest first) for greedy matching
+ */
+export function getAllBrandNames(): string[] {
+  if (allBrandsCache) {
+    return allBrandsCache;
+  }
+
+  const brandSet = new Set<string>();
+  const categories = getAvailableCategories();
+
+  for (const category of categories) {
+    const knowledge = loadCategoryKnowledge(category);
+    if (knowledge) {
+      for (const brand of knowledge.brands) {
+        brandSet.add(brand.name);
+        // Also add aliases
+        for (const alias of brand.aliases) {
+          brandSet.add(alias);
+        }
+      }
+    }
+  }
+
+  // Sort by length descending for greedy matching ("Peak Design" before "Peak")
+  allBrandsCache = Array.from(brandSet).sort((a, b) => b.length - a.length);
+  console.log(`[brandKnowledge] Loaded ${allBrandsCache.length} brand names`);
+  return allBrandsCache;
+}
+
+/**
+ * Extract brand from a product name string
+ * Returns { brand, productName } if a known brand is found at the start
+ *
+ * Examples:
+ *   "Sony FX3" → { brand: "Sony", productName: "FX3" }
+ *   "Peak Design Strap" → { brand: "Peak Design", productName: "Strap" }
+ *   "Unknown Product" → { brand: null, productName: "Unknown Product" }
+ */
+export function extractBrandFromProductName(fullName: string): { brand: string | null; productName: string } {
+  const trimmed = fullName.trim();
+  const brands = getAllBrandNames();
+
+  for (const brand of brands) {
+    // Check if product name starts with brand (case-insensitive)
+    if (trimmed.toLowerCase().startsWith(brand.toLowerCase())) {
+      // Make sure it's a word boundary (space or end of string after brand)
+      const afterBrand = trimmed.slice(brand.length);
+      if (afterBrand.length === 0 || afterBrand[0] === ' ') {
+        const productName = afterBrand.trim() || trimmed; // If no product name after brand, keep original
+        return {
+          brand,
+          productName: productName || trimmed,
+        };
+      }
+    }
+  }
+
+  return { brand: null, productName: trimmed };
+}

@@ -219,7 +219,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
     return `https://${trimmed}`;
   };
 
-  // Scrape URL for metadata
+  // Scrape URL for metadata - uses bulk-links API for better AI analysis
   const scrapeUrl = useCallback(async (url: string) => {
     setIsScrapingUrl(true);
     setScrapedData(null);
@@ -227,6 +227,45 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
     setPendingUrl(url);
 
     try {
+      // Use bulk-links API for single URL - has AI analysis
+      // Extract bag code from current URL path
+      const pathParts = window.location.pathname.split('/');
+      const codeIndex = pathParts.findIndex(p => p === 'edit') - 1;
+      const bagCode = codeIndex >= 0 ? pathParts[codeIndex] : null;
+
+      if (bagCode) {
+        const response = await fetch(`/api/bags/${bagCode}/bulk-links`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ urls: [url] }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const result = data.results?.[0];
+
+          if (result && result.status !== 'failed') {
+            setScrapedData(result);
+
+            const suggestion: ProductSuggestion = {
+              custom_name: result.suggestedItem?.custom_name || result.scraped?.title || 'Product',
+              custom_description: result.suggestedItem?.custom_description || result.scraped?.description || '',
+              notes: result.scraped?.price ? `Price: $${result.scraped.price}` : '',
+              category: result.analysis?.category || '',
+              confidence: result.analysis?.confidence || 0.8,
+              brand: result.suggestedItem?.brand || result.analysis?.brand || result.scraped?.brand || undefined,
+              productUrl: url,
+              imageUrl: result.photoOptions?.[0]?.url || result.scraped?.image,
+              price: result.scraped?.price,
+            };
+
+            setSuggestions([suggestion]);
+            return;
+          }
+        }
+      }
+
+      // Fallback to simple scrape-url if bulk-links fails
       const response = await fetch('/api/scrape-url', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

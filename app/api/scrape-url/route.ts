@@ -74,14 +74,34 @@ const DOMAIN_TO_BRAND: Record<string, string> = {
   'winn.com': 'Winn',
 };
 
-// Known golf brands to detect in text
+// Known brands to detect in text (sorted by length descending for greedy matching)
 const KNOWN_BRANDS = [
+  // Multi-word brands first (greedy matching)
+  'Good Good Golf', 'Under Armour', 'TRUE Linkswear', 'Scotty Cameron', 'Sun Mountain',
+  'Jones Sports', 'Golf Pride', 'Vice Golf', 'Malbon Golf', 'Peak Design', 'Bang & Olufsen',
+  'Bowers & Wilkins', 'Audio-Technica', 'Black Diamond', 'Arc\'teryx', 'The North Face',
+  'Patagonia', 'Outdoor Research', 'Mountain Hardwear', 'Sea to Summit',
+  // Golf brands
   'TaylorMade', 'Callaway', 'Titleist', 'Ping', 'Cobra', 'Mizuno', 'Srixon', 'Cleveland',
-  'Bridgestone', 'FootJoy', 'Puma', 'Nike', 'Adidas', 'Under Armour', 'TravisMathew',
-  'Johnnie-O', 'G/FORE', 'Malbon Golf', 'Good Good Golf', 'Birddogs', 'Melin', 'Skechers',
-  'ECCO', 'TRUE Linkswear', 'PXG', 'Honma', 'XXIO', 'Wilson', 'Vice Golf', 'Bushnell',
-  'Garmin', 'Arccos', 'Sun Mountain', 'Ogio', 'Jones Sports', 'Vessel', 'Stitch',
-  'SuperStroke', 'Golf Pride', 'Lamkin', 'Scotty Cameron', 'Vokey'
+  'Bridgestone', 'FootJoy', 'TravisMathew', 'Johnnie-O', 'G/FORE', 'Birddogs', 'Melin',
+  'Skechers', 'ECCO', 'PXG', 'Honma', 'XXIO', 'Wilson', 'Bushnell', 'Garmin', 'Arccos',
+  'Ogio', 'Vessel', 'Stitch', 'SuperStroke', 'Lamkin', 'Vokey',
+  // Tech brands
+  'Sony', 'Canon', 'Nikon', 'Fujifilm', 'Panasonic', 'Olympus', 'Leica', 'Hasselblad',
+  'Apple', 'Samsung', 'Google', 'Microsoft', 'Logitech', 'Razer', 'Corsair', 'SteelSeries',
+  'Bose', 'Sennheiser', 'Shure', 'Rode', 'Zoom', 'Tascam', 'Focusrite', 'Universal Audio',
+  'DJI', 'GoPro', 'Insta360', 'Blackmagic', 'Atomos', 'Smallrig', 'Manfrotto', 'Gitzo',
+  'Dell', 'HP', 'Lenovo', 'Asus', 'Acer', 'LG', 'BenQ', 'ViewSonic', 'Anker', 'Belkin',
+  'JBL', 'Sonos', 'Marshall', 'Beats', 'AirPods', 'Jabra', 'Skullcandy',
+  // Fashion/Lifestyle
+  'Nike', 'Adidas', 'Puma', 'New Balance', 'Reebok', 'Converse', 'Vans',
+  'Gucci', 'Louis Vuitton', 'Prada', 'Burberry', 'Hermes', 'Chanel', 'Dior',
+  'Ray-Ban', 'Oakley', 'Persol', 'Maui Jim', 'Costa', 'Smith',
+  // Outdoor/EDC
+  'Yeti', 'Hydro Flask', 'Stanley', 'Osprey', 'Gregory', 'Deuter', 'Fjallraven',
+  'Benchmade', 'Spyderco', 'Kershaw', 'Leatherman', 'Gerber', 'SOG', 'CRKT',
+  'Olight', 'Fenix', 'Streamlight', 'SureFire', 'Nitecore',
+  'Bellroy', 'Ridge', 'Secrid', 'Ekster', 'Trayvax',
 ];
 
 // Extract brand from URL domain
@@ -104,6 +124,44 @@ function extractBrandFromText(text: string): string | null {
     }
   }
   return null;
+}
+
+// Search Google Images for a product
+async function searchGoogleImages(query: string): Promise<string | null> {
+  const apiKey = process.env.GOOGLE_SEARCH_API_KEY;
+  const searchEngineId = process.env.GOOGLE_SEARCH_ENGINE_ID;
+
+  if (!apiKey || !searchEngineId || !query) {
+    return null;
+  }
+
+  try {
+    const searchParams = new URLSearchParams({
+      key: apiKey,
+      cx: searchEngineId,
+      q: query.trim(),
+      searchType: 'image',
+      num: '1',
+      imgSize: 'medium',
+      imgType: 'photo',
+      safe: 'active',
+    });
+
+    const response = await fetch(
+      `https://www.googleapis.com/customsearch/v1?${searchParams.toString()}`
+    );
+
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    if (data.items && data.items.length > 0) {
+      return data.items[0].link;
+    }
+    return null;
+  } catch (error) {
+    console.error('Google Image Search error:', error);
+    return null;
+  }
 }
 
 // Video platform detection helpers
@@ -289,25 +347,29 @@ export async function POST(request: NextRequest) {
     }
 
     // Fetch the URL
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.5',
-      },
-      // Don't follow redirects infinitely
-      redirect: 'follow',
-    });
+    let html = '';
+    let fetchSucceeded = false;
 
-    if (!response.ok) {
-      return NextResponse.json(
-        { error: `Failed to fetch URL: ${response.status} ${response.statusText}` },
-        { status: response.status }
-      );
+    try {
+      const response = await fetch(url, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.5',
+        },
+        redirect: 'follow',
+      });
+
+      if (response.ok) {
+        html = await response.text();
+        fetchSucceeded = true;
+      }
+    } catch (fetchError) {
+      console.error('Fetch error:', fetchError);
+      // Continue without HTML - we can still extract from URL
     }
 
-    const html = await response.text();
-    const $ = cheerio.load(html);
+    const $ = fetchSucceeded ? cheerio.load(html) : null;
 
     // Extract metadata using multiple strategies
     const metadata: ScrapedMetadata = {
@@ -323,58 +385,61 @@ export async function POST(request: NextRequest) {
     // First, try to extract brand from URL domain
     metadata.brand = extractBrandFromUrl(url);
 
-    // Title - try multiple sources
-    metadata.title =
-      $('meta[property="og:title"]').attr('content') ||
-      $('meta[name="twitter:title"]').attr('content') ||
-      $('meta[property="product:title"]').attr('content') ||
-      $('h1').first().text().trim() ||
-      $('title').text().trim() ||
-      null;
+    // Only extract from HTML if fetch succeeded
+    if ($) {
+      // Title - try multiple sources
+      metadata.title =
+        $('meta[property="og:title"]').attr('content') ||
+        $('meta[name="twitter:title"]').attr('content') ||
+        $('meta[property="product:title"]').attr('content') ||
+        $('h1').first().text().trim() ||
+        $('title').text().trim() ||
+        null;
 
-    // Description
-    metadata.description =
-      $('meta[property="og:description"]').attr('content') ||
-      $('meta[name="twitter:description"]').attr('content') ||
-      $('meta[name="description"]').attr('content') ||
-      $('meta[property="product:description"]').attr('content') ||
-      null;
+      // Description
+      metadata.description =
+        $('meta[property="og:description"]').attr('content') ||
+        $('meta[name="twitter:description"]').attr('content') ||
+        $('meta[name="description"]').attr('content') ||
+        $('meta[property="product:description"]').attr('content') ||
+        null;
 
-    // Image
-    let imageUrl =
-      $('meta[property="og:image"]').attr('content') ||
-      $('meta[name="twitter:image"]').attr('content') ||
-      $('meta[property="product:image"]').attr('content') ||
-      $('img[itemprop="image"]').attr('src') ||
-      null;
+      // Image
+      let imageUrl =
+        $('meta[property="og:image"]').attr('content') ||
+        $('meta[name="twitter:image"]').attr('content') ||
+        $('meta[property="product:image"]').attr('content') ||
+        $('img[itemprop="image"]').attr('src') ||
+        null;
 
-    // Make image URL absolute if relative
-    if (imageUrl && !imageUrl.startsWith('http')) {
-      imageUrl = new URL(imageUrl, url).href;
-    }
-    metadata.image = imageUrl;
+      // Make image URL absolute if relative
+      if (imageUrl && !imageUrl.startsWith('http')) {
+        imageUrl = new URL(imageUrl, url).href;
+      }
+      metadata.image = imageUrl;
 
-    // Price - try multiple selectors for different sites
-    const priceSelectors = [
-      'meta[property="og:price:amount"]',
-      'meta[property="product:price:amount"]',
-      'span[itemprop="price"]',
-      '.price',
-      '[class*="price"]',
-      '#price',
-      'span.a-price-whole', // Amazon
-      'span.a-offscreen', // Amazon
-    ];
+      // Price - try multiple selectors for different sites
+      const priceSelectors = [
+        'meta[property="og:price:amount"]',
+        'meta[property="product:price:amount"]',
+        'span[itemprop="price"]',
+        '.price',
+        '[class*="price"]',
+        '#price',
+        'span.a-price-whole', // Amazon
+        'span.a-offscreen', // Amazon
+      ];
 
-    for (const selector of priceSelectors) {
-      const priceElement = $(selector);
-      if (priceElement.length > 0) {
-        const priceText = priceElement.attr('content') || priceElement.text();
-        // Extract just the numeric price
-        const priceMatch = priceText.match(/[\d,]+\.?\d*/);
-        if (priceMatch) {
-          metadata.price = priceMatch[0].replace(/,/g, '');
-          break;
+      for (const selector of priceSelectors) {
+        const priceElement = $(selector);
+        if (priceElement.length > 0) {
+          const priceText = priceElement.attr('content') || priceElement.text();
+          // Extract just the numeric price
+          const priceMatch = priceText.match(/[\d,]+\.?\d*/);
+          if (priceMatch) {
+            metadata.price = priceMatch[0].replace(/,/g, '');
+            break;
+          }
         }
       }
     }
@@ -392,6 +457,55 @@ export async function POST(request: NextRequest) {
       if (metadata.title.length > 150) {
         metadata.title = metadata.title.substring(0, 147) + '...';
       }
+
+      // Detect bot-detection/garbage titles (just site name)
+      const garbageTitles = [
+        'amazon.com', 'amazon', 'ebay', 'ebay.com', 'walmart', 'walmart.com',
+        'sign in', 'log in', 'robot check', 'captcha', 'access denied',
+        'page not found', '404', 'error',
+      ];
+      if (garbageTitles.some(g => metadata.title!.toLowerCase() === g || metadata.title!.toLowerCase().startsWith(g + ' '))) {
+        metadata.title = null;
+      }
+    }
+
+    // For Amazon URLs without a proper title, try to extract product name from URL
+    if (!metadata.title && metadata.domain.includes('amazon')) {
+      // Try multiple URL patterns:
+      // 1. /PRODUCT-NAME/dp/ASIN - has product slug before /dp/
+      // 2. /dp/ASIN or /gp/product/ASIN or /p/ASIN - short form, no slug
+
+      // Pattern 1: Extract product slug from URL (most informative)
+      const productSlugMatch = url.match(/amazon\.[^/]+\/([^/]+)\/dp\//);
+      if (productSlugMatch && productSlugMatch[1]) {
+        const slug = productSlugMatch[1]
+          .replace(/-/g, ' ')
+          .replace(/\b\w/g, c => c.toUpperCase())
+          .trim();
+        if (slug.length > 3 && slug.length < 100) {
+          metadata.title = slug;
+        }
+      }
+
+      // Pattern 2: If no slug, extract ASIN and mark as Amazon product
+      if (!metadata.title) {
+        const asinMatch = url.match(/\/(?:dp|gp\/product|p)\/([A-Z0-9]{10})/i);
+        if (asinMatch && asinMatch[1]) {
+          // Use ASIN as reference - better than nothing
+          metadata.title = `Amazon Product (${asinMatch[1]})`;
+        }
+      }
+    }
+
+    // For other sites without titles, use domain as fallback
+    if (!metadata.title && metadata.domain) {
+      // Extract a readable site name from domain
+      const siteName = metadata.domain
+        .replace(/^www\./, '')
+        .split('.')[0]
+        .replace(/-/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
+      metadata.title = `${siteName} Product`;
     }
 
     if (metadata.description && metadata.description.length > 500) {
@@ -411,6 +525,25 @@ export async function POST(request: NextRequest) {
     if (videoInfo) {
       metadata.videoType = videoInfo.type;
       metadata.videoId = videoInfo.id;
+    }
+
+    // If no image found, try Google Image Search as fallback
+    if (!metadata.image && metadata.title) {
+      let searchQuery: string;
+
+      // For Amazon ASIN-only titles, search Amazon for that ASIN
+      const asinMatch = metadata.title.match(/Amazon Product \(([A-Z0-9]{10})\)/i);
+      if (asinMatch) {
+        searchQuery = `Amazon ${asinMatch[1]} product`;
+      } else {
+        // Use title (and brand if available) as search query
+        searchQuery = [metadata.brand, metadata.title].filter(Boolean).join(' ');
+      }
+
+      const googleImage = await searchGoogleImages(searchQuery);
+      if (googleImage) {
+        metadata.image = googleImage;
+      }
     }
 
     return NextResponse.json(metadata, { status: 200 });
