@@ -76,15 +76,15 @@ function calculateWordRelevance(query: string, resultName: string, resultBrand?:
 function hasGoodWordRelevance(query: string, results: SearchResult[]): boolean {
   if (results.length === 0) return false;
 
-  // Check if at least one result has > 50% word overlap
+  // Check if at least one result has >= 75% word overlap (stricter threshold)
   for (const result of results) {
     const relevance = calculateWordRelevance(query, result.product.name, result.product.brand);
-    if (relevance >= 0.5) {
+    if (relevance >= 0.75) {
       return true;
     }
   }
 
-  console.log(`[enrich-item] Poor word relevance detected for "${query}" - all results have < 50% word overlap`);
+  console.log(`[enrich-item] Poor word relevance detected for "${query}" - all results have < 75% word overlap`);
   return false;
 }
 
@@ -607,8 +607,8 @@ export async function POST(request: NextRequest) {
     // TIER 1: Search product library
     const { results: libraryResults, relatedProducts } = await searchProductLibrary(userInput, category);
 
-    // Check if we have an EXACT match (confidence > 85%)
-    const exactMatches = libraryResults.filter(r => r.confidence > 85);
+    // Check if we have an EXACT match (confidence > 92% - very strict to avoid bad library matches)
+    const exactMatches = libraryResults.filter(r => r.confidence > 92);
 
     // Also check word relevance - even high confidence matches might be irrelevant
     // e.g., "fujikura blue 6x" matching "Cut Blue" on just "blue"
@@ -650,7 +650,8 @@ export async function POST(request: NextRequest) {
       if (!forceAI) {
         const relevantLibraryResults = libraryResults.filter(result => {
           const relevance = calculateWordRelevance(userInput, result.product.name, result.product.brand);
-          return relevance >= 0.5; // Only include library results with >50% word relevance
+          // Only include library results with >= 70% word relevance (stricter to avoid bad matches)
+          return relevance >= 0.7;
         });
         librarysuggestions = libraryResultsToSuggestions(relevantLibraryResults);
         console.log(`[enrich-item] Filtered library: ${libraryResults.length} → ${relevantLibraryResults.length} with good relevance`);
@@ -708,12 +709,12 @@ export async function POST(request: NextRequest) {
       // Don't show irrelevant results just because AI failed
       const relevantLibraryResults = libraryResults.filter(result => {
         const relevance = calculateWordRelevance(userInput, result.product.name, result.product.brand);
-        return relevance >= 0.5;
+        return relevance >= 0.7; // Stricter threshold
       });
 
       const relevantRelatedProducts = relatedProducts.filter(result => {
         const relevance = calculateWordRelevance(userInput, result.product.name, result.product.brand);
-        return relevance >= 0.3; // Slightly lower threshold for related products
+        return relevance >= 0.5; // Slightly lower threshold for related products
       });
 
       // If AI fails and forceAI is true, only return fallback (no library)
