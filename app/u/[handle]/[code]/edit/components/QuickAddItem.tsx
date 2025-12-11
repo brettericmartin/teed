@@ -7,6 +7,131 @@ import ItemPreview from './ItemPreview';
 import { SmartIdentificationWizard } from '@/components/apis';
 import type { ValidatedProduct } from '@/lib/apis/types';
 
+// Compress and convert image to JPEG (handles HEIC from mobile)
+async function compressImageForAPI(base64: string, maxSizeKB: number = 3500): Promise<string> {
+  // Convert data URL to blob
+  const fetchBlob = async (): Promise<Blob> => {
+    try {
+      const response = await fetch(base64);
+      if (response.ok) return await response.blob();
+    } catch { /* fall through */ }
+
+    // Manual conversion fallback
+    const commaIndex = base64.indexOf(',');
+    if (commaIndex === -1) throw new Error('Invalid data URL');
+
+    const prefix = base64.substring(0, commaIndex);
+    let data = base64.substring(commaIndex + 1);
+    const mimeMatch = prefix.match(/^data:([^;]+)/);
+    const mimeType = mimeMatch?.[1] || 'image/jpeg';
+
+    // Clean and decode
+    data = data.replace(/\s/g, '').replace(/-/g, '+').replace(/_/g, '/');
+    const paddingNeeded = (4 - (data.length % 4)) % 4;
+    if (paddingNeeded > 0) data += '='.repeat(paddingNeeded);
+
+    const binary = atob(data);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+
+    return new Blob([bytes], { type: mimeType });
+  };
+
+  try {
+    const blob = await fetchBlob();
+
+    // Load image using createImageBitmap or Image fallback
+    let imgWidth: number, imgHeight: number;
+    let drawSource: ImageBitmap | HTMLImageElement;
+
+    if (typeof createImageBitmap === 'function') {
+      try {
+        drawSource = await createImageBitmap(blob);
+        imgWidth = drawSource.width;
+        imgHeight = drawSource.height;
+      } catch {
+        drawSource = await loadImageFromBlob(blob);
+        imgWidth = drawSource.width;
+        imgHeight = drawSource.height;
+      }
+    } else {
+      drawSource = await loadImageFromBlob(blob);
+      imgWidth = drawSource.width;
+      imgHeight = drawSource.height;
+    }
+
+    if (imgWidth === 0 || imgHeight === 0) {
+      throw new Error('Image has invalid dimensions');
+    }
+
+    // Calculate target dimensions
+    let width = imgWidth;
+    let height = imgHeight;
+    const MAX_DIMENSION = 1600;
+
+    if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+      const ratio = Math.min(MAX_DIMENSION / width, MAX_DIMENSION / height);
+      width = Math.round(width * ratio);
+      height = Math.round(height * ratio);
+    }
+
+    // Create canvas and draw
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('Failed to get canvas context');
+
+    ctx.drawImage(drawSource, 0, 0, width, height);
+
+    // Clean up ImageBitmap
+    if ('close' in drawSource && typeof drawSource.close === 'function') {
+      drawSource.close();
+    }
+
+    // Compress with reducing quality - convert to JPEG
+    let quality = 0.85;
+    let result = canvas.toDataURL('image/jpeg', quality);
+
+    while (result.length > maxSizeKB * 1024 * 1.37 && quality > 0.3) {
+      quality -= 0.1;
+      result = canvas.toDataURL('image/jpeg', quality);
+    }
+
+    console.log('[QuickAdd Compress]', {
+      original: `${imgWidth}x${imgHeight}`,
+      final: `${width}x${height}`,
+      sizeKB: Math.round((result.length * 3) / 4 / 1024),
+    });
+
+    return result;
+  } catch (err) {
+    console.error('[QuickAdd Compress] Error:', err);
+    throw err;
+  }
+}
+
+// Helper to load image from blob
+function loadImageFromBlob(blob: Blob): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(blob);
+
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(img);
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error('Failed to load image'));
+    };
+
+    img.src = url;
+  });
+}
+
 type ProductSuggestion = {
   custom_name: string;
   custom_description: string;
@@ -137,24 +262,34 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
     }
   }, []);
 
-  // Handle image selection - immediately launch APIS wizard
-  const handleImageSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle image selection - compress and launch APIS wizard
+  const handleImageSelect = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Convert to base64 and launch APIS
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const base64 = event.target?.result as string;
-      setSmartWizardImage(base64);
-      setShowSmartWizard(true);
-    };
-    reader.readAsDataURL(file);
-
-    // Reset file input for next selection
+    // Reset file input immediately for next selection
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
+
+    // Convert to base64
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const rawBase64 = event.target?.result as string;
+
+      try {
+        // Compress and convert to JPEG (handles HEIC from mobile)
+        const compressedBase64 = await compressImageForAPI(rawBase64);
+        setSmartWizardImage(compressedBase64);
+        setShowSmartWizard(true);
+      } catch (err) {
+        console.error('[QuickAdd] Image processing failed:', err);
+        // Try with raw base64 as fallback
+        setSmartWizardImage(rawBase64);
+        setShowSmartWizard(true);
+      }
+    };
+    reader.readAsDataURL(file);
   }, []);
 
   // Handle Smart Wizard completion
