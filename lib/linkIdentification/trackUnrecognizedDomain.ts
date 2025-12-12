@@ -53,7 +53,8 @@ export async function trackUnrecognizedDomain(
 
   try {
     // Use the upsert function we created in the migration
-    const { error } = await supabase.rpc('upsert_unrecognized_domain', {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase.rpc as any)('upsert_unrecognized_domain', {
       p_domain: domain,
       p_url: url,
       p_user_id: null, // We could pass user ID if available
@@ -66,8 +67,8 @@ export async function trackUnrecognizedDomain(
 
     // If we have AI suggestions, update them separately
     if (suggestedBrand || suggestedCategory) {
-      await supabase
-        .from('unrecognized_domains')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabase.from('unrecognized_domains') as any)
         .update({
           suggested_brand: suggestedBrand,
           suggested_category: suggestedCategory,
