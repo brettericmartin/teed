@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import DashboardClient from './DashboardClient';
-import BetaGate from './BetaGate';
 
 export default async function DashboardPage() {
   const supabase = await createServerSupabase();
@@ -16,17 +15,12 @@ export default async function DashboardPage() {
     redirect('/login'); // Redirect to login if not authenticated
   }
 
-  // Check beta access first
+  // Fetch user profile
   const { data: profile } = await supabase
     .from('profiles')
-    .select('handle, display_name, beta_tier, beta_approved_at, total_views, total_bags, total_followers, stats_updated_at')
+    .select('handle, display_name, total_views, total_bags, total_followers, stats_updated_at')
     .eq('id', user.id)
     .single();
-
-  // If user doesn't have beta access, show the beta gate
-  if (!profile?.beta_tier) {
-    return <BetaGate userEmail={user.email || ''} userName={profile?.display_name || ''} />;
-  }
 
   // Fetch user's bags with featured items
   // Sort by: pinned first (by pinned_at DESC), then by created_at DESC
