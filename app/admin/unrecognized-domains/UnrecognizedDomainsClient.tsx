@@ -16,6 +16,8 @@ import {
   TrendingUp,
   Clock,
   Database,
+  Plus,
+  FileCode,
 } from 'lucide-react';
 
 interface UnrecognizedDomain {
@@ -52,6 +54,7 @@ export default function UnrecognizedDomainsClient() {
   const [sortBy, setSortBy] = useState<'occurrence_count' | 'last_seen_at'>('occurrence_count');
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [copiedDomain, setCopiedDomain] = useState<string | null>(null);
+  const [addingDomain, setAddingDomain] = useState<UnrecognizedDomain | null>(null);
 
   const fetchDomains = useCallback(async () => {
     setLoading(true);
@@ -398,13 +401,13 @@ export default function UnrecognizedDomainsClient() {
                   {domain.status === 'pending' && (
                     <div className="flex items-center gap-2">
                       <button
-                        onClick={() => updateDomainStatus(domain.id, 'added')}
+                        onClick={() => setAddingDomain(domain)}
                         disabled={updatingId === domain.id}
                         className="flex items-center gap-1 px-3 py-1.5 bg-[var(--teed-green-9)] text-white rounded-lg hover:bg-[var(--teed-green-10)] transition-colors disabled:opacity-50"
-                        title="Mark as added to database"
+                        title="Add to brand library"
                       >
-                        <Check className="w-4 h-4" />
-                        Added
+                        <Plus className="w-4 h-4" />
+                        Add to Library
                       </button>
                       <button
                         onClick={() => updateDomainStatus(domain.id, 'ignored')}
@@ -447,6 +450,107 @@ export default function UnrecognizedDomainsClient() {
           </div>
         )}
       </main>
+
+      {/* Add to Library Modal */}
+      {addingDomain && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-[var(--surface)] rounded-xl max-w-lg w-full shadow-xl">
+            <div className="p-6 border-b border-[var(--border-subtle)]">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-[var(--teed-green-4)] rounded-lg flex items-center justify-center">
+                  <FileCode className="w-5 h-5 text-[var(--teed-green-11)]" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold text-[var(--text-primary)]">
+                    Add to Brand Library
+                  </h2>
+                  <p className="text-sm text-[var(--text-secondary)]">
+                    {addingDomain.domain}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 space-y-4">
+              {/* Step 1 */}
+              <div className="flex gap-3">
+                <div className="w-6 h-6 rounded-full bg-[var(--sky-9)] text-white flex items-center justify-center text-sm font-medium shrink-0">
+                  1
+                </div>
+                <div className="flex-1">
+                  <p className="font-medium text-[var(--text-primary)] mb-2">
+                    Copy this code snippet:
+                  </p>
+                  <div className="relative">
+                    <pre className="p-3 bg-[var(--grey-4)] rounded-lg text-xs font-mono overflow-x-auto text-[var(--text-primary)]">
+                      {generateCodeSnippet(addingDomain)}
+                    </pre>
+                    <button
+                      onClick={() => {
+                        copyToClipboard(generateCodeSnippet(addingDomain));
+                      }}
+                      className="absolute top-2 right-2 p-1.5 bg-[var(--surface)] rounded hover:bg-[var(--grey-6)] transition-colors"
+                    >
+                      {copiedDomain === generateCodeSnippet(addingDomain) ? (
+                        <Check className="w-4 h-4 text-[var(--teed-green-9)]" />
+                      ) : (
+                        <Copy className="w-4 h-4 text-[var(--text-secondary)]" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Step 2 */}
+              <div className="flex gap-3">
+                <div className="w-6 h-6 rounded-full bg-[var(--sky-9)] text-white flex items-center justify-center text-sm font-medium shrink-0">
+                  2
+                </div>
+                <div className="flex-1">
+                  <p className="font-medium text-[var(--text-primary)]">
+                    Paste into the brand library file:
+                  </p>
+                  <code className="text-xs text-[var(--text-secondary)] bg-[var(--grey-4)] px-2 py-1 rounded mt-1 inline-block">
+                    lib/linkIdentification/domainBrands.ts
+                  </code>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div className="flex gap-3">
+                <div className="w-6 h-6 rounded-full bg-[var(--sky-9)] text-white flex items-center justify-center text-sm font-medium shrink-0">
+                  3
+                </div>
+                <div className="flex-1">
+                  <p className="font-medium text-[var(--text-primary)]">
+                    Commit and deploy the change
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-4 border-t border-[var(--border-subtle)] flex justify-end gap-3">
+              <button
+                onClick={() => setAddingDomain(null)}
+                className="px-4 py-2 text-[var(--text-secondary)] hover:bg-[var(--grey-4)] rounded-lg transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={async () => {
+                  await updateDomainStatus(addingDomain.id, 'added');
+                  setAddingDomain(null);
+                }}
+                disabled={updatingId === addingDomain.id}
+                className="flex items-center gap-2 px-4 py-2 bg-[var(--teed-green-9)] text-white rounded-lg hover:bg-[var(--teed-green-10)] transition-colors disabled:opacity-50"
+              >
+                <Check className="w-4 h-4" />
+                Done - Mark as Added
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
