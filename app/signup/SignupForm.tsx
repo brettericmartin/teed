@@ -4,7 +4,8 @@ import { useState, useEffect, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import { Button } from '@/components/ui/Button';
-import { Check, X, Loader2 } from 'lucide-react';
+import { Check, X } from 'lucide-react';
+import { GolfLoader } from '@/components/ui/GolfLoader';
 
 export default function SignupForm() {
   const router = useRouter();
@@ -198,7 +199,7 @@ export default function SignupForm() {
             />
             <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
               {handleAvailability.checking && (
-                <Loader2 className="w-5 h-5 text-[var(--text-tertiary)] animate-spin" />
+                <GolfLoader size="md" />
               )}
               {!handleAvailability.checking && handleAvailability.available === true && (
                 <Check className="w-5 h-5 text-[var(--teed-green-9)]" />
@@ -312,7 +313,7 @@ export default function SignupForm() {
         >
           {isLoading ? (
             <>
-              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+              <GolfLoader size="md" className="mr-2" />
               Creating account...
             </>
           ) : (

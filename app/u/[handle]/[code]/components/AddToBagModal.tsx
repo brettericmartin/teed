@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, Plus, Loader2, Package, Check } from 'lucide-react';
+import { X, Plus, Package, Check } from 'lucide-react';
+import { GolfLoader } from '@/components/ui/GolfLoader';
 import { Button } from '@/components/ui/Button';
 
 interface ItemLink {
@@ -261,7 +262,7 @@ export default function AddToBagModal({
             {/* Loading State */}
             {isFetchingBags ? (
               <div className="flex items-center justify-center py-8">
-                <Loader2 className="w-6 h-6 animate-spin text-[var(--text-secondary)]" />
+                <GolfLoader size="lg" />
               </div>
             ) : bags.length === 0 && !isCreatingNewBag ? (
               /* No Bags State */
@@ -328,7 +329,7 @@ export default function AddToBagModal({
                   >
                     {isCreatingBag ? (
                       <>
-                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                        <GolfLoader size="sm" className="mr-2" />
                         Creating...
                       </>
                     ) : (
@@ -391,7 +392,7 @@ export default function AddToBagModal({
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                    <GolfLoader size="sm" className="mr-2" />
                     Adding...
                   </>
                 ) : (

@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link as LinkIcon, Loader2, Camera, Sparkles } from 'lucide-react';
+import { Camera, Sparkles, Info } from 'lucide-react';
+import { GolfLoader } from '@/components/ui/GolfLoader';
 import AISuggestions from './AISuggestions';
 import ItemPreview from './ItemPreview';
 import { SmartIdentificationWizard } from '@/components/apis';
@@ -188,118 +189,13 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
   const [existingAnswers, setExistingAnswers] = useState<Record<string, string>>({});
   const [searchTier, setSearchTier] = useState<'library' | 'library+ai' | 'ai' | 'vision' | 'fallback' | 'error' | undefined>();
   const [isAdding, setIsAdding] = useState(false);
-  const [isScrapingUrl, setIsScrapingUrl] = useState(false);
-  const [scrapedData, setScrapedData] = useState<any>(null);
-  const [pendingUrl, setPendingUrl] = useState<string | null>(null);
   const [previewingSuggestion, setPreviewingSuggestion] = useState<ProductSuggestion | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   // APIS Smart Identification Wizard state
   const [showSmartWizard, setShowSmartWizard] = useState(false);
   const [smartWizardImage, setSmartWizardImage] = useState<string | null>(null);
-
-  // Helper to detect if input is a URL
-  const isUrl = (text: string): boolean => {
-    const trimmed = text.trim();
-    try {
-      new URL(trimmed);
-      return true;
-    } catch {
-      const urlPattern = /^(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/\S*)?$/;
-      return urlPattern.test(trimmed) || trimmed.includes('.com/') || trimmed.includes('.co/') || trimmed.includes('.golf/');
-    }
-  };
-
-  // Normalize URL by adding https:// if missing
-  const normalizeUrl = (text: string): string => {
-    const trimmed = text.trim();
-    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
-      return trimmed;
-    }
-    return `https://${trimmed}`;
-  };
-
-  // Scrape URL for metadata - uses bulk-links API for better AI analysis
-  const scrapeUrl = useCallback(async (url: string) => {
-    setIsScrapingUrl(true);
-    setScrapedData(null);
-    setSuggestions([]);
-    setPendingUrl(url);
-
-    try {
-      // Use bulk-links API for single URL - has AI analysis
-      // Extract bag code from current URL path
-      const pathParts = window.location.pathname.split('/');
-      const codeIndex = pathParts.findIndex(p => p === 'edit') - 1;
-      const bagCode = codeIndex >= 0 ? pathParts[codeIndex] : null;
-
-      if (bagCode) {
-        const response = await fetch(`/api/bags/${bagCode}/bulk-links`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ urls: [url] }),
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          const result = data.results?.[0];
-
-          if (result && result.status !== 'failed') {
-            setScrapedData(result);
-
-            const suggestion: ProductSuggestion = {
-              custom_name: result.suggestedItem?.custom_name || result.scraped?.title || 'Product',
-              custom_description: result.suggestedItem?.custom_description || result.scraped?.description || '',
-              notes: result.scraped?.price ? `Price: $${result.scraped.price}` : '',
-              category: result.analysis?.category || '',
-              confidence: result.analysis?.confidence || 0.8,
-              brand: result.suggestedItem?.brand || result.analysis?.brand || result.scraped?.brand || undefined,
-              productUrl: url,
-              imageUrl: result.photoOptions?.[0]?.url || result.scraped?.image,
-              price: result.scraped?.price,
-            };
-
-            setSuggestions([suggestion]);
-            return;
-          }
-        }
-      }
-
-      // Fallback to simple scrape-url if bulk-links fails
-      const response = await fetch('/api/scrape-url', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setScrapedData(data);
-
-        const suggestion: ProductSuggestion = {
-          custom_name: data.title || 'Product',
-          custom_description: data.description || '',
-          notes: data.price ? `Price: $${data.price}` : '',
-          category: '',
-          confidence: 0.95,
-          brand: data.brand || undefined,
-          productUrl: url,
-          imageUrl: data.image,
-          price: data.price,
-        };
-
-        setSuggestions([suggestion]);
-      } else {
-        console.error('Failed to scrape URL');
-        fetchSuggestions(url, {});
-      }
-    } catch (error) {
-      console.error('Error scraping URL:', error);
-      fetchSuggestions(url, {});
-    } finally {
-      setIsScrapingUrl(false);
-    }
-  }, []);
 
   // Handle image selection - compress and launch APIS wizard
   const handleImageSelect = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -376,11 +272,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
 
       if (response.ok) {
         const data = await response.json();
-        const suggestions = (data.suggestions || []).map((s: ProductSuggestion) => ({
-          ...s,
-          productUrl: s.productUrl || pendingUrl || undefined,
-        }));
-        setSuggestions(suggestions);
+        setSuggestions(data.suggestions || []);
         setQuestions(data.questions || []);
         setClarificationNeeded(data.clarificationNeeded || false);
         setSearchTier(data.searchTier);
@@ -394,25 +286,18 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
     } finally {
       setIsLoadingSuggestions(false);
     }
-  }, [bagTitle, pendingUrl]);
+  }, [bagTitle]);
 
-  // Debounced effect for text/URL input
+  // Debounced effect for text input
   useEffect(() => {
     const timer = setTimeout(() => {
       if (input && input.trim().length >= 2) {
-        if (isUrl(input.trim())) {
-          scrapeUrl(normalizeUrl(input.trim()));
-        } else {
-          setPendingUrl(null);
-          fetchSuggestions(input, existingAnswers);
-        }
-      } else {
-        setPendingUrl(null);
+        fetchSuggestions(input, existingAnswers);
       }
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [input, existingAnswers, fetchSuggestions, scrapeUrl]);
+  }, [input, existingAnswers, fetchSuggestions]);
 
   const handleSelectSuggestion = (suggestion: ProductSuggestion) => {
     console.log('[QuickAddItem] Selected suggestion:', {
@@ -439,8 +324,6 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
       setSuggestions([]);
       setQuestions([]);
       setExistingAnswers({});
-      setScrapedData(null);
-      setPendingUrl(null);
       setPreviewingSuggestion(null);
     } catch (error) {
       console.error('Error adding item:', error);
@@ -491,6 +374,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
           suggestion={previewingSuggestion}
           onConfirm={handleConfirmPreview}
           onCancel={handleCancelPreview}
+          isAdding={isAdding}
         />
       )}
 
@@ -504,6 +388,34 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
           className="hidden"
         />
 
+        {/* Header with info tooltip */}
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-medium text-gray-700">Quick Add Single Item</h3>
+          <div className="relative">
+            <button
+              type="button"
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+              onClick={() => setShowTooltip(!showTooltip)}
+              className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <Info className="w-4 h-4" />
+            </button>
+            {showTooltip && (
+              <div className="absolute right-0 top-full mt-1 w-64 p-3 bg-gray-900 text-white text-xs rounded-lg shadow-lg z-10">
+                <p className="font-medium mb-1">Adding items to your bag:</p>
+                <p className="text-gray-300 mb-2">
+                  Use this box to quickly add a single item by typing its name or uploading a photo.
+                </p>
+                <p className="text-gray-300">
+                  For bulk imports (multiple photos, product links, etc.), use the <span className="font-medium text-sky-300">Curator</span> below.
+                </p>
+                <div className="absolute -top-1 right-3 w-2 h-2 bg-gray-900 transform rotate-45" />
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Quick Input */}
         <div>
           <div className="relative flex gap-2">
@@ -512,21 +424,11 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Type item name or paste product URL..."
-                disabled={isAdding || isScrapingUrl}
-                className="w-full px-4 py-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 pr-10"
+                placeholder="Type item name (e.g., 'TaylorMade Stealth Driver')"
+                disabled={isAdding}
+                className="w-full px-4 py-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
                 autoFocus
               />
-              {isScrapingUrl && (
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />
-                </div>
-              )}
-              {isUrl(input.trim()) && !isScrapingUrl && input.trim().length > 0 && (
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <LinkIcon className="w-5 h-5 text-green-500" />
-                </div>
-              )}
             </div>
 
             {/* Camera button - launches APIS directly */}
@@ -546,24 +448,10 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
 
           {/* Help text */}
           {!input && (
-            <div className="mt-2 space-y-1">
-              <p className="text-xs text-gray-500 flex items-center gap-1">
-                <Camera className="w-3 h-3" />
-                <Sparkles className="w-3 h-3" />
-                Upload a photo for AI-powered Smart Identification
-              </p>
-              <p className="text-xs text-gray-400 flex items-center gap-1">
-                <LinkIcon className="w-3 h-3" />
-                or paste a product URL / type item name
-              </p>
-            </div>
-          )}
-
-          {/* URL scraping status */}
-          {isScrapingUrl && (
-            <p className="mt-2 text-xs text-blue-600 flex items-center gap-1">
-              <Loader2 className="w-3 h-3 animate-spin" />
-              Fetching product details from URL...
+            <p className="mt-2 text-xs text-gray-500 flex items-center gap-1.5">
+              <Camera className="w-3 h-3" />
+              <Sparkles className="w-3 h-3" />
+              <span>Type a description or upload a photo to identify a single item</span>
             </p>
           )}
 

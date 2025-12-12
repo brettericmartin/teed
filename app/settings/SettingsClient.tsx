@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
-import { User, Loader2, Check, X, Upload, Trash2, Camera, ArrowLeft, Instagram, Twitter, Youtube, Globe, Video } from 'lucide-react';
+import { User, Check, X, Upload, Trash2, Camera, ArrowLeft, Instagram, Twitter, Youtube, Globe, Video } from 'lucide-react';
+import { GolfLoader } from '@/components/ui/GolfLoader';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
 import AvatarCropper from '@/components/ui/AvatarCropper';
 
@@ -425,7 +426,7 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
                 )}
                 {isUploadingAvatar && (
                   <div className="absolute inset-0 rounded-full bg-black/50 flex items-center justify-center">
-                    <Loader2 className="w-8 h-8 text-white animate-spin" />
+                    <GolfLoader size="lg" />
                   </div>
                 )}
               </div>
@@ -509,7 +510,7 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
                   />
                   <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
                     {handleAvailability.checking && (
-                      <Loader2 className="w-5 h-5 text-[var(--text-tertiary)] animate-spin" />
+                      <GolfLoader size="md" />
                     )}
                     {!handleAvailability.checking && handleAvailability.available === true && (
                       <Check className="w-5 h-5 text-[var(--teed-green-9)]" />
@@ -670,7 +671,7 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
                 >
                   {isSaving ? (
                     <>
-                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      <GolfLoader size="md" className="mr-2" />
                       Saving...
                     </>
                   ) : (

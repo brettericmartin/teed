@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { Share2, ExternalLink, User, X, Package, Trophy, Copy, CheckCheck, ChevronDown, Tag, Bookmark, UserPlus, UserCheck, Loader2, LayoutGrid, List, Plus } from 'lucide-react';
+import { Share2, ExternalLink, User, X, Package, Trophy, Copy, CheckCheck, ChevronDown, Tag, Bookmark, UserPlus, UserCheck, LayoutGrid, List, Plus } from 'lucide-react';
+import { GolfLoader } from '@/components/ui/GolfLoader';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import QRCodeDisplay from '@/components/ui/QRCodeDisplay';
 import PublicShareModal from './PublicShareModal';
@@ -409,7 +410,7 @@ export default function PublicBagView({
                   aria-label={isSaved ? 'Unsave this bag' : 'Save this bag'}
                 >
                   {isSaveLoading ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <GolfLoader size="md" />
                   ) : (
                     <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`} />
                   )}
@@ -433,7 +434,7 @@ export default function PublicBagView({
                     aria-label="Copy this bag to your account"
                   >
                     {isCopyLoading ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <GolfLoader size="md" />
                     ) : (
                       <Copy className="w-5 h-5" />
                     )}
@@ -466,7 +467,7 @@ export default function PublicBagView({
                     aria-label={isFollowing ? `Unfollow @${ownerHandle}` : `Follow @${ownerHandle}`}
                   >
                     {isFollowLoading ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <GolfLoader size="sm" />
                     ) : isFollowing ? (
                       <UserCheck className="w-4 h-4" />
                     ) : (

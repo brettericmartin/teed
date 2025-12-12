@@ -1,6 +1,7 @@
 'use client';
 
-import { Camera, Images, Sparkles, ChevronRight, Loader2, Bot, FileText, Link } from 'lucide-react';
+import { Camera, Images, Sparkles, ChevronRight, Bot, Link } from 'lucide-react';
+import { GolfLoader } from '@/components/ui/GolfLoader';
 
 type AIAction = {
   id: string;
@@ -20,7 +21,6 @@ type AIAssistantHubProps = {
   itemCount: number;
   itemsWithoutPhotos: number;
   onAddFromPhoto: () => void;
-  onAddFromTranscript: () => void;
   onAddFromLinks: () => void;
   onFindPhotos: () => void;
   onFillProductInfo: () => void;
@@ -53,7 +53,7 @@ function AIActionRow({
         <div className="relative flex-shrink-0">
           <div className="w-10 h-10 rounded-lg bg-[var(--sky-3)] flex items-center justify-center text-[var(--sky-11)] group-hover:bg-[var(--sky-4)] transition-colors">
             {isLoading ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
+              <GolfLoader size="md" variant="bounce" />
             ) : (
               icon
             )}
@@ -92,7 +92,6 @@ export default function AIAssistantHub({
   itemCount,
   itemsWithoutPhotos,
   onAddFromPhoto,
-  onAddFromTranscript,
   onAddFromLinks,
   onFindPhotos,
   onFillProductInfo,
@@ -104,21 +103,13 @@ export default function AIAssistantHub({
     {
       id: 'add-from-photo',
       icon: <Camera className="w-5 h-5" />,
-      title: 'Add from Photo',
-      description: 'Upload a photo, AI extracts products',
+      title: 'Add from Photos',
+      description: 'Upload multiple photos, AI extracts products',
       onClick: onAddFromPhoto,
       isLoading: isIdentifying,
       loadingText: 'Identifying...',
       disabled: isIdentifying,
       delay: 100,
-    },
-    {
-      id: 'add-from-transcript',
-      icon: <FileText className="w-5 h-5" />,
-      title: 'Add from Transcript',
-      description: 'Paste a video/podcast transcript',
-      onClick: onAddFromTranscript,
-      delay: 150,
     },
     {
       id: 'add-from-links',
@@ -129,7 +120,7 @@ export default function AIAssistantHub({
       isLoading: isImportingLinks,
       loadingText: 'Importing...',
       disabled: isImportingLinks,
-      delay: 175,
+      delay: 150,
     },
     {
       id: 'find-photos',
@@ -140,7 +131,7 @@ export default function AIAssistantHub({
       countLabel: itemsWithoutPhotos > 0 ? 'need photos' : 'items',
       onClick: onFindPhotos,
       hidden: itemCount === 0,
-      delay: 225,
+      delay: 200,
     },
     {
       id: 'fill-info',
@@ -153,7 +144,7 @@ export default function AIAssistantHub({
       loadingText: 'Filling info...',
       disabled: isFillingInfo,
       hidden: itemCount === 0,
-      delay: 275,
+      delay: 250,
     },
   ];
 
@@ -178,7 +169,7 @@ export default function AIAssistantHub({
               </span>
             </div>
             <p className="text-xs text-[var(--text-secondary)]">
-              Your smart assistant for building bags
+              Best for bulk imports and AI-powered enhancements
             </p>
           </div>
         </div>

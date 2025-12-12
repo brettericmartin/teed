@@ -15,6 +15,7 @@ import {
   Palette,
   MessageSquare,
   Video,
+  Globe,
 } from 'lucide-react';
 import { ROLE_PERMISSIONS, getRoleDisplayName, type AdminRole } from '@/lib/types/admin';
 
@@ -140,6 +141,15 @@ export default function AdminDashboardClient({
       borderHover: 'hover:border-[var(--amber-6)]',
       permission: 'canViewAnalytics',
       comingSoon: true,
+    },
+    {
+      href: '/admin/unrecognized-domains',
+      title: 'Unrecognized Domains',
+      description: 'Track new domains to expand the brand database',
+      icon: <Globe className="w-6 h-6 text-[var(--copper-11)]" />,
+      gradient: 'from-[var(--copper-4)] to-[var(--copper-6)]',
+      borderHover: 'hover:border-[var(--copper-6)]',
+      permission: 'canViewAnalytics',
     },
   ];
 

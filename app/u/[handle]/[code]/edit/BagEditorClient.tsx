@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Loader2, Share2, Trash2, Camera, ChevronLeft, Package, Images, Link, Sparkles, Upload, Image, X, Eye } from 'lucide-react';
+import { ArrowLeft, Share2, Trash2, Camera, ChevronLeft, Package, Images, Link, Sparkles, Upload, Image, X, Eye } from 'lucide-react';
+import { GolfLoader } from '@/components/ui/GolfLoader';
 import NextLink from 'next/link';
 import ItemList from './components/ItemList';
 import QuickAddItem from './components/QuickAddItem';
@@ -10,7 +11,6 @@ import AddItemForm from './components/AddItemForm';
 import ShareModal from './components/ShareModal';
 import PhotoUploadModal from './components/PhotoUploadModal';
 import BulkPhotoUploadModal from './components/BulkPhotoUploadModal';
-import TranscriptProcessorModal from './components/TranscriptProcessorModal';
 import BulkLinkImportModal from './components/BulkLinkImportModal';
 import ProductReviewModal, { IdentifiedProduct } from './components/ProductReviewModal';
 import BatchPhotoSelector from './components/BatchPhotoSelector';
@@ -159,7 +159,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [showManualForm, setShowManualForm] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showPhotoUpload, setShowPhotoUpload] = useState(false);
-  const [showTranscriptProcessor, setShowTranscriptProcessor] = useState(false);
   const [showBulkLinkImport, setShowBulkLinkImport] = useState(false);
   const [showProductReview, setShowProductReview] = useState(false);
   const [showBulkSmartWizard, setShowBulkSmartWizard] = useState(false);
@@ -827,23 +826,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     toast.showSuccess(`Added ${product.name} to bag`);
   };
 
-  // Transcript processing handler
-  const handleTranscriptProductsExtracted = async (products: IdentifiedProduct[]) => {
-    setShowTranscriptProcessor(false);
-
-    // Format products to match the expected structure
-    const formattedResult = {
-      products,
-      totalConfidence: products.length > 0
-        ? products.reduce((sum, p) => sum + (p.confidence || 0), 0) / products.length
-        : 0,
-      processingTime: 0,
-    };
-
-    setIdentifiedProducts(formattedResult);
-    setShowProductReview(true);
-  };
-
   // Step 29: Batch item creation from AI results
   const handleAddSelectedProducts = async (selectedProducts: IdentifiedProduct[], uploadedPhotoFile?: File) => {
     try {
@@ -1241,7 +1223,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     <div className="min-h-screen">
       {/* Header - Scrolls away with content */}
       <header className="bg-[var(--surface)] border-b border-[var(--border-subtle)]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 sm:pt-6 pb-3 sm:pb-4">
           {/* Title Row with Public Toggle and Actions */}
           <div className="flex items-start gap-2 sm:gap-3 mb-2">
             {/* Editable Title */}
@@ -1324,7 +1306,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             <div className="flex items-center gap-2 text-xs text-[var(--text-secondary)] flex-shrink-0">
               {isSaving ? (
                 <span className="flex items-center">
-                  <Loader2 className="animate-spin h-3 w-3" />
+                  <GolfLoader size="sm" />
                 </span>
               ) : lastSaved ? (
                 <span className="hidden sm:inline">
@@ -1647,6 +1629,9 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                     links: newLinks,
                   }],
                 }));
+
+                // Show success toast
+                toast.showSuccess(`Added "${suggestion.custom_name}" to bag`);
               }}
               bagTitle={bag.title}
               onShowManualForm={() => setShowManualForm(true)}
@@ -1658,7 +1643,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             itemCount={bag.items.length}
             itemsWithoutPhotos={bag.items.filter(item => !item.photo_url).length}
             onAddFromPhoto={() => setShowPhotoUpload(true)}
-            onAddFromTranscript={() => setShowTranscriptProcessor(true)}
             onAddFromLinks={() => setShowBulkLinkImport(true)}
             onFindPhotos={() => setShowItemSelection(true)}
             onFillProductInfo={() => setShowEnrichmentItemSelection(true)}
@@ -1746,14 +1730,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         isOpen={showPhotoUpload}
         onClose={() => setShowPhotoUpload(false)}
         onPhotosCapture={handleBulkPhotosCapture}
-        bagType={bag.title}
-      />
-
-      {/* Transcript Processor Modal */}
-      <TranscriptProcessorModal
-        isOpen={showTranscriptProcessor}
-        onClose={() => setShowTranscriptProcessor(false)}
-        onProductsExtracted={handleTranscriptProductsExtracted}
         bagType={bag.title}
       />
 

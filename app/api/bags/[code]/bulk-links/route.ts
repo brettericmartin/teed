@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import * as cheerio from 'cheerio';
 import { openai } from '@/lib/openaiClient';
+import { identifyProduct, parseProductUrl } from '@/lib/linkIdentification';
 
 export const maxDuration = 60; // Extended timeout for bulk processing
 
@@ -431,24 +432,65 @@ async function processUrl(
     // Resolve redirects
     const resolvedUrl = await resolveRedirects(url);
 
-    // Step 1: Scrape
-    const scraped = await scrapeUrl(resolvedUrl);
+    // NEW: Use the link identification pipeline first
+    // This handles bot-protected sites by using URL intelligence
+    const identification = await identifyProduct(resolvedUrl, {
+      fetchTimeout: 8000,
+      earlyExitConfidence: 0.85,
+    });
 
-    // Step 2: AI Analysis
-    const analysis = await analyzeWithAI(resolvedUrl, scraped);
+    console.log(`[bulk-links] Identified: ${identification.fullName} (${(identification.confidence * 100).toFixed(0)}% via ${identification.primarySource})`);
 
-    // Step 3: Find Photos
-    const photoOptions = await findProductImages(resolvedUrl, scraped, analysis);
+    // Convert identification result to our formats
+    const scraped: ScrapedData = {
+      title: identification.fullName,
+      description: identification.specifications.join(' | ') || null,
+      brand: identification.brand,
+      price: identification.price,
+      image: identification.imageUrl,
+      domain: identification.urlParsed.domain,
+    };
 
-    // Step 4: Compose suggestion
-    const suggestedItem = composeSuggestion(scraped, analysis);
+    const analysis: AnalysisResult = {
+      brand: identification.brand,
+      productName: identification.productName,
+      category: identification.category,
+      specs: identification.specifications,
+      confidence: identification.confidence,
+    };
 
-    // Determine status
+    // Find photos (can use existing approach + identification data)
+    let photoOptions = await findProductImages(resolvedUrl, scraped, analysis);
+
+    // If identification gave us an image and it's not in options, add it
+    if (identification.imageUrl && !photoOptions.some(p => p.url === identification.imageUrl)) {
+      photoOptions.unshift({
+        url: identification.imageUrl,
+        source: 'og',
+        isPrimary: true,
+      });
+      // Update other primaries
+      photoOptions = photoOptions.map((p, i) => ({ ...p, isPrimary: i === 0 }));
+    }
+
+    // Compose suggestion from identification
+    const suggestedItem = {
+      custom_name: identification.productName || 'Unknown Product',
+      brand: identification.brand || '',
+      custom_description: identification.specifications.join(' | '),
+    };
+
+    // Determine status based on identification confidence
     let status: 'success' | 'partial' | 'failed' = 'failed';
-    if (scraped && analysis && photoOptions.length > 0) {
-      status = 'success';
-    } else if (scraped || analysis) {
+    if (identification.confidence >= 0.7) {
+      status = photoOptions.length > 0 ? 'success' : 'partial';
+    } else if (identification.confidence >= 0.4) {
       status = 'partial';
+    }
+
+    // Log if scraping was blocked but we still got a result
+    if (identification.fetchResult?.blocked) {
+      console.log(`[bulk-links] ⚠️ Scraping blocked for ${identification.urlParsed.domain}, but identified via ${identification.primarySource}`);
     }
 
     return {
@@ -463,6 +505,42 @@ async function processUrl(
     };
   } catch (error) {
     console.error(`[bulk-links] Error processing ${url}:`, error);
+
+    // Fallback: Try URL parsing alone
+    try {
+      const parsed = parseProductUrl(url);
+      if (parsed.brand && parsed.humanizedName) {
+        return {
+          index,
+          originalUrl: url,
+          resolvedUrl: url,
+          status: 'partial',
+          error: 'Identification failed, using URL parsing',
+          scraped: {
+            title: `${parsed.brand} ${parsed.humanizedName}`,
+            description: null,
+            brand: parsed.brand,
+            price: null,
+            image: null,
+            domain: parsed.domain,
+          },
+          analysis: {
+            brand: parsed.brand,
+            productName: parsed.humanizedName,
+            category: parsed.category,
+            specs: [],
+            confidence: parsed.urlConfidence,
+          },
+          photoOptions: [],
+          suggestedItem: {
+            custom_name: parsed.humanizedName,
+            brand: parsed.brand,
+            custom_description: '',
+          },
+        };
+      }
+    } catch {}
+
     return {
       index,
       originalUrl: url,
