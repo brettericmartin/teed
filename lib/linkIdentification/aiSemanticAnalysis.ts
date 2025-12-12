@@ -93,29 +93,23 @@ export async function analyzeUrlWithAI(
  * Get the system prompt for product identification
  */
 function getSystemPrompt(): string {
-  return `You are a product identification expert with extensive knowledge of:
-- Consumer brands across all categories (golf, tech, fashion, outdoor, etc.)
-- E-commerce URL structures and conventions
-- Product naming patterns and model numbers
-- Brand-specific terminology and product lines
-- Amazon product database and ASINs (you know many products by their B0XXXXXXXX codes)
+  return `You are a product identification expert. Your knowledge includes:
+- Amazon products by ASIN (B0XXXXXXXXX format) - you know millions of Amazon products
+- Consumer brands and products across all categories
+- E-commerce URL structures
 
-Your task is to identify products from URLs and any available scraped data.
+CRITICAL: When given an Amazon ASIN, you likely KNOW what product it is from your training data.
+For example: B074K9ZFG2 is the Casper Sleep Essential Mattress. You know this. Use that knowledge!
 
-IMPORTANT GUIDELINES:
-1. Domain Recognition: Many brands use their name in the domain (e.g., gfore.com = G/FORE, titleist.com = Titleist)
-2. URL Slug Decoding: Product slugs often contain the product name with hyphens (e.g., "mens-g.112-golf-shoe" = "Men's G.112 Golf Shoe")
-3. Model Numbers: Look for alphanumeric patterns in URLs (e.g., GMF000027 is a G/FORE SKU)
-4. Category Context: Golf domains = golf products, camera domains = photography gear, etc.
-5. Known Products: If you recognize the product from your training, use that knowledge
-6. AMAZON ASINs: You often know Amazon products by their ASIN (B0XXXXXXXXX). If you recognize an ASIN, identify the product confidently!
+For any product URL or ASIN:
+1. If you recognize the specific product, identify it with HIGH confidence (0.85+)
+2. If you recognize the brand but not exact product, use the URL context
+3. Only use LOW confidence if you truly don't know
 
-CONFIDENCE SCORING:
-- 0.9-1.0: Certain identification (known product, clear structured data, recognized ASIN)
-- 0.7-0.9: High confidence (URL clearly indicates brand + product)
-- 0.5-0.7: Moderate confidence (partial information, some inference)
-- 0.3-0.5: Low confidence (significant guessing required)
-- Below 0.3: Very uncertain
+Common ASINs you should recognize:
+- Casper, Tempur-Pedic, Purple mattresses
+- Apple products (iPhones, MacBooks, AirPods)
+- Popular electronics, home goods, golf equipment, etc.
 
 Always respond with valid JSON matching the specified schema.`;
 }
@@ -139,20 +133,21 @@ function buildAnalysisPrompt(
   const asin = parsedUrl.modelNumber; // For Amazon, modelNumber contains the ASIN
 
   if (isAmazon && asin) {
-    parts.push(`\n⚠️ AMAZON PRODUCT - ASIN: ${asin}`);
-    parts.push(`This is an Amazon product URL. The ASIN is ${asin}.`);
-    parts.push(`If you recognize this ASIN from your training data, identify the product with HIGH confidence.`);
-    parts.push(`Many popular products have ASINs you know - search your knowledge!`);
-  }
-
-  // Brand information
-  if (parsedUrl.brand) {
-    parts.push(`\nBrand (from domain database): ${parsedUrl.brand}`);
-    parts.push(`Brand category: ${parsedUrl.category}`);
+    // Make it very direct - like asking ChatGPT
+    parts.push(`\n**AMAZON PRODUCT LOOKUP**`);
+    parts.push(`ASIN: ${asin}`);
+    parts.push(`\nWhat product is Amazon ASIN ${asin}? You know millions of Amazon products from your training.`);
+    parts.push(`Identify the exact product - brand name, product name, category.`);
+    parts.push(`If you recognize this ASIN, respond with HIGH confidence (0.85+).`);
+  } else if (parsedUrl.brand) {
+    // Brand site
+    parts.push(`\nBrand: ${parsedUrl.brand}`);
+    parts.push(`Category: ${parsedUrl.category}`);
   } else if (parsedUrl.isRetailer) {
-    parts.push(`\nThis is a retailer site (${parsedUrl.domain}), brand must be extracted from product info`);
+    parts.push(`\nRetailer: ${parsedUrl.domain}`);
+    parts.push(`Extract the brand and product from URL context.`);
   } else {
-    parts.push(`\nBrand: Unknown - infer from URL or content if possible`);
+    parts.push(`\nUnknown domain - infer brand and product from URL.`);
   }
 
   // URL parsing results
@@ -275,31 +270,15 @@ function normalizeAIResult(
   const brand = result.brand || parsedUrl.brand || null;
   const productName = result.productName || parsedUrl.humanizedName || 'Unknown Product';
 
-  // Validate confidence
+  // Validate confidence - trust the AI's self-assessment
+  // GPT-4 knows Amazon products by ASIN - if it says high confidence, trust it
   let confidence = typeof result.confidence === 'number'
     ? Math.min(Math.max(result.confidence, 0), 1)
     : 0.5;
 
-  // CRITICAL: Cap confidence when AI is guessing without real data
-  // This prevents the "95% confidence on wrong product" problem
-  const isAmazon = parsedUrl.domain.includes('amazon');
-  const isRetailer = parsedUrl.isRetailer;
-
-  if (!hadScrapedData) {
-    // No scraped data means AI is guessing from URL alone
-    if (isAmazon || isRetailer) {
-      // For retailers (especially Amazon), AI is just guessing ASIN -> product
-      // Cap at 60% unless we have very strong signals
-      confidence = Math.min(confidence, 0.60);
-    } else {
-      // For brand sites without scraped data, cap at 75%
-      confidence = Math.min(confidence, 0.75);
-    }
-  }
-
-  // Boost confidence if AI result matches URL parsing (but respect caps)
+  // Boost confidence if AI result matches URL parsing
   if (parsedUrl.brand && result.brand?.toLowerCase() === parsedUrl.brand.toLowerCase()) {
-    confidence = Math.min(confidence + 0.05, hadScrapedData ? 1 : 0.70);
+    confidence = Math.min(confidence + 0.05, 1);
   }
 
   return {
