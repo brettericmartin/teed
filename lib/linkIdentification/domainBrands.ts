@@ -74,6 +74,7 @@ export const DOMAIN_BRAND_MAP: Record<string, DomainBrandInfo> = {
   'eastsidefgc.com': { brand: 'Eastside Golf', category: 'golf', tier: 'premium', aliases: [], isRetailer: false },
   'malaborlabs.com': { brand: 'Malbon Golf', category: 'golf', tier: 'luxury', aliases: ['Malbon'], isRetailer: false },
   'malbongolf.com': { brand: 'Malbon Golf', category: 'golf', tier: 'luxury', aliases: ['Malbon'], isRetailer: false },
+  'melin.com': { brand: 'melin', category: 'golf', tier: 'luxury', aliases: ['Melin'], isRetailer: false },
 
   // Golf Tech & Rangefinders
   'bushnellgolf.com': { brand: 'Bushnell', category: 'golf', tier: 'premium', aliases: ['Bushnell Golf'], isRetailer: false },
