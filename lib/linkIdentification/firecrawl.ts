@@ -119,7 +119,8 @@ export async function scrapeWithFirecrawl(url: string): Promise<FirecrawlResult>
     }
 
     // Extract product info
-    const title = metadata.ogTitle || metadata.title || extractTitleFromMarkdown(markdown);
+    const rawTitle = metadata.ogTitle || metadata.title || extractTitleFromMarkdown(markdown);
+    const title = rawTitle ? cleanTitle(rawTitle) : null;
     const description = metadata.ogDescription || metadata.description || null;
     const image = metadata.ogImage || extractImageFromMarkdown(markdown);
     const price = extractPriceFromMarkdown(markdown);
@@ -192,6 +193,10 @@ function extractTitleFromMarkdown(markdown: string): string | null {
  */
 function cleanTitle(title: string): string {
   return title
+    .replace(/^Amazon\.com\s*:\s*/i, '') // Remove "Amazon.com : " prefix
+    .replace(/\s*:\s*Electronics\s*$/i, '') // Remove ": Electronics" suffix
+    .replace(/\s*:\s*Home & Kitchen\s*$/i, '')
+    .replace(/\s*:\s*Sports & Outdoors\s*$/i, '')
     .replace(/\s*[-|:]\s*Amazon.*$/i, '')
     .replace(/\s*[-|:]\s*Walmart.*$/i, '')
     .replace(/\s*[-|:]\s*Target.*$/i, '')
