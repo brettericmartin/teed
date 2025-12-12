@@ -11,6 +11,7 @@ import { analyzeUrlWithAI, quickAIAnalysis, type AIProductAnalysis } from './aiS
 import { getBrandFromDomain } from './domainBrands';
 import { trackUnrecognizedDomain } from './trackUnrecognizedDomain';
 import { fetchViaJinaReader, extractAmazonProductInfo } from './jinaReader';
+import { lookupAmazonProduct, getAmazonImageUrl } from './amazonLookup';
 
 export interface ProductIdentificationResult {
   // Core product info
@@ -195,7 +196,53 @@ export async function identifyProduct(
   }
 
   // ========================================
-  // STAGE 2.5: Jina Reader Fallback (for blocked sites)
+  // STAGE 2.5: Amazon-Specific Lookup (HIGH PRIORITY)
+  // ========================================
+  const isAmazon = parsedUrl.domain.includes('amazon');
+  const asin = parsedUrl.modelNumber;
+
+  if (isAmazon && asin) {
+    sources.push('amazon_lookup');
+
+    // Try direct Amazon lookup first
+    const amazonResult = await lookupAmazonProduct(asin);
+
+    if (amazonResult.success && amazonResult.title) {
+      const brand = amazonResult.brand;
+      let productName = amazonResult.title;
+
+      // Remove brand from product name if present at start
+      if (brand && productName.toLowerCase().startsWith(brand.toLowerCase())) {
+        productName = productName.slice(brand.length).replace(/^[-–—|:\s]+/, '').trim();
+      }
+
+      const fullName = brand ? `${brand} ${productName}` : productName;
+
+      return buildResult({
+        brand,
+        productName,
+        fullName,
+        category: parsedUrl.category,
+        specifications: [],
+        price: amazonResult.price,
+        imageUrl: amazonResult.image || getAmazonImageUrl(asin),
+        confidence: 0.90, // High confidence - we got real data
+        primarySource: 'amazon_lookup',
+        sources,
+        parsedUrl,
+        fetchResult,
+        startTime,
+      });
+    }
+
+    // If Amazon lookup failed, at least get the image
+    const amazonImageUrl = getAmazonImageUrl(asin);
+    // Store for later use
+    (fetchResult as any).amazonImageUrl = amazonImageUrl;
+  }
+
+  // ========================================
+  // STAGE 2.6: Jina Reader Fallback (for other blocked sites)
   // ========================================
   if (fetchResult.blocked || (!fetchResult.success && parsedUrl.isRetailer)) {
     sources.push('jina_reader');
@@ -204,8 +251,6 @@ export async function identifyProduct(
 
     if (jinaResult.success && jinaResult.title) {
       // For Amazon specifically, extract structured info
-      const isAmazon = parsedUrl.domain.includes('amazon');
-
       if (isAmazon && jinaResult.content) {
         const amazonInfo = extractAmazonProductInfo(jinaResult.content);
 
@@ -227,6 +272,7 @@ export async function identifyProduct(
             category: parsedUrl.category,
             specifications: amazonInfo.features,
             price: amazonInfo.price,
+            imageUrl: asin ? getAmazonImageUrl(asin) : undefined,
             confidence: 0.85,
             primarySource: 'jina_amazon',
             sources,

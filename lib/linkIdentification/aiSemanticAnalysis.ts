@@ -280,9 +280,26 @@ function normalizeAIResult(
     ? Math.min(Math.max(result.confidence, 0), 1)
     : 0.5;
 
-  // Boost confidence if AI result matches URL parsing
+  // CRITICAL: Cap confidence when AI is guessing without real data
+  // This prevents the "95% confidence on wrong product" problem
+  const isAmazon = parsedUrl.domain.includes('amazon');
+  const isRetailer = parsedUrl.isRetailer;
+
+  if (!hadScrapedData) {
+    // No scraped data means AI is guessing from URL alone
+    if (isAmazon || isRetailer) {
+      // For retailers (especially Amazon), AI is just guessing ASIN -> product
+      // Cap at 60% unless we have very strong signals
+      confidence = Math.min(confidence, 0.60);
+    } else {
+      // For brand sites without scraped data, cap at 75%
+      confidence = Math.min(confidence, 0.75);
+    }
+  }
+
+  // Boost confidence if AI result matches URL parsing (but respect caps)
   if (parsedUrl.brand && result.brand?.toLowerCase() === parsedUrl.brand.toLowerCase()) {
-    confidence = Math.min(confidence + 0.05, 1);
+    confidence = Math.min(confidence + 0.05, hadScrapedData ? 1 : 0.70);
   }
 
   return {
