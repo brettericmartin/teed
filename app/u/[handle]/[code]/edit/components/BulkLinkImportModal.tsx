@@ -513,6 +513,16 @@ export default function BulkLinkImportModal({
                               {result.error}
                             </p>
                           )}
+                          {/* Warning for low-confidence Amazon results */}
+                          {result.status !== 'failed' &&
+                           result.analysis &&
+                           result.analysis.confidence < 0.70 &&
+                           (result.scraped?.domain?.includes('amazon') || result.originalUrl.includes('amazon')) && (
+                            <p className="text-xs text-orange-600 mt-1 flex items-center gap-1">
+                              <AlertCircle className="w-3 h-3" />
+                              Unable to verify Amazon product - please confirm name
+                            </p>
+                          )}
                         </div>
 
                         {/* Expand Button */}
