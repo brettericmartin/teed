@@ -98,6 +98,7 @@ function getSystemPrompt(): string {
 - E-commerce URL structures and conventions
 - Product naming patterns and model numbers
 - Brand-specific terminology and product lines
+- Amazon product database and ASINs (you know many products by their B0XXXXXXXX codes)
 
 Your task is to identify products from URLs and any available scraped data.
 
@@ -107,9 +108,10 @@ IMPORTANT GUIDELINES:
 3. Model Numbers: Look for alphanumeric patterns in URLs (e.g., GMF000027 is a G/FORE SKU)
 4. Category Context: Golf domains = golf products, camera domains = photography gear, etc.
 5. Known Products: If you recognize the product from your training, use that knowledge
+6. AMAZON ASINs: You often know Amazon products by their ASIN (B0XXXXXXXXX). If you recognize an ASIN, identify the product confidently!
 
 CONFIDENCE SCORING:
-- 0.9-1.0: Certain identification (known product, clear structured data)
+- 0.9-1.0: Certain identification (known product, clear structured data, recognized ASIN)
 - 0.7-0.9: High confidence (URL clearly indicates brand + product)
 - 0.5-0.7: Moderate confidence (partial information, some inference)
 - 0.3-0.5: Low confidence (significant guessing required)
@@ -131,6 +133,17 @@ function buildAnalysisPrompt(
   parts.push(`Analyze this product URL and identify the product:\n`);
   parts.push(`URL: ${url}`);
   parts.push(`Domain: ${parsedUrl.domain}`);
+
+  // Check if this is an Amazon URL
+  const isAmazon = parsedUrl.domain.includes('amazon');
+  const asin = parsedUrl.modelNumber; // For Amazon, modelNumber contains the ASIN
+
+  if (isAmazon && asin) {
+    parts.push(`\n⚠️ AMAZON PRODUCT - ASIN: ${asin}`);
+    parts.push(`This is an Amazon product URL. The ASIN is ${asin}.`);
+    parts.push(`If you recognize this ASIN from your training data, identify the product with HIGH confidence.`);
+    parts.push(`Many popular products have ASINs you know - search your knowledge!`);
+  }
 
   // Brand information
   if (parsedUrl.brand) {

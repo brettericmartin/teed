@@ -10,6 +10,7 @@ import { lightweightFetch, getBestTitle, getPrice, getImage, type LightweightFet
 import { analyzeUrlWithAI, quickAIAnalysis, type AIProductAnalysis } from './aiSemanticAnalysis';
 import { getBrandFromDomain } from './domainBrands';
 import { trackUnrecognizedDomain } from './trackUnrecognizedDomain';
+import { fetchViaJinaReader, extractAmazonProductInfo } from './jinaReader';
 
 export interface ProductIdentificationResult {
   // Core product info
@@ -194,11 +195,73 @@ export async function identifyProduct(
   }
 
   // ========================================
+  // STAGE 2.5: Jina Reader Fallback (for blocked sites)
+  // ========================================
+  if (fetchResult.blocked || (!fetchResult.success && parsedUrl.isRetailer)) {
+    sources.push('jina_reader');
+
+    const jinaResult = await fetchViaJinaReader(url);
+
+    if (jinaResult.success && jinaResult.title) {
+      // For Amazon specifically, extract structured info
+      const isAmazon = parsedUrl.domain.includes('amazon');
+
+      if (isAmazon && jinaResult.content) {
+        const amazonInfo = extractAmazonProductInfo(jinaResult.content);
+
+        if (amazonInfo.title) {
+          const brand = amazonInfo.brand;
+          let productName = amazonInfo.title;
+
+          // Remove brand from product name if present at start
+          if (brand && productName.toLowerCase().startsWith(brand.toLowerCase())) {
+            productName = productName.slice(brand.length).replace(/^[-–—|:\s]+/, '').trim();
+          }
+
+          const fullName = brand ? `${brand} ${productName}` : productName;
+
+          return buildResult({
+            brand,
+            productName,
+            fullName,
+            category: parsedUrl.category,
+            specifications: amazonInfo.features,
+            price: amazonInfo.price,
+            confidence: 0.85,
+            primarySource: 'jina_amazon',
+            sources,
+            parsedUrl,
+            fetchResult,
+            startTime,
+          });
+        }
+      }
+
+      // Generic Jina result
+      const productName = jinaResult.title;
+      return buildResult({
+        brand: parsedUrl.brand,
+        productName,
+        fullName: parsedUrl.brand ? `${parsedUrl.brand} ${productName}` : productName,
+        category: parsedUrl.category,
+        specifications: jinaResult.description ? [jinaResult.description] : [],
+        confidence: 0.75,
+        primarySource: 'jina_reader',
+        sources,
+        parsedUrl,
+        fetchResult,
+        startTime,
+      });
+    }
+  }
+
+  // ========================================
   // STAGE 3: AI Semantic Analysis
   // ========================================
   if (!skipAI) {
     sources.push('ai_analysis');
 
+    // Pass Jina content to AI if direct fetch failed but Jina succeeded
     const aiResult = await analyzeUrlWithAI(url, parsedUrl, fetchResult);
 
     // If AI identified a brand for an unknown domain, update the tracking
