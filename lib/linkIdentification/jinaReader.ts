@@ -19,7 +19,7 @@ export interface JinaReaderResult {
  * Jina Reader handles JavaScript rendering and bot protection bypass.
  * Free tier has generous limits.
  */
-export async function fetchViaJinaReader(url: string, timeout = 15000): Promise<JinaReaderResult> {
+export async function fetchViaJinaReader(url: string, timeout = 20000): Promise<JinaReaderResult> {
   const jinaUrl = `https://r.jina.ai/${url}`;
 
   try {
@@ -29,8 +29,8 @@ export async function fetchViaJinaReader(url: string, timeout = 15000): Promise<
     const response = await fetch(jinaUrl, {
       signal: controller.signal,
       headers: {
-        'Accept': 'text/plain',
-        'X-Return-Format': 'text',
+        'Accept': 'application/json',
+        'X-With-Generated-Alt': 'true',
       },
     });
 
@@ -46,11 +46,39 @@ export async function fetchViaJinaReader(url: string, timeout = 15000): Promise<
       };
     }
 
-    const content = await response.text();
+    const contentType = response.headers.get('content-type') || '';
+    let content: string;
+    let title: string | null = null;
+    let description: string | null = null;
 
-    // Jina returns markdown - extract useful info
-    const title = extractTitleFromMarkdown(content);
-    const description = extractDescriptionFromMarkdown(content);
+    if (contentType.includes('application/json')) {
+      // JSON response format
+      const json = await response.json();
+      content = json.content || json.text || '';
+      title = json.title || extractTitleFromMarkdown(content);
+      description = json.description || extractDescriptionFromMarkdown(content);
+    } else {
+      // Plain text/markdown response
+      content = await response.text();
+      title = extractTitleFromMarkdown(content);
+      description = extractDescriptionFromMarkdown(content);
+    }
+
+    // Check if we got a CAPTCHA/bot detection page
+    const lowerContent = content.toLowerCase();
+    if (lowerContent.includes('robot') ||
+        lowerContent.includes('captcha') ||
+        lowerContent.includes('continue shopping') ||
+        lowerContent.includes('automated access') ||
+        lowerContent.includes('unusual traffic')) {
+      return {
+        success: false,
+        title: null,
+        description: null,
+        content: null,
+        error: 'Bot detection page',
+      };
+    }
 
     return {
       success: true,

@@ -12,6 +12,7 @@ import { getBrandFromDomain } from './domainBrands';
 import { trackUnrecognizedDomain } from './trackUnrecognizedDomain';
 import { fetchViaJinaReader, extractAmazonProductInfo } from './jinaReader';
 import { lookupAmazonProduct, getAmazonImageUrl } from './amazonLookup';
+import { scrapeWithFirecrawl } from './firecrawl';
 
 export interface ProductIdentificationResult {
   // Core product info
@@ -242,11 +243,43 @@ export async function identifyProduct(
   }
 
   // ========================================
-  // STAGE 2.6: Jina Reader Fallback (for other blocked sites)
+  // STAGE 2.6: Firecrawl Fallback (for blocked sites like Amazon)
   // ========================================
   if (fetchResult.blocked || (!fetchResult.success && parsedUrl.isRetailer)) {
-    sources.push('jina_reader');
+    sources.push('firecrawl');
 
+    const firecrawlResult = await scrapeWithFirecrawl(url);
+
+    if (firecrawlResult.success && firecrawlResult.title) {
+      const brand = firecrawlResult.brand;
+      let productName = firecrawlResult.title;
+
+      // Remove brand from product name if present at start
+      if (brand && productName.toLowerCase().startsWith(brand.toLowerCase())) {
+        productName = productName.slice(brand.length).replace(/^[-–—|:\s]+/, '').trim();
+      }
+
+      const fullName = brand ? `${brand} ${productName}` : productName;
+
+      return buildResult({
+        brand,
+        productName,
+        fullName,
+        category: parsedUrl.category,
+        specifications: firecrawlResult.description ? [firecrawlResult.description] : [],
+        price: firecrawlResult.price,
+        imageUrl: firecrawlResult.image || (isAmazon && asin ? getAmazonImageUrl(asin) : undefined),
+        confidence: 0.90, // High confidence - Firecrawl got real data
+        primarySource: 'firecrawl',
+        sources,
+        parsedUrl,
+        fetchResult,
+        startTime,
+      });
+    }
+
+    // If Firecrawl also failed, try Jina Reader as last resort
+    sources.push('jina_reader');
     const jinaResult = await fetchViaJinaReader(url);
 
     if (jinaResult.success && jinaResult.title) {
@@ -307,8 +340,10 @@ export async function identifyProduct(
   if (!skipAI) {
     sources.push('ai_analysis');
 
-    // Pass Jina content to AI if direct fetch failed but Jina succeeded
-    const aiResult = await analyzeUrlWithAI(url, parsedUrl, fetchResult);
+    // CRITICAL: If fetch was blocked, don't pass the bot page content to AI
+    // Just pass null so AI uses its knowledge (especially for Amazon ASINs)
+    const fetchResultForAI = fetchResult.blocked ? null : fetchResult;
+    const aiResult = await analyzeUrlWithAI(url, parsedUrl, fetchResultForAI);
 
     // If AI identified a brand for an unknown domain, update the tracking
     if (!parsedUrl.brandInfo && parsedUrl.domain && aiResult.brand) {

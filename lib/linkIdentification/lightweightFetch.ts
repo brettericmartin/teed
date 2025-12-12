@@ -83,6 +83,9 @@ const BOT_PROTECTION_PATTERNS = [
   'captcha',
   'robot',
   'unusual traffic',
+  'continue shopping', // Amazon's CAPTCHA page
+  'click the button below', // Amazon's CAPTCHA page
+  'automated access',
 ];
 
 // Rotating user agents
