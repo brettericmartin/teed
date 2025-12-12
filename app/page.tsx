@@ -2,78 +2,14 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Camera, Share2, Sparkles, TrendingUp, Users, Zap } from 'lucide-react';
 
-const ROTATING_WORDS = [
-  'Gear',
-  'Golf Bag',
-  'Makeup Kit',
-  'Shopping Haul',
-  'Desk Setup',
-  'Camera Kit',
-  'Travel Kit',
-  'Skincare',
-  'Tech Stack',
-  'Fitness Gear',
-  'Daily Carry',
-  'Book Collection',
-  'Art Supplies',
-  'Kitchen Setup',
-];
-
 export default function Home() {
-  const [isVisible, setIsVisible] = useState(false);
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [showFixedHero, setShowFixedHero] = useState(true);
-  const [heroOpacity, setHeroOpacity] = useState(1);
-  const heroRef = useRef<HTMLElement>(null);
   const featuresRef = useRef<HTMLDivElement>(null);
   const useCasesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setIsVisible(true);
-
-    // Scroll-triggered word rotation
-    const handleScroll = () => {
-      if (!heroRef.current) return;
-
-      const heroRect = heroRef.current.getBoundingClientRect();
-      const heroHeight = heroRef.current.offsetHeight;
-      // Calculate scroll progress through the hero section
-      const scrollProgress = Math.max(0, Math.min(1, -heroRect.top / (heroHeight - window.innerHeight)));
-
-      const wordIndex = Math.min(
-        ROTATING_WORDS.length - 1,
-        Math.floor(scrollProgress * ROTATING_WORDS.length)
-      );
-
-      setCurrentWordIndex(wordIndex);
-
-      // Smoothly fade out fixed hero when approaching end of hero section
-      const heroBottom = heroRect.bottom;
-      // Start fading when hero bottom is within 600px of viewport top (earlier = smoother)
-      const fadeStartThreshold = 600;
-      if (heroBottom > fadeStartThreshold) {
-        setHeroOpacity(1);
-        setShowFixedHero(true);
-      } else if (heroBottom > 100) {
-        // Smoothly interpolate opacity from 1 to 0, with easing
-        const rawOpacity = (heroBottom - 100) / (fadeStartThreshold - 100);
-        // Apply ease-out curve for smoother visual transition
-        const opacity = rawOpacity * rawOpacity;
-        setHeroOpacity(opacity);
-        setShowFixedHero(true);
-      } else {
-        // Fully hide before the features section appears
-        setHeroOpacity(0);
-        setShowFixedHero(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial call
-
     const observerOptions = {
       threshold: 0.1,
       rootMargin: '0px 0px -100px 0px'
@@ -91,130 +27,25 @@ export default function Home() {
     elements.forEach(el => observer.observe(el));
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
       observer.disconnect();
     };
   }, []);
 
   return (
     <div className="min-h-screen bg-[var(--background)] overflow-x-hidden">
-      {/* Hero Section - Creates scroll distance for word cycling */}
-      <section ref={heroRef} className="relative" style={{ height: `${100 + ROTATING_WORDS.length * 10}vh` }}>
-
-        {/* "Share your" text - positioned above the laptop screen */}
-        {showFixedHero && (
-        <div
-          className={`fixed left-1/2 -translate-x-1/2 transition-all duration-700 pointer-events-none top-[12%] sm:top-[10%] md:top-[8%] ${
-            isVisible ? 'opacity-100' : 'opacity-0'
-          }`}
-          style={{ zIndex: 50, opacity: isVisible ? heroOpacity : 0 }}
-        >
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-[var(--text-primary)] whitespace-nowrap drop-shadow-sm">
-            Share your
-          </h2>
-        </div>
-        )}
-
-        {/* Fixed layers - stay in place while scrolling through hero section */}
-        {showFixedHero && (
-        <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 1 }}>
-
-          {/* Solid background - fades out slower than content to hide features underneath */}
-          <div
-            className="absolute inset-0 transition-opacity duration-200"
-            style={{
-              backgroundColor: '#dfd5cf',
-              zIndex: 0,
-              // Background stays more opaque longer, then fades quickly at the end
-              opacity: Math.min(1, heroOpacity * 1.5)
-            }}
-          />
-
-          {/* Layer 1: Scrolling words - centered in screen area */}
-          <div
-            className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center top-[22%] sm:top-[21%] md:top-[20%] h-[5%] w-[10%] transition-opacity duration-150"
-            style={{ zIndex: 1, opacity: heroOpacity }}
-          >
-            <div className="relative flex items-center justify-center">
-              {ROTATING_WORDS.map((word, index) => (
-                <span
-                  key={word}
-                  className={`absolute text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold text-[var(--teed-green-10)] transition-all duration-300 whitespace-nowrap ${
-                    index === currentWordIndex
-                      ? 'opacity-100 transform translate-y-0'
-                      : index < currentWordIndex
-                      ? 'opacity-0 transform -translate-y-3'
-                      : 'opacity-0 transform translate-y-3'
-                  }`}
-                >
-                  {word}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Layer 2 (FRONT): Hero image with transparent laptop screen */}
-          <div className="absolute inset-0 transition-opacity duration-150" style={{ zIndex: 10, opacity: heroOpacity }}>
-            <Image
-              src="/hero-screen-v11.png"
-              alt="Curated collection of gear - golf clubs, camera, laptop, makeup, and more"
-              fill
-              priority
-              className="object-cover object-center"
-              sizes="100vw"
-            />
-          </div>
-
-          {/* CTA Button - positioned on laptop trackpad */}
-          <div
-            className={`absolute left-1/2 -translate-x-1/2 transition-all duration-300 pointer-events-auto top-[44%] sm:top-[43%] md:top-[42%] ${
-              isVisible ? 'opacity-100' : 'opacity-0'
-            }`}
-            style={{ zIndex: 20, opacity: isVisible ? heroOpacity : 0 }}
-          >
-            <Link
-              href="/discover"
-              className="group relative inline-flex px-6 py-3 sm:px-8 sm:py-3 md:px-10 md:py-4 bg-[var(--teed-green-8)] text-white text-base sm:text-lg font-semibold rounded-[var(--radius-xl)] hover:bg-[var(--teed-green-9)] transition-all duration-300 shadow-[var(--shadow-4)] hover:shadow-[var(--shadow-5)] hover:scale-105 overflow-hidden"
-            >
-              <span className="relative z-10">Explore</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-[var(--teed-green-9)] to-[var(--teed-green-10)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </Link>
-          </div>
-
-          {/* Scroll hint */}
-          <div
-            className={`absolute bottom-8 left-1/2 -translate-x-1/2 transition-all duration-300 ${
-              isVisible ? 'opacity-100' : 'opacity-0'
-            }`}
-            style={{ zIndex: 20, opacity: isVisible ? heroOpacity : 0 }}
-          >
-            <div className="flex flex-col items-center gap-2 text-[var(--text-secondary)]">
-              <span className="text-sm font-medium">Scroll to explore</span>
-              <div className="w-6 h-10 border-2 border-[var(--text-tertiary)] rounded-full flex items-start justify-center p-2">
-                <div className="w-1 h-3 bg-[var(--text-tertiary)] rounded-full animate-scroll" />
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom gradient fade for smooth transition to features section */}
-          <div
-            className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
-            style={{
-              zIndex: 30,
-              background: 'linear-gradient(to bottom, transparent, var(--surface-elevated))'
-            }}
+      {/* Hero Section - Static banner image */}
+      <section className="relative w-full">
+        <div className="relative w-full aspect-[7000/3938]">
+          <Image
+            src="/hero-banner.png"
+            alt="Your Curations - Accessible. Sharable."
+            fill
+            priority
+            className="object-cover object-center"
+            sizes="100vw"
           />
         </div>
-        )}
       </section>
-
-      {/* Transition spacer - creates smooth color transition from hero to features */}
-      <div
-        className="relative h-32"
-        style={{
-          background: 'linear-gradient(to bottom, #dfd5cf 0%, var(--surface-elevated) 100%)'
-        }}
-      />
 
       {/* Features Section */}
       <section id="features" ref={featuresRef} className="py-24 px-4 sm:px-6 lg:px-8 bg-[var(--surface-elevated)]">

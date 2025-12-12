@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       baseCode = 'bag';
     }
 
-    // Check for existing codes within this user's bags
+    // Check for existing codes globally (bags_code_key is a global unique constraint)
     let code = baseCode;
     let suffix = 2;
 
@@ -70,12 +70,11 @@ export async function POST(request: NextRequest) {
       const { data: existingBag } = await supabase
         .from('bags')
         .select('id')
-        .eq('owner_id', user.id)
         .eq('code', code)
         .maybeSingle();
 
       if (!existingBag) {
-        // Code is unique for this user
+        // Code is unique globally
         break;
       }
 
