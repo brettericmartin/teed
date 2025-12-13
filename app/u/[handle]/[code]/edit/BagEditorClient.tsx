@@ -1459,7 +1459,19 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
 
         {/* Add Item Section */}
         <div className="mb-6 space-y-4">
-          {/* Quick AI-Powered Text Input (Primary) */}
+          {/* AI Assistant Hub (Curator) - Primary */}
+          <AIAssistantHub
+            itemCount={bag.items.length}
+            itemsWithoutPhotos={bag.items.filter(item => !item.photo_url).length}
+            onAddFromPhoto={() => setShowPhotoUpload(true)}
+            onAddFromLinks={() => setShowBulkLinkImport(true)}
+            onFindPhotos={() => setShowItemSelection(true)}
+            onFillProductInfo={() => setShowEnrichmentItemSelection(true)}
+            isIdentifying={isIdentifying}
+            isFillingInfo={isFillingLinks}
+          />
+
+          {/* Quick Add Single Item */}
           {!showManualForm && (
             <QuickAddItem
               onAdd={async (suggestion) => {
@@ -1557,7 +1569,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                   }
                 }
                 // Priority 2: If there's an imageUrl (e.g., YouTube thumbnail), upload it to storage
-                // This uses the same system as manual photo uploads for consistency
                 else if (suggestion.imageUrl) {
                   try {
                     console.log('[QuickAddItem] Uploading image from URL:', suggestion.imageUrl);
@@ -1637,18 +1648,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
               onShowManualForm={() => setShowManualForm(true)}
             />
           )}
-
-          {/* AI Assistant Hub */}
-          <AIAssistantHub
-            itemCount={bag.items.length}
-            itemsWithoutPhotos={bag.items.filter(item => !item.photo_url).length}
-            onAddFromPhoto={() => setShowPhotoUpload(true)}
-            onAddFromLinks={() => setShowBulkLinkImport(true)}
-            onFindPhotos={() => setShowItemSelection(true)}
-            onFillProductInfo={() => setShowEnrichmentItemSelection(true)}
-            isIdentifying={isIdentifying}
-            isFillingInfo={isFillingLinks}
-          />
 
           {/* Analytics (only show for public bags) */}
           {isPublic && (

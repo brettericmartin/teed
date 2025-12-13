@@ -99,18 +99,8 @@ export default function AIAssistantHub({
   isFillingInfo = false,
   isImportingLinks = false,
 }: AIAssistantHubProps) {
-  const actions: (AIAction & { delay: number })[] = [
-    {
-      id: 'add-from-photo',
-      icon: <Camera className="w-5 h-5" />,
-      title: 'Add from Photos',
-      description: 'Upload multiple photos, AI extracts products',
-      onClick: onAddFromPhoto,
-      isLoading: isIdentifying,
-      loadingText: 'Identifying...',
-      disabled: isIdentifying,
-      delay: 100,
-    },
+  // Section 1: Add New Items
+  const addActions: (AIAction & { delay: number })[] = [
     {
       id: 'add-from-links',
       icon: <Link className="w-5 h-5" />,
@@ -120,8 +110,23 @@ export default function AIAssistantHub({
       isLoading: isImportingLinks,
       loadingText: 'Importing...',
       disabled: isImportingLinks,
+      delay: 100,
+    },
+    {
+      id: 'add-from-photo',
+      icon: <Camera className="w-5 h-5" />,
+      title: 'Add from Photos',
+      description: 'Upload multiple photos, AI extracts products',
+      onClick: onAddFromPhoto,
+      isLoading: isIdentifying,
+      loadingText: 'Identifying...',
+      disabled: isIdentifying,
       delay: 150,
     },
+  ];
+
+  // Section 2: Smart Enhancements
+  const enhanceActions: (AIAction & { delay: number })[] = [
     {
       id: 'find-photos',
       icon: <Images className="w-5 h-5" />,
@@ -136,19 +141,19 @@ export default function AIAssistantHub({
     {
       id: 'fill-info',
       icon: <Sparkles className="w-5 h-5" />,
-      title: 'Auto-Fill Details',
+      title: 'Enhance Details',
       description: 'Complete missing product info',
       count: itemCount,
       onClick: () => onFillProductInfo(),
       isLoading: isFillingInfo,
-      loadingText: 'Filling info...',
+      loadingText: 'Enhancing...',
       disabled: isFillingInfo,
       hidden: itemCount === 0,
       delay: 250,
     },
   ];
 
-  const visibleActions = actions.filter(a => !a.hidden);
+  const visibleEnhanceActions = enhanceActions.filter(a => !a.hidden);
 
   return (
     <div className="rounded-2xl bg-gradient-to-br from-[var(--sky-2)] to-[var(--sky-3)] p-1 animate-glow">
@@ -169,17 +174,36 @@ export default function AIAssistantHub({
               </span>
             </div>
             <p className="text-xs text-[var(--text-secondary)]">
-              Best for bulk imports and AI-powered enhancements
+              AI-powered tools for curating your collection
             </p>
           </div>
         </div>
 
-        {/* Action Rows */}
-        <div className="space-y-2">
-          {visibleActions.map((action) => (
-            <AIActionRow key={action.id} {...action} />
-          ))}
+        {/* Section 1: Add New Items */}
+        <div className="mb-4">
+          <p className="text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider mb-2 px-1">
+            Add New Items
+          </p>
+          <div className="space-y-2">
+            {addActions.map((action) => (
+              <AIActionRow key={action.id} {...action} />
+            ))}
+          </div>
         </div>
+
+        {/* Section 2: Smart Enhancements */}
+        {visibleEnhanceActions.length > 0 && (
+          <div>
+            <p className="text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider mb-2 px-1">
+              Smart Enhancements
+            </p>
+            <div className="space-y-2">
+              {visibleEnhanceActions.map((action) => (
+                <AIActionRow key={action.id} {...action} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

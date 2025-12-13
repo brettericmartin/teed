@@ -103,6 +103,11 @@ export default function ListViewItem({
             </span>
           )}
         </div>
+        {item.custom_description && (
+          <p className="text-sm text-[var(--text-secondary)] truncate mt-0.5" style={{ fontFamily: 'var(--font-serif)' }}>
+            {item.custom_description}
+          </p>
+        )}
         {item.notes && (
           <p className="text-xs text-[var(--text-tertiary)] truncate mt-0.5 italic">
             {item.notes}

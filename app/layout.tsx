@@ -18,6 +18,9 @@ export const viewport = {
   viewportFit: 'cover',
 };
 
+// Force dynamic rendering to ensure fresh user data (avatar, etc.)
+export const dynamic = 'force-dynamic';
+
 export default async function RootLayout({
   children,
 }: Readonly<{
