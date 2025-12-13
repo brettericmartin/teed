@@ -3,6 +3,7 @@ import { createServerSupabase } from '@/lib/serverSupabase';
 import * as cheerio from 'cheerio';
 import { openai } from '@/lib/openaiClient';
 import { identifyProduct, parseProductUrl } from '@/lib/linkIdentification';
+import type { ProcessingStage, BulkLinkStreamEvent } from '@/lib/types/bulkLinkStream';
 
 export const maxDuration = 60; // Extended timeout for bulk processing
 
@@ -424,20 +425,29 @@ function composeSuggestion(
 
 async function processUrl(
   url: string,
-  index: number
+  index: number,
+  onProgress?: (stage: ProcessingStage) => void
 ): Promise<ProcessedLinkResult> {
   console.log(`[bulk-links] Processing ${index + 1}: ${url}`);
 
   try {
+    // Stage 1: Parse URL
+    onProgress?.('parsing');
+
     // Resolve redirects
+    onProgress?.('fetching');
     const resolvedUrl = await resolveRedirects(url);
 
-    // NEW: Use the link identification pipeline first
+    // Stage 2-4: Use the link identification pipeline
     // This handles bot-protected sites by using URL intelligence
+    onProgress?.('detecting');
     const identification = await identifyProduct(resolvedUrl, {
       fetchTimeout: 8000,
       earlyExitConfidence: 0.85,
     });
+
+    // Emit analyzing stage after identification (which includes AI)
+    onProgress?.('analyzing');
 
     console.log(`[bulk-links] Identified: ${identification.fullName} (${(identification.confidence * 100).toFixed(0)}% via ${identification.primarySource})`);
 
@@ -459,18 +469,46 @@ async function processUrl(
       confidence: identification.confidence,
     };
 
-    // Find photos (can use existing approach + identification data)
+    // Stage 5: Find photos
+    onProgress?.('imaging');
     let photoOptions = await findProductImages(resolvedUrl, scraped, analysis);
 
+    // Check if identification image is a problematic Amazon widget URL
+    // These often return tracking pixels instead of actual images
+    const isProblematicAmazonUrl = identification.imageUrl?.includes('amazon-adsystem.com');
+
     // If identification gave us an image and it's not in options, add it
+    // But don't mark Amazon widget URLs as primary - they're often broken
     if (identification.imageUrl && !photoOptions.some(p => p.url === identification.imageUrl)) {
-      photoOptions.unshift({
-        url: identification.imageUrl,
-        source: 'og',
-        isPrimary: true,
-      });
-      // Update other primaries
-      photoOptions = photoOptions.map((p, i) => ({ ...p, isPrimary: i === 0 }));
+      if (isProblematicAmazonUrl && photoOptions.length > 0) {
+        // Add Amazon widget URL at the end, not as primary
+        photoOptions.push({
+          url: identification.imageUrl,
+          source: 'og',
+          isPrimary: false,
+        });
+      } else if (!isProblematicAmazonUrl) {
+        // Non-Amazon URL can be primary
+        photoOptions.unshift({
+          url: identification.imageUrl,
+          source: 'og',
+          isPrimary: true,
+        });
+        // Update other primaries
+        photoOptions = photoOptions.map((p, i) => ({ ...p, isPrimary: i === 0 }));
+      }
+    }
+
+    // Ensure we have a primary image (prefer non-Amazon-widget URLs)
+    if (photoOptions.length > 0 && !photoOptions.some(p => p.isPrimary)) {
+      // Find the first non-Amazon-widget URL to be primary
+      const bestIndex = photoOptions.findIndex(p => !p.url.includes('amazon-adsystem.com'));
+      if (bestIndex >= 0) {
+        photoOptions[bestIndex].isPrimary = true;
+      } else {
+        // All are Amazon widget URLs, just use the first
+        photoOptions[0].isPrimary = true;
+      }
     }
 
     // Compose suggestion from identification
@@ -633,61 +671,110 @@ export async function POST(
       );
     }
 
-    console.log(`[bulk-links] Processing ${urls.length} URLs for bag ${code}`);
+    console.log(`[bulk-links] Processing ${urls.length} URLs for bag ${code} (streaming)`);
 
-    // Process URLs in batches
-    const results: ProcessedLinkResult[] = [];
+    // Create SSE streaming response
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      async start(controller) {
+        const sendEvent = (event: BulkLinkStreamEvent) => {
+          const data = `data: ${JSON.stringify(event)}\n\n`;
+          controller.enqueue(encoder.encode(data));
+        };
 
-    for (let i = 0; i < urls.length; i += BATCH_SIZE) {
-      const batch = urls.slice(i, i + BATCH_SIZE);
+        const results: ProcessedLinkResult[] = [];
+        let completedCount = 0;
 
-      const batchResults = await Promise.allSettled(
-        batch.map((url, batchIndex) => processUrl(url, i + batchIndex))
-      );
+        try {
+          // Process URLs sequentially for real-time streaming updates
+          for (let i = 0; i < urls.length; i++) {
+            const url = urls[i];
 
-      for (const result of batchResults) {
-        if (result.status === 'fulfilled') {
-          results.push(result.value);
-        } else {
-          // This shouldn't happen since processUrl catches errors, but handle it
-          results.push({
-            index: results.length,
-            originalUrl: batch[results.length % BATCH_SIZE] || '',
-            resolvedUrl: '',
-            status: 'failed',
-            error: 'Processing failed',
-            scraped: null,
-            analysis: null,
-            photoOptions: [],
-            suggestedItem: { custom_name: 'Unknown Product', brand: '', custom_description: '' },
+            // Emit start event
+            sendEvent({
+              type: 'url_started',
+              index: i,
+              url,
+            });
+
+            // Process with stage callbacks
+            const result = await processUrl(url, i, (stage) => {
+              sendEvent({
+                type: 'url_stage_update',
+                index: i,
+                stage,
+              });
+            });
+
+            results.push(result);
+            completedCount++;
+
+            // Emit completed event
+            sendEvent({
+              type: 'url_completed',
+              index: i,
+              result: {
+                index: result.index,
+                originalUrl: result.originalUrl,
+                resolvedUrl: result.resolvedUrl,
+                status: result.status,
+                error: result.error,
+                scraped: result.scraped,
+                analysis: result.analysis,
+                photoOptions: result.photoOptions,
+                suggestedItem: result.suggestedItem,
+              },
+            });
+
+            // Emit batch progress
+            sendEvent({
+              type: 'batch_progress',
+              completed: completedCount,
+              total: urls.length,
+            });
+
+            // Small delay between URLs to prevent overwhelming
+            if (i < urls.length - 1) {
+              await delay(BATCH_DELAY_MS);
+            }
+          }
+
+          // Sort results by original index
+          results.sort((a, b) => a.index - b.index);
+
+          // Calculate and emit final summary
+          const summary: BatchSummary = {
+            total: urls.length,
+            successful: results.filter(r => r.status === 'success').length,
+            partial: results.filter(r => r.status === 'partial').length,
+            failed: results.filter(r => r.status === 'failed').length,
+            processingTimeMs: Date.now() - startTime,
+          };
+
+          console.log(`[bulk-links] Completed: ${summary.successful} success, ${summary.partial} partial, ${summary.failed} failed in ${summary.processingTimeMs}ms`);
+
+          sendEvent({
+            type: 'complete',
+            summary,
           });
+        } catch (error) {
+          console.error('[bulk-links] Stream error:', error);
+          sendEvent({
+            type: 'error',
+            message: error instanceof Error ? error.message : 'Processing failed',
+          });
+        } finally {
+          controller.close();
         }
-      }
+      },
+    });
 
-      // Rate limit delay between batches
-      if (i + BATCH_SIZE < urls.length) {
-        await delay(BATCH_DELAY_MS);
-      }
-    }
-
-    // Sort results by original index
-    results.sort((a, b) => a.index - b.index);
-
-    // Calculate summary
-    const summary: BatchSummary = {
-      total: urls.length,
-      successful: results.filter(r => r.status === 'success').length,
-      partial: results.filter(r => r.status === 'partial').length,
-      failed: results.filter(r => r.status === 'failed').length,
-      processingTimeMs: Date.now() - startTime,
-    };
-
-    console.log(`[bulk-links] Completed: ${summary.successful} success, ${summary.partial} partial, ${summary.failed} failed in ${summary.processingTimeMs}ms`);
-
-    return NextResponse.json({
-      results,
-      summary,
-      bagCode: code,
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+      },
     });
   } catch (error) {
     console.error('[bulk-links] Unexpected error:', error);

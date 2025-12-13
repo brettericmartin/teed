@@ -2,6 +2,13 @@
 
 import { useState, useCallback } from 'react';
 import { X, Check, Loader2, Link as LinkIcon, ChevronDown, ChevronUp, ExternalLink, AlertCircle, Image as ImageIcon } from 'lucide-react';
+import { BulkLinkProcessingView } from './BulkLinkProcessingView';
+import type {
+  ProcessingStage,
+  BulkLinkStreamEvent,
+  StreamingItem,
+  StreamedLinkResult,
+} from '@/lib/types/bulkLinkStream';
 
 // ============================================================
 // TYPES
@@ -165,6 +172,11 @@ export default function BulkLinkImportModal({
   const [isSaving, setIsSaving] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
+  // Streaming state for progressive loading
+  const [streamingResults, setStreamingResults] = useState<Map<number, StreamingItem>>(new Map());
+  const [currentStages, setCurrentStages] = useState<Map<number, ProcessingStage>>(new Map());
+  const [completedCount, setCompletedCount] = useState(0);
+
   // Parse URLs from input text
   const parseInput = useCallback((text: string) => {
     const lines = text.split(/[\n,\s]+/).filter(Boolean);
@@ -206,11 +218,25 @@ export default function BulkLinkImportModal({
     setStep('processing');
     setIsProcessing(true);
     setProcessingProgress(0);
+    setCompletedCount(0);
+
+    // Initialize streaming state with pending items
+    const initialItems = new Map<number, StreamingItem>();
+    parsedUrls.forEach((url, i) => {
+      initialItems.set(i, { status: 'pending', url });
+    });
+    setStreamingResults(initialItems);
+    setCurrentStages(new Map());
+
+    const collectedResults: StreamedLinkResult[] = [];
 
     try {
       const response = await fetch(`/api/bags/${bagCode}/bulk-links`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'text/event-stream',
+        },
         body: JSON.stringify({ urls: parsedUrls }),
       });
 
@@ -218,20 +244,108 @@ export default function BulkLinkImportModal({
         throw new Error('Failed to process links');
       }
 
-      const data = await response.json();
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error('No response body');
+      }
 
-      // Convert results to editable format
-      const editedResults: EditedResult[] = data.results.map((r: ProcessedLinkResult) => ({
-        ...r,
-        isSelected: r.status !== 'failed',
-        editedName: r.suggestedItem.custom_name,
-        editedBrand: r.suggestedItem.brand,
-        editedDescription: r.suggestedItem.custom_description,
-        selectedPhotoIndex: r.photoOptions.findIndex(p => p.isPrimary) || 0,
-      }));
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+
+        // Process complete SSE events (separated by double newlines)
+        const events = buffer.split('\n\n');
+        buffer = events.pop() || ''; // Keep incomplete event in buffer
+
+        for (const eventText of events) {
+          if (!eventText.trim()) continue;
+
+          // Parse SSE data lines
+          const lines = eventText.split('\n');
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const event: BulkLinkStreamEvent = JSON.parse(line.slice(6));
+
+                switch (event.type) {
+                  case 'url_started':
+                    setStreamingResults(prev => {
+                      const next = new Map(prev);
+                      next.set(event.index, {
+                        status: 'processing',
+                        url: event.url,
+                      });
+                      return next;
+                    });
+                    break;
+
+                  case 'url_stage_update':
+                    setCurrentStages(prev => {
+                      const next = new Map(prev);
+                      next.set(event.index, event.stage);
+                      return next;
+                    });
+                    break;
+
+                  case 'url_completed':
+                    collectedResults.push(event.result);
+                    setStreamingResults(prev => {
+                      const next = new Map(prev);
+                      next.set(event.index, {
+                        status: 'completed',
+                        url: event.result.originalUrl,
+                        result: event.result,
+                      });
+                      return next;
+                    });
+                    setCurrentStages(prev => {
+                      const next = new Map(prev);
+                      next.delete(event.index);
+                      return next;
+                    });
+                    break;
+
+                  case 'batch_progress':
+                    setCompletedCount(event.completed);
+                    setProcessingProgress((event.completed / event.total) * 100);
+                    break;
+
+                  case 'complete':
+                    setSummary(event.summary);
+                    break;
+
+                  case 'error':
+                    console.error('Stream error:', event.message);
+                    break;
+                }
+              } catch (e) {
+                console.error('Error parsing SSE event:', e);
+              }
+            }
+          }
+        }
+      }
+
+      // Convert collected results to editable format
+      const editedResults: EditedResult[] = collectedResults
+        .sort((a, b) => a.index - b.index)
+        .map((r) => ({
+          ...r,
+          isSelected: r.status !== 'failed',
+          editedName: r.suggestedItem.custom_name,
+          editedBrand: r.suggestedItem.brand,
+          editedDescription: r.suggestedItem.custom_description,
+          selectedPhotoIndex: r.photoOptions.findIndex(p => p.isPrimary) >= 0
+            ? r.photoOptions.findIndex(p => p.isPrimary)
+            : 0,
+        }));
 
       setResults(editedResults);
-      setSummary(data.summary);
       setStep('review');
     } catch (error) {
       console.error('Error processing links:', error);
@@ -324,6 +438,10 @@ export default function BulkLinkImportModal({
     setResults([]);
     setSummary(null);
     setExpandedIndex(null);
+    // Reset streaming state
+    setStreamingResults(new Map());
+    setCurrentStages(new Map());
+    setCompletedCount(0);
     onClose();
   };
 
@@ -411,18 +529,14 @@ export default function BulkLinkImportModal({
             </div>
           )}
 
-          {/* Step 2: Processing */}
+          {/* Step 2: Processing - Streaming View */}
           {step === 'processing' && (
-            <div className="flex flex-col items-center justify-center py-12">
-              <Loader2 className="w-12 h-12 text-[var(--sky-9)] animate-spin mb-4" />
-              <h3 className="text-lg font-medium text-gray-900">Analyzing {parsedUrls.length} links</h3>
-              <p className="text-sm text-gray-500 mt-2">
-                Scraping pages, extracting product info, and finding photos...
-              </p>
-              <p className="text-xs text-gray-400 mt-4">
-                This may take a minute for complete accuracy
-              </p>
-            </div>
+            <BulkLinkProcessingView
+              totalUrls={parsedUrls.length}
+              completedCount={completedCount}
+              streamingResults={streamingResults}
+              currentStages={currentStages}
+            />
           )}
 
           {/* Step 3: Review */}
