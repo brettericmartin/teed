@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { User, Settings, LogOut, ChevronDown, Compass, LayoutDashboard, Shield } from 'lucide-react';
+import { User, Settings, LogOut, ChevronDown, Compass, LayoutDashboard, Shield, Sparkles } from 'lucide-react';
 
 interface NavigationProps {
   userHandle?: string;
@@ -110,6 +110,17 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
                   <Compass className="w-4 h-4" />
                   <span>Discover</span>
                 </Link>
+                <Link
+                  href="/updates"
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    pathname === '/updates'
+                      ? 'bg-[var(--surface-hover)] text-[var(--text-primary)]'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]'
+                  }`}
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>Updates</span>
+                </Link>
                 {isAdmin && (
                   <Link
                     href="/admin"
@@ -199,6 +210,13 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
                         <Compass className="w-4 h-4 text-[var(--text-secondary)]" />
                         Discover
                       </Link>
+                      <Link
+                        href="/updates"
+                        className="flex items-center gap-3 px-4 py-3 min-h-[48px] text-sm text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors"
+                      >
+                        <Sparkles className="w-4 h-4 text-[var(--text-secondary)]" />
+                        Updates
+                      </Link>
                       {isAdmin && (
                         <Link
                           href="/admin"
@@ -257,6 +275,17 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
                 <Compass className="w-4 h-4" />
                 <span className="hidden sm:inline">Discover</span>
               </Link>
+              <Link
+                href="/updates"
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  pathname === '/updates'
+                    ? 'bg-[var(--surface-hover)] text-[var(--text-primary)]'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]'
+                }`}
+              >
+                <Sparkles className="w-4 h-4" />
+                <span className="hidden sm:inline">Updates</span>
+              </Link>
 
               {/* Sign In / Get Started */}
               <Link
@@ -303,6 +332,17 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
             >
               <Compass className="w-6 h-6" />
               <span className="text-xs font-medium">Discover</span>
+            </Link>
+            <Link
+              href="/updates"
+              className={`flex flex-col items-center gap-1 p-2 min-h-[56px] min-w-[56px] rounded-lg transition-colors ${
+                pathname === '/updates'
+                  ? 'text-[var(--teed-green-9)]'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+              }`}
+            >
+              <Sparkles className="w-6 h-6" />
+              <span className="text-xs font-medium">Updates</span>
             </Link>
             <button
               onClick={() => setIsProfileOpen(!isProfileOpen)}
