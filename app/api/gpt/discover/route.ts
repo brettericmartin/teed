@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
         created_at,
         updated_at,
         owner_id,
-        profiles!inner (
+        profiles!bags_owner_id_fkey (
           handle,
           display_name
         )
@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
     if (bagsError) {
       console.error('Error fetching discover bags:', bagsError);
       return NextResponse.json(
-        { error: 'Failed to fetch bags' },
+        { error: 'Failed to fetch bags', details: bagsError.message },
         { status: 500 }
       );
     }

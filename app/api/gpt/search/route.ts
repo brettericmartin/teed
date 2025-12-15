@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
           description,
           category,
           owner_id,
-          profiles!inner (
+          profiles!bags_owner_id_fkey (
             handle,
             display_name
           )
@@ -110,7 +110,7 @@ export async function GET(request: NextRequest) {
             title,
             is_public,
             owner_id,
-            profiles!inner (
+            profiles!bags_owner_id_fkey (
               handle,
               display_name
             )
