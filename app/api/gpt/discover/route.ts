@@ -32,8 +32,7 @@ export async function GET(request: NextRequest) {
           display_name
         )
       `)
-      .eq('is_public', true)
-      .eq('is_hidden', false);
+      .eq('is_public', true);
 
     // Filter by featured if requested
     if (featured) {
