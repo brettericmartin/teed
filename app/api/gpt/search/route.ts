@@ -1,13 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerSupabase } from '@/lib/serverSupabase';
+import { createClient } from '@supabase/supabase-js';
 
 /**
  * GET /api/gpt/search
  * Search across public bags and items
+ * This endpoint is public and uses service role to bypass RLS
  */
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createServerSupabase();
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      { auth: { autoRefreshToken: false, persistSession: false } }
+    );
     const { searchParams } = new URL(request.url);
 
     const query = searchParams.get('q');
@@ -47,7 +52,6 @@ export async function GET(request: NextRequest) {
           )
         `)
         .eq('is_public', true)
-        .eq('is_hidden', false)
         .or(`title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`)
         .limit(limit);
 
@@ -105,7 +109,6 @@ export async function GET(request: NextRequest) {
             code,
             title,
             is_public,
-            is_hidden,
             owner_id,
             profiles!inner (
               handle,
@@ -123,7 +126,7 @@ export async function GET(request: NextRequest) {
         results.items = (items || [])
           .filter(item => {
             const bag = (item as any).bags;
-            return bag.is_public && !bag.is_hidden;
+            return bag.is_public;
           })
           .map(item => {
             const bag = (item as any).bags;

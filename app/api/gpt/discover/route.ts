@@ -1,13 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerSupabase } from '@/lib/serverSupabase';
+import { createClient } from '@supabase/supabase-js';
 
 /**
  * GET /api/gpt/discover
  * Browse public and featured bags
+ * This endpoint is public and uses service role to bypass RLS
  */
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createServerSupabase();
+    // Use service role to access public bags across all users
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      { auth: { autoRefreshToken: false, persistSession: false } }
+    );
     const { searchParams } = new URL(request.url);
 
     const featured = searchParams.get('featured') === 'true';

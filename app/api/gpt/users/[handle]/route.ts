@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerSupabase } from '@/lib/serverSupabase';
+import { createClient } from '@supabase/supabase-js';
 
 /**
  * GET /api/gpt/users/[handle]
  * Get a user's public profile and their public bags
+ * This endpoint is public and uses service role to bypass RLS
  */
 export async function GET(
   request: NextRequest,
@@ -11,7 +12,11 @@ export async function GET(
 ) {
   try {
     const { handle } = await params;
-    const supabase = await createServerSupabase();
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      { auth: { autoRefreshToken: false, persistSession: false } }
+    );
 
     // Remove @ if present
     const cleanHandle = handle.replace(/^@/, '').toLowerCase();
@@ -45,7 +50,6 @@ export async function GET(
       `)
       .eq('owner_id', profile.id)
       .eq('is_public', true)
-      .eq('is_hidden', false)
       .order('updated_at', { ascending: false, nullsFirst: false });
 
     if (bagsError) {
