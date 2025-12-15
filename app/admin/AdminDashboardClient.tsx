@@ -116,6 +116,14 @@ export default function AdminDashboardClient({
       borderHover: 'hover:border-[var(--sky-6)]',
     },
     {
+      href: '/admin/gpt-setup',
+      title: 'ChatGPT GPT Setup',
+      description: 'Configure the Teed custom GPT for ChatGPT integration',
+      icon: <MessageSquare className="w-6 h-6 text-[var(--teed-green-11)]" />,
+      gradient: 'from-[var(--teed-green-4)] to-[var(--teed-green-6)]',
+      borderHover: 'hover:border-[var(--teed-green-6)]',
+    },
+    {
       href: '/admin/design-system',
       title: 'Design System',
       description: 'Colors, typography, and component library',
