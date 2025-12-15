@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
-import { uploadItemPhoto, createMediaAsset } from '@/lib/supabaseStorage';
+import { uploadItemPhoto, createMediaAsset, deleteMediaAsset } from '@/lib/supabaseStorage';
 
 /**
  * POST /api/media/upload-from-url
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
 
     // Parse JSON body
     const body = await request.json();
-    const { imageUrl, itemId, filename } = body;
+    const { imageUrl, itemId, filename, existingMediaAssetId } = body;
 
     // Validate required fields
     if (!imageUrl || typeof imageUrl !== 'string') {
@@ -90,6 +90,18 @@ export async function POST(request: NextRequest) {
         { error: 'You do not have permission to upload photos for this item' },
         { status: 403 }
       );
+    }
+
+    // Delete existing media asset if provided (replacing an image)
+    if (existingMediaAssetId) {
+      try {
+        console.log('[upload-from-url] Deleting existing media asset:', existingMediaAssetId);
+        await deleteMediaAsset(existingMediaAssetId);
+        console.log('[upload-from-url] Successfully deleted existing media asset');
+      } catch (deleteError: any) {
+        // Log but don't fail - the old asset may already be deleted or invalid
+        console.warn('[upload-from-url] Failed to delete existing media asset:', deleteError.message);
+      }
     }
 
     // Download image from URL (server-side, bypasses CORS)

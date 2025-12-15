@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
-import { uploadItemPhoto, createMediaAsset } from '@/lib/supabaseStorage';
+import { uploadItemPhoto, createMediaAsset, deleteMediaAsset } from '@/lib/supabaseStorage';
 
 /**
  * POST /api/media/upload
@@ -51,6 +51,7 @@ export async function POST(request: NextRequest) {
     const file = formData.get('file') as File | null;
     const itemId = formData.get('itemId') as string | null;
     const alt = formData.get('alt') as string | null;
+    const existingMediaAssetId = formData.get('existingMediaAssetId') as string | null;
 
     // Validate required fields
     if (!file) {
@@ -108,6 +109,18 @@ export async function POST(request: NextRequest) {
         { error: 'You do not have permission to upload photos for this item' },
         { status: 403 }
       );
+    }
+
+    // Delete existing media asset if provided (replacing an image)
+    if (existingMediaAssetId) {
+      try {
+        console.log('[upload] Deleting existing media asset:', existingMediaAssetId);
+        await deleteMediaAsset(existingMediaAssetId);
+        console.log('[upload] Successfully deleted existing media asset');
+      } catch (deleteError: any) {
+        // Log but don't fail - the old asset may already be deleted or invalid
+        console.warn('[upload] Failed to delete existing media asset:', deleteError.message);
+      }
     }
 
     // Upload to Supabase Storage

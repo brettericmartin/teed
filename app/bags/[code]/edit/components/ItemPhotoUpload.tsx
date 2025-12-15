@@ -6,6 +6,7 @@ import ImageCropModal from './ImageCropModal';
 type ItemPhotoUploadProps = {
   itemId: string;
   currentPhotoUrl?: string | null;
+  existingMediaAssetId?: string | null;
   onPhotoUploaded: (mediaAssetId: string, photoUrl: string) => void;
   onPhotoRemoved?: () => void;
   itemName: string;
@@ -16,6 +17,7 @@ type ItemPhotoUploadProps = {
 export default function ItemPhotoUpload({
   itemId,
   currentPhotoUrl,
+  existingMediaAssetId,
   onPhotoUploaded,
   onPhotoRemoved,
   itemName,
@@ -174,6 +176,7 @@ export default function ItemPhotoUpload({
           imageUrl,
           itemId,
           filename: `${itemName.replace(/[^a-z0-9]/gi, '-')}.jpg`,
+          existingMediaAssetId: existingMediaAssetId || undefined,
         }),
       });
 
@@ -229,6 +232,10 @@ export default function ItemPhotoUpload({
 
       formData.append('file', fileToUpload);
       formData.append('itemId', itemId);
+      // Pass existing media asset ID so server can delete it
+      if (existingMediaAssetId) {
+        formData.append('existingMediaAssetId', existingMediaAssetId);
+      }
 
       const response = await fetch('/api/media/upload', {
         method: 'POST',

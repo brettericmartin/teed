@@ -232,6 +232,7 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
             <ItemPhotoUpload
               itemId={item.id}
               currentPhotoUrl={item.photo_url}
+              existingMediaAssetId={item.custom_photo_id}
               onPhotoUploaded={handlePhotoUploaded}
               onPhotoRemoved={handlePhotoRemoved}
               itemName={item.custom_name || 'Item'}
