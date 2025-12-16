@@ -87,18 +87,49 @@ export default function ConsentClient() {
 
     setSubmitting(true);
     try {
-      // Approve the authorization
-      // Note: This is a placeholder - actual implementation depends on Supabase OAuth server API
-      // The real implementation would call: supabase.auth.oauth.approveAuthorization(authorizationId)
+      // Get the current session to include the access token
+      const { data: { session } } = await supabase.auth.getSession();
 
-      // For now, we'll just redirect back with a success indicator
-      // In production, Supabase handles the redirect with the authorization code
+      if (!session) {
+        setError('Session expired. Please try again.');
+        setSubmitting(false);
+        return;
+      }
 
-      // Simulate approval and redirect
-      const redirectUri = authDetails?.redirect_uri || searchParams.get('redirect_uri');
-      if (redirectUri) {
-        // In production, Supabase would append the authorization code
-        window.location.href = redirectUri;
+      // Approve the authorization by POSTing to Supabase OAuth server
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/oauth/authorize/${authorizationId}`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            consent: 'approve',
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('OAuth approval failed:', errorData);
+        setError(errorData.message || 'Failed to approve authorization.');
+        setSubmitting(false);
+        return;
+      }
+
+      const data = await response.json();
+
+      // Supabase should return the redirect URL with the authorization code
+      if (data.redirect_uri) {
+        window.location.href = data.redirect_uri;
+      } else if (data.redirect_to) {
+        window.location.href = data.redirect_to;
+      } else {
+        // Fallback: something went wrong
+        setError('Authorization approved but no redirect URL received.');
+        setSubmitting(false);
       }
     } catch (err) {
       console.error('Error approving authorization:', err);
@@ -112,19 +143,41 @@ export default function ConsentClient() {
 
     setSubmitting(true);
     try {
-      // Deny the authorization
-      // Note: This is a placeholder - actual implementation depends on Supabase OAuth server API
-      // The real implementation would call: supabase.auth.oauth.denyAuthorization(authorizationId)
+      // Get the current session to include the access token
+      const { data: { session } } = await supabase.auth.getSession();
 
+      if (session) {
+        // Deny the authorization by POSTing to Supabase OAuth server
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/oauth/authorize/${authorizationId}`,
+          {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${session.access_token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              consent: 'deny',
+            }),
+          }
+        );
+
+        const data = await response.json().catch(() => ({}));
+
+        if (data.redirect_uri || data.redirect_to) {
+          window.location.href = data.redirect_uri || data.redirect_to;
+          return;
+        }
+      }
+
+      // Fallback: redirect with error
       const redirectUri = authDetails?.redirect_uri || searchParams.get('redirect_uri');
       if (redirectUri) {
-        // Redirect with error=access_denied
         const url = new URL(redirectUri);
         url.searchParams.set('error', 'access_denied');
         url.searchParams.set('error_description', 'User denied the authorization request');
         window.location.href = url.toString();
       } else {
-        // Just close or redirect to home
         router.push('/');
       }
     } catch (err) {
