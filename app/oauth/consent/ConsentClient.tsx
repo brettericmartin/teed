@@ -59,17 +59,33 @@ export default function ConsentClient() {
           display_name: profile?.display_name || authUser.email?.split('@')[0],
         });
 
-        // Get authorization details from Supabase OAuth server
-        // Note: This is a placeholder - actual implementation depends on Supabase OAuth server API
-        // The real implementation would call: supabase.auth.oauth.getAuthorizationDetails(authorizationId)
+        // Try to get authorization details from Supabase OAuth server
+        try {
+          const { data: oauthDetails, error: oauthError } = await supabase.auth.oauth.getAuthorizationDetails(authorizationId);
 
-        // For now, we'll parse the client info from the URL or use defaults
-        // In production, this should come from the Supabase OAuth server
-        setAuthDetails({
-          client_name: 'ChatGPT - Teed Assistant',
-          scopes: ['openid', 'email', 'profile'],
-          redirect_uri: searchParams.get('redirect_uri') || '',
-        });
+          if (oauthDetails && !oauthError) {
+            setAuthDetails({
+              client_name: oauthDetails.client?.client_name || 'ChatGPT - Teed Assistant',
+              client_logo: oauthDetails.client?.logo_uri,
+              scopes: oauthDetails.scope?.split(' ') || ['openid', 'email', 'profile'],
+              redirect_uri: oauthDetails.redirect_uri || '',
+            });
+          } else {
+            // Fallback to defaults if SDK method fails
+            setAuthDetails({
+              client_name: 'ChatGPT - Teed Assistant',
+              scopes: ['openid', 'email', 'profile'],
+              redirect_uri: searchParams.get('redirect_uri') || '',
+            });
+          }
+        } catch {
+          // Fallback if oauth methods don't exist in this SDK version
+          setAuthDetails({
+            client_name: 'ChatGPT - Teed Assistant',
+            scopes: ['openid', 'email', 'profile'],
+            redirect_uri: searchParams.get('redirect_uri') || '',
+          });
+        }
 
         setLoading(false);
       } catch (err) {
@@ -87,47 +103,22 @@ export default function ConsentClient() {
 
     setSubmitting(true);
     try {
-      // Get the current session to include the access token
-      const { data: { session } } = await supabase.auth.getSession();
+      // Use Supabase SDK's OAuth approval method
+      const { data, error: approveError } = await supabase.auth.oauth.approveAuthorization(authorizationId);
 
-      if (!session) {
-        setError('Session expired. Please try again.');
+      if (approveError) {
+        console.error('OAuth approval failed:', approveError);
+        setError(approveError.message || 'Failed to approve authorization.');
         setSubmitting(false);
         return;
       }
 
-      // Approve the authorization by POSTing to Supabase OAuth server
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/oauth/authorize/${authorizationId}`,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            consent: 'approve',
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error('OAuth approval failed:', errorData);
-        setError(errorData.message || 'Failed to approve authorization.');
-        setSubmitting(false);
-        return;
-      }
-
-      const data = await response.json();
-
-      // Supabase should return the redirect URL with the authorization code
-      if (data.redirect_uri) {
-        window.location.href = data.redirect_uri;
-      } else if (data.redirect_to) {
-        window.location.href = data.redirect_to;
+      // Supabase returns the redirect URL with the authorization code
+      if (data?.redirect_url) {
+        window.location.href = data.redirect_url;
       } else {
         // Fallback: something went wrong
+        console.error('No redirect URL in response:', data);
         setError('Authorization approved but no redirect URL received.');
         setSubmitting(false);
       }
@@ -143,31 +134,12 @@ export default function ConsentClient() {
 
     setSubmitting(true);
     try {
-      // Get the current session to include the access token
-      const { data: { session } } = await supabase.auth.getSession();
+      // Use Supabase SDK's OAuth deny method
+      const { data, error: denyError } = await supabase.auth.oauth.denyAuthorization(authorizationId);
 
-      if (session) {
-        // Deny the authorization by POSTing to Supabase OAuth server
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/oauth/authorize/${authorizationId}`,
-          {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${session.access_token}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              consent: 'deny',
-            }),
-          }
-        );
-
-        const data = await response.json().catch(() => ({}));
-
-        if (data.redirect_uri || data.redirect_to) {
-          window.location.href = data.redirect_uri || data.redirect_to;
-          return;
-        }
+      if (!denyError && data?.redirect_url) {
+        window.location.href = data.redirect_url;
+        return;
       }
 
       // Fallback: redirect with error
@@ -182,8 +154,16 @@ export default function ConsentClient() {
       }
     } catch (err) {
       console.error('Error denying authorization:', err);
-      setError('Failed to process your request. Please try again.');
-      setSubmitting(false);
+      // Fallback: redirect with error
+      const redirectUri = authDetails?.redirect_uri || searchParams.get('redirect_uri');
+      if (redirectUri) {
+        const url = new URL(redirectUri);
+        url.searchParams.set('error', 'access_denied');
+        url.searchParams.set('error_description', 'User denied the authorization request');
+        window.location.href = url.toString();
+      } else {
+        router.push('/');
+      }
     }
   };
 
