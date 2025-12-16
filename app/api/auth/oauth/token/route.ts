@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 
 /**
  * POST /api/auth/oauth/token
  * Proxy to Supabase OAuth token endpoint
+ * Adds PKCE code_verifier from cookie
  */
 export async function POST(request: NextRequest) {
   try {
+    // Get the code verifier from cookie (set during authorize)
+    const cookieStore = await cookies();
+    const codeVerifier = cookieStore.get('oauth_code_verifier')?.value;
+
     // Parse the request body
     const contentType = request.headers.get('Content-Type') || '';
     let bodyParams: URLSearchParams;
@@ -19,6 +25,11 @@ export async function POST(request: NextRequest) {
     } else {
       const body = await request.text();
       bodyParams = new URLSearchParams(body);
+    }
+
+    // Add code_verifier for PKCE
+    if (codeVerifier) {
+      bodyParams.set('code_verifier', codeVerifier);
     }
 
     console.log('Token request params:', bodyParams.toString());
@@ -40,6 +51,11 @@ export async function POST(request: NextRequest) {
 
     console.log('Token response status:', response.status);
     console.log('Token response:', data);
+
+    // Clear the code verifier cookie
+    if (codeVerifier) {
+      cookieStore.delete('oauth_code_verifier');
+    }
 
     // Return the response with same status and headers
     return new NextResponse(data, {
