@@ -103,42 +103,64 @@ export default function ConsentClient() {
 
     setSubmitting(true);
     try {
-      // Get the current session for the access token
-      const { data: { session } } = await supabase.auth.getSession();
+      // Try SDK method first (has full browser context with cookies)
+      console.log('Attempting SDK approveAuthorization...');
+      let data: any = null;
+      let approveError: any = null;
 
-      if (!session) {
-        setError('You must be logged in to approve this authorization.');
-        setSubmitting(false);
-        return;
+      try {
+        const result = await (supabase.auth as any).oauth.approveAuthorization(authorizationId);
+        data = result.data;
+        approveError = result.error;
+        console.log('SDK result:', result);
+      } catch (sdkErr) {
+        console.error('SDK method not available or failed:', sdkErr);
+        approveError = sdkErr;
       }
 
-      // Use server-side API to handle consent (avoids SDK issues with public clients)
-      const response = await fetch('/api/auth/oauth/consent', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify({
-          authorization_id: authorizationId,
-          action: 'approve',
-        }),
-      });
+      if (approveError) {
+        console.error('SDK approval failed:', approveError);
+        // Fall back to server-side
+        console.log('Falling back to server-side consent...');
+        const { data: { session } } = await supabase.auth.getSession();
 
-      const data = await response.json();
+        if (!session) {
+          setError('You must be logged in to approve this authorization.');
+          setSubmitting(false);
+          return;
+        }
 
-      if (!response.ok) {
-        console.error('OAuth approval failed:', data);
-        setError(data.error || 'Failed to approve authorization.');
-        setSubmitting(false);
-        return;
+        const response = await fetch('/api/auth/oauth/consent', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({
+            authorization_id: authorizationId,
+            action: 'approve',
+          }),
+        });
+
+        const responseData = await response.json();
+
+        if (!response.ok) {
+          console.error('Server-side approval failed:', responseData);
+          setError(responseData.error || 'Failed to approve authorization.');
+          setSubmitting(false);
+          return;
+        }
+
+        if (responseData?.redirect_url) {
+          window.location.href = responseData.redirect_url;
+          return;
+        }
       }
 
-      // Supabase returns the redirect URL with the authorization code
+      // SDK success path
       if (data?.redirect_url) {
         window.location.href = data.redirect_url;
       } else {
-        // Fallback: something went wrong
         console.error('No redirect URL in response:', data);
         setError('Authorization approved but no redirect URL received.');
         setSubmitting(false);
