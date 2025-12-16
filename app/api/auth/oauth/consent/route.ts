@@ -36,8 +36,17 @@ export async function POST(request: NextRequest) {
     const accessToken = authHeader.replace('Bearer ', '');
 
     // Call Supabase's OAuth consent endpoint server-side
+    const consentUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/oauth/authorizations/${authorization_id}/consent`;
+
+    console.log('OAuth consent request:', {
+      url: consentUrl,
+      authorization_id,
+      action,
+      hasAccessToken: !!accessToken,
+    });
+
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/oauth/authorizations/${authorization_id}/consent`,
+      consentUrl,
       {
         method: 'POST',
         headers: {
@@ -49,7 +58,18 @@ export async function POST(request: NextRequest) {
       }
     );
 
-    const data = await response.json();
+    const responseText = await response.text();
+    console.log('OAuth consent raw response:', {
+      status: response.status,
+      body: responseText,
+    });
+
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch {
+      data = { raw: responseText };
+    }
 
     if (!response.ok) {
       console.error('Supabase OAuth consent error:', {
@@ -57,6 +77,7 @@ export async function POST(request: NextRequest) {
         data,
         authorization_id,
         action,
+        responseHeaders: Object.fromEntries(response.headers.entries()),
       });
       return NextResponse.json(
         {
@@ -67,6 +88,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    console.log('OAuth consent success:', data);
     return NextResponse.json(data);
   } catch (error) {
     console.error('OAuth consent error:', error);

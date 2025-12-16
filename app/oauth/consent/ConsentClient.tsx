@@ -103,12 +103,33 @@ export default function ConsentClient() {
 
     setSubmitting(true);
     try {
-      // Use Supabase SDK directly - it handles the consent with proper browser context
-      const { data, error: approveError } = await supabase.auth.oauth.approveAuthorization(authorizationId);
+      // Get the current session for the access token
+      const { data: { session } } = await supabase.auth.getSession();
 
-      if (approveError) {
-        console.error('OAuth approval failed:', approveError);
-        setError(approveError.message || 'Failed to approve authorization.');
+      if (!session) {
+        setError('You must be logged in to approve this authorization.');
+        setSubmitting(false);
+        return;
+      }
+
+      // Use server-side API to handle consent (avoids SDK issues with public clients)
+      const response = await fetch('/api/auth/oauth/consent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          authorization_id: authorizationId,
+          action: 'approve',
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error('OAuth approval failed:', data);
+        setError(data.error || 'Failed to approve authorization.');
         setSubmitting(false);
         return;
       }

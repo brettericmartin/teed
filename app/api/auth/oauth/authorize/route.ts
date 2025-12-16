@@ -54,7 +54,13 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  console.log('OAuth authorize redirect:', supabaseUrl.toString());
+  console.log('OAuth authorize redirect:', {
+    url: supabaseUrl.toString(),
+    client_id: supabaseUrl.searchParams.get('client_id'),
+    redirect_uri: supabaseUrl.searchParams.get('redirect_uri'),
+    has_code_challenge: supabaseUrl.searchParams.has('code_challenge'),
+    code_challenge_method: supabaseUrl.searchParams.get('code_challenge_method'),
+  });
 
   // Redirect to Supabase
   return NextResponse.redirect(supabaseUrl.toString());
