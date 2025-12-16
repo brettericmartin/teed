@@ -300,8 +300,11 @@ async function findProductImages(
 ): Promise<PhotoOption[]> {
   const images: PhotoOption[] = [];
 
-  // 1. Add OG image from scrape
-  if (scraped?.image) {
+  // Helper to check if URL is a problematic Amazon widget URL
+  const isAmazonWidgetUrl = (imgUrl: string) => imgUrl.includes('amazon-adsystem.com');
+
+  // 1. Add OG image from scrape (but not Amazon widget URLs - they're unreliable)
+  if (scraped?.image && !isAmazonWidgetUrl(scraped.image)) {
     images.push({ url: scraped.image, source: 'og', isPrimary: true });
   }
 
@@ -316,7 +319,7 @@ async function findProductImages(
     if (response.ok) {
       const html = await response.text();
 
-      // Extract JSON-LD images
+      // Extract JSON-LD images (skip Amazon widget URLs)
       const jsonLdMatches = html.matchAll(/<script\s+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi);
       for (const match of jsonLdMatches) {
         try {
@@ -325,7 +328,7 @@ async function findProductImages(
             const productImages = Array.isArray(jsonLd.image) ? jsonLd.image : [jsonLd.image];
             for (const img of productImages) {
               const imgUrl = typeof img === 'string' ? img : img.url;
-              if (imgUrl && !images.some(i => i.url === imgUrl)) {
+              if (imgUrl && !isAmazonWidgetUrl(imgUrl) && !images.some(i => i.url === imgUrl)) {
                 images.push({ url: imgUrl, source: 'json-ld', isPrimary: false });
               }
             }
@@ -333,15 +336,16 @@ async function findProductImages(
         } catch {}
       }
 
-      // Extract Twitter image
+      // Extract Twitter image (skip Amazon widget URLs)
       const twitterMatch = html.match(/<meta\s+(?:name|property)=["']twitter:image["']\s+content=["']([^"']+)["']/i);
-      if (twitterMatch && twitterMatch[1] && !images.some(i => i.url === twitterMatch[1])) {
+      if (twitterMatch && twitterMatch[1] && !isAmazonWidgetUrl(twitterMatch[1]) && !images.some(i => i.url === twitterMatch[1])) {
         images.push({ url: twitterMatch[1], source: 'meta', isPrimary: false });
       }
     }
   } catch {}
 
-  // 3. Fall back to Google Image Search if we don't have enough images
+  // 3. Fall back to Google Image Search if we don't have enough good images
+  // (Amazon widget URLs are not counted as they're unreliable)
   if (images.length < 3 && (analysis?.productName || scraped?.title)) {
     const query = [analysis?.brand || scraped?.brand, analysis?.productName || scraped?.title]
       .filter(Boolean)
@@ -474,41 +478,23 @@ async function processUrl(
     let photoOptions = await findProductImages(resolvedUrl, scraped, analysis);
 
     // Check if identification image is a problematic Amazon widget URL
-    // These often return tracking pixels instead of actual images
-    const isProblematicAmazonUrl = identification.imageUrl?.includes('amazon-adsystem.com');
+    // These return tracking pixels instead of actual images - skip them entirely
+    const isAmazonWidgetUrl = identification.imageUrl?.includes('amazon-adsystem.com');
 
-    // If identification gave us an image and it's not in options, add it
-    // But don't mark Amazon widget URLs as primary - they're often broken
-    if (identification.imageUrl && !photoOptions.some(p => p.url === identification.imageUrl)) {
-      if (isProblematicAmazonUrl && photoOptions.length > 0) {
-        // Add Amazon widget URL at the end, not as primary
-        photoOptions.push({
-          url: identification.imageUrl,
-          source: 'og',
-          isPrimary: false,
-        });
-      } else if (!isProblematicAmazonUrl) {
-        // Non-Amazon URL can be primary
-        photoOptions.unshift({
-          url: identification.imageUrl,
-          source: 'og',
-          isPrimary: true,
-        });
-        // Update other primaries
-        photoOptions = photoOptions.map((p, i) => ({ ...p, isPrimary: i === 0 }));
-      }
+    // If identification gave us a valid image (not Amazon widget) and it's not in options, add it
+    if (identification.imageUrl && !isAmazonWidgetUrl && !photoOptions.some(p => p.url === identification.imageUrl)) {
+      photoOptions.unshift({
+        url: identification.imageUrl,
+        source: 'og',
+        isPrimary: true,
+      });
+      // Update other primaries
+      photoOptions = photoOptions.map((p, i) => ({ ...p, isPrimary: i === 0 }));
     }
 
-    // Ensure we have a primary image (prefer non-Amazon-widget URLs)
+    // Ensure we have a primary image
     if (photoOptions.length > 0 && !photoOptions.some(p => p.isPrimary)) {
-      // Find the first non-Amazon-widget URL to be primary
-      const bestIndex = photoOptions.findIndex(p => !p.url.includes('amazon-adsystem.com'));
-      if (bestIndex >= 0) {
-        photoOptions[bestIndex].isPrimary = true;
-      } else {
-        // All are Amazon widget URLs, just use the first
-        photoOptions[0].isPrimary = true;
-      }
+      photoOptions[0].isPrimary = true;
     }
 
     // Compose suggestion from identification
@@ -672,6 +658,7 @@ export async function POST(
     }
 
     console.log(`[bulk-links] Processing ${urls.length} URLs for bag ${code} (streaming)`);
+    console.log(`[bulk-links] URLs to process:`, urls);
 
     // Create SSE streaming response
     const encoder = new TextEncoder();

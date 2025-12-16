@@ -138,6 +138,33 @@ export async function lightweightFetch(
 
       clearTimeout(timeoutId);
 
+      // Check for redirect-based bot protection (e.g., /captchashow, /challenge)
+      if (response.redirected && response.url) {
+        const finalUrl = new URL(response.url);
+        const originalUrl = new URL(url);
+
+        // If redirected to a completely different path, it's likely bot protection
+        const botRedirectPatterns = ['captcha', 'challenge', 'verify', 'blocked', 'security', 'robot'];
+        const isBotRedirect = botRedirectPatterns.some(pattern =>
+          finalUrl.pathname.toLowerCase().includes(pattern)
+        );
+
+        // Also check if redirected to homepage when requesting a product page
+        const wasRedirectedToHomepage = finalUrl.pathname === '/' && originalUrl.pathname !== '/';
+
+        if (isBotRedirect || wasRedirectedToHomepage) {
+          return {
+            success: false,
+            blocked: true,
+            reason: isBotRedirect ? 'redirect_to_captcha' : 'redirect_to_homepage',
+            statusCode: response.status,
+            data: null,
+            html: null,
+            fetchTimeMs: Date.now() - startTime,
+          };
+        }
+      }
+
       if (!response.ok) {
         if (attempt < maxRetries - 1) {
           await delay(1000 * (attempt + 1));

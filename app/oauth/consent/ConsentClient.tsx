@@ -129,7 +129,7 @@ export default function ConsentClient() {
 
       if (!response.ok) {
         console.error('OAuth approval failed:', data);
-        setError(data.error || 'Failed to approve authorization.');
+        setError(data.error + (data.details ? ` (${JSON.stringify(data.details)})` : ''));
         setSubmitting(false);
         return;
       }

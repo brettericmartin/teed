@@ -52,9 +52,17 @@ export async function POST(request: NextRequest) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error('Supabase OAuth consent error:', data);
+      console.error('Supabase OAuth consent error:', {
+        status: response.status,
+        data,
+        authorization_id,
+        action,
+      });
       return NextResponse.json(
-        { error: data.error_description || data.message || 'Consent failed' },
+        {
+          error: data.error_description || data.error || data.message || data.msg || 'Consent failed',
+          details: data,
+        },
         { status: response.status }
       );
     }

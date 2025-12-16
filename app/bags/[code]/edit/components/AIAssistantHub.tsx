@@ -14,6 +14,10 @@ type AIAction = {
   loadingText?: string;
   disabled?: boolean;
   hidden?: boolean;
+  badge?: {
+    label: string;
+    variant: 'recommended' | 'experimental' | 'new';
+  };
 };
 
 type AIAssistantHubProps = {
@@ -37,7 +41,19 @@ function AIActionRow({
   loadingText,
   disabled,
   delay = 0,
+  badge,
 }: AIAction & { delay?: number }) {
+  const getBadgeStyles = (variant: 'recommended' | 'experimental' | 'new') => {
+    switch (variant) {
+      case 'recommended':
+        return 'bg-emerald-100 text-emerald-700 border-emerald-200';
+      case 'experimental':
+        return 'bg-amber-100 text-amber-700 border-amber-200';
+      case 'new':
+        return 'bg-purple-100 text-purple-700 border-purple-200';
+    }
+  };
+
   return (
     <button
       onClick={onClick}
@@ -61,10 +77,15 @@ function AIActionRow({
 
         {/* Content */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="font-semibold text-[var(--text-primary)] group-hover:text-[var(--sky-11)] transition-colors">
               {isLoading ? loadingText : title}
             </span>
+            {badge && !isLoading && (
+              <span className={`px-1.5 py-0.5 text-[10px] font-semibold rounded border ${getBadgeStyles(badge.variant)}`}>
+                {badge.label}
+              </span>
+            )}
             {count !== undefined && count > 0 && !isLoading && (
               <span className="px-2 py-0.5 text-xs font-medium bg-[var(--sky-4)] text-[var(--sky-11)] rounded-full">
                 {count} {countLabel || 'items'}
@@ -105,6 +126,7 @@ export default function AIAssistantHub({
       loadingText: 'Identifying...',
       disabled: isIdentifying,
       delay: 100,
+      badge: { label: 'Experimental', variant: 'experimental' },
     },
     {
       id: 'find-photos',
@@ -116,6 +138,7 @@ export default function AIAssistantHub({
       onClick: onFindPhotos,
       hidden: itemCount === 0,
       delay: 200,
+      badge: { label: 'Experimental', variant: 'experimental' },
     },
     {
       id: 'fill-info',

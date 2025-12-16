@@ -73,6 +73,127 @@ const SIZE_PATTERNS = [
   /dwvar.*?_size[=_]([^&_]+)/i,           // Demandware size param
 ];
 
+// Known brands for extraction from URL slugs (sorted by specificity - longer names first)
+// Used when scraping retailer sites where brand is in the product slug
+const SLUG_BRAND_PATTERNS: Array<{ pattern: RegExp; brand: string }> = [
+  // Golf - Multi-word brands first
+  { pattern: /^scotty[- ]?cameron/i, brand: 'Scotty Cameron' },
+  { pattern: /^voice[- ]?caddie/i, brand: 'Voice Caddie' },
+  { pattern: /^shot[- ]?scope/i, brand: 'Shot Scope' },
+  { pattern: /^super[- ]?stroke/i, brand: 'SuperStroke' },
+  { pattern: /^golf[- ]?pride/i, brand: 'Golf Pride' },
+
+  // Golf - Single word brands
+  { pattern: /^taylormade/i, brand: 'TaylorMade' },
+  { pattern: /^callaway/i, brand: 'Callaway' },
+  { pattern: /^titleist/i, brand: 'Titleist' },
+  { pattern: /^bridgestone/i, brand: 'Bridgestone' },
+  { pattern: /^cleveland/i, brand: 'Cleveland' },
+  { pattern: /^odyssey/i, brand: 'Odyssey' },
+  { pattern: /^mizuno/i, brand: 'Mizuno' },
+  { pattern: /^srixon/i, brand: 'Srixon' },
+  { pattern: /^cobra/i, brand: 'Cobra' },
+  { pattern: /^ping\b/i, brand: 'PING' },
+  { pattern: /^vokey/i, brand: 'Vokey' },
+  { pattern: /^wilson/i, brand: 'Wilson' },
+  { pattern: /^xxio/i, brand: 'XXIO' },
+  { pattern: /^pxg\b/i, brand: 'PXG' },
+  { pattern: /^honma/i, brand: 'Honma' },
+  { pattern: /^miura/i, brand: 'Miura' },
+  { pattern: /^bettinardi/i, brand: 'Bettinardi' },
+  { pattern: /^bushnell/i, brand: 'Bushnell' },
+  { pattern: /^garmin/i, brand: 'Garmin' },
+  { pattern: /^arccos/i, brand: 'Arccos' },
+  { pattern: /^footjoy/i, brand: 'FootJoy' },
+
+  // Golf Apparel
+  { pattern: /^travis[- ]?mathew/i, brand: 'TravisMathew' },
+  { pattern: /^peter[- ]?millar/i, brand: 'Peter Millar' },
+  { pattern: /^g\/fore|^gfore/i, brand: 'G/FORE' },
+  { pattern: /^greyson/i, brand: 'Greyson' },
+  { pattern: /^johnnie[- ]?o/i, brand: 'Johnnie-O' },
+  { pattern: /^linksoul/i, brand: 'Linksoul' },
+  { pattern: /^malbon/i, brand: 'Malbon Golf' },
+  { pattern: /^bad[- ]?birdie/i, brand: 'Bad Birdie' },
+
+  // General Sports/Fashion
+  { pattern: /^under[- ]?armour/i, brand: 'Under Armour' },
+  { pattern: /^new[- ]?balance/i, brand: 'New Balance' },
+  { pattern: /^nike/i, brand: 'Nike' },
+  { pattern: /^adidas/i, brand: 'adidas' },
+  { pattern: /^puma/i, brand: 'Puma' },
+
+  // Tech
+  { pattern: /^apple/i, brand: 'Apple' },
+  { pattern: /^samsung/i, brand: 'Samsung' },
+  { pattern: /^sony/i, brand: 'Sony' },
+  { pattern: /^bose/i, brand: 'Bose' },
+  { pattern: /^logitech/i, brand: 'Logitech' },
+  { pattern: /^anker/i, brand: 'Anker' },
+];
+
+// Golf model number patterns that should preserve case
+const GOLF_MODEL_PATTERNS = [
+  // TaylorMade models
+  { pattern: /\bqi10\b/gi, replacement: 'Qi10' },
+  { pattern: /\bqi35\b/gi, replacement: 'Qi35' },
+  { pattern: /\bstealth\s*2\b/gi, replacement: 'Stealth 2' },
+  { pattern: /\bstealth\s*plus\b/gi, replacement: 'Stealth Plus' },
+  { pattern: /\bsim\s*2\b/gi, replacement: 'SIM 2' },
+  { pattern: /\bsim\s*max\b/gi, replacement: 'SIM Max' },
+  { pattern: /\btp5\b/gi, replacement: 'TP5' },
+  { pattern: /\btp5x\b/gi, replacement: 'TP5x' },
+
+  // Titleist models
+  { pattern: /\btsr([1234])\b/gi, replacement: 'TSR$1' },
+  { pattern: /\btsi([1234])\b/gi, replacement: 'TSi$1' },
+  { pattern: /\bgt([1234])\b/gi, replacement: 'GT$1' },
+  { pattern: /\bpro\s*v1\b/gi, replacement: 'Pro V1' },
+  { pattern: /\bpro\s*v1x\b/gi, replacement: 'Pro V1x' },
+  { pattern: /\bavx\b/gi, replacement: 'AVX' },
+  { pattern: /\bsm([789]|10)\b/gi, replacement: 'SM$1' },
+
+  // Callaway models
+  { pattern: /\bparadym\b/gi, replacement: 'Paradym' },
+  { pattern: /\bai\s*smoke\b/gi, replacement: 'Ai Smoke' },
+  { pattern: /\brogue\s*st\b/gi, replacement: 'Rogue ST' },
+  { pattern: /\bepic\s*max\b/gi, replacement: 'Epic Max' },
+  { pattern: /\bepic\s*speed\b/gi, replacement: 'Epic Speed' },
+  { pattern: /\bjaws\b/gi, replacement: 'JAWS' },
+  { pattern: /\bmd5\b/gi, replacement: 'MD5' },
+  { pattern: /\bchr\s*soft\b/gi, replacement: 'Chrome Soft' },
+  { pattern: /\bchr\s*soft\s*x\b/gi, replacement: 'Chrome Soft X' },
+
+  // PING models
+  { pattern: /\bg430\b/gi, replacement: 'G430' },
+  { pattern: /\bg425\b/gi, replacement: 'G425' },
+  { pattern: /\bg410\b/gi, replacement: 'G410' },
+  { pattern: /\bi([25]30)\b/gi, replacement: 'i$1' },
+  { pattern: /\bpld\b/gi, replacement: 'PLD' },
+
+  // Cobra models
+  { pattern: /\baerojet\b/gi, replacement: 'Aerojet' },
+  { pattern: /\bltdx\b/gi, replacement: 'LTDx' },
+  { pattern: /\bdarkspeed\b/gi, replacement: 'Darkspeed' },
+
+  // Mizuno models
+  { pattern: /\bjpx([0-9]+)\b/gi, replacement: 'JPX$1' },
+  { pattern: /\bst([- ]?[xz]|max)\b/gi, replacement: 'ST$1' },
+
+  // Srixon models
+  { pattern: /\bzx([457]|mk\s*ii)\b/gi, replacement: 'ZX$1' },
+  { pattern: /\bz[- ]?star\b/gi, replacement: 'Z-Star' },
+
+  // Cleveland models
+  { pattern: /\brtx\b/gi, replacement: 'RTX' },
+  { pattern: /\bcbx\b/gi, replacement: 'CBX' },
+
+  // Generic patterns
+  { pattern: /\bmax\b/gi, replacement: 'Max' },
+  { pattern: /\bls\b/gi, replacement: 'LS' },
+  { pattern: /\bhd\b/gi, replacement: 'HD' },
+];
+
 /**
  * Parse a product URL to extract all available information
  */
@@ -95,7 +216,7 @@ export function parseProductUrl(urlString: string): ParsedProductUrl {
 
   // Get brand info from domain
   const brandInfo = getBrandFromDomain(domain);
-  const brand = brandInfo?.brand || null;
+  let brand = brandInfo?.brand || null;
   const category = brandInfo?.category || null;
   const isRetailer = brandInfo?.isRetailer || false;
 
@@ -103,7 +224,16 @@ export function parseProductUrl(urlString: string): ParsedProductUrl {
   const pathParts = pathname.split('/').filter(Boolean);
   const productSlug = extractProductSlug(pathParts, parsed.search);
 
-  // Humanize the slug
+  // For retailers, try to extract brand from the product slug
+  let slugBrand: string | null = null;
+  if (isRetailer && productSlug) {
+    slugBrand = extractBrandFromSlug(productSlug);
+    if (slugBrand) {
+      brand = slugBrand;
+    }
+  }
+
+  // Humanize the slug (passing the extracted brand for proper removal)
   const humanizedName = humanizeProductSlug(productSlug, brand);
 
   // Extract model/SKU
@@ -141,6 +271,35 @@ export function parseProductUrl(urlString: string): ParsedProductUrl {
     variant,
     urlConfidence,
   };
+}
+
+/**
+ * Extract brand from a product slug (for retailer URLs)
+ */
+function extractBrandFromSlug(slug: string): string | null {
+  // Normalize the slug for matching
+  const normalized = slug.replace(/-/g, ' ').toLowerCase();
+
+  for (const { pattern, brand } of SLUG_BRAND_PATTERNS) {
+    if (pattern.test(normalized)) {
+      return brand;
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Apply golf model number corrections to properly case model names
+ */
+function applyModelCorrections(name: string): string {
+  let corrected = name;
+
+  for (const { pattern, replacement } of GOLF_MODEL_PATTERNS) {
+    corrected = corrected.replace(pattern, replacement);
+  }
+
+  return corrected;
 }
 
 /**
@@ -203,6 +362,8 @@ export function humanizeProductSlug(slug: string | null, brand: string | null): 
   if (!slug || slug.length < 3) return null;
 
   let humanized = slug
+    // Replace multiple dashes/underscores with single separator (e.g., "---" to " - ")
+    .replace(/[-_]{2,}/g, ' - ')
     // Replace separators with spaces
     .replace(/[-_+]/g, ' ')
     // Handle camelCase
@@ -228,14 +389,28 @@ export function humanizeProductSlug(slug: string | null, brand: string | null): 
     })
     .join(' ');
 
+  // Apply golf model number corrections (TSR3, Qi10, etc.)
+  humanized = applyModelCorrections(humanized);
+
   // Clean up common patterns
   humanized = humanized
-    // Remove duplicate brand mentions if brand is known
-    .replace(new RegExp(`^${escapeRegExp(brand || '')}\\s+`, 'i'), '')
     // Remove SKU-like suffixes
     .replace(/\s+[A-Z]{2,3}\d{3,}$/i, '')
     // Clean up size suffixes that got into the name
     .replace(/\s+(Xs|S|M|L|Xl|Xxl|2xl|3xl)\s*$/i, '');
+
+  // Remove brand from the beginning if present
+  if (brand) {
+    // Handle multi-word brands (e.g., "Scotty Cameron")
+    const brandLower = brand.toLowerCase();
+    const humanizedLower = humanized.toLowerCase();
+
+    if (humanizedLower.startsWith(brandLower)) {
+      humanized = humanized.slice(brand.length).trim();
+      // Remove leading dash or connector if present
+      humanized = humanized.replace(/^[-–—|:\s]+/, '').trim();
+    }
+  }
 
   // Minimum viable name
   if (humanized.length < 3) return null;

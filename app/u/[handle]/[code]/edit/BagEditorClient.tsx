@@ -248,12 +248,23 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     custom_description?: string;
     notes?: string;
     quantity?: number;
+    brand?: string;
+    imageUrl?: string; // External image URL from APIS
+    photo_url?: string; // Direct photo URL
   }) => {
     try {
+      // Map imageUrl to photo_url for API
+      const apiPayload = {
+        ...itemData,
+        photo_url: itemData.photo_url || itemData.imageUrl || undefined,
+      };
+      // Remove imageUrl from payload (API doesn't expect it)
+      delete (apiPayload as any).imageUrl;
+
       const response = await fetch(`/api/bags/${bag.code}/items`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(itemData),
+        body: JSON.stringify(apiPayload),
       });
 
       if (!response.ok) {
@@ -845,6 +856,9 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 ? `Est. price: ${product.estimatedPrice}`
                 : undefined,
               quantity: 1,
+              // Set photo_url as fallback (external URL from product image)
+              // If upload to storage succeeds later, custom_photo_id will override this
+              photo_url: product.productImage?.imageUrl || undefined,
             }),
           });
 
@@ -1504,6 +1518,9 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                     notes: suggestion.notes || undefined,
                     quantity: 1,
                     brand: suggestion.brand || undefined,
+                    // Set photo_url immediately as fallback (external URL)
+                    // If upload to storage succeeds later, custom_photo_id will override this
+                    photo_url: suggestion.imageUrl || undefined,
                   }),
                 });
 

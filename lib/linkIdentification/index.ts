@@ -11,8 +11,9 @@ import { analyzeUrlWithAI, quickAIAnalysis, type AIProductAnalysis } from './aiS
 import { getBrandFromDomain } from './domainBrands';
 import { trackUnrecognizedDomain } from './trackUnrecognizedDomain';
 import { fetchViaJinaReader, extractAmazonProductInfo } from './jinaReader';
-import { lookupAmazonProduct, getAmazonImageUrl } from './amazonLookup';
+import { lookupAmazonProduct } from './amazonLookup';
 import { scrapeWithFirecrawl } from './firecrawl';
+import { searchGoogleImages, buildProductSearchQuery } from './googleImageSearch';
 
 export interface ProductIdentificationResult {
   // Core product info
@@ -226,7 +227,8 @@ export async function identifyProduct(
         category: parsedUrl.category,
         specifications: [],
         price: amazonResult.price,
-        imageUrl: amazonResult.image || getAmazonImageUrl(asin),
+        // Only use the image from Amazon if it's a real CDN URL, not the widget URL
+        imageUrl: amazonResult.image && !amazonResult.image.includes('amazon-adsystem.com') ? amazonResult.image : null,
         confidence: 0.90, // High confidence - we got real data
         primarySource: 'amazon_lookup',
         sources,
@@ -235,11 +237,8 @@ export async function identifyProduct(
         startTime,
       });
     }
-
-    // If Amazon lookup failed, at least get the image
-    const amazonImageUrl = getAmazonImageUrl(asin);
-    // Store for later use
-    (fetchResult as any).amazonImageUrl = amazonImageUrl;
+    // Note: We no longer fall back to getAmazonImageUrl() as those widget URLs are unreliable
+    // Google Images fallback will be used instead if needed
   }
 
   // ========================================
@@ -251,31 +250,46 @@ export async function identifyProduct(
     const firecrawlResult = await scrapeWithFirecrawl(url);
 
     if (firecrawlResult.success && firecrawlResult.title) {
-      const brand = firecrawlResult.brand;
-      let productName = firecrawlResult.title;
+      // Validate Firecrawl result - check if it's actually product content
+      // If URL parsing found a brand but Firecrawl didn't, or the title looks like a homepage, skip it
+      const looksLikeHomepage = firecrawlResult.title.toLowerCase().includes('buy golf equipment') ||
+                                firecrawlResult.title.toLowerCase().includes('shop online') ||
+                                firecrawlResult.title.toLowerCase().includes('denied') ||
+                                firecrawlResult.title.toLowerCase().includes('access to this page');
 
-      // Remove brand from product name if present at start
-      if (brand && productName.toLowerCase().startsWith(brand.toLowerCase())) {
-        productName = productName.slice(brand.length).replace(/^[-–—|:\s]+/, '').trim();
+      // If URL parsing found a specific product but Firecrawl returned generic content, skip Firecrawl
+      const urlHasGoodData = parsedUrl.brand && parsedUrl.humanizedName;
+
+      if (!looksLikeHomepage) {
+        const brand = firecrawlResult.brand;
+        let productName = firecrawlResult.title;
+
+        // Remove brand from product name if present at start
+        if (brand && productName.toLowerCase().startsWith(brand.toLowerCase())) {
+          productName = productName.slice(brand.length).replace(/^[-–—|:\s]+/, '').trim();
+        }
+
+        const fullName = brand ? `${brand} ${productName}` : productName;
+
+        return buildResult({
+          brand,
+          productName,
+          fullName,
+          category: parsedUrl.category,
+          specifications: firecrawlResult.description ? [firecrawlResult.description] : [],
+          price: firecrawlResult.price,
+          // Don't fall back to Amazon widget URLs - they're unreliable. Google Images will be used instead.
+          imageUrl: firecrawlResult.image || null,
+          confidence: 0.90, // High confidence - Firecrawl got real data
+          primarySource: 'firecrawl',
+          sources,
+          parsedUrl,
+          fetchResult,
+          startTime,
+        });
+      } else {
+        console.log(`[linkIdentification] Firecrawl returned homepage/error content for ${parsedUrl.domain}, skipping`);
       }
-
-      const fullName = brand ? `${brand} ${productName}` : productName;
-
-      return buildResult({
-        brand,
-        productName,
-        fullName,
-        category: parsedUrl.category,
-        specifications: firecrawlResult.description ? [firecrawlResult.description] : [],
-        price: firecrawlResult.price,
-        imageUrl: firecrawlResult.image || (isAmazon && asin ? getAmazonImageUrl(asin) : undefined),
-        confidence: 0.90, // High confidence - Firecrawl got real data
-        primarySource: 'firecrawl',
-        sources,
-        parsedUrl,
-        fetchResult,
-        startTime,
-      });
     }
 
     // If Firecrawl also failed, try Jina Reader as last resort
@@ -305,7 +319,8 @@ export async function identifyProduct(
             category: parsedUrl.category,
             specifications: amazonInfo.features,
             price: amazonInfo.price,
-            imageUrl: asin ? getAmazonImageUrl(asin) : undefined,
+            // Don't use Amazon widget URLs - they're unreliable. Google Images will be used instead.
+            imageUrl: null,
             confidence: 0.85,
             primarySource: 'jina_amazon',
             sources,
@@ -326,6 +341,35 @@ export async function identifyProduct(
         specifications: jinaResult.description ? [jinaResult.description] : [],
         confidence: 0.75,
         primarySource: 'jina_reader',
+        sources,
+        parsedUrl,
+        fetchResult,
+        startTime,
+      });
+    }
+
+    // ========================================
+    // STAGE 2.7: URL Parsing + Google Images Fallback
+    // ========================================
+    // If all scraping methods failed but we have good URL data, use that + Google Images
+    if (parsedUrl.brand && parsedUrl.humanizedName && parsedUrl.urlConfidence >= 0.5) {
+      sources.push('google_images');
+      console.log(`[linkIdentification] Scraping blocked for ${parsedUrl.domain}, falling back to URL parsing + Google Images`);
+
+      const searchQuery = buildProductSearchQuery(parsedUrl.brand, parsedUrl.humanizedName);
+      const googleImages = await searchGoogleImages(searchQuery, 3);
+
+      const imageUrl = googleImages.length > 0 ? googleImages[0] : null;
+
+      return buildResult({
+        brand: parsedUrl.brand,
+        productName: parsedUrl.humanizedName,
+        fullName: `${parsedUrl.brand} ${parsedUrl.humanizedName}`,
+        category: parsedUrl.category,
+        specifications: [],
+        imageUrl,
+        confidence: 0.75, // Good confidence - we have brand + name from URL
+        primarySource: 'url_google_fallback',
         sources,
         parsedUrl,
         fetchResult,

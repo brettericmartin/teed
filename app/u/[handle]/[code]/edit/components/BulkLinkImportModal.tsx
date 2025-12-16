@@ -331,8 +331,32 @@ export default function BulkLinkImportModal({
         }
       }
 
+      // Validate we got results for all URLs
+      console.log(`[BulkLinkImport] Collected ${collectedResults.length} results for ${parsedUrls.length} URLs`);
+
+      // Fill in any missing results (URLs that didn't get a response)
+      const resultsByIndex = new Map(collectedResults.map(r => [r.index, r]));
+      const allResults: StreamedLinkResult[] = parsedUrls.map((url, index) => {
+        const existing = resultsByIndex.get(index);
+        if (existing) return existing;
+
+        // Create a failed result for missing URLs
+        console.warn(`[BulkLinkImport] Missing result for URL at index ${index}: ${url}`);
+        return {
+          index,
+          originalUrl: url,
+          resolvedUrl: url,
+          status: 'failed' as const,
+          error: 'No response received from server',
+          scraped: null,
+          analysis: null,
+          photoOptions: [],
+          suggestedItem: { custom_name: 'Unknown Product', brand: '', custom_description: '' },
+        };
+      });
+
       // Convert collected results to editable format
-      const editedResults: EditedResult[] = collectedResults
+      const editedResults: EditedResult[] = allResults
         .sort((a, b) => a.index - b.index)
         .map((r) => ({
           ...r,
