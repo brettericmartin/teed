@@ -103,12 +103,33 @@ export default function ConsentClient() {
 
     setSubmitting(true);
     try {
-      // Use Supabase SDK's OAuth approval method
-      const { data, error: approveError } = await supabase.auth.oauth.approveAuthorization(authorizationId);
+      // Get the current session for the access token
+      const { data: { session } } = await supabase.auth.getSession();
 
-      if (approveError) {
-        console.error('OAuth approval failed:', approveError);
-        setError(approveError.message || 'Failed to approve authorization.');
+      if (!session) {
+        setError('Session expired. Please try again.');
+        setSubmitting(false);
+        return;
+      }
+
+      // Use server-side API to avoid CORS issues with Supabase
+      const response = await fetch('/api/auth/oauth/consent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          authorization_id: authorizationId,
+          action: 'approve',
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error('OAuth approval failed:', data);
+        setError(data.error || 'Failed to approve authorization.');
         setSubmitting(false);
         return;
       }
@@ -134,12 +155,29 @@ export default function ConsentClient() {
 
     setSubmitting(true);
     try {
-      // Use Supabase SDK's OAuth deny method
-      const { data, error: denyError } = await supabase.auth.oauth.denyAuthorization(authorizationId);
+      // Get the current session for the access token
+      const { data: { session } } = await supabase.auth.getSession();
 
-      if (!denyError && data?.redirect_url) {
-        window.location.href = data.redirect_url;
-        return;
+      if (session) {
+        // Use server-side API to avoid CORS issues with Supabase
+        const response = await fetch('/api/auth/oauth/consent', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({
+            authorization_id: authorizationId,
+            action: 'deny',
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data?.redirect_url) {
+          window.location.href = data.redirect_url;
+          return;
+        }
       }
 
       // Fallback: redirect with error
