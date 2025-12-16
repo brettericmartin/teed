@@ -8,7 +8,7 @@ import { createClient } from '@supabase/supabase-js';
  */
 export async function POST(request: NextRequest) {
   try {
-    const { authorization_id, action } = await request.json();
+    const { authorization_id, action, client_id } = await request.json();
 
     if (!authorization_id) {
       return NextResponse.json(
