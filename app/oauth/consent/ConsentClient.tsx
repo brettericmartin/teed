@@ -103,33 +103,12 @@ export default function ConsentClient() {
 
     setSubmitting(true);
     try {
-      // Get the current session for the access token
-      const { data: { session } } = await supabase.auth.getSession();
+      // Use Supabase SDK directly - it handles the consent with proper browser context
+      const { data, error: approveError } = await supabase.auth.oauth.approveAuthorization(authorizationId);
 
-      if (!session) {
-        setError('Session expired. Please try again.');
-        setSubmitting(false);
-        return;
-      }
-
-      // Use server-side API to avoid CORS issues with Supabase
-      const response = await fetch('/api/auth/oauth/consent', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify({
-          authorization_id: authorizationId,
-          action: 'approve',
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error('OAuth approval failed:', data);
-        setError(data.error + (data.details ? ` (${JSON.stringify(data.details)})` : ''));
+      if (approveError) {
+        console.error('OAuth approval failed:', approveError);
+        setError(approveError.message || 'Failed to approve authorization.');
         setSubmitting(false);
         return;
       }
@@ -143,9 +122,9 @@ export default function ConsentClient() {
         setError('Authorization approved but no redirect URL received.');
         setSubmitting(false);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error approving authorization:', err);
-      setError('Failed to approve authorization. Please try again.');
+      setError(err?.message || 'Failed to approve authorization. Please try again.');
       setSubmitting(false);
     }
   };
