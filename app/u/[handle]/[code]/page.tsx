@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
+import type { Metadata } from 'next';
 import PublicBagView from './PublicBagView';
 
 // Public Supabase client (no auth required for public bags)
@@ -11,6 +12,80 @@ const supabase = createClient(
 
 interface PageProps {
   params: Promise<{ handle: string; code: string }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { handle, code } = await params;
+
+  // Fetch bag info for metadata
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('id, display_name')
+    .eq('handle', handle)
+    .single();
+
+  if (!profile) {
+    return {
+      title: 'Bag Not Found | Teed',
+    };
+  }
+
+  const { data: bag } = await supabase
+    .from('bags')
+    .select('title, description, cover_photo_id')
+    .eq('owner_id', profile.id)
+    .eq('code', code)
+    .eq('is_public', true)
+    .single();
+
+  if (!bag) {
+    return {
+      title: 'Bag Not Found | Teed',
+    };
+  }
+
+  // Get cover photo URL if present
+  let coverPhotoUrl: string | null = null;
+  if (bag.cover_photo_id) {
+    const { data: media } = await supabase
+      .from('media_assets')
+      .select('url')
+      .eq('id', bag.cover_photo_id)
+      .single();
+    coverPhotoUrl = media?.url || null;
+  }
+
+  const title = `${bag.title} | Teed`;
+  const description = bag.description || `${bag.title} by ${profile.display_name || handle}`;
+  const url = `https://teed.club/u/${handle}/${code}`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title: bag.title,
+      description,
+      url,
+      siteName: 'Teed',
+      type: 'website',
+      ...(coverPhotoUrl && {
+        images: [
+          {
+            url: coverPhotoUrl,
+            width: 1200,
+            height: 630,
+            alt: bag.title,
+          },
+        ],
+      }),
+    },
+    twitter: {
+      card: coverPhotoUrl ? 'summary_large_image' : 'summary',
+      title: bag.title,
+      description,
+      ...(coverPhotoUrl && { images: [coverPhotoUrl] }),
+    },
+  };
 }
 
 export default async function UserBagPage({ params }: PageProps) {
