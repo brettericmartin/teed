@@ -795,7 +795,7 @@ export default function PublicBagView({
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="sticky top-0 bg-[var(--modal-bg)] border-b border-[var(--border-subtle)] px-4 sm:px-8 py-4 sm:py-6 flex items-start justify-between rounded-t-[var(--radius-2xl)]">
+            <div className="bg-[var(--modal-bg)] border-b border-[var(--border-subtle)] px-4 sm:px-8 py-4 sm:py-6 flex items-start justify-between rounded-t-[var(--radius-2xl)]">
               <div className="flex-1">
                 {selectedItem.brand && (
                   <p className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-1">
