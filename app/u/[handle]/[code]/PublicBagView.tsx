@@ -505,17 +505,6 @@ export default function PublicBagView({
               />
             </div>
           </div>
-
-          {/* Mobile QR Code */}
-          <div className="mt-6 flex justify-center md:hidden">
-            <QRCodeDisplay
-              url={shareUrl}
-              size={120}
-              downloadable={true}
-              label="Scan to view this bag"
-              downloadFileName={`${ownerHandle}-${bag.code}-qr`}
-            />
-          </div>
         </div>
       </div>
 
