@@ -294,9 +294,9 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
               >
                 Sign In
               </Link>
-              {/* Get Started - primary CTA */}
+              {/* Get Started - primary CTA for new users */}
               <Link
-                href="/login"
+                href="/signup"
                 className="px-4 py-2.5 min-h-[44px] flex items-center text-sm font-medium text-white bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] rounded-lg transition-colors"
               >
                 Get Started
