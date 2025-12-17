@@ -287,15 +287,16 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
                 <span className="hidden sm:inline">Updates</span>
               </Link>
 
-              {/* Sign In / Get Started */}
+              {/* Sign In - hidden on mobile */}
               <Link
                 href="/login"
-                className="px-3 sm:px-4 py-2.5 min-h-[44px] flex items-center text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                className="hidden sm:flex px-4 py-2.5 min-h-[44px] items-center text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
               >
                 Sign In
               </Link>
+              {/* Get Started - primary CTA */}
               <Link
-                href="/signup"
+                href="/login"
                 className="px-4 py-2.5 min-h-[44px] flex items-center text-sm font-medium text-white bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] rounded-lg transition-colors"
               >
                 Get Started
