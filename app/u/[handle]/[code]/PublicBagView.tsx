@@ -840,12 +840,12 @@ export default function PublicBagView({
             <div className="px-4 sm:px-8 py-6 space-y-6">
               {/* Photo */}
               {selectedItem.photo_url && (
-                <div className="flex justify-center">
-                  <div className="max-w-md w-full bg-[var(--sky-2)] rounded-[var(--radius-lg)] overflow-hidden">
+                <div className="flex justify-center -mx-4 sm:mx-0">
+                  <div className="w-full sm:max-w-xl bg-[var(--sky-2)] sm:rounded-[var(--radius-lg)] overflow-hidden">
                     <img
                       src={selectedItem.photo_url}
                       alt={selectedItem.custom_name || 'Item photo'}
-                      className="w-full h-auto object-contain max-h-80"
+                      className="w-full h-auto object-contain max-h-[50vh] sm:max-h-[60vh]"
                     />
                   </div>
                 </div>
