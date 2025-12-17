@@ -23,9 +23,8 @@ import CoverPhotoCropper, { type AspectRatioId } from './components/CoverPhotoCr
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
-import { SmartIdentificationWizard, TapToIdentifyWizard } from '@/components/apis';
+import { SmartIdentificationWizard } from '@/components/apis';
 import type { ValidatedProduct } from '@/lib/apis/types';
-import type { IdentifiedItem } from '@/components/apis/TapToIdentifyWizard';
 
 /**
  * Robust data URL to Blob converter that handles mobile browser quirks.
@@ -184,10 +183,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [showCoverCropper, setShowCoverCropper] = useState(false);
   const [coverImageToCrop, setCoverImageToCrop] = useState<string | null>(null);
   const [showEnrichmentItemSelection, setShowEnrichmentItemSelection] = useState(false);
-
-  // Tap-to-Identify wizard state (for single photo identification)
-  const [showTapToIdentifyWizard, setShowTapToIdentifyWizard] = useState(false);
-  const [tapToIdentifyImage, setTapToIdentifyImage] = useState<string | null>(null);
 
   // Auto-save bag metadata (debounced)
   useEffect(() => {
@@ -783,23 +778,12 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     }
   };
 
-  // Bulk photo upload handler - routes to appropriate wizard based on photo count
+  // Bulk photo upload handler (for 2-10 photos) - Uses APIS
   const handleBulkPhotosCapture = async (base64Images: string[]) => {
     setShowPhotoUpload(false);
-
-    // Single image → Use new Tap-to-Identify wizard
-    if (base64Images.length === 1) {
-      console.log('[PhotoUpload] Single image - launching Tap-to-Identify wizard');
-      setTapToIdentifyImage(base64Images[0]);
-      setShowTapToIdentifyWizard(true);
-      return;
-    }
-
-    // Multiple images → Use existing SmartIdentificationWizard (APIS)
     setCapturedPhotosArray(base64Images);
     setBulkWizardImages(base64Images);
     setShowBulkSmartWizard(true);
-
     console.log('[BulkUpload] Launching APIS with', base64Images.length, 'images');
   };
 
@@ -849,101 +833,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
 
     await handleAddItem(suggestion);
     toast.showSuccess(`Added ${product.name} to bag`);
-  };
-
-  // Handler for Tap-to-Identify wizard completion
-  const handleTapToIdentifyComplete = async (items: IdentifiedItem[]) => {
-    setShowTapToIdentifyWizard(false);
-    setTapToIdentifyImage(null);
-
-    console.log('[TapToIdentify] Completed with', items.length, 'items');
-
-    // Add each identified item to the bag
-    for (const item of items) {
-      try {
-        // Create the item
-        const response = await fetch(`/api/bags/${bag.code}/items`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            custom_name: item.name,
-            brand: item.brand || null,
-            custom_description: item.visualDescription || undefined,
-            notes: item.model ? `Model: ${item.model}${item.year ? ` (${item.year})` : ''}` : undefined,
-            quantity: 1,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Failed to add ${item.name}`);
-        }
-
-        const newItem = await response.json();
-        let finalPhotoUrl: string | null = null;
-        let finalCustomPhotoId: string | null = null;
-
-        // Upload the cropped image if available
-        if (item.croppedImageBase64) {
-          try {
-            console.log('[TapToIdentify] Uploading cropped image for:', item.name);
-            const blob = await dataUrlToBlob(item.croppedImageBase64);
-
-            const formData = new FormData();
-            const sanitizedName = item.name.replace(/[^a-zA-Z0-9-_]/g, '-').substring(0, 50);
-            formData.append('file', blob, `${sanitizedName}-${Date.now()}.jpg`);
-            formData.append('itemId', newItem.id);
-
-            const uploadResponse = await fetch('/api/media/upload', {
-              method: 'POST',
-              body: formData,
-            });
-
-            if (uploadResponse.ok) {
-              const uploadData = await uploadResponse.json();
-
-              // Update item with photo
-              await fetch(`/api/items/${newItem.id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  custom_photo_id: uploadData.mediaAssetId,
-                }),
-              });
-
-              finalPhotoUrl = uploadData.url;
-              finalCustomPhotoId = uploadData.mediaAssetId;
-              console.log('[TapToIdentify] Photo uploaded successfully');
-            }
-          } catch (photoError) {
-            console.error('[TapToIdentify] Failed to upload photo:', photoError);
-          }
-        }
-
-        // Update local state with the new item
-        setBag((prev) => ({
-          ...prev,
-          items: [
-            ...prev.items,
-            {
-              ...newItem,
-              photo_url: finalPhotoUrl,
-              custom_photo_id: finalCustomPhotoId,
-              links: [],
-            },
-          ],
-        }));
-
-        // Trigger background auto-link finding
-        autoFindProductLink(newItem.id, item.name, item.brand);
-      } catch (error) {
-        console.error('[TapToIdentify] Error adding item:', error);
-        toast.showError(`Failed to add ${item.name}`);
-      }
-    }
-
-    if (items.length > 0) {
-      toast.showSuccess(`Added ${items.length} item${items.length !== 1 ? 's' : ''} to bag`);
-    }
   };
 
   // Step 29: Batch item creation from AI results
@@ -1913,25 +1802,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
               setCapturedPhotosArray([]);
             }}
           />
-        </div>
-      )}
-
-      {/* Tap-to-Identify Wizard - for single photo */}
-      {showTapToIdentifyWizard && tapToIdentifyImage && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-0 sm:p-4">
-          {/* Full screen on mobile, contained modal on desktop */}
-          <div className="bg-white w-full h-full sm:h-auto sm:max-w-2xl sm:max-h-[90vh] sm:rounded-xl overflow-hidden shadow-2xl flex flex-col">
-            <TapToIdentifyWizard
-              imageSource={tapToIdentifyImage}
-              categoryHint={bag.category || bag.title}
-              onComplete={handleTapToIdentifyComplete}
-              onCancel={() => {
-                setShowTapToIdentifyWizard(false);
-                setTapToIdentifyImage(null);
-              }}
-              className="h-full"
-            />
-          </div>
         </div>
       )}
 
