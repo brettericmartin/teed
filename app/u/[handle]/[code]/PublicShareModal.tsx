@@ -1,12 +1,17 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { X, Copy, Check, Download } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Copy, Check, Download, Share2 } from 'lucide-react';
 import QRCode from 'qrcode';
+import { useCelebration } from '@/lib/celebrations';
+import { modalOverlay, modalContent } from '@/lib/animations';
+import { analytics } from '@/lib/analytics';
 
 interface PublicShareModalProps {
   isOpen: boolean;
   onClose: () => void;
+  bagId: string;
   bagCode: string;
   bagTitle: string;
   ownerHandle: string;
@@ -16,6 +21,7 @@ interface PublicShareModalProps {
 export default function PublicShareModal({
   isOpen,
   onClose,
+  bagId,
   bagCode,
   bagTitle,
   ownerHandle,
@@ -25,6 +31,7 @@ export default function PublicShareModal({
   const [shareUrl, setShareUrl] = useState('');
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState('');
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { celebrateShare } = useCelebration();
 
   // Update share URL when modal opens (to capture current view mode from URL)
   useEffect(() => {
@@ -67,12 +74,12 @@ export default function PublicShareModal({
     }
   }, [shareUrl, isOpen]);
 
-  if (!isOpen) return null;
-
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
+      analytics.bagShared(bagId, bagCode, 'copy_link');
+      celebrateShare(); // Trigger confetti celebration
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
@@ -87,6 +94,7 @@ export default function PublicShareModal({
           text: `Check out ${ownerName}'s ${bagTitle} on Teed`,
           url: shareUrl,
         });
+        analytics.bagShared(bagId, bagCode, 'native_share');
       } catch (err) {
         console.log('Share cancelled or failed');
       }
@@ -96,6 +104,7 @@ export default function PublicShareModal({
   const handleDownloadQR = () => {
     if (!qrCodeDataUrl) return;
 
+    analytics.bagShared(bagId, bagCode, 'qr_code');
     const link = document.createElement('a');
     link.href = qrCodeDataUrl;
     link.download = `${ownerHandle}-${bagCode}-qr.png`;
@@ -105,14 +114,28 @@ export default function PublicShareModal({
   };
 
   return (
-    <div
-      className="fixed inset-0 bg-[var(--overlay-bg)] flex items-end sm:items-center justify-center p-0 sm:p-4 z-50 backdrop-blur-sm modal-backdrop-enter"
-      onClick={onClose}
-    >
-      <div
-        className="bg-[var(--modal-bg)] rounded-t-[var(--radius-2xl)] sm:rounded-[var(--radius-2xl)] shadow-[var(--shadow-6)] max-w-md w-full border border-[var(--modal-border)] modal-content-enter max-h-[85vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+          {/* Backdrop */}
+          <motion.div
+            variants={modalOverlay}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="absolute inset-0 bg-[var(--overlay-bg)] backdrop-blur-sm"
+            onClick={onClose}
+          />
+
+          {/* Modal */}
+          <motion.div
+            variants={modalContent}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="relative bg-[var(--modal-bg)] rounded-t-[var(--radius-2xl)] sm:rounded-[var(--radius-2xl)] shadow-[var(--shadow-6)] max-w-md w-full border border-[var(--modal-border)] max-h-[85vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-[var(--border-subtle)]">
           <div>
@@ -192,15 +215,17 @@ export default function PublicShareModal({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] sm:pb-4 bg-[var(--sky-1)] border-t border-[var(--border-subtle)] sm:rounded-b-[var(--radius-2xl)]">
-          <button
-            onClick={onClose}
-            className="w-full px-4 py-2.5 min-h-[44px] text-[var(--text-primary)] hover:bg-[var(--surface-hover)] rounded-lg transition-colors font-medium"
-          >
-            Close
-          </button>
+            <div className="px-6 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] sm:pb-4 bg-[var(--sky-1)] border-t border-[var(--border-subtle)] sm:rounded-b-[var(--radius-2xl)]">
+              <button
+                onClick={onClose}
+                className="w-full px-4 py-2.5 min-h-[44px] text-[var(--text-primary)] hover:bg-[var(--surface-hover)] rounded-lg transition-colors font-medium"
+              >
+                Close
+              </button>
+            </div>
+          </motion.div>
         </div>
-      </div>
-    </div>
+      )}
+    </AnimatePresence>
   );
 }

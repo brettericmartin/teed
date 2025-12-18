@@ -1,27 +1,33 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
-import { Shield, ShoppingBag, User, Pencil, Trash2, Eye, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
+import { Shield, User, Pencil, Trash2, Eye, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 
-interface AuthorizationDetails {
-  client_name: string;
-  client_logo?: string;
-  scopes: string[];
+interface OAuthRequest {
+  client_id: string;
   redirect_uri: string;
+  state: string | null;
+  scope: string;
+  code_challenge: string | null;
+  code_challenge_method: string | null;
+  user_id: string;
+  created_at: number;
+}
+
+interface UserInfo {
+  email?: string;
+  display_name?: string;
 }
 
 export default function ConsentClient() {
-  const searchParams = useSearchParams();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [authDetails, setAuthDetails] = useState<AuthorizationDetails | null>(null);
-  const [user, setUser] = useState<{ email?: string; display_name?: string } | null>(null);
-
-  const authorizationId = searchParams.get('authorization_id');
+  const [oauthRequest, setOauthRequest] = useState<OAuthRequest | null>(null);
+  const [user, setUser] = useState<UserInfo | null>(null);
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -29,13 +35,7 @@ export default function ConsentClient() {
   );
 
   useEffect(() => {
-    async function loadAuthorizationDetails() {
-      if (!authorizationId) {
-        setError('Missing authorization ID. Please try the authorization process again.');
-        setLoading(false);
-        return;
-      }
-
+    async function loadConsentDetails() {
       try {
         // Get the current user
         const { data: { user: authUser }, error: userError } = await supabase.auth.getUser();
@@ -43,7 +43,7 @@ export default function ConsentClient() {
         if (userError || !authUser) {
           // Redirect to login with return URL
           const returnUrl = encodeURIComponent(window.location.href);
-          router.push(`/auth/login?redirect_to=${returnUrl}`);
+          router.push(`/login?redirect_to=${returnUrl}`);
           return;
         }
 
@@ -59,110 +59,70 @@ export default function ConsentClient() {
           display_name: profile?.display_name || authUser.email?.split('@')[0],
         });
 
-        // Try to get authorization details from Supabase OAuth server
-        try {
-          const { data: oauthDetails, error: oauthError } = await supabase.auth.oauth.getAuthorizationDetails(authorizationId);
-
-          if (oauthDetails && !oauthError) {
-            setAuthDetails({
-              client_name: oauthDetails.client?.client_name || 'ChatGPT - Teed Assistant',
-              client_logo: oauthDetails.client?.logo_uri,
-              scopes: oauthDetails.scope?.split(' ') || ['openid', 'email', 'profile'],
-              redirect_uri: oauthDetails.redirect_uri || '',
-            });
-          } else {
-            // Fallback to defaults if SDK method fails
-            setAuthDetails({
-              client_name: 'ChatGPT - Teed Assistant',
-              scopes: ['openid', 'email', 'profile'],
-              redirect_uri: searchParams.get('redirect_uri') || '',
-            });
-          }
-        } catch {
-          // Fallback if oauth methods don't exist in this SDK version
-          setAuthDetails({
-            client_name: 'ChatGPT - Teed Assistant',
-            scopes: ['openid', 'email', 'profile'],
-            redirect_uri: searchParams.get('redirect_uri') || '',
-          });
+        // Fetch OAuth request details from the server
+        const response = await fetch('/api/auth/oauth/request');
+        if (!response.ok) {
+          const errorData = await response.json();
+          setError(errorData.error || 'Failed to load authorization request');
+          setLoading(false);
+          return;
         }
 
+        const data = await response.json();
+
+        // Verify the request hasn't expired (10 minute timeout)
+        if (Date.now() - data.created_at > 10 * 60 * 1000) {
+          setError('Authorization request has expired. Please try again.');
+          setLoading(false);
+          return;
+        }
+
+        // Verify the user matches
+        if (data.user_id !== authUser.id) {
+          setError('Session mismatch. Please log in again.');
+          setLoading(false);
+          return;
+        }
+
+        setOauthRequest(data);
         setLoading(false);
       } catch (err) {
-        console.error('Error loading authorization details:', err);
+        console.error('Error loading consent details:', err);
         setError('Failed to load authorization details. Please try again.');
         setLoading(false);
       }
     }
 
-    loadAuthorizationDetails();
-  }, [authorizationId, searchParams, router, supabase]);
+    loadConsentDetails();
+  }, [router, supabase]);
 
   const handleApprove = async () => {
-    if (!authorizationId) return;
+    if (!oauthRequest) return;
 
     setSubmitting(true);
     try {
-      // Try SDK method first (has full browser context with cookies)
-      console.log('Attempting SDK approveAuthorization...');
-      let data: any = null;
-      let approveError: any = null;
+      // Call our custom approve endpoint
+      const response = await fetch('/api/auth/oauth/approve', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ action: 'approve' }),
+      });
 
-      try {
-        const result = await (supabase.auth as any).oauth.approveAuthorization(authorizationId);
-        data = result.data;
-        approveError = result.error;
-        console.log('SDK result:', result);
-      } catch (sdkErr) {
-        console.error('SDK method not available or failed:', sdkErr);
-        approveError = sdkErr;
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || 'Failed to approve authorization');
+        setSubmitting(false);
+        return;
       }
 
-      if (approveError) {
-        console.error('SDK approval failed:', approveError);
-        // Fall back to server-side
-        console.log('Falling back to server-side consent...');
-        const { data: { session } } = await supabase.auth.getSession();
-
-        if (!session) {
-          setError('You must be logged in to approve this authorization.');
-          setSubmitting(false);
-          return;
-        }
-
-        const response = await fetch('/api/auth/oauth/consent', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session.access_token}`,
-          },
-          body: JSON.stringify({
-            authorization_id: authorizationId,
-            action: 'approve',
-          }),
-        });
-
-        const responseData = await response.json();
-
-        if (!response.ok) {
-          console.error('Server-side approval failed:', responseData);
-          setError(responseData.error || 'Failed to approve authorization.');
-          setSubmitting(false);
-          return;
-        }
-
-        if (responseData?.redirect_url) {
-          window.location.href = responseData.redirect_url;
-          return;
-        }
-      }
-
-      // SDK success path
-      if (data?.redirect_url) {
+      if (data.redirect_url) {
+        // Redirect back to ChatGPT with the auth code
         window.location.href = data.redirect_url;
       } else {
-        console.error('No redirect URL in response:', data);
-        setError('Authorization approved but no redirect URL received.');
+        setError('No redirect URL received');
         setSubmitting(false);
       }
     } catch (err: any) {
@@ -173,57 +133,21 @@ export default function ConsentClient() {
   };
 
   const handleDeny = async () => {
-    if (!authorizationId) return;
+    if (!oauthRequest) return;
 
     setSubmitting(true);
     try {
-      // Get the current session for the access token
-      const { data: { session } } = await supabase.auth.getSession();
-
-      if (session) {
-        // Use server-side API to avoid CORS issues with Supabase
-        const response = await fetch('/api/auth/oauth/consent', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session.access_token}`,
-          },
-          body: JSON.stringify({
-            authorization_id: authorizationId,
-            action: 'deny',
-          }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data?.redirect_url) {
-          window.location.href = data.redirect_url;
-          return;
-        }
+      // Redirect back to ChatGPT with an error
+      const redirectUrl = new URL(oauthRequest.redirect_uri);
+      redirectUrl.searchParams.set('error', 'access_denied');
+      redirectUrl.searchParams.set('error_description', 'User denied the authorization request');
+      if (oauthRequest.state) {
+        redirectUrl.searchParams.set('state', oauthRequest.state);
       }
-
-      // Fallback: redirect with error
-      const redirectUri = authDetails?.redirect_uri || searchParams.get('redirect_uri');
-      if (redirectUri) {
-        const url = new URL(redirectUri);
-        url.searchParams.set('error', 'access_denied');
-        url.searchParams.set('error_description', 'User denied the authorization request');
-        window.location.href = url.toString();
-      } else {
-        router.push('/');
-      }
+      window.location.href = redirectUrl.toString();
     } catch (err) {
       console.error('Error denying authorization:', err);
-      // Fallback: redirect with error
-      const redirectUri = authDetails?.redirect_uri || searchParams.get('redirect_uri');
-      if (redirectUri) {
-        const url = new URL(redirectUri);
-        url.searchParams.set('error', 'access_denied');
-        url.searchParams.set('error_description', 'User denied the authorization request');
-        window.location.href = url.toString();
-      } else {
-        router.push('/');
-      }
+      router.push('/');
     }
   };
 
@@ -267,7 +191,7 @@ export default function ConsentClient() {
             <Shield className="w-8 h-8 text-[var(--teed-green-9)]" />
           </div>
           <h1 className="text-xl font-bold text-[var(--text-primary)] mb-1">
-            Authorize {authDetails?.client_name || 'Application'}
+            Authorize ChatGPT - Teed Assistant
           </h1>
           <p className="text-sm text-[var(--text-secondary)]">
             wants to access your Teed account

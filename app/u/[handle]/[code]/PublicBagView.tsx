@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { Share2, ExternalLink, User, X, Package, Trophy, Copy, CheckCheck, ChevronDown, Tag, Bookmark, UserPlus, UserCheck, LayoutGrid, List, Plus } from 'lucide-react';
+import { Share2, ExternalLink, User, X, Package, Trophy, Copy, CheckCheck, ChevronDown, Tag, Bookmark, UserPlus, UserCheck, LayoutGrid, List, Plus, GitFork } from 'lucide-react';
 import { GolfLoader } from '@/components/ui/GolfLoader';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import QRCodeDisplay from '@/components/ui/QRCodeDisplay';
@@ -12,6 +12,13 @@ import ViewToggle from './components/ViewToggle';
 import ListViewItem from './components/ListViewItem';
 import AddToBagModal from './components/AddToBagModal';
 import { useToast } from '@/components/ui/Toast';
+import { StickyActionBar } from '@/components/ui/StickyActionBar';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { CloneSuccessModal } from '@/components/modals/CloneSuccessModal';
+import { CuratorNote } from '@/components/ui/CuratorNote';
+import { useCelebration } from '@/lib/celebrations';
+import { PageContainer, ContentContainer } from '@/components/layout/PageContainer';
+import { analytics } from '@/lib/analytics';
 
 interface ItemLink {
   id: string;
@@ -104,8 +111,13 @@ export default function PublicBagView({
   const [isAddToBagModalOpen, setIsAddToBagModalOpen] = useState(false);
 
   const { showSuccess, showError } = useToast();
+  const { celebrateClone, celebrateSave, celebrateShare } = useCelebration();
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
   const isOwnBag = currentUserId === ownerId;
+
+  // Clone success modal state
+  const [isCloneSuccessOpen, setIsCloneSuccessOpen] = useState(false);
+  const [clonedBagData, setClonedBagData] = useState<{ code: string; handle: string } | null>(null);
 
   // Helper to copy promo code
   const handleCopyPromo = async (itemId: string, code: string) => {
@@ -170,27 +182,7 @@ export default function PublicBagView({
 
   // Track page view
   useEffect(() => {
-    const trackView = async () => {
-      try {
-        await fetch('/api/analytics/track', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            event_type: 'bag_viewed',
-            event_data: {
-              bag_id: bag.id,
-              bag_code: bag.code,
-              owner_handle: ownerHandle,
-              referrer: document.referrer || undefined,
-            },
-          }),
-        });
-      } catch (error) {
-        console.log('[Analytics] View tracking failed:', error);
-      }
-    };
-
-    trackView();
+    analytics.bagViewed(bag.id, bag.code, ownerHandle);
   }, [bag.id, bag.code, ownerHandle]);
 
   // Check auth, save, and follow status
@@ -252,15 +244,21 @@ export default function PublicBagView({
 
       if (response.ok) {
         const data = await response.json();
-        // Redirect to the new copied bag's edit page
-        router.push(`/u/${data.ownerHandle}/${data.code}/edit`);
+        // Track clone event
+        analytics.bagCloned(bag.id, bag.code, data.id, data.code);
+        // Trigger celebration
+        celebrateClone();
+        // Store cloned bag data and show success modal
+        setClonedBagData({ code: data.code, handle: data.ownerHandle });
+        setIsCloneSuccessOpen(true);
       } else {
         const errorData = await response.json();
         console.error('Copy error:', errorData.error);
-        // Could show a toast here
+        showError('Failed to clone bag. Please try again.');
       }
     } catch (error) {
       console.error('Error copying bag:', error);
+      showError('Failed to clone bag. Please try again.');
     } finally {
       setIsCopyLoading(false);
     }
@@ -282,6 +280,7 @@ export default function PublicBagView({
         });
         if (response.ok) {
           setIsSaved(false);
+          analytics.bagUnsaved(bag.id, bag.code);
         }
       } else {
         // Save
@@ -290,6 +289,10 @@ export default function PublicBagView({
         });
         if (response.ok) {
           setIsSaved(true);
+          analytics.bagSaved(bag.id, bag.code, ownerHandle);
+          // Trigger subtle haptic celebration for save
+          celebrateSave();
+          showSuccess('Bag saved!');
         }
       }
     } catch (error) {
@@ -315,6 +318,7 @@ export default function PublicBagView({
         });
         if (response.ok) {
           setIsFollowing(false);
+          analytics.userUnfollowed(ownerId, ownerHandle);
         }
       } else {
         // Follow
@@ -325,6 +329,7 @@ export default function PublicBagView({
         });
         if (response.ok) {
           setIsFollowing(true);
+          analytics.userFollowed(ownerId, ownerHandle);
         }
       }
     } catch (error) {
@@ -344,24 +349,14 @@ export default function PublicBagView({
   };
 
   // Track link click
-  const trackLinkClick = async (linkId: string, itemId: string, url: string) => {
-    try {
-      await fetch('/api/analytics/track', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          event_type: 'link_clicked',
-          event_data: {
-            link_id: linkId,
-            item_id: itemId,
-            bag_id: bag.id,
-            url,
-          },
-        }),
-      });
-    } catch (error) {
-      // Silent failure
-    }
+  const trackLinkClick = (linkId: string, itemId: string, url: string, linkType?: string) => {
+    analytics.linkClicked(linkId, itemId, bag.id, url, linkType);
+  };
+
+  // Track item view when modal is opened
+  const handleItemClick = (item: Item) => {
+    analytics.itemViewed(item.id, item.custom_name, bag.id, bag.code);
+    setSelectedItem(item);
   };
 
   const getLinkTypeColor = (kind: string) => {
@@ -378,10 +373,12 @@ export default function PublicBagView({
   const hasCover = Boolean(bag.cover_photo_url);
 
   return (
-    <div className="min-h-screen">
-      {/* Header Section - Always the same layout */}
-      <div className="bg-[var(--surface)] shadow-[var(--shadow-2)] border-b border-[var(--border-subtle)]">
-        <div className="max-w-5xl mx-auto px-4 py-6">
+    <PageContainer variant="cool">
+      {/* Header Section with ambient background */}
+      <div className="relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--sky-2)] via-[var(--teed-green-1)] to-transparent opacity-50" />
+        <div className="relative bg-[var(--surface)] border-b border-[var(--border-subtle)]">
+          <ContentContainer size="md" className="py-8">
           {/* Breadcrumbs */}
           <Breadcrumbs
             items={[
@@ -442,7 +439,12 @@ export default function PublicBagView({
                 )}
               </div>
               {bag.description && (
-                <p className="text-[var(--text-secondary)] text-lg">{bag.description}</p>
+                <CuratorNote
+                  note={bag.description}
+                  curatorName={ownerName || `@${ownerHandle}`}
+                  variant="inline"
+                  className="mt-4"
+                />
               )}
               <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)] mt-3">
                 <User className="w-4 h-4" />
@@ -505,12 +507,13 @@ export default function PublicBagView({
               />
             </div>
           </div>
+          </ContentContainer>
         </div>
       </div>
 
       {/* Cover Photo Banner - Between header and items */}
       {hasCover && (
-        <div className="max-w-5xl mx-auto px-4 pt-6">
+        <ContentContainer size="md" className="pt-8">
           <div
             className="relative w-full rounded-[var(--radius-xl)] overflow-hidden shadow-[var(--shadow-3)]"
             style={{ aspectRatio: (bag.cover_photo_aspect || '21/9').replace('/', ' / ') }}
@@ -522,13 +525,13 @@ export default function PublicBagView({
               loading="eager"
             />
           </div>
-        </div>
+        </ContentContainer>
       )}
 
       {/* FTC Affiliate Disclosure */}
       {hasAffiliateLinks && (
         <div className="bg-[var(--copper-2)] border-y border-[var(--copper-6)]">
-          <div className="max-w-5xl mx-auto px-4 py-4">
+          <ContentContainer size="md" className="py-4">
             <div className="flex items-start gap-3">
               <div className="flex-shrink-0 mt-0.5">
                 <svg className="w-5 h-5 text-[var(--copper-11)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -549,12 +552,12 @@ export default function PublicBagView({
                 </p>
               </div>
             </div>
-          </div>
+          </ContentContainer>
         </div>
       )}
 
       {/* Items Section */}
-      <div className="max-w-5xl mx-auto px-4 py-8">
+      <ContentContainer size="md" className="py-10">
         {/* View Toggle Header */}
         {items.length > 0 && (
           <div className="flex items-center justify-between mb-6">
@@ -566,12 +569,12 @@ export default function PublicBagView({
         )}
 
         {items.length === 0 ? (
-          <div className="text-center py-20">
-            <div className="bg-[var(--sky-3)] w-20 h-20 rounded-full mx-auto flex items-center justify-center">
-              <Package className="h-10 w-10 text-[var(--evergreen-10)]" />
-            </div>
-            <p className="text-[var(--text-secondary)] text-lg mt-6">No items in this bag yet</p>
-          </div>
+          <EmptyState
+            variant="no-items"
+            title="This bag is empty"
+            description={`@${ownerHandle} hasn't added any items yet. Check back later!`}
+            hideCta={true}
+          />
         ) : viewMode === 'list' ? (
           /* List View */
           <div className="flex flex-col bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden">
@@ -580,7 +583,7 @@ export default function PublicBagView({
                 key={item.id}
                 item={item}
                 isHero={bag.hero_item_id === item.id}
-                onItemClick={() => setSelectedItem(item)}
+                onItemClick={() => handleItemClick(item)}
                 onLinkClick={trackLinkClick}
                 getLinkCTA={getLinkCTA}
                 getLinkDomain={getLinkDomain}
@@ -624,7 +627,7 @@ export default function PublicBagView({
                   {item.photo_url && (
                     <div
                       className="aspect-square bg-[var(--sky-2)] overflow-hidden cursor-pointer"
-                      onClick={() => setSelectedItem(item)}
+                      onClick={() => handleItemClick(item)}
                     >
                       <img
                         src={item.photo_url}
@@ -647,7 +650,7 @@ export default function PublicBagView({
                     {/* Product Name */}
                     <h3
                       className="text-base md:text-lg font-semibold text-[var(--text-primary)] leading-tight line-clamp-2 cursor-pointer hover:text-[var(--teed-green-9)] transition-colors"
-                      onClick={() => setSelectedItem(item)}
+                      onClick={() => handleItemClick(item)}
                     >
                       {item.custom_name}
                     </h3>
@@ -757,7 +760,7 @@ export default function PublicBagView({
 
                         {/* View Details Link */}
                         <button
-                          onClick={() => setSelectedItem(item)}
+                          onClick={() => handleItemClick(item)}
                           className="w-full text-center text-xs text-[var(--text-tertiary)] hover:text-[var(--teed-green-9)] transition-colors py-1"
                         >
                           View full details →
@@ -769,7 +772,7 @@ export default function PublicBagView({
                     {item.links.length === 0 && (
                       <div className="pt-3 mt-2 border-t border-[var(--border-subtle)]">
                         <button
-                          onClick={() => setSelectedItem(item)}
+                          onClick={() => handleItemClick(item)}
                           className="flex items-center justify-center gap-2 w-full px-4 py-3 min-h-[44px] bg-[var(--surface-hover)] hover:bg-[var(--grey-3)] text-[var(--text-primary)] font-medium rounded-lg border border-[var(--border-subtle)] transition-all"
                         >
                           View Details
@@ -782,7 +785,7 @@ export default function PublicBagView({
             })}
           </div>
         )}
-      </div>
+      </ContentContainer>
 
       {/* Item Detail Modal */}
       {selectedItem && (
@@ -949,43 +952,46 @@ export default function PublicBagView({
       )}
 
       {/* Footer with CTA */}
-      <div className="max-w-5xl mx-auto px-4 py-12 mt-12 border-t border-[var(--border-subtle)]">
-        <div className="text-center">
-          <p className="text-[var(--text-secondary)] mb-2">Created with</p>
-          <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
-            <h2 className="text-[var(--font-size-8)] font-semibold text-[var(--text-primary)]">
-              Teed
-            </h2>
-          </Link>
-          <p className="text-sm text-[var(--text-secondary)] mt-2 mb-6">
-            Curations, Made Shareable
-          </p>
-
-          {/* CTA for visitors */}
-          <div className="bg-gradient-to-r from-[var(--teed-green-2)] to-[var(--sky-2)] rounded-2xl p-6 max-w-md mx-auto border border-[var(--teed-green-6)]">
-            <p className="text-[var(--text-primary)] font-medium mb-3">
-              Want to create your own curated bags?
-            </p>
-            <Link
-              href="/signup"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] text-white font-medium rounded-lg transition-colors"
-            >
-              Create Your Bag
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
+      <div className="border-t border-[var(--border-subtle)] mt-12">
+        <ContentContainer size="md" className="py-16">
+          <div className="text-center">
+            <p className="text-[var(--text-secondary)] mb-2 font-serif italic">Created with</p>
+            <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
+              <h2 className="text-[var(--font-size-8)] font-bold text-[var(--text-primary)]">
+                Teed
+              </h2>
             </Link>
-            <p className="text-xs text-[var(--text-tertiary)] mt-3">
-              Free to use • Share with anyone
+            <p className="text-sm text-[var(--text-secondary)] mt-2 mb-8 font-serif italic">
+              Curations, Made Shareable
             </p>
+
+            {/* CTA for visitors */}
+            <div className="bg-gradient-to-br from-[var(--teed-green-2)] via-[var(--sky-2)] to-[var(--sand-2)] rounded-2xl p-8 max-w-md mx-auto border border-[var(--teed-green-6)] shadow-[var(--shadow-3)]">
+              <p className="text-[var(--text-primary)] font-medium mb-4 text-lg">
+                Want to create your own curated bags?
+              </p>
+              <Link
+                href="/signup"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] text-white font-medium rounded-lg transition-all hover:shadow-glow-teed"
+              >
+                Create Your Bag
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </Link>
+              <p className="text-xs text-[var(--text-tertiary)] mt-4">
+                Free to use • Share with anyone
+              </p>
+            </div>
           </div>
-        </div>
+        </ContentContainer>
       </div>
 
       {/* Share Modal */}
       <PublicShareModal
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
+        bagId={bag.id}
         bagCode={bag.code}
         bagTitle={bag.title}
         ownerHandle={ownerHandle}
@@ -1003,6 +1009,34 @@ export default function PublicBagView({
           setSelectedItem(null);
         }}
       />
-    </div>
+
+      {/* Clone Success Modal */}
+      <CloneSuccessModal
+        isOpen={isCloneSuccessOpen}
+        onClose={() => {
+          setIsCloneSuccessOpen(false);
+          setClonedBagData(null);
+        }}
+        clonedBag={clonedBagData ? {
+          code: clonedBagData.code,
+          name: bag.title,
+          itemCount: items.length,
+          handle: clonedBagData.handle
+        } : null}
+      />
+
+      {/* Sticky Action Bar for Mobile - shows on scroll */}
+      <StickyActionBar
+        bagName={bag.title}
+        itemCount={items.length}
+        creatorHandle={ownerHandle}
+        onClone={handleCopyBag}
+        onShare={handleShare}
+        onSave={handleSaveToggle}
+        isSaved={isSaved}
+        isOwner={isOwnBag}
+        threshold={400}
+      />
+    </PageContainer>
   );
 }

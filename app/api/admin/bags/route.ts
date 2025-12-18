@@ -43,6 +43,7 @@ export async function GET(request: NextRequest) {
       is_flagged,
       flag_reason,
       is_hidden,
+      is_spotlight,
       featured_at,
       created_at,
       updated_at,
@@ -60,6 +61,9 @@ export async function GET(request: NextRequest) {
   switch (status) {
     case 'featured':
       query = query.eq('is_featured', true);
+      break;
+    case 'spotlight':
+      query = query.eq('is_spotlight', true);
       break;
     case 'flagged':
       query = query.eq('is_flagged', true);
@@ -169,6 +173,7 @@ export async function GET(request: NextRequest) {
       is_flagged: bag.is_flagged,
       flag_reason: bag.flag_reason,
       is_hidden: bag.is_hidden,
+      is_spotlight: bag.is_spotlight,
       featured_at: bag.featured_at,
       item_count: itemCounts[bag.id] || 0,
       view_count: viewCounts[bag.id] || 0,

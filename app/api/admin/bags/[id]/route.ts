@@ -35,7 +35,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         handle,
         display_name
       ),
-      bag_items (
+      bag_items!bag_items_bag_id_fkey (
         id,
         title,
         brand,
@@ -74,7 +74,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
   // Get current bag state
   const { data: currentBag, error: fetchError } = await supabase
     .from('bags')
-    .select('id, title, code, is_featured, is_flagged, is_hidden, flag_reason, owner_id')
+    .select('id, title, code, category, is_featured, is_flagged, is_hidden, is_spotlight, flag_reason, owner_id')
     .eq('id', id)
     .single();
 
@@ -100,11 +100,26 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         { status: 403 }
       );
     }
+
+    // Use new category if provided, otherwise use current category
+    const targetCategory = body.category || currentBag.category;
+
+    // If featuring, unfeature other bags in the same category (only one featured per category)
+    if (body.is_featured && targetCategory) {
+      await supabase
+        .from('bags')
+        .update({ is_featured: false, featured_at: null })
+        .eq('category', targetCategory)
+        .eq('is_featured', true)
+        .neq('id', id);
+    }
+
     updates.is_featured = body.is_featured;
     updates.featured_at = body.is_featured ? new Date().toISOString() : null;
     action = body.is_featured ? 'content.feature' : 'content.unfeature';
     details.previous_featured = currentBag.is_featured;
     details.new_featured = body.is_featured;
+    details.category = targetCategory;
   }
 
   // Handle flag action
@@ -137,6 +152,35 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     details.new_hidden = body.is_hidden;
   }
 
+  // Handle spotlight action
+  if ('is_spotlight' in body) {
+    if (!checkPermission(admin, 'canHideContent')) {
+      return NextResponse.json(
+        { error: 'Insufficient permissions to set spotlight' },
+        { status: 403 }
+      );
+    }
+
+    // Use new category if provided, otherwise use current category
+    const targetCategory = body.category || currentBag.category;
+
+    // If setting as spotlight, first remove spotlight from other bags in same category
+    if (body.is_spotlight && targetCategory) {
+      await supabase
+        .from('bags')
+        .update({ is_spotlight: false, is_featured: false })
+        .eq('category', targetCategory)
+        .eq('is_spotlight', true)
+        .neq('id', id);
+    }
+
+    updates.is_spotlight = body.is_spotlight;
+    action = body.is_spotlight ? 'content.spotlight' : 'content.unspotlight';
+    details.previous_spotlight = currentBag.is_spotlight;
+    details.new_spotlight = body.is_spotlight;
+    details.category = targetCategory;
+  }
+
   // Handle public/private toggle
   if ('is_public' in body) {
     if (!checkPermission(admin, 'canHideContent')) {
@@ -146,6 +190,19 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       );
     }
     updates.is_public = body.is_public;
+  }
+
+  // Handle category update
+  if ('category' in body) {
+    if (!checkPermission(admin, 'canHideContent')) {
+      return NextResponse.json(
+        { error: 'Insufficient permissions to change category' },
+        { status: 403 }
+      );
+    }
+    updates.category = body.category;
+    details.previous_category = currentBag.category;
+    details.new_category = body.category;
   }
 
   if (Object.keys(updates).length === 0) {

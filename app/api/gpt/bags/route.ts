@@ -1,23 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerSupabase } from '@/lib/serverSupabase';
+import { authenticateGptRequest } from '@/lib/gptAuth';
 
 /**
  * GET /api/gpt/bags
  * List all bags owned by the authenticated user
  */
 export async function GET() {
+  console.log('GET /api/gpt/bags called');
   try {
-    const supabase = await createServerSupabase();
+    const { user, supabase, error: authError } = await authenticateGptRequest();
 
-    // Get authenticated user
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
+    if (!user) {
       return NextResponse.json(
-        { error: 'Unauthorized. Please sign in to your Teed account.' },
+        { error: authError || 'Unauthorized. Please sign in to your Teed account.' },
         { status: 401 }
       );
     }
@@ -100,17 +95,11 @@ export async function GET() {
  */
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createServerSupabase();
+    const { user, supabase, error: authError } = await authenticateGptRequest();
 
-    // Get authenticated user
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
+    if (!user) {
       return NextResponse.json(
-        { error: 'Unauthorized. Please sign in to your Teed account.' },
+        { error: authError || 'Unauthorized. Please sign in to your Teed account.' },
         { status: 401 }
       );
     }

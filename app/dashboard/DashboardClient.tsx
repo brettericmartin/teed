@@ -3,10 +3,15 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { Plus, Package, User, Settings, Eye, Layers, Pin } from 'lucide-react';
 import NewBagModal from './components/NewBagModal';
 import { Button } from '@/components/ui/Button';
 import ProfileStats from '@/components/ProfileStats';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { useCelebration } from '@/lib/celebrations';
+import { staggerContainer, cardVariants } from '@/lib/animations';
+import { PageContainer, PageHeader, ContentContainer } from '@/components/layout/PageContainer';
 
 type BagItem = {
   id: string;
@@ -85,9 +90,11 @@ export default function DashboardClient({
   const [bags, setBags] = useState<Bag[]>(initialBags);
   const [showNewBagModal, setShowNewBagModal] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  const { celebrateFirstBag } = useCelebration();
 
   const handleCreateBag = async (data: { title: string; description?: string; is_public: boolean }) => {
     setIsCreating(true);
+    const isFirstBag = bags.length === 0;
 
     try {
       const response = await fetch('/api/bags', {
@@ -103,6 +110,11 @@ export default function DashboardClient({
       const newBag = await response.json();
       setBags([newBag, ...bags]);
       setShowNewBagModal(false);
+
+      // Celebrate first bag creation with major confetti
+      if (isFirstBag) {
+        celebrateFirstBag();
+      }
 
       // Redirect to bag editor
       router.push(`/u/${userHandle}/${newBag.code}/edit`);
@@ -161,87 +173,85 @@ export default function DashboardClient({
   };
 
   return (
-    <div className="min-h-screen pt-16">
-      {/* Header */}
-      <header className="bg-[var(--surface)] border-b border-[var(--border-subtle)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <PageContainer variant="warm" className="pt-16">
+      {/* Header with welcome message - Compact & Colorful */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-[var(--copper-3)] via-[var(--sand-3)] to-[var(--teed-green-2)]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,_var(--copper-4)_0%,_transparent_50%)] opacity-50" />
+
+        <ContentContainer className="relative py-5">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
-              <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
-                My Bags
+              <h1 className="text-2xl font-bold text-[var(--copper-12)]">
+                {displayName || `@${userHandle}`}
               </h1>
-              <div className="flex items-center gap-3 mt-1.5">
+              <div className="flex items-center gap-2 mt-1">
                 <Link
                   href={`/u/${userHandle}`}
-                  className="inline-flex items-center gap-1.5 py-1.5 px-2 -ml-2 rounded text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors group min-h-[36px]"
+                  className="text-sm text-[var(--copper-11)] hover:text-[var(--copper-12)] hover:underline transition-colors"
                 >
-                  <User className="w-4 h-4" />
-                  <span className="group-hover:underline">@{userHandle}</span>
+                  View Profile
                 </Link>
+                <span className="text-[var(--copper-8)]">•</span>
                 <Link
                   href="/settings"
-                  className="inline-flex items-center gap-1.5 py-1.5 px-2 -ml-2 rounded text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors group min-h-[36px]"
+                  className="text-sm text-[var(--copper-11)] hover:text-[var(--copper-12)] hover:underline transition-colors"
                 >
-                  <Settings className="w-4 h-4" />
-                  <span className="group-hover:underline">Settings</span>
+                  Settings
                 </Link>
               </div>
             </div>
             <Button
               variant="featured"
               onClick={() => setShowNewBagModal(true)}
-              className="w-full sm:w-auto min-h-[48px]"
+              className="w-full sm:w-auto"
             >
               <Plus className="w-5 h-5 sm:mr-2" />
               <span className="hidden sm:inline">Create New Bag</span>
               <span className="sm:hidden">New Bag</span>
             </Button>
           </div>
-        </div>
-      </header>
+        </ContentContainer>
+      </div>
 
       {/* Profile Stats */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <ContentContainer className="py-4">
         <ProfileStats
           totalBags={bags.length}
           totalViews={profileStats.totalViews}
           totalFollowers={profileStats.totalFollowers}
           statsUpdatedAt={profileStats.statsUpdatedAt}
         />
-      </div>
+      </ContentContainer>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <ContentContainer className="pb-8">
         {bags.length === 0 ? (
-          // Empty State
-          <div className="text-center py-20">
-            <div className="bg-[var(--sky-3)] w-20 h-20 rounded-full mx-auto flex items-center justify-center">
-              <Package className="h-10 w-10 text-[var(--evergreen-10)]" />
-            </div>
-            <h3 className="mt-6 text-xl font-semibold text-[var(--text-primary)]">No bags yet</h3>
-            <p className="mt-2 text-base text-[var(--text-secondary)]">
-              Get started by creating your first bag.
-            </p>
-            <div className="mt-8">
-              <Button
-                variant="create"
-                onClick={() => setShowNewBagModal(true)}
-              >
-                Create Your First Bag
-              </Button>
-            </div>
-          </div>
+          // Empty State with premium animation
+          <EmptyState
+            variant="new-user"
+            title="Your first bag awaits"
+            description="Start curating your collection. Add items you love, organize them your way, and share with the world."
+            ctaText="Create Your First Bag"
+            onAction={() => setShowNewBagModal(true)}
+          />
         ) : (
-          // Bags Grid
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          // Bags Grid with stagger animation
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+          >
             {bags.map((bag) => (
-              <div
+              <motion.div
                 key={bag.id}
+                variants={cardVariants}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
                 onClick={() => router.push(`/u/${userHandle}/${bag.code}/edit`)}
-                className="bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden hover:shadow-[var(--shadow-5)] hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
+                className="bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden hover:shadow-glow-teed transition-all duration-300 cursor-pointer group"
               >
                 {/* Cover Image or Featured Items Grid - Flexible Hero Layout */}
-                <div className={`h-[200px] bg-gradient-to-br ${getBagGradient(bag.id)} relative overflow-hidden border-b border-[var(--border-subtle)]`}>
+                <div className={`h-[180px] bg-gradient-to-br ${getBagGradient(bag.id)} relative overflow-hidden`}>
                   {(() => {
                     // Get all items with photos
                     const allItemsWithPhotos = bag.items?.filter(item => item.photo_url) || [];
@@ -403,11 +413,11 @@ export default function DashboardClient({
                     <span>{formatDate(bag.created_at)}</span>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
-      </main>
+      </ContentContainer>
 
       {/* New Bag Modal */}
       {showNewBagModal && (
@@ -418,6 +428,6 @@ export default function DashboardClient({
           isLoading={isCreating}
         />
       )}
-    </div>
+    </PageContainer>
   );
 }

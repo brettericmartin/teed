@@ -25,6 +25,7 @@ import { useToast } from '@/components/ui/Toast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
 import { SmartIdentificationWizard } from '@/components/apis';
 import type { ValidatedProduct } from '@/lib/apis/types';
+import { CATEGORIES } from '@/lib/categories';
 
 /**
  * Robust data URL to Blob converter that handles mobile browser quirks.
@@ -1342,17 +1343,11 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 className="text-xs bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] rounded px-2 py-1 focus:outline-none focus:border-[var(--teed-green-8)] transition-colors"
               >
                 <option value="">None</option>
-                <option value="golf">⛳ Golf</option>
-                <option value="travel">✈️ Travel</option>
-                <option value="tech">💻 Tech</option>
-                <option value="camping">🏕️ Camping</option>
-                <option value="photography">📷 Photography</option>
-                <option value="fitness">💪 Fitness</option>
-                <option value="cooking">🍳 Cooking</option>
-                <option value="music">🎵 Music</option>
-                <option value="art">🎨 Art</option>
-                <option value="gaming">🎮 Gaming</option>
-                <option value="other">📦 Other</option>
+                {CATEGORIES.map((cat) => (
+                  <option key={cat.value} value={cat.value}>
+                    {cat.icon} {cat.label}
+                  </option>
+                ))}
               </select>
             </div>
 

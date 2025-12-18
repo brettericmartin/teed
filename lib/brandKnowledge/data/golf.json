@@ -21,100 +21,123 @@
     {
       "name": "TaylorMade",
       "aliases": ["TM", "TMaG", "TaylorMade Golf"],
-      "signatureColors": ["white", "red", "black", "blue"],
-      "designCues": ["carbon crown texture", "speed pocket sole", "twist face lines", "sliding weight track", "carbonwood construction"],
+      "signatureColors": ["grey", "green", "black", "blue", "white", "red"],
+      "designCues": ["Infinity Carbon Crown", "speed pocket sole", "twist face lines", "TAS weight system", "Chromium Carbon material"],
       "identificationTips": [
-        "White crown with carbon sole = Stealth/Qi series (2022-2024)",
-        "Blue accents = Qi10 series (2024)",
+        "Grey Chromium Carbon crown with green accents = Qi35 series (2025)",
+        "Jet black with subtle green = Qi35 Designer Series (2025)",
+        "Blue accents on black = Qi10 series (2024)",
         "Red accents = Stealth series (2022-2023)",
-        "All-carbon matte black = Stealth 2 (2023)",
         "Speed Pocket visible on sole is signature TaylorMade design",
-        "Red/white racing stripe logo on heel"
+        "Red/white racing stripe Metal-T logo on heel",
+        "TAS (Trajectory Adjustment System) movable weights on sole",
+        "Visible grey carbon weave pattern on crown = 2025 models"
       ],
       "recentColorways": [
+        { "line": "Qi35", "year": "2025", "colors": ["grey Chromium Carbon crown", "green accents", "black sole"] },
+        { "line": "Qi35 LS", "year": "2025", "colors": ["grey/black", "green highlights", "5 strategic materials"] },
+        { "line": "Qi35 Max", "year": "2025", "colors": ["grey carbon", "green", "34g rear tungsten weight"] },
+        { "line": "Qi35 Designer Series", "year": "2025", "colors": ["jet black finish", "subtle green highlights"] },
         { "line": "Qi10", "year": "2024", "colors": ["carbon black", "blue accents", "white crown option"] },
-        { "line": "Qi10 Max", "year": "2024", "colors": ["blue/black", "larger head profile"] },
-        { "line": "Stealth 2", "year": "2023", "colors": ["all carbon black", "red accents"] },
-        { "line": "Stealth 2 Plus", "year": "2023", "colors": ["carbon/red", "sliding weight"] }
+        { "line": "Qi10 Max", "year": "2024", "colors": ["blue/black", "larger head profile"] }
       ]
     },
     {
       "name": "Titleist",
       "aliases": ["Acushnet"],
-      "signatureColors": ["black", "gold", "red", "white"],
-      "designCues": ["brushed black finish", "gold accents", "classic styling", "SureFit hosel", "compact head shapes", "eagle/bird logo"],
+      "signatureColors": ["black", "silver", "red", "white"],
+      "designCues": ["Seamless Thermoform Crown", "polymer crown material", "Speed Ring face", "SureFit hosel", "VFT face technology", "clean modern lines"],
       "identificationTips": [
-        "Subtle gold accents on black finish = TSR series",
-        "Compact head profile compared to competitors",
-        "SureFit adjustable hosel visible on heel",
+        "Seamless polymer crown with no visible seam = GT series (2024-2025)",
+        "Clean silver/black colorway with minimal branding = GT series",
+        "Black crown wrapped to sole = GT thermoform design",
+        "Speed Ring visible around face perimeter = GT drivers",
+        "Adjustable CG track on sole = GT3 model",
+        "Compact 430cc head = GT4 low-spin model",
         "Red 'Titleist' script on sole",
-        "Classic, traditional styling - less aggressive than competitors",
-        "Black/gold/red color scheme is signature"
+        "SureFit adjustable hosel visible on heel",
+        "Classic black/gold = older TSR series (2023)"
       ],
       "recentColorways": [
-        { "line": "TSR1", "year": "2023-2024", "colors": ["matte black", "gold accents", "red Titleist script"] },
+        { "line": "GT2", "year": "2024-2025", "colors": ["black polymer crown", "silver face", "seamless wrap to sole"] },
+        { "line": "GT3", "year": "2024-2025", "colors": ["black/silver", "adjustable CG track", "5 weight positions"] },
+        { "line": "GT4", "year": "2024-2025", "colors": ["black/silver", "compact 430cc head", "dual spin settings"] },
+        { "line": "GT280 Mini Driver", "year": "2025", "colors": ["black crown", "silver face", "compact profile"] },
         { "line": "TSR2", "year": "2023-2024", "colors": ["brushed black", "gold trim"] },
-        { "line": "TSR3", "year": "2023-2024", "colors": ["black/gold", "more compact"] },
-        { "line": "TSR4", "year": "2023-2024", "colors": ["black/gold", "low spin"] }
+        { "line": "TSR3", "year": "2023-2024", "colors": ["black/gold", "sliding weight"] }
       ]
     },
     {
       "name": "Callaway",
       "aliases": ["Callaway Golf"],
-      "signatureColors": ["dark green", "white", "yellow", "purple", "black"],
-      "designCues": ["chevron patterns", "white crown alignment aid", "flowing curves", "Jailbreak bars", "AI face design", "Apex branding"],
+      "signatureColors": ["black", "silver", "white", "dark green", "blue"],
+      "designCues": ["chevron logo", "Thermoforged Carbon Crown", "Ai 10x Face", "aerospace carbon fiber", "clean modern profile"],
       "identificationTips": [
         "Chevron logo on crown is signature Callaway",
+        "Dark matte black 'Night Edition' with silver = Elyte (2025)",
+        "Thermoforged carbon crown with clean profile = Elyte series (2025)",
+        "Silver face with black crown = standard Elyte (2025)",
         "Dark green = Paradym series (2023-2024)",
-        "Yellow/lime accents = Mavrik series (2020)",
-        "Purple/burgundy = Rogue ST series (2022)",
-        "White crown with contrasting sole common",
-        "Triple Diamond = tour-level, compact head"
+        "Smoke gray with blue = Paradym Ai Smoke (2024)",
+        "Triple Diamond = tour-level, compact head",
+        "Interchangeable weight screws on sole = Elyte Triple Diamond"
       ],
       "recentColorways": [
-        { "line": "Paradym", "year": "2023-2024", "colors": ["dark green", "black", "white crown option"] },
+        { "line": "Elyte", "year": "2025", "colors": ["silver face", "carbon crown", "modern profile"] },
+        { "line": "Elyte X", "year": "2025", "colors": ["silver/black", "heel weighted", "draw bias"] },
+        { "line": "Elyte Night Edition", "year": "2025", "colors": ["all dark matte black", "silver accents", "refined finish"] },
+        { "line": "Elyte Triple Diamond", "year": "2025", "colors": ["black/silver", "tour shape", "weight screws"] },
         { "line": "Paradym Ai Smoke", "year": "2024", "colors": ["smoke gray", "blue accents"] },
-        { "line": "Rogue ST Max", "year": "2022", "colors": ["purple/white", "flowing lines"] },
-        { "line": "Epic Flash", "year": "2019", "colors": ["yellow/black", "Flash Face"] }
+        { "line": "Paradym", "year": "2023-2024", "colors": ["dark green", "black", "white crown option"] }
       ]
     },
     {
       "name": "Ping",
       "aliases": ["PING"],
-      "signatureColors": ["blue", "teal", "orange", "black", "silver"],
-      "designCues": ["G-icon on sole", "turbulators on crown", "forgiving cavity backs", "tungsten weighting", "Dragonfly technology"],
+      "signatureColors": ["teal", "blue", "black", "silver", "orange"],
+      "designCues": ["Carbonfly Wrap crown", "Free Hosel technology", "turbulators on crown", "G-icon on sole", "adjustable back weight", "low CG design"],
       "identificationTips": [
-        "Blue/teal accents = G430 series (2023-2024)",
+        "Carbonfly Wrap lightweight crown = G440 series (2025)",
+        "Teal/turquoise accents on black = G440 series (2025)",
+        "Shallow face profile = G440 design",
+        "Free Hosel (weight-saved hosel) = G440 (2025)",
+        "3-position adjustable back weight = G440 Max/LST",
+        "Blue/teal accents on black = older G430 series (2023-2024)",
         "Orange accents = G410/G425 series (2019-2022)",
         "Turbulator ridges on crown for alignment",
-        "G-icon prominently on sole",
-        "Forgiving, high-MOI designs",
-        "Alta CB/Tour shafts often stock"
+        "G-icon prominently on sole"
       ],
       "recentColorways": [
+        { "line": "G440 Max", "year": "2025", "colors": ["black with teal accents", "Carbonfly crown", "460cc"] },
+        { "line": "G440 LST", "year": "2025", "colors": ["black/teal", "450cc compact", "low spin"] },
+        { "line": "G440 SFT", "year": "2025", "colors": ["black/teal", "draw bias", "slice correction"] },
+        { "line": "G440 K", "year": "2025", "colors": ["black/teal", "most forgiving", "Dual Carbonfly"] },
         { "line": "G430", "year": "2023-2024", "colors": ["blue/black", "teal accents"] },
-        { "line": "G430 Max", "year": "2023", "colors": ["blue crown", "black sole"] },
-        { "line": "G425", "year": "2021-2022", "colors": ["black", "orange accents"] },
-        { "line": "G410", "year": "2019-2020", "colors": ["black", "bright orange"] }
+        { "line": "G430 Max 10K", "year": "2023-2024", "colors": ["blue crown", "ultra-forgiving"] }
       ]
     },
     {
       "name": "Cobra",
       "aliases": ["Cobra Golf", "Puma Golf"],
-      "signatureColors": ["orange", "yellow", "black", "red"],
-      "designCues": ["snake logo", "Baffler rails", "aggressive styling", "one-length irons", "Radspeed branding"],
+      "signatureColors": ["black", "red", "blue", "orange", "yellow"],
+      "designCues": ["snake logo", "PWR-BRIDGE technology", "PWRSHELL L-cup face", "carbon weave crown", "black-on-black design", "moveable weights"],
       "identificationTips": [
-        "Snake head logo is signature",
-        "Orange/yellow accents common",
-        "Baffler rails on fairway woods/hybrids",
+        "Snake head logo is signature Cobra",
+        "Black-on-black 'murdered out' design = Darkspeed series (2024-2025)",
+        "Black carbon weave crown with colored sole accents = Darkspeed",
+        "Black sole accents = Darkspeed LS (low spin)",
+        "Blue sole accents = Darkspeed X (mid launch)",
+        "Red sole accents = Darkspeed Max (forgiving)",
+        "PWR-BRIDGE visible through crown = Darkspeed technology",
         "One-length iron sets unique to Cobra",
-        "Often Puma branding connection",
-        "Aggressive, youthful styling"
+        "Most affordable premium driver at ~$549"
       ],
       "recentColorways": [
-        { "line": "Aerojet", "year": "2023-2024", "colors": ["black", "red accents"] },
-        { "line": "LTDx", "year": "2022", "colors": ["yellow/black", "orange accents"] },
-        { "line": "Radspeed", "year": "2021", "colors": ["black", "red/yellow"] }
+        { "line": "Darkspeed LS", "year": "2024-2025", "colors": ["black-on-black", "black accents", "aerodynamic"] },
+        { "line": "Darkspeed X", "year": "2024-2025", "colors": ["black carbon", "blue accents", "mid-launch"] },
+        { "line": "Darkspeed Max", "year": "2024-2025", "colors": ["black carbon", "red accents", "most forgiving"] },
+        { "line": "Aerojet", "year": "2023", "colors": ["black", "red accents", "older model"] },
+        { "line": "LTDx", "year": "2022", "colors": ["yellow/black", "orange accents"] }
       ]
     },
     {
@@ -190,22 +213,25 @@
     {
       "name": "Srixon",
       "aliases": ["Srixon Golf", "Cleveland/Srixon"],
-      "signatureColors": ["blue", "red", "white", "black"],
-      "signatureColors": ["blue", "red", "white", "black"],
-      "designCues": ["star logo", "Z-series branding", "tour-level balls", "diamond face pattern", "rebound frame"],
+      "signatureColors": ["blue", "red", "white", "black", "chrome"],
+      "designCues": ["star logo", "ZXi branding", "i-Forging process", "MainFrame face tech", "rebound frame", "tour-level balls"],
       "identificationTips": [
-        "Blue/white color scheme common on balls",
-        "Z-series clubs (ZX5, ZX7) tour irons",
         "Star logo prominently featured",
-        "Diamond pattern on driver face",
+        "ZXi branding = 2025 series (ZXi4, ZXi5, ZXi7)",
+        "i-Forged badge = softer feel, 2025 irons",
+        "MainFrame milled pattern on back of face",
+        "ZX MK II = older 2023 series",
+        "Blue accents with chrome = signature Srixon irons",
         "Same parent company as Cleveland",
-        "Q-Star ball line for mid-handicappers"
+        "Diamond pattern on driver face"
       ],
       "recentColorways": [
-        { "line": "ZX Mk II", "year": "2023", "colors": ["black", "blue accents"] },
-        { "line": "ZX5/ZX7 Irons", "year": "2023", "colors": ["chrome", "blue badge"] },
-        { "line": "Z-Star Ball", "year": "2024", "colors": ["tour white", "yellow", "orange"] },
-        { "line": "Q-Star Ball", "year": "2024", "colors": ["white", "yellow", "green"] }
+        { "line": "ZXi5 Irons", "year": "2025", "colors": ["chrome", "blue badge", "i-Forged"] },
+        { "line": "ZXi7 Irons", "year": "2025", "colors": ["chrome", "tour compact", "i-Forged"] },
+        { "line": "ZXi4 Irons", "year": "2025", "colors": ["chrome", "players distance"] },
+        { "line": "ZXi Driver", "year": "2025", "colors": ["black crown", "blue accents"] },
+        { "line": "ZX5 Mk II Irons", "year": "2023", "colors": ["chrome", "blue badge"] },
+        { "line": "ZX Mk II Driver", "year": "2023", "colors": ["black", "blue accents"] }
       ]
     },
     {

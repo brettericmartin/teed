@@ -1,11 +1,13 @@
 'use client';
 
 import { useState, FormEvent, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirect_to');
   const [email, setEmail] = useState('test@teed-test.com');
   const [password, setPassword] = useState('test-password');
   const [isLoading, setIsLoading] = useState(false);
@@ -15,8 +17,8 @@ export default function LoginPage() {
     // Debug: Check if environment variables are loaded
     console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
     console.log('Has Supabase Key:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
-    console.log('Supabase client:', supabase);
-  }, []);
+    console.log('Redirect to:', redirectTo);
+  }, [redirectTo]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -40,9 +42,11 @@ export default function LoginPage() {
       }
 
       if (data.session) {
-        console.log('Session created, redirecting to dashboard');
+        console.log('Session created, redirecting...');
         // Force a hard navigation to ensure cookies are sent
-        window.location.href = '/dashboard';
+        // Use redirect_to if provided, otherwise go to dashboard
+        const destination = redirectTo || '/dashboard';
+        window.location.href = destination;
       } else {
         console.error('No session created');
         setError('No session created. Please try again.');

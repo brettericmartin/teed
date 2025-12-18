@@ -126,6 +126,8 @@ export type AuditAction =
   | 'content.unflag'
   | 'content.feature'
   | 'content.unfeature'
+  | 'content.spotlight'
+  | 'content.unspotlight'
   | 'content.transfer'
   // Feedback actions
   | 'feedback.update'
@@ -192,6 +194,7 @@ export interface BagForAdmin {
   is_featured: boolean;
   is_flagged: boolean;
   is_hidden: boolean;
+  is_spotlight: boolean;
   flag_reason: string | null;
   featured_at: string | null;
   item_count: number;

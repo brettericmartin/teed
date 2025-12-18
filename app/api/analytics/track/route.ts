@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { event_type, event_data } = body;
+    const { event_type, event_data, session_id: clientSessionId } = body;
 
     if (!event_type) {
       return NextResponse.json(
@@ -46,10 +46,32 @@ export async function POST(request: NextRequest) {
     }
 
     // Get request metadata
-    const userAgent = request.headers.get('user-agent') || null;
+    const userAgent = request.headers.get('user-agent') || '';
     const referrer = request.headers.get('referer') || event_data?.referrer || null;
-    const forwardedFor = request.headers.get('x-forwarded-for');
-    const ipAddress = forwardedFor?.split(',')[0]?.trim() || null;
+    const pageUrl = event_data?.page_url || null;
+
+    // Parse user agent for device info
+    const isMobile = /Mobile|Android|iPhone|iPad/i.test(userAgent);
+    const isTablet = /Tablet|iPad/i.test(userAgent);
+    const deviceType = isTablet ? 'tablet' : isMobile ? 'mobile' : 'desktop';
+
+    // Extract browser name
+    let browser = 'unknown';
+    if (userAgent.includes('Chrome')) browser = 'Chrome';
+    else if (userAgent.includes('Safari')) browser = 'Safari';
+    else if (userAgent.includes('Firefox')) browser = 'Firefox';
+    else if (userAgent.includes('Edge')) browser = 'Edge';
+
+    // Extract OS
+    let os = 'unknown';
+    if (userAgent.includes('Windows')) os = 'Windows';
+    else if (userAgent.includes('Mac')) os = 'macOS';
+    else if (userAgent.includes('Linux')) os = 'Linux';
+    else if (userAgent.includes('Android')) os = 'Android';
+    else if (userAgent.includes('iPhone') || userAgent.includes('iPad')) os = 'iOS';
+
+    // Use client-provided session ID or generate a fallback
+    const sessionId = clientSessionId || Math.random().toString(36).substring(2, 8);
 
     // Insert the activity record
     const { error } = await supabase
@@ -58,9 +80,12 @@ export async function POST(request: NextRequest) {
         event_type,
         event_data: enrichedEventData,
         user_id: user?.id || null,
-        user_agent: userAgent,
+        session_id: sessionId,
+        page_url: pageUrl,
         referrer: referrer,
-        ip_address: ipAddress,
+        device_type: deviceType,
+        browser: browser,
+        os: os,
       });
 
     if (error) {

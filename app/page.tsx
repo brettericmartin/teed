@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import { Camera, Share2, Sparkles, TrendingUp, Users, Zap } from 'lucide-react';
+import FeaturedBagsSection from '@/components/home/FeaturedBagsSection';
 
 export default function Home() {
   const featuresRef = useRef<HTMLDivElement>(null);
@@ -46,6 +47,9 @@ export default function Home() {
           />
         </div>
       </section>
+
+      {/* Featured Bags Section */}
+      <FeaturedBagsSection />
 
       {/* Features Section */}
       <section id="features" ref={featuresRef} className="py-24 px-4 sm:px-6 lg:px-8 bg-[var(--surface-elevated)]">

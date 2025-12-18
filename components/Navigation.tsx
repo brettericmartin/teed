@@ -44,9 +44,12 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
   const handleSignOut = async () => {
     try {
       await fetch('/api/auth/signout', { method: 'POST' });
-      router.push('/login');
+      // Use window.location for a hard refresh to clear all client state
+      window.location.href = '/login';
     } catch (error) {
       console.error('Sign out error:', error);
+      // Still redirect even if the request fails
+      window.location.href = '/login';
     }
   };
 

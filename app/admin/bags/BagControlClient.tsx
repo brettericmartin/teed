@@ -21,12 +21,15 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { type AdminRole, type BagForAdmin, ROLE_PERMISSIONS } from '@/lib/types/admin';
+import { CATEGORIES, CATEGORIES_WITH_ALL } from '@/lib/categories';
 
 interface Props {
   adminRole: AdminRole;
 }
 
 type BagStatus = 'all' | 'featured' | 'flagged' | 'hidden' | 'public' | 'private';
+
+// Use shared categories from lib/categories.ts
 
 interface BagStats {
   featured: number;
@@ -52,6 +55,7 @@ export default function BagControlClient({ adminRole }: Props) {
   const [stats, setStats] = useState<BagStats>({ featured: 0, flagged: 0, hidden: 0 });
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<BagStatus>('all');
+  const [categoryFilter, setCategoryFilter] = useState('all');
   const [sortBy, setSortBy] = useState('created_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [actionMenuBagId, setActionMenuBagId] = useState<string | null>(null);
@@ -59,6 +63,8 @@ export default function BagControlClient({ adminRole }: Props) {
   const [flagReason, setFlagReason] = useState('');
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<BagForAdmin | null>(null);
+  const [categoryPickerBag, setCategoryPickerBag] = useState<BagForAdmin | null>(null);
+  const [selectedCategoryForBag, setSelectedCategoryForBag] = useState<string>('');
 
   const permissions = ROLE_PERMISSIONS[adminRole];
 
@@ -68,6 +74,7 @@ export default function BagControlClient({ adminRole }: Props) {
       const params = new URLSearchParams();
       if (searchQuery) params.set('search', searchQuery);
       if (statusFilter !== 'all') params.set('status', statusFilter);
+      if (categoryFilter !== 'all') params.set('category', categoryFilter);
       params.set('sortBy', sortBy);
       params.set('sortOrder', sortOrder);
       params.set('page', page.toString());
@@ -88,7 +95,7 @@ export default function BagControlClient({ adminRole }: Props) {
     } finally {
       setLoading(false);
     }
-  }, [searchQuery, statusFilter, sortBy, sortOrder, page]);
+  }, [searchQuery, statusFilter, categoryFilter, sortBy, sortOrder, page]);
 
   useEffect(() => {
     fetchBags();
@@ -105,13 +112,14 @@ export default function BagControlClient({ adminRole }: Props) {
 
   const handleAction = async (
     bagId: string,
-    action: 'feature' | 'unfeature' | 'flag' | 'unflag' | 'hide' | 'unhide'
+    action: 'feature' | 'unfeature' | 'flag' | 'unflag' | 'hide' | 'unhide',
+    additionalUpdates?: Record<string, string | null>
   ) => {
     setActionLoading(bagId);
     setActionMenuBagId(null);
 
     try {
-      const updates: Record<string, boolean | string | null> = {};
+      const updates: Record<string, boolean | string | null> = { ...additionalUpdates };
 
       switch (action) {
         case 'feature':
@@ -142,36 +150,47 @@ export default function BagControlClient({ adminRole }: Props) {
       });
 
       if (response.ok) {
+        const targetBag = bags.find(b => b.id === bagId);
+        const newCategory = additionalUpdates?.category || targetBag?.category;
+
         // Update local state
         setBags((prev) =>
-          prev.map((bag) =>
-            bag.id === bagId
-              ? {
-                  ...bag,
-                  is_featured:
-                    typeof updates.is_featured === 'boolean'
-                      ? updates.is_featured
-                      : bag.is_featured,
-                  is_flagged:
-                    typeof updates.is_flagged === 'boolean'
-                      ? updates.is_flagged
-                      : bag.is_flagged,
-                  flag_reason:
-                    updates.is_flagged === false
-                      ? null
-                      : typeof updates.flag_reason === 'string'
-                        ? updates.flag_reason
-                        : bag.flag_reason,
-                  is_hidden:
-                    typeof updates.is_hidden === 'boolean'
-                      ? updates.is_hidden
-                      : bag.is_hidden,
-                }
-              : bag
-          )
+          prev.map((bag) => {
+            if (bag.id === bagId) {
+              return {
+                ...bag,
+                category: additionalUpdates?.category || bag.category,
+                is_featured:
+                  typeof updates.is_featured === 'boolean'
+                    ? updates.is_featured
+                    : bag.is_featured,
+                is_flagged:
+                  typeof updates.is_flagged === 'boolean'
+                    ? updates.is_flagged
+                    : bag.is_flagged,
+                flag_reason:
+                  updates.is_flagged === false
+                    ? null
+                    : typeof updates.flag_reason === 'string'
+                      ? updates.flag_reason
+                      : bag.flag_reason,
+                is_hidden:
+                  typeof updates.is_hidden === 'boolean'
+                    ? updates.is_hidden
+                    : bag.is_hidden,
+              };
+            }
+            // If featuring, unfeature other bags in same category
+            if (updates.is_featured === true && bag.category === newCategory && bag.is_featured) {
+              return { ...bag, is_featured: false };
+            }
+            return bag;
+          })
         );
         setFlagModalBag(null);
         setFlagReason('');
+        setCategoryPickerBag(null);
+        setSelectedCategoryForBag('');
       } else {
         const error = await response.json();
         alert(error.error || 'Action failed');
@@ -182,6 +201,22 @@ export default function BagControlClient({ adminRole }: Props) {
     } finally {
       setActionLoading(null);
     }
+  };
+
+  // Handle feature action - prompts for category if missing
+  const handleFeature = (bag: BagForAdmin) => {
+    if (!bag.category) {
+      setCategoryPickerBag(bag);
+      setSelectedCategoryForBag('');
+    } else {
+      handleAction(bag.id, 'feature');
+    }
+  };
+
+  // Handle feature with category assignment
+  const handleFeatureWithCategory = () => {
+    if (!categoryPickerBag || !selectedCategoryForBag) return;
+    handleAction(categoryPickerBag.id, 'feature', { category: selectedCategoryForBag });
   };
 
   const handleDelete = async (bag: BagForAdmin) => {
@@ -303,6 +338,22 @@ export default function BagControlClient({ adminRole }: Props) {
               className="w-full pl-10 pr-4 py-2.5 bg-[var(--surface)] border border-[var(--border-subtle)] rounded-lg text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:border-[var(--teed-green-6)]"
             />
           </div>
+
+          {/* Category Filter */}
+          <select
+            value={categoryFilter}
+            onChange={(e) => {
+              setCategoryFilter(e.target.value);
+              setPage(1);
+            }}
+            className="px-4 py-2.5 bg-[var(--surface)] border border-[var(--border-subtle)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--teed-green-6)]"
+          >
+            {CATEGORIES_WITH_ALL.map((cat) => (
+              <option key={cat.value} value={cat.value}>
+                {cat.icon} {cat.label}
+              </option>
+            ))}
+          </select>
 
           {/* Status Filter */}
           <select
@@ -506,14 +557,13 @@ export default function BagControlClient({ adminRole }: Props) {
                               onClick={(e) => e.stopPropagation()}
                             >
                               <div className="py-1">
-                                {/* Feature/Unfeature */}
+                                {/* Feature/Unfeature (also controls spotlight) */}
                                 {permissions.canHideContent && (
                                   <button
                                     onClick={() =>
-                                      handleAction(
-                                        bag.id,
-                                        bag.is_featured ? 'unfeature' : 'feature'
-                                      )
+                                      bag.is_featured
+                                        ? handleAction(bag.id, 'unfeature')
+                                        : handleFeature(bag)
                                     }
                                     className="w-full px-4 py-2 text-left text-sm hover:bg-[var(--surface-elevated)] flex items-center gap-2"
                                   >
@@ -787,6 +837,70 @@ export default function BagControlClient({ adminRole }: Props) {
                   {actionLoading === confirmDelete.id
                     ? 'Deleting...'
                     : 'Delete Bag'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Category Picker Modal */}
+      {categoryPickerBag && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-[var(--surface)] rounded-xl border border-[var(--border-subtle)] w-full max-w-md">
+            <div className="p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-[var(--amber-4)] flex items-center justify-center">
+                  <Star className="w-5 h-5 text-[var(--amber-9)]" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+                    Feature Bag
+                  </h3>
+                  <p className="text-sm text-[var(--text-secondary)]">
+                    {categoryPickerBag.title}
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-sm text-[var(--text-secondary)] mb-4">
+                This bag needs a category to be featured. Please select a category:
+              </p>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                  Category
+                </label>
+                <select
+                  value={selectedCategoryForBag}
+                  onChange={(e) => setSelectedCategoryForBag(e.target.value)}
+                  className="w-full px-3 py-2.5 bg-[var(--surface)] border border-[var(--border-subtle)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--teed-green-6)]"
+                >
+                  <option value="">Select a category...</option>
+                  {CATEGORIES.map((cat) => (
+                    <option key={cat.value} value={cat.value}>
+                      {cat.icon} {cat.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    setCategoryPickerBag(null);
+                    setSelectedCategoryForBag('');
+                  }}
+                  className="flex-1 px-4 py-2.5 border border-[var(--border-subtle)] rounded-lg text-[var(--text-primary)] hover:bg-[var(--surface-elevated)]"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleFeatureWithCategory}
+                  disabled={!selectedCategoryForBag}
+                  className="flex-1 px-4 py-2.5 bg-[var(--amber-9)] text-white rounded-lg hover:bg-[var(--amber-10)] disabled:opacity-50"
+                >
+                  Feature Bag
                 </button>
               </div>
             </div>

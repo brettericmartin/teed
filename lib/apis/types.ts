@@ -382,6 +382,123 @@ export interface StoreCorrectionResponse {
 }
 
 // ============================================================================
+// TAP-TO-IDENTIFY TYPES (New simplified flow)
+// ============================================================================
+
+/**
+ * Selection region for tap-to-identify
+ */
+export interface SelectionRegion {
+  id: string;
+  type: 'tap' | 'rectangle';
+  // Normalized coordinates (0-1)
+  centerX: number;
+  centerY: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  // Pixel coordinates for cropping
+  pixelBounds: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+}
+
+/**
+ * Visual description from AI analysis
+ */
+export interface VisualDescription {
+  objectType: string;            // "mallet putter headcover"
+  primaryColor: string;
+  secondaryColors: string[];
+  finish: string;                // "matte", "glossy", "metallic"
+  materials: string[];
+  shape: string;
+  visibleText: string[];         // Any text/numbers seen
+  brandIndicators: string[];     // Logo shapes, design cues
+  conditionNotes: string;
+  size: string;
+}
+
+/**
+ * Single product guess with confidence
+ */
+export interface ProductGuess {
+  rank: 1 | 2 | 3;
+  name: string;
+  brand: string;
+  model?: string;
+  year?: number;
+  confidence: number;            // 0-100
+  confidenceLevel: 'high' | 'medium' | 'low' | 'uncertain';
+  matchingReasons: string[];
+  differentiators: string[];     // What would confirm/deny this guess
+}
+
+/**
+ * Uncertainty information from AI
+ */
+export interface UncertaintyInfo {
+  isConfident: boolean;          // Only true if top guess >= 70%
+  reason: string | null;
+  whatWouldHelp: string[];
+}
+
+/**
+ * Result from identify-single-item endpoint
+ */
+export interface SingleItemIdentificationResult {
+  visualDescription: VisualDescription;
+  guesses: ProductGuess[];
+  uncertainty: UncertaintyInfo;
+  processingTimeMs: number;
+  modelUsed: string;
+}
+
+/**
+ * Request to identify-single-item endpoint
+ */
+export interface IdentifySingleItemRequest {
+  imageBase64: string;           // REQUIRED: Cropped image of single item
+  categoryHint?: string;         // Optional: "golf", "tech", etc.
+  brandHint?: string;            // Optional: User says "I think it's Titleist"
+  additionalContext?: string;    // Optional: Any text the user provides
+}
+
+/**
+ * Response from identify-single-item endpoint
+ */
+export interface IdentifySingleItemResponse {
+  success: boolean;
+  result?: SingleItemIdentificationResult;
+  error?: string;
+}
+
+/**
+ * Tap-to-identify wizard stages (simplified from APIS)
+ */
+export type TapToIdentifyStage =
+  | 'idle'           // No image loaded
+  | 'ready'          // Image displayed, waiting for user tap/draw
+  | 'identifying'    // Processing selected region
+  | 'reviewing'      // Showing identification results
+  | 'error';         // Error state
+
+/**
+ * Identified item on the canvas (after identification)
+ */
+export interface IdentifiedCanvasItem {
+  id: string;
+  region: SelectionRegion;
+  result: SingleItemIdentificationResult;
+  selectedGuessIndex: number;    // Which of the 3 guesses the user selected (0, 1, or 2)
+  croppedImageBase64: string;    // The cropped region image
+}
+
+// ============================================================================
 // CONFIDENCE ROUTING
 // ============================================================================
 

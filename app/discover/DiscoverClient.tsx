@@ -1,9 +1,14 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
+import { motion } from 'framer-motion';
 import { Compass, Package, Search, Filter, X, Heart, Eye, Layers, ChevronDown, User, Tag, TrendingUp, Bookmark } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { staggerContainer, cardVariants } from '@/lib/animations';
+import { SkeletonBagGrid } from '@/components/ui/Skeleton';
+import { PageContainer, PageHeader, ContentContainer } from '@/components/layout/PageContainer';
+import { CATEGORIES, getCategoryColors } from '@/lib/categories';
 
 type BagItem = {
   id: string;
@@ -69,35 +74,8 @@ const SORT_OPTIONS = [
   { value: 'popular', label: 'Most Active', icon: '🔥' },
 ];
 
-const CATEGORIES = [
-  { value: 'golf', label: '⛳ Golf', icon: '⛳' },
-  { value: 'travel', label: '✈️ Travel', icon: '✈️' },
-  { value: 'outdoor', label: '🏔️ Outdoor', icon: '🏔️' },
-  { value: 'tech', label: '💻 Tech', icon: '💻' },
-  { value: 'fashion', label: '👔 Fashion', icon: '👔' },
-  { value: 'fitness', label: '💪 Fitness', icon: '💪' },
-  { value: 'photography', label: '📷 Photography', icon: '📷' },
-  { value: 'gaming', label: '🎮 Gaming', icon: '🎮' },
-  { value: 'music', label: '🎵 Music', icon: '🎵' },
-  { value: 'other', label: '📦 Other', icon: '📦' },
-];
-
-// Color mapping for categories based on semantic meaning
-const getCategoryColor = (categoryValue: string) => {
-  const colorMap: Record<string, { bg: string; text: string }> = {
-    golf: { bg: 'bg-[var(--teed-green-8)]', text: 'text-white' },
-    outdoor: { bg: 'bg-[var(--evergreen-9)]', text: 'text-white' },
-    travel: { bg: 'bg-[var(--sky-6)]', text: 'text-white' },
-    tech: { bg: 'bg-[var(--sky-7)]', text: 'text-white' },
-    fashion: { bg: 'bg-[var(--copper-7)]', text: 'text-white' },
-    fitness: { bg: 'bg-[var(--copper-8)]', text: 'text-white' },
-    gaming: { bg: 'bg-[var(--copper-6)]', text: 'text-white' },
-    photography: { bg: 'bg-[var(--sand-9)]', text: 'text-white' },
-    music: { bg: 'bg-[var(--sand-8)]', text: 'text-white' },
-    other: { bg: 'bg-[var(--grey-7)]', text: 'text-white' },
-  };
-  return colorMap[categoryValue] || { bg: 'bg-[var(--teed-green-8)]', text: 'text-white' };
-};
+// Use getCategoryColors from shared lib/categories.ts
+const getCategoryColor = (categoryValue: string) => getCategoryColors(categoryValue);
 
 // Diversified gradient options for bag cards
 const GRADIENT_OPTIONS = [
@@ -158,9 +136,13 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   // Popular tags state
   const [popularTags, setPopularTags] = useState<Array<{ tag: string; count: number }>>([]);
 
+  // Spotlight bags state
+  const [spotlightBags, setSpotlightBags] = useState<Bag[]>([]);
+
   useEffect(() => {
     checkAuth();
     fetchPopularTags();
+    fetchSpotlightBags();
 
     // Track discover page view
     fetch('/api/analytics/track', {
@@ -242,6 +224,18 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
       }
     } catch (error) {
       console.error('Error fetching popular tags:', error);
+    }
+  };
+
+  const fetchSpotlightBags = async () => {
+    try {
+      const response = await fetch('/api/discover/spotlight');
+      if (response.ok) {
+        const data = await response.json();
+        setSpotlightBags(data.spotlight || []);
+      }
+    } catch (error) {
+      console.error('Error fetching spotlight bags:', error);
     }
   };
 
@@ -331,20 +325,33 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   };
 
   return (
-    <div className="min-h-screen pt-16">
-      {/* Header */}
-      <header className="bg-[var(--surface)] border-b border-[var(--border-subtle)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-col gap-4">
-            {/* Title */}
+    <PageContainer variant="cool">
+      {/* Hero Section - Compact & Colorful */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-[var(--teed-green-3)] via-[var(--sky-3)] to-[var(--copper-2)]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,_var(--teed-green-4)_0%,_transparent_50%)] opacity-60" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,_var(--sky-4)_0%,_transparent_40%)] opacity-50" />
+
+        <ContentContainer className="relative py-6 md:py-8">
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
+              <h1 className="text-3xl md:text-4xl font-bold text-[var(--evergreen-12)] mb-1">
                 Discover
               </h1>
-              <p className="text-sm text-[var(--text-secondary)] mt-1">
-                Explore public bags from the Teed community
+              <p className="text-sm md:text-base text-[var(--evergreen-11)] font-medium">
+                Curated collections from creators and enthusiasts
               </p>
             </div>
+            <div className="hidden md:flex items-center gap-2 text-[var(--evergreen-11)]">
+              <Compass className="w-8 h-8 opacity-60" />
+            </div>
+          </div>
+        </ContentContainer>
+      </div>
+
+      {/* Filters Header */}
+      <PageHeader>
+        <ContentContainer className="py-4">
+          <div className="flex flex-col gap-3">
 
             {/* Filters */}
             <div className="flex flex-col gap-3">
@@ -526,79 +533,158 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
               </div>
 
               {/* Category Filters */}
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xs font-medium text-[var(--text-tertiary)]">Categories:</span>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {CATEGORIES.map((category) => {
-                    const colors = getCategoryColor(category.value);
-                    const isSelected = selectedCategory === category.value;
-                    return (
-                      <button
-                        key={category.value}
-                        onClick={() => setSelectedCategory(
-                          selectedCategory === category.value ? null : category.value
-                        )}
-                        className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                          isSelected
-                            ? `${colors.bg} ${colors.text}`
-                            : 'bg-[var(--surface-elevated)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)]'
-                        }`}
-                      >
-                        <span>{category.icon}</span>
-                        <span className="ml-1.5">{category.label.split(' ')[1]}</span>
-                      </button>
-                    );
-                  })}
-                </div>
+              <div className="flex flex-wrap gap-2">
+                {CATEGORIES.map((category) => {
+                  const colors = getCategoryColor(category.value);
+                  const isSelected = selectedCategory === category.value;
+                  return (
+                    <button
+                      key={category.value}
+                      onClick={() => setSelectedCategory(
+                        selectedCategory === category.value ? null : category.value
+                      )}
+                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                        isSelected
+                          ? `${colors.bg} ${colors.text} shadow-sm`
+                          : 'bg-[var(--surface-elevated)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)]'
+                      }`}
+                    >
+                      <span>{category.icon}</span>
+                      <span className="ml-1.5">{category.label}</span>
+                    </button>
+                  );
+                })}
               </div>
-
-              {/* Tag Filters (show popular tags across all bags) */}
-              {popularTags.length > 0 && (
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xs font-medium text-[var(--text-tertiary)]">Popular Tags:</span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {popularTags.map(({ tag, count }) => {
-                      const isSelected = selectedTags.includes(tag);
-                      return (
-                        <button
-                          key={tag}
-                          onClick={() => toggleTag(tag)}
-                          className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all flex items-center gap-1.5 ${
-                            isSelected
-                              ? 'bg-[var(--sky-6)] text-white'
-                              : 'bg-[var(--surface-elevated)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)]'
-                          }`}
-                        >
-                          #{tag}
-                          <span className={`text-[10px] px-1 py-0.5 rounded ${
-                            isSelected
-                              ? 'bg-white/20'
-                              : 'bg-[var(--surface-hover)]'
-                          }`}>
-                            {count}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
             </div>
           </div>
-        </div>
-      </header>
+        </ContentContainer>
+      </PageHeader>
+
+      {/* Spotlight Section - Featured bags from database */}
+      {!selectedCategory && !searchQuery && !showFollowing && !showSaved && spotlightBags.length > 0 && (
+        <ContentContainer className="pt-6">
+          <div className="flex items-center gap-2 mb-4">
+            <TrendingUp className="w-5 h-5 text-[var(--teed-green-9)]" />
+            <h2 className="text-lg font-semibold text-[var(--text-primary)]">Spotlight</h2>
+          </div>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+            {spotlightBags.map((bag) => {
+              const category = bag.category || 'other';
+              const categoryInfo = CATEGORIES.find(c => c.value === category);
+              const colors = getCategoryColor(category);
+
+              // Get items with photos
+              const allItemsWithPhotos = bag.items?.filter(item => item.photo_url) || [];
+              const featuredItems = allItemsWithPhotos
+                .filter(item => item.is_featured)
+                .sort((a, b) => (a.featured_position || 0) - (b.featured_position || 0));
+              const nonFeaturedItems = allItemsWithPhotos.filter(item => !item.is_featured);
+              const itemsToShow = [...featuredItems, ...nonFeaturedItems].slice(0, 8);
+
+              // Get border color based on category
+              const getBorderColor = (cat: string) => {
+                const colorVars: Record<string, string> = {
+                  golf: 'var(--teed-green-6)',
+                  wishlist: 'var(--sky-6)',
+                  photography: 'var(--sand-6)',
+                  travel: 'var(--sky-6)',
+                  tech: 'var(--sky-7)',
+                  fitness: 'var(--copper-8)',
+                  music: 'var(--sand-8)',
+                };
+                return colorVars[cat] || 'var(--teed-green-6)';
+              };
+
+              return (
+                <div
+                  key={bag.id}
+                  className={`bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border-2 overflow-hidden hover:shadow-glow-teed hover:-translate-y-1 transition-all duration-300 group relative`}
+                  style={{ borderColor: getBorderColor(category) }}
+                >
+                  {/* Category Label Banner */}
+                  <div className={`${colors.bg} px-3 py-1.5 flex items-center gap-2`}>
+                    <span>{categoryInfo?.icon}</span>
+                    <span className="text-sm font-semibold text-white">
+                      {categoryInfo?.label || 'Featured'}
+                    </span>
+                  </div>
+
+                  {/* Card Image */}
+                  <div
+                    onClick={() => router.push(`/u/${bag.owner.handle}/${bag.code}`)}
+                    className={`h-[180px] bg-gradient-to-br ${getBagGradient(bag.id)} relative overflow-hidden cursor-pointer`}
+                  >
+                    {itemsToShow.length > 0 ? (
+                      <div className="grid grid-cols-4 gap-1.5 p-2 h-full">
+                        {itemsToShow.map((item) => (
+                          <div key={item.id} className="relative bg-white rounded overflow-hidden shadow-sm">
+                            <img
+                              src={item.photo_url!}
+                              alt={item.custom_name || 'Item'}
+                              className="w-full h-full object-contain"
+                              loading="lazy"
+                            />
+                          </div>
+                        ))}
+                        {Array.from({ length: Math.max(0, 8 - itemsToShow.length) }).map((_, i) => (
+                          <div key={`placeholder-${i}`} className={`${getPlaceholderColor(i)} rounded opacity-40`}></div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Package className="w-16 h-16 text-[var(--evergreen-12)] opacity-20" />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Owner Badge */}
+                  <div className="absolute bottom-[52px] left-3 z-10">
+                    <Link
+                      href={`/u/${bag.owner.handle}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="flex items-center gap-1.5 bg-white/95 rounded-full pl-1 pr-2.5 py-1 shadow-md hover:shadow-lg transition-shadow group/owner"
+                    >
+                      {bag.owner.avatar_url ? (
+                        <img src={bag.owner.avatar_url} alt="" className="w-5 h-5 rounded-full object-cover" />
+                      ) : (
+                        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[var(--teed-green-6)] to-[var(--sky-6)] flex items-center justify-center text-[10px] font-bold text-white">
+                          {getInitials(bag.owner.display_name || bag.owner.handle)}
+                        </div>
+                      )}
+                      <span className="text-xs font-medium text-[var(--text-primary)] group-hover/owner:text-[var(--teed-green-9)] transition-colors max-w-[120px] truncate">
+                        {bag.owner.display_name}
+                      </span>
+                    </Link>
+                  </div>
+
+                  {/* Card Info */}
+                  <div className="p-3">
+                    <h3
+                      onClick={() => router.push(`/u/${bag.owner.handle}/${bag.code}`)}
+                      className="text-base font-semibold text-[var(--text-primary)] group-hover:text-[var(--teed-green-9)] transition-colors line-clamp-1 cursor-pointer mb-1"
+                    >
+                      {bag.title}
+                    </h3>
+                    <div className="flex items-center justify-between text-xs text-[var(--text-tertiary)]">
+                      <span className="flex items-center gap-1 text-[var(--teed-green-10)]">
+                        <Package className="w-3.5 h-3.5" />
+                        <span className="font-medium">{bag.items?.length || 0}</span>
+                      </span>
+                      <span className="text-[var(--text-secondary)]">/{bag.code}</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </ContentContainer>
+      )}
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <ContentContainer className="py-6">
         {/* Loading State */}
         {isLoading && (
-          <div className="flex items-center justify-center py-20">
-            <div className="w-8 h-8 border-4 border-[var(--teed-green-8)] border-t-transparent rounded-full animate-spin" />
-          </div>
+          <SkeletonBagGrid count={6} />
         )}
 
         {/* Results */}
@@ -628,18 +714,33 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
             )}
           </div>
         ) : !isLoading && (
-          // Bags Grid
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          // Bags Grid with stagger animation
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+          >
             {bags.map((bag) => (
-              <div
+              <motion.div
                 key={bag.id}
-                className="bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden hover:shadow-[var(--shadow-5)] hover:-translate-y-1 transition-all duration-300 group"
+                variants={cardVariants}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                className="bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden hover:shadow-glow-teed transition-all duration-300 group"
               >
                 {/* Cover Image or Featured Items Grid - Flexible Hero Layout */}
                 <div
                   onClick={() => router.push(`/u/${bag.owner.handle}/${bag.code}`)}
-                  className={`h-[200px] bg-gradient-to-br ${getBagGradient(bag.id)} relative overflow-hidden cursor-pointer border-b border-[var(--border-subtle)]`}
+                  className={`h-[180px] bg-gradient-to-br ${getBagGradient(bag.id)} relative overflow-hidden cursor-pointer`}
                 >
+                  {/* Category Badge Overlay */}
+                  {bag.category && (
+                    <div className="absolute top-2 left-2 z-10">
+                      <span className={`px-2 py-1 rounded-full text-xs font-semibold shadow-sm ${getCategoryColor(bag.category).bg} ${getCategoryColor(bag.category).text}`}>
+                        {CATEGORIES.find(c => c.value === bag.category)?.icon} {CATEGORIES.find(c => c.value === bag.category)?.label}
+                      </span>
+                    </div>
+                  )}
                   {(() => {
                     // Get all items with photos
                     const allItemsWithPhotos = bag.items?.filter(item => item.photo_url) || [];
@@ -792,62 +893,28 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                 </div>
 
                 {/* Bag Info - Compressed */}
-                <div className="p-4">
-                  <div className="flex items-start justify-between gap-2 mb-2">
-                    <h3
-                      onClick={() => router.push(`/u/${bag.owner.handle}/${bag.code}`)}
-                      className="text-xl font-semibold text-[var(--text-primary)] group-hover:text-[var(--teed-green-9)] transition-colors line-clamp-1 cursor-pointer flex-1"
-                    >
-                      {bag.title}
-                    </h3>
-                    {/* Category Badge */}
-                    {bag.category && (
-                      <span className={`flex-shrink-0 px-2 py-0.5 rounded-md text-xs font-medium ${getCategoryColor(bag.category).bg} ${getCategoryColor(bag.category).text}`}>
-                        {CATEGORIES.find(c => c.value === bag.category)?.icon || '📦'}
-                      </span>
-                    )}
-                  </div>
+                <div className="p-3">
+                  <h3
+                    onClick={() => router.push(`/u/${bag.owner.handle}/${bag.code}`)}
+                    className="text-base font-semibold text-[var(--text-primary)] group-hover:text-[var(--teed-green-9)] transition-colors line-clamp-1 cursor-pointer mb-1"
+                  >
+                    {bag.title}
+                  </h3>
 
-                  {/* Tags */}
-                  {bag.tags && bag.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mb-2">
-                      {bag.tags.slice(0, 3).map((tag: string) => (
-                        <span
-                          key={tag}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleTag(tag);
-                          }}
-                          className="px-1.5 py-0.5 bg-[var(--sky-2)] text-[var(--sky-11)] rounded text-xs font-medium hover:bg-[var(--sky-3)] cursor-pointer transition-colors"
-                        >
-                          #{tag}
-                        </span>
-                      ))}
-                      {bag.tags.length > 3 && (
-                        <span className="px-1.5 py-0.5 text-[var(--text-tertiary)] text-xs">
-                          +{bag.tags.length - 3}
-                        </span>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Icon-based metadata */}
+                  {/* Metadata row */}
                   <div className="flex items-center justify-between text-xs text-[var(--text-tertiary)]">
-                    <div className="flex items-center gap-3">
-                      <span className="flex items-center gap-1">
-                        <Package className="w-3.5 h-3.5" />
-                        {bag.items?.length || 0} {bag.items?.length === 1 ? 'item' : 'items'}
-                      </span>
-                      <span className="font-medium text-[var(--text-secondary)]">/{bag.code}</span>
-                    </div>
-                    <span>{formatDate(bag.created_at)}</span>
+                    <span className="flex items-center gap-1 text-[var(--teed-green-10)]">
+                      <Package className="w-3.5 h-3.5" />
+                      <span className="font-medium">{bag.items?.length || 0}</span>
+                    </span>
+                    <span className="text-[var(--text-secondary)]">/{bag.code}</span>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
-      </main>
-    </div>
+      </ContentContainer>
+    </PageContainer>
   );
 }

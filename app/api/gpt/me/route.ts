@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { headers } from 'next/headers';
+import { createClient } from '@supabase/supabase-js';
 import { createServerSupabase } from '@/lib/serverSupabase';
 
 /**
@@ -8,19 +10,49 @@ import { createServerSupabase } from '@/lib/serverSupabase';
  */
 export async function GET() {
   try {
-    const supabase = await createServerSupabase();
+    // Check for Bearer token in Authorization header (from ChatGPT)
+    const headersList = await headers();
+    const authHeader = headersList.get('authorization');
 
-    // Get authenticated user
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    let user;
+    let supabase;
 
-    if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized. Please sign in to your Teed account.' },
-        { status: 401 }
+    if (authHeader?.startsWith('Bearer ')) {
+      const accessToken = authHeader.substring(7);
+      console.log('GPT /me: Using Bearer token authentication');
+
+      // Create Supabase client and verify the token
+      supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+          auth: { autoRefreshToken: false, persistSession: false },
+          global: { headers: { Authorization: `Bearer ${accessToken}` } }
+        }
       );
+
+      // Verify the token and get user
+      const { data, error: authError } = await supabase.auth.getUser(accessToken);
+      if (authError || !data.user) {
+        console.error('GPT /me: Bearer token invalid:', authError?.message);
+        return NextResponse.json(
+          { error: 'Unauthorized. Invalid or expired token. Please sign in again.' },
+          { status: 401 }
+        );
+      }
+      user = data.user;
+      console.log('GPT /me: Token valid for user:', user.id);
+    } else {
+      // Fall back to cookie-based auth
+      supabase = await createServerSupabase();
+      const { data, error: authError } = await supabase.auth.getUser();
+      if (authError || !data.user) {
+        return NextResponse.json(
+          { error: 'Unauthorized. Please sign in to your Teed account.' },
+          { status: 401 }
+        );
+      }
+      user = data.user;
     }
 
     // Get user's profile

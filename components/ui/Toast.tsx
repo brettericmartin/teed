@@ -1,7 +1,9 @@
 'use client';
 
 import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle, AlertCircle, Info, Sparkles } from 'lucide-react';
+import { toastVariants } from '@/lib/animations';
 
 type ToastType = 'success' | 'error' | 'info' | 'ai';
 
@@ -68,18 +70,29 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: () => void }) 
   const style = styles[toast.type];
 
   return (
-    <div
+    <motion.div
+      layout
+      variants={toastVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
       className={`
         ${style.bg} ${style.border} border
         rounded-xl px-4 py-3 shadow-lg
         flex items-center gap-3
-        animate-slide-in-top
         backdrop-blur-sm
         max-w-md w-full
       `}
       role="alert"
     >
-      <span className={style.icon}>{icons[toast.type]}</span>
+      <motion.span
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ type: 'spring', stiffness: 500, damping: 15, delay: 0.1 }}
+        className={style.icon}
+      >
+        {icons[toast.type]}
+      </motion.span>
       <p className={`${style.text} text-sm font-medium flex-1`}>{toast.message}</p>
       <button
         onClick={onRemove}
@@ -88,7 +101,7 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: () => void }) 
       >
         <X className="w-4 h-4" />
       </button>
-    </div>
+    </motion.div>
   );
 }
 
@@ -138,11 +151,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
       {/* Toast Container */}
       <div className="fixed top-4 right-4 z-[100] flex flex-col gap-2 pointer-events-none">
-        {toasts.map((toast) => (
-          <div key={toast.id} className="pointer-events-auto">
-            <ToastItem toast={toast} onRemove={() => removeToast(toast.id)} />
-          </div>
-        ))}
+        <AnimatePresence mode="popLayout">
+          {toasts.map((toast) => (
+            <div key={toast.id} className="pointer-events-auto">
+              <ToastItem toast={toast} onRemove={() => removeToast(toast.id)} />
+            </div>
+          ))}
+        </AnimatePresence>
       </div>
     </ToastContext.Provider>
   );

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerSupabase } from '@/lib/serverSupabase';
+import { authenticateGptRequest } from '@/lib/gptAuth';
 
 /**
  * GET /api/gpt/bags/[code]/items
@@ -11,7 +11,7 @@ export async function GET(
 ) {
   try {
     const { code } = await params;
-    const supabase = await createServerSupabase();
+    const { user, supabase } = await authenticateGptRequest();
 
     // Get the bag by code
     const { data: bag, error: bagError } = await supabase
@@ -25,7 +25,6 @@ export async function GET(
     }
 
     // Check if user has access
-    const { data: { user } } = await supabase.auth.getUser();
     const isOwner = user?.id === bag.owner_id;
     const isPublic = bag.is_public === true;
 
@@ -80,17 +79,11 @@ export async function POST(
 ) {
   try {
     const { code } = await params;
-    const supabase = await createServerSupabase();
+    const { user, supabase, error: authError } = await authenticateGptRequest();
 
-    // Get authenticated user
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
+    if (!user) {
       return NextResponse.json(
-        { error: 'Unauthorized. Please sign in to your Teed account.' },
+        { error: authError || 'Unauthorized. Please sign in to your Teed account.' },
         { status: 401 }
       );
     }
