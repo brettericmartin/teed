@@ -1,8 +1,13 @@
+'use client';
+
 import * as React from 'react';
+import { haptic } from '@/lib/haptics';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'ai' | 'create' | 'featured' | 'destructive' | 'secondary' | 'ghost' | 'outline';
   size?: 'sm' | 'md' | 'lg';
+  /** Enable haptic feedback on click (default: true for primary actions) */
+  hapticFeedback?: boolean;
 }
 
 /**
@@ -24,7 +29,17 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
  * - outline: For outlined style (White with Evergreen border)
  */
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className = '', variant = 'create', size = 'md', ...props }, ref) => {
+  ({ className = '', variant = 'create', size = 'md', hapticFeedback, onClick, ...props }, ref) => {
+    // Default haptic feedback for primary action buttons
+    const shouldHaptic = hapticFeedback ?? ['create', 'featured', 'destructive'].includes(variant);
+
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      if (shouldHaptic && !props.disabled) {
+        haptic(variant === 'destructive' ? 'warning' : 'medium');
+      }
+      onClick?.(e);
+    };
+
     const baseStyles =
       'inline-flex items-center justify-center font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--focus-ring)] disabled:opacity-50 disabled:cursor-not-allowed';
 
@@ -59,7 +74,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const combinedClassName = `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`;
 
-    return <button ref={ref} className={combinedClassName} {...props} />;
+    return <button ref={ref} className={combinedClassName} onClick={handleClick} {...props} />;
   }
 );
 

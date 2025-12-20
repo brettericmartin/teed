@@ -3,14 +3,17 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Share2, ExternalLink, User, X, Package, Trophy, Copy, CheckCheck, ChevronDown, Tag, Bookmark, UserPlus, UserCheck, LayoutGrid, List, Plus, GitFork } from 'lucide-react';
 import { GolfLoader } from '@/components/ui/GolfLoader';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import QRCodeDisplay from '@/components/ui/QRCodeDisplay';
 import PublicShareModal from './PublicShareModal';
-import ViewToggle from './components/ViewToggle';
 import ListViewItem from './components/ListViewItem';
 import AddToBagModal from './components/AddToBagModal';
+import { GridView } from './components/GridView';
+import { MasonryView } from './components/MasonryView';
+import { EditorialView } from './components/EditorialView';
+import { ViewStylePicker, type ViewStyle } from './components/ViewStylePicker';
 import { useToast } from '@/components/ui/Toast';
 import { StickyActionBar } from '@/components/ui/StickyActionBar';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -81,15 +84,17 @@ export default function PublicBagView({
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  // View mode from URL parameter (default: grid)
-  const viewMode = searchParams.get('view') === 'list' ? 'list' : 'grid';
+  // View style from URL parameter (default: masonry/flow for curated look)
+  const validStyles: ViewStyle[] = ['grid', 'masonry', 'editorial', 'list'];
+  const styleParam = searchParams.get('style') as ViewStyle;
+  const viewStyle: ViewStyle = validStyles.includes(styleParam) ? styleParam : 'masonry';
 
-  const handleViewToggle = (newView: 'grid' | 'list') => {
+  const handleViewStyleChange = (newStyle: ViewStyle) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (newView === 'grid') {
-      params.delete('view'); // Grid is default, clean URL
+    if (newStyle === 'masonry') {
+      params.delete('style'); // Flow is default, clean URL
     } else {
-      params.set('view', 'list');
+      params.set('style', newStyle);
     }
     const queryString = params.toString();
     router.replace(`${pathname}${queryString ? `?${queryString}` : ''}`, { scroll: false });
@@ -112,7 +117,6 @@ export default function PublicBagView({
 
   const { showSuccess, showError } = useToast();
   const { celebrateClone, celebrateSave, celebrateShare } = useCelebration();
-  const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
   const isOwnBag = currentUserId === ownerId;
 
   // Clone success modal state
@@ -376,9 +380,9 @@ export default function PublicBagView({
     <PageContainer variant="cool">
       {/* Header Section with ambient background */}
       <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--sky-2)] via-[var(--teed-green-1)] to-transparent opacity-50" />
-        <div className="relative bg-[var(--surface)] border-b border-[var(--border-subtle)]">
-          <ContentContainer size="md" className="py-8">
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--sky-2)] via-[var(--teed-green-1)] to-transparent opacity-40" />
+        <div className="relative bg-[var(--surface)]/95 backdrop-blur-sm border-b border-[var(--border-subtle)]">
+          <ContentContainer size="md" className="py-4 md:py-5">
           {/* Breadcrumbs */}
           <Breadcrumbs
             items={[
@@ -388,10 +392,10 @@ export default function PublicBagView({
             showHome={false}
           />
 
-          <div className="flex flex-col md:flex-row items-start justify-between gap-6 mt-4">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-2">
-                <h1 className="text-[var(--font-size-9)] font-semibold text-[var(--text-primary)]">
+          <div className="flex flex-col md:flex-row items-start justify-between gap-4 mt-3">
+            <div className="flex-1 max-w-2xl">
+              <div className="flex items-start gap-3 mb-1">
+                <h1 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] leading-tight">
                   {bag.title}
                 </h1>
                 {/* Save Button */}
@@ -439,22 +443,24 @@ export default function PublicBagView({
                 )}
               </div>
               {bag.description && (
-                <CuratorNote
-                  note={bag.description}
-                  curatorName={ownerName || `@${ownerHandle}`}
-                  variant="inline"
-                  className="mt-4"
-                />
+                <p className="mt-2 text-base max-w-xl text-editorial">
+                  "{bag.description}"
+                </p>
               )}
-              <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)] mt-3">
-                <User className="w-4 h-4" />
-                <span>by</span>
-                <Link
-                  href={`/u/${ownerHandle}`}
-                  className="font-medium text-[var(--text-primary)] hover:text-[var(--teed-green-9)] hover:underline transition-colors"
-                >
-                  @{ownerHandle}
-                </Link>
+              <div className="flex items-center gap-3 text-sm mt-3">
+                <span className="inline-flex items-center px-2.5 py-1 bg-[var(--teed-green-2)] text-[var(--teed-green-11)] rounded-full text-xs font-medium">
+                  {items.length} {items.length === 1 ? 'item' : 'items'}
+                </span>
+                <span className="text-[var(--text-secondary)]">
+                  <span className="text-editorial">curated by</span>
+                  {' '}
+                  <Link
+                    href={`/u/${ownerHandle}`}
+                    className="font-semibold text-[var(--text-primary)] hover:text-[var(--teed-green-9)] transition-colors"
+                  >
+                    @{ownerHandle}
+                  </Link>
+                </span>
                 {/* Follow Button - only show if not own bag */}
                 {!isOwnBag && (
                   <button
@@ -481,7 +487,7 @@ export default function PublicBagView({
 
               {/* Tags */}
               {bag.tags && bag.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-4">
+                <div className="flex flex-wrap gap-2 mt-2">
                   {bag.tags.map((tag) => (
                     <Link
                       key={tag}
@@ -495,17 +501,15 @@ export default function PublicBagView({
               )}
             </div>
 
-            {/* QR Code Section */}
-            <div className="flex-shrink-0 hidden md:block">
-              <QRCodeDisplay
-                url={shareUrl}
-                size={100}
-                downloadable={true}
-                label="Scan to view"
-                downloadFileName={`${ownerHandle}-${bag.code}-qr`}
-                compact={true}
-              />
-            </div>
+            {/* View Style Picker - right side */}
+            {items.length > 0 && (
+              <div className="flex-shrink-0 self-end">
+                <ViewStylePicker
+                  currentStyle={viewStyle}
+                  onStyleChange={handleViewStyleChange}
+                />
+              </div>
+            )}
           </div>
           </ContentContainer>
         </div>
@@ -513,7 +517,7 @@ export default function PublicBagView({
 
       {/* Cover Photo Banner - Between header and items */}
       {hasCover && (
-        <ContentContainer size="md" className="pt-8">
+        <ContentContainer size="md" className="pt-4">
           <div
             className="relative w-full rounded-[var(--radius-xl)] overflow-hidden shadow-[var(--shadow-3)]"
             style={{ aspectRatio: (bag.cover_photo_aspect || '21/9').replace('/', ' / ') }}
@@ -557,17 +561,7 @@ export default function PublicBagView({
       )}
 
       {/* Items Section */}
-      <ContentContainer size="md" className="py-10">
-        {/* View Toggle Header */}
-        {items.length > 0 && (
-          <div className="flex items-center justify-between mb-6">
-            <p className="text-sm text-[var(--text-secondary)]">
-              {items.length} {items.length === 1 ? 'item' : 'items'}
-            </p>
-            <ViewToggle viewMode={viewMode} onViewChange={handleViewToggle} />
-          </div>
-        )}
-
+      <ContentContainer size="md" className="py-6 md:py-8">
         {items.length === 0 ? (
           <EmptyState
             variant="no-items"
@@ -575,215 +569,57 @@ export default function PublicBagView({
             description={`@${ownerHandle} hasn't added any items yet. Check back later!`}
             hideCta={true}
           />
-        ) : viewMode === 'list' ? (
-          /* List View */
-          <div className="flex flex-col bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden">
-            {items.map((item) => (
-              <ListViewItem
-                key={item.id}
-                item={item}
-                isHero={bag.hero_item_id === item.id}
-                onItemClick={() => handleItemClick(item)}
-                onLinkClick={trackLinkClick}
-                getLinkCTA={getLinkCTA}
-                getLinkDomain={getLinkDomain}
-              />
-            ))}
-          </div>
         ) : (
-          /* Grid View */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {items.map((item) => {
-              const isHero = bag.hero_item_id === item.id;
-              const primaryLink = getPrimaryLink(item.links);
-              const secondaryLinks = item.links.filter(l => l.id !== primaryLink?.id);
-              const isLinksExpanded = expandedLinks.has(item.id);
-
-              return (
-                <article
-                  key={item.id}
-                  className={`bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] overflow-hidden hover:shadow-[var(--shadow-3)] transition-all relative flex flex-col card-lift ${
-                    isHero
-                      ? 'ring-2 ring-[var(--amber-8)] border-2 border-[var(--amber-6)]'
-                      : 'border border-[var(--border-subtle)]'
-                  }`}
-                >
-                  {/* Hero Badge */}
-                  {isHero && (
-                    <div className="absolute top-3 right-3 z-10 bg-[var(--amber-3)] text-[var(--amber-11)] px-2 py-1 rounded-full flex items-center gap-1 shadow-sm">
-                      <Trophy className="w-3.5 h-3.5 fill-current" />
-                      <span className="text-xs font-medium">Hero</span>
-                    </div>
-                  )}
-
-                  {/* Quantity Badge */}
-                  {item.quantity > 1 && (
-                    <div className="absolute top-3 left-3 z-10 px-2.5 py-1 bg-[var(--sky-3)] text-[var(--evergreen-12)] text-xs font-medium rounded-lg shadow-sm">
-                      ×{item.quantity}
-                    </div>
-                  )}
-
-                  {/* Item Photo */}
-                  {item.photo_url && (
-                    <div
-                      className="aspect-square bg-[var(--sky-2)] overflow-hidden cursor-pointer"
-                      onClick={() => handleItemClick(item)}
-                    >
-                      <img
-                        src={item.photo_url}
-                        alt={item.custom_name || 'Item photo'}
-                        className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-                        loading="lazy"
-                      />
-                    </div>
-                  )}
-
-                  {/* Card Content */}
-                  <div className="p-4 md:p-5 flex flex-col flex-1 gap-2">
-                    {/* Brand Name */}
-                    {item.brand && (
-                      <p className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
-                        {item.brand}
-                      </p>
-                    )}
-
-                    {/* Product Name */}
-                    <h3
-                      className="text-base md:text-lg font-semibold text-[var(--text-primary)] leading-tight line-clamp-2 cursor-pointer hover:text-[var(--teed-green-9)] transition-colors"
-                      onClick={() => handleItemClick(item)}
-                    >
-                      {item.custom_name}
-                    </h3>
-
-                    {/* Description/Specs */}
-                    {item.custom_description && (
-                      <p className="text-sm text-[var(--text-secondary)] line-clamp-2 leading-relaxed">
-                        {item.custom_description}
-                      </p>
-                    )}
-
-                    {/* Creator Notes Preview */}
-                    {item.notes && (
-                      <p className="text-sm text-[var(--text-tertiary)] italic line-clamp-2 border-l-2 border-[var(--teed-green-6)] pl-3 py-1">
-                        {item.notes}
-                      </p>
-                    )}
-
-                    {/* Promo Code */}
-                    {item.promo_codes && (
-                      <div className="mt-2 bg-gradient-to-r from-[var(--amber-2)] to-[var(--amber-3)] border border-dashed border-[var(--amber-6)] rounded-lg p-3">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Tag className="w-3.5 h-3.5 text-[var(--amber-11)]" />
-                          <span className="text-xs font-medium text-[var(--amber-11)] uppercase tracking-wide">
-                            Promo Code
-                          </span>
-                        </div>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleCopyPromo(item.id, item.promo_codes!);
-                          }}
-                          className="w-full flex items-center justify-between px-3 py-2 min-h-[44px] bg-white border border-[var(--amber-6)] rounded-lg font-mono font-bold text-sm text-[var(--text-primary)] tracking-wider transition-all active:scale-[0.98] hover:bg-[var(--amber-1)]"
-                        >
-                          <span>{item.promo_codes}</span>
-                          {copiedPromoId === item.id ? (
-                            <CheckCheck className="w-4 h-4 text-[var(--teed-green-9)]" />
-                          ) : (
-                            <Copy className="w-4 h-4 text-[var(--amber-11)]" />
-                          )}
-                        </button>
-                        {copiedPromoId === item.id && (
-                          <p className="text-xs text-[var(--teed-green-9)] font-medium mt-1 text-center">
-                            Copied!
-                          </p>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Spacer */}
-                    <div className="flex-1" />
-
-                    {/* Purchase Links Section */}
-                    {primaryLink && (
-                      <div className="space-y-2 pt-3 mt-2 border-t border-[var(--border-subtle)]">
-                        {/* Primary CTA */}
-                        <a
-                          href={primaryLink.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            trackLinkClick(primaryLink.id, item.id, primaryLink.url);
-                          }}
-                          className="flex items-center justify-center gap-2 w-full px-4 py-3 min-h-[48px] bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] text-white font-medium rounded-lg transition-all active:scale-[0.98] shadow-sm hover:shadow-md"
-                        >
-                          <span>{getLinkCTA(primaryLink)} {getLinkDomain(primaryLink.url)}</span>
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
-
-                        {/* Secondary Links */}
-                        {secondaryLinks.length > 0 && (
-                          <>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                toggleExpandedLinks(item.id);
-                              }}
-                              className="flex items-center justify-center gap-2 w-full px-4 py-2.5 min-h-[44px] bg-[var(--surface)] border border-[var(--border-subtle)] hover:bg-[var(--surface-hover)] text-[var(--text-secondary)] text-sm font-medium rounded-lg transition-colors"
-                            >
-                              <span>{secondaryLinks.length} more {secondaryLinks.length === 1 ? 'option' : 'options'}</span>
-                              <ChevronDown className={`w-4 h-4 transition-transform ${isLinksExpanded ? 'rotate-180' : ''}`} />
-                            </button>
-
-                            {isLinksExpanded && (
-                              <div className="space-y-2">
-                                {secondaryLinks.map((link) => (
-                                  <a
-                                    key={link.id}
-                                    href={link.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      trackLinkClick(link.id, item.id, link.url);
-                                    }}
-                                    className="flex items-center justify-between w-full px-4 py-2.5 min-h-[44px] bg-[var(--surface)] border border-[var(--border-subtle)] hover:border-[var(--teed-green-8)] hover:bg-[var(--surface-hover)] text-[var(--text-primary)] text-sm rounded-lg transition-all"
-                                  >
-                                    <span className="truncate">{getLinkDomain(link.url)}</span>
-                                    <ExternalLink className="w-4 h-4 flex-shrink-0 ml-2" />
-                                  </a>
-                                ))}
-                              </div>
-                            )}
-                          </>
-                        )}
-
-                        {/* View Details Link */}
-                        <button
-                          onClick={() => handleItemClick(item)}
-                          className="w-full text-center text-xs text-[var(--text-tertiary)] hover:text-[var(--teed-green-9)] transition-colors py-1"
-                        >
-                          View full details →
-                        </button>
-                      </div>
-                    )}
-
-                    {/* No Links - Just View Details */}
-                    {item.links.length === 0 && (
-                      <div className="pt-3 mt-2 border-t border-[var(--border-subtle)]">
-                        <button
-                          onClick={() => handleItemClick(item)}
-                          className="flex items-center justify-center gap-2 w-full px-4 py-3 min-h-[44px] bg-[var(--surface-hover)] hover:bg-[var(--grey-3)] text-[var(--text-primary)] font-medium rounded-lg border border-[var(--border-subtle)] transition-all"
-                        >
-                          View Details
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </article>
-              );
-            })}
-          </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={viewStyle}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+            >
+              {viewStyle === 'list' ? (
+                /* List View */
+                <div className="flex flex-col bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden">
+                  {items.map((item) => (
+                    <ListViewItem
+                      key={item.id}
+                      item={item}
+                      isHero={bag.hero_item_id === item.id}
+                      onItemClick={() => handleItemClick(item)}
+                      onLinkClick={trackLinkClick}
+                      getLinkCTA={getLinkCTA}
+                      getLinkDomain={getLinkDomain}
+                    />
+                  ))}
+                </div>
+              ) : viewStyle === 'masonry' ? (
+                /* Masonry Flow View */
+                <MasonryView
+                  items={items}
+                  heroItemId={bag.hero_item_id}
+                  onItemClick={handleItemClick}
+                  onLinkClick={trackLinkClick}
+                />
+              ) : viewStyle === 'editorial' ? (
+                /* Editorial Magazine View */
+                <EditorialView
+                  items={items}
+                  heroItemId={bag.hero_item_id}
+                  onItemClick={handleItemClick}
+                  onLinkClick={trackLinkClick}
+                />
+              ) : (
+                /* Grid View (default) */
+                <GridView
+                  items={items}
+                  heroItemId={bag.hero_item_id}
+                  onItemClick={handleItemClick}
+                  onLinkClick={trackLinkClick}
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
         )}
       </ContentContainer>
 

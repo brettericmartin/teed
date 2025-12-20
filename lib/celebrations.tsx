@@ -18,9 +18,12 @@ interface CelebrationContextType {
   celebrate: (intensity?: 'micro' | 'medium' | 'major', config?: CelebrationConfig) => void;
   celebrateClone: () => void;
   celebrateFirstBag: () => void;
+  celebrateBagCreated: () => void;
+  celebrateItemAdded: () => void;
   celebrateShare: () => void;
   celebrateSave: () => void;
   celebrateComplete: () => void;
+  celebrateMilestone: (count: number) => void;
   triggerHaptic: (pattern: number | number[]) => void;
 }
 
@@ -161,15 +164,109 @@ export function CelebrationProvider({ children }: { children: ReactNode }) {
     }, 100);
   }, [celebrate]);
 
+  // Celebration for regular bag creation (not first bag)
+  const celebrateBagCreated = useCallback(() => {
+    triggerHaptic(HAPTIC_PATTERNS.medium);
+
+    // Check for reduced motion
+    if (typeof window !== 'undefined') {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) return;
+    }
+
+    // Subtle upward burst - feels like opening a gift
+    confetti({
+      particleCount: 50,
+      spread: 55,
+      startVelocity: 35,
+      origin: { x: 0.5, y: 0.7 },
+      colors: TEED_COLORS,
+      disableForReducedMotion: true
+    });
+  }, [triggerHaptic]);
+
+  // Celebration for adding an item - very subtle
+  const celebrateItemAdded = useCallback(() => {
+    triggerHaptic(50); // Quick haptic pulse
+
+    // Check for reduced motion
+    if (typeof window !== 'undefined') {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) return;
+    }
+
+    // Small sparkle effect - not too intrusive
+    confetti({
+      particleCount: 15,
+      spread: 30,
+      startVelocity: 20,
+      gravity: 1.5,
+      origin: { x: 0.5, y: 0.4 },
+      colors: ['#8BAA7E', '#82B2BF'], // Just teed-green and sky
+      scalar: 0.7,
+      disableForReducedMotion: true
+    });
+  }, [triggerHaptic]);
+
+  // Celebration for reaching milestones (5, 10, 25, 50, 100 items/bags)
+  const celebrateMilestone = useCallback((count: number) => {
+    // Only celebrate at specific milestones
+    const milestones = [5, 10, 25, 50, 100, 250, 500];
+    if (!milestones.includes(count)) return;
+
+    triggerHaptic(HAPTIC_PATTERNS.major);
+
+    // Check for reduced motion
+    if (typeof window !== 'undefined') {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) return;
+    }
+
+    // Gold-themed celebration for milestones
+    const goldColors = ['#D9B47C', '#C2784A', '#FFD700', '#FFA500'];
+
+    // Main burst
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: goldColors,
+      disableForReducedMotion: true
+    });
+
+    // Secondary bursts from sides
+    setTimeout(() => {
+      confetti({
+        particleCount: 30,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0, y: 0.6 },
+        colors: goldColors,
+        disableForReducedMotion: true
+      });
+      confetti({
+        particleCount: 30,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1, y: 0.6 },
+        colors: goldColors,
+        disableForReducedMotion: true
+      });
+    }, 150);
+  }, [triggerHaptic]);
+
   return (
     <CelebrationContext.Provider
       value={{
         celebrate,
         celebrateClone,
         celebrateFirstBag,
+        celebrateBagCreated,
+        celebrateItemAdded,
         celebrateShare,
         celebrateSave,
         celebrateComplete,
+        celebrateMilestone,
         triggerHaptic
       }}
     >

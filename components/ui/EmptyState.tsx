@@ -7,6 +7,10 @@ import { MagneticButton } from './MagneticButton';
 import { cn } from '@/lib/utils';
 import { fadeUp } from '@/lib/animations';
 import type { LucideIcon } from 'lucide-react';
+import {
+  emptyStateIllustrations,
+  type IllustrationType,
+} from '@/components/illustrations/EmptyStateIllustrations';
 
 type EmptyStateVariant =
   | 'new-user'
@@ -129,6 +133,9 @@ export function EmptyState({
     </MagneticButton>
   );
 
+  // Get the illustration component for this variant
+  const IllustrationComponent = emptyStateIllustrations[variant as IllustrationType];
+
   return (
     <motion.div
       variants={fadeUp}
@@ -139,15 +146,22 @@ export function EmptyState({
         className
       )}
     >
-      {/* Icon Circle */}
-      <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.1 }}
-        className="w-28 h-28 rounded-full bg-gradient-to-br from-[var(--teed-green-2)] to-[var(--sky-3)] flex items-center justify-center mb-6"
-      >
-        <Icon className="w-14 h-14 text-[var(--teed-green-9)]" strokeWidth={1.5} />
-      </motion.div>
+      {/* Custom Illustration */}
+      {IllustrationComponent ? (
+        <div className="mb-6">
+          <IllustrationComponent animate={true} />
+        </div>
+      ) : (
+        /* Fallback to Icon Circle */
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.1 }}
+          className="w-28 h-28 rounded-full bg-gradient-to-br from-[var(--teed-green-2)] to-[var(--sky-3)] flex items-center justify-center mb-6"
+        >
+          <Icon className="w-14 h-14 text-[var(--teed-green-9)]" strokeWidth={1.5} />
+        </motion.div>
+      )}
 
       {/* Content */}
       <motion.div
