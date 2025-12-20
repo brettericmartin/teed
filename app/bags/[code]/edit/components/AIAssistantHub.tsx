@@ -117,16 +117,15 @@ export default function AIAssistantHub({
 }: AIAssistantHubProps) {
   const actions: (AIAction & { delay: number })[] = [
     {
-      id: 'add-from-photo',
+      id: 'tap-to-identify',
       icon: <Camera className="w-5 h-5" />,
-      title: 'Add from Photo',
-      description: 'Upload a photo, AI extracts products',
+      title: 'Tap to Identify',
+      description: 'Upload a photo, tap items to identify them',
       onClick: onAddFromPhoto,
       isLoading: isIdentifying,
       loadingText: 'Identifying...',
       disabled: isIdentifying,
       delay: 100,
-      badge: { label: 'Experimental', variant: 'experimental' },
     },
     {
       id: 'find-photos',

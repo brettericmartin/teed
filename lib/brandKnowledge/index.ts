@@ -310,6 +310,21 @@ export function getAllBrandNames(): string[] {
 }
 
 /**
+ * Get brand knowledge for multiple categories
+ * Returns array of CategoryKnowledge objects for OOD detection
+ */
+export function getBrandKnowledge(categories: string[]): CategoryKnowledge[] {
+  const results: CategoryKnowledge[] = [];
+  for (const category of categories) {
+    const knowledge = loadCategoryKnowledge(category);
+    if (knowledge) {
+      results.push(knowledge);
+    }
+  }
+  return results;
+}
+
+/**
  * Extract brand from a product name string
  * Returns { brand, productName } if a known brand is found at the start
  *

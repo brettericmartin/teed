@@ -7,9 +7,10 @@ import ItemList from './components/ItemList';
 import QuickAddItem from './components/QuickAddItem';
 import AddItemForm from './components/AddItemForm';
 import ShareModal from './components/ShareModal';
-import PhotoUploadModal from './components/PhotoUploadModal';
 import ProductReviewModal, { IdentifiedProduct } from './components/ProductReviewModal';
 import AIAssistantHub from './components/AIAssistantHub';
+import { TapToIdentifyWizard } from '@/components/apis';
+import type { IdentifiedItem } from '@/components/apis/TapToIdentifyWizard';
 import { Button } from '@/components/ui/Button';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
 
@@ -63,7 +64,8 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [showManualForm, setShowManualForm] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
-  const [showPhotoUpload, setShowPhotoUpload] = useState(false);
+  const [showTapToIdentify, setShowTapToIdentify] = useState(false);
+  const [tapToIdentifyImage, setTapToIdentifyImage] = useState<string | null>(null);
   const [showProductReview, setShowProductReview] = useState(false);
   const [identifiedProducts, setIdentifiedProducts] = useState<{
     products: IdentifiedProduct[];
@@ -256,36 +258,50 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
     }
   };
 
-  // Step 29: Photo upload and AI identification handlers
-  const handlePhotoCapture = async (base64Image: string) => {
-    setIsIdentifying(true);
-    setShowPhotoUpload(false);
+  // Tap-to-Identify: Handle image selection and launch wizard
+  const handleTapToIdentifyImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-    try {
-      const response = await fetch('/api/ai/identify-products', {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64 = event.target?.result as string;
+      setTapToIdentifyImage(base64);
+      setShowTapToIdentify(true);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Tap-to-Identify: Handle wizard completion
+  const handleTapToIdentifyComplete = async (items: IdentifiedItem[]) => {
+    setShowTapToIdentify(false);
+    setTapToIdentifyImage(null);
+
+    // Add each identified item to the bag
+    for (const item of items) {
+      await fetch(`/api/bags/${bag.code}/items`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          image: base64Image,
-          bagType: bag.title, // Use bag title as context
+          custom_name: item.name,
+          brand: item.brand || null,
+          custom_description: item.visualDescription || null,
         }),
       });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to identify products');
-      }
-
-      const result = await response.json();
-
-      setIdentifiedProducts(result);
-      setShowProductReview(true);
-    } catch (error: any) {
-      console.error('Error identifying products:', error);
-      alert(error.message || 'Failed to identify products. Please try again.');
-    } finally {
-      setIsIdentifying(false);
     }
+
+    // Refresh items list
+    const response = await fetch(`/api/bags/${bag.code}`);
+    const updatedBag = await response.json();
+    if (updatedBag?.items) {
+      setBag((prev: any) => ({ ...prev, items: updatedBag.items }));
+    }
+  };
+
+  // Tap-to-Identify: Handle wizard cancel
+  const handleTapToIdentifyCancel = () => {
+    setShowTapToIdentify(false);
+    setTapToIdentifyImage(null);
   };
 
   // Step 29: Batch item creation from AI results
@@ -498,7 +514,7 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
           <AIAssistantHub
             itemCount={bag.items.length}
             itemsWithoutPhotos={bag.items.filter(item => !item.photo_url).length}
-            onAddFromPhoto={() => setShowPhotoUpload(true)}
+            onAddFromPhoto={() => document.getElementById('tap-to-identify-input-bags')?.click()}
             onFindPhotos={() => {}} // Not implemented in this version
             onFillProductInfo={() => {}} // Not implemented in this version
             isIdentifying={isIdentifying}
@@ -571,13 +587,27 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
         onTogglePublic={() => setIsPublic(!isPublic)}
       />
 
-      {/* Photo Upload Modal */}
-      <PhotoUploadModal
-        isOpen={showPhotoUpload}
-        onClose={() => setShowPhotoUpload(false)}
-        onPhotoCapture={handlePhotoCapture}
-        bagType={bag.title}
+      {/* Hidden file input for Tap-to-Identify */}
+      <input
+        type="file"
+        id="tap-to-identify-input-bags"
+        accept="image/*"
+        onChange={handleTapToIdentifyImageSelect}
+        className="hidden"
       />
+
+      {/* Tap-to-Identify Wizard */}
+      {showTapToIdentify && tapToIdentifyImage && (
+        <div className="fixed inset-0 bg-black z-50">
+          <TapToIdentifyWizard
+            imageSource={tapToIdentifyImage}
+            onComplete={handleTapToIdentifyComplete}
+            onCancel={handleTapToIdentifyCancel}
+            categoryHint="golf"
+            className="h-full"
+          />
+        </div>
+      )}
 
       {/* Product Review Modal */}
       {identifiedProducts && (

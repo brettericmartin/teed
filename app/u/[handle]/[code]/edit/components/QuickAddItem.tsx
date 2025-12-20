@@ -5,8 +5,8 @@ import { Camera, Sparkles, Info } from 'lucide-react';
 import { GolfLoader } from '@/components/ui/GolfLoader';
 import AISuggestions from './AISuggestions';
 import ItemPreview from './ItemPreview';
-import { SmartIdentificationWizard } from '@/components/apis';
-import type { ValidatedProduct } from '@/lib/apis/types';
+import { TapToIdentifyWizard } from '@/components/apis';
+import type { IdentifiedItem } from '@/components/apis/TapToIdentifyWizard';
 
 // Compress and convert image to JPEG (handles HEIC from mobile)
 async function compressImageForAPI(base64: string, maxSizeKB: number = 3500): Promise<string> {
@@ -160,23 +160,18 @@ type QuickAddItemProps = {
 };
 
 
-// Helper to convert ValidatedProduct to ProductSuggestion
-function convertValidatedProductToSuggestion(
-  product: ValidatedProduct,
-  uploadedImageBase64?: string
+// Helper to convert IdentifiedItem to ProductSuggestion
+function convertIdentifiedItemToSuggestion(
+  item: IdentifiedItem
 ): ProductSuggestion {
   return {
-    custom_name: product.name,
-    custom_description: product.specs || product.specifications?.join(' | ') || '',
+    custom_name: item.name,
+    custom_description: item.visualDescription || '',
     notes: '',
-    category: product.category,
-    confidence: product.finalConfidence / 100, // Convert 0-100 to 0-1
-    brand: product.brand,
-    funFactOptions: product.funFacts,
-    productUrl: product.links?.[0]?.url,
-    imageUrl: product.productImage?.imageUrl,
-    price: product.estimatedPrice,
-    uploadedImageBase64
+    category: 'golf', // Default category
+    confidence: item.confidence / 100, // Convert 0-100 to 0-1
+    brand: item.brand,
+    uploadedImageBase64: item.croppedImageBase64
   };
 }
 
@@ -227,19 +222,21 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
     reader.readAsDataURL(file);
   }, []);
 
-  // Handle Smart Wizard completion
-  const handleSmartWizardComplete = useCallback(async (product: ValidatedProduct) => {
-    const suggestion = convertValidatedProductToSuggestion(product, smartWizardImage || undefined);
+  // Handle Tap-to-Identify Wizard completion
+  const handleTapToIdentifyComplete = useCallback(async (items: IdentifiedItem[]) => {
     setShowSmartWizard(false);
     setSmartWizardImage(null);
 
-    // Add the item
-    await onAdd(suggestion);
+    // Add all identified items
+    for (const item of items) {
+      const suggestion = convertIdentifiedItemToSuggestion(item);
+      await onAdd(suggestion);
+    }
 
     // Reset form
     setInput('');
     setSuggestions([]);
-  }, [onAdd, smartWizardImage]);
+  }, [onAdd]);
 
   // Cancel Smart Wizard
   const handleSmartWizardCancel = useCallback(() => {
@@ -356,14 +353,15 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
 
   return (
     <>
-      {/* APIS Smart Identification Wizard Modal */}
+      {/* Tap-to-Identify Wizard Modal */}
       {showSmartWizard && smartWizardImage && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
-          <SmartIdentificationWizard
-            initialImageBase64={smartWizardImage}
-            bagContext={bagTitle}
-            onComplete={handleSmartWizardComplete}
+        <div className="fixed inset-0 bg-black z-50">
+          <TapToIdentifyWizard
+            imageSource={smartWizardImage}
+            onComplete={handleTapToIdentifyComplete}
             onCancel={handleSmartWizardCancel}
+            categoryHint="golf"
+            className="h-full"
           />
         </div>
       )}

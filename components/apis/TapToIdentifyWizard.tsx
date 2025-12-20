@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { Crosshair, Square, Plus, Check, X, Loader2 } from 'lucide-react';
+import { Crosshair, Square, Plus, Check, X } from 'lucide-react';
 import { ImageSelectionCanvas } from './ImageSelectionCanvas';
-import { IdentificationResultCard } from './IdentificationResultCard';
+import { IdentificationResultCard, EditedGuess } from './IdentificationResultCard';
+import { IdentificationLoadingState } from './IdentificationLoadingState';
 import { useQuickIdentify } from '@/lib/apis/useQuickIdentify';
 import { cropImageToRegion } from '@/lib/apis/cropImage';
 import type {
@@ -59,6 +60,7 @@ export function TapToIdentifyWizard({
   const [currentRegion, setCurrentRegion] = useState<SelectionRegion | null>(null);
   const [currentCroppedImage, setCurrentCroppedImage] = useState<string | null>(null);
   const [selectedGuessIndex, setSelectedGuessIndex] = useState<number | undefined>(undefined);
+  const [currentEdits, setCurrentEdits] = useState<EditedGuess | undefined>(undefined);
 
   // Identified items
   const [identifiedItems, setIdentifiedItems] = useState<IdentifiedCanvasItem[]>([]);
@@ -90,23 +92,77 @@ export function TapToIdentifyWizard({
     }
   }, [imageSource, categoryHint, identify]);
 
-  // Handle guess selection
-  const handleSelectGuess = useCallback((index: number) => {
+  // Handle guess selection (with optional edits)
+  const handleSelectGuess = useCallback((index: number, edits?: EditedGuess) => {
     setSelectedGuessIndex(index);
+    setCurrentEdits(edits);
   }, []);
+
+  // Store correction for learning (non-blocking)
+  const storeVisualCorrection = useCallback(async (
+    visualDescription: {
+      objectType: string;
+      itemTypeReasoning?: string;
+      primaryColor: string;
+      secondaryColors: string[];
+      materials: string[];
+      brandIndicators: string[];
+      designEra?: string;
+      ocrTexts?: Array<{ text: string; type: string; confidence: number }>;
+    },
+    originalGuess: ProductGuess,
+    correction: EditedGuess
+  ) => {
+    try {
+      await fetch('/api/ai/store-visual-correction', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          visualDescription: {
+            objectType: visualDescription.objectType,
+            itemTypeReasoning: visualDescription.itemTypeReasoning,
+            primaryColor: visualDescription.primaryColor,
+            secondaryColors: visualDescription.secondaryColors,
+            materials: visualDescription.materials,
+            brandIndicators: visualDescription.brandIndicators,
+            designEra: visualDescription.designEra,
+            ocrTexts: visualDescription.ocrTexts,
+          },
+          originalGuess: {
+            name: originalGuess.name,
+            brand: originalGuess.brand,
+            confidence: originalGuess.confidence,
+            matchingReasons: originalGuess.matchingReasons,
+          },
+          correction,
+          category: categoryHint,
+        }),
+      });
+      console.log('[TapToIdentify] Stored correction for learning');
+    } catch (err) {
+      // Non-critical - just log
+      console.warn('[TapToIdentify] Failed to store correction:', err);
+    }
+  }, [categoryHint]);
 
   // Handle confirm (add to list)
   const handleConfirmItem = useCallback(() => {
     if (!result || selectedGuessIndex === undefined || !currentRegion || !currentCroppedImage) return;
 
-    const guess = result.guesses[selectedGuessIndex];
+    const originalGuess = result.guesses[selectedGuessIndex];
+
+    // If user edited, store the correction for learning
+    if (currentEdits && (currentEdits.name !== originalGuess.name || currentEdits.brand !== originalGuess.brand)) {
+      storeVisualCorrection(result.visualDescription, originalGuess, currentEdits);
+    }
 
     const newItem: IdentifiedCanvasItem = {
       id: `item_${Date.now()}`,
       region: currentRegion,
       result,
       selectedGuessIndex,
-      croppedImageBase64: currentCroppedImage
+      croppedImageBase64: currentCroppedImage,
+      edits: currentEdits
     };
 
     setIdentifiedItems(prev => [...prev, newItem]);
@@ -115,9 +171,10 @@ export function TapToIdentifyWizard({
     setCurrentRegion(null);
     setCurrentCroppedImage(null);
     setSelectedGuessIndex(undefined);
+    setCurrentEdits(undefined);
     resetIdentify();
     setStage('ready');
-  }, [result, selectedGuessIndex, currentRegion, currentCroppedImage, resetIdentify]);
+  }, [result, selectedGuessIndex, currentRegion, currentCroppedImage, currentEdits, resetIdentify, storeVisualCorrection]);
 
   // Handle reject (go back)
   const handleReject = useCallback(() => {
@@ -132,9 +189,12 @@ export function TapToIdentifyWizard({
   const handleComplete = useCallback(() => {
     const items: IdentifiedItem[] = identifiedItems.map(item => {
       const guess = item.result.guesses[item.selectedGuessIndex];
+      // Use edits if available, otherwise fall back to guess values
+      const name = item.edits?.name ?? guess.name;
+      const brand = item.edits?.brand ?? guess.brand;
       return {
-        name: guess.name,
-        brand: guess.brand,
+        name,
+        brand,
         model: guess.model,
         year: guess.year,
         confidence: guess.confidence,
@@ -208,13 +268,9 @@ export function TapToIdentifyWizard({
             disabled={stage === 'identifying' || stage === 'reviewing'}
           />
 
-          {/* Loading state */}
-          {stage === 'identifying' && (
-            <div className="bg-white rounded-xl p-6 flex flex-col items-center justify-center gap-3">
-              <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
-              <p className="text-gray-600">Identifying product...</p>
-              <p className="text-sm text-gray-400">This usually takes 3-5 seconds</p>
-            </div>
+          {/* Loading state - enhanced with visual feedback */}
+          {stage === 'identifying' && currentCroppedImage && (
+            <IdentificationLoadingState croppedImage={currentCroppedImage} />
           )}
 
           {/* Error state */}
@@ -249,8 +305,12 @@ export function TapToIdentifyWizard({
                 Identified Items ({identifiedItems.length})
               </h3>
               <div className="space-y-2">
-                {identifiedItems.map((item, index) => {
+                {identifiedItems.map((item) => {
                   const guess = item.result.guesses[item.selectedGuessIndex];
+                  // Use edits if available
+                  const displayName = item.edits?.name ?? guess.name;
+                  const displayBrand = item.edits?.brand ?? guess.brand;
+                  const wasEdited = item.edits && (item.edits.name !== guess.name || item.edits.brand !== guess.brand);
                   return (
                     <div
                       key={item.id}
@@ -259,13 +319,20 @@ export function TapToIdentifyWizard({
                       <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
                         <img
                           src={item.croppedImageBase64}
-                          alt={guess.name}
+                          alt={displayName}
                           className="w-full h-full object-cover"
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-gray-900 truncate">{guess.name}</p>
-                        <p className="text-sm text-gray-500">{guess.brand}</p>
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium text-gray-900 truncate">{displayName}</p>
+                          {wasEdited && (
+                            <span className="inline-flex items-center px-1.5 py-0.5 bg-purple-100 text-purple-700 text-xs rounded">
+                              Edited
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-sm text-gray-500">{displayBrand}</p>
                       </div>
                       <div className="text-sm text-green-600 font-medium">
                         {guess.confidence}%
@@ -321,9 +388,12 @@ export function TapToIdentifyWizard({
                 setTimeout(() => {
                   if (result && currentRegion && currentCroppedImage) {
                     const guess = result.guesses[selectedGuessIndex];
+                    // Use edits if available
+                    const name = currentEdits?.name ?? guess.name;
+                    const brand = currentEdits?.brand ?? guess.brand;
                     const item: IdentifiedItem = {
-                      name: guess.name,
-                      brand: guess.brand,
+                      name,
+                      brand,
                       model: guess.model,
                       year: guess.year,
                       confidence: guess.confidence,

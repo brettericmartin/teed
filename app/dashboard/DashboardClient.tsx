@@ -90,7 +90,7 @@ export default function DashboardClient({
   const [bags, setBags] = useState<Bag[]>(initialBags);
   const [showNewBagModal, setShowNewBagModal] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  const { celebrateFirstBag } = useCelebration();
+  const { celebrateFirstBag, celebrateBagCreated } = useCelebration();
 
   const handleCreateBag = async (data: { title: string; description?: string; is_public: boolean }) => {
     setIsCreating(true);
@@ -111,9 +111,11 @@ export default function DashboardClient({
       setBags([newBag, ...bags]);
       setShowNewBagModal(false);
 
-      // Celebrate first bag creation with major confetti
+      // Celebrate bag creation with confetti
       if (isFirstBag) {
         celebrateFirstBag();
+      } else {
+        celebrateBagCreated();
       }
 
       // Redirect to bag editor
@@ -173,55 +175,44 @@ export default function DashboardClient({
   };
 
   return (
-    <PageContainer variant="warm" className="pt-16">
-      {/* Header with welcome message - Compact & Colorful */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-[var(--copper-3)] via-[var(--sand-3)] to-[var(--teed-green-2)]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,_var(--copper-4)_0%,_transparent_50%)] opacity-50" />
-
-        <ContentContainer className="relative py-5">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-              <h1 className="text-2xl font-bold text-[var(--copper-12)]">
-                {displayName || `@${userHandle}`}
-              </h1>
-              <div className="flex items-center gap-2 mt-1">
-                <Link
-                  href={`/u/${userHandle}`}
-                  className="text-sm text-[var(--copper-11)] hover:text-[var(--copper-12)] hover:underline transition-colors"
-                >
-                  View Profile
-                </Link>
-                <span className="text-[var(--copper-8)]">•</span>
-                <Link
-                  href="/settings"
-                  className="text-sm text-[var(--copper-11)] hover:text-[var(--copper-12)] hover:underline transition-colors"
-                >
-                  Settings
-                </Link>
-              </div>
-            </div>
-            <Button
-              variant="featured"
-              onClick={() => setShowNewBagModal(true)}
-              className="w-full sm:w-auto"
+    <PageContainer variant="warm">
+      {/* Top section with background that extends to navbar */}
+      <div className="bg-[var(--surface)] pt-12">
+        <ContentContainer className="pb-4">
+          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <Link
+              href={`/u/${userHandle}`}
+              className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:underline transition-colors"
             >
-              <Plus className="w-5 h-5 sm:mr-2" />
-              <span className="hidden sm:inline">Create New Bag</span>
-              <span className="sm:hidden">New Bag</span>
-            </Button>
+              View Profile
+            </Link>
+            <span className="text-[var(--text-tertiary)]">•</span>
+            <Link
+              href="/settings"
+              className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:underline transition-colors"
+            >
+              Settings
+            </Link>
           </div>
-        </ContentContainer>
-      </div>
-
-      {/* Profile Stats */}
-      <ContentContainer className="py-4">
+          <Button
+            variant="featured"
+            onClick={() => setShowNewBagModal(true)}
+            className="w-auto"
+          >
+            <Plus className="w-5 h-5 sm:mr-2" />
+            <span className="hidden sm:inline">Create New Bag</span>
+            <span className="sm:hidden">New Bag</span>
+          </Button>
+        </div>
         <ProfileStats
           totalBags={bags.length}
           totalViews={profileStats.totalViews}
           totalFollowers={profileStats.totalFollowers}
           statsUpdatedAt={profileStats.statsUpdatedAt}
         />
-      </ContentContainer>
+        </ContentContainer>
+      </div>
 
       {/* Main Content */}
       <ContentContainer className="pb-8">

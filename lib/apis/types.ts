@@ -408,19 +408,64 @@ export interface SelectionRegion {
 }
 
 /**
- * Visual description from AI analysis
+ * Feature with confidence score
+ */
+export interface ConfidentFeature<T = string> {
+  value: T;
+  confidence: number;            // 0-100
+}
+
+/**
+ * OCR extracted text from image
+ */
+export interface ExtractedText {
+  text: string;
+  confidence: number;            // 0-100 OCR confidence
+  location: string;              // "crown", "sole", "face", "label", etc.
+  type: 'brand' | 'model' | 'serial' | 'other';
+}
+
+/**
+ * Visual description from AI analysis (enhanced with confidence scores)
  */
 export interface VisualDescription {
   objectType: string;            // "mallet putter headcover"
+  objectTypeConfidence: number;  // 0-100
   primaryColor: string;
+  primaryColorConfidence: number;
   secondaryColors: string[];
   finish: string;                // "matte", "glossy", "metallic"
+  finishConfidence: number;
   materials: string[];
+  materialsConfidence: number;
   shape: string;
-  visibleText: string[];         // Any text/numbers seen
+  shapeConfidence: number;
+  visibleText: string[];         // Any text/numbers seen (legacy)
   brandIndicators: string[];     // Logo shapes, design cues
   conditionNotes: string;
   size: string;
+  // Enhanced OCR data
+  ocrTexts?: ExtractedText[];    // Detailed OCR extractions
+}
+
+/**
+ * Out-of-distribution / novelty detection info
+ */
+export interface NoveltyInfo {
+  isNovel: boolean;              // True if product appears unknown
+  noveltyScore: number;          // 0-100, higher = more novel/unknown
+  knowledgeBaseCoverage: number; // 0-100, % of KB products matching features
+  reason: string | null;         // Why we think it's novel
+  suggestedAction: string;       // "help us learn", "try different angle", etc.
+}
+
+/**
+ * Confidence interval for calibrated confidence
+ */
+export interface ConfidenceInterval {
+  point: number;                 // Point estimate (e.g., 75)
+  lower: number;                 // Lower bound (e.g., 60)
+  upper: number;                 // Upper bound (e.g., 85)
 }
 
 /**
@@ -432,10 +477,16 @@ export interface ProductGuess {
   brand: string;
   model?: string;
   year?: number;
-  confidence: number;            // 0-100
+  confidence: number;            // 0-100 (point estimate)
+  confidenceInterval?: ConfidenceInterval; // Calibrated confidence range
   confidenceLevel: 'high' | 'medium' | 'low' | 'uncertain';
   matchingReasons: string[];
   differentiators: string[];     // What would confirm/deny this guess
+  ocrMatch?: {                   // OCR text matching info
+    matched: boolean;
+    matchedText?: string;
+    boostApplied: number;        // Confidence boost from OCR match
+  };
 }
 
 /**
@@ -454,6 +505,7 @@ export interface SingleItemIdentificationResult {
   visualDescription: VisualDescription;
   guesses: ProductGuess[];
   uncertainty: UncertaintyInfo;
+  novelty: NoveltyInfo;          // OOD detection results
   processingTimeMs: number;
   modelUsed: string;
 }
@@ -496,6 +548,10 @@ export interface IdentifiedCanvasItem {
   result: SingleItemIdentificationResult;
   selectedGuessIndex: number;    // Which of the 3 guesses the user selected (0, 1, or 2)
   croppedImageBase64: string;    // The cropped region image
+  edits?: {                       // Optional user edits to the guess
+    name: string;
+    brand: string;
+  };
 }
 
 // ============================================================================

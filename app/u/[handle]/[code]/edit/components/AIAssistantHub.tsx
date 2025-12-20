@@ -135,16 +135,15 @@ export default function AIAssistantHub({
       badge: { label: 'Best', variant: 'recommended' },
     },
     {
-      id: 'add-from-photo',
+      id: 'tap-to-identify',
       icon: <Camera className="w-5 h-5" />,
-      title: 'Add from Photos',
-      description: 'Upload multiple photos, AI extracts products',
+      title: 'Tap to Identify',
+      description: 'Upload a photo, tap items to identify them',
       onClick: onAddFromPhoto,
       isLoading: isIdentifying,
       loadingText: 'Identifying...',
       disabled: isIdentifying,
       delay: 150,
-      badge: { label: 'Experimental', variant: 'experimental' },
     },
   ];
 

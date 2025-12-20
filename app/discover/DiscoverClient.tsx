@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Compass, Package, Search, Filter, X, Heart, Eye, Layers, ChevronDown, User, Tag, TrendingUp, Bookmark } from 'lucide-react';
+import { Compass, Package, Search, Filter, X, Heart, Eye, ChevronDown, User, TrendingUp, Bookmark } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { staggerContainer, cardVariants } from '@/lib/animations';
@@ -326,31 +326,9 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
 
   return (
     <PageContainer variant="cool">
-      {/* Hero Section - Compact & Colorful */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-[var(--teed-green-3)] via-[var(--sky-3)] to-[var(--copper-2)]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,_var(--teed-green-4)_0%,_transparent_50%)] opacity-60" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,_var(--sky-4)_0%,_transparent_40%)] opacity-50" />
-
-        <ContentContainer className="relative py-6 md:py-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-[var(--evergreen-12)] mb-1">
-                Discover
-              </h1>
-              <p className="text-sm md:text-base text-[var(--evergreen-11)] font-medium">
-                Curated collections from creators and enthusiasts
-              </p>
-            </div>
-            <div className="hidden md:flex items-center gap-2 text-[var(--evergreen-11)]">
-              <Compass className="w-8 h-8 opacity-60" />
-            </div>
-          </div>
-        </ContentContainer>
-      </div>
-
-      {/* Filters Header */}
-      <PageHeader>
-        <ContentContainer className="py-4">
+      {/* Filters Header - extends up to navbar */}
+      <PageHeader className="pt-12">
+        <ContentContainer className="pb-4">
           <div className="flex flex-col gap-3">
 
             {/* Filters */}

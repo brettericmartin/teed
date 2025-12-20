@@ -10,7 +10,6 @@ import QuickAddItem from './components/QuickAddItem';
 import AddItemForm from './components/AddItemForm';
 import ShareModal from './components/ShareModal';
 import PhotoUploadModal from './components/PhotoUploadModal';
-import BulkPhotoUploadModal from './components/BulkPhotoUploadModal';
 import BulkLinkImportModal from './components/BulkLinkImportModal';
 import ProductReviewModal, { IdentifiedProduct } from './components/ProductReviewModal';
 import BatchPhotoSelector from './components/BatchPhotoSelector';
@@ -23,9 +22,10 @@ import CoverPhotoCropper, { type AspectRatioId } from './components/CoverPhotoCr
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
-import { SmartIdentificationWizard } from '@/components/apis';
-import type { ValidatedProduct } from '@/lib/apis/types';
+import { TapToIdentifyWizard } from '@/components/apis';
+import type { IdentifiedItem } from '@/components/apis/TapToIdentifyWizard';
 import { CATEGORIES } from '@/lib/categories';
+import { useCelebration } from '@/lib/celebrations';
 
 /**
  * Robust data URL to Blob converter that handles mobile browser quirks.
@@ -149,6 +149,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const router = useRouter();
   const toast = useToast();
   const confirm = useConfirm();
+  const { celebrateItemAdded, celebrateMilestone } = useCelebration();
   const [bag, setBag] = useState<Bag>(initialBag);
   const [title, setTitle] = useState(bag.title);
   const [description, setDescription] = useState(bag.description || '');
@@ -159,11 +160,10 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [showManualForm, setShowManualForm] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
-  const [showPhotoUpload, setShowPhotoUpload] = useState(false);
   const [showBulkLinkImport, setShowBulkLinkImport] = useState(false);
   const [showProductReview, setShowProductReview] = useState(false);
-  const [showBulkSmartWizard, setShowBulkSmartWizard] = useState(false);
-  const [bulkWizardImages, setBulkWizardImages] = useState<string[]>([]);
+  const [showTapToIdentify, setShowTapToIdentify] = useState(false);
+  const [tapToIdentifyImage, setTapToIdentifyImage] = useState<string | null>(null);
   const [showItemSelection, setShowItemSelection] = useState(false);
   const [showBatchPhotoSelector, setShowBatchPhotoSelector] = useState(false);
   const [selectedItemsForPhotos, setSelectedItemsForPhotos] = useState<typeof bag.items>([]);
@@ -273,11 +273,18 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       }
 
       const newItem = await response.json();
+      const newItemCount = bag.items.length + 1;
       setBag((prev) => ({
         ...prev,
         items: [...prev.items, { ...newItem, links: [] }],
       }));
       // QuickAddItem component handles its own state reset
+
+      // Celebrate the new item
+      celebrateItemAdded();
+
+      // Check for milestone celebrations
+      celebrateMilestone(newItemCount);
 
       // Trigger background auto-enrichment (don't await - run silently)
       autoEnrichItem(newItem.id, itemData.custom_name);
@@ -744,96 +751,49 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     }
   };
 
-  // Step 29: Photo upload and AI identification handlers
-  const handlePhotoCapture = async (base64Image: string) => {
-    setIsIdentifying(true);
-    setShowPhotoUpload(false);
-    // Store the captured photo to use later when creating items
-    setCapturedPhotoBase64(base64Image);
+  // Tap-to-Identify: Handle image selection and launch wizard
+  const handleTapToIdentifyImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-    try {
-      const response = await fetch('/api/ai/identify-products', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          image: base64Image,
-          bagType: bag.title, // Use bag title as context
-        }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to identify products');
-      }
-
-      const result = await response.json();
-
-      setIdentifiedProducts(result);
-      setShowProductReview(true);
-    } catch (error: any) {
-      console.error('Error identifying products:', error);
-      setCapturedPhotoBase64(null); // Clear on error
-      alert(error.message || 'Failed to identify products. Please try again.');
-    } finally {
-      setIsIdentifying(false);
-    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64 = event.target?.result as string;
+      setTapToIdentifyImage(base64);
+      setShowTapToIdentify(true);
+    };
+    reader.readAsDataURL(file);
   };
 
-  // Bulk photo upload handler (for 2-10 photos) - Uses APIS
-  const handleBulkPhotosCapture = async (base64Images: string[]) => {
-    setShowPhotoUpload(false);
-    setCapturedPhotosArray(base64Images);
-    setBulkWizardImages(base64Images);
-    setShowBulkSmartWizard(true);
-    console.log('[BulkUpload] Launching APIS with', base64Images.length, 'images');
-  };
+  // Tap-to-Identify: Handle wizard completion
+  const handleTapToIdentifyComplete = async (items: IdentifiedItem[]) => {
+    setShowTapToIdentify(false);
+    setTapToIdentifyImage(null);
 
-  // Handler for APIS bulk completion
-  const handleBulkSmartWizardComplete = async (products: ValidatedProduct[]) => {
-    setShowBulkSmartWizard(false);
-    setBulkWizardImages([]);
+    console.log('[TapToIdentify] Completed with', items.length, 'items');
 
-    console.log('[BulkUpload] APIS completed with', products.length, 'products');
-
-    // Add each validated product to the bag
-    for (const product of products) {
+    // Add each identified item to the bag
+    for (const item of items) {
       const suggestion = {
-        custom_name: product.name,
-        custom_description: product.specs || product.specifications?.join(' | ') || '',
+        custom_name: item.name,
+        custom_description: item.visualDescription || '',
         notes: '',
-        category: product.category,
-        confidence: product.finalConfidence / 100,
-        brand: product.brand,
-        funFactOptions: product.funFacts,
-        productUrl: product.links?.[0]?.url,
-        imageUrl: product.productImage?.imageUrl,
-        price: product.estimatedPrice,
+        category: 'golf', // Default category
+        confidence: item.confidence / 100,
+        brand: item.brand,
+        uploadedImageBase64: item.croppedImageBase64,
       };
 
       await handleAddItem(suggestion);
     }
 
-    setCapturedPhotosArray([]);
-    toast.showSuccess(`Added ${products.length} item${products.length !== 1 ? 's' : ''} to bag`);
+    toast.showSuccess(`Added ${items.length} item${items.length !== 1 ? 's' : ''} to bag`);
   };
 
-  // Handler for single product from bulk APIS (when user adds one at a time)
-  const handleBulkSmartWizardSingleComplete = async (product: ValidatedProduct) => {
-    const suggestion = {
-      custom_name: product.name,
-      custom_description: product.specs || product.specifications?.join(' | ') || '',
-      notes: '',
-      category: product.category,
-      confidence: product.finalConfidence / 100,
-      brand: product.brand,
-      funFactOptions: product.funFacts,
-      productUrl: product.links?.[0]?.url,
-      imageUrl: product.productImage?.imageUrl,
-      price: product.estimatedPrice,
-    };
-
-    await handleAddItem(suggestion);
-    toast.showSuccess(`Added ${product.name} to bag`);
+  // Tap-to-Identify: Handle wizard cancel
+  const handleTapToIdentifyCancel = () => {
+    setShowTapToIdentify(false);
+    setTapToIdentifyImage(null);
   };
 
   // Step 29: Batch item creation from AI results
@@ -995,6 +955,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       );
 
       // Update bag state with new items
+      const newItemCount = bag.items.length + createdItems.length;
       setBag((prev) => ({
         ...prev,
         items: [
@@ -1007,6 +968,12 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       setIdentifiedProducts(null);
       setCapturedPhotoBase64(null); // Clear the captured photo
       setCapturedPhotosArray([]); // Clear the bulk photos array
+
+      // Celebrate batch add
+      celebrateItemAdded();
+
+      // Check for milestone celebrations
+      celebrateMilestone(newItemCount);
 
       // Show success message
       toast.showAI(`Successfully added ${createdItems.length} items to your bag!`);
@@ -1473,7 +1440,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           <AIAssistantHub
             itemCount={bag.items.length}
             itemsWithoutPhotos={bag.items.filter(item => !item.photo_url).length}
-            onAddFromPhoto={() => setShowPhotoUpload(true)}
+            onAddFromPhoto={() => document.getElementById('tap-to-identify-input')?.click()}
             onAddFromLinks={() => setShowBulkLinkImport(true)}
             onFindPhotos={() => setShowItemSelection(true)}
             onFillProductInfo={() => setShowEnrichmentItemSelection(true)}
@@ -1737,13 +1704,27 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         onTogglePublic={() => setIsPublic(!isPublic)}
       />
 
-      {/* Bulk Photo Upload Modal (supports 1-10 photos) */}
-      <BulkPhotoUploadModal
-        isOpen={showPhotoUpload}
-        onClose={() => setShowPhotoUpload(false)}
-        onPhotosCapture={handleBulkPhotosCapture}
-        bagType={bag.title}
+      {/* Hidden file input for Tap-to-Identify */}
+      <input
+        type="file"
+        id="tap-to-identify-input"
+        accept="image/*"
+        onChange={handleTapToIdentifyImageSelect}
+        className="hidden"
       />
+
+      {/* Tap-to-Identify Wizard */}
+      {showTapToIdentify && tapToIdentifyImage && (
+        <div className="fixed inset-0 bg-black z-50">
+          <TapToIdentifyWizard
+            imageSource={tapToIdentifyImage}
+            onComplete={handleTapToIdentifyComplete}
+            onCancel={handleTapToIdentifyCancel}
+            categoryHint="golf"
+            className="h-full"
+          />
+        </div>
+      )}
 
       {/* Bulk Link Import Modal */}
       <BulkLinkImportModal
@@ -1783,22 +1764,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         />
       )}
 
-      {/* Bulk Smart Identification Wizard (APIS) - for multiple photos */}
-      {showBulkSmartWizard && bulkWizardImages.length > 0 && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
-          <SmartIdentificationWizard
-            initialImages={bulkWizardImages}
-            bagContext={bag.title}
-            onComplete={handleBulkSmartWizardSingleComplete}
-            onCompleteAll={handleBulkSmartWizardComplete}
-            onCancel={() => {
-              setShowBulkSmartWizard(false);
-              setBulkWizardImages([]);
-              setCapturedPhotosArray([]);
-            }}
-          />
-        </div>
-      )}
 
       {/* Item Selection Modal for Photos */}
       <ItemSelectionModal
