@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, FormEvent, useEffect } from 'react';
+import { useState, FormEvent } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -8,17 +8,10 @@ export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect_to');
-  const [email, setEmail] = useState('test@teed-test.com');
-  const [password, setPassword] = useState('test-password');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    // Debug: Check if environment variables are loaded
-    console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
-    console.log('Has Supabase Key:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
-    console.log('Redirect to:', redirectTo);
-  }, [redirectTo]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -26,33 +19,23 @@ export default function LoginPage() {
     setError('');
 
     try {
-      console.log('Attempting sign in with:', email);
-
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      console.log('Sign in response:', { data, error });
-
       if (error) {
-        console.error('Sign in error:', error);
         setError(error.message);
         return;
       }
 
       if (data.session) {
-        console.log('Session created, redirecting...');
-        // Force a hard navigation to ensure cookies are sent
-        // Use redirect_to if provided, otherwise go to dashboard
         const destination = redirectTo || '/dashboard';
         window.location.href = destination;
       } else {
-        console.error('No session created');
         setError('No session created. Please try again.');
       }
     } catch (err: any) {
-      console.error('Caught error:', err);
       setError(err.message || 'An error occurred');
     } finally {
       setIsLoading(false);
@@ -80,6 +63,7 @@ export default function LoginPage() {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
               required
               disabled={isLoading}
               className="w-full px-4 py-3 text-base bg-[var(--input-bg)] border border-[var(--input-border)] rounded-[var(--radius-md)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:outline-none focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent disabled:bg-[var(--input-bg-disabled)] transition-all"
@@ -116,16 +100,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="mt-6 pt-6 border-t border-[var(--border-subtle)]">
-          <p className="text-sm text-[var(--text-secondary)] text-center">
-            Test credentials are pre-filled
-          </p>
-          <p className="text-xs text-[var(--text-tertiary)] text-center mt-1">
-            test@teed-test.com / test-password
-          </p>
-        </div>
-
-        <div className="mt-6 text-center">
+        <div className="mt-6 pt-6 border-t border-[var(--border-subtle)] text-center">
           <p className="text-sm text-[var(--text-secondary)]">
             Don't have an account?{' '}
             <a
