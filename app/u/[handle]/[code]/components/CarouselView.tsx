@@ -236,27 +236,30 @@ export function CarouselView({
     setTouchStart(null);
   };
 
-  // Handle tap navigation on mobile - tap left/right zones to navigate (instant, no fade)
+  // Handle all clicks in slideshow - NEVER open modal, only navigate on mobile tap zones
   const handleTapNavigation = (e: React.MouseEvent) => {
-    if (!isMobile) return;
+    // Always stop propagation to prevent modal from opening
+    e.preventDefault();
+    e.stopPropagation();
 
-    // Don't trigger on buttons or links
+    // Don't navigate if clicking buttons or links
     const target = e.target as HTMLElement;
     if (target.closest('button') || target.closest('a')) return;
 
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const width = rect.width;
+    // On mobile, use tap zones for navigation
+    if (isMobile) {
+      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const width = rect.width;
 
-    // Left third = previous, right third = next, middle = do nothing (let content handle it)
-    if (x < width * 0.33) {
-      e.stopPropagation();
-      setIsInstantTransition(true);
-      goToPrevious();
-    } else if (x > width * 0.67) {
-      e.stopPropagation();
-      setIsInstantTransition(true);
-      goToNext();
+      // Left third = previous, right third = next
+      if (x < width * 0.33) {
+        setIsInstantTransition(true);
+        goToPrevious();
+      } else if (x > width * 0.67) {
+        setIsInstantTransition(true);
+        goToNext();
+      }
     }
   };
 
@@ -358,8 +361,8 @@ export function CarouselView({
               <div
                 className="absolute inset-0 flex flex-col justify-end"
               >
-                {/* Text content - left aligned, bottom positioned */}
-                <div className="p-6 md:p-10 lg:p-12 space-y-3 md:space-y-4 bg-gradient-to-t from-black/70 via-black/30 to-transparent">
+                {/* Text content - left aligned, positioned higher on mobile for TikTok-style viewing */}
+                <div className="p-6 pb-24 md:p-10 md:pb-10 lg:p-12 lg:pb-12 space-y-2 md:space-y-4 bg-gradient-to-t from-black/70 via-black/40 to-transparent pt-32 md:pt-20">
                   {/* Brand */}
                   {item.brand && (
                     <p
