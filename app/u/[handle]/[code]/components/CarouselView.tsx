@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Play, Pause, Maximize, Minimize, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, Pause, Maximize, Minimize } from 'lucide-react';
 
 interface ItemLink {
   id: string;
@@ -139,20 +139,66 @@ export function CarouselView({
     return () => clearInterval(interval);
   }, [isAutoPlaying, goToNext]);
 
-  // Toggle fullscreen
-  const toggleFullscreen = useCallback(() => {
-    setIsFullscreen((prev) => !prev);
-  }, []);
+  // Toggle fullscreen - use native API on desktop, CSS fallback on mobile
+  const toggleFullscreen = useCallback(async () => {
+    if (!containerRef.current) return;
 
-  // Lock body scroll when fullscreen
+    const newFullscreen = !isFullscreen;
+
+    // On desktop, try native fullscreen API
+    if (!isMobile && document.fullscreenEnabled) {
+      try {
+        if (newFullscreen) {
+          await containerRef.current.requestFullscreen();
+        } else if (document.fullscreenElement) {
+          await document.exitFullscreen();
+        }
+      } catch (err) {
+        // Native API failed, fall through to CSS fallback
+      }
+    }
+
+    // Always set state for CSS fallback (especially on mobile)
+    setIsFullscreen(newFullscreen);
+  }, [isFullscreen, isMobile]);
+
+  // Sync state with browser fullscreen changes (e.g., user presses Escape on desktop)
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      // Only sync if using native fullscreen
+      if (!isMobile) {
+        setIsFullscreen(!!document.fullscreenElement);
+      }
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, [isMobile]);
+
+  // Lock body scroll and hide overflow when fullscreen
   useEffect(() => {
     if (isFullscreen) {
+      // Save current scroll position
+      const scrollY = window.scrollY;
       document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
     } else {
+      // Restore scroll position
+      const scrollY = document.body.style.top;
       document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
     }
     return () => {
       document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
     };
   }, [isFullscreen]);
 
@@ -165,16 +211,14 @@ export function CarouselView({
         e.preventDefault();
         setIsAutoPlaying((prev) => !prev);
       }
-      if (e.key === 'Escape' && isFullscreen) {
-        setIsFullscreen(false);
-      }
+      // Escape is handled natively by fullscreen API
       if (e.key === 'f' || e.key === 'F') {
         toggleFullscreen();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [goToPrevious, goToNext, isFullscreen, toggleFullscreen]);
+  }, [goToPrevious, goToNext, toggleFullscreen]);
 
   // Touch/swipe handling - keeps swipe as backup
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -227,26 +271,26 @@ export function CarouselView({
 
   if (sortedItems.length === 0) return null;
 
-  // Fullscreen wrapper classes
+  // Fullscreen wrapper classes - z-[9999] to go above everything including navbars
   const fullscreenClasses = isFullscreen
-    ? 'fixed inset-0 z-50 bg-black flex items-center justify-center'
+    ? 'fixed inset-0 z-[9999] bg-black flex items-center justify-center'
     : 'relative w-full';
 
-  // Carousel container classes
+  // Carousel container classes - use dvh for dynamic viewport height on mobile
   const carouselClasses = isFullscreen
-    ? 'relative w-full h-full overflow-hidden bg-black'
+    ? 'relative w-screen h-[100dvh] overflow-hidden bg-black'
     : 'relative aspect-square max-h-[85vh] w-full max-w-3xl mx-auto overflow-hidden rounded-2xl bg-black';
 
   return (
     <div className={fullscreenClasses} ref={containerRef}>
-      {/* Close button when fullscreen */}
+      {/* Teed watermark when fullscreen - tap to exit */}
       {isFullscreen && (
         <button
-          onClick={() => setIsFullscreen(false)}
-          className="absolute top-4 right-4 z-50 p-3 bg-black/60 hover:bg-black/80 backdrop-blur-sm text-white rounded-full transition-all"
+          onClick={toggleFullscreen}
+          className="absolute top-4 left-4 z-50 px-3 py-1.5 text-white/70 hover:text-white text-sm font-medium tracking-wide transition-all"
           aria-label="Exit fullscreen"
         >
-          <X className="w-6 h-6" />
+          teed.club
         </button>
       )}
 
@@ -312,8 +356,7 @@ export function CarouselView({
 
               {/* Content Overlay - Left aligned */}
               <div
-                className="absolute inset-0 flex flex-col justify-end cursor-pointer"
-                onClick={() => onItemClick(item)}
+                className="absolute inset-0 flex flex-col justify-end"
               >
                 {/* Text content - left aligned, bottom positioned */}
                 <div className="p-6 md:p-10 lg:p-12 space-y-3 md:space-y-4 bg-gradient-to-t from-black/70 via-black/30 to-transparent">
