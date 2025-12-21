@@ -5,7 +5,7 @@ import { openai } from '@/lib/openaiClient';
 import { identifyProduct, parseProductUrl } from '@/lib/linkIdentification';
 import type { ProcessingStage, BulkLinkStreamEvent } from '@/lib/types/bulkLinkStream';
 
-export const maxDuration = 60; // Extended timeout for bulk processing
+export const maxDuration = 300; // Extended timeout for bulk processing (Vercel Pro: 300s max)
 
 // ============================================================
 // TYPES
@@ -308,45 +308,13 @@ async function findProductImages(
     images.push({ url: scraped.image, source: 'og', isPrimary: true });
   }
 
-  // 2. Try to extract more images from the page
-  try {
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-      },
-    });
+  // 2. Skip additional page fetch if we already have a good image from identification
+  // The identification pipeline (Firecrawl/lightweightFetch) already extracted images
+  // Re-fetching here just wastes time on blocked sites
+  // Only fetch if we have NO images and need more options
 
-    if (response.ok) {
-      const html = await response.text();
-
-      // Extract JSON-LD images (skip Amazon widget URLs)
-      const jsonLdMatches = html.matchAll(/<script\s+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi);
-      for (const match of jsonLdMatches) {
-        try {
-          const jsonLd = JSON.parse(match[1]);
-          if (jsonLd['@type'] === 'Product' && jsonLd.image) {
-            const productImages = Array.isArray(jsonLd.image) ? jsonLd.image : [jsonLd.image];
-            for (const img of productImages) {
-              const imgUrl = typeof img === 'string' ? img : img.url;
-              if (imgUrl && !isAmazonWidgetUrl(imgUrl) && !images.some(i => i.url === imgUrl)) {
-                images.push({ url: imgUrl, source: 'json-ld', isPrimary: false });
-              }
-            }
-          }
-        } catch {}
-      }
-
-      // Extract Twitter image (skip Amazon widget URLs)
-      const twitterMatch = html.match(/<meta\s+(?:name|property)=["']twitter:image["']\s+content=["']([^"']+)["']/i);
-      if (twitterMatch && twitterMatch[1] && !isAmazonWidgetUrl(twitterMatch[1]) && !images.some(i => i.url === twitterMatch[1])) {
-        images.push({ url: twitterMatch[1], source: 'meta', isPrimary: false });
-      }
-    }
-  } catch {}
-
-  // 3. Fall back to Google Image Search if we don't have enough good images
-  // (Amazon widget URLs are not counted as they're unreliable)
-  if (images.length < 3 && (analysis?.productName || scraped?.title)) {
+  // 3. Fall back to Google Image Search ONLY if we have no images at all
+  if (images.length === 0 && (analysis?.productName || scraped?.title)) {
     const query = [analysis?.brand || scraped?.brand, analysis?.productName || scraped?.title]
       .filter(Boolean)
       .join(' ');

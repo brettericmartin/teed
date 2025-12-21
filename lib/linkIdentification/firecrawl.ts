@@ -5,6 +5,32 @@
  * Firecrawl handles JavaScript rendering, bot protection bypass, and returns clean data.
  */
 
+// Simple in-memory cache for Firecrawl results (prevents duplicate API calls on retries)
+// Cache entries expire after 10 minutes
+const firecrawlCache = new Map<string, { result: FirecrawlResult; timestamp: number }>();
+const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+
+function getCachedResult(url: string): FirecrawlResult | null {
+  const cached = firecrawlCache.get(url);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+    console.log(`[Firecrawl] Cache hit for ${new URL(url).hostname}`);
+    return cached.result;
+  }
+  if (cached) {
+    firecrawlCache.delete(url); // Clean up expired entry
+  }
+  return null;
+}
+
+function setCachedResult(url: string, result: FirecrawlResult): void {
+  firecrawlCache.set(url, { result, timestamp: Date.now() });
+  // Limit cache size to prevent memory issues
+  if (firecrawlCache.size > 100) {
+    const firstKey = firecrawlCache.keys().next().value;
+    if (firstKey) firecrawlCache.delete(firstKey);
+  }
+}
+
 export interface FirecrawlResult {
   success: boolean;
   title: string | null;
@@ -41,6 +67,12 @@ interface FirecrawlResponse {
  * Use this when direct fetch is blocked (Amazon, etc.)
  */
 export async function scrapeWithFirecrawl(url: string): Promise<FirecrawlResult> {
+  // Check cache first to avoid duplicate API calls on retries
+  const cached = getCachedResult(url);
+  if (cached) {
+    return cached;
+  }
+
   const apiKey = process.env.FIRECRAWL_API_KEY;
 
   if (!apiKey) {
@@ -66,8 +98,8 @@ export async function scrapeWithFirecrawl(url: string): Promise<FirecrawlResult>
       body: JSON.stringify({
         url,
         formats: ['markdown'],
-        timeout: 30000,
-        waitFor: 2000, // Wait for dynamic content
+        timeout: 15000, // Reduced from 30s - fail faster for slow sites
+        waitFor: 1000, // Wait for dynamic content (reduced from 2s)
       }),
     });
 
@@ -126,7 +158,7 @@ export async function scrapeWithFirecrawl(url: string): Promise<FirecrawlResult>
     const price = extractPriceFromMarkdown(markdown);
     const brand = extractBrandFromTitle(title);
 
-    return {
+    const successResult: FirecrawlResult = {
       success: true,
       title,
       description,
@@ -135,6 +167,10 @@ export async function scrapeWithFirecrawl(url: string): Promise<FirecrawlResult>
       image,
       markdown: markdown.slice(0, 15000), // Limit size for AI
     };
+
+    // Cache successful results
+    setCachedResult(url, successResult);
+    return successResult;
 
   } catch (error: any) {
     console.error('[Firecrawl] Error:', error);
