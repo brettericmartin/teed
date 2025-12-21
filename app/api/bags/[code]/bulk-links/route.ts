@@ -641,45 +641,59 @@ export async function POST(
         let completedCount = 0;
 
         try {
-          // Process URLs sequentially for real-time streaming updates
-          for (let i = 0; i < urls.length; i++) {
-            const url = urls[i];
+          // Process URLs in parallel batches for speed
+          // Batch size of 5 means 25 URLs = 5 batches instead of 25 sequential calls
+          const PARALLEL_BATCH_SIZE = 5;
 
-            // Emit start event
-            sendEvent({
-              type: 'url_started',
-              index: i,
-              url,
-            });
+          for (let batchStart = 0; batchStart < urls.length; batchStart += PARALLEL_BATCH_SIZE) {
+            const batchEnd = Math.min(batchStart + PARALLEL_BATCH_SIZE, urls.length);
+            const batchUrls = urls.slice(batchStart, batchEnd);
 
-            // Process with stage callbacks
-            const result = await processUrl(url, i, (stage) => {
+            // Emit start events for all URLs in this batch
+            batchUrls.forEach((url, idx) => {
+              const globalIdx = batchStart + idx;
               sendEvent({
-                type: 'url_stage_update',
-                index: i,
-                stage,
+                type: 'url_started',
+                index: globalIdx,
+                url,
               });
             });
 
-            results.push(result);
-            completedCount++;
-
-            // Emit completed event
-            sendEvent({
-              type: 'url_completed',
-              index: i,
-              result: {
-                index: result.index,
-                originalUrl: result.originalUrl,
-                resolvedUrl: result.resolvedUrl,
-                status: result.status,
-                error: result.error,
-                scraped: result.scraped,
-                analysis: result.analysis,
-                photoOptions: result.photoOptions,
-                suggestedItem: result.suggestedItem,
-              },
+            // Process batch in parallel
+            const batchPromises = batchUrls.map((url, idx) => {
+              const globalIdx = batchStart + idx;
+              return processUrl(url, globalIdx, (stage) => {
+                sendEvent({
+                  type: 'url_stage_update',
+                  index: globalIdx,
+                  stage,
+                });
+              });
             });
+
+            const batchResults = await Promise.all(batchPromises);
+
+            // Emit completed events for all URLs in this batch
+            for (const result of batchResults) {
+              results.push(result);
+              completedCount++;
+
+              sendEvent({
+                type: 'url_completed',
+                index: result.index,
+                result: {
+                  index: result.index,
+                  originalUrl: result.originalUrl,
+                  resolvedUrl: result.resolvedUrl,
+                  status: result.status,
+                  error: result.error,
+                  scraped: result.scraped,
+                  analysis: result.analysis,
+                  photoOptions: result.photoOptions,
+                  suggestedItem: result.suggestedItem,
+                },
+              });
+            }
 
             // Emit batch progress
             sendEvent({
@@ -688,8 +702,8 @@ export async function POST(
               total: urls.length,
             });
 
-            // Small delay between URLs to prevent overwhelming
-            if (i < urls.length - 1) {
+            // Small delay between batches
+            if (batchEnd < urls.length) {
               await delay(BATCH_DELAY_MS);
             }
           }
