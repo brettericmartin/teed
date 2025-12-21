@@ -242,16 +242,9 @@ export async function identifyProduct(
   }
 
   // ========================================
-  // STAGE 2.6: Fallback for blocked sites
+  // STAGE 2.6: Firecrawl Fallback (for blocked sites like Amazon)
   // ========================================
-  // NOTE: Firecrawl disabled to preserve credits - using URL parsing + Google Images instead
-  // Most sites that block direct fetches also block Firecrawl, making it wasteful
   if (fetchResult.blocked || (!fetchResult.success && parsedUrl.isRetailer)) {
-    // Skip Firecrawl entirely - go straight to URL parsing + Google Images fallback
-    // This is more reliable and doesn't burn API credits
-    const skipFirecrawl = true;
-
-    if (!skipFirecrawl) {
     sources.push('firecrawl');
 
     const firecrawlResult = await scrapeWithFirecrawl(url);
@@ -354,7 +347,6 @@ export async function identifyProduct(
         startTime,
       });
     }
-    } // End of skipFirecrawl block
 
     // ========================================
     // STAGE 2.7: URL Parsing + Google Images Fallback

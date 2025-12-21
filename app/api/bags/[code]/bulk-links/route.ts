@@ -5,7 +5,7 @@ import { openai } from '@/lib/openaiClient';
 import { identifyProduct, parseProductUrl } from '@/lib/linkIdentification';
 import type { ProcessingStage, BulkLinkStreamEvent } from '@/lib/types/bulkLinkStream';
 
-export const maxDuration = 300; // Extended timeout for bulk processing (Vercel Pro limit)
+export const maxDuration = 60; // Extended timeout for bulk processing
 
 // ============================================================
 // TYPES
@@ -63,8 +63,8 @@ interface BatchSummary {
 // ============================================================
 
 const MAX_URLS = 25;
-const PARALLEL_BATCH_SIZE = 3; // Process 3 URLs at a time for balance of speed and reliability
-const BATCH_DELAY_MS = 50;
+const BATCH_SIZE = 5;
+const BATCH_DELAY_MS = 100;
 
 // Brand detection from domains
 const DOMAIN_TO_BRAND: Record<string, string> = {
@@ -308,12 +308,45 @@ async function findProductImages(
     images.push({ url: scraped.image, source: 'og', isPrimary: true });
   }
 
-  // NOTE: Removed redundant page fetch - we already have image data from identifyProduct
-  // The lightweightFetch in the identification pipeline already extracted JSON-LD and meta images
+  // 2. Try to extract more images from the page
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+      },
+    });
 
-  // 2. Fall back to Google Image Search ONLY if we have no images at all
-  // This reduces API calls while still providing fallback for blocked sites
-  if (images.length === 0 && (analysis?.productName || scraped?.title)) {
+    if (response.ok) {
+      const html = await response.text();
+
+      // Extract JSON-LD images (skip Amazon widget URLs)
+      const jsonLdMatches = html.matchAll(/<script\s+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi);
+      for (const match of jsonLdMatches) {
+        try {
+          const jsonLd = JSON.parse(match[1]);
+          if (jsonLd['@type'] === 'Product' && jsonLd.image) {
+            const productImages = Array.isArray(jsonLd.image) ? jsonLd.image : [jsonLd.image];
+            for (const img of productImages) {
+              const imgUrl = typeof img === 'string' ? img : img.url;
+              if (imgUrl && !isAmazonWidgetUrl(imgUrl) && !images.some(i => i.url === imgUrl)) {
+                images.push({ url: imgUrl, source: 'json-ld', isPrimary: false });
+              }
+            }
+          }
+        } catch {}
+      }
+
+      // Extract Twitter image (skip Amazon widget URLs)
+      const twitterMatch = html.match(/<meta\s+(?:name|property)=["']twitter:image["']\s+content=["']([^"']+)["']/i);
+      if (twitterMatch && twitterMatch[1] && !isAmazonWidgetUrl(twitterMatch[1]) && !images.some(i => i.url === twitterMatch[1])) {
+        images.push({ url: twitterMatch[1], source: 'meta', isPrimary: false });
+      }
+    }
+  } catch {}
+
+  // 3. Fall back to Google Image Search if we don't have enough good images
+  // (Amazon widget URLs are not counted as they're unreliable)
+  if (images.length < 3 && (analysis?.productName || scraped?.title)) {
     const query = [analysis?.brand || scraped?.brand, analysis?.productName || scraped?.title]
       .filter(Boolean)
       .join(' ');
@@ -413,7 +446,7 @@ async function processUrl(
     // This handles bot-protected sites by using URL intelligence
     onProgress?.('detecting');
     const identification = await identifyProduct(resolvedUrl, {
-      fetchTimeout: 5000, // Reduced from 8s - fail fast and use URL parsing
+      fetchTimeout: 8000,
       earlyExitConfidence: 0.85,
     });
 
