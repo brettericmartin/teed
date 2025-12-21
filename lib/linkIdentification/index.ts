@@ -70,9 +70,34 @@ export async function identifyProduct(
   const {
     urlOnly = false,
     skipAI = false,
-    fetchTimeout = 8000,
+    fetchTimeout = 5000, // Reduced from 8s for faster failures
     earlyExitConfidence = 0.85,
   } = options;
+
+  // ========================================
+  // STAGE 0: Check Product Library FIRST
+  // ========================================
+  // This saves API calls if we've scraped this URL before
+  const libraryEntry = await lookupInLibrary(url);
+  if (libraryEntry) {
+    sources.push('product_library');
+    const parsedUrlForLibrary = parseProductUrl(url);
+    return buildResult({
+      brand: libraryEntry.brand,
+      productName: libraryEntry.product_name || 'Unknown Product',
+      fullName: libraryEntry.full_name || libraryEntry.product_name || 'Unknown Product',
+      category: libraryEntry.category || parsedUrlForLibrary.category,
+      specifications: libraryEntry.specifications || [],
+      price: libraryEntry.price,
+      imageUrl: libraryEntry.image_url,
+      confidence: libraryEntry.confidence,
+      primarySource: 'product_library',
+      sources,
+      parsedUrl: parsedUrlForLibrary,
+      fetchResult: null,
+      startTime,
+    });
+  }
 
   // ========================================
   // STAGE 1: URL Intelligence (No Network)
@@ -245,29 +270,8 @@ export async function identifyProduct(
   // ========================================
   // STAGE 2.6: Firecrawl Fallback (for blocked sites like Amazon)
   // ========================================
+  // Note: Library was already checked in STAGE 0, so we go straight to Firecrawl
   if (fetchResult.blocked || (!fetchResult.success && parsedUrl.isRetailer)) {
-    // First, check the product library for cached data
-    // This saves Firecrawl credits if we've seen this URL before
-    const libraryEntry = await lookupInLibrary(url);
-    if (libraryEntry) {
-      sources.push('product_library');
-      return buildResult({
-        brand: libraryEntry.brand,
-        productName: libraryEntry.product_name || 'Unknown Product',
-        fullName: libraryEntry.full_name || libraryEntry.product_name || 'Unknown Product',
-        category: libraryEntry.category || parsedUrl.category,
-        specifications: libraryEntry.specifications || [],
-        price: libraryEntry.price,
-        imageUrl: libraryEntry.image_url,
-        confidence: libraryEntry.confidence,
-        primarySource: 'product_library',
-        sources,
-        parsedUrl,
-        fetchResult,
-        startTime,
-      });
-    }
-
     sources.push('firecrawl');
 
     const firecrawlResult = await scrapeWithFirecrawl(url);

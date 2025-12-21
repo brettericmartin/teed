@@ -133,14 +133,20 @@ function parseUrls(input: string[]): string[] {
 
 async function resolveRedirects(url: string): Promise<string> {
   try {
-    // Follow redirects to get final URL
+    // Follow redirects to get final URL with a 3s timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
+
     const response = await fetch(url, {
       method: 'HEAD',
       redirect: 'follow',
+      signal: controller.signal,
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
       },
     });
+
+    clearTimeout(timeoutId);
     return response.url || url;
   } catch {
     return url;
@@ -303,18 +309,14 @@ async function findProductImages(
   // Helper to check if URL is a problematic Amazon widget URL
   const isAmazonWidgetUrl = (imgUrl: string) => imgUrl.includes('amazon-adsystem.com');
 
-  // 1. Add OG image from scrape (but not Amazon widget URLs - they're unreliable)
+  // 1. Add scraped image first (from Firecrawl/lightweightFetch)
   if (scraped?.image && !isAmazonWidgetUrl(scraped.image)) {
     images.push({ url: scraped.image, source: 'og', isPrimary: true });
   }
 
-  // 2. Skip additional page fetch if we already have a good image from identification
-  // The identification pipeline (Firecrawl/lightweightFetch) already extracted images
-  // Re-fetching here just wastes time on blocked sites
-  // Only fetch if we have NO images and need more options
-
-  // 3. Fall back to Google Image Search ONLY if we have no images at all
-  if (images.length === 0 && (analysis?.productName || scraped?.title)) {
+  // 2. ALWAYS do Google Image Search for additional options
+  // This gives users choices even when we scraped an image
+  if (analysis?.productName || scraped?.title) {
     const query = [analysis?.brand || scraped?.brand, analysis?.productName || scraped?.title]
       .filter(Boolean)
       .join(' ');
@@ -322,7 +324,12 @@ async function findProductImages(
     const googleImages = await searchGoogleImages(query);
     for (const imgUrl of googleImages) {
       if (!images.some(i => i.url === imgUrl)) {
-        images.push({ url: imgUrl, source: 'google', isPrimary: images.length === 0 });
+        // First Google result is primary if we didn't get a scraped image
+        images.push({
+          url: imgUrl,
+          source: 'google',
+          isPrimary: images.length === 0
+        });
       }
     }
   }
@@ -414,7 +421,7 @@ async function processUrl(
     // This handles bot-protected sites by using URL intelligence
     onProgress?.('detecting');
     const identification = await identifyProduct(resolvedUrl, {
-      fetchTimeout: 8000,
+      fetchTimeout: 5000, // Reduced for faster failures
       earlyExitConfidence: 0.85,
     });
 

@@ -37,10 +37,27 @@ interface SaveFailure {
 
 async function downloadImage(imageUrl: string): Promise<Blob | null> {
   try {
-    // Use the proxy for external images to avoid CORS issues
+    // Detect which site we're fetching from
+    const isAmazonUrl = imageUrl.includes('amazon') ||
+      imageUrl.includes('media-amazon.com') ||
+      imageUrl.includes('amazon-adsystem.com');
+    const isRetailerUrl = imageUrl.includes('rei.com') ||
+      imageUrl.includes('target.com') ||
+      imageUrl.includes('walmart.com');
+
+    // Use browser-like headers for sites that block bots
+    const userAgent = (isAmazonUrl || isRetailerUrl)
+      ? 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      : 'Mozilla/5.0 (compatible; TeedBot/1.0)';
+
     const response = await fetch(imageUrl, {
+      redirect: 'follow',
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'User-Agent': userAgent,
+        'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Referer': isAmazonUrl ? 'https://www.amazon.com/' :
+                   isRetailerUrl ? `https://${new URL(imageUrl).hostname}/` : '',
       },
     });
 
@@ -48,14 +65,20 @@ async function downloadImage(imageUrl: string): Promise<Blob | null> {
       throw new Error(`HTTP ${response.status}`);
     }
 
-    const contentType = response.headers.get('content-type');
-    if (!contentType?.startsWith('image/')) {
-      throw new Error('Not an image');
+    // Verify we got actual image data (not a tiny blocked response)
+    const blob = await response.blob();
+    if (blob.size < 100) {
+      throw new Error(`Image too small (${blob.size} bytes) - likely blocked`);
     }
 
-    return await response.blob();
+    const contentType = response.headers.get('content-type') || blob.type;
+    if (!contentType?.startsWith('image/')) {
+      throw new Error(`Not an image: ${contentType}`);
+    }
+
+    return blob;
   } catch (error) {
-    console.error(`[bulk-links/save] Failed to download image:`, error);
+    console.error(`[bulk-links/save] Failed to download image from ${imageUrl}:`, error);
     return null;
   }
 }
