@@ -14,6 +14,7 @@ import { fetchViaJinaReader, extractAmazonProductInfo } from './jinaReader';
 import { lookupAmazonProduct } from './amazonLookup';
 import { scrapeWithFirecrawl } from './firecrawl';
 import { searchGoogleImages, buildProductSearchQuery } from './googleImageSearch';
+import { lookupInLibrary, saveToLibrary } from './productLibrary';
 
 export interface ProductIdentificationResult {
   // Core product info
@@ -245,6 +246,28 @@ export async function identifyProduct(
   // STAGE 2.6: Firecrawl Fallback (for blocked sites like Amazon)
   // ========================================
   if (fetchResult.blocked || (!fetchResult.success && parsedUrl.isRetailer)) {
+    // First, check the product library for cached data
+    // This saves Firecrawl credits if we've seen this URL before
+    const libraryEntry = await lookupInLibrary(url);
+    if (libraryEntry) {
+      sources.push('product_library');
+      return buildResult({
+        brand: libraryEntry.brand,
+        productName: libraryEntry.product_name || 'Unknown Product',
+        fullName: libraryEntry.full_name || libraryEntry.product_name || 'Unknown Product',
+        category: libraryEntry.category || parsedUrl.category,
+        specifications: libraryEntry.specifications || [],
+        price: libraryEntry.price,
+        imageUrl: libraryEntry.image_url,
+        confidence: libraryEntry.confidence,
+        primarySource: 'product_library',
+        sources,
+        parsedUrl,
+        fetchResult,
+        startTime,
+      });
+    }
+
     sources.push('firecrawl');
 
     const firecrawlResult = await scrapeWithFirecrawl(url);
@@ -270,6 +293,22 @@ export async function identifyProduct(
         }
 
         const fullName = brand ? `${brand} ${productName}` : productName;
+
+        // Save to product library for future lookups (non-blocking)
+        saveToLibrary({
+          url,
+          domain: parsedUrl.domain,
+          brand,
+          productName,
+          fullName,
+          category: parsedUrl.category,
+          description: firecrawlResult.description,
+          price: firecrawlResult.price,
+          imageUrl: firecrawlResult.image,
+          specifications: firecrawlResult.description ? [firecrawlResult.description] : [],
+          confidence: 0.90,
+          source: 'firecrawl',
+        }).catch(() => {}); // Ignore save errors
 
         return buildResult({
           brand,
@@ -312,6 +351,22 @@ export async function identifyProduct(
 
           const fullName = brand ? `${brand} ${productName}` : productName;
 
+          // Save to product library (non-blocking)
+          saveToLibrary({
+            url,
+            domain: parsedUrl.domain,
+            brand,
+            productName,
+            fullName,
+            category: parsedUrl.category,
+            description: null,
+            price: amazonInfo.price,
+            imageUrl: null,
+            specifications: amazonInfo.features,
+            confidence: 0.85,
+            source: 'jina_amazon',
+          }).catch(() => {});
+
           return buildResult({
             brand,
             productName,
@@ -333,10 +388,28 @@ export async function identifyProduct(
 
       // Generic Jina result
       const productName = jinaResult.title;
+      const fullNameJina = parsedUrl.brand ? `${parsedUrl.brand} ${productName}` : productName;
+
+      // Save to product library (non-blocking)
+      saveToLibrary({
+        url,
+        domain: parsedUrl.domain,
+        brand: parsedUrl.brand,
+        productName,
+        fullName: fullNameJina,
+        category: parsedUrl.category,
+        description: jinaResult.description,
+        price: null,
+        imageUrl: null,
+        specifications: jinaResult.description ? [jinaResult.description] : [],
+        confidence: 0.75,
+        source: 'jina_reader',
+      }).catch(() => {});
+
       return buildResult({
         brand: parsedUrl.brand,
         productName,
-        fullName: parsedUrl.brand ? `${parsedUrl.brand} ${productName}` : productName,
+        fullName: fullNameJina,
         category: parsedUrl.category,
         specifications: jinaResult.description ? [jinaResult.description] : [],
         confidence: 0.75,
