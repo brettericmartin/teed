@@ -13,6 +13,7 @@ import AddToBagModal from './components/AddToBagModal';
 import { GridView } from './components/GridView';
 import { MasonryView } from './components/MasonryView';
 import { EditorialView } from './components/EditorialView';
+import { CarouselView } from './components/CarouselView';
 import { ViewStylePicker, type ViewStyle } from './components/ViewStylePicker';
 import { useToast } from '@/components/ui/Toast';
 import { StickyActionBar } from '@/components/ui/StickyActionBar';
@@ -84,15 +85,27 @@ export default function PublicBagView({
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  // View style from URL parameter (default: masonry/flow for curated look)
-  const validStyles: ViewStyle[] = ['grid', 'masonry', 'editorial', 'list'];
+  // Mobile detection for responsive default view
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // View style from URL parameter (editorial default on mobile, flow/masonry on desktop)
+  const validStyles: ViewStyle[] = ['grid', 'masonry', 'editorial', 'list', 'carousel'];
   const styleParam = searchParams.get('style') as ViewStyle;
-  const viewStyle: ViewStyle = validStyles.includes(styleParam) ? styleParam : 'masonry';
+  const defaultStyle: ViewStyle = isMobile ? 'editorial' : 'masonry';
+  const viewStyle: ViewStyle = validStyles.includes(styleParam) ? styleParam : defaultStyle;
 
   const handleViewStyleChange = (newStyle: ViewStyle) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (newStyle === 'masonry') {
-      params.delete('style'); // Flow is default, clean URL
+    // Clean URL when using platform default (editorial on mobile, masonry on desktop)
+    if (newStyle === defaultStyle) {
+      params.delete('style');
     } else {
       params.set('style', newStyle);
     }
@@ -604,6 +617,14 @@ export default function PublicBagView({
               ) : viewStyle === 'editorial' ? (
                 /* Editorial Magazine View */
                 <EditorialView
+                  items={items}
+                  heroItemId={bag.hero_item_id}
+                  onItemClick={handleItemClick}
+                  onLinkClick={trackLinkClick}
+                />
+              ) : viewStyle === 'carousel' ? (
+                /* Carousel Slideshow View */
+                <CarouselView
                   items={items}
                   heroItemId={bag.hero_item_id}
                   onItemClick={handleItemClick}

@@ -1,8 +1,8 @@
 'use client';
 
-import { LayoutGrid, List, Columns, Newspaper } from 'lucide-react';
+import { LayoutGrid, List, Columns, Newspaper, GalleryHorizontalEnd } from 'lucide-react';
 
-export type ViewStyle = 'grid' | 'list' | 'masonry' | 'editorial';
+export type ViewStyle = 'grid' | 'list' | 'masonry' | 'editorial' | 'carousel';
 
 interface ViewStylePickerProps {
   currentStyle: ViewStyle;
@@ -33,6 +33,12 @@ const VIEW_OPTIONS: { value: ViewStyle; icon: typeof LayoutGrid; label: string; 
     icon: List,
     label: 'List',
     description: 'Compact list view',
+  },
+  {
+    value: 'carousel',
+    icon: GalleryHorizontalEnd,
+    label: 'Slides',
+    description: 'Full-screen slideshow',
   },
 ];
 

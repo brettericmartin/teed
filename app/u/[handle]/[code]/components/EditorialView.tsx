@@ -137,6 +137,15 @@ function EditorialCard({
           {item.custom_name || 'Untitled'}
         </h3>
 
+        {/* Description - 2 lines for curated feel */}
+        {item.custom_description && (
+          <p className={`text-[var(--text-secondary)] line-clamp-2 ${
+            isHero ? 'mt-3 text-base' : 'mt-2 text-sm'
+          }`}>
+            {item.custom_description}
+          </p>
+        )}
+
         {/* Curator Note */}
         {hasNote && (
           <div className={`${isHero ? 'mt-5' : 'mt-4'} p-3 rounded-lg bg-white/60 border-l-[3px] ${cardColor.quote}`}>
