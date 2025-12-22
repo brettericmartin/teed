@@ -627,6 +627,7 @@ export default function PublicBagView({
                 <CarouselView
                   items={items}
                   heroItemId={bag.hero_item_id}
+                  bagTitle={bag.title}
                   onItemClick={handleItemClick}
                   onLinkClick={trackLinkClick}
                 />

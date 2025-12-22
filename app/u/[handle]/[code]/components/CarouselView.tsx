@@ -59,6 +59,7 @@ interface Item {
 interface CarouselViewProps {
   items: Item[];
   heroItemId: string | null;
+  bagTitle?: string;
   onItemClick: (item: Item) => void;
   onLinkClick: (linkId: string, itemId: string, url: string) => void;
 }
@@ -122,6 +123,7 @@ function getColorScheme(id: string) {
 export function CarouselView({
   items,
   heroItemId,
+  bagTitle,
   onItemClick,
   onLinkClick,
 }: CarouselViewProps) {
@@ -467,16 +469,18 @@ export function CarouselView({
                       inset: 0,
                     }}
                   >
-                    {/* Text content - left aligned, positioned within image */}
-                    <div className={`space-y-2 md:space-y-4 bg-gradient-to-t from-black/70 via-black/40 to-transparent ${
+                    {/* Text content - positioned for viral appeal on mobile */}
+                    <div className={`bg-gradient-to-t from-black/70 via-black/40 to-transparent ${
                       isFullscreen && isMobile
-                        ? 'pl-8 pr-4 pb-16 pt-20' // More left padding for mobile crop flexibility
-                        : 'p-6 pb-24 md:p-10 md:pb-10 lg:p-12 lg:pb-12 pt-32 md:pt-20'
+                        ? 'pl-8 pr-4 pb-[25%] pt-8 space-y-1' // Higher position, tighter spacing for TikTok
+                        : 'p-6 pb-24 md:p-10 md:pb-10 lg:p-12 lg:pb-12 pt-32 md:pt-20 space-y-2 md:space-y-4'
                     }`}>
                       {/* Brand */}
                       {item.brand && (
                         <p
-                          className="font-serif text-xl md:text-2xl lg:text-3xl tracking-wide uppercase"
+                          className={`font-serif tracking-wide uppercase ${
+                            isFullscreen && isMobile ? 'text-lg' : 'text-xl md:text-2xl lg:text-3xl'
+                          }`}
                           style={{
                             color: colorScheme.secondary,
                             textShadow: colorScheme.shadowSmall,
@@ -486,15 +490,23 @@ export function CarouselView({
                         </p>
                       )}
 
-                      {/* Product name - HUGE, left aligned, scales down for long names */}
+                      {/* Product name - HUGE, left aligned */}
                       <h2
-                        className="font-black leading-[0.85] tracking-tighter uppercase line-clamp-3"
+                        className={`font-black leading-[0.85] tracking-tighter uppercase ${
+                          isFullscreen && isMobile ? 'line-clamp-2' : 'line-clamp-3'
+                        }`}
                         style={{
                           color: colorScheme.primary,
                           textShadow: colorScheme.shadow,
                           fontSize: (() => {
                             const name = item.custom_name || 'Untitled';
                             const len = name.length;
+                            if (isFullscreen && isMobile) {
+                              // Larger text for mobile fullscreen viral content
+                              if (len > 30) return 'clamp(2rem, 8vw, 3.5rem)';
+                              if (len > 20) return 'clamp(2.5rem, 10vw, 4.5rem)';
+                              return 'clamp(3rem, 12vw, 5.5rem)';
+                            }
                             if (len > 50) return 'clamp(1.5rem, 5vw, 3rem)';
                             if (len > 35) return 'clamp(1.75rem, 6vw, 4rem)';
                             if (len > 25) return 'clamp(2rem, 7vw, 5rem)';
@@ -508,8 +520,8 @@ export function CarouselView({
                         )}
                       </h2>
 
-                      {/* Description */}
-                      {item.custom_description && (
+                      {/* Description - hidden in mobile fullscreen for curiosity gap */}
+                      {item.custom_description && !(isFullscreen && isMobile) && (
                         <p
                           className="font-serif text-lg md:text-2xl lg:text-3xl leading-snug line-clamp-2 max-w-2xl"
                           style={{
@@ -521,8 +533,8 @@ export function CarouselView({
                         </p>
                       )}
 
-                      {/* Notes */}
-                      {item.notes && (
+                      {/* Notes - hidden in mobile fullscreen for curiosity gap */}
+                      {item.notes && !(isFullscreen && isMobile) && (
                         <p
                           className="font-serif text-base md:text-xl lg:text-2xl italic line-clamp-2 max-w-xl opacity-90"
                           style={{
@@ -538,15 +550,22 @@ export function CarouselView({
                 );
               })()}
 
-              {/* Slide Counter */}
+              {/* Slide Counter - TikTok style for mobile fullscreen */}
               <div
-                className="absolute top-4 right-4 md:top-6 md:right-6 px-5 py-2.5 bg-black/40 backdrop-blur-sm rounded-full text-xl md:text-2xl font-bold"
+                className={`absolute ${
+                  isFullscreen && isMobile
+                    ? 'top-16 right-6 text-4xl font-black px-0 py-0 bg-transparent'
+                    : 'top-4 right-4 md:top-6 md:right-6 px-5 py-2.5 bg-black/40 backdrop-blur-sm rounded-full text-xl md:text-2xl font-bold'
+                }`}
                 style={{
                   color: colorScheme.primary,
-                  textShadow: colorScheme.shadowSmall,
+                  textShadow: colorScheme.shadow,
                 }}
               >
-                {index + 1} / {sortedItems.length}
+                {isFullscreen && isMobile
+                  ? String(index + 1).padStart(2, '0')
+                  : `${index + 1} / ${sortedItems.length}`
+                }
               </div>
 
               {/* Featured Badge */}
@@ -609,19 +628,32 @@ export function CarouselView({
         </div>
         {createPortal(
           <div className="fixed inset-0 z-[9999] bg-black" ref={containerRef}>
-            {/* Teed watermark - tap to exit */}
-            <button
-              onClick={toggleFullscreen}
-              className="absolute top-4 left-4 z-50 px-3 py-1.5 text-white/70 hover:text-white text-sm font-medium tracking-wide transition-all"
-              aria-label="Exit fullscreen"
-            >
-              teed.club
-            </button>
+            {/* Top bar - Hook text (bag title) and subtle branding */}
+            <div className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-6 pt-6">
+              {/* Bag title as hook - viral content needs context */}
+              {bagTitle && isMobile && (
+                <p className="text-white/80 text-sm font-medium tracking-wide uppercase truncate max-w-[60%]">
+                  {bagTitle}
+                </p>
+              )}
+              {!bagTitle && isMobile && <div />}
+
+              {/* Teed watermark - subtle, tap to exit */}
+              <button
+                onClick={toggleFullscreen}
+                className={`text-white/50 hover:text-white/80 font-medium tracking-wide transition-all ${
+                  isMobile ? 'text-xs' : 'text-sm'
+                }`}
+                aria-label="Exit fullscreen"
+              >
+                teed.club
+              </button>
+            </div>
 
             {carouselContent}
 
-            {/* Fullscreen dot navigation */}
-            {sortedItems.length > 1 && (
+            {/* Fullscreen dot navigation - hidden on mobile for cleaner viral look */}
+            {sortedItems.length > 1 && !isMobile && (
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-40">
                 {sortedItems.map((item, index) => {
                   const colorScheme = getColorScheme(item.id);
@@ -638,6 +670,13 @@ export function CarouselView({
                     />
                   );
                 })}
+              </div>
+            )}
+
+            {/* Mobile: Total count - subtle indicator */}
+            {isMobile && sortedItems.length > 1 && (
+              <div className="absolute bottom-6 right-6 z-40 text-white/40 text-xs font-medium">
+                of {sortedItems.length}
               </div>
             )}
           </div>,
