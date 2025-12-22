@@ -470,7 +470,7 @@ export function CarouselView({
                     {/* Text content - left aligned, positioned within image */}
                     <div className={`space-y-2 md:space-y-4 bg-gradient-to-t from-black/70 via-black/40 to-transparent ${
                       isFullscreen && isMobile
-                        ? 'p-4 pb-16 pt-20' // Tighter padding within image bounds
+                        ? 'pl-8 pr-4 pb-16 pt-20' // More left padding for mobile crop flexibility
                         : 'p-6 pb-24 md:p-10 md:pb-10 lg:p-12 lg:pb-12 pt-32 md:pt-20'
                     }`}>
                       {/* Brand */}
