@@ -20,6 +20,10 @@ export default function ImageCropModal({
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [imageAspect, setImageAspect] = useState(1);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
   // Reset state when modal opens with new image
   useEffect(() => {
@@ -29,7 +33,21 @@ export default function ImageCropModal({
       setCroppedAreaPixels(null);
       setPreviewUrl(null);
       setImageLoaded(false);
+      setImageAspect(1);
     }
+  }, [isOpen, imageUrl]);
+
+  // Load the image to get its aspect ratio
+  useEffect(() => {
+    if (!isOpen || !imageUrl) return;
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      imageRef.current = img;
+      setImageAspect(img.naturalWidth / img.naturalHeight);
+      setImageLoaded(true);
+    };
+    img.src = imageUrl;
   }, [isOpen, imageUrl]);
 
   const onCropChange = (location: { x: number; y: number }) => {
@@ -44,22 +62,6 @@ export default function ImageCropModal({
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const imageRef = useRef<HTMLImageElement | null>(null);
-
-  // Load the image once
-  useEffect(() => {
-    if (!isOpen || !imageUrl) return;
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      imageRef.current = img;
-      setImageLoaded(true);
-    };
-    img.src = imageUrl;
-  }, [isOpen, imageUrl]);
-
   // Generate square preview whenever crop changes
   useEffect(() => {
     if (!croppedAreaPixels || !imageRef.current) return;
@@ -71,7 +73,7 @@ export default function ImageCropModal({
     const squareY = y + (height - size) / 2;
 
     const canvas = document.createElement('canvas');
-    const previewSize = 96; // Match the preview container size
+    const previewSize = 96;
     canvas.width = previewSize;
     canvas.height = previewSize;
     const ctx = canvas.getContext('2d');
@@ -107,7 +109,7 @@ export default function ImageCropModal({
 
     if (!ctx) return null;
 
-    // Set canvas size to cropped area
+    // Set canvas size to cropped area (preserves original aspect)
     canvas.width = croppedAreaPixels.width;
     canvas.height = croppedAreaPixels.height;
 
@@ -172,10 +174,12 @@ export default function ImageCropModal({
               image={imageUrl}
               crop={crop}
               zoom={zoom}
+              aspect={imageAspect}
               onCropChange={onCropChange}
               onZoomChange={onZoomChange}
               onCropComplete={onCropAreaComplete}
               showGrid={true}
+              objectFit="contain"
             />
           </div>
 
