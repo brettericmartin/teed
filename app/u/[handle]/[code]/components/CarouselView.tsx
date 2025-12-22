@@ -550,23 +550,18 @@ export function CarouselView({
                 );
               })()}
 
-              {/* Slide Counter - TikTok style for mobile fullscreen */}
-              <div
-                className={`absolute ${
-                  isFullscreen && isMobile
-                    ? 'top-16 right-6 text-4xl font-black px-0 py-0 bg-transparent'
-                    : 'top-4 right-4 md:top-6 md:right-6 px-5 py-2.5 bg-black/40 backdrop-blur-sm rounded-full text-xl md:text-2xl font-bold'
-                }`}
-                style={{
-                  color: colorScheme.primary,
-                  textShadow: colorScheme.shadow,
-                }}
-              >
-                {isFullscreen && isMobile
-                  ? String(index + 1).padStart(2, '0')
-                  : `${index + 1} / ${sortedItems.length}`
-                }
-              </div>
+              {/* Slide Counter - hidden on mobile fullscreen for cleaner viral look */}
+              {!(isFullscreen && isMobile) && (
+                <div
+                  className="absolute top-4 right-4 md:top-6 md:right-6 px-5 py-2.5 bg-black/40 backdrop-blur-sm rounded-full text-xl md:text-2xl font-bold"
+                  style={{
+                    color: colorScheme.primary,
+                    textShadow: colorScheme.shadowSmall,
+                  }}
+                >
+                  {index + 1} / {sortedItems.length}
+                </div>
+              )}
 
               {/* Featured Badge */}
               {item.is_featured && (
@@ -628,31 +623,20 @@ export function CarouselView({
         </div>
         {createPortal(
           <div className="fixed inset-0 z-[9999] bg-black" ref={containerRef}>
-            {/* Top bar - Hook text (bag title) and subtle branding */}
-            <div className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-6 pt-6">
-              {/* Bag title as hook - viral content needs context */}
-              {bagTitle && isMobile && (
-                <p className="text-white/80 text-sm font-medium tracking-wide uppercase truncate max-w-[60%]">
-                  {bagTitle}
-                </p>
-              )}
-              {!bagTitle && isMobile && <div />}
-
-              {/* Teed watermark - subtle, tap to exit */}
-              <button
-                onClick={toggleFullscreen}
-                className={`text-white/50 hover:text-white/80 font-medium tracking-wide transition-all ${
-                  isMobile ? 'text-xs' : 'text-sm'
-                }`}
-                aria-label="Exit fullscreen"
-              >
-                teed.club
-              </button>
-            </div>
+            {/* Teed watermark - subtle, tap to exit */}
+            <button
+              onClick={toggleFullscreen}
+              className={`absolute top-6 right-6 z-50 text-white/40 hover:text-white/60 font-medium tracking-widest transition-all ${
+                isMobile ? 'text-xs' : 'text-sm'
+              }`}
+              aria-label="Exit fullscreen"
+            >
+              teed
+            </button>
 
             {carouselContent}
 
-            {/* Fullscreen dot navigation - hidden on mobile for cleaner viral look */}
+            {/* Fullscreen dot navigation - only on desktop */}
             {sortedItems.length > 1 && !isMobile && (
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-40">
                 {sortedItems.map((item, index) => {
@@ -670,13 +654,6 @@ export function CarouselView({
                     />
                   );
                 })}
-              </div>
-            )}
-
-            {/* Mobile: Total count - subtle indicator */}
-            {isMobile && sortedItems.length > 1 && (
-              <div className="absolute bottom-6 right-6 z-40 text-white/40 text-xs font-medium">
-                of {sortedItems.length}
               </div>
             )}
           </div>,
