@@ -35,11 +35,11 @@ export default function SortableItemCard({ item, onDelete, onUpdate, bagCode, is
 
   return (
     <div ref={setNodeRef} style={style} className="relative group">
-      {/* Drag Handle */}
+      {/* Drag Handle - always visible on mobile, hover on desktop */}
       <button
         {...attributes}
         {...listeners}
-        className="absolute -left-2 top-1/2 -translate-y-1/2 p-2 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing z-10 hover:bg-[var(--surface-hover)] rounded touch-none"
+        className="absolute -left-2 top-1/2 -translate-y-1/2 p-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing z-10 hover:bg-[var(--surface-hover)] rounded touch-none"
         aria-label="Drag to reorder"
       >
         <GripVertical className="w-5 h-5 text-[var(--text-tertiary)]" />

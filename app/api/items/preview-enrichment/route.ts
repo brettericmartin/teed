@@ -4,13 +4,6 @@ import { findBestProductLinks, detectProductAge } from '@/lib/services/SmartLink
 import { openai } from '@/lib/openaiClient';
 import { generateBrandContext, loadCategoryKnowledge } from '@/lib/brandKnowledge';
 
-type ClarificationQuestion = {
-  id: string;
-  question: string;
-  options: string[];
-  itemId: string;
-};
-
 /**
  * Detect likely categories from bag metadata and item names
  * Returns array of detected categories for brand knowledge loading
@@ -64,7 +57,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { bagId, clarificationAnswers, itemIds: selectedItemIds } = body; // Accept answers and optional item filter
+    const { bagId, itemIds: selectedItemIds } = body;
 
     if (!bagId) {
       return NextResponse.json({ error: 'bagId is required' }, { status: 400 });
@@ -152,11 +145,7 @@ export async function POST(request: NextRequest) {
         suggested: {},
       };
 
-      // Check if we have answers for this item from previous clarification
-      const itemAnswers = clarificationAnswers?.[item.id] || {};
-      const hasAnswers = Object.keys(itemAnswers).length > 0;
-
-      // Always generate enrichment suggestions (even if item has data)
+      // Generate enrichment suggestions
       try {
         const enrichResponse = await openai.chat.completions.create({
           model: 'gpt-4o',
@@ -178,21 +167,10 @@ Return ONLY valid JSON:
 {
   "brand": "Brand Name",
   "custom_description": "Specs with | separator (e.g., 10.5° | Stiff | Graphite)",
-  "notes": "Interesting 2-3 sentence fun fact with product differentiation",
-  "confidence": 0.85,
-  "clarificationNeeded": false,
-  "questions": []
+  "notes": "Interesting 2-3 sentence fun fact with product differentiation"
 }
 
-Confidence scoring:
-- 0.9+: Very confident in the identification
-- 0.7-0.89: Moderately confident, might benefit from clarification
-- <0.7: Low confidence, definitely need clarification
-
-If confidence < 0.85 and no user answers provided, include 1-2 clarification questions with visual-friendly options.
-Question format: { "id": "type", "question": "What type is this?", "options": ["Option A", "Option B", "Option C", "Other"] }
-
-Always provide ALL fields, even if some data already exists.`,
+Always provide ALL fields with your best guess based on the product name.`,
             },
             {
               role: 'user',
@@ -200,9 +178,8 @@ Always provide ALL fields, even if some data already exists.`,
 ${item.brand ? `Current brand: ${item.brand}` : ''}
 ${item.custom_description ? `Current description: ${item.custom_description}` : ''}
 ${item.notes ? `Current notes: ${item.notes}` : ''}
-${hasAnswers ? `User provided answers: ${JSON.stringify(itemAnswers)}` : ''}
 
-Generate fresh, detailed information for all fields.${hasAnswers ? ' Use the user answers to improve accuracy.' : ''}`,
+Generate fresh, detailed information for all fields.`,
             },
           ],
           temperature: 0.7,
@@ -220,18 +197,6 @@ Generate fresh, detailed information for all fields.${hasAnswers ? ' Use the use
         }
         if (enrichedData.notes) {
           suggestion.suggested.notes = enrichedData.notes;
-        }
-
-        // Track confidence and questions
-        suggestion.confidence = enrichedData.confidence || 0.9;
-
-        // Only include questions if no answers were provided and confidence is low
-        if (!hasAnswers && enrichedData.clarificationNeeded && enrichedData.questions?.length > 0) {
-          suggestion.clarificationNeeded = true;
-          suggestion.questions = enrichedData.questions.map((q: any) => ({
-            ...q,
-            itemId: item.id,
-          }));
         }
       } catch (error) {
         console.error(`Failed to enrich item ${item.id}:`, error);
@@ -276,20 +241,8 @@ Generate fresh, detailed information for all fields.${hasAnswers ? ' Use the use
     const allSuggestions = await Promise.all(suggestionPromises);
     const suggestions = allSuggestions.filter(s => s !== null);
 
-    // Collect all clarification questions
-    const allQuestions: ClarificationQuestion[] = suggestions
-      .filter(s => s.clarificationNeeded && s.questions?.length > 0)
-      .flatMap(s => s.questions);
-
-    // Check if any items need clarification
-    const needsClarification = allQuestions.length > 0;
-
-    console.log(`[preview-enrichment] Returning ${suggestions.length} suggestions, ${allQuestions.length} questions`);
-    return NextResponse.json({
-      suggestions,
-      needsClarification,
-      questions: allQuestions,
-    });
+    console.log(`[preview-enrichment] Returning ${suggestions.length} suggestions`);
+    return NextResponse.json({ suggestions });
   } catch (error) {
     console.error('Error in preview-enrichment:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

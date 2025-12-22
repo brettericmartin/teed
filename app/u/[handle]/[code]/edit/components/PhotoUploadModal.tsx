@@ -11,7 +11,7 @@ type PhotoUploadModalProps = {
 
 // Compress image to target size while maintaining quality
 // Handles iPhone HEIC, various mobile browser quirks, etc.
-async function compressImage(base64: string, maxSizeKB: number = 3500): Promise<string> {
+async function compressImage(base64: string, maxSizeKB: number = 5000): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new Image();
 
@@ -26,8 +26,8 @@ async function compressImage(base64: string, maxSizeKB: number = 3500): Promise<
           return;
         }
 
-        // Max dimension for good quality while reducing size
-        const MAX_DIMENSION = 2000;
+        // Max dimension - higher for better slideshow quality
+        const MAX_DIMENSION = 2400;
         if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
           const ratio = Math.min(MAX_DIMENSION / width, MAX_DIMENSION / height);
           width = Math.round(width * ratio);
@@ -46,12 +46,12 @@ async function compressImage(base64: string, maxSizeKB: number = 3500): Promise<
         ctx.drawImage(img, 0, 0, width, height);
 
         // Try different quality levels to get under target size
-        let quality = 0.9;
+        let quality = 0.92;
         let result = canvas.toDataURL('image/jpeg', quality);
 
-        // Reduce quality until we're under the target size
-        while (result.length > maxSizeKB * 1024 * 1.37 && quality > 0.3) {
-          quality -= 0.1;
+        // Reduce quality until we're under the target size (but keep quality reasonable)
+        while (result.length > maxSizeKB * 1024 * 1.37 && quality > 0.5) {
+          quality -= 0.05;
           result = canvas.toDataURL('image/jpeg', quality);
         }
 

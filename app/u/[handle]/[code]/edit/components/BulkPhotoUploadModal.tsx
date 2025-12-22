@@ -18,7 +18,7 @@ type PhotoPreview = {
 
 // Compress image to target size while maintaining quality
 // Uses createImageBitmap for better mobile Safari support, falls back to Image
-async function compressImage(base64: string, maxSizeKB: number = 3500): Promise<string> {
+async function compressImage(base64: string, maxSizeKB: number = 5000): Promise<string> {
   // First, convert data URL to blob for createImageBitmap
   const fetchBlob = async (): Promise<Blob> => {
     // Try fetch approach first (works on most browsers)
@@ -84,7 +84,7 @@ async function compressImage(base64: string, maxSizeKB: number = 3500): Promise<
     // Calculate target dimensions
     let width = imgWidth;
     let height = imgHeight;
-    const MAX_DIMENSION = 1600; // Reduced for mobile memory
+    const MAX_DIMENSION = 2400; // Higher for better slideshow quality
 
     if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
       const ratio = Math.min(MAX_DIMENSION / width, MAX_DIMENSION / height);
@@ -107,12 +107,12 @@ async function compressImage(base64: string, maxSizeKB: number = 3500): Promise<
       drawSource.close();
     }
 
-    // Compress with reducing quality
-    let quality = 0.85;
+    // Compress with reducing quality (higher quality for slideshow)
+    let quality = 0.92;
     let result = canvas.toDataURL('image/jpeg', quality);
 
-    while (result.length > maxSizeKB * 1024 * 1.37 && quality > 0.3) {
-      quality -= 0.1;
+    while (result.length > maxSizeKB * 1024 * 1.37 && quality > 0.5) {
+      quality -= 0.05;
       result = canvas.toDataURL('image/jpeg', quality);
     }
 

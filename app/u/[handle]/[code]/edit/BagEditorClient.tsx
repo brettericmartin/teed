@@ -15,7 +15,6 @@ import ProductReviewModal, { IdentifiedProduct } from './components/ProductRevie
 import BatchPhotoSelector from './components/BatchPhotoSelector';
 import ItemSelectionModal from './components/ItemSelectionModal';
 import EnrichmentPreview from './components/EnrichmentPreview';
-import ClarificationModal from './components/ClarificationModal';
 import AIAssistantHub from './components/AIAssistantHub';
 import BagAnalytics from './components/BagAnalytics';
 import CoverPhotoCropper, { type AspectRatioId } from './components/CoverPhotoCropper';
@@ -178,9 +177,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [isFillingLinks, setIsFillingLinks] = useState(false);
   const [enrichmentSuggestions, setEnrichmentSuggestions] = useState<any[]>([]);
   const [showEnrichmentPreview, setShowEnrichmentPreview] = useState(false);
-  const [clarificationQuestions, setClarificationQuestions] = useState<any[]>([]);
-  const [showClarificationModal, setShowClarificationModal] = useState(false);
-  const [clarificationAnswers, setClarificationAnswers] = useState<Record<string, Record<string, string>>>({});
   const [showCoverCropper, setShowCoverCropper] = useState(false);
   const [coverImageToCrop, setCoverImageToCrop] = useState<string | null>(null);
   const [showEnrichmentItemSelection, setShowEnrichmentItemSelection] = useState(false);
@@ -993,19 +989,17 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     }
   };
 
-  // Fill product info handler - shows preview modal (or clarification questions first)
-  const handleFillLinks = async (withAnswers?: Record<string, Record<string, string>>, itemIds?: string[]) => {
+  // Fill product info handler - generates suggestions and shows preview modal
+  const handleFillLinks = async (itemIds?: string[]) => {
     setIsFillingLinks(true);
 
     try {
-      // Get preview suggestions (include answers if provided, and optional itemIds filter)
       const response = await fetch('/api/items/preview-enrichment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           bagId: bag.id,
-          clarificationAnswers: withAnswers || clarificationAnswers,
-          itemIds: itemIds, // Only process selected items if provided
+          itemIds: itemIds,
         }),
       });
 
@@ -1020,40 +1014,15 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         return;
       }
 
-      // If there are clarification questions and no answers provided yet, show questions first
-      if (result.needsClarification && result.questions?.length > 0 && !withAnswers) {
-        setClarificationQuestions(result.questions);
-        setEnrichmentSuggestions(result.suggestions); // Store suggestions for later
-        setShowClarificationModal(true);
-        return;
-      }
-
-      // Show preview modal (even if items have data - user can choose to replace)
+      // Show preview modal
       setEnrichmentSuggestions(result.suggestions);
       setShowEnrichmentPreview(true);
-      setShowClarificationModal(false);
-      setClarificationQuestions([]);
     } catch (error) {
       console.error('Error generating suggestions:', error);
       alert('Failed to generate suggestions. Please try again.');
     } finally {
       setIsFillingLinks(false);
     }
-  };
-
-  // Handle clarification answers and re-run enrichment
-  const handleClarificationSubmit = async (answers: Record<string, Record<string, string>>) => {
-    setClarificationAnswers(answers);
-    setShowClarificationModal(false);
-    // Re-run with answers
-    await handleFillLinks(answers);
-  };
-
-  // Skip clarification and use current suggestions
-  const handleSkipClarification = () => {
-    setShowClarificationModal(false);
-    setClarificationQuestions([]);
-    setShowEnrichmentPreview(true);
   };
 
   // Apply approved enrichments
@@ -1803,7 +1772,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         onConfirm={(selectedItems) => {
           const selectedIds = selectedItems.map(i => i.id);
           setShowEnrichmentItemSelection(false);
-          handleFillLinks(undefined, selectedIds);
+          handleFillLinks(selectedIds);
         }}
         title="Select Items to Auto-Fill"
         description="Choose which items you want to generate details for"
@@ -1828,20 +1797,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         }))}
         onApplyPhotos={handleApplyBatchPhotos}
       />
-
-      {/* Clarification Questions Modal */}
-      {showClarificationModal && (
-        <ClarificationModal
-          questions={clarificationQuestions}
-          itemNames={bag.items.reduce((acc, item) => {
-            acc[item.id] = item.custom_name || 'Unnamed Item';
-            return acc;
-          }, {} as Record<string, string>)}
-          onSubmit={handleClarificationSubmit}
-          onSkip={handleSkipClarification}
-          isLoading={isFillingLinks}
-        />
-      )}
 
       {/* Enrichment Preview Modal */}
       {showEnrichmentPreview && (

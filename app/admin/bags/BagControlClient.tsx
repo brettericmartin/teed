@@ -203,14 +203,10 @@ export default function BagControlClient({ adminRole }: Props) {
     }
   };
 
-  // Handle feature action - prompts for category if missing
+  // Handle feature action - always prompts for category selection
   const handleFeature = (bag: BagForAdmin) => {
-    if (!bag.category) {
-      setCategoryPickerBag(bag);
-      setSelectedCategoryForBag('');
-    } else {
-      handleAction(bag.id, 'feature');
-    }
+    setCategoryPickerBag(bag);
+    setSelectedCategoryForBag(bag.category || '');
   };
 
   // Handle feature with category assignment
@@ -250,7 +246,7 @@ export default function BagControlClient({ adminRole }: Props) {
       badges.push(
         <span
           key="featured"
-          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-[var(--amber-4)] text-[var(--amber-11)]"
+          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-[var(--sand-4)] text-[var(--sand-11)]"
         >
           <Star className="w-3 h-3" />
           Featured
@@ -570,7 +566,7 @@ export default function BagControlClient({ adminRole }: Props) {
                                     <Star
                                       className={`w-4 h-4 ${
                                         bag.is_featured
-                                          ? 'text-[var(--amber-9)] fill-current'
+                                          ? 'text-[var(--sand-9)] fill-current'
                                           : 'text-[var(--text-secondary)]'
                                       }`}
                                     />
@@ -701,7 +697,7 @@ export default function BagControlClient({ adminRole }: Props) {
           </div>
           <div className="p-4 bg-[var(--surface)] rounded-lg border border-[var(--border-subtle)]">
             <p className="text-sm text-[var(--text-secondary)]">Featured</p>
-            <p className="text-2xl font-bold text-[var(--amber-11)]">
+            <p className="text-2xl font-bold text-[var(--sand-11)]">
               {stats.featured}
             </p>
           </div>
@@ -850,8 +846,8 @@ export default function BagControlClient({ adminRole }: Props) {
           <div className="bg-[var(--surface)] rounded-xl border border-[var(--border-subtle)] w-full max-w-md">
             <div className="p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-[var(--amber-4)] flex items-center justify-center">
-                  <Star className="w-5 h-5 text-[var(--amber-9)]" />
+                <div className="w-10 h-10 rounded-full bg-[var(--sand-4)] flex items-center justify-center">
+                  <Star className="w-5 h-5 text-[var(--sand-9)]" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-[var(--text-primary)]">
@@ -864,7 +860,7 @@ export default function BagControlClient({ adminRole }: Props) {
               </div>
 
               <p className="text-sm text-[var(--text-secondary)] mb-4">
-                This bag needs a category to be featured. Please select a category:
+                Select a category for this featured bag:
               </p>
 
               <div className="mb-4">
@@ -898,7 +894,7 @@ export default function BagControlClient({ adminRole }: Props) {
                 <button
                   onClick={handleFeatureWithCategory}
                   disabled={!selectedCategoryForBag}
-                  className="flex-1 px-4 py-2.5 bg-[var(--amber-9)] text-white rounded-lg hover:bg-[var(--amber-10)] disabled:opacity-50"
+                  className="flex-1 px-4 py-2.5 bg-[var(--sand-9)] text-white rounded-lg hover:opacity-90 disabled:opacity-50"
                 >
                   Feature Bag
                 </button>

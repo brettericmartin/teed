@@ -4,11 +4,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Plus, Package, User, Settings, Eye, Layers, Pin } from 'lucide-react';
+import { Plus, Package, Eye, Sparkles, ArrowRight } from 'lucide-react';
 import NewBagModal from './components/NewBagModal';
 import { Button } from '@/components/ui/Button';
 import ProfileStats from '@/components/ProfileStats';
-import { EmptyState } from '@/components/ui/EmptyState';
 import { useCelebration } from '@/lib/celebrations';
 import { staggerContainer, cardVariants } from '@/lib/animations';
 import { PageContainer, PageHeader, ContentContainer } from '@/components/layout/PageContainer';
@@ -217,14 +216,78 @@ export default function DashboardClient({
       {/* Main Content */}
       <ContentContainer className="pb-8">
         {bags.length === 0 ? (
-          // Empty State with premium animation
-          <EmptyState
-            variant="new-user"
-            title="Your first bag awaits"
-            description="Start curating your collection. Add items you love, organize them your way, and share with the world."
-            ctaText="Create Your First Bag"
-            onAction={() => setShowNewBagModal(true)}
-          />
+          // Welcome State for new users
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="max-w-xl mx-auto"
+          >
+            {/* Welcome Card */}
+            <div className="bg-gradient-to-br from-[var(--teed-green-2)] via-[var(--surface)] to-[var(--sky-2)] rounded-2xl border border-[var(--border-subtle)] p-8 shadow-lg">
+              {/* Greeting */}
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-[var(--teed-green-9)] flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-semibold text-[var(--text-primary)]">
+                    Welcome to Teed{displayName ? `, ${displayName.split(' ')[0]}` : ''}!
+                  </h2>
+                  <p className="text-sm text-[var(--text-secondary)]">
+                    Your curation journey starts here
+                  </p>
+                </div>
+              </div>
+
+              {/* Steps */}
+              <div className="space-y-3 mb-6">
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-[var(--teed-green-3)] flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-xs font-bold text-[var(--teed-green-11)]">1</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-[var(--text-primary)]">Create a bag</p>
+                    <p className="text-xs text-[var(--text-tertiary)]">
+                      A bag is a collection of items — your golf clubs, desk setup, travel kit, or anything you want to share
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-[var(--sky-3)] flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-xs font-bold text-[var(--sky-11)]">2</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-[var(--text-primary)]">Add items with photos</p>
+                    <p className="text-xs text-[var(--text-tertiary)]">
+                      Snap photos or upload images — our AI will identify products automatically
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-[var(--copper-3)] flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-xs font-bold text-[var(--copper-11)]">3</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-[var(--text-primary)]">Share your bag</p>
+                    <p className="text-xs text-[var(--text-tertiary)]">
+                      Get a unique link to share on social, embed in your bio, or send to friends
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA */}
+              <button
+                onClick={() => setShowNewBagModal(true)}
+                className="w-full flex items-center justify-center gap-2 bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-md hover:shadow-lg active:scale-[0.98]"
+              >
+                <Plus className="w-5 h-5" />
+                Create Your First Bag
+                <ArrowRight className="w-4 h-4 ml-1" />
+              </button>
+            </div>
+          </motion.div>
         ) : (
           // Bags Grid with stagger animation
           <motion.div

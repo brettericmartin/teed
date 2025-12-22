@@ -3,6 +3,35 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Play, Pause, Maximize, Minimize } from 'lucide-react';
 
+// Helper to calculate image dimensions within container
+function getContainedImageBounds(
+  imageAspect: number,
+  containerWidth: number,
+  containerHeight: number
+): { top: number; left: number; width: number; height: number } {
+  const containerAspect = containerWidth / containerHeight;
+
+  if (imageAspect > containerAspect) {
+    // Image is wider than container - letterbox top/bottom
+    const height = containerWidth / imageAspect;
+    return {
+      left: 0,
+      top: (containerHeight - height) / 2,
+      width: containerWidth,
+      height,
+    };
+  } else {
+    // Image is taller than container - letterbox left/right
+    const width = containerHeight * imageAspect;
+    return {
+      left: (containerWidth - width) / 2,
+      top: 0,
+      width,
+      height: containerHeight,
+    };
+  }
+}
+
 interface ItemLink {
   id: string;
   url: string;
@@ -101,7 +130,10 @@ export function CarouselView({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isInstantTransition, setIsInstantTransition] = useState(false);
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  const [imageAspects, setImageAspects] = useState<Record<string, number>>({});
   const containerRef = useRef<HTMLDivElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   // Detect mobile device
   useEffect(() => {
@@ -110,6 +142,37 @@ export function CarouselView({
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Track container size for image bounds calculation
+  useEffect(() => {
+    const updateSize = () => {
+      if (carouselRef.current) {
+        setContainerSize({
+          width: carouselRef.current.clientWidth,
+          height: carouselRef.current.clientHeight,
+        });
+      }
+    };
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, [isFullscreen]);
+
+  // Preload image aspects for all items
+  useEffect(() => {
+    items.forEach((item) => {
+      if (item.photo_url && !imageAspects[item.id]) {
+        const img = new Image();
+        img.onload = () => {
+          setImageAspects((prev) => ({
+            ...prev,
+            [item.id]: img.naturalWidth / img.naturalHeight,
+          }));
+        };
+        img.src = item.photo_url;
+      }
+    });
+  }, [items, imageAspects]);
 
   // Sort items - hero first, then featured, then by sort_index
   const sortedItems = [...items].sort((a, b) => {
@@ -274,14 +337,14 @@ export function CarouselView({
 
   if (sortedItems.length === 0) return null;
 
-  // Fullscreen wrapper classes - z-[9999] to go above everything including navbars
+  // Fullscreen wrapper classes - truly fullscreen on mobile, covers safe areas too
   const fullscreenClasses = isFullscreen
-    ? 'fixed inset-0 z-[9999] bg-black flex items-center justify-center'
+    ? 'fixed inset-0 z-[9999] bg-black'
     : 'relative w-full';
 
   // Carousel container classes - use dvh for dynamic viewport height on mobile
   const carouselClasses = isFullscreen
-    ? 'relative w-screen h-[100dvh] overflow-hidden bg-black'
+    ? 'relative w-full h-full overflow-hidden bg-black'
     : 'relative aspect-square max-h-[85vh] w-full max-w-3xl mx-auto overflow-hidden rounded-2xl bg-black';
 
   return (
@@ -299,6 +362,7 @@ export function CarouselView({
 
       {/* Main Carousel Container */}
       <div
+        ref={carouselRef}
         className={carouselClasses}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
@@ -329,19 +393,55 @@ export function CarouselView({
                 isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-105 pointer-events-none'
               }`}
             >
-              {/* Background Image - preserves user's crop with blurred fill for letterbox */}
+              {/* Background Image - mirrored fill on mobile fullscreen, blurred on desktop */}
               {item.photo_url ? (
                 <>
-                  {/* Blurred background fill for empty space */}
-                  <img
-                    src={item.photo_url}
-                    alt=""
-                    className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-60"
-                    loading={index < 3 ? 'eager' : 'lazy'}
-                    aria-hidden="true"
-                  />
-                  {/* Dark overlay on blurred background */}
-                  <div className="absolute inset-0 bg-black/40" />
+                  {/* Mobile fullscreen: Mirrored/reflected background */}
+                  {isFullscreen && isMobile ? (
+                    <>
+                      {/* Left mirrored image */}
+                      <img
+                        src={item.photo_url}
+                        alt=""
+                        className="absolute h-full object-cover opacity-40"
+                        style={{
+                          right: '50%',
+                          transform: 'scaleX(-1)',
+                          width: '50%',
+                        }}
+                        loading={index < 3 ? 'eager' : 'lazy'}
+                        aria-hidden="true"
+                      />
+                      {/* Right mirrored image */}
+                      <img
+                        src={item.photo_url}
+                        alt=""
+                        className="absolute h-full object-cover opacity-40"
+                        style={{
+                          left: '50%',
+                          transform: 'scaleX(-1)',
+                          width: '50%',
+                        }}
+                        loading={index < 3 ? 'eager' : 'lazy'}
+                        aria-hidden="true"
+                      />
+                      {/* Dark overlay on mirrored background */}
+                      <div className="absolute inset-0 bg-black/50" />
+                    </>
+                  ) : (
+                    <>
+                      {/* Desktop/non-fullscreen: Blurred background fill */}
+                      <img
+                        src={item.photo_url}
+                        alt=""
+                        className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-60"
+                        loading={index < 3 ? 'eager' : 'lazy'}
+                        aria-hidden="true"
+                      />
+                      {/* Dark overlay on blurred background */}
+                      <div className="absolute inset-0 bg-black/40" />
+                    </>
+                  )}
                   {/* Main image - contained to preserve user's crop */}
                   <img
                     src={item.photo_url}
@@ -357,76 +457,96 @@ export function CarouselView({
               {/* Subtle vignette for depth */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20" />
 
-              {/* Content Overlay - Left aligned */}
-              <div
-                className="absolute inset-0 flex flex-col justify-end"
-              >
-                {/* Text content - left aligned, positioned higher on mobile for TikTok-style viewing */}
-                <div className="p-6 pb-24 md:p-10 md:pb-10 lg:p-12 lg:pb-12 space-y-2 md:space-y-4 bg-gradient-to-t from-black/70 via-black/40 to-transparent pt-32 md:pt-20">
-                  {/* Brand */}
-                  {item.brand && (
-                    <p
-                      className="font-serif text-xl md:text-2xl lg:text-3xl tracking-wide uppercase"
-                      style={{
-                        color: colorScheme.secondary,
-                        textShadow: colorScheme.shadowSmall,
-                      }}
-                    >
-                      {item.brand}
-                    </p>
-                  )}
+              {/* Content Overlay - Left aligned, positioned within image bounds on mobile fullscreen */}
+              {(() => {
+                // Calculate bounds for this specific item
+                const itemAspect = imageAspects[item.id] || 1;
+                const itemBounds = isFullscreen && isMobile && containerSize.width > 0
+                  ? getContainedImageBounds(itemAspect, containerSize.width, containerSize.height)
+                  : null;
 
-                  {/* Product name - HUGE, left aligned, scales down for long names */}
-                  <h2
-                    className="font-black leading-[0.85] tracking-tighter uppercase line-clamp-3"
-                    style={{
-                      color: colorScheme.primary,
-                      textShadow: colorScheme.shadow,
-                      // Scale font size down for longer names
-                      fontSize: (() => {
-                        const name = item.custom_name || 'Untitled';
-                        const len = name.length;
-                        if (len > 50) return 'clamp(1.5rem, 5vw, 3rem)';
-                        if (len > 35) return 'clamp(1.75rem, 6vw, 4rem)';
-                        if (len > 25) return 'clamp(2rem, 7vw, 5rem)';
-                        return 'clamp(2.5rem, 10vw, 7rem)';
-                      })(),
+                return (
+                  <div
+                    className="absolute flex flex-col justify-end"
+                    style={itemBounds ? {
+                      left: itemBounds.left,
+                      top: itemBounds.top,
+                      width: itemBounds.width,
+                      height: itemBounds.height,
+                    } : {
+                      inset: 0,
                     }}
                   >
-                    {item.custom_name || 'Untitled'}
-                    {item.quantity > 1 && (
-                      <span className="text-[0.4em] ml-2 opacity-70">×{item.quantity}</span>
-                    )}
-                  </h2>
+                    {/* Text content - left aligned, positioned within image */}
+                    <div className={`space-y-2 md:space-y-4 bg-gradient-to-t from-black/70 via-black/40 to-transparent ${
+                      isFullscreen && isMobile
+                        ? 'p-4 pb-16 pt-20' // Tighter padding within image bounds
+                        : 'p-6 pb-24 md:p-10 md:pb-10 lg:p-12 lg:pb-12 pt-32 md:pt-20'
+                    }`}>
+                      {/* Brand */}
+                      {item.brand && (
+                        <p
+                          className="font-serif text-xl md:text-2xl lg:text-3xl tracking-wide uppercase"
+                          style={{
+                            color: colorScheme.secondary,
+                            textShadow: colorScheme.shadowSmall,
+                          }}
+                        >
+                          {item.brand}
+                        </p>
+                      )}
 
-                  {/* Description */}
-                  {item.custom_description && (
-                    <p
-                      className="font-serif text-lg md:text-2xl lg:text-3xl leading-snug line-clamp-2 max-w-2xl"
-                      style={{
-                        color: colorScheme.secondary,
-                        textShadow: colorScheme.shadowSmall,
-                      }}
-                    >
-                      {item.custom_description}
-                    </p>
-                  )}
+                      {/* Product name - HUGE, left aligned, scales down for long names */}
+                      <h2
+                        className="font-black leading-[0.85] tracking-tighter uppercase line-clamp-3"
+                        style={{
+                          color: colorScheme.primary,
+                          textShadow: colorScheme.shadow,
+                          fontSize: (() => {
+                            const name = item.custom_name || 'Untitled';
+                            const len = name.length;
+                            if (len > 50) return 'clamp(1.5rem, 5vw, 3rem)';
+                            if (len > 35) return 'clamp(1.75rem, 6vw, 4rem)';
+                            if (len > 25) return 'clamp(2rem, 7vw, 5rem)';
+                            return 'clamp(2.5rem, 10vw, 7rem)';
+                          })(),
+                        }}
+                      >
+                        {item.custom_name || 'Untitled'}
+                        {item.quantity > 1 && (
+                          <span className="text-[0.4em] ml-2 opacity-70">×{item.quantity}</span>
+                        )}
+                      </h2>
 
-                  {/* Notes */}
-                  {item.notes && (
-                    <p
-                      className="font-serif text-base md:text-xl lg:text-2xl italic line-clamp-2 max-w-xl opacity-90"
-                      style={{
-                        color: colorScheme.secondary,
-                        textShadow: colorScheme.shadowSmall,
-                      }}
-                    >
-                      "{item.notes}"
-                    </p>
-                  )}
+                      {/* Description */}
+                      {item.custom_description && (
+                        <p
+                          className="font-serif text-lg md:text-2xl lg:text-3xl leading-snug line-clamp-2 max-w-2xl"
+                          style={{
+                            color: colorScheme.secondary,
+                            textShadow: colorScheme.shadowSmall,
+                          }}
+                        >
+                          {item.custom_description}
+                        </p>
+                      )}
 
-                </div>
-              </div>
+                      {/* Notes */}
+                      {item.notes && (
+                        <p
+                          className="font-serif text-base md:text-xl lg:text-2xl italic line-clamp-2 max-w-xl opacity-90"
+                          style={{
+                            color: colorScheme.secondary,
+                            textShadow: colorScheme.shadowSmall,
+                          }}
+                        >
+                          "{item.notes}"
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* Slide Counter */}
               <div

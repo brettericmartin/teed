@@ -107,27 +107,33 @@ export default function ShareModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-[var(--overlay-bg)] flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-      <div className="bg-[var(--modal-bg)] rounded-[var(--radius-2xl)] shadow-[var(--shadow-6)] max-w-lg w-full border border-[var(--modal-border)]">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-[var(--border-subtle)]">
+    <div
+      className="fixed inset-0 bg-[var(--overlay-bg)] flex items-end md:items-center justify-center z-50 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="bg-[var(--modal-bg)] rounded-t-[var(--radius-2xl)] md:rounded-[var(--radius-2xl)] shadow-[var(--shadow-6)] max-w-lg w-full border border-[var(--modal-border)] max-h-[90vh] flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header - sticky */}
+        <div className="flex items-center justify-between p-4 md:p-6 border-b border-[var(--border-subtle)] flex-shrink-0">
           <div>
-            <h2 className="text-xl font-semibold text-[var(--text-primary)]">Share Bag</h2>
+            <h2 className="text-lg md:text-xl font-semibold text-[var(--text-primary)]">Share Bag</h2>
             <p className="text-xs text-[var(--text-secondary)] mt-1">
               Code: <span className="font-mono font-semibold">{bagCode}</span>
             </p>
           </div>
           <button
             onClick={onClose}
-            className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors rounded-lg p-1 hover:bg-[var(--surface-hover)]"
+            className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors rounded-lg p-2 hover:bg-[var(--surface-hover)] -mr-2"
             aria-label="Close"
           >
             <X className="w-6 h-6" />
           </button>
         </div>
 
-        {/* Content */}
-        <div className="p-6 space-y-6">
+        {/* Content - scrollable */}
+        <div className="p-4 md:p-6 space-y-4 md:space-y-6 overflow-y-auto flex-1">
           {/* Privacy Warning */}
           {!isPublic && (
             <div className="bg-[var(--sand-2)] border border-[var(--sand-6)] rounded-lg p-4">
@@ -242,13 +248,13 @@ export default function ShareModal({
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="px-6 py-4 bg-[var(--sky-1)] border-t border-[var(--border-subtle)] rounded-b-[var(--radius-2xl)] flex justify-end">
+        {/* Footer - sticky */}
+        <div className="px-4 md:px-6 py-3 md:py-4 bg-[var(--sky-1)] border-t border-[var(--border-subtle)] rounded-b-[var(--radius-2xl)] flex justify-end flex-shrink-0">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-[var(--text-primary)] hover:text-[var(--text-secondary)] transition-colors"
+            className="px-4 py-2 text-[var(--text-primary)] hover:text-[var(--text-secondary)] transition-colors font-medium"
           >
-            Close
+            Done
           </button>
         </div>
       </div>

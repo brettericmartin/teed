@@ -51,8 +51,8 @@ export async function cropImageToRegion(
           0, 0, cropWidth, cropHeight            // Destination rectangle
         );
 
-        // Convert to base64
-        const croppedBase64 = canvas.toDataURL('image/jpeg', 0.9);
+        // Convert to base64 - high quality for slideshow
+        const croppedBase64 = canvas.toDataURL('image/jpeg', 0.95);
         resolve(croppedBase64);
 
       } catch (error) {
