@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { ChevronLeft, ChevronRight, Play, Pause, Maximize, Minimize } from 'lucide-react';
 
 // Helper to calculate image dimensions within container
@@ -132,8 +133,14 @@ export function CarouselView({
   const [isInstantTransition, setIsInstantTransition] = useState(false);
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const [imageAspects, setImageAspects] = useState<Record<string, number>>({});
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
+
+  // Set up portal container for fullscreen
+  useEffect(() => {
+    setPortalContainer(document.body);
+  }, []);
 
   // Detect mobile device
   useEffect(() => {
@@ -337,37 +344,20 @@ export function CarouselView({
 
   if (sortedItems.length === 0) return null;
 
-  // Fullscreen wrapper classes - truly fullscreen on mobile, covers safe areas too
-  const fullscreenClasses = isFullscreen
-    ? 'fixed inset-0 z-[9999] bg-black'
-    : 'relative w-full';
-
-  // Carousel container classes - use dvh for dynamic viewport height on mobile
+  // Carousel container classes
   const carouselClasses = isFullscreen
     ? 'relative w-full h-full overflow-hidden bg-black'
     : 'relative aspect-square max-h-[85vh] w-full max-w-3xl mx-auto overflow-hidden rounded-2xl bg-black';
 
-  return (
-    <div className={fullscreenClasses} ref={containerRef}>
-      {/* Teed watermark when fullscreen - tap to exit */}
-      {isFullscreen && (
-        <button
-          onClick={toggleFullscreen}
-          className="absolute top-4 left-4 z-50 px-3 py-1.5 text-white/70 hover:text-white text-sm font-medium tracking-wide transition-all"
-          aria-label="Exit fullscreen"
-        >
-          teed.club
-        </button>
-      )}
-
-      {/* Main Carousel Container */}
-      <div
-        ref={carouselRef}
-        className={carouselClasses}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        onClick={handleTapNavigation}
-      >
+  // The main carousel content - used both inline and in portal
+  const carouselContent = (
+    <div
+      ref={carouselRef}
+      className={carouselClasses}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onClick={handleTapNavigation}
+    >
         {/* Mobile tap zone indicators - subtle visual hints */}
         {isMobile && sortedItems.length > 1 && (
           <>
@@ -607,9 +597,63 @@ export function CarouselView({
           </button>
         </div>
       </div>
+  );
 
-      {/* Dot Navigation - hide when fullscreen on mobile for cleaner look */}
-      {sortedItems.length > 1 && !isFullscreen && (
+  // When fullscreen, render in a portal to escape stacking context
+  if (isFullscreen && portalContainer) {
+    return (
+      <>
+        {/* Placeholder to maintain layout when fullscreen */}
+        <div className="relative w-full">
+          <div className="aspect-square max-h-[85vh] w-full max-w-3xl mx-auto" />
+        </div>
+        {createPortal(
+          <div className="fixed inset-0 z-[9999] bg-black" ref={containerRef}>
+            {/* Teed watermark - tap to exit */}
+            <button
+              onClick={toggleFullscreen}
+              className="absolute top-4 left-4 z-50 px-3 py-1.5 text-white/70 hover:text-white text-sm font-medium tracking-wide transition-all"
+              aria-label="Exit fullscreen"
+            >
+              teed.club
+            </button>
+
+            {carouselContent}
+
+            {/* Fullscreen dot navigation */}
+            {sortedItems.length > 1 && (
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-40">
+                {sortedItems.map((item, index) => {
+                  const colorScheme = getColorScheme(item.id);
+                  const isActive = index === currentIndex;
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => goToSlide(index)}
+                      className={`h-2.5 rounded-full transition-all ${
+                        isActive ? 'w-8' : 'w-2.5 bg-white/40 hover:bg-white/60'
+                      }`}
+                      style={isActive ? { backgroundColor: colorScheme.primary } : undefined}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </div>,
+          portalContainer
+        )}
+      </>
+    );
+  }
+
+  // Normal (non-fullscreen) render
+  return (
+    <div className="relative w-full" ref={containerRef}>
+      {carouselContent}
+
+      {/* Dot Navigation */}
+      {sortedItems.length > 1 && (
         <div className="flex justify-center gap-3 mt-5">
           {sortedItems.map((item, index) => {
             const colorScheme = getColorScheme(item.id);
@@ -629,35 +673,12 @@ export function CarouselView({
         </div>
       )}
 
-      {/* Fullscreen dot navigation - positioned at bottom of screen */}
-      {sortedItems.length > 1 && isFullscreen && (
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-40">
-          {sortedItems.map((item, index) => {
-            const colorScheme = getColorScheme(item.id);
-            const isActive = index === currentIndex;
-            return (
-              <button
-                key={index}
-                onClick={() => goToSlide(index)}
-                className={`h-2.5 rounded-full transition-all ${
-                  isActive ? 'w-8' : 'w-2.5 bg-white/40 hover:bg-white/60'
-                }`}
-                style={isActive ? { backgroundColor: colorScheme.primary } : undefined}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            );
-          })}
-        </div>
-      )}
-
       {/* Keyboard Hints */}
-      {!isFullscreen && (
-        <div className="hidden md:flex justify-center gap-6 mt-4 text-base text-[var(--text-tertiary)]">
-          <span>← → Navigate</span>
-          <span>Space to {isAutoPlaying ? 'pause' : 'play'}</span>
-          <span>F for fullscreen</span>
-        </div>
-      )}
+      <div className="hidden md:flex justify-center gap-6 mt-4 text-base text-[var(--text-tertiary)]">
+        <span>← → Navigate</span>
+        <span>Space to {isAutoPlaying ? 'pause' : 'play'}</span>
+        <span>F for fullscreen</span>
+      </div>
     </div>
   );
 }
