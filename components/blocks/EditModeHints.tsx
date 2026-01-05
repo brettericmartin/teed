@@ -10,10 +10,10 @@ interface Hint {
 }
 
 const HINTS: Hint[] = [
-  { id: 'drag', emoji: '↕️', message: 'Drag the ⋮⋮ handle to reposition blocks' },
+  { id: 'drag', emoji: '↕️', message: 'Grab the green "Drag" pill to reorder blocks' },
   { id: 'select', emoji: '👆', message: 'Click any block to select it and see options' },
   { id: 'toolbar', emoji: '🔧', message: 'Use the toolbar to hide, duplicate, or delete' },
-  { id: 'resize', emoji: '↔️', message: 'Drag block edges to resize' },
+  { id: 'resize', emoji: '↔️', message: 'Drag block edges to resize on desktop' },
   { id: 'panel', emoji: '⚙️', message: 'Edit content and settings in the side panel' },
 ];
 

@@ -9,7 +9,7 @@
  */
 
 import { ReactNode, useState } from 'react';
-import { GripVertical, EyeOff } from 'lucide-react';
+import { GripVertical, EyeOff, Move } from 'lucide-react';
 import { ProfileBlock } from '@/lib/blocks/types';
 import BlockToolbar from './BlockToolbar';
 
@@ -74,25 +74,6 @@ export default function BaseBlock({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Left margin drag handle - always visible in edit mode */}
-      <div className="absolute -left-10 top-1/2 -translate-y-1/2 w-10 flex justify-center z-10">
-        <button
-          className={`
-            drag-handle p-1.5 rounded-md transition-all
-            ${isSelected || isHovered
-              ? 'opacity-100 bg-[var(--surface-elevated)] shadow-sm border border-[var(--border-subtle)]'
-              : 'opacity-50 hover:opacity-80'
-            }
-            text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]
-            cursor-grab active:cursor-grabbing
-          `}
-          title="Drag to reposition"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <GripVertical className="w-4 h-4" />
-        </button>
-      </div>
-
       {/* Floating toolbar - appears when selected */}
       {isSelected && (
         <BlockToolbar
@@ -118,6 +99,24 @@ export default function BaseBlock({
           ${!block.is_visible ? 'opacity-50' : ''}
         `}
       >
+        {/* Drag handle - prominent pill at top of block */}
+        <div
+          className={`
+            drag-handle absolute -top-3 left-1/2 -translate-x-1/2 z-20
+            flex items-center gap-1.5 px-3 py-1.5
+            bg-[var(--teed-green-9)] text-white
+            rounded-full shadow-lg
+            cursor-grab active:cursor-grabbing
+            transition-all
+            ${isDragging ? 'scale-110 shadow-xl' : 'hover:scale-105 hover:shadow-xl'}
+          `}
+          title="Drag to reorder"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <GripVertical className="w-4 h-4" />
+          <span className="text-xs font-medium">Drag</span>
+        </div>
+
         {/* Hidden indicator badge */}
         {!block.is_visible && (
           <div className="absolute top-3 right-3 z-10

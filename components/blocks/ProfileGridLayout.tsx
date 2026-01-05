@@ -282,12 +282,12 @@ export default function ProfileGridLayout({
 
   // Desktop: use react-grid-layout for BOTH edit and view modes
   // This ensures identical rendering - only difference is drag/resize enabled
-  const gridWidth = isEditMode ? Math.max(width - 48, 100) : width;
+  const gridWidth = width;
 
   return (
     <div
       ref={containerRef}
-      className={`relative ${isEditMode ? 'pl-12' : ''}`} // Left padding for drag handles in edit mode
+      className={`relative ${isEditMode ? 'pt-4' : ''}`}
     >
       {/* Grid lines overlay - shows column structure */}
       {isEditMode && (() => {
@@ -307,8 +307,7 @@ export default function ProfileGridLayout({
 
         return (
           <div
-            className="absolute pointer-events-none z-0"
-            style={{ left: '48px', right: 0, top: 0, bottom: 0 }}
+            className="absolute inset-0 pointer-events-none z-0"
           >
             {/* Emphasized line at Half point (column 6 start) */}
             <div
