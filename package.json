@@ -41,6 +41,8 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-easy-crop": "^5.5.3",
+    "react-grid-layout": "^2.1.1",
+    "react-social-media-embed": "^2.5.18",
     "recharts": "^3.5.1",
     "tailwind-merge": "^3.4.0",
     "tsx": "^4.20.6",

@@ -118,7 +118,12 @@ export async function PATCH(request: NextRequest) {
       }
 
       // Validate social links structure
-      const allowedPlatforms = ['instagram', 'twitter', 'youtube', 'tiktok', 'website', 'twitch'];
+      const allowedPlatforms = [
+        'instagram', 'twitter', 'youtube', 'tiktok', 'website', 'twitch',
+        'facebook', 'threads', 'pinterest', 'snapchat', 'discord',
+        'telegram', 'whatsapp', 'email', 'spotify', 'soundcloud',
+        'patreon', 'github', 'linkedin', 'behance', 'dribbble', 'substack'
+      ];
       if (social_links) {
         for (const [platform, value] of Object.entries(social_links)) {
           if (!allowedPlatforms.includes(platform)) {

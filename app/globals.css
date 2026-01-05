@@ -1576,3 +1576,638 @@ body {
 .animate-fade-up-in {
   animation: fade-up-in 0.3s ease-out forwards;
 }
+
+/* ============================================
+   SOCIAL MEDIA EMBED RESETS
+   ============================================ */
+
+/* TikTok embed container styling */
+.tiktok-embed-wrapper {
+  width: 100%;
+  max-width: 325px;
+  margin: 0 auto;
+}
+
+.tiktok-embed-wrapper blockquote {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  font-style: normal !important;
+}
+
+.tiktok-embed-wrapper blockquote::before,
+.tiktok-embed-wrapper blockquote::after {
+  content: none !important;
+}
+
+.tiktok-embed-wrapper iframe {
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+/* Instagram embed container styling */
+.instagram-embed-wrapper {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+.instagram-embed-wrapper blockquote {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  font-style: normal !important;
+}
+
+.instagram-embed-wrapper blockquote::before,
+.instagram-embed-wrapper blockquote::after {
+  content: none !important;
+}
+
+.instagram-embed-wrapper iframe {
+  border-radius: 12px !important;
+}
+
+/* Twitter/X embed container styling */
+.twitter-embed-wrapper {
+  width: 100%;
+  max-width: 550px;
+  margin: 0 auto;
+}
+
+.twitter-embed-wrapper blockquote {
+  margin: 0 !important;
+}
+
+/* General embed responsive container */
+.embed-responsive {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.embed-responsive-16by9 {
+  padding-bottom: 56.25%;
+}
+
+.embed-responsive-9by16 {
+  padding-bottom: 177.78%;
+}
+
+.embed-responsive-1by1 {
+  padding-bottom: 100%;
+}
+
+.embed-responsive iframe,
+.embed-responsive video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ============================================
+   PROFILE BLOCK VISUAL IDENTITY SYSTEM
+   ============================================ */
+
+/* Gallery Frame Effect - Museum-like presentation for bags */
+.gallery-frame {
+  position: relative;
+  border-radius: var(--radius-xl);
+  box-shadow:
+    0 0 0 1px var(--border-subtle),
+    0 2px 8px rgba(31, 58, 46, 0.08);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-frame:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 0 0 1px var(--teed-green-6),
+    0 8px 24px rgba(31, 58, 46, 0.12),
+    0 0 0 4px rgba(139, 170, 126, 0.08);
+}
+
+/* Gallery frame with inner matting effect */
+.gallery-frame-matted {
+  position: relative;
+  border-radius: var(--radius-xl);
+  box-shadow:
+    inset 0 0 0 3px var(--theme-primary, var(--teed-green-7)),
+    inset 0 0 0 6px var(--surface),
+    0 2px 8px rgba(31, 58, 46, 0.1);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-frame-matted:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    inset 0 0 0 3px var(--theme-primary, var(--teed-green-8)),
+    inset 0 0 0 6px var(--surface),
+    0 8px 24px rgba(31, 58, 46, 0.15),
+    0 0 20px rgba(139, 170, 126, 0.1);
+}
+
+/* Bio Block - Subtle accent border */
+.bio-block-enhanced {
+  position: relative;
+  padding-left: 20px;
+}
+
+.bio-block-enhanced::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  background: linear-gradient(
+    180deg,
+    var(--theme-primary, var(--teed-green-7)) 0%,
+    var(--theme-accent, var(--sky-6)) 100%
+  );
+  border-radius: 2px;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.bio-block-enhanced:hover::before {
+  opacity: 1;
+}
+
+/* Header Block - Premium typography with optional serif */
+.header-display-serif {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* Avatar glow effect */
+.avatar-glow {
+  transition: box-shadow 0.3s ease;
+}
+
+.avatar-glow:hover {
+  box-shadow: 0 0 24px rgba(var(--theme-primary-rgb, 139, 170, 126), 0.3);
+}
+
+/* Social icon glow effect */
+.social-icon-glow {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.social-icon-glow:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 16px rgba(var(--theme-primary-rgb, 139, 170, 126), 0.25);
+}
+
+/* Embed block frame */
+.embed-frame {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.embed-frame:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(31, 58, 46, 0.1);
+  border-color: var(--border-default);
+}
+
+/* Block hover lift - subtle premium effect */
+.block-hover-lift {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.block-hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+/* Subtle background tint for blocks */
+.block-tint-primary {
+  background: linear-gradient(
+    180deg,
+    rgba(var(--theme-primary-rgb, 139, 170, 126), 0.02) 0%,
+    rgba(var(--theme-primary-rgb, 139, 170, 126), 0.01) 100%
+  );
+}
+
+/* Underline animation for links */
+.link-underline-grow {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-underline-grow::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--theme-primary, var(--teed-green-8));
+  transition: width 0.3s ease;
+}
+
+.link-underline-grow:hover::after {
+  width: 100%;
+}
+
+/* Premium card with depth */
+.card-premium {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow:
+    0 1px 3px rgba(31, 58, 46, 0.06),
+    0 0 0 1px rgba(31, 58, 46, 0.04);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-premium:hover {
+  box-shadow:
+    0 8px 24px rgba(31, 58, 46, 0.1),
+    0 0 0 1px rgba(31, 58, 46, 0.06);
+  transform: translateY(-4px);
+}
+
+/* Completion indicator dot */
+.completion-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.completion-dot.complete {
+  background: var(--teed-green-8);
+  box-shadow: 0 0 8px rgba(139, 170, 126, 0.4);
+}
+
+.completion-dot.incomplete {
+  background: var(--grey-5);
+}
+
+/* Progress ring for completion */
+@keyframes progress-fill {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: var(--progress-offset, 0);
+  }
+}
+
+.progress-ring-animated {
+  animation: progress-fill 1s ease-out forwards;
+}
+
+/* Social links card container */
+.social-links-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.social-links-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(31, 58, 46, 0.08);
+}
+
+/* Subtle background pattern for header area */
+.header-pattern-dots {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    var(--theme-primary, var(--teed-green-7)) 1px,
+    transparent 0
+  );
+  background-size: 24px 24px;
+  opacity: 0.04;
+}
+
+.header-pattern-lines {
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--theme-primary, var(--teed-green-7)) 0,
+    var(--theme-primary, var(--teed-green-7)) 1px,
+    transparent 0,
+    transparent 50%
+  );
+  background-size: 12px 12px;
+  opacity: 0.03;
+}
+
+/* Slow pulse animation for glow effects */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.02);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
+/* Section divider with gradient */
+.section-divider-gradient {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--border-subtle) 20%,
+    var(--theme-primary, var(--teed-green-6)) 50%,
+    var(--border-subtle) 80%,
+    transparent 100%
+  );
+  opacity: 0.6;
+}
+
+/* Decorative dot separator */
+.dot-separator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot-separator::before,
+.dot-separator::after {
+  content: '';
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--border-subtle)
+  );
+}
+
+.dot-separator::after {
+  background: linear-gradient(
+    90deg,
+    var(--border-subtle),
+    transparent
+  );
+}
+
+/* Stats card hover effect */
+.stats-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stats-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(31, 58, 46, 0.08);
+}
+
+/* Profile header background gradient */
+.profile-header-bg {
+  background: linear-gradient(
+    180deg,
+    var(--theme-background, var(--background)) 0%,
+    transparent 100%
+  );
+}
+
+/* Floating badge style */
+.floating-badge {
+  box-shadow:
+    0 2px 8px rgba(31, 58, 46, 0.15),
+    0 0 0 2px var(--surface);
+}
+
+/* Icon container with theme background */
+.icon-container-themed {
+  background: var(--theme-primary, var(--teed-green-7));
+  opacity: 0.15;
+}
+
+/* ============================================
+   REACT-GRID-LAYOUT STYLES
+   ============================================ */
+
+/* Dragging state */
+.react-grid-item.react-draggable-dragging {
+  z-index: 50;
+  opacity: 0.9;
+  transition: none;
+}
+
+/* Placeholder shown during drag */
+.react-grid-placeholder {
+  background: var(--teed-green-3);
+  border: 2px dashed var(--teed-green-7);
+  border-radius: 12px;
+  opacity: 0.5;
+  transition: all 100ms ease;
+}
+
+
+/* Resize handle styling - more visible */
+.react-resizable-handle {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  box-sizing: border-box;
+  background-image: none;
+}
+
+.react-resizable-handle::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--teed-green-7);
+  border-radius: 2px;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+}
+
+.react-resizable-handle:hover::after {
+  opacity: 1;
+  transform: scale(1.2);
+  background: var(--teed-green-9);
+}
+
+/* Corner resize handles */
+.react-resizable-handle-se {
+  right: 0;
+  bottom: 0;
+  cursor: se-resize;
+}
+
+.react-resizable-handle-se::after {
+  right: 4px;
+  bottom: 4px;
+}
+
+.react-resizable-handle-sw {
+  left: 3px;
+  bottom: 3px;
+  cursor: sw-resize;
+}
+
+.react-resizable-handle-sw::after {
+  left: 5px;
+  bottom: 5px;
+  transform: rotate(90deg);
+}
+
+.react-resizable-handle-ne {
+  right: 3px;
+  top: 3px;
+  cursor: ne-resize;
+}
+
+.react-resizable-handle-ne::after {
+  right: 5px;
+  top: 5px;
+  transform: rotate(-90deg);
+}
+
+.react-resizable-handle-nw {
+  left: 3px;
+  top: 3px;
+  cursor: nw-resize;
+}
+
+.react-resizable-handle-nw::after {
+  left: 5px;
+  top: 5px;
+  transform: rotate(180deg);
+}
+
+/* Edge resize handles */
+.react-resizable-handle-n,
+.react-resizable-handle-s {
+  left: 50%;
+  margin-left: -10px;
+  cursor: ns-resize;
+}
+
+.react-resizable-handle-e,
+.react-resizable-handle-w {
+  top: 50%;
+  margin-top: -10px;
+  cursor: ew-resize;
+}
+
+/* Smooth transitions for grid items when not dragging */
+.react-grid-item {
+  transition: transform 200ms ease, background-color 200ms ease;
+}
+
+.react-grid-item.cssTransforms {
+  transition-property: transform, background-color;
+}
+
+.react-grid-item.resizing {
+  transition: none;
+  z-index: 30;
+}
+
+/* Drag handle cursor */
+.drag-handle {
+  cursor: grab;
+}
+
+.drag-handle:active,
+.react-draggable-dragging .drag-handle {
+  cursor: grabbing;
+}
+
+/* Grid item content container */
+.react-grid-item > div {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ========================================
+   Edit Mode Animations & Styles
+   ======================================== */
+
+/* Tailwind's animate-in classes for the floating toolbar */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInFromBottom {
+  from { transform: translateX(-50%) translateY(8px); opacity: 0; }
+  to { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+.animate-in {
+  animation-duration: 150ms;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+}
+
+.fade-in {
+  animation-name: fadeIn;
+}
+
+.slide-in-from-bottom-2 {
+  animation-name: slideInFromBottom;
+}
+
+.slide-in-from-bottom-4 {
+  animation-name: slideInFromBottom;
+}
+
+/* Edit mode entry animation - blocks briefly highlight */
+@keyframes editModeEnter {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.005); box-shadow: 0 0 0 2px var(--teed-green-5); }
+  100% { transform: scale(1); box-shadow: none; }
+}
+
+.edit-mode-enter {
+  animation: editModeEnter 0.4s ease-out;
+}
+
+/* Drag handle pulse animation for first-time users */
+@keyframes handlePulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); background-color: var(--teed-green-2); }
+}
+
+.drag-handle-pulse {
+  animation: handlePulse 1s ease-in-out 3;
+}
+
+/* Block toolbar arrow pointer */
+.block-toolbar::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--surface);
+}
+
+.block-toolbar::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 7px solid transparent;
+  border-top-color: var(--border-subtle);
+}
+
+/* Smooth hover transitions for blocks in edit mode */
+.block-content {
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
