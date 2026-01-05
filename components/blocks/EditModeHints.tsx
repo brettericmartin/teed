@@ -64,10 +64,11 @@ export default function EditModeHints({ isEditMode }: EditModeHintsProps) {
 
   return (
     <div
-      className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60]
+      className="fixed bottom-32 left-1/2 -translate-x-1/2 z-[60]
                  bg-[var(--surface)] border border-[var(--border-subtle)]
-                 rounded-xl shadow-xl px-4 py-3 max-w-sm
-                 animate-in fade-in slide-in-from-bottom-4 duration-300"
+                 rounded-xl shadow-xl px-4 py-3 max-w-sm mx-4
+                 animate-in fade-in slide-in-from-bottom-4 duration-300
+                 sm:bottom-28 lg:bottom-24"
     >
       <div className="flex items-start gap-3">
         <span className="text-2xl flex-shrink-0">{hint.emoji}</span>

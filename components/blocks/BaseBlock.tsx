@@ -48,9 +48,16 @@ export default function BaseBlock({
 
   // Edit mode
   const handleClick = (e: React.MouseEvent) => {
-    // Don't trigger selection if clicking on buttons or toolbar
-    if ((e.target as HTMLElement).closest('button')) return;
-    if ((e.target as HTMLElement).closest('.block-toolbar')) return;
+    const target = e.target as HTMLElement;
+
+    // Only ignore clicks on toolbar and drag handle
+    if (target.closest('.block-toolbar')) {
+      return;
+    }
+    if (target.closest('.drag-handle')) {
+      return;
+    }
+
     onSelect?.(block.id);
     onOpenSettings?.(block.id);
   };

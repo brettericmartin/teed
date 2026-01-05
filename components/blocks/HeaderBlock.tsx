@@ -130,18 +130,23 @@ export default function HeaderBlock({ profile, config = {}, isOwner, onAvatarCli
                 </span>
               </div>
             )}
-            {/* Edit badge for owners */}
+            {/* Edit badge for owners - explicit button for reliable clicks */}
             {isOwner && (
-              <div className="
-                absolute -bottom-1 -right-1 z-20
-                w-7 h-7 rounded-full
-                bg-[var(--teed-green-9)] text-white
-                flex items-center justify-center
-                shadow-md border-2 border-[var(--theme-background,#F9F5EE)]
-                group-hover:scale-110 transition-transform
-              ">
+              <button
+                onClick={handleAvatarClick}
+                className="
+                  absolute -bottom-1 -right-1 z-20
+                  w-7 h-7 rounded-full
+                  bg-[var(--teed-green-9)] text-white
+                  flex items-center justify-center
+                  shadow-md border-2 border-[var(--theme-background,#F9F5EE)]
+                  group-hover:scale-110 transition-transform
+                  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--teed-green-7)]
+                "
+                aria-label="Edit profile"
+              >
                 <Pencil className="w-3.5 h-3.5" />
-              </div>
+              </button>
             )}
           </div>
         )}

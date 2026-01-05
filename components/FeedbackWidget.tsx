@@ -92,6 +92,17 @@ export default function FeedbackWidget({ position = 'bottom-right' }: FeedbackWi
         )}
       </button>
 
+      {/* Backdrop to close on click outside */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-30"
+          onClick={() => {
+            setIsOpen(false);
+            setIsExpanded(false);
+          }}
+        />
+      )}
+
       {/* Feedback Panel */}
       {isOpen && (
         <div
