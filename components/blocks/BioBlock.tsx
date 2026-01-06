@@ -20,6 +20,7 @@ export default function BioBlock({ bio, config = {} }: BioBlockProps) {
     size = 'standard',
     alignment = 'left',
     fontWeight = 'normal',
+    fontSize,
     showAccentBorder = true, // New: subtle accent border for visual interest
   } = config;
 
@@ -38,10 +39,22 @@ export default function BioBlock({ bio, config = {} }: BioBlockProps) {
     right: 'text-right',
   };
 
-  const fontWeightClasses = {
+  const fontWeightClasses: Record<string, string> = {
     normal: 'font-normal',
     medium: 'font-medium',
+    semibold: 'font-semibold',
+    bold: 'font-bold',
   };
+
+  const fontSizeClasses: Record<string, string> = {
+    sm: 'text-sm',
+    base: 'text-base',
+    lg: 'text-lg',
+    xl: 'text-xl',
+  };
+
+  // Use custom fontSize if specified, otherwise use size preset
+  const fontSizeClass = fontSize ? fontSizeClasses[fontSize] : sizeConfig.fontSize;
 
   // Use accent border for left-aligned text (looks best visually)
   const useAccentBorder = showAccentBorder && alignment === 'left';
@@ -51,9 +64,9 @@ export default function BioBlock({ bio, config = {} }: BioBlockProps) {
       <div className={useAccentBorder ? 'bio-block-enhanced' : ''}>
         <p
           className={`
-            ${sizeConfig.fontSize}
+            ${fontSizeClass}
             ${alignmentClasses[alignment]}
-            ${fontWeightClasses[fontWeight]}
+            ${fontWeightClasses[fontWeight] || 'font-normal'}
             text-[var(--theme-text-secondary,var(--text-secondary))]
             leading-relaxed
             ${lineClamp}

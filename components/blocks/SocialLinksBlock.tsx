@@ -113,8 +113,16 @@ function getSocialUrl(platform: string, value: string): string {
   return urlMap[platform] || value;
 }
 
+// Button size configurations
+const BUTTON_SIZES = {
+  sm: { outer: 'w-9 h-9', inner: 'w-4 h-4', gap: 'gap-2' },
+  md: { outer: 'w-11 h-11', inner: 'w-5 h-5', gap: 'gap-3' },
+  lg: { outer: 'w-14 h-14', inner: 'w-7 h-7', gap: 'gap-3' },
+  xl: { outer: 'w-16 h-16', inner: 'w-8 h-8', gap: 'gap-4' },
+};
+
 export default function SocialLinksBlock({ socialLinks, config = {} }: SocialLinksBlockProps) {
-  const { style = 'icons', platforms, showLabel = false, useCard = false, title = 'Connect' } = config;
+  const { style = 'icons', platforms, showLabel = false, useCard = false, title = 'Connect', buttonSize = 'md' } = config;
 
   // Filter platforms if specified
   const filteredLinks = Object.entries(socialLinks).filter(([platform, value]) => {
@@ -166,14 +174,14 @@ export default function SocialLinksBlock({ socialLinks, config = {} }: SocialLin
   };
 
   if (style === 'icons') {
-    // Enhanced icons with larger size for single link
+    // Get size configuration - use larger size for single link unless custom size specified
     const isSingleLink = filteredLinks.length === 1;
-    const iconSize = isSingleLink ? 'w-14 h-14' : 'w-11 h-11';
-    const innerIconSize = isSingleLink ? 'w-7 h-7' : 'w-5 h-5';
+    const effectiveSize = buttonSize || (isSingleLink ? 'lg' : 'md');
+    const sizeConfig = BUTTON_SIZES[effectiveSize] || BUTTON_SIZES.md;
 
     return (
       <Wrapper>
-        <div className="flex flex-wrap justify-center gap-3">
+        <div className={`flex flex-wrap justify-center ${sizeConfig.gap}`}>
           {filteredLinks.map(([platform, value]) => {
             const Icon = platformIcons[platform] || Globe;
             const url = getSocialUrl(platform, value!);
@@ -184,7 +192,7 @@ export default function SocialLinksBlock({ socialLinks, config = {} }: SocialLin
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`
-                  ${iconSize} rounded-full flex items-center justify-center
+                  ${sizeConfig.outer} rounded-full flex items-center justify-center
                   bg-[var(--surface-hover,#f5f5f5)] text-[var(--theme-text-secondary,var(--text-secondary))]
                   social-icon-glow border border-transparent
                   hover:border-[var(--border-subtle)]
@@ -192,7 +200,7 @@ export default function SocialLinksBlock({ socialLinks, config = {} }: SocialLin
                 `}
                 title={platformNames[platform] || platform.charAt(0).toUpperCase() + platform.slice(1)}
               >
-                <Icon className={innerIconSize} />
+                <Icon className={sizeConfig.inner} />
               </a>
             );
           })}

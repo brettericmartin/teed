@@ -106,7 +106,8 @@ export interface BioBlockConfig {
   show_full?: boolean; // Show full bio or truncated
   size?: 'compact' | 'standard' | 'expanded';
   alignment?: 'left' | 'center' | 'right';
-  fontWeight?: 'normal' | 'medium';
+  fontWeight?: 'normal' | 'medium' | 'semibold' | 'bold';
+  fontSize?: 'sm' | 'base' | 'lg' | 'xl'; // Custom font size
   showAccentBorder?: boolean; // Subtle gradient accent border
 }
 
@@ -117,6 +118,7 @@ export interface SocialLinksBlockConfig {
   platforms?: string[]; // Which platforms to show (or all if empty)
   showLabel?: boolean; // Show section title label above links
   useCard?: boolean; // Wrap in decorative card container
+  buttonSize?: 'sm' | 'md' | 'lg' | 'xl'; // Size of social buttons
 }
 
 export interface EmbedBlockConfig {

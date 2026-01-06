@@ -418,19 +418,47 @@ export default function BlockSettingsPanel({
           <label className="block text-sm font-medium text-[var(--text-secondary)] mb-3">
             Font Weight
           </label>
-          <div className="flex gap-2">
-            {['normal', 'medium'].map((weight) => (
+          <div className="grid grid-cols-4 gap-2">
+            {['normal', 'medium', 'semibold', 'bold'].map((weight) => (
               <button
                 key={weight}
                 onClick={() => updateConfig('fontWeight', weight)}
-                className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors capitalize ${
+                className={`py-2 px-2 rounded-lg text-xs transition-colors capitalize ${
                   (bioConfig as any).fontWeight === weight || (!(bioConfig as any).fontWeight && weight === 'normal')
                     ? 'bg-[var(--teed-green-9)] text-white'
                     : 'bg-[var(--surface-elevated)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)]'
                 }`}
-                style={{ fontWeight: weight === 'normal' ? 400 : 500 }}
+                style={{ fontWeight: weight === 'normal' ? 400 : weight === 'medium' ? 500 : weight === 'semibold' ? 600 : 700 }}
               >
                 {weight}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Font size */}
+        <div className="border-t border-[var(--border-subtle)] pt-4">
+          <label className="block text-sm font-medium text-[var(--text-secondary)] mb-3">
+            Font Size
+          </label>
+          <div className="grid grid-cols-4 gap-2">
+            {[
+              { value: 'sm', label: 'S', size: '14px' },
+              { value: 'base', label: 'M', size: '16px' },
+              { value: 'lg', label: 'L', size: '18px' },
+              { value: 'xl', label: 'XL', size: '20px' },
+            ].map(({ value, label, size }) => (
+              <button
+                key={value}
+                onClick={() => updateConfig('fontSize', value)}
+                className={`py-2 px-2 rounded-lg text-xs transition-colors ${
+                  (bioConfig as any).fontSize === value || (!(bioConfig as any).fontSize && value === 'base')
+                    ? 'bg-[var(--teed-green-9)] text-white'
+                    : 'bg-[var(--surface-elevated)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)]'
+                }`}
+              >
+                <span className="font-medium">{label}</span>
+                <span className="block text-[10px] opacity-70">{size}</span>
               </button>
             ))}
           </div>
@@ -651,6 +679,34 @@ export default function BlockSettingsPanel({
                 }`}
               >
                 {style.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Button Size */}
+        <div className="border-t border-[var(--border-subtle)] pt-4">
+          <label className="block text-sm font-medium text-[var(--text-secondary)] mb-3">
+            Button Size
+          </label>
+          <div className="grid grid-cols-4 gap-2">
+            {[
+              { value: 'sm', label: 'S', desc: 'Small' },
+              { value: 'md', label: 'M', desc: 'Medium' },
+              { value: 'lg', label: 'L', desc: 'Large' },
+              { value: 'xl', label: 'XL', desc: 'X-Large' },
+            ].map(({ value, label, desc }) => (
+              <button
+                key={value}
+                onClick={() => updateConfig('buttonSize', value)}
+                className={`py-2 px-2 rounded-lg text-xs transition-colors ${
+                  socialConfig.buttonSize === value || (!socialConfig.buttonSize && value === 'md')
+                    ? 'bg-[var(--teed-green-9)] text-white'
+                    : 'bg-[var(--surface-elevated)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)]'
+                }`}
+              >
+                <span className="font-medium">{label}</span>
+                <span className="block text-[10px] opacity-70">{desc}</span>
               </button>
             ))}
           </div>
