@@ -8,8 +8,8 @@
  * See GRID_LAYOUT.md for the full height chain requirements.
  */
 
-import { ReactNode, useState } from 'react';
-import { GripVertical, EyeOff, Move } from 'lucide-react';
+import { ReactNode, useState, useRef } from 'react';
+import { GripVertical, EyeOff, Pencil } from 'lucide-react';
 import { ProfileBlock } from '@/lib/blocks/types';
 import BlockToolbar from './BlockToolbar';
 
@@ -39,6 +39,7 @@ export default function BaseBlock({
   onOpenSettings,
 }: BaseBlockProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const editButtonRef = useRef<HTMLButtonElement>(null);
 
   // View mode - render content directly, no wrapper chrome
   if (!isEditMode) {
@@ -50,16 +51,29 @@ export default function BaseBlock({
   const handleClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
 
-    // Only ignore clicks on toolbar and drag handle
+    // Only ignore clicks on toolbar, drag handle, and edit button
     if (target.closest('.block-toolbar')) {
       return;
     }
     if (target.closest('.drag-handle')) {
       return;
     }
+    if (target.closest('.edit-button')) {
+      return;
+    }
 
     onSelect?.(block.id);
-    onOpenSettings?.(block.id);
+  };
+
+  const handleEditClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    // Get position for radial menu
+    if (editButtonRef.current) {
+      const rect = editButtonRef.current.getBoundingClientRect();
+      window.dispatchEvent(new CustomEvent('openRadialMenu', {
+        detail: { rect, blockId: block.id }
+      }));
+    }
   };
 
   const handleDelete = () => {
@@ -99,22 +113,41 @@ export default function BaseBlock({
           ${!block.is_visible ? 'opacity-50' : ''}
         `}
       >
-        {/* Drag handle - prominent pill at top of block */}
-        <div
-          className={`
-            drag-handle absolute -top-3 left-1/2 -translate-x-1/2 z-20
-            flex items-center gap-1.5 px-3 py-1.5
-            bg-[var(--teed-green-9)] text-white
-            rounded-full shadow-lg
-            cursor-grab active:cursor-grabbing
-            transition-all
-            ${isDragging ? 'scale-110 shadow-xl' : 'hover:scale-105 hover:shadow-xl'}
-          `}
-          title="Drag to reorder"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <GripVertical className="w-4 h-4" />
-          <span className="text-xs font-medium">Drag</span>
+        {/* Edit controls - pills at top of block */}
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+          {/* Drag handle */}
+          <div
+            className={`
+              drag-handle flex items-center gap-1.5 px-3 py-1.5
+              bg-[var(--surface-elevated)] text-[var(--text-secondary)]
+              border border-[var(--border-subtle)]
+              rounded-full shadow-md
+              cursor-grab active:cursor-grabbing
+              transition-all
+              ${isDragging ? 'scale-110 shadow-xl bg-[var(--teed-green-9)] text-white border-transparent' : 'hover:scale-105 hover:shadow-lg hover:border-[var(--teed-green-6)]'}
+            `}
+            title="Drag to reorder"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <GripVertical className="w-4 h-4" />
+            <span className="text-xs font-medium">Drag</span>
+          </div>
+
+          {/* Edit button - opens radial menu */}
+          <button
+            ref={editButtonRef}
+            onClick={handleEditClick}
+            className="edit-button flex items-center gap-1.5 px-3 py-1.5
+              bg-[var(--teed-green-9)] text-white
+              rounded-full shadow-md
+              transition-all
+              hover:scale-105 hover:shadow-lg hover:bg-[var(--teed-green-10)]
+              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--teed-green-7)]"
+            title="Edit profile"
+          >
+            <Pencil className="w-3.5 h-3.5" />
+            <span className="text-xs font-medium">Edit</span>
+          </button>
         </div>
 
         {/* Hidden indicator badge */}

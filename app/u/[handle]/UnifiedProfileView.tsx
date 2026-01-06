@@ -441,6 +441,19 @@ export default function UnifiedProfileView({
     setIsRadialMenuOpen(true);
   }, []);
 
+  // Listen for openRadialMenu events from block edit buttons
+  useEffect(() => {
+    const handleOpenRadialMenu = (e: CustomEvent<{ rect: DOMRect; blockId: string }>) => {
+      setAvatarRect(e.detail.rect);
+      setIsRadialMenuOpen(true);
+    };
+
+    window.addEventListener('openRadialMenu', handleOpenRadialMenu as EventListener);
+    return () => {
+      window.removeEventListener('openRadialMenu', handleOpenRadialMenu as EventListener);
+    };
+  }, []);
+
   // Handle profile updates from block settings
   const handleUpdateProfile = useCallback(async (updates: Partial<Profile>) => {
     try {
