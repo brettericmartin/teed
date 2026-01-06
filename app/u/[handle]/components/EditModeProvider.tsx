@@ -54,7 +54,8 @@ export function EditModeProvider({
   profileId,
   isOwner,
 }: EditModeProviderProps) {
-  const [isEditMode, setEditMode] = useState(false);
+  // Owners automatically start in edit mode on their profile
+  const [isEditMode, setEditMode] = useState(isOwner);
   const [blocks, setBlocks] = useState<ProfileBlock[]>(initialBlocks);
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [isDirty, setIsDirty] = useState(false);
