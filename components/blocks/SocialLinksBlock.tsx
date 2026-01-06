@@ -217,6 +217,8 @@ export default function SocialLinksBlock({ socialLinks, config = {} }: SocialLin
 
   if (style === 'list') {
     // List style: icon button + clickable link text
+    const listSizeConfig = BUTTON_SIZES[buttonSize] || BUTTON_SIZES.md;
+
     return (
       <Wrapper>
         <div className="flex flex-col gap-3">
@@ -241,7 +243,7 @@ export default function SocialLinksBlock({ socialLinks, config = {} }: SocialLin
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`
-                    w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0
+                    ${listSizeConfig.outer} rounded-xl flex items-center justify-center flex-shrink-0
                     bg-[var(--surface-hover,#f5f5f5)] text-[var(--theme-text-secondary,var(--text-secondary))]
                     social-icon-glow border border-transparent
                     hover:border-[var(--border-subtle)]
@@ -249,7 +251,7 @@ export default function SocialLinksBlock({ socialLinks, config = {} }: SocialLin
                   `}
                   title={displayName}
                 >
-                  <Icon className="w-5 h-5" />
+                  <Icon className={listSizeConfig.inner} />
                 </a>
                 {/* Link text */}
                 <a
@@ -274,6 +276,15 @@ export default function SocialLinksBlock({ socialLinks, config = {} }: SocialLin
   }
 
   // Pills style (default fallback)
+  // Size config for pills - affects padding and icon size
+  const pillSizes = {
+    sm: { padding: 'px-2.5 py-1', icon: 'w-3 h-3', text: 'text-xs', gap: 'gap-1' },
+    md: { padding: 'px-3 py-1.5', icon: 'w-3.5 h-3.5', text: 'text-sm', gap: 'gap-1.5' },
+    lg: { padding: 'px-4 py-2', icon: 'w-4 h-4', text: 'text-base', gap: 'gap-2' },
+    xl: { padding: 'px-5 py-2.5', icon: 'w-5 h-5', text: 'text-lg', gap: 'gap-2' },
+  };
+  const pillSizeConfig = pillSizes[buttonSize] || pillSizes.md;
+
   return (
     <div className="px-4 py-4 h-full flex flex-col justify-center">
       <div className="flex flex-wrap justify-center gap-2">
@@ -287,13 +298,13 @@ export default function SocialLinksBlock({ socialLinks, config = {} }: SocialLin
               target="_blank"
               rel="noopener noreferrer"
               className={`
-                flex items-center gap-1.5 px-3 py-1.5 rounded-full
+                flex items-center ${pillSizeConfig.gap} ${pillSizeConfig.padding} rounded-full
                 bg-[var(--surface-hover,#f5f5f5)] text-[var(--theme-text-secondary,var(--text-secondary))]
-                text-sm transition-all duration-200
+                ${pillSizeConfig.text} transition-all duration-200
                 ${platformColors[platform] || 'hover:bg-[var(--theme-primary)] hover:text-white'}
               `}
             >
-              <Icon className="w-3.5 h-3.5" />
+              <Icon className={pillSizeConfig.icon} />
               <span>{platformNames[platform] || platform.charAt(0).toUpperCase() + platform.slice(1)}</span>
             </a>
           );
