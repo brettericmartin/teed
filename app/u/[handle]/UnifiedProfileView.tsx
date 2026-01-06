@@ -572,19 +572,24 @@ function BlockSettingsPanelConnected({
   profile: Profile;
   onUpdateProfile: (updates: Partial<Profile>) => Promise<void>;
 }) {
-  const { blocks, isEditMode } = useEditMode();
+  const { blocks, isEditMode, selectedBlockId, selectBlock } = useEditMode();
   const [isOpen, setIsOpen] = useState(false);
-  const [settingsBlockId, setSettingsBlockId] = useState<string | null>(null);
 
-  // Track when settings panel should open (via global event or direct call)
-  const selectedBlock = settingsBlockId
-    ? blocks.find((b) => b.id === settingsBlockId) || null
+  // Show settings for whichever block is selected
+  const selectedBlock = selectedBlockId
+    ? blocks.find((b) => b.id === selectedBlockId) || null
     : null;
 
-  // Listen for settings open events
+  // Auto-open panel when a block is selected
+  useEffect(() => {
+    if (selectedBlockId) {
+      setIsOpen(true);
+    }
+  }, [selectedBlockId]);
+
+  // Also listen for explicit settings open events (from toolbar button)
   useEffect(() => {
     const handleOpenSettings = (e: CustomEvent<string>) => {
-      setSettingsBlockId(e.detail);
       setIsOpen(true);
     };
     window.addEventListener('openBlockSettings', handleOpenSettings as EventListener);
@@ -598,10 +603,10 @@ function BlockSettingsPanelConnected({
   return (
     <BlockSettingsPanel
       block={selectedBlock}
-      isOpen={isOpen}
+      isOpen={isOpen && !!selectedBlock}
       onClose={() => {
         setIsOpen(false);
-        setSettingsBlockId(null);
+        selectBlock(null); // Deselect block when panel closes
       }}
       profile={profile}
       onUpdateProfile={onUpdateProfile}
