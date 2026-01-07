@@ -99,16 +99,6 @@ export const PATCH_NOTES: PatchNote[] = [
     ]
   },
   {
-    version: '1.2.0',
-    releaseDate: '2025-12-11',
-    title: 'Public Beta Launch',
-    summary: 'Teed is now open to everyone.',
-    changes: [
-      { text: 'Removed beta gate - all users can now sign up and access the full dashboard', category: 'feature' },
-      { text: 'Streamlined onboarding flow for new users', category: 'improvement' }
-    ]
-  },
-  {
     version: '1.1.0',
     releaseDate: '2025-12-11',
     title: 'Advanced Product Identification',
