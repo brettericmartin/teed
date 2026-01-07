@@ -42,11 +42,54 @@ export const CATEGORY_META: Record<CategoryType, {
 
 export const PATCH_NOTES: PatchNote[] = [
   {
+    version: '1.6.0',
+    releaseDate: '2026-01-06',
+    title: 'Profile Blocks System',
+    summary: 'Completely redesigned profile editing with modular blocks you can drag, resize, and customize.',
+    isLatest: true,
+    changes: [
+      { text: 'Modular profile blocks with 12-column responsive grid layout', category: 'feature' },
+      { text: 'Drag & Edit pill controls on every block for easy rearranging', category: 'feature' },
+      { text: 'Settings panel auto-opens and follows whichever block you click', category: 'feature' },
+      { text: 'Font weight controls (normal to bold) for bio and text blocks', category: 'feature' },
+      { text: 'Font size selector (S/M/L/XL) for bio blocks', category: 'feature' },
+      { text: 'Button size controls for social links (small to extra large)', category: 'feature' },
+      { text: 'Auto-enter edit mode when viewing your own profile', category: 'improvement' },
+      { text: 'Radial menu accessible from any block via Edit button', category: 'improvement' }
+    ]
+  },
+  {
+    version: '1.5.0',
+    releaseDate: '2025-12-21',
+    title: 'Mobile Slideshow Experience',
+    summary: 'TikTok-style fullscreen slideshow for sharing your curations on social media.',
+    changes: [
+      { text: 'Fullscreen carousel slideshow view optimized for mobile', category: 'feature' },
+      { text: 'Tap navigation - tap left/right sides to move between items', category: 'feature' },
+      { text: 'Viral-ready format with subtle teed watermark for social sharing', category: 'feature' },
+      { text: 'Improved image cropping using natural aspect ratios', category: 'improvement' },
+      { text: 'Portal-based fullscreen to escape stacking context issues', category: 'bugfix' }
+    ]
+  },
+  {
+    version: '1.4.0',
+    releaseDate: '2025-12-17',
+    title: 'Speed & Polish',
+    summary: 'Faster bulk imports, better caching, and visual refinements across the platform.',
+    changes: [
+      { text: 'Product library caches Firecrawl results for instant reuse', category: 'feature' },
+      { text: 'Parallel batch processing makes bulk imports 5x faster', category: 'improvement' },
+      { text: 'Curated view system with visual design overhaul', category: 'improvement' },
+      { text: 'Open Graph metadata for bag pages (better link previews)', category: 'improvement' },
+      { text: 'Fixed cover photo aspect ratio display in editor', category: 'bugfix' },
+      { text: 'Fixed tiny image display in item detail modal', category: 'bugfix' }
+    ]
+  },
+  {
     version: '1.3.0',
     releaseDate: '2025-12-13',
     title: 'Bulk Link Import',
     summary: 'Import multiple product links at once with real-time progress tracking and enhanced Amazon support.',
-    isLatest: true,
     changes: [
       { text: 'Streaming progress UI shows each link as it processes in real-time', category: 'feature' },
       { text: 'Firecrawl integration for scraping Amazon and other blocked sites', category: 'feature' },
