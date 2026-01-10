@@ -1,0 +1,14 @@
+.embed-body {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  min-height: 100vh;
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+}
+
+/* Support dark mode detection from parent */
+@media (prefers-color-scheme: dark) {
+  .embed-body {
+    color-scheme: dark;
+  }
+}

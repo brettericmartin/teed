@@ -42,11 +42,26 @@ export const CATEGORY_META: Record<CategoryType, {
 
 export const PATCH_NOTES: PatchNote[] = [
   {
+    version: '1.7.0',
+    releaseDate: '2026-01-10',
+    title: 'Collections Without Borders',
+    summary: 'Your collections now work everywhere. Embed them in blogs, export for YouTube descriptions, or subscribe via RSS.',
+    isLatest: true,
+    changes: [
+      { text: 'Embed your collection on any website with one line of code', category: 'feature' },
+      { text: 'Export ready-to-paste formats for YouTube, newsletters, and blogs', category: 'feature' },
+      { text: 'RSS feeds for profiles and bags so followers can subscribe', category: 'feature' },
+      { text: 'oEmbed support for automatic previews in Notion, WordPress, and Medium', category: 'feature' },
+      { text: 'Beautiful social previews when you share links on Twitter, Discord, or Slack', category: 'improvement' },
+      { text: 'Schema.org structured data helps Google and AI understand your collections', category: 'improvement' },
+      { text: 'Value-focused share modal with contextual tips for each option', category: 'improvement' }
+    ]
+  },
+  {
     version: '1.6.0',
     releaseDate: '2026-01-06',
     title: 'Profile Blocks System',
     summary: 'Completely redesigned profile editing with modular blocks you can drag, resize, and customize.',
-    isLatest: true,
     changes: [
       { text: 'Modular profile blocks with 12-column responsive grid layout', category: 'feature' },
       { text: 'Drag & Edit pill controls on every block for easy rearranging', category: 'feature' },

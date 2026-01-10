@@ -4,6 +4,9 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { User, Settings, LogOut, ChevronDown, Compass, LayoutDashboard, Shield, Sparkles } from 'lucide-react';
+import { BetaCapacityBadge } from './BetaCapacityCounter';
+import { BetaCountdownBadge } from './BetaCountdown';
+import { useFeatureDiscovery, FEATURE_RELEASES } from './ui/FeatureBadge';
 
 interface NavigationProps {
   userHandle?: string;
@@ -18,6 +21,9 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const pathname = usePathname();
+
+  // Track if user has seen the latest updates
+  const updatesDiscovery = useFeatureDiscovery('share-embed-tab', FEATURE_RELEASES['share-embed-tab']);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -115,7 +121,8 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
                 </Link>
                 <Link
                   href="/updates"
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  onClick={() => updatesDiscovery.markAsSeen()}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors relative ${
                     pathname === '/updates'
                       ? 'bg-[var(--surface-hover)] text-[var(--text-primary)]'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]'
@@ -123,6 +130,9 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
                 >
                   <Sparkles className="w-4 h-4" />
                   <span>Updates</span>
+                  {updatesDiscovery.shouldShow && (
+                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[var(--teed-green-9)] rounded-full animate-pulse" />
+                  )}
                 </Link>
                 {isAdmin && (
                   <Link
@@ -141,8 +151,17 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
             )}
           </div>
 
-          {/* Right: Profile Menu (when authenticated) */}
+          {/* Right: Beta Badge + Profile Menu (when authenticated) */}
           {isAuthenticated && userHandle && (
+            <div className="flex items-center gap-3">
+              {/* Beta Status Badges - also visible for authenticated users */}
+              <Link
+                href="/join"
+                className="hidden lg:flex items-center gap-2 hover:opacity-80 transition-opacity"
+              >
+                <BetaCapacityBadge />
+              </Link>
+
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
@@ -215,10 +234,14 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
                       </Link>
                       <Link
                         href="/updates"
-                        className="flex items-center gap-3 px-4 py-3 min-h-[48px] text-sm text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors"
+                        onClick={() => updatesDiscovery.markAsSeen()}
+                        className="flex items-center gap-3 px-4 py-3 min-h-[48px] text-sm text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors relative"
                       >
                         <Sparkles className="w-4 h-4 text-[var(--text-secondary)]" />
                         Updates
+                        {updatesDiscovery.shouldShow && (
+                          <span className="ml-auto w-2 h-2 bg-[var(--teed-green-9)] rounded-full animate-pulse" />
+                        )}
                       </Link>
                       {isAdmin && (
                         <Link
@@ -261,11 +284,21 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
                 </div>
               )}
             </div>
+            </div>
           )}
 
           {/* Navigation + CTA (when not authenticated) */}
           {!isAuthenticated && (
             <div className="flex items-center gap-2 sm:gap-4">
+              {/* Beta Status Badges - visible for visitors */}
+              <Link
+                href="/join"
+                className="hidden lg:flex items-center gap-2 hover:opacity-80 transition-opacity"
+              >
+                <BetaCapacityBadge />
+                <BetaCountdownBadge />
+              </Link>
+
               {/* Discover link for visitors */}
               <Link
                 href="/discover"
@@ -280,14 +313,18 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
               </Link>
               <Link
                 href="/updates"
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                onClick={() => updatesDiscovery.markAsSeen()}
+                className={`hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors relative ${
                   pathname === '/updates'
                     ? 'bg-[var(--surface-hover)] text-[var(--text-primary)]'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]'
                 }`}
               >
                 <Sparkles className="w-4 h-4" />
-                <span className="hidden sm:inline">Updates</span>
+                <span>Updates</span>
+                {updatesDiscovery.shouldShow && (
+                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[var(--teed-green-9)] rounded-full animate-pulse" />
+                )}
               </Link>
 
               {/* Sign In - hidden on mobile */}
@@ -297,12 +334,13 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
               >
                 Sign In
               </Link>
-              {/* Get Started - primary CTA */}
+              {/* Apply for Beta - primary CTA */}
               <Link
-                href="/login"
+                href="/join"
                 className="px-4 py-2.5 min-h-[44px] flex items-center text-sm font-medium text-white bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] rounded-lg transition-colors"
               >
-                Get Started
+                <span className="sm:hidden">Apply</span>
+                <span className="hidden sm:inline">Apply for Beta</span>
               </Link>
             </div>
           )}
@@ -339,13 +377,19 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
             </Link>
             <Link
               href="/updates"
-              className={`flex flex-col items-center gap-1 p-2 min-h-[56px] min-w-[56px] rounded-lg transition-colors ${
+              onClick={() => updatesDiscovery.markAsSeen()}
+              className={`flex flex-col items-center gap-1 p-2 min-h-[56px] min-w-[56px] rounded-lg transition-colors relative ${
                 pathname === '/updates'
                   ? 'text-[var(--teed-green-9)]'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
-              <Sparkles className="w-6 h-6" />
+              <div className="relative">
+                <Sparkles className="w-6 h-6" />
+                {updatesDiscovery.shouldShow && (
+                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-[var(--teed-green-9)] rounded-full animate-pulse" />
+                )}
+              </div>
               <span className="text-xs font-medium">Updates</span>
             </Link>
             <button
