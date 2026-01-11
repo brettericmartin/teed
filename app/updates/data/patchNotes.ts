@@ -42,11 +42,28 @@ export const CATEGORY_META: Record<CategoryType, {
 
 export const PATCH_NOTES: PatchNote[] = [
   {
+    version: '1.9.0',
+    releaseDate: '2026-01-11',
+    title: 'Showcase Mode & Quick Creation',
+    summary: 'Your profile now feels like a gallery, not a construction site. Paste links anywhere, use keyboard shortcuts, and enjoy a smoother creation flow.',
+    isLatest: true,
+    changes: [
+      { text: 'Showcase Mode: see your profile as visitors see it by default', category: 'feature' },
+      { text: 'Press E to enter/exit edit mode, with floating Edit/Done button', category: 'feature' },
+      { text: 'Paste any link anywhere and choose where it goes (profile, bag, or social)', category: 'feature' },
+      { text: 'Command Palette (Cmd+K) for power users with instant link classification', category: 'feature' },
+      { text: 'Floating + button for quick access to Link, Photo, Bag, and Block creation', category: 'feature' },
+      { text: 'New /bags/new page with quick-start URL field', category: 'feature' },
+      { text: 'First-time editor tips help new users get started', category: 'feature' },
+      { text: 'Celebration animation when exiting edit mode after making changes', category: 'improvement' },
+      { text: 'Mobile-optimized button placement in thumb-friendly zones', category: 'improvement' }
+    ]
+  },
+  {
     version: '1.8.0',
     releaseDate: '2026-01-10',
     title: 'Rich Context & Organization',
     summary: 'Tell the story behind your picks with rich context fields, organize items into sections, and track how your collections evolve.',
-    isLatest: true,
     changes: [
       { text: 'Rich item context: explain why you chose something, add specs, compare alternatives', category: 'feature' },
       { text: 'Bag sections for organizing items into logical groups', category: 'feature' },
