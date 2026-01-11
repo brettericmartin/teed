@@ -42,11 +42,25 @@ export const CATEGORY_META: Record<CategoryType, {
 
 export const PATCH_NOTES: PatchNote[] = [
   {
+    version: '1.8.0',
+    releaseDate: '2026-01-10',
+    title: 'Rich Context & Organization',
+    summary: 'Tell the story behind your picks with rich context fields, organize items into sections, and track how your collections evolve.',
+    isLatest: true,
+    changes: [
+      { text: 'Rich item context: explain why you chose something, add specs, compare alternatives', category: 'feature' },
+      { text: 'Bag sections for organizing items into logical groups', category: 'feature' },
+      { text: 'Version history tracks every change to your bags over time', category: 'feature' },
+      { text: 'Multi-bag collections to group related curations together', category: 'feature' },
+      { text: 'Creator stats page showing your impact and reach', category: 'feature' },
+      { text: 'Track purchase dates and prices paid for items', category: 'improvement' }
+    ]
+  },
+  {
     version: '1.7.0',
     releaseDate: '2026-01-10',
     title: 'Collections Without Borders',
     summary: 'Your collections now work everywhere. Embed them in blogs, export for YouTube descriptions, or subscribe via RSS.',
-    isLatest: true,
     changes: [
       { text: 'Embed your collection on any website with one line of code', category: 'feature' },
       { text: 'Export ready-to-paste formats for YouTube, newsletters, and blogs', category: 'feature' },
