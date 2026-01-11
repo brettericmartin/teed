@@ -29,6 +29,7 @@ interface OEmbedResponse {
  * Supports URLs in these formats:
  * - https://teed.club/u/{handle}/{code} - Bag embeds
  * - https://teed.club/u/{handle} - Profile embeds
+ * - https://teed.club/embed/item/{id} - Item embeds
  *
  * Query params:
  * - url (required): The URL to embed
@@ -70,9 +71,11 @@ export async function GET(request: NextRequest) {
     let response: OEmbedResponse | null = null;
 
     if (parsed.type === 'bag') {
-      response = await getBagOEmbed(parsed.handle, parsed.code!, maxwidth, maxheight);
+      response = await getBagOEmbed(parsed.handle!, parsed.code!, maxwidth, maxheight);
+    } else if (parsed.type === 'item') {
+      response = await getItemOEmbed(parsed.itemId!, maxwidth, maxheight);
     } else {
-      response = await getProfileOEmbed(parsed.handle, maxwidth, maxheight);
+      response = await getProfileOEmbed(parsed.handle!, maxwidth, maxheight);
     }
 
     if (!response) {
@@ -106,13 +109,19 @@ export async function GET(request: NextRequest) {
   }
 }
 
-function parseUrl(url: string): { type: 'bag' | 'profile'; handle: string; code?: string } | null {
+function parseUrl(url: string): { type: 'bag' | 'profile' | 'item'; handle?: string; code?: string; itemId?: string } | null {
   try {
     const parsed = new URL(url);
 
     // Accept teed.club or localhost for development
     if (!['teed.club', 'www.teed.club', 'localhost'].includes(parsed.hostname)) {
       return null;
+    }
+
+    // Match /embed/item/{id}
+    const itemMatch = parsed.pathname.match(/^\/embed\/item\/([a-f0-9-]+)\/?$/i);
+    if (itemMatch) {
+      return { type: 'item', itemId: itemMatch[1] };
     }
 
     // Match /u/{handle}/{code} or /u/{handle}
@@ -186,6 +195,84 @@ async function getBagOEmbed(
     thumbnail_width: 1200,
     thumbnail_height: 630,
     html: generateEmbedHtml(embedUrl, bag.title, width, height),
+    width,
+    height,
+  };
+}
+
+async function getItemOEmbed(
+  itemId: string,
+  maxwidth: number,
+  maxheight: number
+): Promise<OEmbedResponse | null> {
+  // Fetch item with bag and owner info
+  const { data: item } = await supabase
+    .from('bag_items')
+    .select(`
+      id,
+      custom_name,
+      brand,
+      photo_url,
+      custom_photo_id,
+      why_chosen,
+      bag:bags!bag_items_bag_id_fkey(
+        id,
+        code,
+        title,
+        is_public,
+        owner:profiles!bags_owner_id_fkey(
+          handle,
+          display_name
+        )
+      )
+    `)
+    .eq('id', itemId)
+    .single();
+
+  if (!item || !item.bag) return null;
+
+  // Check if bag is public
+  const bag = Array.isArray(item.bag) ? item.bag[0] : item.bag;
+  if (!bag?.is_public) return null;
+
+  const owner = Array.isArray(bag.owner) ? bag.owner[0] : bag.owner;
+  if (!owner) return null;
+
+  // Get photo URL for thumbnail
+  let photoUrl = item.photo_url;
+  if (item.custom_photo_id) {
+    const { data: media } = await supabase
+      .from('media_assets')
+      .select('url')
+      .eq('id', item.custom_photo_id)
+      .single();
+    if (media) {
+      photoUrl = media.url;
+    }
+  }
+
+  const itemName = item.custom_name || item.brand || 'Item';
+  const displayName = owner.display_name || owner.handle;
+  const bagUrl = `https://teed.club/u/${owner.handle}/${bag.code}`;
+  const itemUrl = `https://teed.club/embed/item/${itemId}`;
+
+  // Item cards are more horizontal - 500x180
+  const width = Math.min(maxwidth, 500);
+  const height = Math.min(maxheight, 180);
+
+  return {
+    type: 'rich',
+    version: '1.0',
+    title: item.brand ? `${item.brand} ${itemName}` : itemName,
+    author_name: displayName,
+    author_url: `https://teed.club/u/${owner.handle}`,
+    provider_name: 'Teed',
+    provider_url: 'https://teed.club',
+    cache_age: 3600,
+    thumbnail_url: photoUrl || undefined,
+    thumbnail_width: photoUrl ? 400 : undefined,
+    thumbnail_height: photoUrl ? 400 : undefined,
+    html: generateEmbedHtml(itemUrl, itemName, width, height),
     width,
     height,
   };

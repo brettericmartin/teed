@@ -53,6 +53,7 @@ export const PATCH_NOTES: PatchNote[] = [
       { text: 'Version history tracks every change to your bags over time', category: 'feature' },
       { text: 'Multi-bag collections to group related curations together', category: 'feature' },
       { text: 'Creator stats page showing your impact and reach', category: 'feature' },
+      { text: 'Mark bags as complete with celebratory confetti animation', category: 'feature' },
       { text: 'Track purchase dates and prices paid for items', category: 'improvement' }
     ]
   },

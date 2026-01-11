@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import * as cheerio from 'cheerio';
+import { classifyUrl, parseEmbedUrlDetailed } from '@/lib/links/classifyUrl';
+import { fetchOEmbed } from '@/lib/linkIntelligence';
 
 interface ScrapedMetadata {
   title: string | null;
@@ -9,7 +11,7 @@ interface ScrapedMetadata {
   domain: string;
   url: string;
   brand: string | null;
-  videoType?: 'youtube' | 'tiktok' | 'instagram';
+  videoType?: 'youtube' | 'tiktok' | 'instagram' | 'vimeo' | 'spotify' | 'twitter';
   videoId?: string;
 }
 
@@ -164,120 +166,45 @@ async function searchGoogleImages(query: string): Promise<string | null> {
   }
 }
 
-// Video platform detection helpers
-function extractYouTubeVideoId(url: string): string | null {
-  const patterns = [
-    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
-    /youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/,
-  ];
-  for (const pattern of patterns) {
-    const match = url.match(pattern);
-    if (match) return match[1];
-  }
-  return null;
-}
+/**
+ * Handle embed URLs using Link Intelligence library
+ */
+async function handleEmbedUrl(url: string, platform: string): Promise<ScrapedMetadata | null> {
+  const embedData = parseEmbedUrlDetailed(url);
+  if (!embedData) return null;
 
-function extractTikTokVideoId(url: string): string | null {
-  // TikTok URLs: tiktok.com/@user/video/VIDEO_ID or vm.tiktok.com/VIDEO_ID
-  const patterns = [
-    /tiktok\.com\/@[^/]+\/video\/(\d+)/,
-    /tiktok\.com\/t\/([a-zA-Z0-9]+)/,
-    /vm\.tiktok\.com\/([a-zA-Z0-9]+)/,
-  ];
-  for (const pattern of patterns) {
-    const match = url.match(pattern);
-    if (match) return match[1];
-  }
-  return null;
-}
-
-function extractInstagramPostId(url: string): string | null {
-  // Instagram: instagram.com/p/POST_ID or instagram.com/reel/REEL_ID
-  const match = url.match(/instagram\.com\/(?:p|reel|reels)\/([a-zA-Z0-9_-]+)/);
-  return match ? match[1] : null;
-}
-
-function isVideoUrl(url: string): { type: 'youtube' | 'tiktok' | 'instagram'; id: string } | null {
-  const youtubeId = extractYouTubeVideoId(url);
-  if (youtubeId) return { type: 'youtube', id: youtubeId };
-
-  const tiktokId = extractTikTokVideoId(url);
-  if (tiktokId) return { type: 'tiktok', id: tiktokId };
-
-  const instagramId = extractInstagramPostId(url);
-  if (instagramId) return { type: 'instagram', id: instagramId };
-
-  return null;
-}
-
-async function fetchYouTubeMetadata(url: string, videoId: string): Promise<Partial<ScrapedMetadata>> {
-  try {
-    // Use oEmbed API for title
-    const oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`;
-    const response = await fetch(oembedUrl);
-
-    if (response.ok) {
-      const data = await response.json();
-      return {
-        title: data.title || null,
-        description: `Video by ${data.author_name || 'YouTube'}`,
-        image: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
-        domain: 'youtube.com',
-        brand: data.author_name || 'YouTube',
-        videoType: 'youtube',
-        videoId,
-      };
-    }
-  } catch (e) {
-    console.error('YouTube oEmbed error:', e);
-  }
-
-  // Fallback - just return thumbnail
-  return {
-    title: null,
-    image: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
-    domain: 'youtube.com',
-    videoType: 'youtube',
-    videoId,
+  // Map platform to video type for backward compatibility
+  const platformToVideoType: Record<string, ScrapedMetadata['videoType']> = {
+    youtube: 'youtube',
+    tiktok: 'tiktok',
+    instagram: 'instagram',
+    vimeo: 'vimeo',
+    spotify: 'spotify',
+    twitter: 'twitter',
   };
-}
 
-async function fetchTikTokMetadata(url: string, videoId: string): Promise<Partial<ScrapedMetadata>> {
-  try {
-    const oembedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(url)}`;
-    const response = await fetch(oembedUrl);
+  const videoType = platformToVideoType[platform];
+  const parsedUrl = new URL(url);
 
-    if (response.ok) {
-      const data = await response.json();
-      return {
-        title: data.title || null,
-        description: `Video by @${data.author_name || 'TikTok'}`,
-        image: data.thumbnail_url || null,
-        domain: 'tiktok.com',
-        brand: data.author_name ? `@${data.author_name}` : 'TikTok',
-        videoType: 'tiktok',
-        videoId,
-      };
-    }
-  } catch (e) {
-    console.error('TikTok oEmbed error:', e);
+  // Try to fetch oEmbed data for title and thumbnail
+  const oembed = await fetchOEmbed(url);
+
+  // Generate thumbnail URL for YouTube
+  let thumbnailUrl: string | null = null;
+  if (platform === 'youtube' && embedData.contentId) {
+    thumbnailUrl = `https://img.youtube.com/vi/${embedData.contentId}/maxresdefault.jpg`;
   }
 
   return {
-    title: null,
-    domain: 'tiktok.com',
-    videoType: 'tiktok',
-    videoId,
-  };
-}
-
-async function fetchInstagramMetadata(url: string, postId: string): Promise<Partial<ScrapedMetadata>> {
-  // Instagram's oEmbed requires authentication, so we'll fall back to scraping
-  return {
-    title: null,
-    domain: 'instagram.com',
-    videoType: 'instagram',
-    videoId: postId,
+    title: oembed?.title || null,
+    description: oembed?.authorName ? `Video by ${oembed.authorName}` : null,
+    image: oembed?.thumbnailUrl || thumbnailUrl || null,
+    price: null,
+    domain: parsedUrl.hostname.replace('www.', ''),
+    url,
+    brand: oembed?.authorName || embedData.platformName || null,
+    videoType,
+    videoId: embedData.contentId,
   };
 }
 
@@ -311,42 +238,36 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if this is a video URL (YouTube, TikTok, Instagram)
-    const videoInfo = isVideoUrl(url);
-    if (videoInfo) {
-      let videoMetadata: Partial<ScrapedMetadata> = {};
+    // Use Link Intelligence to classify the URL
+    const classification = classifyUrl(url);
 
-      switch (videoInfo.type) {
-        case 'youtube':
-          videoMetadata = await fetchYouTubeMetadata(url, videoInfo.id);
-          break;
-        case 'tiktok':
-          videoMetadata = await fetchTikTokMetadata(url, videoInfo.id);
-          break;
-        case 'instagram':
-          videoMetadata = await fetchInstagramMetadata(url, videoInfo.id);
-          break;
+    // Handle embed URLs (YouTube, TikTok, Instagram, Spotify, etc.)
+    if (classification.type === 'embed') {
+      const embedMetadata = await handleEmbedUrl(url, classification.platform);
+      if (embedMetadata) {
+        // For YouTube with successful data, return early
+        // For others without image, fall through to scraping
+        if (classification.platform === 'youtube' || embedMetadata.image) {
+          return NextResponse.json(embedMetadata, { status: 200 });
+        }
       }
-
-      // For YouTube with successful oEmbed, return early
-      // For TikTok/Instagram, fall through to scraping if oEmbed failed (no thumbnail)
-      if (videoInfo.type === 'youtube' || videoMetadata.image) {
-        return NextResponse.json({
-          title: videoMetadata.title,
-          description: videoMetadata.description || null,
-          image: videoMetadata.image || null,
-          price: null,
-          domain: videoMetadata.domain || parsedUrl.hostname.replace('www.', ''),
-          url,
-          brand: videoMetadata.brand || null,
-          videoType: videoMetadata.videoType,
-          videoId: videoMetadata.videoId,
-        }, { status: 200 });
-      }
-      // Fall through to regular scraping to get og:image for TikTok/Instagram
+      // Fall through to regular scraping to get og:image
     }
 
-    // Fetch the URL
+    // Handle social profile URLs
+    if (classification.type === 'social') {
+      return NextResponse.json({
+        title: `${classification.displayName} - @${classification.username}`,
+        description: `${classification.displayName} profile`,
+        image: null,
+        price: null,
+        domain: parsedUrl.hostname.replace('www.', ''),
+        url,
+        brand: classification.displayName,
+      }, { status: 200 });
+    }
+
+    // Product URLs - fetch and scrape HTML
     let html = '';
     let fetchSucceeded = false;
 
@@ -519,12 +440,6 @@ export async function POST(request: NextRequest) {
       if (textBrand) {
         metadata.brand = textBrand;
       }
-    }
-
-    // Add video info if this was detected as a video URL (e.g., Instagram)
-    if (videoInfo) {
-      metadata.videoType = videoInfo.type;
-      metadata.videoId = videoInfo.id;
     }
 
     // If no image found, try Google Image Search as fallback

@@ -9,8 +9,11 @@ export type BlockType =
   | 'featured_bags'
   | 'custom_text'
   | 'spacer'
-  | 'divider';
+  | 'divider'
+  | 'quote'
+  | 'affiliate_disclosure';
 
+// Embed platforms supported by Link Intelligence library
 export type EmbedPlatform =
   | 'youtube'
   | 'spotify'
@@ -18,7 +21,14 @@ export type EmbedPlatform =
   | 'twitter'
   | 'instagram'
   | 'twitch'
-  | 'unknown';
+  | 'vimeo'
+  | 'soundcloud'
+  | 'apple-music'
+  | 'loom'
+  | 'bluesky'
+  | 'reddit'
+  | 'threads'
+  | string; // Allow other platforms from Link Intelligence
 
 // Block width options - DEPRECATED, kept for backward compatibility
 // @deprecated Use grid coordinates (gridX, gridY, gridW, gridH) instead
@@ -54,6 +64,8 @@ export const DEFAULT_BLOCK_GRID: Record<BlockType, { w: number; h: number; minH?
   custom_text: { w: 6, h: 1, minH: 1, maxH: 4 },
   spacer: { w: 12, h: 1, minH: 1, maxH: 3 },
   divider: { w: 12, h: 1, minH: 1, maxH: 1 },
+  quote: { w: 12, h: 2, minH: 1, maxH: 4 },
+  affiliate_disclosure: { w: 12, h: 1, minH: 1, maxH: 2 },
 };
 
 // Base block interface
@@ -88,7 +100,9 @@ export type BlockConfig =
   | FeaturedBagsBlockConfig
   | CustomTextBlockConfig
   | SpacerBlockConfig
-  | DividerBlockConfig;
+  | DividerBlockConfig
+  | QuoteBlockConfig
+  | AffiliateDisclosureBlockConfig;
 
 export interface HeaderBlockConfig {
   show_avatar?: boolean;
@@ -170,6 +184,30 @@ export interface SpacerBlockConfig {
 export interface DividerBlockConfig {
   style?: 'solid' | 'dashed' | 'dotted';
   width?: 'full' | 'half' | 'third';
+}
+
+/**
+ * Quote/Testimonial Block
+ * DOCTRINE: Authoritative social proof without engagement metrics.
+ */
+export interface QuoteBlockConfig {
+  quote: string;
+  attribution?: string; // Who said it (e.g., "Mark, Pro Golfer")
+  source?: string; // Where it came from (e.g., "Instagram")
+  sourceUrl?: string; // Link to original
+  style?: 'minimal' | 'callout' | 'card';
+  alignment?: 'left' | 'center' | 'right';
+  showQuotationMarks?: boolean;
+}
+
+/**
+ * Affiliate Disclosure Block
+ * DOCTRINE: Professional legal infrastructure; transparent, not apologetic.
+ */
+export interface AffiliateDisclosureBlockConfig {
+  disclosureType: 'amazon' | 'general' | 'custom';
+  customText?: string;
+  style?: 'minimal' | 'notice' | 'card';
 }
 
 // Theme types

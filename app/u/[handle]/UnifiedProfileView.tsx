@@ -32,6 +32,8 @@ import {
   SpacerBlock,
   DividerBlock,
   EmbedBlock,
+  QuoteBlock,
+  AffiliateDisclosureBlock,
   BlockSettingsPanel,
   ProfileStats,
   BlockContainer,
@@ -226,6 +228,12 @@ function BlockRenderer({
 
       case 'divider':
         return <DividerBlock config={config} />;
+
+      case 'quote':
+        return <QuoteBlock config={config} />;
+
+      case 'affiliate_disclosure':
+        return <AffiliateDisclosureBlock config={config} />;
 
       case 'embed':
         return (

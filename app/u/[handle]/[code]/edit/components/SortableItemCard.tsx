@@ -14,9 +14,10 @@ type SortableItemCardProps = {
   isHero?: boolean;
   onToggleHero?: (itemId: string) => void;
   sections?: Section[];
+  onItemMoved?: (itemId: string, targetBagTitle: string) => void;
 };
 
-export default function SortableItemCard({ item, onDelete, onUpdate, bagCode, isHero, onToggleHero, sections = [] }: SortableItemCardProps) {
+export default function SortableItemCard({ item, onDelete, onUpdate, bagCode, isHero, onToggleHero, sections = [], onItemMoved }: SortableItemCardProps) {
   const {
     attributes,
     listeners,
@@ -53,6 +54,7 @@ export default function SortableItemCard({ item, onDelete, onUpdate, bagCode, is
         isHero={isHero}
         onToggleHero={onToggleHero}
         sections={sections}
+        onItemMoved={onItemMoved}
       />
     </div>
   );

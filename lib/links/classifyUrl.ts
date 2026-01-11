@@ -8,13 +8,33 @@
  *
  * Classification priority: Embed > Social > Product
  * This ensures content URLs are properly detected before falling back to profile detection.
+ *
+ * Now powered by the Link Intelligence Library for expanded platform support (40+ platforms).
  */
 
-import { parseEmbedUrl, type ParsedEmbed, type EmbedPlatform } from '@/lib/embeds/parseEmbedUrl';
-import { parseSocialProfileUrl, type ParsedSocialProfile } from './parseSocialProfileUrl';
+import {
+  classifyUrl as liClassifyUrl,
+  classifyUrls as liClassifyUrls,
+  parseEmbedUrl as liParseEmbedUrl,
+  parseSocialProfileUrl as liParseSocialProfileUrl,
+  normalizeUrl,
+  isValidUrl as liIsValidUrl,
+  parseUrlsFromInput as liParseUrlsFromInput,
+  type ClassifiedUrl,
+  type EmbedResult,
+  type SocialProfileResult,
+} from '@/lib/linkIntelligence';
+
+// Re-export ParsedEmbed type for backward compatibility
+import type { EmbedPlatform, ParsedEmbed } from '@/lib/embeds/parseEmbedUrl';
+import type { ParsedSocialProfile } from './parseSocialProfileUrl';
+
+// =============================================================================
+// BACKWARD COMPATIBLE TYPES
+// =============================================================================
 
 /**
- * Classification result types
+ * Classification result types (backward compatible)
  */
 export type LinkClassification =
   | EmbedClassification
@@ -57,6 +77,88 @@ export interface ClassificationSummary {
   total: number;
 }
 
+// =============================================================================
+// ADAPTER FUNCTIONS
+// =============================================================================
+
+/**
+ * Convert Link Intelligence embed result to legacy ParsedEmbed format.
+ */
+function toLegacyEmbed(embed: EmbedResult): ParsedEmbed {
+  // Map new platform names to legacy EmbedPlatform type
+  const platformMap: Record<string, EmbedPlatform> = {
+    youtube: 'youtube',
+    spotify: 'spotify',
+    tiktok: 'tiktok',
+    twitter: 'twitter',
+    instagram: 'instagram',
+    twitch: 'twitch',
+  };
+
+  return {
+    platform: platformMap[embed.platform] || 'unknown',
+    id: embed.contentId,
+    originalUrl: embed.url,
+    embedUrl: embed.embedUrl,
+    type: embed.contentType,
+  };
+}
+
+/**
+ * Convert Link Intelligence social result to legacy ParsedSocialProfile format.
+ */
+function toLegacySocialProfile(social: SocialProfileResult): ParsedSocialProfile {
+  return {
+    platform: social.platform,
+    username: social.username,
+    displayName: social.displayName || social.platformName || social.platform,
+    originalUrl: social.url,
+  };
+}
+
+/**
+ * Convert Link Intelligence ClassifiedUrl to legacy LinkClassification format.
+ * Note: classifyUrl only returns type/platform, so we need to call parse functions for full data.
+ */
+function toLegacyClassification(result: ClassifiedUrl, url: string): LinkClassification {
+  if (result.type === 'embed') {
+    // Get full embed data by parsing
+    const embedResult = liParseEmbedUrl(url);
+    if (embedResult) {
+      return {
+        type: 'embed',
+        platform: toLegacyEmbed(embedResult).platform,
+        embedData: toLegacyEmbed(embedResult),
+        originalUrl: result.normalizedUrl,
+      };
+    }
+  }
+
+  if (result.type === 'social') {
+    // Get full social data by parsing
+    const socialResult = liParseSocialProfileUrl(url);
+    if (socialResult) {
+      const legacy = toLegacySocialProfile(socialResult);
+      return {
+        type: 'social',
+        platform: legacy.platform,
+        username: legacy.username,
+        displayName: legacy.displayName,
+        originalUrl: result.normalizedUrl,
+      };
+    }
+  }
+
+  return {
+    type: 'product',
+    originalUrl: result.normalizedUrl,
+  };
+}
+
+// =============================================================================
+// PUBLIC API (backward compatible)
+// =============================================================================
+
 /**
  * Classify a single URL.
  *
@@ -73,36 +175,8 @@ export function classifyUrl(url: string): LinkClassification {
     return { type: 'product', originalUrl: url };
   }
 
-  const normalizedUrl = normalizeUrl(url);
-
-  // 1. Try embed detection first (content URLs like videos, tracks, posts)
-  const embedResult = parseEmbedUrl(normalizedUrl);
-  if (embedResult.platform !== 'unknown') {
-    return {
-      type: 'embed',
-      platform: embedResult.platform,
-      embedData: embedResult,
-      originalUrl: normalizedUrl,
-    };
-  }
-
-  // 2. Try social profile detection (profile URLs)
-  const socialResult = parseSocialProfileUrl(normalizedUrl);
-  if (socialResult) {
-    return {
-      type: 'social',
-      platform: socialResult.platform,
-      username: socialResult.username,
-      displayName: socialResult.displayName,
-      originalUrl: normalizedUrl,
-    };
-  }
-
-  // 3. Default to product (will go through scraping pipeline)
-  return {
-    type: 'product',
-    originalUrl: normalizedUrl,
-  };
+  const result = liClassifyUrl(url);
+  return toLegacyClassification(result, url);
 }
 
 /**
@@ -156,40 +230,6 @@ export function classifyUrls(urls: string[]): {
 }
 
 /**
- * Normalize a URL for consistent processing.
- *
- * - Trims whitespace
- * - Adds https:// if no protocol
- * - Removes tracking parameters
- */
-function normalizeUrl(url: string): string {
-  let normalized = url.trim();
-
-  // Add protocol if missing
-  if (!normalized.match(/^https?:\/\//i)) {
-    // Check if it's a mailto: link
-    if (normalized.startsWith('mailto:')) {
-      return normalized;
-    }
-    normalized = 'https://' + normalized;
-  }
-
-  // Remove common tracking parameters
-  try {
-    const urlObj = new URL(normalized);
-    const trackingParams = [
-      'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
-      'fbclid', 'gclid', 'ref', 'ref_src', 'ref_url',
-    ];
-    trackingParams.forEach((param) => urlObj.searchParams.delete(param));
-    return urlObj.toString();
-  } catch {
-    // If URL parsing fails, return as-is
-    return normalized;
-  }
-}
-
-/**
  * Parse URLs from raw text input.
  *
  * Handles:
@@ -202,49 +242,7 @@ function normalizeUrl(url: string): string {
  * @returns Array of parsed URLs
  */
 export function parseUrlsFromInput(input: string, maxUrls: number = 25): string[] {
-  if (!input) return [];
-
-  // Split by newlines, commas, or spaces
-  const parts = input.split(/[\n,\s]+/).filter(Boolean);
-
-  // Filter to valid URLs
-  const urls: string[] = [];
-  const seen = new Set<string>();
-
-  for (const part of parts) {
-    const trimmed = part.trim();
-    if (!trimmed) continue;
-
-    // Basic URL validation
-    if (isValidUrl(trimmed)) {
-      const normalized = normalizeUrl(trimmed);
-
-      // Deduplicate
-      if (!seen.has(normalized)) {
-        seen.add(normalized);
-        urls.push(normalized);
-      }
-    }
-
-    // Stop at max
-    if (urls.length >= maxUrls) break;
-  }
-
-  return urls;
-}
-
-/**
- * Basic URL validation.
- */
-function isValidUrl(str: string): boolean {
-  // Allow mailto: links
-  if (str.startsWith('mailto:')) {
-    return str.includes('@');
-  }
-
-  // Check for domain-like pattern
-  const domainPattern = /^(https?:\/\/)?[a-zA-Z0-9][-a-zA-Z0-9]*(\.[a-zA-Z0-9][-a-zA-Z0-9]*)+/i;
-  return domainPattern.test(str);
+  return liParseUrlsFromInput(input, maxUrls);
 }
 
 /**
@@ -290,3 +288,34 @@ export function getClassificationIcon(classification: LinkClassification): strin
       return 'shopping-bag';
   }
 }
+
+// =============================================================================
+// EXTENDED API (new features from Link Intelligence)
+// =============================================================================
+
+/**
+ * Get detailed classification with Link Intelligence metadata.
+ * Use this for new code that wants access to the full data.
+ */
+export function classifyUrlDetailed(url: string): ClassifiedUrl {
+  return liClassifyUrl(url);
+}
+
+/**
+ * Get full embed details (new format with more platforms).
+ * Returns null for non-embed URLs.
+ */
+export function parseEmbedUrlDetailed(url: string): EmbedResult | null {
+  return liParseEmbedUrl(url);
+}
+
+/**
+ * Get full social profile details (new format with more platforms).
+ * Returns null for non-profile URLs.
+ */
+export function parseSocialProfileUrlDetailed(url: string): SocialProfileResult | null {
+  return liParseSocialProfileUrl(url);
+}
+
+// Re-export Link Intelligence utilities for direct access
+export { normalizeUrl, liIsValidUrl as isValidUrl };

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Share2, Trash2, Camera, ChevronLeft, Package, Images, Link, Sparkles, Upload, Image, X, Eye } from 'lucide-react';
+import { ArrowLeft, Share2, Trash2, Camera, ChevronLeft, Package, Images, Link, Sparkles, Upload, Image, X, Eye, Loader2 } from 'lucide-react';
 import { GolfLoader } from '@/components/ui/GolfLoader';
 import NextLink from 'next/link';
 import ItemList from './components/ItemList';
@@ -26,6 +26,7 @@ import { TapToIdentifyWizard } from '@/components/apis';
 import type { IdentifiedItem } from '@/components/apis/TapToIdentifyWizard';
 import { CATEGORIES } from '@/lib/categories';
 import { useCelebration } from '@/lib/celebrations';
+import BagCompletionButton from '@/components/BagCompletionButton';
 
 /**
  * Robust data URL to Blob converter that handles mobile browser quirks.
@@ -151,6 +152,8 @@ type Bag = {
   title: string;
   description: string | null;
   is_public: boolean;
+  is_complete: boolean;
+  completed_at: string | null;
   background_image: string | null;
   category: string | null;
   tags: string[];
@@ -205,6 +208,36 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [showCoverCropper, setShowCoverCropper] = useState(false);
   const [coverImageToCrop, setCoverImageToCrop] = useState<string | null>(null);
   const [showEnrichmentItemSelection, setShowEnrichmentItemSelection] = useState(false);
+  const [isGeneratingDescription, setIsGeneratingDescription] = useState(false);
+
+  const handleGenerateDescription = async () => {
+    setIsGeneratingDescription(true);
+    try {
+      const response = await fetch('/api/ai/generate-bag-description', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bagCode: bag.code,
+          type: 'description',
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate');
+      }
+
+      const data = await response.json();
+      if (data.description) {
+        setDescription(data.description);
+        toast.showSuccess('Description generated!');
+      }
+    } catch (error) {
+      console.error('Error generating description:', error);
+      toast.showError('Failed to generate description');
+    } finally {
+      setIsGeneratingDescription(false);
+    }
+  };
 
   // Auto-save bag metadata (debounced)
   useEffect(() => {
@@ -528,6 +561,20 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       console.error('Error deleting item:', error);
       toast.showError('Failed to delete item. Please try again.');
     }
+  };
+
+  // Handle item moved to another bag
+  const handleItemMoved = (itemId: string, targetBagTitle: string) => {
+    const movedItem = bag.items.find((item) => item.id === itemId);
+    const itemName = movedItem?.custom_name || 'Item';
+
+    // Remove item from local state
+    setBag((prev) => ({
+      ...prev,
+      items: prev.items.filter((item) => item.id !== itemId),
+    }));
+
+    toast.showSuccess(`"${itemName}" moved to "${targetBagTitle}"`);
   };
 
   // Batch reorder items - only sends changed items to API
@@ -1282,6 +1329,20 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 <span className="hidden sm:inline">Share</span>
               </Button>
 
+              {/* Completion Button */}
+              <BagCompletionButton
+                bagCode={bag.code}
+                isComplete={bag.is_complete}
+                onCompletionChange={(isComplete) => {
+                  setBag((prev) => ({
+                    ...prev,
+                    is_complete: isComplete,
+                    completed_at: isComplete ? new Date().toISOString() : null,
+                  }));
+                }}
+                size="sm"
+              />
+
               {/* Delete Bag Button */}
               <Button
                 onClick={handleDeleteBag}
@@ -1297,14 +1358,29 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
 
           {/* Description and Status Row */}
           <div className="flex items-start gap-2">
-            {/* Editable Description */}
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Add a description..."
-              rows={1}
-              className="flex-1 text-sm text-[var(--text-secondary)] text-base w-full border-0 border-b-2 border-transparent hover:border-[var(--border-subtle)] focus:border-[var(--teed-green-8)] focus:outline-none bg-transparent px-0 py-1 resize-none transition-colors placeholder:text-[var(--input-placeholder)] min-w-0"
-            />
+            {/* Editable Description with AI Generate */}
+            <div className="flex-1 flex items-start gap-1.5 min-w-0">
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Add a description..."
+                rows={1}
+                className="flex-1 text-sm text-[var(--text-secondary)] text-base w-full border-0 border-b-2 border-transparent hover:border-[var(--border-subtle)] focus:border-[var(--teed-green-8)] focus:outline-none bg-transparent px-0 py-1 resize-none transition-colors placeholder:text-[var(--input-placeholder)] min-w-0"
+              />
+              <button
+                type="button"
+                onClick={handleGenerateDescription}
+                disabled={isGeneratingDescription}
+                className="flex-shrink-0 inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-[var(--sky-11)] bg-[var(--sky-3)] hover:bg-[var(--sky-4)] rounded-md transition-colors disabled:opacity-50"
+                title="AI Generate Description"
+              >
+                {isGeneratingDescription ? (
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                ) : (
+                  <Sparkles className="w-3 h-3" />
+                )}
+              </button>
+            </div>
 
             {/* Save Status & Privacy Label */}
             <div className="flex items-center gap-2 text-xs text-[var(--text-secondary)] flex-shrink-0">
@@ -1711,6 +1787,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             heroItemId={bag.hero_item_id}
             onToggleHero={handleToggleHero}
             sections={bag.sections}
+            onItemMoved={handleItemMoved}
           />
         ) : (
           <div className="text-center py-12">

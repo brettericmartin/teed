@@ -345,10 +345,10 @@ For significant features, evaluate through the lens of Teed's advisory panel def
 
 | Advisor | Focus | Key Question |
 |---------|-------|--------------|
-| **Daniel Priestley** | Growth | "Does this multiply touchpoints across 4 locations?" |
+| **Daniel Priestley** | Growth & Demand | "Does this create visible demand/supply tension?" |
 | **Julie Zhuo** | Design | "Does this feel discovered, not disrupted?" |
 | **Li Jin** | Ownership | "Does this increase creator control and leverage?" |
 | **Emily Heyward** | Brand | "Would creators proudly show this branding?" |
-| **Codie Sanchez** | Value | "Is this the boring, reliable approach that works?" |
+| **Codie Sanchez** | Infrastructure | "Is this picks-and-shovels that enables everyone?" |
 
 Use the full evaluation template in `ADVISORS.md` for major features. A feature needs 4/5 board approval to ship.

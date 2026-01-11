@@ -530,12 +530,261 @@ export const DOMAIN_BRAND_MAP: Record<string, DomainBrandInfo> = {
 
   'amazon.com': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
   'amazon.co.uk': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
+  'amazon.ca': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
+  'amazon.de': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
   'ebay.com': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
   'walmart.com': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
   'target.com': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
   'costco.com': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
   'homedepot.com': { brand: null, category: 'home', tier: 'value', aliases: ['Home Depot'], isRetailer: true },
   'lowes.com': { brand: null, category: 'home', tier: 'value', aliases: ["Lowe's"], isRetailer: true },
+  'samsclub.com': { brand: null, category: 'retail', tier: 'value', aliases: ["Sam's Club"], isRetailer: true },
+  'bjs.com': { brand: null, category: 'retail', tier: 'value', aliases: ["BJ's"], isRetailer: true },
+
+  // ============================================
+  // PET SUPPLIES
+  // ============================================
+
+  // Pet Retailers
+  'chewy.com': { brand: null, category: 'pet', tier: 'mid', aliases: [], isRetailer: true },
+  'petco.com': { brand: null, category: 'pet', tier: 'mid', aliases: [], isRetailer: true },
+  'petsmart.com': { brand: null, category: 'pet', tier: 'mid', aliases: [], isRetailer: true },
+
+  // Pet Brands
+  'orijen.com': { brand: 'Orijen', category: 'pet', tier: 'premium', aliases: [], isRetailer: false },
+  'acana.com': { brand: 'Acana', category: 'pet', tier: 'premium', aliases: [], isRetailer: false },
+  'royalcanin.com': { brand: 'Royal Canin', category: 'pet', tier: 'premium', aliases: [], isRetailer: false },
+  'hillspet.com': { brand: "Hill's", category: 'pet', tier: 'premium', aliases: ["Hill's Science Diet"], isRetailer: false },
+  'purina.com': { brand: 'Purina', category: 'pet', tier: 'mid', aliases: [], isRetailer: false },
+  'bluebu.com': { brand: 'Blue Buffalo', category: 'pet', tier: 'premium', aliases: [], isRetailer: false },
+  'thefarmersdog.com': { brand: "The Farmer's Dog", category: 'pet', tier: 'premium', aliases: [], isRetailer: false },
+  'ollie.com': { brand: 'Ollie', category: 'pet', tier: 'premium', aliases: [], isRetailer: false },
+  'justfoodfordogs.com': { brand: 'Just Food For Dogs', category: 'pet', tier: 'premium', aliases: [], isRetailer: false },
+  'wildone.com': { brand: 'Wild One', category: 'pet', tier: 'premium', aliases: [], isRetailer: false },
+  'figopetinsurance.com': { brand: 'Figo', category: 'pet', tier: 'mid', aliases: [], isRetailer: false },
+  'kongcompany.com': { brand: 'KONG', category: 'pet', tier: 'mid', aliases: [], isRetailer: false },
+  'barkbox.com': { brand: 'BarkBox', category: 'pet', tier: 'premium', aliases: ['Bark'], isRetailer: false },
+  'fi.co': { brand: 'Fi', category: 'pet', tier: 'premium', aliases: ['Fi Collar'], isRetailer: false },
+
+  // ============================================
+  // BABY & KIDS
+  // ============================================
+
+  // Baby Retailers
+  'buybuybaby.com': { brand: null, category: 'baby', tier: 'mid', aliases: [], isRetailer: true },
+  'babylist.com': { brand: null, category: 'baby', tier: 'mid', aliases: [], isRetailer: true },
+
+  // Baby Brands
+  'uppababy.com': { brand: 'UPPAbaby', category: 'baby', tier: 'luxury', aliases: [], isRetailer: false },
+  'bugaboo.com': { brand: 'Bugaboo', category: 'baby', tier: 'luxury', aliases: [], isRetailer: false },
+  'nuna.eu': { brand: 'Nuna', category: 'baby', tier: 'luxury', aliases: [], isRetailer: false },
+  'cybex-online.com': { brand: 'Cybex', category: 'baby', tier: 'luxury', aliases: [], isRetailer: false },
+  'stokke.com': { brand: 'Stokke', category: 'baby', tier: 'luxury', aliases: [], isRetailer: false },
+  'chiccousa.com': { brand: 'Chicco', category: 'baby', tier: 'mid', aliases: [], isRetailer: false },
+  'gracobaby.com': { brand: 'Graco', category: 'baby', tier: 'mid', aliases: [], isRetailer: false },
+  'owletcare.com': { brand: 'Owlet', category: 'baby', tier: 'premium', aliases: [], isRetailer: false },
+  'halo.com': { brand: 'HALO', category: 'baby', tier: 'mid', aliases: [], isRetailer: false },
+  'ergobabycarrier.com': { brand: 'Ergobaby', category: 'baby', tier: 'premium', aliases: [], isRetailer: false },
+  'babybjorn.com': { brand: 'BabyBjörn', category: 'baby', tier: 'premium', aliases: ['Baby Bjorn'], isRetailer: false },
+  'dockatot.com': { brand: 'DockATot', category: 'baby', tier: 'premium', aliases: [], isRetailer: false },
+  'snoobassinest.com': { brand: 'SNOO', category: 'baby', tier: 'luxury', aliases: ['Happiest Baby'], isRetailer: false },
+  'monbebe.com': { brand: 'Monbebe', category: 'baby', tier: 'mid', aliases: [], isRetailer: false },
+  'loveevery.com': { brand: 'Lovevery', category: 'baby', tier: 'premium', aliases: [], isRetailer: false },
+  'kiwico.com': { brand: 'KiwiCo', category: 'kids', tier: 'premium', aliases: [], isRetailer: false },
+
+  // Kids Apparel
+  'primarykids.com': { brand: 'Primary', category: 'kids', tier: 'premium', aliases: [], isRetailer: false },
+  'hannaandersson.com': { brand: 'Hanna Andersson', category: 'kids', tier: 'premium', aliases: [], isRetailer: false },
+  'teacollection.com': { brand: 'Tea Collection', category: 'kids', tier: 'premium', aliases: [], isRetailer: false },
+
+  // ============================================
+  // EYEWEAR
+  // ============================================
+
+  'warbyparker.com': { brand: 'Warby Parker', category: 'eyewear', tier: 'premium', aliases: [], isRetailer: false },
+  'rayban.com': { brand: 'Ray-Ban', category: 'eyewear', tier: 'premium', aliases: [], isRetailer: false },
+  'oakley.com': { brand: 'Oakley', category: 'eyewear', tier: 'premium', aliases: [], isRetailer: false },
+  'persol.com': { brand: 'Persol', category: 'eyewear', tier: 'luxury', aliases: [], isRetailer: false },
+  'oliverpeoples.com': { brand: 'Oliver Peoples', category: 'eyewear', tier: 'luxury', aliases: [], isRetailer: false },
+  'gentlemonster.com': { brand: 'Gentle Monster', category: 'eyewear', tier: 'luxury', aliases: [], isRetailer: false },
+  'sunglasshut.com': { brand: null, category: 'eyewear', tier: 'mid', aliases: [], isRetailer: true },
+  'zenni.com': { brand: 'Zenni', category: 'eyewear', tier: 'value', aliases: ['Zenni Optical'], isRetailer: false },
+  'maui-jim.com': { brand: 'Maui Jim', category: 'eyewear', tier: 'premium', aliases: [], isRetailer: false },
+  'costa.com': { brand: 'Costa', category: 'eyewear', tier: 'premium', aliases: ['Costa Del Mar'], isRetailer: false },
+  'kaenon.com': { brand: 'Kaenon', category: 'eyewear', tier: 'premium', aliases: [], isRetailer: false },
+  'smithoptics.com': { brand: 'Smith', category: 'eyewear', tier: 'premium', aliases: ['Smith Optics'], isRetailer: false },
+
+  // ============================================
+  // SUPPLEMENTS & NUTRITION
+  // ============================================
+
+  'athleticgreens.com': { brand: 'AG1', category: 'supplements', tier: 'premium', aliases: ['Athletic Greens'], isRetailer: false },
+  'ritual.com': { brand: 'Ritual', category: 'supplements', tier: 'premium', aliases: [], isRetailer: false },
+  'care-of.com': { brand: 'Care/of', category: 'supplements', tier: 'premium', aliases: [], isRetailer: false },
+  'momentous.com': { brand: 'Momentous', category: 'supplements', tier: 'premium', aliases: [], isRetailer: false },
+  'thorne.com': { brand: 'Thorne', category: 'supplements', tier: 'premium', aliases: [], isRetailer: false },
+  'gardenoflife.com': { brand: 'Garden of Life', category: 'supplements', tier: 'mid', aliases: [], isRetailer: false },
+  'nowfoods.com': { brand: 'NOW Foods', category: 'supplements', tier: 'mid', aliases: [], isRetailer: false },
+  'optimumnutrition.com': { brand: 'Optimum Nutrition', category: 'supplements', tier: 'mid', aliases: ['ON'], isRetailer: false },
+  'transparentlabs.com': { brand: 'Transparent Labs', category: 'supplements', tier: 'premium', aliases: [], isRetailer: false },
+  'legionathletics.com': { brand: 'Legion', category: 'supplements', tier: 'premium', aliases: [], isRetailer: false },
+  'bodybuilding.com': { brand: null, category: 'supplements', tier: 'mid', aliases: [], isRetailer: true },
+  'gnc.com': { brand: null, category: 'supplements', tier: 'mid', aliases: ['GNC'], isRetailer: true },
+  'vitaminshoppe.com': { brand: null, category: 'supplements', tier: 'mid', aliases: ['Vitamin Shoppe'], isRetailer: true },
+  'huel.com': { brand: 'Huel', category: 'supplements', tier: 'mid', aliases: [], isRetailer: false },
+  'drinkag1.com': { brand: 'AG1', category: 'supplements', tier: 'premium', aliases: [], isRetailer: false },
+
+  // ============================================
+  // OFFICE & DESK SETUP
+  // ============================================
+
+  'autonomous.ai': { brand: 'Autonomous', category: 'office', tier: 'mid', aliases: [], isRetailer: false },
+  'fully.com': { brand: 'Fully', category: 'office', tier: 'premium', aliases: [], isRetailer: false },
+  'upliftdesk.com': { brand: 'Uplift', category: 'office', tier: 'premium', aliases: [], isRetailer: false },
+  'hermanmiller.com': { brand: 'Herman Miller', category: 'office', tier: 'luxury', aliases: [], isRetailer: false },
+  'steelcase.com': { brand: 'Steelcase', category: 'office', tier: 'luxury', aliases: [], isRetailer: false },
+  'humanscale.com': { brand: 'Humanscale', category: 'office', tier: 'luxury', aliases: [], isRetailer: false },
+  'vari.com': { brand: 'Vari', category: 'office', tier: 'mid', aliases: ['Varidesk'], isRetailer: false },
+  'staples.com': { brand: null, category: 'office', tier: 'value', aliases: [], isRetailer: true },
+  'officedepot.com': { brand: null, category: 'office', tier: 'value', aliases: [], isRetailer: true },
+  'haworth.com': { brand: 'Haworth', category: 'office', tier: 'luxury', aliases: [], isRetailer: false },
+  'knoll.com': { brand: 'Knoll', category: 'office', tier: 'luxury', aliases: [], isRetailer: false },
+
+  // ============================================
+  // SPORTS EQUIPMENT (Beyond Golf)
+  // ============================================
+
+  // Tennis (wilson.com already defined in golf section)
+  'babolat.com': { brand: 'Babolat', category: 'tennis', tier: 'premium', aliases: [], isRetailer: false },
+  'head.com': { brand: 'Head', category: 'sports', tier: 'premium', aliases: [], isRetailer: false },
+  'yonex.com': { brand: 'Yonex', category: 'sports', tier: 'premium', aliases: [], isRetailer: false },
+  'tennisexpress.com': { brand: null, category: 'tennis', tier: 'mid', aliases: [], isRetailer: true },
+  'tennis-warehouse.com': { brand: null, category: 'tennis', tier: 'mid', aliases: [], isRetailer: true },
+
+  // Basketball
+  'nba.com/store': { brand: null, category: 'basketball', tier: 'mid', aliases: [], isRetailer: true },
+
+  // Soccer/Football
+  'soccer.com': { brand: null, category: 'soccer', tier: 'mid', aliases: [], isRetailer: true },
+
+  // Skiing/Snowboarding
+  'burton.com': { brand: 'Burton', category: 'snow', tier: 'premium', aliases: [], isRetailer: false },
+  'lib-tech.com': { brand: 'Lib Tech', category: 'snow', tier: 'premium', aliases: [], isRetailer: false },
+  'rossignol.com': { brand: 'Rossignol', category: 'snow', tier: 'premium', aliases: [], isRetailer: false },
+  'volcom.com': { brand: 'Volcom', category: 'snow', tier: 'mid', aliases: [], isRetailer: false },
+  'atomic.com': { brand: 'Atomic', category: 'snow', tier: 'premium', aliases: [], isRetailer: false },
+  'thehouseoutdoors.com': { brand: null, category: 'snow', tier: 'mid', aliases: ['The House'], isRetailer: true },
+  'evo.com': { brand: null, category: 'snow', tier: 'mid', aliases: [], isRetailer: true },
+
+  // Surfing
+  'channel-islands.com': { brand: 'Channel Islands', category: 'surf', tier: 'premium', aliases: [], isRetailer: false },
+  'ripcurl.com': { brand: 'Rip Curl', category: 'surf', tier: 'mid', aliases: [], isRetailer: false },
+  'quiksilver.com': { brand: 'Quiksilver', category: 'surf', tier: 'mid', aliases: [], isRetailer: false },
+  'billabong.com': { brand: 'Billabong', category: 'surf', tier: 'mid', aliases: [], isRetailer: false },
+  'hurley.com': { brand: 'Hurley', category: 'surf', tier: 'mid', aliases: [], isRetailer: false },
+
+  // General Sports Retailers (dickssportinggoods.com already defined in golf section)
+  'academy.com': { brand: null, category: 'sports', tier: 'value', aliases: ['Academy Sports'], isRetailer: true },
+  'sportsmanswarehouse.com': { brand: null, category: 'sports', tier: 'mid', aliases: ["Sportsman's Warehouse"], isRetailer: true },
+
+  // ============================================
+  // ART SUPPLIES
+  // ============================================
+
+  'dickblick.com': { brand: null, category: 'art', tier: 'mid', aliases: ['Blick Art'], isRetailer: true },
+  'jerrysartarama.com': { brand: null, category: 'art', tier: 'mid', aliases: ["Jerry's Artarama"], isRetailer: true },
+  'michaels.com': { brand: null, category: 'art', tier: 'value', aliases: [], isRetailer: true },
+  'hobbylobby.com': { brand: null, category: 'art', tier: 'value', aliases: ['Hobby Lobby'], isRetailer: true },
+  'joann.com': { brand: null, category: 'art', tier: 'value', aliases: ['Jo-Ann'], isRetailer: true },
+  'winsorandnewton.com': { brand: 'Winsor & Newton', category: 'art', tier: 'premium', aliases: [], isRetailer: false },
+  'copic.jp': { brand: 'Copic', category: 'art', tier: 'premium', aliases: [], isRetailer: false },
+  'prismacolor.com': { brand: 'Prismacolor', category: 'art', tier: 'mid', aliases: [], isRetailer: false },
+  'stabilo.com': { brand: 'Stabilo', category: 'art', tier: 'mid', aliases: [], isRetailer: false },
+  'fabercastell.com': { brand: 'Faber-Castell', category: 'art', tier: 'premium', aliases: [], isRetailer: false },
+
+  // ============================================
+  // D2C / POPULAR DIRECT-TO-CONSUMER BRANDS
+  // ============================================
+
+  // Apparel
+  'everlane.com': { brand: 'Everlane', category: 'apparel', tier: 'premium', aliases: [], isRetailer: false },
+  'kotn.com': { brand: 'Kotn', category: 'apparel', tier: 'premium', aliases: [], isRetailer: false },
+  'cuyana.com': { brand: 'Cuyana', category: 'apparel', tier: 'premium', aliases: [], isRetailer: false },
+  'reformation.com': { brand: 'Reformation', category: 'apparel', tier: 'premium', aliases: [], isRetailer: false },
+  'marine-layer.com': { brand: 'Marine Layer', category: 'apparel', tier: 'mid', aliases: [], isRetailer: false },
+  'untuckit.com': { brand: 'UNTUCKit', category: 'apparel', tier: 'mid', aliases: [], isRetailer: false },
+  'buckmason.com': { brand: 'Buck Mason', category: 'apparel', tier: 'premium', aliases: [], isRetailer: false },
+  'toddsnyder.com': { brand: 'Todd Snyder', category: 'apparel', tier: 'premium', aliases: [], isRetailer: false },
+
+  // Bags & Accessories (cuyana.com already defined in apparel section)
+  'dagnedover.com': { brand: 'Dagne Dover', category: 'bags', tier: 'premium', aliases: [], isRetailer: false },
+  'calpaktravel.com': { brand: 'CALPAK', category: 'bags', tier: 'mid', aliases: [], isRetailer: false },
+  'beistravel.com': { brand: 'Béis', category: 'bags', tier: 'mid', aliases: ['Beis'], isRetailer: false },
+  'senreve.com': { brand: 'Senreve', category: 'bags', tier: 'luxury', aliases: [], isRetailer: false },
+
+  // Mattresses
+  'purple.com': { brand: 'Purple', category: 'bedding', tier: 'premium', aliases: [], isRetailer: false },
+  'tuftandneedle.com': { brand: 'Tuft & Needle', category: 'bedding', tier: 'mid', aliases: [], isRetailer: false },
+  'nectar.com': { brand: 'Nectar', category: 'bedding', tier: 'mid', aliases: [], isRetailer: false },
+  'saatva.com': { brand: 'Saatva', category: 'bedding', tier: 'premium', aliases: [], isRetailer: false },
+  'helixsleep.com': { brand: 'Helix', category: 'bedding', tier: 'premium', aliases: [], isRetailer: false },
+  'eightsleep.com': { brand: 'Eight Sleep', category: 'bedding', tier: 'luxury', aliases: [], isRetailer: false },
+
+  // Personal Care
+  'harrys.com': { brand: "Harry's", category: 'grooming', tier: 'mid', aliases: [], isRetailer: false },
+  'dollarshaveclub.com': { brand: 'Dollar Shave Club', category: 'grooming', tier: 'value', aliases: ['DSC'], isRetailer: false },
+  'billie.com': { brand: 'Billie', category: 'grooming', tier: 'mid', aliases: [], isRetailer: false },
+  'native.com': { brand: 'Native', category: 'grooming', tier: 'mid', aliases: [], isRetailer: false },
+  'everist.com': { brand: 'Everist', category: 'grooming', tier: 'premium', aliases: [], isRetailer: false },
+  'by-humankind.com': { brand: 'By Humankind', category: 'grooming', tier: 'premium', aliases: [], isRetailer: false },
+
+  // ============================================
+  // BOOKS & READING
+  // ============================================
+
+  'barnesandnoble.com': { brand: null, category: 'books', tier: 'mid', aliases: ['Barnes & Noble'], isRetailer: true },
+  'bookshop.org': { brand: null, category: 'books', tier: 'mid', aliases: [], isRetailer: true },
+  'thriftbooks.com': { brand: null, category: 'books', tier: 'value', aliases: [], isRetailer: true },
+  'abebooks.com': { brand: null, category: 'books', tier: 'value', aliases: [], isRetailer: true },
+  'alibris.com': { brand: null, category: 'books', tier: 'value', aliases: [], isRetailer: true },
+  'kindle.amazon.com': { brand: 'Kindle', category: 'books', tier: 'mid', aliases: [], isRetailer: true },
+
+  // ============================================
+  // HEALTH & MEDICAL
+  // ============================================
+
+  'cvs.com': { brand: null, category: 'health', tier: 'value', aliases: ['CVS Pharmacy'], isRetailer: true },
+  'walgreens.com': { brand: null, category: 'health', tier: 'value', aliases: [], isRetailer: true },
+  'riteaid.com': { brand: null, category: 'health', tier: 'value', aliases: ['Rite Aid'], isRetailer: true },
+  'nurx.com': { brand: 'Nurx', category: 'health', tier: 'mid', aliases: [], isRetailer: false },
+  'hims.com': { brand: 'Hims', category: 'health', tier: 'mid', aliases: [], isRetailer: false },
+  'forhers.com': { brand: 'Hers', category: 'health', tier: 'mid', aliases: [], isRetailer: false },
+  'ro.co': { brand: 'Ro', category: 'health', tier: 'mid', aliases: ['Roman', 'Rory'], isRetailer: false },
+
+  // ============================================
+  // INTERNATIONAL RETAILERS
+  // ============================================
+
+  // UK
+  'johnlewis.com': { brand: null, category: 'retail', tier: 'premium', aliases: ['John Lewis'], isRetailer: true },
+  'argos.co.uk': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
+  'currys.co.uk': { brand: null, category: 'tech', tier: 'mid', aliases: [], isRetailer: true },
+  'boots.com': { brand: null, category: 'health', tier: 'mid', aliases: [], isRetailer: true },
+
+  // EU
+  'zalando.com': { brand: null, category: 'fashion', tier: 'mid', aliases: [], isRetailer: true },
+  'aboutyou.com': { brand: null, category: 'fashion', tier: 'mid', aliases: [], isRetailer: true },
+  'otto.de': { brand: null, category: 'retail', tier: 'mid', aliases: [], isRetailer: true },
+
+  // Australia
+  'myer.com.au': { brand: null, category: 'retail', tier: 'mid', aliases: [], isRetailer: true },
+  'davidjones.com': { brand: null, category: 'fashion', tier: 'premium', aliases: ['David Jones'], isRetailer: true },
+  'kogan.com': { brand: null, category: 'tech', tier: 'value', aliases: [], isRetailer: true },
+
+  // Canada
+  'canadiantire.ca': { brand: null, category: 'retail', tier: 'value', aliases: ['Canadian Tire'], isRetailer: true },
+  'sportchek.ca': { brand: null, category: 'sports', tier: 'mid', aliases: ['Sport Chek'], isRetailer: true },
+  'thebay.com': { brand: null, category: 'retail', tier: 'mid', aliases: ['Hudson Bay', 'The Bay'], isRetailer: true },
 };
 
 /**

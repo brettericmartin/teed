@@ -52,6 +52,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const url = `https://teed.club/u/${handle}`;
   const ogImageUrl = `https://teed.club/api/og/profile/${handle}`;
 
+  // oEmbed discovery URL
+  const oembedUrl = `https://teed.club/api/oembed?url=${encodeURIComponent(url)}&format=json`;
+
   return {
     title,
     description,
@@ -75,6 +78,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: displayName,
       description,
       images: [ogImageUrl],
+    },
+    alternates: {
+      // oEmbed discovery for platforms like Notion, Slack, etc.
+      types: {
+        'application/json+oembed': oembedUrl,
+      },
     },
   };
 }

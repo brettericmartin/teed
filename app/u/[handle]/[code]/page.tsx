@@ -55,6 +55,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // Dynamic OG image - always use the generated image for rich previews
   const ogImageUrl = `https://teed.club/api/og/bag/${handle}/${code}`;
 
+  // oEmbed discovery URL
+  const oembedUrl = `https://teed.club/api/oembed?url=${encodeURIComponent(url)}&format=json`;
+
   return {
     title,
     description,
@@ -78,6 +81,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: bag.title,
       description,
       images: [ogImageUrl],
+    },
+    alternates: {
+      // oEmbed discovery for platforms like Notion, Slack, etc.
+      types: {
+        'application/json+oembed': oembedUrl,
+      },
     },
   };
 }

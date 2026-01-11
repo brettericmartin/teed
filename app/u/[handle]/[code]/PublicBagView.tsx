@@ -21,6 +21,7 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { CloneSuccessModal } from '@/components/modals/CloneSuccessModal';
 import { CuratorNote } from '@/components/ui/CuratorNote';
 import { useCelebration } from '@/lib/celebrations';
+import { CompletionBadge } from '@/components/BagCompletionButton';
 import { PageContainer, ContentContainer } from '@/components/layout/PageContainer';
 import { analytics } from '@/lib/analytics';
 import { ChangelogBadge } from '@/components/changelog';
@@ -66,6 +67,8 @@ interface Bag {
   title: string;
   description: string | null;
   is_public: boolean;
+  is_complete?: boolean;
+  completed_at?: string | null;
   hero_item_id: string | null;
   cover_photo_id: string | null;
   cover_photo_url: string | null;
@@ -481,6 +484,8 @@ export default function PublicBagView({
                 <span className="inline-flex items-center px-2.5 py-1 bg-[var(--teed-green-2)] text-[var(--teed-green-11)] rounded-full text-xs font-medium">
                   {items.length} {items.length === 1 ? 'item' : 'items'}
                 </span>
+                {/* Completion badge */}
+                {bag.is_complete && <CompletionBadge isComplete={true} />}
                 {/* Changelog badge for recent updates */}
                 <ChangelogBadge
                   bag={{

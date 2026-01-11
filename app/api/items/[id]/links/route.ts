@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
+import { classifyUrl } from '@/lib/links/classifyUrl';
 
 /**
  * POST /api/items/[id]/links
@@ -83,22 +84,12 @@ export async function POST(
     let enrichedMetadata = metadata || null;
     let enrichedLabel = label?.trim() || null;
 
-    // Helper to detect video URLs (YouTube, TikTok, Instagram)
-    const isVideoUrl = (urlString: string): boolean => {
-      const videoPatterns = [
-        /youtube\.com\/watch/,
-        /youtu\.be\//,
-        /youtube\.com\/shorts\//,
-        /tiktok\.com\/@.+\/video\//,
-        /tiktok\.com\/t\//,
-        /vm\.tiktok\.com\//,
-        /instagram\.com\/(?:p|reel|reels)\//,
-      ];
-      return videoPatterns.some(pattern => pattern.test(urlString));
-    };
+    // Use Link Intelligence to detect embed URLs (YouTube, TikTok, Instagram, Spotify, etc.)
+    const classification = classifyUrl(url);
+    const isEmbedUrl = classification.type === 'embed';
 
-    // For video links OR detected video URLs, scrape to get thumbnail and title
-    const shouldProcessAsVideo = kind === 'video' || isVideoUrl(url);
+    // For video links OR detected embed URLs, scrape to get thumbnail and title
+    const shouldProcessAsVideo = kind === 'video' || isEmbedUrl;
 
     if (shouldProcessAsVideo) {
       try {

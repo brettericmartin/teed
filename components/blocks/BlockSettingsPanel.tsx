@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   X, User, FileText, Link, Video, Package, Type, Minus, MoreHorizontal,
   RectangleHorizontal, Square, Plus, Trash2, Edit2, Check, ExternalLink,
-  Instagram, Twitter, Youtube, Globe, Music
+  Instagram, Twitter, Youtube, Globe, Music, Quote, Info
 } from 'lucide-react';
 import { ProfileBlock, BlockType, BlockConfig, BlockWidth, HeaderBlockConfig, BioBlockConfig, CustomTextBlockConfig, FeaturedBagsBlockConfig, SocialLinksBlockConfig, SpacerBlockConfig, DividerBlockConfig, EmbedBlockConfig, DEFAULT_BLOCK_GRID } from '@/lib/blocks/types';
 import { useEditMode } from '@/app/u/[handle]/components/EditModeProvider';
@@ -63,6 +63,8 @@ const BLOCK_TYPE_INFO: Record<BlockType, { label: string; icon: typeof User }> =
   spacer: { label: 'Spacer', icon: Minus },
   divider: { label: 'Divider', icon: Minus },
   destinations: { label: 'Destinations', icon: MoreHorizontal },
+  quote: { label: 'Quote', icon: Quote },
+  affiliate_disclosure: { label: 'Disclosure', icon: Info },
 };
 
 // Size options per block type

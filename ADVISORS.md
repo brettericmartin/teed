@@ -6,10 +6,10 @@ This document enables AI-assisted evaluation of features through the lens of Tee
 
 ## The Board
 
-### Daniel Priestley — Growth & Leverage
-**Background**: Entrepreneur, author of *Oversubscribed*, *Key Person of Influence*, and *24 Assets*. Founder of Dent Global. Has built and sold multiple companies across industries.
+### Daniel Priestley — Growth, Leverage & Demand Generation
+**Background**: Entrepreneur, author of *Oversubscribed*, *Key Person of Influence*, *24 Assets*, and *Scorecard Marketing*. Founder of Dent Global (one of the world's top business accelerators). Co-founder of ScoreApp (serving 150,000+ businesses). Has built and sold multiple companies across industries.
 
-**Sources**: [The Futur](https://www.thefutur.com/content/have-people-lining-up-to-do-business-with-you), [Brand & Market](https://brandandmarket.co/blog/from-0-to-trust-how-to-implement-the-7-11-4-rule-in-your-brand-ecosystem/), [Flash Hub](https://flashhub.io/7-11-4-rule/)
+**Sources**: [The Futur](https://www.thefutur.com/content/have-people-lining-up-to-do-business-with-you), [Brand & Market](https://brandandmarket.co/blog/from-0-to-trust-how-to-implement-the-7-11-4-rule-in-your-brand-ecosystem/), [ScoreApp](https://www.scoreapp.com/videos/lead-generation-scorecard-marketing/), [Daniel Priestley on X](https://x.com/DanielPriestley/status/1950179577071898676)
 
 #### The 7-11-4 Rule
 Before someone trusts you enough to buy, they need:
@@ -31,11 +31,68 @@ Every business needs 24 marketing assets across 7 categories working 24/7:
 
 **Core Belief**: "Income follows assets because assets are the machine that generates income and leverage."
 
+#### Demand/Supply Tension & Being Oversubscribed
+
+**The core insight**: Most businesses chase customers one-by-one. Oversubscribed businesses create visible demand that exceeds supply, then release access strategically.
+
+> "The key to becoming an oversubscribed business is to market for signals first - not sales. Build up demand and supply tension, and only where there are enough bubbles behind the cork, do you pop the top off." — Daniel Priestley
+
+**How demand/supply tension works**:
+- Create an official capacity (how many can you truly delight?)
+- Make sure people know what that capacity is
+- Collect signals of interest, not immediate sales
+- Only release when demand visibly exceeds supply
+- The transparency of scarcity creates urgency without manipulation
+
+**Example language**: "We've got 40 clients that we can work with in a year. We've got 300-400 people who have filled in the assessment. We pick and choose. Can we interview you to see whether you'd be suitable?"
+
+#### The Campaign-Driven Enterprise Model
+
+Daniel's 5-phase model for generating demand rhythmically (not hoping for trickle):
+
+| Phase | Focus | Key Action |
+|-------|-------|------------|
+| **1. Planning** | Capacity | Know exactly how many you can delight—that's your ceiling |
+| **2. Build-up** | Signaling | Signal to market what's coming; get them to signal back interest |
+| **3. Release** | Staged access | Release when oversubscribed, in tiers (early bird, VIP, general) |
+| **4. Remarkable delivery** | Exceed expectations | Under-promise, over-deliver to create stories |
+| **5. Celebrate & innovate** | Momentum | Share success publicly, analyze data, reward team, rest |
+
+**Why campaigns beat constant selling**:
+- Many people engage at once → creates synergistic buzz
+- Avoids boredom and burnout of one-to-one pursuit
+- Creates natural rhythm and anticipation
+- Each campaign builds on the last
+
+#### Signaling & Scorecard Marketing
+
+**The problem**: You can't sell to people who haven't signaled interest. But asking for a sale too early kills the relationship.
+
+**The solution**: Create low-friction ways for people to signal interest while receiving value.
+
+**Scorecards/Assessments**:
+- Give instant gratification (a score, insights, personalized results)
+- Collect valuable data about each person
+- Signal interest without pressure to buy
+- Create community through shared participation
+- Turn dormant desires into active ones
+
+**Active vs. Dormant Desires**:
+- **Active desires**: People already looking to buy (small pool, high competition)
+- **Dormant desires**: People who could be activated (huge pool, low competition)
+
+> "Great brands manufacture dormant desires." — Daniel Priestley
+
+**Everything is downstream from lead generation**: If you can't capture attention and generate signals of interest, nothing else matters.
+
 #### Teed Lens
 - Does this feature help creators multiply touchpoints across 4+ locations?
 - Does this make bags work as "authority catalogs" that work 24/7?
 - Does this create assets that compound value over time?
 - Does this reduce the hours needed to build trust?
+- **Does this create a signal of interest before asking for commitment?**
+- **Does this build visible demand/supply tension?**
+- **Does this turn one interaction into 7 hours / 11 touchpoints / 4 locations?**
 
 #### Questions Daniel Would Ask
 1. "How does this help a creator get found across more touchpoints?"
@@ -43,6 +100,10 @@ Every business needs 24 marketing assets across 7 categories working 24/7:
 3. "Will this compound over time or require constant maintenance?"
 4. "Can one piece of content become multiple touchpoints automatically?"
 5. "Does this build trust faster or slower than alternatives?"
+6. **"What's the signal of interest before commitment here?"**
+7. **"Is there visible demand/supply tension, or invisible hope?"**
+8. **"Are we running campaign rhythms or hoping for organic trickle?"**
+9. **"Does this help creators collect signals, not just broadcast content?"**
 
 ---
 
@@ -165,10 +226,10 @@ Instagram's concentration on photos while Facebook attempted everything shows ho
 
 ---
 
-### Codie Sanchez — Cash Flow & Contrarian Value
+### Codie Sanchez — Cash Flow, Infrastructure & Contrarian Value
 **Background**: Former Wall Street executive (15 years). Founder of Contrarian Thinking and Unconventional Acquisitions. NYT bestselling author of *Main Street Millionaire*. Owns 26+ businesses. Estimated net worth $17.7M, portfolio revenues $4.1M/month. Mission: Create 1 million financially free humans through business ownership.
 
-**Sources**: [Contrarian Thinking](https://www.contrarianthinking.co), [WarTime CEO Stories](https://wartimeceostories.com/p/the-magic-of-contrarian-thinking-codie-sanchez), [James Altucher Show](https://jamesaltuchershow.com/episode/how-to-build-wealth-buying-boring-businesses-codie-sanchez)
+**Sources**: [Contrarian Thinking](https://www.contrarianthinking.co), [WarTime CEO Stories](https://wartimeceostories.com/p/the-magic-of-contrarian-thinking-codie-sanchez), [James Altucher Show](https://jamesaltuchershow.com/episode/how-to-build-wealth-buying-boring-businesses-codie-sanchez), [Inc Magazine](https://www.inc.com/tim-crino/how-to-turn-boring-businesses-into-cashflow-machines/90990137)
 
 #### Core Philosophy
 
@@ -188,11 +249,39 @@ High-risk tech ventures get all the attention, but local service-based businesse
 **Cash Flow is King**
 Multiple streams of income that generate money regardless of market conditions. Profitability over growth-at-all-costs.
 
+#### The "Picks and Shovels" Infrastructure Thesis
+
+The most powerful version of Codie's philosophy: **sell infrastructure to an industry, not products within it.**
+
+**Origin**: During the California Gold Rush, Samuel Brannan became the first millionaire—not by mining gold, but by selling picks, shovels, and pans to miners. The merchants who sold essential supplies often made more money than the miners themselves.
+
+**Why infrastructure wins**:
+
+| Direct Play | Infrastructure Play |
+|-------------|---------------------|
+| Bet on which creator/company wins | Enable ALL creators/companies |
+| High variance, winner-take-all | Revenue regardless of who succeeds |
+| Compete with the product | Profit from the competition |
+| Single customer success | Industry-wide adoption |
+
+**Modern examples**:
+- **Shopify** → Powers billions in transactions, takes a cut from every sale regardless of which store wins
+- **ASML** → Makes the machines that make the chips—doesn't need to pick AI winners
+- **Stripe** → Infrastructure for internet payments, wins when ANY online business wins
+- **AWS** → Powers Netflix, Airbnb, Slack—doesn't compete with them, enables them
+
+**The infrastructure advantage**:
+- Sign long-term contracts, serve multiple customers
+- Generate revenue today rather than betting on future adoption
+- Reduce risk because infrastructure profits regardless of which end-products succeed
+- Diversification built-in: if one customer fails, others continue
+
 **Contrarian Thinking Framework**:
 - Question assumptions everyone accepts
 - Seek hidden value where others see risk or tedium
 - Make decisions based on logic rather than trends
 - Look beyond the hype to consistent cash flow
+- Build the layer that enables others, not the layer that competes with them
 
 **Strategic Leadership Over Daily Operations**
 Delegate operations to competent managers. Focus on scaling and transformation, not micromanaging.
@@ -206,6 +295,9 @@ Simple amenities (WiFi, comfortable seating) can transform mundane businesses in
 - Does this generate ongoing returns without constant maintenance?
 - Are we being contrarian in a valuable way, or just different?
 - Does this compound over time like a cash-flowing asset?
+- **Does this make Teed essential infrastructure, not a destination?**
+- **Does this work regardless of which platform or creator wins?**
+- **Are we selling picks and shovels, or trying to mine gold ourselves?**
 
 #### Questions Codie Would Ask
 1. "What's the boring, reliable version of this that nobody's building?"
@@ -213,6 +305,9 @@ Simple amenities (WiFi, comfortable seating) can transform mundane businesses in
 3. "Are we chasing trends or building durable infrastructure?"
 4. "Would a practical businessperson invest in this feature?"
 5. "Does this serve the creator who wants steady income, not viral fame?"
+6. **"Is this infrastructure that enables others, or a product competing with them?"**
+7. **"Would this still be valuable if TikTok, YouTube, or Instagram disappeared?"**
+8. **"Are we the Shopify/Stripe of creator references—essential plumbing everyone needs?"**
 
 ---
 
@@ -230,6 +325,8 @@ Use this template when evaluating any feature:
 - 7/11/4 amplification: [Does this multiply touchpoints across locations?]
 - 24/7 asset: [Does this work while creator sleeps?]
 - Compound value: [Does this get more valuable over time?]
+- Demand signaling: [Does this help collect signals of interest?]
+- Demand/supply tension: [Does this create visible scarcity or capacity?]
 - **Verdict**: [APPROVED / NEEDS WORK / REJECTED]
 - **Reasoning**: [1-2 sentences]
 
@@ -262,6 +359,8 @@ Use this template when evaluating any feature:
 - Cash flow mindset: [Does this generate consistent value?]
 - Practical value: [Would a businessperson invest in this?]
 - Contrarian edge: [Are we building what others overlook?]
+- Infrastructure play: [Is this picks-and-shovels that enables others?]
+- Platform independence: [Does this work regardless of which platform wins?]
 - **Verdict**: [APPROVED / NEEDS WORK / REJECTED]
 - **Reasoning**: [1-2 sentences]
 
@@ -290,6 +389,9 @@ Use this template when evaluating any feature:
 - Fragments rather than consolidates creator presence
 - Chases trends instead of building durable value
 - Prioritizes virality over steady utility
+- **Competes with creators instead of enabling them**
+- **Depends on one platform surviving (single point of failure)**
+- **Hopes for organic trickle instead of building demand systems**
 
 ### Green Flags (Strong Signal)
 - Works across 4+ locations (social, long-form, owned, physical)
@@ -299,6 +401,9 @@ Use this template when evaluating any feature:
 - Gets more valuable as collection grows
 - Generates consistent value without constant input
 - The "boring" reliable approach others overlook
+- **Infrastructure that enables others (picks-and-shovels)**
+- **Creates signals of interest before asking for commitment**
+- **Works regardless of which platform or creator wins**
 
 ### Yellow Flags (Investigate)
 - Requires explanation to understand value
@@ -506,13 +611,19 @@ If any answer is "no," iterate before shipping.
 
 | Advisor | Focus | Key Question | Red Flag |
 |---------|-------|--------------|----------|
-| Daniel Priestley | Growth | "Does this multiply touchpoints?" | Requires constant promotion |
+| Daniel Priestley | Growth & Demand | "Does this create visible demand/supply tension?" | Hoping for trickle instead of building campaigns |
 | Julie Zhuo | Design | "Does this feel native?" | Disrupts rather than integrates |
 | Li Jin | Ownership | "Does the creator control this?" | Platform lock-in |
 | Emily Heyward | Brand | "Would creators show this off?" | Desperate or needy language |
-| Codie Sanchez | Value | "Is this the boring reliable approach?" | Chasing trends over utility |
+| Codie Sanchez | Infrastructure | "Is this picks-and-shovels that enables everyone?" | Competing with creators instead of enabling them |
 
 ---
 
-*Advisory Framework v2.0 — January 2026*
+*Advisory Framework v2.1 — January 2026*
 *For AI-assisted feature evaluation*
+
+**v2.1 Updates:**
+- Expanded Daniel Priestley with Campaign-Driven Enterprise, demand/supply tension, and scorecard marketing
+- Expanded Codie Sanchez with "Picks and Shovels" infrastructure thesis
+- Added infrastructure and signaling criteria to evaluation template
+- Updated quick reference and heuristics

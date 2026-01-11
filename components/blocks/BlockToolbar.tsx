@@ -14,6 +14,8 @@ const BLOCK_TYPE_LABELS: Record<BlockType, string> = {
   spacer: 'Spacer',
   divider: 'Divider',
   destinations: 'Links',
+  quote: 'Quote',
+  affiliate_disclosure: 'Disclosure',
 };
 
 interface BlockToolbarProps {

@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { useEditMode } from './EditModeProvider';
 import { BlockType, BlockConfig, DEFAULT_BLOCK_GRID } from '@/lib/blocks/types';
-import { parseEmbedUrl, getPlatformName } from '@/lib/embeds/parseEmbedUrl';
+import { parseEmbedUrlDetailed } from '@/lib/links/classifyUrl';
 
 interface BlockOption {
   type: BlockType;
@@ -195,10 +195,10 @@ export default function BlockPicker({ profileId, isOpen: externalIsOpen, onClose
       return;
     }
 
-    const parsed = parseEmbedUrl(embedUrl);
+    const parsed = parseEmbedUrlDetailed(embedUrl);
 
-    if (parsed.platform === 'unknown') {
-      setEmbedError('URL not recognized. Supported: YouTube, Spotify, TikTok, Twitter/X, Instagram, Twitch');
+    if (!parsed) {
+      setEmbedError('URL not recognized. Supported: YouTube, Spotify, TikTok, Twitter/X, Instagram, Twitch, Vimeo, and more');
       return;
     }
 
@@ -236,7 +236,7 @@ export default function BlockPicker({ profileId, isOpen: externalIsOpen, onClose
   };
 
   // Preview the parsed URL
-  const urlPreview = embedUrl.trim() ? parseEmbedUrl(embedUrl) : null;
+  const urlPreview = embedUrl.trim() ? parseEmbedUrlDetailed(embedUrl) : null;
 
   return (
     <>
@@ -307,9 +307,9 @@ export default function BlockPicker({ profileId, isOpen: externalIsOpen, onClose
                     <span>{embedError}</span>
                   </div>
                 )}
-                {urlPreview && urlPreview.platform !== 'unknown' && (
+                {urlPreview && (
                   <div className="flex items-center gap-2 mt-2 text-sm text-[var(--teed-green-9)]">
-                    <span>Detected: {getPlatformName(urlPreview.platform)}</span>
+                    <span>Detected: {urlPreview.platformName}</span>
                   </div>
                 )}
               </div>

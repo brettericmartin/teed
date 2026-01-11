@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ChevronDown, Edit2, Trash2, X, Check, Link as LinkIcon, Copy, CheckCheck, Star, Trophy } from 'lucide-react';
+import { ChevronDown, Edit2, Trash2, X, Check, Link as LinkIcon, Copy, CheckCheck, Star, Trophy, Sparkles, Loader2, FolderInput } from 'lucide-react';
 import LinkManagerModal from './LinkManagerModal';
+import MoveToBagModal from './MoveToBagModal';
 import ItemPhotoUpload from './ItemPhotoUpload';
 
 type Link = {
@@ -56,11 +57,13 @@ type ItemCardProps = {
   isHero?: boolean;
   onToggleHero?: (itemId: string) => void;
   sections?: Section[];
+  onItemMoved?: (itemId: string, targetBagTitle: string) => void;
 };
 
-export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = false, onToggleHero, sections = [] }: ItemCardProps) {
+export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = false, onToggleHero, sections = [], onItemMoved }: ItemCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isMoveModalOpen, setIsMoveModalOpen] = useState(false);
   const [editName, setEditName] = useState(item.custom_name || '');
   const [editBrand, setEditBrand] = useState(item.brand || '');
   const [editDescription, setEditDescription] = useState(item.custom_description || '');
@@ -75,6 +78,34 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
   const [editPurchaseDate, setEditPurchaseDate] = useState(item.purchase_date || '');
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const [itemLinks, setItemLinks] = useState(item.links);
+  const [isGeneratingWhyChosen, setIsGeneratingWhyChosen] = useState(false);
+
+  const handleGenerateWhyChosen = async () => {
+    setIsGeneratingWhyChosen(true);
+    try {
+      const response = await fetch('/api/ai/generate-why-chosen', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          itemId: item.id,
+          tone: 'casual',
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate');
+      }
+
+      const data = await response.json();
+      if (data.whyChosen) {
+        setEditWhyChosen(data.whyChosen);
+      }
+    } catch (error) {
+      console.error('Error generating why chosen:', error);
+    } finally {
+      setIsGeneratingWhyChosen(false);
+    }
+  };
   const [copySuccess, setCopySuccess] = useState(false);
 
   // Update itemLinks when item.links changes (e.g., after Fill Links is clicked)
@@ -228,9 +259,24 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
 
                   <div className="space-y-3">
                     <div>
-                      <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
-                        Why I chose this
-                      </label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-sm font-medium text-[var(--text-primary)]">
+                          Why I chose this
+                        </label>
+                        <button
+                          type="button"
+                          onClick={handleGenerateWhyChosen}
+                          disabled={isGeneratingWhyChosen}
+                          className="inline-flex items-center gap-1.5 px-2 py-1 text-xs font-medium text-[var(--sky-11)] bg-[var(--sky-3)] hover:bg-[var(--sky-4)] rounded-md transition-colors disabled:opacity-50"
+                        >
+                          {isGeneratingWhyChosen ? (
+                            <Loader2 className="w-3 h-3 animate-spin" />
+                          ) : (
+                            <Sparkles className="w-3 h-3" />
+                          )}
+                          {isGeneratingWhyChosen ? 'Generating...' : 'AI Generate'}
+                        </button>
+                      </div>
                       <textarea
                         value={editWhyChosen}
                         onChange={(e) => setEditWhyChosen(e.target.value)}
@@ -402,6 +448,16 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
                     </span>
                   )}
                 </button>
+                {onItemMoved && (
+                  <button
+                    onClick={() => setIsMoveModalOpen(true)}
+                    className="hidden sm:flex p-2.5 min-h-[44px] min-w-[44px] items-center justify-center rounded-lg transition-colors text-[var(--text-tertiary)] hover:text-[var(--sky-9)] hover:bg-[var(--sky-2)]"
+                    title="Move to another curation"
+                    aria-label="Move to another curation"
+                  >
+                    <FolderInput className="w-5 h-5" />
+                  </button>
+                )}
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
                   className="p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] rounded-lg transition-colors"
@@ -475,6 +531,15 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
                 </span>
               )}
             </button>
+            {onItemMoved && (
+              <button
+                onClick={() => setIsMoveModalOpen(true)}
+                className="min-h-[44px] px-3 py-2 rounded-lg transition-all flex items-center justify-center gap-2 text-[var(--text-secondary)] bg-[var(--surface)] border border-[var(--border-subtle)] hover:border-[var(--sky-6)]"
+              >
+                <FolderInput className="w-5 h-5" />
+                <span className="text-sm font-medium">Move</span>
+              </button>
+            )}
             <button
               onClick={() => onDelete(item.id)}
               className="min-h-[44px] px-3 py-2 rounded-lg transition-all flex items-center justify-center gap-2 text-[var(--copper-9)] bg-[var(--surface)] border border-[var(--border-subtle)] hover:border-[var(--copper-6)] hover:bg-[var(--copper-2)]"
@@ -638,6 +703,20 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
           onUpdate(item.id, { photo_url: newPhotoUrl });
         }}
       />
+
+      {/* Move to Bag Modal */}
+      {onItemMoved && (
+        <MoveToBagModal
+          isOpen={isMoveModalOpen}
+          onClose={() => setIsMoveModalOpen(false)}
+          itemId={item.id}
+          itemName={item.custom_name || 'Item'}
+          currentBagId={item.bag_id}
+          onItemMoved={(targetBagId, targetBagTitle) => {
+            onItemMoved(item.id, targetBagTitle);
+          }}
+        />
+      )}
     </div>
   );
 }
