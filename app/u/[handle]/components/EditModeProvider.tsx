@@ -12,6 +12,7 @@ interface GridLayout {
 
 interface EditModeContextType {
   isEditMode: boolean;
+  isOwner: boolean;
   toggleEditMode: () => void;
   setEditMode: (value: boolean) => void;
 
@@ -37,6 +38,9 @@ interface EditModeContextType {
   // Saving
   isSaving: boolean;
   saveBlocks: () => Promise<void>;
+
+  // Track if changes were made during edit session
+  hadChanges: boolean;
 }
 
 const EditModeContext = createContext<EditModeContextType | undefined>(undefined);
@@ -54,12 +58,14 @@ export function EditModeProvider({
   profileId,
   isOwner,
 }: EditModeProviderProps) {
-  // Owners automatically start in edit mode on their profile
-  const [isEditMode, setEditMode] = useState(isOwner);
+  // Showcase Mode: Owners see their profile as visitors see it by default
+  // They can press 'E' or click the floating edit button to enter edit mode
+  const [isEditMode, setEditMode] = useState(false);
   const [blocks, setBlocks] = useState<ProfileBlock[]>(initialBlocks);
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [hadChanges, setHadChanges] = useState(false);
 
   const toggleEditMode = useCallback(() => {
     setEditMode(prev => {
@@ -70,6 +76,55 @@ export function EditModeProvider({
       return !prev;
     });
   }, []);
+
+  // Track when changes are made during an edit session
+  useEffect(() => {
+    if (isDirty) {
+      setHadChanges(true);
+    }
+  }, [isDirty]);
+
+  // Reset hadChanges when entering edit mode
+  useEffect(() => {
+    if (isEditMode) {
+      setHadChanges(false);
+    }
+  }, [isEditMode]);
+
+  // Keyboard shortcuts: E to enter edit mode, Escape to exit
+  useEffect(() => {
+    if (!isOwner) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger if typing in an input or textarea
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
+        return;
+      }
+
+      // 'E' to toggle edit mode
+      if (e.key === 'e' || e.key === 'E') {
+        e.preventDefault();
+        setEditMode(prev => {
+          if (prev) {
+            // Exiting - deselect block
+            setSelectedBlockId(null);
+          }
+          return !prev;
+        });
+      }
+
+      // Escape to exit edit mode (alternative)
+      if (e.key === 'Escape' && isEditMode) {
+        e.preventDefault();
+        setEditMode(false);
+        setSelectedBlockId(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOwner, isEditMode]);
 
   const addBlock = useCallback((block: Omit<ProfileBlock, 'id' | 'created_at' | 'updated_at'>) => {
     const newBlock: ProfileBlock = {
@@ -263,6 +318,7 @@ export function EditModeProvider({
       <EditModeContext.Provider
         value={{
           isEditMode: false,
+          isOwner: false,
           toggleEditMode: () => {},
           setEditMode: () => {},
           blocks,
@@ -280,6 +336,7 @@ export function EditModeProvider({
           setIsDirty: () => {},
           isSaving: false,
           saveBlocks: async () => {},
+          hadChanges: false,
         }}
       >
         {children}
@@ -291,6 +348,7 @@ export function EditModeProvider({
     <EditModeContext.Provider
       value={{
         isEditMode,
+        isOwner,
         toggleEditMode,
         setEditMode,
         blocks,
@@ -308,6 +366,7 @@ export function EditModeProvider({
         setIsDirty,
         isSaving,
         saveBlocks,
+        hadChanges,
       }}
     >
       {children}

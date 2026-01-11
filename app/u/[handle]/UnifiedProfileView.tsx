@@ -43,6 +43,10 @@ import type { DeviceType } from '@/components/blocks';
 import { ThemeEditor } from '@/components/theme';
 import UniversalLinkAdder from './components/UniversalLinkAdder';
 import CelebrationModal from '@/components/CelebrationModal';
+import { FloatingEditButton } from '@/components/FloatingEditButton';
+import { GlobalPasteHandler } from '@/components/GlobalPasteHandler';
+import { CommandPalette } from '@/components/CommandPalette';
+import { FloatingActionHub } from '@/components/FloatingActionHub';
 
 type BagItem = {
   id: string;
@@ -595,6 +599,56 @@ export default function UnifiedProfileView({
             tier={profile.beta_tier || 'founder'}
           />
         )}
+
+        {/* Floating Action Hub - Quick creation menu */}
+        <FloatingActionHub
+          onOpenBlockPicker={() => setIsBlockPickerOpen(true)}
+          onOpenLinkAdder={() => setIsLinkAdderOpen(true)}
+        />
+
+        {/* Floating Edit Button - Showcase Mode toggle */}
+        <FloatingEditButton />
+
+        {/* Command Palette - Power user keyboard interface */}
+        <CommandPalette
+          profileHandle={profile.handle}
+          isOwner={isOwnProfile}
+          onOpenBlockPicker={() => setIsBlockPickerOpen(true)}
+          onOpenThemeEditor={() => setIsThemeEditorOpen(true)}
+        />
+
+        {/* Global Paste Handler - Universal link drop */}
+        <GlobalPasteHandler
+          profileHandle={profile.handle}
+          isOwner={isOwnProfile}
+          onAddEmbedBlock={async (url, classification) => {
+            // Add embed block to profile
+            const response = await fetch('/api/profile/blocks', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                profile_id: profile.id,
+                block_type: 'embed',
+                config: {
+                  url,
+                  platform: classification.platform,
+                  showTitle: true,
+                },
+              }),
+            });
+            if (!response.ok) throw new Error('Failed to add embed block');
+          }}
+          onAddSocialLink={async (url, platform) => {
+            // Add to profile social links
+            const currentLinks = profile.social_links || {};
+            await handleUpdateProfile({
+              social_links: {
+                ...currentLinks,
+                [platform]: url,
+              },
+            });
+          }}
+        />
       </EditModeProvider>
     </ProfileThemeProvider>
   );

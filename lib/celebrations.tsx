@@ -24,6 +24,7 @@ interface CelebrationContextType {
   celebrateSave: () => void;
   celebrateComplete: () => void;
   celebrateMilestone: (count: number) => void;
+  celebrateProfileUpdate: () => void;
   triggerHaptic: (pattern: number | number[]) => void;
 }
 
@@ -255,6 +256,29 @@ export function CelebrationProvider({ children }: { children: ReactNode }) {
     }, 150);
   }, [triggerHaptic]);
 
+  // Celebration for exiting edit mode after making changes - "Your showcase is updated"
+  const celebrateProfileUpdate = useCallback(() => {
+    triggerHaptic(HAPTIC_PATTERNS.micro);
+
+    // Check for reduced motion
+    if (typeof window !== 'undefined') {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) return;
+    }
+
+    // Subtle, elegant sparkle from the center - feels like polishing a display
+    confetti({
+      particleCount: 25,
+      spread: 45,
+      startVelocity: 25,
+      gravity: 1.2,
+      origin: { x: 0.5, y: 0.5 },
+      colors: ['#8BAA7E', '#D9B47C', '#82B2BF'], // Teed green, gold, sky
+      scalar: 0.8,
+      disableForReducedMotion: true
+    });
+  }, [triggerHaptic]);
+
   return (
     <CelebrationContext.Provider
       value={{
@@ -267,6 +291,7 @@ export function CelebrationProvider({ children }: { children: ReactNode }) {
         celebrateSave,
         celebrateComplete,
         celebrateMilestone,
+        celebrateProfileUpdate,
         triggerHaptic
       }}
     >

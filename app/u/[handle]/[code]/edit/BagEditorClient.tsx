@@ -27,6 +27,7 @@ import type { IdentifiedItem } from '@/components/apis/TapToIdentifyWizard';
 import { CATEGORIES } from '@/lib/categories';
 import { useCelebration } from '@/lib/celebrations';
 import BagCompletionButton from '@/components/BagCompletionButton';
+import { EditorOnboarding } from '@/components/EditorOnboarding';
 
 /**
  * Robust data URL to Blob converter that handles mobile browser quirks.
@@ -1972,6 +1973,9 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           initialAspectRatio={(bag.cover_photo_aspect as AspectRatioId) || '21/9'}
         />
       )}
+
+      {/* Editor Onboarding - First-run tips */}
+      <EditorOnboarding />
     </div>
   );
 }

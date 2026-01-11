@@ -1,14 +1,18 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
-import { X } from 'lucide-react';
+import { useState, useEffect, useRef, FormEvent } from 'react';
+import { X, Link2, Sparkles, Check } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { classifyUrl, isValidUrl } from '@/lib/linkIntelligence/classifier';
+import { cn } from '@/lib/utils';
 
 type NewBagModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: { title: string; description?: string; is_public: boolean }) => void;
+  onSubmit: (data: { title: string; description?: string; is_public: boolean; initialUrl?: string }) => void;
   isLoading: boolean;
+  /** Pre-filled URL from link paste workflow */
+  initialUrl?: string;
 };
 
 export default function NewBagModal({
@@ -16,10 +20,49 @@ export default function NewBagModal({
   onClose,
   onSubmit,
   isLoading,
+  initialUrl = '',
 }: NewBagModalProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isPublic, setIsPublic] = useState(true);
+  const [quickStartUrl, setQuickStartUrl] = useState('');
+  const [urlClassification, setUrlClassification] = useState<string | null>(null);
+
+  // Set initial URL when modal opens with a URL (from link paste workflow)
+  // We track the last processed URL to avoid re-processing
+  const lastProcessedUrl = useRef<string | null>(null);
+
+  useEffect(() => {
+    // Only process if modal is open and we have a new URL to process
+    // This initialization pattern is intentional - we want to pre-fill the URL field
+    if (isOpen && initialUrl && initialUrl !== lastProcessedUrl.current) {
+      lastProcessedUrl.current = initialUrl;
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setQuickStartUrl(initialUrl);
+      if (isValidUrl(initialUrl)) {
+        const result = classifyUrl(initialUrl);
+        const platform = result.platform.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        setUrlClassification(`${platform} ${result.type}`);
+      }
+    }
+
+    // Reset when modal closes
+    if (!isOpen) {
+      lastProcessedUrl.current = null;
+    }
+  }, [isOpen, initialUrl]);
+
+  // Validate and classify URL as user types
+  const handleUrlChange = (url: string) => {
+    setQuickStartUrl(url);
+    if (url && isValidUrl(url)) {
+      const result = classifyUrl(url);
+      const platform = result.platform.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      setUrlClassification(`${platform} ${result.type}`);
+    } else {
+      setUrlClassification(null);
+    }
+  };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -33,6 +76,7 @@ export default function NewBagModal({
       title: title.trim(),
       description: description.trim() || undefined,
       is_public: isPublic,
+      initialUrl: quickStartUrl.trim() || undefined,
     });
   };
 
@@ -41,6 +85,8 @@ export default function NewBagModal({
       setTitle('');
       setDescription('');
       setIsPublic(true);
+      setQuickStartUrl('');
+      setUrlClassification(null);
       onClose();
     }
   };
@@ -116,6 +162,49 @@ export default function NewBagModal({
                   disabled={isLoading}
                   className="w-full px-4 py-3 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-[var(--radius-md)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:outline-none focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent resize-none disabled:bg-[var(--input-bg-disabled)] disabled:cursor-not-allowed transition-all"
                 />
+              </div>
+
+              {/* Quick Start: Add First Link */}
+              <div className={cn(
+                'p-4 rounded-[var(--radius-md)] border transition-all',
+                quickStartUrl && urlClassification
+                  ? 'bg-teed-green-50 border-teed-green-200'
+                  : 'bg-[var(--surface-secondary)] border-[var(--border-subtle)]'
+              )}>
+                <div className="flex items-center gap-2 mb-2">
+                  <Sparkles className="w-4 h-4 text-[var(--teed-green-8)]" />
+                  <label
+                    htmlFor="quickStartUrl"
+                    className="text-sm font-medium text-[var(--text-primary)]"
+                  >
+                    Quick Start
+                  </label>
+                  <span className="text-xs text-[var(--text-tertiary)]">(optional)</span>
+                </div>
+                <p className="text-xs text-[var(--text-secondary)] mb-3">
+                  Paste a link to add your first item immediately
+                </p>
+                <div className="relative">
+                  <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-tertiary)]" />
+                  <input
+                    type="url"
+                    id="quickStartUrl"
+                    name="quickStartUrl"
+                    value={quickStartUrl}
+                    onChange={(e) => handleUrlChange(e.target.value)}
+                    placeholder="https://amazon.com/product..."
+                    disabled={isLoading}
+                    className="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-[var(--input-border)] rounded-[var(--radius-md)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:outline-none focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent disabled:bg-[var(--input-bg-disabled)] disabled:cursor-not-allowed transition-all"
+                    data-no-paste-handler
+                  />
+                </div>
+                {/* URL Classification Feedback */}
+                {quickStartUrl && urlClassification && (
+                  <div className="mt-2 flex items-center gap-2 text-sm text-teed-green-700">
+                    <Check className="w-4 h-4" />
+                    <span>{urlClassification} detected</span>
+                  </div>
+                )}
               </div>
 
               {/* Privacy Toggle */}
