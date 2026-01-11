@@ -106,6 +106,35 @@ export async function PUT(
       updates.featured_position = body.featured_position ? Number(body.featured_position) : null;
     }
 
+    // New context fields (Phase 1)
+    if (body.why_chosen !== undefined) {
+      updates.why_chosen = body.why_chosen?.trim() || null;
+    }
+
+    if (body.specs !== undefined) {
+      updates.specs = body.specs || {};
+    }
+
+    if (body.compared_to !== undefined) {
+      updates.compared_to = body.compared_to?.trim() || null;
+    }
+
+    if (body.alternatives !== undefined) {
+      updates.alternatives = body.alternatives || null;
+    }
+
+    if (body.price_paid !== undefined) {
+      updates.price_paid = body.price_paid ? Number(body.price_paid) : null;
+    }
+
+    if (body.purchase_date !== undefined) {
+      updates.purchase_date = body.purchase_date || null;
+    }
+
+    if (body.section_id !== undefined) {
+      updates.section_id = body.section_id || null;
+    }
+
     // Update the item
     const { data: updatedItem, error: updateError } = await supabase
       .from('bag_items')

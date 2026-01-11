@@ -18,6 +18,7 @@ import type { DeviceType } from '@/components/blocks';
 interface ProfileHubWrapperProps {
   isOwnProfile: boolean;
   profileId: string;
+  profileHandle: string;
   onOpenThemeEditor: () => void;
   onOpenBlockPicker: () => void;
   onOpenLinkAdder: () => void;
@@ -32,6 +33,7 @@ interface ProfileHubWrapperProps {
 export default function ProfileHubWrapper({
   isOwnProfile,
   profileId,
+  profileHandle,
   onOpenThemeEditor,
   onOpenBlockPicker,
   onOpenLinkAdder,
@@ -49,6 +51,7 @@ export default function ProfileHubWrapper({
   return (
     <ProfileHub
       profileId={profileId}
+      profileHandle={profileHandle}
       onOpenThemeEditor={onOpenThemeEditor}
       onOpenBlockPicker={onOpenBlockPicker}
       onOpenLinkAdder={onOpenLinkAdder}
@@ -57,6 +60,7 @@ export default function ProfileHubWrapper({
       isMenuOpen={isMenuOpen}
       onMenuClose={onMenuClose}
       avatarRect={avatarRect}
+      isOwnProfile={isOwnProfile}
     />
   );
 }

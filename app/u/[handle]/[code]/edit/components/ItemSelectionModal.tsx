@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { X, Check } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
+// Simplified Item type for selection modal - only requires fields used for display
 interface Item {
   id: string;
   custom_name: string;

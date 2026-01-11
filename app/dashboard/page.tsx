@@ -1,7 +1,12 @@
 import { redirect } from 'next/navigation';
 import { createServerSupabase } from '@/lib/serverSupabase';
 
-export default async function DashboardPage() {
+interface DashboardPageProps {
+  searchParams: Promise<{ welcome?: string }>;
+}
+
+export default async function DashboardPage({ searchParams }: DashboardPageProps) {
+  const params = await searchParams;
   const supabase = await createServerSupabase();
 
   // Check authentication
@@ -27,6 +32,7 @@ export default async function DashboardPage() {
   }
 
   // Redirect to unified profile view
-  // The /u/[handle] page serves as both dashboard (for owner) and public profile
-  redirect(`/u/${profile.handle}`);
+  // Preserve welcome param for celebration modal
+  const welcomeParam = params.welcome === 'true' ? '?welcome=true' : '';
+  redirect(`/u/${profile.handle}${welcomeParam}`);
 }

@@ -1,16 +1,88 @@
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import UnifiedProfileView from './UnifiedProfileView';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import { ProfileBlock, DEFAULT_BLOCK_GRID } from '@/lib/blocks/types';
+import {
+  generateProfileJsonLd,
+  generateBreadcrumbJsonLd,
+} from '@/lib/seo/structuredData';
+import { createClient } from '@supabase/supabase-js';
+
+// Static supabase client for metadata generation (no auth)
+const supabaseStatic = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 type PageProps = {
   params: Promise<{
     handle: string;
   }>;
+  searchParams: Promise<{
+    welcome?: string;
+  }>;
 };
 
-export default async function UserProfilePage({ params }: PageProps) {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { handle } = await params;
+
+  const { data: profile } = await supabaseStatic
+    .from('profiles')
+    .select('id, display_name, bio, avatar_url')
+    .eq('handle', handle)
+    .single();
+
+  if (!profile) {
+    return {
+      title: 'Profile Not Found | Teed',
+    };
+  }
+
+  // Get public bag count
+  const { count: bagCount } = await supabaseStatic
+    .from('bags')
+    .select('id', { count: 'exact', head: true })
+    .eq('owner_id', profile.id)
+    .eq('is_public', true);
+
+  const displayName = profile.display_name || handle;
+  const title = `${displayName} (@${handle}) | Teed`;
+  const description = profile.bio || `${displayName}'s curated collections on Teed • ${bagCount || 0} collection${bagCount === 1 ? '' : 's'}`;
+  const url = `https://teed.club/u/${handle}`;
+  const ogImageUrl = `https://teed.club/api/og/profile/${handle}`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title: displayName,
+      description,
+      url,
+      siteName: 'Teed',
+      type: 'profile',
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${displayName}'s Teed profile`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: displayName,
+      description,
+      images: [ogImageUrl],
+    },
+  };
+}
+
+export default async function UserProfilePage({ params, searchParams }: PageProps) {
+  const { handle } = await params;
+  const search = await searchParams;
+  const showWelcome = search.welcome === 'true';
 
   // Query database directly instead of HTTP fetch
   const supabase = await createServerSupabase();
@@ -18,10 +90,10 @@ export default async function UserProfilePage({ params }: PageProps) {
   // Check if current user is viewing their own profile
   const { data: { user } } = await supabase.auth.getUser();
 
-  // Find the profile by handle (including blocks_enabled flag)
+  // Find the profile by handle (including blocks_enabled flag and beta_tier)
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
-    .select('id, handle, display_name, avatar_url, banner_url, bio, social_links, created_at, blocks_enabled')
+    .select('id, handle, display_name, avatar_url, banner_url, bio, social_links, created_at, blocks_enabled, beta_tier')
     .eq('handle', handle)
     .single();
 
@@ -152,14 +224,51 @@ export default async function UserProfilePage({ params }: PageProps) {
     ];
   }
 
+  // Get member number for welcome celebration (only if showing welcome)
+  let memberNumber: number | undefined;
+  if (showWelcome && isOwnProfile) {
+    const { data: capacity } = await supabase.rpc('get_beta_capacity');
+    memberNumber = capacity?.current ?? 43;
+  }
+
+  // Generate structured data for SEO and AI discoverability
+  const profileJsonLd = generateProfileJsonLd(
+    {
+      handle: profile.handle,
+      displayName: profile.display_name,
+      bio: profile.bio,
+      avatarUrl: profile.avatar_url,
+      createdAt: profile.created_at,
+    },
+    profile.social_links as Record<string, string> | undefined
+  );
+
+  const breadcrumbJsonLd = generateBreadcrumbJsonLd([
+    { name: 'Teed', url: 'https://teed.club' },
+    { name: profile.display_name || profile.handle, url: `https://teed.club/u/${profile.handle}` },
+  ]);
+
   // Always use the unified blocks view
   return (
-    <UnifiedProfileView
-      profile={profile}
-      bags={bags || []}
-      blocks={blocks}
-      theme={theme}
-      isOwnProfile={isOwnProfile}
-    />
+    <>
+      {/* JSON-LD structured data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(profileJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <UnifiedProfileView
+        profile={profile}
+        bags={bags || []}
+        blocks={blocks}
+        theme={theme}
+        isOwnProfile={isOwnProfile}
+        showWelcome={showWelcome && isOwnProfile}
+        memberNumber={memberNumber}
+      />
+    </>
   );
 }

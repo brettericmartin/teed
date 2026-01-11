@@ -18,6 +18,7 @@ import EnrichmentPreview from './components/EnrichmentPreview';
 import AIAssistantHub from './components/AIAssistantHub';
 import BagAnalytics from './components/BagAnalytics';
 import CoverPhotoCropper, { type AspectRatioId } from './components/CoverPhotoCropper';
+import SectionManager from './components/SectionManager';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
@@ -104,6 +105,21 @@ type Link = {
   is_auto_generated?: boolean;
 };
 
+type ItemSpecs = {
+  [key: string]: string | number | boolean;
+};
+
+type Section = {
+  id: string;
+  bag_id: string;
+  name: string;
+  description: string | null;
+  sort_index: number;
+  collapsed_by_default: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
 type Item = {
   id: string;
   bag_id: string;
@@ -118,6 +134,14 @@ type Item = {
   promo_codes: string | null;
   is_featured: boolean;
   featured_position: number | null;
+  section_id: string | null; // Optional section this item belongs to
+  // New context fields (Phase 1)
+  why_chosen: string | null;
+  specs: ItemSpecs;
+  compared_to: string | null;
+  alternatives: string[] | null;
+  price_paid: number | null;
+  purchase_date: string | null;
   links: Link[];
 };
 
@@ -137,6 +161,7 @@ type Bag = {
   created_at: string;
   updated_at: string | null;
   items: Item[];
+  sections: Section[];
 };
 
 type BagEditorClientProps = {
@@ -615,6 +640,36 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       }
     } catch (error) {
       console.error('Error updating hero item:', error);
+    }
+  };
+
+  // Handle section changes
+  const handleSectionsChange = (newSections: Section[]) => {
+    setBag((prev) => ({
+      ...prev,
+      sections: newSections,
+    }));
+  };
+
+  // Handle item section assignment change
+  const handleItemSectionChange = async (itemId: string, sectionId: string | null) => {
+    // Update local state
+    setBag((prev) => ({
+      ...prev,
+      items: prev.items.map((item) =>
+        item.id === itemId ? { ...item, section_id: sectionId } : item
+      ),
+    }));
+
+    // Persist to server
+    try {
+      await fetch(`/api/items/${itemId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ section_id: sectionId }),
+      });
+    } catch (error) {
+      console.error('Error updating item section:', error);
     }
   };
 
@@ -1628,6 +1683,23 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           )}
         </div>
 
+        {/* Sections Manager */}
+        {bag.items.length > 0 && (
+          <div className="mb-6 bg-[var(--surface)] rounded-xl border border-[var(--border-subtle)] p-4">
+            <SectionManager
+              bagCode={bag.code}
+              sections={bag.sections}
+              items={bag.items.map(item => ({
+                id: item.id,
+                custom_name: item.custom_name,
+                section_id: item.section_id,
+              }))}
+              onSectionsChange={handleSectionsChange}
+              onItemSectionChange={handleItemSectionChange}
+            />
+          </div>
+        )}
+
         {/* Items List */}
         {bag.items.length > 0 ? (
           <ItemList
@@ -1638,6 +1710,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             bagCode={bag.code}
             heroItemId={bag.hero_item_id}
             onToggleHero={handleToggleHero}
+            sections={bag.sections}
           />
         ) : (
           <div className="text-center py-12">

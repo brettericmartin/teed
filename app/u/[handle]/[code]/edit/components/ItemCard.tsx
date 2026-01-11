@@ -14,6 +14,15 @@ type Link = {
   is_auto_generated?: boolean;
 };
 
+type ItemSpecs = {
+  [key: string]: string | number | boolean;
+};
+
+type Section = {
+  id: string;
+  name: string;
+};
+
 type Item = {
   id: string;
   bag_id: string;
@@ -28,6 +37,14 @@ type Item = {
   promo_codes: string | null;
   is_featured: boolean;
   featured_position: number | null;
+  section_id: string | null;
+  // Context fields (Phase 1)
+  why_chosen: string | null;
+  specs: ItemSpecs;
+  compared_to: string | null;
+  alternatives: string[] | null;
+  price_paid: number | null;
+  purchase_date: string | null;
   links: Link[];
 };
 
@@ -38,9 +55,10 @@ type ItemCardProps = {
   bagCode: string;
   isHero?: boolean;
   onToggleHero?: (itemId: string) => void;
+  sections?: Section[];
 };
 
-export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = false, onToggleHero }: ItemCardProps) {
+export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = false, onToggleHero, sections = [] }: ItemCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(item.custom_name || '');
@@ -49,6 +67,12 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
   const [editNotes, setEditNotes] = useState(item.notes || '');
   const [editQuantity, setEditQuantity] = useState(item.quantity.toString());
   const [editPromoCodes, setEditPromoCodes] = useState(item.promo_codes || '');
+  const [editSectionId, setEditSectionId] = useState(item.section_id || '');
+  // New context field states
+  const [editWhyChosen, setEditWhyChosen] = useState(item.why_chosen || '');
+  const [editComparedTo, setEditComparedTo] = useState(item.compared_to || '');
+  const [editPricePaid, setEditPricePaid] = useState(item.price_paid?.toString() || '');
+  const [editPurchaseDate, setEditPurchaseDate] = useState(item.purchase_date || '');
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const [itemLinks, setItemLinks] = useState(item.links);
   const [copySuccess, setCopySuccess] = useState(false);
@@ -66,6 +90,12 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
       notes: editNotes.trim() || null,
       quantity: parseInt(editQuantity) || 1,
       promo_codes: editPromoCodes.trim() || null,
+      section_id: editSectionId || null,
+      // New context fields
+      why_chosen: editWhyChosen.trim() || null,
+      compared_to: editComparedTo.trim() || null,
+      price_paid: editPricePaid ? parseFloat(editPricePaid) : null,
+      purchase_date: editPurchaseDate || null,
     });
     setIsEditing(false);
   };
@@ -77,6 +107,12 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
     setEditNotes(item.notes || '');
     setEditQuantity(item.quantity.toString());
     setEditPromoCodes(item.promo_codes || '');
+    setEditSectionId(item.section_id || '');
+    // Reset new context fields
+    setEditWhyChosen(item.why_chosen || '');
+    setEditComparedTo(item.compared_to || '');
+    setEditPricePaid(item.price_paid?.toString() || '');
+    setEditPurchaseDate(item.purchase_date || '');
     setIsEditing(false);
   };
 
@@ -163,6 +199,92 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
                     className="w-full px-3 py-2 text-base border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent resize-none placeholder:text-[var(--input-placeholder)]"
                   />
                 </div>
+
+                {/* Section Assignment */}
+                {sections.length > 0 && (
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">Section</label>
+                    <select
+                      value={editSectionId}
+                      onChange={(e) => setEditSectionId(e.target.value)}
+                      className="w-full text-base px-3 py-2 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent"
+                    >
+                      <option value="">No section</option>
+                      {sections.map((section) => (
+                        <option key={section.id} value={section.id}>
+                          {section.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {/* Context Fields Section */}
+                <div className="pt-3 mt-3 border-t border-[var(--border-subtle)]">
+                  <h4 className="text-sm font-medium text-[var(--teed-green-11)] mb-3 flex items-center gap-2">
+                    <span className="inline-block w-1.5 h-1.5 bg-[var(--teed-green-9)] rounded-full"></span>
+                    Rich Context (helps readers understand your choice)
+                  </h4>
+
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+                        Why I chose this
+                      </label>
+                      <textarea
+                        value={editWhyChosen}
+                        onChange={(e) => setEditWhyChosen(e.target.value)}
+                        placeholder="Share your story: What made you pick this? What problem does it solve? (e.g., 'This driver replaced my Callaway because the adjustable weights let me fix my slice')"
+                        rows={3}
+                        className="w-full px-3 py-2 text-base border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent resize-none placeholder:text-[var(--input-placeholder)]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+                        Compared to / Replaced
+                      </label>
+                      <input
+                        type="text"
+                        value={editComparedTo}
+                        onChange={(e) => setEditComparedTo(e.target.value)}
+                        placeholder="What did this replace or what did you compare it to? (e.g., 'Upgraded from Sony A7III')"
+                        className="w-full text-base px-3 py-2 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent placeholder:text-[var(--input-placeholder)]"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+                          Price Paid
+                        </label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--text-tertiary)]">$</span>
+                          <input
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            value={editPricePaid}
+                            onChange={(e) => setEditPricePaid(e.target.value)}
+                            placeholder="0.00"
+                            className="w-full text-base pl-7 pr-3 py-2 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent placeholder:text-[var(--input-placeholder)]"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+                          Purchase Date
+                        </label>
+                        <input
+                          type="date"
+                          value={editPurchaseDate}
+                          onChange={(e) => setEditPurchaseDate(e.target.value)}
+                          className="w-full text-base px-3 py-2 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             ) : (
               <>
@@ -173,6 +295,11 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
                   <p className="mt-1 text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wide">
                     {item.brand}
                   </p>
+                )}
+                {item.section_id && sections.length > 0 && (
+                  <span className="inline-flex items-center mt-1 px-2 py-0.5 bg-[var(--sky-3)] text-[var(--sky-11)] text-xs rounded">
+                    {sections.find(s => s.id === item.section_id)?.name || 'Section'}
+                  </span>
                 )}
                 {item.custom_description && (
                   <p className="mt-1 text-sm text-[var(--text-secondary)] line-clamp-2">
@@ -371,6 +498,44 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
               itemDescription={item.custom_description}
             />
           </div>
+
+          {/* Why I Chose This - Prominent display */}
+          {item.why_chosen && (
+            <div className="bg-[var(--teed-green-2)] border border-[var(--teed-green-6)] rounded-lg p-3">
+              <h4 className="text-sm font-medium text-[var(--teed-green-11)] mb-1 flex items-center gap-1.5">
+                <span className="text-base">💡</span> Why I chose this
+              </h4>
+              <p className="text-sm text-[var(--text-primary)] whitespace-pre-wrap">{item.why_chosen}</p>
+            </div>
+          )}
+
+          {/* Compared To */}
+          {item.compared_to && (
+            <div>
+              <h4 className="text-sm font-medium text-[var(--text-primary)] mb-1">Compared to / Replaced</h4>
+              <p className="text-sm text-[var(--text-secondary)]">{item.compared_to}</p>
+            </div>
+          )}
+
+          {/* Price & Date */}
+          {(item.price_paid || item.purchase_date) && (
+            <div className="flex gap-4 text-sm">
+              {item.price_paid && (
+                <div>
+                  <span className="text-[var(--text-tertiary)]">Paid: </span>
+                  <span className="font-medium text-[var(--text-primary)]">${item.price_paid.toFixed(2)}</span>
+                </div>
+              )}
+              {item.purchase_date && (
+                <div>
+                  <span className="text-[var(--text-tertiary)]">Purchased: </span>
+                  <span className="font-medium text-[var(--text-primary)]">
+                    {new Date(item.purchase_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Notes */}
           {item.notes && (

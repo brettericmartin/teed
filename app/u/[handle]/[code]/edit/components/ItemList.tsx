@@ -27,6 +27,15 @@ type Link = {
   created_at: string;
 };
 
+export type ItemSpecs = {
+  [key: string]: string | number | boolean;
+};
+
+export type Section = {
+  id: string;
+  name: string;
+};
+
 export type Item = {
   id: string;
   bag_id: string;
@@ -41,6 +50,14 @@ export type Item = {
   promo_codes: string | null;
   is_featured: boolean;
   featured_position: number | null;
+  section_id: string | null;
+  // Context fields (Phase 1)
+  why_chosen: string | null;
+  specs: ItemSpecs;
+  compared_to: string | null;
+  alternatives: string[] | null;
+  price_paid: number | null;
+  purchase_date: string | null;
   links: Link[];
 };
 
@@ -54,9 +71,10 @@ type ItemListProps = {
   bagCode: string;
   heroItemId?: string | null;
   onToggleHero?: (itemId: string) => void;
+  sections?: Section[];
 };
 
-export default function ItemList({ items, onDelete, onUpdate, onReorder, bagCode, heroItemId, onToggleHero }: ItemListProps) {
+export default function ItemList({ items, onDelete, onUpdate, onReorder, bagCode, heroItemId, onToggleHero, sections = [] }: ItemListProps) {
   // Sort items by sort_index
   const [sortedItems, setSortedItems] = useState([...items].sort((a, b) => a.sort_index - b.sort_index));
   const [isMounted, setIsMounted] = useState(false);
@@ -138,6 +156,7 @@ export default function ItemList({ items, onDelete, onUpdate, onReorder, bagCode
               bagCode={bagCode}
               isHero={heroItemId === item.id}
               onToggleHero={onToggleHero}
+              sections={sections}
             />
           </div>
         ))}
@@ -158,6 +177,7 @@ export default function ItemList({ items, onDelete, onUpdate, onReorder, bagCode
               bagCode={bagCode}
               isHero={heroItemId === item.id}
               onToggleHero={onToggleHero}
+              sections={sections}
             />
           ))}
         </div>

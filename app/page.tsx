@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import { Camera, Share2, Sparkles, TrendingUp, Users, Zap } from 'lucide-react';
 import FeaturedBagsSection from '@/components/home/FeaturedBagsSection';
+import BetaSection from '@/components/home/BetaSection';
 
 export default function Home() {
   const featuresRef = useRef<HTMLDivElement>(null);
@@ -47,6 +48,9 @@ export default function Home() {
           />
         </div>
       </section>
+
+      {/* Beta/Founding Member Section */}
+      <BetaSection />
 
       {/* Featured Bags Section */}
       <FeaturedBagsSection />
@@ -203,19 +207,19 @@ export default function Home() {
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[var(--teed-green-2)] via-[var(--teed-green-3)] to-[var(--sky-2)]">
         <div className="max-w-4xl mx-auto text-center fade-in-section">
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-[var(--text-primary)] mb-6">
-            Ready to get started?
+            Ready to join the founding cohort?
           </h2>
           <p className="text-xl sm:text-2xl text-[var(--text-secondary)] mb-12">
-            Join creators and enthusiasts organizing their world with Teed
+            Limited spots available for founding members with lifetime benefits
           </p>
           <Link
-            href="/login"
+            href="/join"
             className="inline-block px-12 py-5 bg-[var(--teed-green-8)] text-white text-xl font-semibold rounded-[var(--radius-xl)] hover:bg-[var(--teed-green-9)] transition-all duration-300 shadow-[var(--shadow-4)] hover:shadow-[var(--shadow-5)] hover:scale-105"
           >
-            Create Your First Bag Free
+            Apply for Founding Access
           </Link>
           <p className="mt-6 text-sm text-[var(--text-tertiary)]">
-            No credit card required • Free forever
+            Founding members get all features free, forever
           </p>
         </div>
       </section>

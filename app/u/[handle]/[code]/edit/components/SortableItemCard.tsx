@@ -4,7 +4,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical } from 'lucide-react';
 import ItemCard from './ItemCard';
-import { Item } from './ItemList';
+import { Item, Section } from './ItemList';
 
 type SortableItemCardProps = {
   item: Item;
@@ -13,9 +13,10 @@ type SortableItemCardProps = {
   bagCode: string;
   isHero?: boolean;
   onToggleHero?: (itemId: string) => void;
+  sections?: Section[];
 };
 
-export default function SortableItemCard({ item, onDelete, onUpdate, bagCode, isHero, onToggleHero }: SortableItemCardProps) {
+export default function SortableItemCard({ item, onDelete, onUpdate, bagCode, isHero, onToggleHero, sections = [] }: SortableItemCardProps) {
   const {
     attributes,
     listeners,
@@ -51,6 +52,7 @@ export default function SortableItemCard({ item, onDelete, onUpdate, bagCode, is
         bagCode={bagCode}
         isHero={isHero}
         onToggleHero={onToggleHero}
+        sections={sections}
       />
     </div>
   );

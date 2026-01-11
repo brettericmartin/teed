@@ -42,6 +42,10 @@ interface ItemLink {
   is_auto_generated?: boolean;
 }
 
+interface ItemSpecs {
+  [key: string]: string | number | boolean;
+}
+
 interface Item {
   id: string;
   custom_name: string | null;
@@ -53,6 +57,13 @@ interface Item {
   photo_url: string | null;
   promo_codes: string | null;
   is_featured: boolean;
+  // Context fields (Phase 1)
+  why_chosen: string | null;
+  specs: ItemSpecs;
+  compared_to: string | null;
+  alternatives: string[] | null;
+  price_paid: number | null;
+  purchase_date: string | null;
   links: ItemLink[];
 }
 

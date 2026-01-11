@@ -11,6 +11,10 @@ interface ItemLink {
   is_auto_generated?: boolean;
 }
 
+interface ItemSpecs {
+  [key: string]: string | number | boolean;
+}
+
 interface Item {
   id: string;
   custom_name: string | null;
@@ -22,6 +26,13 @@ interface Item {
   photo_url: string | null;
   promo_codes: string | null;
   is_featured: boolean;
+  // Context fields
+  why_chosen: string | null;
+  specs: ItemSpecs;
+  compared_to: string | null;
+  alternatives: string[] | null;
+  price_paid: number | null;
+  purchase_date: string | null;
   links: ItemLink[];
 }
 
@@ -108,7 +119,12 @@ export default function ListViewItem({
             {item.custom_description}
           </p>
         )}
-        {item.notes && (
+        {item.why_chosen && (
+          <p className="text-xs text-[var(--teed-green-11)] truncate mt-1">
+            <span className="font-medium">💡</span> {item.why_chosen}
+          </p>
+        )}
+        {!item.why_chosen && item.notes && (
           <p className="text-xs text-[var(--text-tertiary)] truncate mt-0.5 italic">
             {item.notes}
           </p>

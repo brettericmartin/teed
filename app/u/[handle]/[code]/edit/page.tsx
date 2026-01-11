@@ -62,6 +62,17 @@ export default async function BagEditorPage({ params }: PageProps) {
     console.error('Error fetching items:', itemsError);
   }
 
+  // Fetch sections for this bag
+  const { data: sections, error: sectionsError } = await supabase
+    .from('bag_sections')
+    .select('*')
+    .eq('bag_id', bag.id)
+    .order('sort_index', { ascending: true });
+
+  if (sectionsError) {
+    console.error('Error fetching sections:', sectionsError);
+  }
+
   // Fetch links for all items
   const itemIds = items?.map((item) => item.id) || [];
   let links: any[] = [];
@@ -121,6 +132,7 @@ export default async function BagEditorPage({ params }: PageProps) {
     ...bag,
     cover_photo_url: coverPhotoUrl,
     items: itemsWithLinks,
+    sections: sections || [],
   };
 
   return <BagEditorClient initialBag={bagWithItems} ownerHandle={profile.handle} />;

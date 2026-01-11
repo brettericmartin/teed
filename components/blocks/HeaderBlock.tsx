@@ -1,13 +1,14 @@
 'use client';
 
 import { useRef } from 'react';
-import { Pencil } from 'lucide-react';
+import { Pencil, Crown } from 'lucide-react';
 import { HeaderBlockConfig } from '@/lib/blocks/types';
 
 interface Profile {
   display_name: string;
   handle: string;
   avatar_url?: string | null;
+  beta_tier?: 'founder' | 'influencer' | 'standard' | 'friend' | null;
 }
 
 interface HeaderBlockProps {
@@ -166,6 +167,19 @@ export default function HeaderBlock({ profile, config = {}, isOwner, onAvatarCli
             <p className={`${sizeConfig.handle} text-[var(--theme-text-secondary,var(--text-secondary))] mt-0.5`}>
               @{profile.handle}
             </p>
+          )}
+          {/* Founding Member Badge */}
+          {profile.beta_tier === 'founder' && (
+            <div className={`
+              inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-full
+              bg-gradient-to-r from-amber-100 to-amber-50
+              dark:from-amber-900/30 dark:to-amber-800/20
+              border border-amber-200 dark:border-amber-700/50
+              text-amber-700 dark:text-amber-300
+            `}>
+              <Crown className="w-3.5 h-3.5" />
+              <span className="text-xs font-medium">Founding Member</span>
+            </div>
           )}
         </div>
       </div>

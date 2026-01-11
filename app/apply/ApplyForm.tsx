@@ -1,81 +1,171 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { supabase } from '@/lib/supabaseClient';
+import { BetaCapacityBadge } from '@/components/BetaCapacityCounter';
+import type { SurveyResponses } from '@/lib/types/beta';
+import { ChevronLeft, ChevronRight, Check, Loader2 } from 'lucide-react';
 
 type Step = 1 | 2 | 3 | 4;
 
 interface FormData {
+  // Basic info
   email: string;
   name: string;
-  use_case: string;
-  use_case_other: string;
-  experience_level: string;
-  social_handle: string;
-  platform: string;
-  followers_count: string;
-  excitement: string;
-  referral_source: string;
-  referral_other: string;
+
+  // Step 1: Who You Are (4 questions)
+  creator_type: string;
+  primary_niche: string;
+  primary_niche_other: string;
+  audience_size: string;
+  primary_platform: string;
+
+  // Step 2: Monetization (3 questions)
+  affiliate_status: string;
+  revenue_goals: string;
+  current_tools: string[];
+
+  // Step 3: Your Needs (3 questions)
+  biggest_frustration: string;
+  magic_wand_feature: string;
+  usage_intent: string;
+
+  // Referral
+  referral_code: string;
 }
 
-const USE_CASES = [
-  { id: 'golf', label: 'Golf Gear', icon: '⛳', description: 'Share your bag setup with fellow golfers' },
-  { id: 'fashion', label: 'Fashion / Haul', icon: '👗', description: 'Curate outfits and shopping hauls' },
-  { id: 'tech', label: 'Tech / Gadgets', icon: '📱', description: 'Share your tech stack and gear' },
-  { id: 'creator', label: 'Content Creator', icon: '🎬', description: 'Show your creative toolkit' },
-  { id: 'other', label: 'Something Else', icon: '✨', description: 'I have a unique use case' },
+// ============================================================================
+// Question Options
+// ============================================================================
+
+const CREATOR_TYPES = [
+  { id: 'professional_creator', label: 'Professional Creator', icon: '🎬', description: 'Content creation is my career' },
+  { id: 'serious_hobbyist', label: 'Serious Hobbyist', icon: '🎯', description: 'I create content consistently as a passion' },
+  { id: 'brand_ambassador', label: 'Brand Ambassador', icon: '🤝', description: 'I work with brands and do sponsorships' },
+  { id: 'building_audience', label: 'Building My Audience', icon: '📈', description: 'Actively growing, not yet established' },
 ];
 
-const EXPERIENCE_LEVELS = [
-  { id: 'new', label: 'New to This', description: 'Just getting started with content creation' },
-  { id: 'casual', label: 'Casual Creator', description: 'Share occasionally with friends/followers' },
-  { id: 'regular', label: 'Regular Creator', description: 'Consistently create and share content' },
-  { id: 'professional', label: 'Professional', description: 'Content creation is part of my work' },
+const NICHES = [
+  { id: 'golf', label: 'Golf', icon: '⛳' },
+  { id: 'tech_gadgets', label: 'Tech & Gadgets', icon: '📱' },
+  { id: 'fashion', label: 'Fashion & Style', icon: '👔' },
+  { id: 'outdoor_adventure', label: 'Outdoor & Adventure', icon: '🏔️' },
+  { id: 'home_office', label: 'Home & Office', icon: '🏠' },
+  { id: 'fitness', label: 'Fitness & Wellness', icon: '💪' },
+  { id: 'other', label: 'Something Else', icon: '✨' },
+];
+
+const AUDIENCE_SIZES = [
+  { id: 'under_1k', label: 'Under 1,000', description: 'Just getting started' },
+  { id: '1k_10k', label: '1,000 - 10,000', description: 'Growing steadily' },
+  { id: '10k_50k', label: '10,000 - 50,000', description: 'Established creator' },
+  { id: '50k_plus', label: '50,000+', description: 'Significant reach' },
 ];
 
 const PLATFORMS = [
-  { id: 'instagram', label: 'Instagram' },
-  { id: 'tiktok', label: 'TikTok' },
-  { id: 'youtube', label: 'YouTube' },
-  { id: 'twitter', label: 'X (Twitter)' },
-  { id: 'other', label: 'Other' },
+  { id: 'instagram', label: 'Instagram', icon: '📸' },
+  { id: 'tiktok', label: 'TikTok', icon: '🎵' },
+  { id: 'youtube', label: 'YouTube', icon: '🎥' },
+  { id: 'twitter', label: 'X (Twitter)', icon: '🐦' },
+  { id: 'blog', label: 'Blog / Website', icon: '✍️' },
+  { id: 'other', label: 'Other', icon: '🌐' },
 ];
 
-const REFERRAL_SOURCES = [
-  { id: 'social', label: 'Social Media' },
-  { id: 'friend', label: 'Friend/Colleague' },
-  { id: 'search', label: 'Search Engine' },
-  { id: 'creator', label: 'Creator I Follow' },
-  { id: 'other', label: 'Other' },
+const AFFILIATE_STATUS = [
+  { id: 'actively', label: 'Yes, actively', description: 'I earn from affiliates regularly' },
+  { id: 'sometimes', label: 'Sometimes', description: 'I use them occasionally' },
+  { id: 'want_to_start', label: 'Want to start', description: "Haven't figured it out yet" },
+  { id: 'not_interested', label: 'Not really', description: 'Not my focus right now' },
 ];
+
+const REVENUE_GOALS = [
+  { id: 'side_income', label: '$100-500/month', description: 'Nice side income' },
+  { id: 'meaningful_income', label: '$500-2,000/month', description: 'Meaningful revenue' },
+  { id: 'significant_income', label: '$2,000+/month', description: 'Significant income stream' },
+  { id: 'not_priority', label: "Money isn't the goal", description: 'I just want to share' },
+];
+
+const CURRENT_TOOLS = [
+  { id: 'linktree', label: 'Linktree' },
+  { id: 'amazon_storefront', label: 'Amazon Storefront' },
+  { id: 'ltk', label: 'LTK (Like to Know)' },
+  { id: 'notion', label: 'Notion / Docs' },
+  { id: 'instagram_guides', label: 'Instagram Guides' },
+  { id: 'nothing', label: 'Nothing yet' },
+  { id: 'other', label: 'Something else' },
+];
+
+const FRUSTRATIONS = [
+  { id: 'time_consuming', label: 'Too time-consuming', description: 'Creating lists takes forever' },
+  { id: 'looks_bad', label: "Doesn't look good", description: 'Current tools are ugly' },
+  { id: 'no_analytics', label: 'No good analytics', description: "I don't know what works" },
+  { id: 'affiliate_complexity', label: 'Affiliate links are complicated', description: 'Hard to set up and manage' },
+  { id: 'repeated_questions', label: 'Audience keeps asking', description: 'Same questions over and over' },
+];
+
+const USAGE_INTENT = [
+  { id: 'immediately', label: 'Within 24 hours', description: "I'm ready to go" },
+  { id: 'this_week', label: 'This week', description: 'Soon, just need to gather items' },
+  { id: 'explore_first', label: "I'd explore first", description: "Want to see what's possible" },
+  { id: 'not_sure', label: 'Not sure', description: 'Depends on the experience' },
+];
+
+// ============================================================================
+// Main Component
+// ============================================================================
 
 export default function ApplyForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [step, setStep] = useState<Step>(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isComplete, setIsComplete] = useState(false);
-  const [waitlistPosition, setWaitlistPosition] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [applicationNumber, setApplicationNumber] = useState<number | null>(null);
 
   const [formData, setFormData] = useState<FormData>({
     email: '',
     name: '',
-    use_case: '',
-    use_case_other: '',
-    experience_level: '',
-    social_handle: '',
-    platform: '',
-    followers_count: '',
-    excitement: '',
-    referral_source: '',
-    referral_other: '',
+    creator_type: '',
+    primary_niche: '',
+    primary_niche_other: '',
+    audience_size: '',
+    primary_platform: '',
+    affiliate_status: '',
+    revenue_goals: '',
+    current_tools: [],
+    biggest_frustration: '',
+    magic_wand_feature: '',
+    usage_intent: '',
+    referral_code: searchParams.get('ref') || '',
   });
 
-  const updateField = (field: keyof FormData, value: string) => {
+  // Fetch application count for "Application #X" display
+  useEffect(() => {
+    supabase
+      .from('beta_applications')
+      .select('id', { count: 'exact', head: true })
+      .then(({ count }) => {
+        setApplicationNumber((count || 0) + 1);
+      });
+  }, []);
+
+  const updateField = (field: keyof FormData, value: string | string[]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     setError(null);
+  };
+
+  const toggleArrayField = (field: 'current_tools', value: string) => {
+    setFormData(prev => {
+      const current = prev[field] as string[];
+      if (current.includes(value)) {
+        return { ...prev, [field]: current.filter(v => v !== value) };
+      } else {
+        return { ...prev, [field]: [...current, value] };
+      }
+    });
   };
 
   const canProceed = () => {
@@ -83,11 +173,17 @@ export default function ApplyForm() {
       case 1:
         return formData.email && formData.name;
       case 2:
-        return formData.use_case && (formData.use_case !== 'other' || formData.use_case_other);
+        return (
+          formData.creator_type &&
+          formData.primary_niche &&
+          (formData.primary_niche !== 'other' || formData.primary_niche_other) &&
+          formData.audience_size &&
+          formData.primary_platform
+        );
       case 3:
-        return formData.experience_level;
+        return formData.affiliate_status && formData.revenue_goals && formData.current_tools.length > 0;
       case 4:
-        return formData.referral_source && (formData.referral_source !== 'other' || formData.referral_other);
+        return formData.biggest_frustration && formData.usage_intent;
       default:
         return false;
     }
@@ -112,37 +208,64 @@ export default function ApplyForm() {
     setError(null);
 
     try {
-
-      // Build survey responses
-      const surveyResponses = {
-        use_case: formData.use_case === 'other' ? formData.use_case_other : formData.use_case,
-        experience_level: formData.experience_level,
-        platform: formData.platform,
-        social_handle: formData.social_handle,
-        followers_count: formData.followers_count,
-        excitement: formData.excitement,
-        referral_source: formData.referral_source === 'other' ? formData.referral_other : formData.referral_source,
+      const surveyResponses: SurveyResponses = {
+        creator_type: formData.creator_type as SurveyResponses['creator_type'],
+        primary_niche: formData.primary_niche as SurveyResponses['primary_niche'],
+        primary_niche_other: formData.primary_niche_other,
+        audience_size: formData.audience_size as SurveyResponses['audience_size'],
+        primary_platform: formData.primary_platform as SurveyResponses['primary_platform'],
+        affiliate_status: formData.affiliate_status as SurveyResponses['affiliate_status'],
+        revenue_goals: formData.revenue_goals as SurveyResponses['revenue_goals'],
+        current_tools: formData.current_tools,
+        biggest_frustration: formData.biggest_frustration as SurveyResponses['biggest_frustration'],
+        magic_wand_feature: formData.magic_wand_feature,
+        usage_intent: formData.usage_intent as SurveyResponses['usage_intent'],
       };
 
-      // Insert application
+      // The ref parameter can be:
+      // 1. An invite code (TEED-ABC123) -> goes in referred_by_code
+      // 2. An application UUID -> goes in referred_by_application_id
+      // 3. A custom referral code (SARAH2024) -> lookup the application ID
+      const refValue = formData.referral_code || null;
+      const isUUID = refValue && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(refValue);
+      const isInviteCode = refValue && /^TEED-[A-Z0-9]+$/i.test(refValue);
+
+      // If it's not a UUID and not an invite code, it might be a custom referral code
+      // Try to lookup the referrer application ID
+      let referrerAppId: string | null = isUUID ? refValue : null;
+
+      if (refValue && !isUUID && !isInviteCode) {
+        // Lookup custom referral code
+        const { data: lookupData } = await supabase.rpc('lookup_referrer', {
+          ref_value: refValue,
+        });
+        if (lookupData) {
+          referrerAppId = lookupData;
+        }
+      }
+
       const { data, error: insertError } = await supabase
         .from('beta_applications')
         .insert({
           email: formData.email,
           name: formData.name,
-          use_case: surveyResponses.use_case,
-          social_handle: formData.social_handle || null,
-          platform: formData.platform || null,
-          followers_count: formData.followers_count || null,
+          full_name: formData.name,
+          primary_use_case: formData.primary_niche === 'other' ? formData.primary_niche_other : formData.primary_niche,
+          use_case: formData.primary_niche === 'other' ? formData.primary_niche_other : formData.primary_niche,
+          follower_range: formData.audience_size,
+          social_platform: formData.primary_platform,
+          monetization_interest: formData.affiliate_status === 'actively' || formData.affiliate_status === 'sometimes',
+          biggest_challenge: formData.biggest_frustration,
           survey_responses: surveyResponses,
-          referral_source: surveyResponses.referral_source,
+          referred_by_code: isInviteCode ? refValue : null, // Only set if it's an invite code (TEED-xxx)
+          referred_by_application_id: referrerAppId, // Set if we resolved an application ID
+          source: refValue ? 'referral' : 'organic',
         })
-        .select('waitlist_position')
+        .select('waitlist_position, id')
         .single();
 
       if (insertError) {
         if (insertError.code === '23505') {
-          // Duplicate email
           setError('This email has already applied. Check your inbox for updates!');
         } else {
           throw insertError;
@@ -150,8 +273,8 @@ export default function ApplyForm() {
         return;
       }
 
-      setWaitlistPosition(data?.waitlist_position || null);
-      setIsComplete(true);
+      // Redirect to success page with position
+      router.push(`/apply/success?position=${data?.waitlist_position || 0}&id=${data?.id}`);
     } catch (err) {
       console.error('Application error:', err);
       setError('Something went wrong. Please try again.');
@@ -160,35 +283,28 @@ export default function ApplyForm() {
     }
   };
 
-  if (isComplete) {
-    return (
-      <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-lg p-8 text-center">
-        <div className="w-16 h-16 bg-[var(--teed-green-3)] rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg className="w-8 h-8 text-[var(--teed-green-9)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-        </div>
-        <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-2">You're on the list!</h2>
-        {waitlistPosition && (
-          <p className="text-lg text-[var(--teed-green-9)] font-semibold mb-4">
-            Position #{waitlistPosition}
-          </p>
-        )}
-        <p className="text-[var(--text-secondary)] mb-6">
-          We'll reach out when it's your turn. Keep an eye on your inbox!
-        </p>
-        <div className="bg-[var(--sky-2)] dark:bg-[var(--sky-3)] rounded-xl p-4 text-left">
-          <p className="text-sm font-medium text-[var(--text-primary)] mb-2">Want to move up?</p>
-          <p className="text-sm text-[var(--text-secondary)]">
-            Share your unique referral link with friends. Each person who joins moves you up 5 spots!
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-lg overflow-hidden">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-[var(--teed-green-9)] to-[var(--teed-green-8)] p-6 text-white">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold">Founding Member Application</h2>
+            <p className="text-white/80 mt-1">
+              Step {step} of 4: {step === 1 ? 'Your Info' : step === 2 ? 'Who You Are' : step === 3 ? 'Monetization' : 'Your Needs'}
+            </p>
+          </div>
+          <div className="text-right">
+            {applicationNumber && (
+              <span className="text-sm text-white/60">
+                Application #{applicationNumber}
+              </span>
+            )}
+            <BetaCapacityBadge className="mt-1" />
+          </div>
+        </div>
+      </div>
+
       {/* Progress Bar */}
       <div className="h-1 bg-gray-100 dark:bg-zinc-800">
         <div
@@ -198,28 +314,12 @@ export default function ApplyForm() {
       </div>
 
       <div className="p-6">
-        {/* Step Indicator */}
-        <div className="flex items-center justify-center gap-2 mb-6">
-          {[1, 2, 3, 4].map((s) => (
-            <div
-              key={s}
-              className={`w-2 h-2 rounded-full transition-colors ${
-                s === step
-                  ? 'bg-[var(--teed-green-9)]'
-                  : s < step
-                  ? 'bg-[var(--teed-green-5)]'
-                  : 'bg-gray-200 dark:bg-zinc-700'
-              }`}
-            />
-          ))}
-        </div>
-
         {/* Step 1: Basic Info */}
         {step === 1 && (
           <div className="space-y-6">
             <div className="text-center mb-6">
-              <h2 className="text-xl font-semibold text-[var(--text-primary)]">Let's get started</h2>
-              <p className="text-sm text-[var(--text-secondary)] mt-1">Tell us a bit about yourself</p>
+              <h3 className="text-xl font-semibold text-[var(--text-primary)]">Let's get started</h3>
+              <p className="text-sm text-[var(--text-secondary)] mt-1">We'll use this to keep you updated</p>
             </div>
             <Input
               label="Your Name"
@@ -237,155 +337,275 @@ export default function ApplyForm() {
           </div>
         )}
 
-        {/* Step 2: Use Case */}
+        {/* Step 2: Who You Are (4 questions) */}
         {step === 2 && (
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="text-center mb-6">
-              <h2 className="text-xl font-semibold text-[var(--text-primary)]">What will you curate?</h2>
-              <p className="text-sm text-[var(--text-secondary)] mt-1">Select the category that best fits you</p>
-            </div>
-            <div className="grid gap-3">
-              {USE_CASES.map((useCase) => (
-                <button
-                  key={useCase.id}
-                  onClick={() => updateField('use_case', useCase.id)}
-                  className={`p-4 rounded-xl border-2 text-left transition-all ${
-                    formData.use_case === useCase.id
-                      ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
-                      : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300 dark:hover:border-zinc-600'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">{useCase.icon}</span>
-                    <div>
-                      <p className="font-medium text-[var(--text-primary)]">{useCase.label}</p>
-                      <p className="text-sm text-[var(--text-secondary)]">{useCase.description}</p>
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-            {formData.use_case === 'other' && (
-              <Input
-                placeholder="Tell us more about your use case..."
-                value={formData.use_case_other}
-                onChange={(e) => updateField('use_case_other', e.target.value)}
-                className="mt-4"
-              />
-            )}
-          </div>
-        )}
-
-        {/* Step 3: Experience */}
-        {step === 3 && (
-          <div className="space-y-4">
-            <div className="text-center mb-6">
-              <h2 className="text-xl font-semibold text-[var(--text-primary)]">Your experience level</h2>
-              <p className="text-sm text-[var(--text-secondary)] mt-1">This helps us tailor your onboarding</p>
-            </div>
-            <div className="grid gap-3">
-              {EXPERIENCE_LEVELS.map((level) => (
-                <button
-                  key={level.id}
-                  onClick={() => updateField('experience_level', level.id)}
-                  className={`p-4 rounded-xl border-2 text-left transition-all ${
-                    formData.experience_level === level.id
-                      ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
-                      : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300 dark:hover:border-zinc-600'
-                  }`}
-                >
-                  <p className="font-medium text-[var(--text-primary)]">{level.label}</p>
-                  <p className="text-sm text-[var(--text-secondary)]">{level.description}</p>
-                </button>
-              ))}
+              <h3 className="text-xl font-semibold text-[var(--text-primary)]">Tell us about yourself</h3>
+              <p className="text-sm text-[var(--text-secondary)] mt-1">This helps us understand your needs</p>
             </div>
 
-            {/* Optional Social Info */}
-            <div className="mt-6 pt-6 border-t border-gray-100 dark:border-zinc-800">
-              <p className="text-sm text-[var(--text-secondary)] mb-4">Optional: Connect your social presence</p>
-              <div className="grid gap-4">
-                <div className="flex gap-2">
-                  <select
-                    value={formData.platform}
-                    onChange={(e) => updateField('platform', e.target.value)}
-                    className="px-3 py-2 rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-[var(--text-primary)] text-sm"
-                  >
-                    <option value="">Platform</option>
-                    {PLATFORMS.map((p) => (
-                      <option key={p.id} value={p.id}>{p.label}</option>
-                    ))}
-                  </select>
-                  <Input
-                    placeholder="@yourhandle"
-                    value={formData.social_handle}
-                    onChange={(e) => updateField('social_handle', e.target.value)}
-                    className="flex-1"
-                  />
-                </div>
-                <select
-                  value={formData.followers_count}
-                  onChange={(e) => updateField('followers_count', e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-[var(--text-primary)] text-sm"
-                >
-                  <option value="">Follower count (optional)</option>
-                  <option value="0-1k">0 - 1,000</option>
-                  <option value="1k-10k">1,000 - 10,000</option>
-                  <option value="10k-100k">10,000 - 100,000</option>
-                  <option value="100k+">100,000+</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step 4: Final Details */}
-        {step === 4 && (
-          <div className="space-y-4">
-            <div className="text-center mb-6">
-              <h2 className="text-xl font-semibold text-[var(--text-primary)]">Almost there!</h2>
-              <p className="text-sm text-[var(--text-secondary)] mt-1">Just a couple more questions</p>
-            </div>
-
+            {/* Q1: Creator Type */}
             <div>
-              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
-                How did you hear about Teed?
+              <label className="block text-sm font-medium text-[var(--text-primary)] mb-3">
+                What best describes you?
               </label>
-              <div className="grid grid-cols-2 gap-2">
-                {REFERRAL_SOURCES.map((source) => (
+              <div className="grid gap-3">
+                {CREATOR_TYPES.map((type) => (
                   <button
-                    key={source.id}
-                    onClick={() => updateField('referral_source', source.id)}
-                    className={`p-3 rounded-lg border-2 text-sm transition-all ${
-                      formData.referral_source === source.id
+                    key={type.id}
+                    type="button"
+                    onClick={() => updateField('creator_type', type.id)}
+                    className={`p-4 rounded-xl border-2 text-left transition-all ${
+                      formData.creator_type === type.id
                         ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
                         : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300'
                     }`}
                   >
-                    {source.label}
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">{type.icon}</span>
+                      <div>
+                        <p className="font-medium text-[var(--text-primary)]">{type.label}</p>
+                        <p className="text-sm text-[var(--text-secondary)]">{type.description}</p>
+                      </div>
+                    </div>
                   </button>
                 ))}
               </div>
-              {formData.referral_source === 'other' && (
+            </div>
+
+            {/* Q2: Niche */}
+            <div>
+              <label className="block text-sm font-medium text-[var(--text-primary)] mb-3">
+                What's your primary niche?
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {NICHES.map((niche) => (
+                  <button
+                    key={niche.id}
+                    type="button"
+                    onClick={() => updateField('primary_niche', niche.id)}
+                    className={`p-3 rounded-lg border-2 text-center transition-all ${
+                      formData.primary_niche === niche.id
+                        ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
+                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300'
+                    }`}
+                  >
+                    <span className="text-xl block mb-1">{niche.icon}</span>
+                    <span className="text-sm font-medium text-[var(--text-primary)]">{niche.label}</span>
+                  </button>
+                ))}
+              </div>
+              {formData.primary_niche === 'other' && (
                 <Input
-                  placeholder="Tell us more..."
-                  value={formData.referral_other}
-                  onChange={(e) => updateField('referral_other', e.target.value)}
+                  placeholder="Tell us your niche..."
+                  value={formData.primary_niche_other}
+                  onChange={(e) => updateField('primary_niche_other', e.target.value)}
                   className="mt-3"
                 />
               )}
             </div>
 
-            <div className="mt-6">
-              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
-                What excites you most about Teed? (optional)
+            {/* Q3: Audience Size */}
+            <div>
+              <label className="block text-sm font-medium text-[var(--text-primary)] mb-3">
+                Total audience size (across all platforms)
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {AUDIENCE_SIZES.map((size) => (
+                  <button
+                    key={size.id}
+                    type="button"
+                    onClick={() => updateField('audience_size', size.id)}
+                    className={`p-3 rounded-lg border-2 text-left transition-all ${
+                      formData.audience_size === size.id
+                        ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
+                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300'
+                    }`}
+                  >
+                    <p className="font-medium text-[var(--text-primary)]">{size.label}</p>
+                    <p className="text-xs text-[var(--text-secondary)]">{size.description}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Q4: Primary Platform */}
+            <div>
+              <label className="block text-sm font-medium text-[var(--text-primary)] mb-3">
+                Primary platform
+              </label>
+              <div className="grid grid-cols-3 gap-2">
+                {PLATFORMS.map((platform) => (
+                  <button
+                    key={platform.id}
+                    type="button"
+                    onClick={() => updateField('primary_platform', platform.id)}
+                    className={`p-3 rounded-lg border-2 text-center transition-all ${
+                      formData.primary_platform === platform.id
+                        ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
+                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300'
+                    }`}
+                  >
+                    <span className="text-xl block mb-1">{platform.icon}</span>
+                    <span className="text-xs font-medium text-[var(--text-primary)]">{platform.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Monetization (3 questions) */}
+        {step === 3 && (
+          <div className="space-y-6">
+            <div className="text-center mb-6">
+              <h3 className="text-xl font-semibold text-[var(--text-primary)]">About monetization</h3>
+              <p className="text-sm text-[var(--text-secondary)] mt-1">Help us understand your goals</p>
+            </div>
+
+            {/* Q5: Affiliate Status */}
+            <div>
+              <label className="block text-sm font-medium text-[var(--text-primary)] mb-3">
+                Do you currently use affiliate links?
+              </label>
+              <div className="grid gap-3">
+                {AFFILIATE_STATUS.map((status) => (
+                  <button
+                    key={status.id}
+                    type="button"
+                    onClick={() => updateField('affiliate_status', status.id)}
+                    className={`p-4 rounded-xl border-2 text-left transition-all ${
+                      formData.affiliate_status === status.id
+                        ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
+                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300'
+                    }`}
+                  >
+                    <p className="font-medium text-[var(--text-primary)]">{status.label}</p>
+                    <p className="text-sm text-[var(--text-secondary)]">{status.description}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Q6: Revenue Goals */}
+            <div>
+              <label className="block text-sm font-medium text-[var(--text-primary)] mb-3">
+                What would successful monetization look like?
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {REVENUE_GOALS.map((goal) => (
+                  <button
+                    key={goal.id}
+                    type="button"
+                    onClick={() => updateField('revenue_goals', goal.id)}
+                    className={`p-3 rounded-lg border-2 text-left transition-all ${
+                      formData.revenue_goals === goal.id
+                        ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
+                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300'
+                    }`}
+                  >
+                    <p className="font-medium text-[var(--text-primary)]">{goal.label}</p>
+                    <p className="text-xs text-[var(--text-secondary)]">{goal.description}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Q7: Current Tools (multi-select) */}
+            <div>
+              <label className="block text-sm font-medium text-[var(--text-primary)] mb-3">
+                What do you currently use to share products? <span className="text-[var(--text-tertiary)]">(select all)</span>
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {CURRENT_TOOLS.map((tool) => (
+                  <button
+                    key={tool.id}
+                    type="button"
+                    onClick={() => toggleArrayField('current_tools', tool.id)}
+                    className={`px-4 py-2 rounded-full border-2 text-sm transition-all ${
+                      formData.current_tools.includes(tool.id)
+                        ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-9)] text-white'
+                        : 'border-gray-200 dark:border-zinc-700 text-[var(--text-primary)] hover:border-gray-300'
+                    }`}
+                  >
+                    {formData.current_tools.includes(tool.id) && <Check className="w-3 h-3 inline mr-1" />}
+                    {tool.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Your Needs (3 questions) */}
+        {step === 4 && (
+          <div className="space-y-6">
+            <div className="text-center mb-6">
+              <h3 className="text-xl font-semibold text-[var(--text-primary)]">Almost there!</h3>
+              <p className="text-sm text-[var(--text-secondary)] mt-1">Help us understand what you need</p>
+            </div>
+
+            {/* Q8: Biggest Frustration */}
+            <div>
+              <label className="block text-sm font-medium text-[var(--text-primary)] mb-3">
+                Biggest frustration with sharing product recommendations?
+              </label>
+              <div className="grid gap-3">
+                {FRUSTRATIONS.map((frustration) => (
+                  <button
+                    key={frustration.id}
+                    type="button"
+                    onClick={() => updateField('biggest_frustration', frustration.id)}
+                    className={`p-4 rounded-xl border-2 text-left transition-all ${
+                      formData.biggest_frustration === frustration.id
+                        ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
+                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300'
+                    }`}
+                  >
+                    <p className="font-medium text-[var(--text-primary)]">{frustration.label}</p>
+                    <p className="text-sm text-[var(--text-secondary)]">{frustration.description}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Q9: Magic Wand (optional) */}
+            <div>
+              <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                If you could wave a magic wand, what feature would you want? <span className="text-[var(--text-tertiary)]">(optional)</span>
               </label>
               <textarea
-                value={formData.excitement}
-                onChange={(e) => updateField('excitement', e.target.value)}
-                placeholder="Tell us what you're looking forward to..."
+                value={formData.magic_wand_feature}
+                onChange={(e) => updateField('magic_wand_feature', e.target.value)}
+                placeholder="Dream big..."
                 rows={3}
                 className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-[var(--text-primary)] placeholder:text-gray-400 resize-none"
               />
+            </div>
+
+            {/* Q10: Usage Intent */}
+            <div>
+              <label className="block text-sm font-medium text-[var(--text-primary)] mb-3">
+                If accepted, when would you create your first bag?
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {USAGE_INTENT.map((intent) => (
+                  <button
+                    key={intent.id}
+                    type="button"
+                    onClick={() => updateField('usage_intent', intent.id)}
+                    className={`p-3 rounded-lg border-2 text-left transition-all ${
+                      formData.usage_intent === intent.id
+                        ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
+                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300'
+                    }`}
+                  >
+                    <p className="font-medium text-[var(--text-primary)]">{intent.label}</p>
+                    <p className="text-xs text-[var(--text-secondary)]">{intent.description}</p>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         )}
@@ -401,6 +621,7 @@ export default function ApplyForm() {
         <div className="flex gap-3 mt-8">
           {step > 1 && (
             <Button variant="ghost" onClick={handleBack} className="flex-1">
+              <ChevronLeft className="w-4 h-4 mr-1" />
               Back
             </Button>
           )}
@@ -412,6 +633,7 @@ export default function ApplyForm() {
               className="flex-1"
             >
               Continue
+              <ChevronRight className="w-4 h-4 ml-1" />
             </Button>
           ) : (
             <Button
@@ -420,7 +642,14 @@ export default function ApplyForm() {
               disabled={!canProceed() || isSubmitting}
               className="flex-1"
             >
-              {isSubmitting ? 'Submitting...' : 'Join the Waitlist'}
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                'Submit Application'
+              )}
             </Button>
           )}
         </div>

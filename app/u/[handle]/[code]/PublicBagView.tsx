@@ -23,6 +23,8 @@ import { CuratorNote } from '@/components/ui/CuratorNote';
 import { useCelebration } from '@/lib/celebrations';
 import { PageContainer, ContentContainer } from '@/components/layout/PageContainer';
 import { analytics } from '@/lib/analytics';
+import { ChangelogBadge } from '@/components/changelog';
+import type { BagWithVersioning } from '@/lib/types/versionHistory';
 
 interface ItemLink {
   id: string;
@@ -31,6 +33,10 @@ interface ItemLink {
   label: string | null;
   metadata: any;
   is_auto_generated?: boolean;
+}
+
+interface ItemSpecs {
+  [key: string]: string | number | boolean;
 }
 
 interface Item {
@@ -44,6 +50,13 @@ interface Item {
   photo_url: string | null;
   promo_codes: string | null;
   is_featured: boolean;
+  // Context fields (Phase 1)
+  why_chosen: string | null;
+  specs: ItemSpecs;
+  compared_to: string | null;
+  alternatives: string[] | null;
+  price_paid: number | null;
+  purchase_date: string | null;
   links: ItemLink[];
 }
 
@@ -60,6 +73,10 @@ interface Bag {
   created_at: string;
   tags?: string[];
   category?: string;
+  // Version history fields
+  version_number?: number;
+  update_count?: number;
+  last_major_update?: string | null;
 }
 
 interface PublicBagViewProps {
@@ -464,6 +481,16 @@ export default function PublicBagView({
                 <span className="inline-flex items-center px-2.5 py-1 bg-[var(--teed-green-2)] text-[var(--teed-green-11)] rounded-full text-xs font-medium">
                   {items.length} {items.length === 1 ? 'item' : 'items'}
                 </span>
+                {/* Changelog badge for recent updates */}
+                <ChangelogBadge
+                  bag={{
+                    ...bag,
+                    version_number: bag.version_number || 1,
+                    update_count: bag.update_count || 0,
+                    last_major_update: bag.last_major_update || null,
+                    updated_at: bag.last_major_update || null,
+                  } as BagWithVersioning}
+                />
                 <span className="text-[var(--text-secondary)]">
                   <span className="text-editorial">curated by</span>
                   {' '}
@@ -701,6 +728,73 @@ export default function PublicBagView({
                 </div>
               )}
 
+              {/* Why I Chose This - Hero context field */}
+              {selectedItem.why_chosen && (
+                <div className="bg-gradient-to-r from-[var(--teed-green-1)] to-[var(--teed-green-2)] border border-[var(--teed-green-6)] rounded-lg p-4">
+                  <h3 className="text-sm font-medium text-[var(--teed-green-11)] mb-2 flex items-center gap-2">
+                    <span>💡</span> Why I Chose This
+                  </h3>
+                  <p className="text-[var(--text-primary)] whitespace-pre-wrap">{selectedItem.why_chosen}</p>
+                </div>
+              )}
+
+              {/* Compared To / Replaced */}
+              {selectedItem.compared_to && (
+                <div className="bg-[var(--sky-2)] border border-[var(--sky-6)] rounded-lg p-4">
+                  <h3 className="text-sm font-medium text-[var(--sky-11)] mb-2">Compared To / Replaced</h3>
+                  <p className="text-[var(--text-primary)]">{selectedItem.compared_to}</p>
+                </div>
+              )}
+
+              {/* Specifications */}
+              {selectedItem.specs && Object.keys(selectedItem.specs).length > 0 && (
+                <div>
+                  <h3 className="text-sm font-medium text-[var(--text-primary)] mb-3">Specifications</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    {Object.entries(selectedItem.specs).map(([key, value]) => (
+                      <div key={key} className="flex justify-between items-center px-3 py-2 bg-[var(--surface-alt)] rounded-lg">
+                        <span className="text-sm text-[var(--text-secondary)] capitalize">{key.replace(/_/g, ' ')}</span>
+                        <span className="text-sm font-medium text-[var(--text-primary)]">{String(value)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Alternatives Considered */}
+              {selectedItem.alternatives && selectedItem.alternatives.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-medium text-[var(--text-primary)] mb-2">Alternatives Considered</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedItem.alternatives.map((alt, index) => (
+                      <span key={index} className="px-3 py-1 bg-[var(--sand-3)] text-[var(--sand-11)] text-sm rounded-full">
+                        {alt}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Purchase Info */}
+              {(selectedItem.price_paid || selectedItem.purchase_date) && (
+                <div className="flex flex-wrap gap-4">
+                  {selectedItem.price_paid && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-[var(--text-secondary)]">Price Paid:</span>
+                      <span className="text-sm font-medium text-[var(--text-primary)]">${selectedItem.price_paid.toFixed(2)}</span>
+                    </div>
+                  )}
+                  {selectedItem.purchase_date && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-[var(--text-secondary)]">Purchased:</span>
+                      <span className="text-sm font-medium text-[var(--text-primary)]">
+                        {new Date(selectedItem.purchase_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Notes */}
               {selectedItem.notes && (
                 <div>
@@ -788,7 +882,7 @@ export default function PublicBagView({
                 </div>
               )}
 
-              {!selectedItem.notes && !selectedItem.photo_url && selectedItem.links.length === 0 && !selectedItem.promo_codes && (
+              {!selectedItem.notes && !selectedItem.photo_url && selectedItem.links.length === 0 && !selectedItem.promo_codes && !selectedItem.why_chosen && !selectedItem.compared_to && (!selectedItem.specs || Object.keys(selectedItem.specs).length === 0) && (!selectedItem.alternatives || selectedItem.alternatives.length === 0) && !selectedItem.price_paid && !selectedItem.purchase_date && (
                 <p className="text-[var(--text-secondary)] text-center py-8">No additional details</p>
               )}
 

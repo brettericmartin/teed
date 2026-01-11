@@ -16,6 +16,8 @@ import {
   MessageSquare,
   Video,
   Globe,
+  UserPlus,
+  Map,
 } from 'lucide-react';
 import { ROLE_PERMISSIONS, getRoleDisplayName, type AdminRole } from '@/lib/types/admin';
 
@@ -45,12 +47,29 @@ export default function AdminDashboardClient({
 
   const adminCards: AdminCard[] = [
     {
+      href: '/admin/strategy',
+      title: 'Strategic Roadmap',
+      description: 'Advisory panel insights, competitive analysis, and product direction',
+      icon: <Map className="w-6 h-6 text-[var(--evergreen-11)]" />,
+      gradient: 'from-[var(--evergreen-4)] to-[var(--evergreen-6)]',
+      borderHover: 'hover:border-[var(--evergreen-6)]',
+    },
+    {
       href: '/admin/users',
       title: 'User Management',
       description: 'View users, manage roles, and handle moderation',
       icon: <Users className="w-6 h-6 text-[var(--sky-11)]" />,
       gradient: 'from-[var(--sky-4)] to-[var(--sky-6)]',
       borderHover: 'hover:border-[var(--sky-6)]',
+      permission: 'canManageUsers',
+    },
+    {
+      href: '/admin/beta',
+      title: 'Beta Applications',
+      description: 'Review and approve founding member applications',
+      icon: <UserPlus className="w-6 h-6 text-[var(--teed-green-11)]" />,
+      gradient: 'from-[var(--teed-green-4)] to-[var(--teed-green-6)]',
+      borderHover: 'hover:border-[var(--teed-green-6)]',
       permission: 'canManageUsers',
     },
     {

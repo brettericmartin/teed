@@ -1,13 +1,15 @@
 'use client';
 
 import { useCallback } from 'react';
-import { Plus, Link2, Palette, Check, Loader2, Pencil } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Plus, Link2, Palette, Check, Loader2, Pencil, TrendingUp } from 'lucide-react';
 import { useEditMode } from '../EditModeProvider';
 import RadialMenu, { type RadialMenuItem } from './RadialMenu';
 import type { DeviceType } from '@/components/blocks';
 
 interface ProfileHubProps {
   profileId: string;
+  profileHandle: string;
   onOpenThemeEditor: () => void;
   onOpenBlockPicker: () => void;
   onOpenLinkAdder: () => void;
@@ -17,10 +19,12 @@ interface ProfileHubProps {
   isMenuOpen: boolean;
   onMenuClose: () => void;
   avatarRect: DOMRect | null;
+  isOwnProfile: boolean;
 }
 
 export default function ProfileHub({
   profileId,
+  profileHandle,
   onOpenThemeEditor,
   onOpenBlockPicker,
   onOpenLinkAdder,
@@ -29,7 +33,9 @@ export default function ProfileHub({
   isMenuOpen,
   onMenuClose,
   avatarRect,
+  isOwnProfile,
 }: ProfileHubProps) {
+  const router = useRouter();
   const {
     isEditMode,
     toggleEditMode,
@@ -94,12 +100,12 @@ export default function ProfileHub({
           onClick: handleEnterEditMode,
         },
         {
-          key: 'add-links',
-          icon: <Link2 className="w-4 h-4" />,
-          label: 'Add Links',
+          key: 'stats',
+          icon: <TrendingUp className="w-4 h-4" />,
+          label: 'Your Impact',
           onClick: () => {
-            handleEnterEditMode();
-            setTimeout(onOpenLinkAdder, 100);
+            onMenuClose();
+            router.push(`/u/${profileHandle}/stats`);
           },
         },
         {

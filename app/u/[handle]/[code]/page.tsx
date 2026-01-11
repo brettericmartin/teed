@@ -3,6 +3,10 @@ import { notFound } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 import type { Metadata } from 'next';
 import PublicBagView from './PublicBagView';
+import {
+  generateBagJsonLd,
+  generateBreadcrumbJsonLd,
+} from '@/lib/seo/structuredData';
 
 // Public Supabase client (no auth required for public bags)
 const supabase = createClient(
@@ -44,20 +48,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  // Get cover photo URL if present
-  let coverPhotoUrl: string | null = null;
-  if (bag.cover_photo_id) {
-    const { data: media } = await supabase
-      .from('media_assets')
-      .select('url')
-      .eq('id', bag.cover_photo_id)
-      .single();
-    coverPhotoUrl = media?.url || null;
-  }
-
   const title = `${bag.title} | Teed`;
   const description = bag.description || `${bag.title} by ${profile.display_name || handle}`;
   const url = `https://teed.club/u/${handle}/${code}`;
+
+  // Dynamic OG image - always use the generated image for rich previews
+  const ogImageUrl = `https://teed.club/api/og/bag/${handle}/${code}`;
 
   return {
     title,
@@ -68,22 +64,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       url,
       siteName: 'Teed',
       type: 'website',
-      ...(coverPhotoUrl && {
-        images: [
-          {
-            url: coverPhotoUrl,
-            width: 1200,
-            height: 630,
-            alt: bag.title,
-          },
-        ],
-      }),
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: bag.title,
+        },
+      ],
     },
     twitter: {
-      card: coverPhotoUrl ? 'summary_large_image' : 'summary',
+      card: 'summary_large_image',
       title: bag.title,
       description,
-      ...(coverPhotoUrl && { images: [coverPhotoUrl] }),
+      images: [ogImageUrl],
     },
   };
 }
@@ -103,7 +97,7 @@ export default async function UserBagPage({ params }: PageProps) {
     notFound();
   }
 
-  // Fetch the bag with all items and links (scoped to this user)
+  // Fetch the bag with all items, links, and sections (scoped to this user)
   const { data: bag, error } = await supabase
     .from('bags')
     .select(`
@@ -124,6 +118,13 @@ export default async function UserBagPage({ params }: PageProps) {
         photo_url,
         promo_codes,
         is_featured,
+        section_id,
+        why_chosen,
+        specs,
+        compared_to,
+        alternatives,
+        price_paid,
+        purchase_date,
         links (
           id,
           url,
@@ -132,6 +133,13 @@ export default async function UserBagPage({ params }: PageProps) {
           metadata,
           is_auto_generated
         )
+      ),
+      sections:bag_sections (
+        id,
+        name,
+        description,
+        sort_index,
+        collapsed_by_default
       )
     `)
     .eq('owner_id', profile.id)
@@ -218,18 +226,65 @@ export default async function UserBagPage({ params }: PageProps) {
     cover_photo_url: coverPhotoUrl,
   };
 
+  // Generate structured data for SEO and AI discoverability
+  const bagJsonLd = generateBagJsonLd(
+    {
+      id: bag.id,
+      code: code,
+      title: bag.title,
+      description: bag.description,
+      createdAt: bag.created_at,
+      updatedAt: bag.updated_at,
+      itemCount: sortedItems.length,
+    },
+    {
+      handle: profile.handle,
+      displayName: profile.display_name,
+      bio: null,
+      avatarUrl: null,
+      createdAt: '',
+    },
+    sortedItems.map((item: any) => ({
+      id: item.id,
+      name: item.custom_name || item.brand || 'Item',
+      brand: item.brand,
+      description: item.custom_description || item.notes,
+      photoUrl: item.photo_url,
+      purchaseUrl: item.links?.[0]?.url || null,
+      pricePaid: item.price_paid,
+      purchaseDate: item.purchase_date,
+    }))
+  );
+
+  const breadcrumbJsonLd = generateBreadcrumbJsonLd([
+    { name: 'Teed', url: 'https://teed.club' },
+    { name: profile.display_name || profile.handle, url: `https://teed.club/u/${profile.handle}` },
+    { name: bag.title, url: `https://teed.club/u/${profile.handle}/${code}` },
+  ]);
+
   return (
-    <Suspense fallback={<BagViewSkeleton />}>
-      <PublicBagView
-        bag={bagWithCover}
-        items={sortedItems}
-        ownerHandle={profile.handle}
-        ownerName={profile.display_name}
-        ownerId={profile.id}
-        hasAffiliateLinks={hasAffiliateLinks}
-        disclosureText={disclosureText}
+    <>
+      {/* JSON-LD structured data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(bagJsonLd) }}
       />
-    </Suspense>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <Suspense fallback={<BagViewSkeleton />}>
+        <PublicBagView
+          bag={bagWithCover}
+          items={sortedItems}
+          ownerHandle={profile.handle}
+          ownerName={profile.display_name}
+          ownerId={profile.id}
+          hasAffiliateLinks={hasAffiliateLinks}
+          disclosureText={disclosureText}
+        />
+      </Suspense>
+    </>
   );
 }
 

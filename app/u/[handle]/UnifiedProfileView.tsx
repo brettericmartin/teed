@@ -40,6 +40,7 @@ import {
 import type { DeviceType } from '@/components/blocks';
 import { ThemeEditor } from '@/components/theme';
 import UniversalLinkAdder from './components/UniversalLinkAdder';
+import CelebrationModal from '@/components/CelebrationModal';
 
 type BagItem = {
   id: string;
@@ -79,6 +80,7 @@ type Profile = {
   };
   created_at: string;
   blocks_enabled?: boolean;
+  beta_tier?: 'founder' | 'influencer' | 'standard' | 'friend' | null;
 };
 
 interface UnifiedProfileViewProps {
@@ -87,6 +89,8 @@ interface UnifiedProfileViewProps {
   blocks: ProfileBlock[];
   theme: ProfileTheme | null;
   isOwnProfile: boolean;
+  showWelcome?: boolean;
+  memberNumber?: number;
 }
 
 function BlockRenderer({
@@ -417,12 +421,15 @@ export default function UnifiedProfileView({
   blocks,
   theme: initialTheme,
   isOwnProfile,
+  showWelcome = false,
+  memberNumber,
 }: UnifiedProfileViewProps) {
   const [profile, setProfile] = useState<Profile>(initialProfile);
   const [theme, setTheme] = useState<ProfileTheme | null>(initialTheme);
   const [previewTheme, setPreviewTheme] = useState<ProfileTheme | null>(null);
   const [isThemeEditorOpen, setIsThemeEditorOpen] = useState(false);
   const [previewDevice, setPreviewDevice] = useState<DeviceType>('desktop');
+  const [showCelebration, setShowCelebration] = useState(showWelcome);
 
   // Use preview theme while editing, otherwise saved theme
   const displayTheme = previewTheme ?? theme;
@@ -510,6 +517,7 @@ export default function UnifiedProfileView({
         <ProfileHub
           isOwnProfile={isOwnProfile}
           profileId={profile.id}
+          profileHandle={profile.handle}
           onOpenThemeEditor={() => setIsThemeEditorOpen(true)}
           onOpenBlockPicker={() => setIsBlockPickerOpen(true)}
           onOpenLinkAdder={() => setIsLinkAdderOpen(true)}
@@ -559,6 +567,26 @@ export default function UnifiedProfileView({
 
         {/* Edit Mode Hints - onboarding tooltips */}
         {isOwnProfile && <EditModeHintsConnected />}
+
+        {/* Welcome Celebration Modal */}
+        {isOwnProfile && (
+          <CelebrationModal
+            isOpen={showCelebration}
+            onClose={() => {
+              setShowCelebration(false);
+              // Remove welcome param from URL
+              if (typeof window !== 'undefined') {
+                const url = new URL(window.location.href);
+                url.searchParams.delete('welcome');
+                window.history.replaceState({}, '', url.toString());
+              }
+            }}
+            memberNumber={memberNumber}
+            displayName={profile.display_name}
+            handle={profile.handle}
+            tier={profile.beta_tier || 'founder'}
+          />
+        )}
       </EditModeProvider>
     </ProfileThemeProvider>
   );
