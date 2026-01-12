@@ -1,0 +1,5 @@
+packages/
+docs/
+scripts/
+*.md
+!README.md
