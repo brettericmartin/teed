@@ -358,7 +358,14 @@ export default function ProfileGridLayout({
         onResizeStop={handleResizeStop}
       >
         {sortedBlocks.map(block => (
-          <div key={block.id} className="w-full h-full">
+          <div
+            key={block.id}
+            className="w-full h-full"
+            style={{
+              // Allow featured_bags blocks to overflow when expanded
+              overflow: block.block_type === 'featured_bags' ? 'visible' : undefined,
+            }}
+          >
             {renderBlock(block, draggingId === block.id)}
           </div>
         ))}

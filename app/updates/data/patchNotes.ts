@@ -42,11 +42,31 @@ export const CATEGORY_META: Record<CategoryType, {
 
 export const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.0.0',
+    releaseDate: '2026-01-12',
+    title: 'Discovery Curation Team',
+    summary: 'Introducing automated content discovery that finds trending gear across YouTube, TikTok, and RSS feeds, then curates them into polished collections under @teed.',
+    isLatest: true,
+    changes: [
+      { text: 'Discovery System: AI agents research trending gear content across YouTube, TikTok, and RSS feeds', category: 'feature' },
+      { text: 'Multi-phase YouTube search finds trending videos, new releases, and content from known reliable channels', category: 'feature' },
+      { text: 'Product enrichment extracts specs, prices, and "why it\'s notable" from source content', category: 'feature' },
+      { text: 'Two-link system: every product gets a source link (where discovered) and purchase links (where to buy)', category: 'feature' },
+      { text: 'Review workflow lets admins approve, reject, or archive discovered products before publishing', category: 'feature' },
+      { text: 'Smart deduplication avoids over-repeating products while allowing trending items to resurface', category: 'feature' },
+      { text: 'Gap analysis tracks products not in our library for future catalog expansion', category: 'feature' },
+      { text: 'Beta Scorecard: applicants receive personalized scorecards showing their creator potential', category: 'feature' },
+      { text: 'Opportunity recommendations match applicants to platform features based on their niche', category: 'feature' },
+      { text: 'MCP Server package enables Claude Code and other AI tools to interact with teed', category: 'feature' },
+      { text: 'Strategic initiatives dashboard for tracking platform development priorities', category: 'improvement' },
+      { text: 'Enhanced YouTube API integration with channel search and configurable time windows', category: 'improvement' }
+    ]
+  },
+  {
     version: '1.9.0',
     releaseDate: '2026-01-11',
     title: 'Showcase Mode & Quick Creation',
     summary: 'Your profile now feels like a gallery, not a construction site. Paste links anywhere, use keyboard shortcuts, and enjoy a smoother creation flow.',
-    isLatest: true,
     changes: [
       { text: 'Showcase Mode: see your profile as visitors see it by default', category: 'feature' },
       { text: 'Press E to enter/exit edit mode, with floating Edit/Done button', category: 'feature' },

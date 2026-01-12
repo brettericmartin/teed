@@ -73,6 +73,9 @@ export interface SurveyResponses {
   magic_wand_feature?: string;
   usage_intent?: 'immediately' | 'this_week' | 'explore_first' | 'not_sure';
 
+  // Documentation (new for scorecard)
+  documentation_habits?: 'detailed_notes' | 'basic_tracking' | 'scattered_info' | 'nothing_organized';
+
   // Legacy fields (from old survey)
   use_case?: string;
   experience_level?: string;
@@ -369,4 +372,59 @@ export interface SuccessPageData {
   deadline: BetaDeadline;
   recentApprovals: RecentApproval[];
   capacity: BetaCapacity;
+}
+
+// ============================================================================
+// Scorecard Types
+// ============================================================================
+
+export type ScorecardMode = 'monetization' | 'impact';
+
+export type ScorecardPersonaId =
+  | 'gear_architect'
+  | 'organized_creator'
+  | 'aspiring_organizer'
+  | 'emerging_curator'
+  | 'fresh_start';
+
+export interface ScorecardPersona {
+  id: ScorecardPersonaId;
+  name: string;
+  description: string;
+  emoji: string;
+  color: 'emerald' | 'blue' | 'amber' | 'orange' | 'slate';
+  frame: string;
+}
+
+export interface CategoryScores {
+  organization: number;
+  sharing: number;
+  monetization?: number; // Present when mode = 'monetization'
+  impact?: number; // Present when mode = 'impact'
+  documentation: number;
+}
+
+export interface ScorecardOpportunity {
+  category: keyof CategoryScores;
+  title: string;
+  description: string;
+  icon: string;
+  potentialGain: number;
+}
+
+export interface ScorecardResult {
+  overallScore: number;
+  categoryScores: CategoryScores;
+  persona: ScorecardPersona;
+  percentile: number;
+  mode: ScorecardMode;
+  topOpportunities: ScorecardOpportunity[];
+}
+
+export interface ScorecardData {
+  score: number;
+  categoryScores: CategoryScores;
+  persona: ScorecardPersonaId;
+  percentile: number;
+  mode: ScorecardMode;
 }

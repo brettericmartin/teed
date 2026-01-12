@@ -138,9 +138,12 @@ export default function FeaturedBagsBlock({
   };
 
   return (
-    <div className="px-4 py-4 h-full flex flex-col">
+    <div
+      className={`px-4 py-4 flex flex-col ${isExpanded ? 'bg-[var(--surface)] rounded-b-2xl' : 'h-full'}`}
+      style={{ position: isExpanded ? 'relative' : undefined, zIndex: isExpanded ? 50 : undefined }}
+    >
       {/* Grid with size-based styling */}
-      <div className={`grid ${sizeConfig.grid} flex-1`}>
+      <div className={`grid ${sizeConfig.grid} ${isExpanded ? '' : 'flex-1'}`}>
         {displayBags.map((bag) => {
           const allItemsWithPhotos = bag.items?.filter(item => item.photo_url) || [];
           const featuredItems = allItemsWithPhotos

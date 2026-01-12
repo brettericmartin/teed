@@ -20,12 +20,16 @@ import { useState, useEffect } from 'react';
 import BetaCapacityCounter from '@/components/BetaCapacityCounter';
 import ReferralNotifications from '@/components/ReferralNotifications';
 import CustomCodeClaim from './components/CustomCodeClaim';
+import ScorecardHero from './components/ScorecardHero';
+import CategoryBreakdown from './components/CategoryBreakdown';
+import TopOpportunities from './components/TopOpportunities';
 import type {
   BetaCapacity,
   ApplicationStats,
   BetaDeadline,
   RecentApproval,
   ReferralTierInfo,
+  ScorecardResult,
 } from '@/lib/types/beta';
 
 // Helper to format relative time
@@ -104,6 +108,7 @@ export default function SuccessContent() {
   const [stats, setStats] = useState<ApplicationStats | null>(null);
   const [deadline, setDeadline] = useState<BetaDeadline | null>(null);
   const [recentApprovals, setRecentApprovals] = useState<RecentApproval[]>([]);
+  const [scorecard, setScorecard] = useState<ScorecardResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [customCode, setCustomCode] = useState<string | null>(null);
 
@@ -113,7 +118,7 @@ export default function SuccessContent() {
 
       try {
         // Fetch all data in parallel
-        const [capacityRes, statsRes, deadlineRes, approvalsRes] =
+        const [capacityRes, statsRes, deadlineRes, approvalsRes, scorecardRes] =
           await Promise.all([
             fetch('/api/beta/capacity'),
             applicationId
@@ -121,6 +126,9 @@ export default function SuccessContent() {
               : Promise.resolve(null),
             fetch('/api/beta/deadline'),
             fetch('/api/beta/approvals/recent?limit=3'),
+            applicationId
+              ? fetch(`/api/beta/applications/${applicationId}/scorecard`)
+              : Promise.resolve(null),
           ]);
 
         const capacityData = await capacityRes.json();
@@ -136,6 +144,22 @@ export default function SuccessContent() {
 
         const approvalsData = await approvalsRes.json();
         setRecentApprovals(approvalsData.approvals || []);
+
+        if (scorecardRes) {
+          const scorecardData = await scorecardRes.json();
+          setScorecard(scorecardData.scorecard || null);
+        }
+
+        // Send confirmation email (fire-and-forget, don't block UI)
+        if (applicationId) {
+          fetch('/api/beta/applications/notify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ applicationId }),
+          }).catch((err) => {
+            console.error('Failed to send confirmation email:', err);
+          });
+        }
       } catch (err) {
         console.error('Failed to fetch data:', err);
       } finally {
@@ -204,6 +228,30 @@ export default function SuccessContent() {
                 : 'Your application is being reviewed.'}
           </p>
         </div>
+
+        {/* Creator Scorecard */}
+        {scorecard && (
+          <>
+            <ScorecardHero
+              overallScore={scorecard.overallScore}
+              persona={scorecard.persona}
+              percentile={scorecard.percentile}
+              mode={scorecard.mode}
+              onShare={() => {
+                // Share scorecard - could open share modal or copy link
+                const shareUrl = `${window.location.origin}/apply/success?id=${applicationId}`;
+                navigator.clipboard.writeText(shareUrl);
+              }}
+            />
+
+            <CategoryBreakdown
+              categoryScores={scorecard.categoryScores}
+              mode={scorecard.mode}
+            />
+
+            <TopOpportunities opportunities={scorecard.topOpportunities} />
+          </>
+        )}
 
         {/* Approval Odds Card (only if not instant approved) */}
         {!hasInstantApproval && (

@@ -17,6 +17,7 @@ import {
   ChevronDown,
   ChevronUp,
   ExternalLink,
+  Rocket,
 } from 'lucide-react';
 import { type AdminRole } from '@/lib/types/admin';
 import AdvisoryPanel from './components/AdvisoryPanel';
@@ -24,18 +25,20 @@ import CompetitorMatrix from './components/CompetitorMatrix';
 import UserPersonas from './components/UserPersonas';
 import RoadmapTimeline from './components/RoadmapTimeline';
 import DoctrineChecker from './components/DoctrineChecker';
+import InitiativesPanel from './components/InitiativesPanel';
 
 interface Props {
   adminRole: AdminRole;
 }
 
-type TabId = 'overview' | 'panel' | 'competitors' | 'personas' | 'roadmap' | 'doctrine';
+type TabId = 'overview' | 'initiatives' | 'panel' | 'competitors' | 'personas' | 'roadmap' | 'doctrine';
 
 export default function StrategyDashboardClient({ adminRole }: Props) {
   const [activeTab, setActiveTab] = useState<TabId>('overview');
 
   const tabs: { id: TabId; label: string; icon: React.ReactNode }[] = [
     { id: 'overview', label: 'Overview', icon: <BookOpen className="w-4 h-4" /> },
+    { id: 'initiatives', label: 'Initiatives', icon: <Rocket className="w-4 h-4" /> },
     { id: 'panel', label: 'Advisory Panel', icon: <Users className="w-4 h-4" /> },
     { id: 'competitors', label: 'Competitors', icon: <Target className="w-4 h-4" /> },
     { id: 'personas', label: 'User Personas', icon: <Lightbulb className="w-4 h-4" /> },
@@ -92,6 +95,7 @@ export default function StrategyDashboardClient({ adminRole }: Props) {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'initiatives' && <InitiativesPanel />}
         {activeTab === 'panel' && <AdvisoryPanel />}
         {activeTab === 'competitors' && <CompetitorMatrix />}
         {activeTab === 'personas' && <UserPersonas />}

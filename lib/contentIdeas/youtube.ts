@@ -90,9 +90,10 @@ export async function searchYouTubeVideos(
     maxResults?: number;
     publishedAfter?: string; // ISO date string
     order?: 'date' | 'viewCount' | 'relevance';
+    channelId?: string; // Filter by specific channel
   } = {}
 ): Promise<YouTubeSearchItem[]> {
-  const { maxResults = 10, publishedAfter, order = 'relevance' } = options;
+  const { maxResults = 10, publishedAfter, order = 'relevance', channelId } = options;
 
   const params = new URLSearchParams({
     part: 'snippet',
@@ -107,6 +108,10 @@ export async function searchYouTubeVideos(
 
   if (publishedAfter) {
     params.set('publishedAfter', publishedAfter);
+  }
+
+  if (channelId) {
+    params.set('channelId', channelId);
   }
 
   const response = await fetch(`${YOUTUBE_API_BASE}/search?${params}`);

@@ -213,6 +213,7 @@ function BlockRenderer({
             count={bags.length}
             isOwner={isOwner}
             onEdit={handleOpenSettings}
+            allowOverflow={true}
           >
             <FeaturedBagsBlock
               bags={bags}

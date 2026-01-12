@@ -8,6 +8,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { BetaCapacityBadge } from '@/components/BetaCapacityCounter';
 import type { SurveyResponses } from '@/lib/types/beta';
 import { ChevronLeft, ChevronRight, Check, Loader2 } from 'lucide-react';
+import { calculateScorecardResult, serializeScorecardForDB } from '@/lib/scorecard';
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -28,8 +29,9 @@ interface FormData {
   revenue_goals: string;
   current_tools: string[];
 
-  // Step 3: Your Needs (3 questions)
+  // Step 3: Your Needs (4 questions)
   biggest_frustration: string;
+  documentation_habits: string;
   magic_wand_feature: string;
   usage_intent: string;
 
@@ -113,6 +115,13 @@ const USAGE_INTENT = [
   { id: 'not_sure', label: 'Not sure', description: 'Depends on the experience' },
 ];
 
+const DOCUMENTATION_HABITS = [
+  { id: 'detailed_notes', label: 'I keep detailed notes', description: 'About why I chose each product' },
+  { id: 'basic_tracking', label: 'Basic tracking', description: 'I know what I have, roughly' },
+  { id: 'scattered_info', label: 'Info is scattered', description: 'Across apps, notes, bookmarks' },
+  { id: 'nothing_organized', label: 'Nothing organized', description: 'I just remember or search again' },
+];
+
 // ============================================================================
 // Main Component
 // ============================================================================
@@ -137,6 +146,7 @@ export default function ApplyForm() {
     revenue_goals: '',
     current_tools: [],
     biggest_frustration: '',
+    documentation_habits: '',
     magic_wand_feature: '',
     usage_intent: '',
     referral_code: searchParams.get('ref') || '',
@@ -183,7 +193,7 @@ export default function ApplyForm() {
       case 3:
         return formData.affiliate_status && formData.revenue_goals && formData.current_tools.length > 0;
       case 4:
-        return formData.biggest_frustration && formData.usage_intent;
+        return formData.biggest_frustration && formData.documentation_habits && formData.usage_intent;
       default:
         return false;
     }
@@ -218,9 +228,14 @@ export default function ApplyForm() {
         revenue_goals: formData.revenue_goals as SurveyResponses['revenue_goals'],
         current_tools: formData.current_tools,
         biggest_frustration: formData.biggest_frustration as SurveyResponses['biggest_frustration'],
+        documentation_habits: formData.documentation_habits as SurveyResponses['documentation_habits'],
         magic_wand_feature: formData.magic_wand_feature,
         usage_intent: formData.usage_intent as SurveyResponses['usage_intent'],
       };
+
+      // Calculate the scorecard from survey responses
+      const scorecardResult = calculateScorecardResult(surveyResponses);
+      const scorecardData = serializeScorecardForDB(scorecardResult);
 
       // The ref parameter can be:
       // 1. An invite code (TEED-ABC123) -> goes in referred_by_code
@@ -260,6 +275,8 @@ export default function ApplyForm() {
           referred_by_code: isInviteCode ? refValue : null, // Only set if it's an invite code (TEED-xxx)
           referred_by_application_id: referrerAppId, // Set if we resolved an application ID
           source: refValue ? 'referral' : 'organic',
+          // Scorecard data
+          ...scorecardData,
         })
         .select('waitlist_position, id')
         .single();
@@ -570,18 +587,28 @@ export default function ApplyForm() {
               </div>
             </div>
 
-            {/* Q9: Magic Wand (optional) */}
+            {/* Q9: Documentation Habits */}
             <div>
-              <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
-                If you could wave a magic wand, what feature would you want? <span className="text-[var(--text-tertiary)]">(optional)</span>
+              <label className="block text-sm font-medium text-[var(--text-primary)] mb-3">
+                How do you currently track your gear and recommendations?
               </label>
-              <textarea
-                value={formData.magic_wand_feature}
-                onChange={(e) => updateField('magic_wand_feature', e.target.value)}
-                placeholder="Dream big..."
-                rows={3}
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-[var(--text-primary)] placeholder:text-gray-400 resize-none"
-              />
+              <div className="grid gap-3">
+                {DOCUMENTATION_HABITS.map((habit) => (
+                  <button
+                    key={habit.id}
+                    type="button"
+                    onClick={() => updateField('documentation_habits', habit.id)}
+                    className={`p-4 rounded-xl border-2 text-left transition-all ${
+                      formData.documentation_habits === habit.id
+                        ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
+                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300'
+                    }`}
+                  >
+                    <p className="font-medium text-[var(--text-primary)]">{habit.label}</p>
+                    <p className="text-sm text-[var(--text-secondary)]">{habit.description}</p>
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Q10: Usage Intent */}

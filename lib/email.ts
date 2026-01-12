@@ -350,3 +350,146 @@ export async function sendPositionUpdateEmail(
     return { success: false, error: String(err) };
   }
 }
+
+/**
+ * Send scorecard result email after application submission
+ */
+export async function sendScorecardResultEmail(
+  to: string,
+  data: {
+    name: string;
+    applicationId: string;
+    overallScore: number;
+    personaName: string;
+    personaEmoji: string;
+    personaFrame: string;
+    mode: 'monetization' | 'impact';
+    topOpportunity?: {
+      title: string;
+      description: string;
+    };
+    referralLink: string;
+  }
+): Promise<SendEmailResult> {
+  const resend = getResendClient();
+  if (!resend) {
+    console.warn('RESEND_API_KEY not configured, skipping email');
+    return { success: false, error: 'Email not configured' };
+  }
+
+  // Get score color for the email
+  const getScoreColor = (score: number): string => {
+    if (score >= 85) return '#10B981'; // emerald
+    if (score >= 70) return '#3B82F6'; // blue
+    if (score >= 50) return '#F59E0B'; // amber
+    if (score >= 30) return '#F97316'; // orange
+    return '#64748B'; // slate
+  };
+
+  const scoreColor = getScoreColor(data.overallScore);
+  const shareUrl = `${APP_URL}/apply/success?id=${data.applicationId}`;
+  const ogImageUrl = `${APP_URL}/api/og/scorecard/${data.applicationId}`;
+
+  try {
+    const { data: result, error } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to,
+      subject: `Your Creator Scorecard: ${data.overallScore}/100 - ${data.personaName}`,
+      html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1a1a1a; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="color: #16a34a; margin: 0;">Your Creator Scorecard</h1>
+    <p style="color: #666; margin: 10px 0 0 0;">Thanks for applying to Teed!</p>
+  </div>
+
+  <!-- Score Display -->
+  <div style="background: linear-gradient(135deg, #F9F5EE 0%, #E8F5E9 100%); border-radius: 16px; padding: 30px; margin: 20px 0; text-align: center;">
+    <div style="display: inline-block; width: 120px; height: 120px; border-radius: 50%; background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: relative;">
+      <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <span style="font-size: 48px; font-weight: bold; color: ${scoreColor};">${data.overallScore}</span>
+        <span style="display: block; font-size: 14px; color: #666;">/100</span>
+      </div>
+    </div>
+
+    <div style="margin-top: 20px;">
+      <span style="font-size: 32px;">${data.personaEmoji}</span>
+      <p style="font-size: 20px; font-weight: bold; color: #1a1a1a; margin: 10px 0 5px 0;">
+        ${data.personaName}
+      </p>
+      <p style="font-size: 14px; color: #666; margin: 0; font-style: italic;">
+        "${data.personaFrame}"
+      </p>
+    </div>
+  </div>
+
+  <p>Hey ${data.name},</p>
+
+  <p>Based on your responses, we've created your personalized Creator Scorecard. ${data.mode === 'monetization' ? 'Your score reflects your readiness to monetize your gear recommendations.' : 'Your score reflects your potential impact in helping your audience.'}</p>
+
+  ${data.topOpportunity ? `
+  <!-- Top Opportunity -->
+  <div style="background: #fafafa; border: 1px solid #e5e5e5; border-radius: 12px; padding: 20px; margin: 20px 0;">
+    <p style="margin: 0 0 10px 0; color: #666; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Your Biggest Opportunity</p>
+    <p style="margin: 0 0 8px 0; font-size: 18px; font-weight: bold; color: #1a1a1a;">
+      ${data.topOpportunity.title}
+    </p>
+    <p style="margin: 0; font-size: 14px; color: #666;">
+      ${data.topOpportunity.description}
+    </p>
+  </div>
+  ` : ''}
+
+  <p style="font-weight: bold; color: #16a34a;">Want guaranteed approval?</p>
+
+  <p>Refer 5 friends who apply, and you'll get instant approval — no waiting for review!</p>
+
+  <div style="background: #fafafa; border: 1px solid #e5e5e5; border-radius: 12px; padding: 20px; margin: 20px 0;">
+    <p style="margin: 0 0 10px 0; color: #666; font-size: 14px;">Your referral link:</p>
+    <p style="margin: 0; font-family: monospace; font-size: 14px; word-break: break-all; color: #16a34a;">
+      ${data.referralLink}
+    </p>
+  </div>
+
+  <p style="text-align: center;">
+    <a href="${shareUrl}" style="display: inline-block; background: #16a34a; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+      View Full Scorecard
+    </a>
+  </p>
+
+  <p style="text-align: center; margin-top: 20px;">
+    <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(`I just got my Creator Scorecard from @teedclub! I'm a ${data.personaName} with a score of ${data.overallScore}/100. What's yours?`)}&url=${encodeURIComponent(shareUrl)}" style="display: inline-block; background: #000; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+      Share on X
+    </a>
+  </p>
+
+  <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 30px 0;">
+
+  <p style="font-size: 14px; color: #666;">
+    We review applications weekly. Keep an eye on your inbox!
+  </p>
+
+  <p style="font-size: 12px; color: #999; margin-top: 30px;">
+    — The Teed Team
+  </p>
+</body>
+</html>
+      `,
+    });
+
+    if (error) {
+      console.error('Error sending scorecard email:', error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, id: result?.id };
+  } catch (err) {
+    console.error('Error sending scorecard email:', err);
+    return { success: false, error: String(err) };
+  }
+}

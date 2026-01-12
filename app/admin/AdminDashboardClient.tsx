@@ -18,6 +18,8 @@ import {
   Globe,
   UserPlus,
   Map,
+  Cpu,
+  Search,
 } from 'lucide-react';
 import { ROLE_PERMISSIONS, getRoleDisplayName, type AdminRole } from '@/lib/types/admin';
 
@@ -143,6 +145,14 @@ export default function AdminDashboardClient({
       borderHover: 'hover:border-[var(--teed-green-6)]',
     },
     {
+      href: '/admin/mcp-setup',
+      title: 'MCP Server Setup',
+      description: 'Deploy the MCP server for Claude Desktop and AI integrations',
+      icon: <Cpu className="w-6 h-6 text-purple-600" />,
+      gradient: 'from-purple-100 to-indigo-200 dark:from-purple-900/30 dark:to-indigo-900/30',
+      borderHover: 'hover:border-purple-400',
+    },
+    {
       href: '/admin/design-system',
       title: 'Design System',
       description: 'Colors, typography, and component library',
@@ -157,6 +167,15 @@ export default function AdminDashboardClient({
       icon: <Video className="w-6 h-6 text-[var(--copper-11)]" />,
       gradient: 'from-[var(--copper-4)] to-[var(--copper-6)]',
       borderHover: 'hover:border-[var(--copper-6)]',
+      permission: 'canViewAnalytics',
+    },
+    {
+      href: '/admin/discovery',
+      title: 'Discovery Team',
+      description: 'Automated content research and bag curation across categories',
+      icon: <Search className="w-6 h-6 text-[var(--evergreen-11)]" />,
+      gradient: 'from-[var(--evergreen-4)] to-[var(--evergreen-6)]',
+      borderHover: 'hover:border-[var(--evergreen-6)]',
       permission: 'canViewAnalytics',
     },
     {

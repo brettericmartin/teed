@@ -138,6 +138,7 @@ export type AuditAction =
   // Access actions
   | 'admin.login'
   | 'admin.access_denied'
+  | 'admin.discovery.view'
   // Bulk actions
   | 'bulk.delete'
   | 'bulk.hide'
@@ -155,7 +156,8 @@ export type AuditTargetType =
   | 'settings'
   | 'system'
   | 'content_ideas'
-  | 'search_query';
+  | 'search_query'
+  | 'strategic_initiatives';
 
 // ═══════════════════════════════════════════════════════════════════
 // Admin Dashboard Types

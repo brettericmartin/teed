@@ -15,6 +15,7 @@ interface BlockContainerProps {
   isOwner?: boolean;
   onEdit?: (blockId: string) => void;
   count?: number;
+  allowOverflow?: boolean; // Allow content to overflow container (for expanded states)
 }
 
 // Default titles for each block type
@@ -55,6 +56,7 @@ export default function BlockContainer({
   isOwner = false,
   onEdit,
   count,
+  allowOverflow = false,
 }: BlockContainerProps) {
   // Don't show container for header, spacer, divider, or custom_text blocks
   const skipContainer = ['header', 'spacer', 'divider', 'custom_text'].includes(blockType);
@@ -78,9 +80,9 @@ export default function BlockContainer({
   };
 
   return (
-    <div className="block-container relative group/block h-full">
+    <div className={`block-container relative group/block ${allowOverflow ? 'min-h-full' : 'h-full'}`}>
       {/* Soft floating container */}
-      <div className="bg-[var(--surface)]/60 backdrop-blur-sm rounded-2xl border border-[var(--border-subtle)]/50 shadow-sm overflow-hidden h-full flex flex-col">
+      <div className={`bg-[var(--surface)]/60 backdrop-blur-sm rounded-2xl border border-[var(--border-subtle)]/50 shadow-sm ${allowOverflow ? 'overflow-visible' : 'overflow-hidden'} ${allowOverflow ? 'min-h-full' : 'h-full'} flex flex-col`}>
         {/* Section header with title */}
         {shouldShowTitle && (
           <div className="px-4 pt-4 pb-2">
