@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
-
-// Use the same secret key as the approve endpoint
-const AUTH_CODE_SECRET = process.env.AUTH_CODE_SECRET || crypto.randomBytes(32).toString('hex');
+import {
+  decryptAuthCode,
+  verifyCodeChallenge,
+  generateSessionToken,
+  isSecretConfigured,
+  type AuthCodeData,
+} from '@/lib/oauthCrypto';
 
 // Create admin Supabase client for database operations
 function getAdminSupabase() {
@@ -12,62 +15,6 @@ function getAdminSupabase() {
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     { auth: { autoRefreshToken: false, persistSession: false } }
   );
-}
-
-interface AuthCodeData {
-  user_id: string;
-  access_token: string;
-  refresh_token: string;
-  client_id: string;
-  redirect_uri: string;
-  code_challenge: string | null;
-  code_challenge_method: string | null;
-  scope: string;
-  expires_at: number;
-}
-
-/**
- * Generate a secure session token
- */
-function generateSessionToken(): string {
-  return crypto.randomBytes(32).toString('base64url');
-}
-
-/**
- * Decrypt auth code to get data
- */
-function decryptAuthCode(authCode: string): AuthCodeData | null {
-  try {
-    const combined = Buffer.from(authCode, 'base64url');
-    const iv = combined.subarray(0, 16);
-    const authTag = combined.subarray(16, 32);
-    const encrypted = combined.subarray(32);
-
-    const key = crypto.scryptSync(AUTH_CODE_SECRET, 'salt', 32);
-    const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
-    decipher.setAuthTag(authTag);
-
-    let decrypted = decipher.update(encrypted.toString('base64'), 'base64', 'utf8');
-    decrypted += decipher.final('utf8');
-
-    return JSON.parse(decrypted) as AuthCodeData;
-  } catch (err) {
-    console.error('Failed to decrypt auth code:', err);
-    return null;
-  }
-}
-
-/**
- * Verify PKCE code_verifier against code_challenge
- */
-function verifyCodeChallenge(codeVerifier: string, codeChallenge: string, method: string | null): boolean {
-  if (!method || method === 'plain') {
-    return codeVerifier === codeChallenge;
-  } else if (method === 'S256') {
-    const hash = crypto.createHash('sha256').update(codeVerifier).digest('base64url');
-    return hash === codeChallenge;
-  }
-  return false;
 }
 
 /**

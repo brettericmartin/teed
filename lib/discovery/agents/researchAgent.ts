@@ -812,6 +812,34 @@ export async function runResearch(
 // Database Persistence
 // ============================================================================
 
+// Maximum lengths for text fields to prevent "string did not match" errors
+// These errors occur when payloads exceed Supabase/PostgREST limits
+const MAX_TRANSCRIPT_LENGTH = 50000; // 50KB for transcripts
+const MAX_DESCRIPTION_LENGTH = 5000; // 5KB for descriptions
+const MAX_URL_LENGTH = 2048; // Standard URL limit
+
+/**
+ * Safely truncate text fields to prevent payload size errors
+ */
+function truncateText(text: string | undefined | null, maxLength: number): string | null {
+  if (!text) return null;
+  if (text.length <= maxLength) return text;
+  // Truncate and add indicator
+  return text.slice(0, maxLength - 3) + '...';
+}
+
+/**
+ * Validate URL length and return null if too long
+ */
+function validateUrl(url: string | undefined | null): string | null {
+  if (!url) return null;
+  if (url.length > MAX_URL_LENGTH) {
+    console.warn(`[Research] URL too long (${url.length} chars), skipping: ${url.slice(0, 100)}...`);
+    return null;
+  }
+  return url;
+}
+
 export async function saveResearchResults(
   results: ResearchResult[],
   supabase: SupabaseClient<any, any>
@@ -820,15 +848,21 @@ export async function saveResearchResults(
   let productCount = 0;
 
   for (const result of results) {
+    // Truncate transcript to prevent payload size errors
+    const truncatedTranscript = truncateText(result.transcript, MAX_TRANSCRIPT_LENGTH);
+    if (result.transcript && result.transcript.length > MAX_TRANSCRIPT_LENGTH) {
+      console.log(`[Research] Truncated transcript from ${result.transcript.length} to ${MAX_TRANSCRIPT_LENGTH} chars`);
+    }
+
     // Insert source
     const { data: source, error: sourceError } = await supabase
       .from('discovery_sources')
       .insert({
         source_type: result.sourceType,
         source_url: result.sourceUrl,
-        source_title: result.sourceTitle,
+        source_title: truncateText(result.sourceTitle, 500),
         category: result.category,
-        transcript: result.transcript || null,
+        transcript: truncatedTranscript,
         metadata: {
           theme: result.theme,
           creatorName: result.creatorName,
@@ -840,8 +874,12 @@ export async function saveResearchResults(
       .single();
 
     if (sourceError) {
-      // Likely duplicate URL
-      console.log(`[Research] Source already exists: ${result.sourceUrl}`);
+      // Log the actual error for debugging
+      if (sourceError.message?.includes('already exists') || sourceError.code === '23505') {
+        console.log(`[Research] Source already exists: ${result.sourceUrl}`);
+      } else {
+        console.error(`[Research] Source insert error for ${result.sourceUrl}:`, sourceError.message);
+      }
       continue;
     }
 
@@ -849,23 +887,31 @@ export async function saveResearchResults(
 
     // Insert products with full enriched data including purchase links
     for (const product of result.products) {
-      const { error: productError } = await supabase.from('discovered_products').insert({
+      // Validate and truncate product fields
+      const productData = {
         source_id: source.id,
-        product_name: product.name,
-        brand: product.brand,
-        description: product.description,
-        why_notable: product.whyNotable,
-        source_link: product.sourceLink || null,
-        image_url: product.imageUrl || null,
+        product_name: truncateText(product.name, 500) || 'Unknown Product',
+        brand: truncateText(product.brand, 200),
+        description: truncateText(product.description, MAX_DESCRIPTION_LENGTH),
+        why_notable: truncateText(product.whyNotable, 2000),
+        source_link: validateUrl(product.sourceLink),
+        image_url: validateUrl(product.imageUrl),
         confidence: product.confidence,
         specs: product.specs || null,
-        price_range: product.priceRange || null,
+        price_range: truncateText(product.priceRange, 100),
         product_links: product.productLinks || [],
-        buy_url: product.buyUrl || null,
+        buy_url: validateUrl(product.buyUrl),
         review_status: 'pending', // Start in pending review state
-      });
+      };
 
-      if (!productError) {
+      const { error: productError } = await supabase
+        .from('discovered_products')
+        .insert(productData);
+
+      if (productError) {
+        console.error(`[Research] Product insert error for ${product.name}:`, productError.message);
+        // Continue with other products instead of failing completely
+      } else {
         productCount++;
       }
     }

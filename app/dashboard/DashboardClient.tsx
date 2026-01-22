@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -11,6 +11,7 @@ import ProfileStats from '@/components/ProfileStats';
 import { useCelebration } from '@/lib/celebrations';
 import { staggerContainer, cardVariants } from '@/lib/animations';
 import { PageContainer, PageHeader, ContentContainer } from '@/components/layout/PageContainer';
+import { UniversalAddMenu, AddItemFlow, AddSocialFlow } from '@/components/add';
 
 type BagItem = {
   id: string;
@@ -90,6 +91,64 @@ export default function DashboardClient({
   const [showNewBagModal, setShowNewBagModal] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const { celebrateFirstBag, celebrateBagCreated } = useCelebration();
+
+  // Add flow states
+  const [showAddItemFlow, setShowAddItemFlow] = useState(false);
+  const [showAddSocialFlow, setShowAddSocialFlow] = useState(false);
+
+  // Add menu handlers
+  const handleAddItem = useCallback(() => {
+    setShowAddItemFlow(true);
+  }, []);
+
+  const handleAddBlock = useCallback(() => {
+    // Navigate to profile in edit mode
+    router.push(`/u/${userHandle}?edit=true&action=block`);
+  }, [router, userHandle]);
+
+  const handleAddLink = useCallback(() => {
+    // Navigate to profile in edit mode with link adder
+    router.push(`/u/${userHandle}?edit=true&action=link`);
+  }, [router, userHandle]);
+
+  const handleAddSocial = useCallback(() => {
+    setShowAddSocialFlow(true);
+  }, []);
+
+  const handleAddViaUrl = useCallback(async (bagCode: string, url: string) => {
+    // Call API to process link and add to bag
+    const response = await fetch(`/api/bags/${bagCode}/items/from-url`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to add item');
+    }
+
+    // Redirect to bag editor to see/edit the new item
+    router.push(`/u/${userHandle}/${bagCode}/edit`);
+  }, [router, userHandle]);
+
+  const handleAddViaPhoto = useCallback((bagCode: string) => {
+    // Navigate to bag editor for photo upload
+    router.push(`/u/${userHandle}/${bagCode}/edit?action=photo`);
+  }, [router, userHandle]);
+
+  const handleSaveSocialLinks = useCallback(async (links: Record<string, string>) => {
+    const response = await fetch('/api/profile', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ social_links: links }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to save social links');
+    }
+  }, []);
 
   const handleCreateBag = async (data: { title: string; description?: string; is_public: boolean }) => {
     setIsCreating(true);
@@ -482,6 +541,43 @@ export default function DashboardClient({
           isLoading={isCreating}
         />
       )}
+
+      {/* Universal Add Menu - Prominent FAB */}
+      <UniversalAddMenu
+        hasBags={bags.length > 0}
+        isProfileView={false}
+        onAddItem={handleAddItem}
+        onAddLink={handleAddLink}
+        onAddSocial={handleAddSocial}
+      />
+
+      {/* Add Item Flow */}
+      <AddItemFlow
+        isOpen={showAddItemFlow}
+        onClose={() => setShowAddItemFlow(false)}
+        bags={bags.map(bag => ({
+          id: bag.id,
+          code: bag.code,
+          title: bag.title,
+          itemCount: bag.items?.length || 0,
+          backgroundImage: bag.background_image,
+        }))}
+        onCreateBag={() => {
+          setShowAddItemFlow(false);
+          setShowNewBagModal(true);
+        }}
+        onAddViaUrl={handleAddViaUrl}
+        onAddViaPhoto={handleAddViaPhoto}
+        userHandle={userHandle}
+      />
+
+      {/* Add Social Flow */}
+      <AddSocialFlow
+        isOpen={showAddSocialFlow}
+        onClose={() => setShowAddSocialFlow(false)}
+        currentSocialLinks={{}}
+        onSave={handleSaveSocialLinks}
+      />
     </PageContainer>
   );
 }

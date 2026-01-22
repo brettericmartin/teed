@@ -1,17 +1,18 @@
 'use client';
 
-import { Smartphone, Tablet, Monitor } from 'lucide-react';
+import { Smartphone, Tablet, Monitor, TabletSmartphone } from 'lucide-react';
 
-export type DeviceType = 'mobile' | 'tablet' | 'desktop';
+export type DeviceType = 'mobile' | 'tablet' | 'tablet_landscape' | 'desktop';
 
 interface DevicePreviewToggleProps {
   currentDevice: DeviceType;
   onChange: (device: DeviceType) => void;
 }
 
-const DEVICES: Array<{ type: DeviceType; icon: typeof Smartphone; label: string; width: number }> = [
+const DEVICES: Array<{ type: DeviceType; icon: typeof Smartphone; label: string; width: number; shortLabel?: string }> = [
   { type: 'mobile', icon: Smartphone, label: 'Mobile', width: 375 },
-  { type: 'tablet', icon: Tablet, label: 'Tablet', width: 768 },
+  { type: 'tablet', icon: Tablet, label: 'Tablet', shortLabel: 'Tab', width: 768 },
+  { type: 'tablet_landscape', icon: TabletSmartphone, label: 'iPad Landscape', shortLabel: 'iPad', width: 1024 },
   { type: 'desktop', icon: Monitor, label: 'Desktop', width: 1200 },
 ];
 
@@ -42,7 +43,8 @@ export default function DevicePreviewToggle({
               title={`${device.label} (${device.width}px)`}
             >
               <Icon className="w-4 h-4" />
-              <span className="hidden sm:inline">{device.label}</span>
+              <span className="hidden lg:inline">{device.label}</span>
+              <span className="hidden sm:inline lg:hidden">{device.shortLabel || device.label}</span>
             </button>
           );
         })}
@@ -68,5 +70,6 @@ export default function DevicePreviewToggle({
 export const DEVICE_WIDTHS: Record<DeviceType, number> = {
   mobile: 375,
   tablet: 768,
+  tablet_landscape: 1024,
   desktop: 1200,
 };

@@ -25,7 +25,32 @@ import type {
   DiscoveryResult,
   ResearchResult,
   GapAnalysisReport,
+  DiscoveryPhase,
 } from './types';
+
+// ============================================================================
+// Progress Tracking
+// ============================================================================
+
+/**
+ * Update the progress of a discovery run
+ */
+async function updateProgress(
+  runId: string,
+  phase: DiscoveryPhase,
+  progress: number,
+  supabase: SupabaseClient<any, any>,
+  additionalData?: Record<string, unknown>
+): Promise<void> {
+  const updateData: Record<string, unknown> = {
+    current_phase: phase,
+    phase_progress: Math.min(100, Math.max(0, progress)),
+    last_progress_update: new Date().toISOString(),
+    ...additionalData,
+  };
+
+  await supabase.from('discovery_runs').update(updateData).eq('id', runId);
+}
 
 // ============================================================================
 // Main Orchestrator
@@ -49,13 +74,16 @@ export async function runDiscovery(
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
 
-  // Create run record
+  // Create run record with initial progress
   const { data: runRecord, error: runError } = await supabase
     .from('discovery_runs')
     .insert({
       category,
       status: 'running',
       run_config: runConfig,
+      current_phase: 'starting',
+      phase_progress: 0,
+      last_progress_update: new Date().toISOString(),
     })
     .select('id')
     .single();
@@ -69,23 +97,26 @@ export async function runDiscovery(
 
   try {
     // ========================================
-    // Phase 1: Research
+    // Phase 1: Research (Searching)
     // ========================================
+    await updateProgress(runId, 'searching', 0, supabase);
     console.log(`[Discovery] Phase 1: Research...`);
     const researchResults = await runResearch(category, runConfig, supabase);
+
+    // Update progress: extracting phase (saving to database)
+    await updateProgress(runId, 'extracting', 50, supabase, {
+      sources_found: researchResults.length,
+    });
 
     // Save research to database
     const { sourceIds, productCount } = await saveResearchResults(researchResults, supabase);
 
     // Update run with research stats
-    await supabase
-      .from('discovery_runs')
-      .update({
-        sources_found: researchResults.length,
-        sources_processed: sourceIds.length,
-        products_found: productCount,
-      })
-      .eq('id', runId);
+    await updateProgress(runId, 'extracting', 100, supabase, {
+      sources_found: researchResults.length,
+      sources_processed: sourceIds.length,
+      products_found: productCount,
+    });
 
     console.log(
       `[Discovery] Research complete: ${researchResults.length} sources, ${productCount} products`
@@ -98,6 +129,8 @@ export async function runDiscovery(
     const bagIds: string[] = [];
 
     if (!runConfig.dryRun && researchResults.length > 0) {
+      // Update progress: enriching phase
+      await updateProgress(runId, 'enriching', 0, supabase);
       console.log(`[Discovery] Phase 2: Curation...`);
 
       // Get @teed user
@@ -107,14 +140,24 @@ export async function runDiscovery(
       }
 
       // Curate results into bags
+      await updateProgress(runId, 'enriching', 30, supabase);
       bags = await curateResearchResults(researchResults, category);
 
+      // Update progress: creating_bags phase
+      await updateProgress(runId, 'creating_bags', 0, supabase);
+
       // Create bags in database
-      for (const bag of bags) {
+      for (let i = 0; i < bags.length; i++) {
+        const bag = bags[i];
         const bagId = await createBagInDatabase(bag, teedUserId, supabase);
         if (bagId) {
           bagIds.push(bagId);
         }
+        // Update progress within creating_bags phase
+        const progress = Math.round(((i + 1) / bags.length) * 100);
+        await updateProgress(runId, 'creating_bags', progress, supabase, {
+          bags_created: bagIds.length,
+        });
       }
 
       console.log(`[Discovery] Curation complete: ${bagIds.length} bags created`);
@@ -125,19 +168,28 @@ export async function runDiscovery(
     // ========================================
     // Phase 3: Gap Analysis
     // ========================================
+    await updateProgress(runId, 'gap_analysis', 0, supabase);
     console.log(`[Discovery] Phase 3: Gap Analysis...`);
 
     // Record gaps for products that weren't matched to catalog
+    const totalProducts = researchResults.reduce((sum, r) => sum + r.products.length, 0);
+    let processedProducts = 0;
+
     for (const result of researchResults) {
       for (const product of result.products) {
         // Products with low confidence or no catalog match are gaps
         if (product.confidence < 70) {
           await recordProductGap(product, result.sourceUrl, category, supabase);
         }
+        processedProducts++;
       }
+      // Update progress periodically (per source)
+      const progress = Math.round((processedProducts / Math.max(1, totalProducts)) * 80);
+      await updateProgress(runId, 'gap_analysis', progress, supabase);
     }
 
     const gapReport = await analyzeGaps(category, supabase);
+    await updateProgress(runId, 'gap_analysis', 100, supabase);
     console.log(`[Discovery] Gap analysis: ${gapReport.totalGaps} unresolved gaps`);
 
     // ========================================
@@ -147,9 +199,12 @@ export async function runDiscovery(
       .from('discovery_runs')
       .update({
         status: 'completed',
+        current_phase: 'completed',
+        phase_progress: 100,
         bags_created: bagIds.length,
         bag_ids: bagIds,
         completed_at: new Date().toISOString(),
+        last_progress_update: new Date().toISOString(),
       })
       .eq('id', runId);
 
@@ -161,14 +216,17 @@ export async function runDiscovery(
       gapReport,
     };
   } catch (error) {
-    // Mark run as failed
+    // Mark run as failed with phase info
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     await supabase
       .from('discovery_runs')
       .update({
         status: 'failed',
+        current_phase: 'failed',
+        phase_progress: 0,
         completed_at: new Date().toISOString(),
         error_message: errorMessage,
+        last_progress_update: new Date().toISOString(),
       })
       .eq('id', runId);
 
@@ -206,6 +264,10 @@ async function getRunStatus(
     completedAt: data.completed_at ? new Date(data.completed_at) : undefined,
     errorMessage: data.error_message || undefined,
     config: data.run_config || {},
+    // Progress tracking
+    currentPhase: data.current_phase || undefined,
+    phaseProgress: data.phase_progress ?? undefined,
+    lastProgressUpdate: data.last_progress_update ? new Date(data.last_progress_update) : undefined,
   };
 }
 
@@ -254,6 +316,10 @@ export async function getRecentRuns(
     completedAt: d.completed_at ? new Date(d.completed_at) : undefined,
     errorMessage: d.error_message || undefined,
     config: d.run_config || {},
+    // Progress tracking
+    currentPhase: d.current_phase || undefined,
+    phaseProgress: d.phase_progress ?? undefined,
+    lastProgressUpdate: d.last_progress_update ? new Date(d.last_progress_update) : undefined,
   }));
 }
 
@@ -265,6 +331,7 @@ export { isValidCategory, getCategoryConfig, getAllCategories } from './config';
 export { analyzeGaps, getGapStatistics } from './agents/gapAnalysisAgent';
 export type {
   DiscoveryCategory,
+  DiscoveryPhase,
   DiscoveryRun,
   DiscoveryResult,
   DiscoveryRunConfig,

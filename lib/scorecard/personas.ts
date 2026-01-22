@@ -1,11 +1,11 @@
 /**
  * Scorecard Personas
  *
- * Personas are assigned based on overall scorecard score.
+ * Personas are assigned based on overall scorecard score and mode.
  * All personas are framed positively - they represent stages of a journey, not judgments.
  */
 
-import type { ScorecardPersona, ScorecardPersonaId } from '@/lib/types/beta';
+import type { ScorecardPersona, ScorecardPersonaId, ScorecardMode } from '@/lib/types/beta';
 
 export const PERSONAS: Record<ScorecardPersonaId, ScorecardPersona> = {
   gear_architect: {
@@ -53,12 +53,29 @@ export const PERSONAS: Record<ScorecardPersonaId, ScorecardPersona> = {
     color: 'slate',
     frame: 'Perfect timing to build right',
   },
+  personal_organizer: {
+    id: 'personal_organizer',
+    name: 'The Personal Organizer',
+    description:
+      "You're here for yourself, not an audience - and that's perfect! Teed will help you organize, track, and enjoy the gear you love.",
+    emoji: '🏡',
+    color: 'slate',
+    frame: 'Organizing for yourself',
+  },
 };
 
 /**
- * Get persona based on overall score
+ * Get persona based on overall score and mode
+ * Personal mode users get a special persona that celebrates their self-organization journey
  */
-export function getPersona(score: number): ScorecardPersona {
+export function getPersona(score: number, mode?: ScorecardMode): ScorecardPersona {
+  // Personal mode: Always return personal_organizer with encouraging framing
+  // They're here for themselves, not an audience - and that's great!
+  if (mode === 'personal') {
+    return PERSONAS.personal_organizer;
+  }
+
+  // Standard scoring for monetization/impact modes
   if (score >= 85) return PERSONAS.gear_architect;
   if (score >= 70) return PERSONAS.organized_creator;
   if (score >= 50) return PERSONAS.aspiring_organizer;

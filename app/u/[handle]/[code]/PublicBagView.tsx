@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Share2, ExternalLink, User, X, Package, Trophy, Copy, CheckCheck, ChevronDown, Tag, Bookmark, UserPlus, UserCheck, LayoutGrid, List, Plus, GitFork } from 'lucide-react';
+import { Share2, ExternalLink, User, X, Package, Trophy, Copy, CheckCheck, ChevronDown, Tag, Bookmark, UserPlus, UserCheck, LayoutGrid, List, Plus, GitFork, BookOpen } from 'lucide-react';
+import StoryTimeline from '@/components/story/StoryTimeline';
 import { GolfLoader } from '@/components/ui/GolfLoader';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import PublicShareModal from './PublicShareModal';
@@ -908,8 +909,27 @@ export default function PublicBagView({
         </div>
       )}
 
-      {/* Footer with CTA */}
+      {/* The Story Section */}
       <div className="border-t border-[var(--border-subtle)] mt-12">
+        <ContentContainer size="md" className="py-8">
+          <div className="flex items-center gap-2 mb-6">
+            <BookOpen className="w-5 h-5 text-[var(--text-secondary)]" />
+            <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+              The Story
+            </h3>
+          </div>
+          <StoryTimeline
+            bagCode={bag.code}
+            maxItems={5}
+            showFilters={true}
+            groupByTimePeriod={true}
+            isOwner={isOwnBag}
+          />
+        </ContentContainer>
+      </div>
+
+      {/* Footer with CTA */}
+      <div className="border-t border-[var(--border-subtle)] mt-8">
         <ContentContainer size="md" className="py-16">
           <div className="text-center">
             <p className="text-[var(--text-secondary)] mb-2 font-serif italic">Created with</p>

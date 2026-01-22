@@ -21,6 +21,16 @@ import {
 
 type DiscoveryCategory = 'golf' | 'tech' | 'photography' | 'edc' | 'fitness';
 
+type DiscoveryPhase =
+  | 'starting'
+  | 'searching'
+  | 'extracting'
+  | 'enriching'
+  | 'creating_bags'
+  | 'gap_analysis'
+  | 'completed'
+  | 'failed';
+
 interface DiscoveryRun {
   id: string;
   category: DiscoveryCategory;
@@ -33,7 +43,23 @@ interface DiscoveryRun {
   startedAt: string;
   completedAt?: string;
   errorMessage?: string;
+  // Progress tracking
+  currentPhase?: DiscoveryPhase;
+  phaseProgress?: number;
+  lastProgressUpdate?: string;
 }
+
+// Phase display names and order
+const PHASE_CONFIG: Record<DiscoveryPhase, { label: string; order: number }> = {
+  starting: { label: 'Starting', order: 0 },
+  searching: { label: 'Searching', order: 1 },
+  extracting: { label: 'Extracting', order: 2 },
+  enriching: { label: 'Enriching', order: 3 },
+  creating_bags: { label: 'Creating Bags', order: 4 },
+  gap_analysis: { label: 'Analyzing Gaps', order: 5 },
+  completed: { label: 'Completed', order: 6 },
+  failed: { label: 'Failed', order: -1 },
+};
 
 interface GapStatistics {
   total: number;
@@ -542,6 +568,51 @@ function RunCard({ run }: { run: DiscoveryRun }) {
           )}
         </div>
       </div>
+
+      {/* Progress Bar for Running Jobs */}
+      {run.status === 'running' && run.currentPhase && (
+        <div className="mt-4 pt-4 border-t border-[var(--border-subtle)]">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-[var(--text-secondary)]">
+              {PHASE_CONFIG[run.currentPhase]?.label || run.currentPhase}
+            </span>
+            <span className="text-xs text-[var(--text-tertiary)]">
+              {run.phaseProgress ?? 0}%
+            </span>
+          </div>
+          {/* Phase progress bar */}
+          <div className="h-2 bg-[var(--grey-4)] rounded-full overflow-hidden">
+            <div
+              className="h-full bg-[var(--sky-9)] transition-all duration-500 ease-out"
+              style={{ width: `${run.phaseProgress ?? 0}%` }}
+            />
+          </div>
+          {/* Phase steps indicator */}
+          <div className="flex justify-between mt-2 text-xs">
+            {(['searching', 'extracting', 'enriching', 'creating_bags', 'gap_analysis'] as DiscoveryPhase[]).map((phase) => {
+              const config = PHASE_CONFIG[phase];
+              const currentOrder = run.currentPhase ? PHASE_CONFIG[run.currentPhase]?.order ?? 0 : 0;
+              const isComplete = config.order < currentOrder;
+              const isCurrent = phase === run.currentPhase;
+
+              return (
+                <span
+                  key={phase}
+                  className={`px-1 ${
+                    isComplete
+                      ? 'text-[var(--teed-green-11)]'
+                      : isCurrent
+                      ? 'text-[var(--sky-11)] font-medium'
+                      : 'text-[var(--text-tertiary)]'
+                  }`}
+                >
+                  {isComplete ? '✓' : ''} {config.label}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {run.errorMessage && (
         <div className="mt-3 p-3 bg-red-50 dark:bg-red-950/30 rounded-lg">

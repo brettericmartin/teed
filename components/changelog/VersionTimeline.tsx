@@ -154,6 +154,7 @@ function TimelineItem({ entry }: { entry: TimelineEntry }) {
     }
   };
 
+  // DOCTRINE: Use neutral colors for removals (no red/urgent)
   const getIconBgColor = () => {
     switch (entry.changeType) {
       case 'created':
@@ -163,13 +164,14 @@ function TimelineItem({ entry }: { entry: TimelineEntry }) {
         return 'bg-[var(--teed-green-3)] text-[var(--teed-green-11)]';
       case 'removed':
       case 'items_removed':
-        return 'bg-[var(--red-3)] text-[var(--red-11)]';
+        // DOCTRINE: Neutral stone/sand for retired items - NOT red
+        return 'bg-[var(--stone-3)] text-[var(--stone-11)]';
       case 'replaced':
         return 'bg-[var(--sky-3)] text-[var(--sky-11)]';
       case 'updated':
       case 'items_updated':
       case 'metadata_updated':
-        return 'bg-[var(--amber-3)] text-[var(--amber-11)]';
+        return 'bg-[var(--sand-3)] text-[var(--sand-11)]';
       case 'major_update':
         return 'bg-[var(--sky-9)] text-white';
       default:
@@ -202,28 +204,17 @@ function TimelineItem({ entry }: { entry: TimelineEntry }) {
   );
 }
 
+/**
+ * DOCTRINE: Format date as month/year only (no "days ago" freshness pressure)
+ * This removes implicit staleness signals and allows timeless curation.
+ */
 function formatDate(dateString: string): string {
   const date = new Date(dateString);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-  if (diffDays === 0) {
-    return 'Today';
-  } else if (diffDays === 1) {
-    return 'Yesterday';
-  } else if (diffDays <= 7) {
-    return `${diffDays} days ago`;
-  } else if (diffDays <= 30) {
-    const weeks = Math.floor(diffDays / 7);
-    return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
-  } else {
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined,
-    });
-  }
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    year: 'numeric',
+  });
+  // Returns: "Mar 2026", "Jan 2025", etc.
 }
 
 // Compact badge for displaying in bag cards

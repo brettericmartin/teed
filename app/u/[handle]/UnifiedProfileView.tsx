@@ -20,7 +20,6 @@ import ProfileGridLayout from '@/components/blocks/ProfileGridLayout';
 import EditModeHints from '@/components/blocks/EditModeHints';
 import ProfileThemeProvider from './components/ProfileThemeProvider';
 import { EditModeProvider, useEditMode } from './components/EditModeProvider';
-import ProfileHub from './components/ProfileHub';
 import BlockPicker from './components/BlockPicker';
 import {
   BaseBlock,
@@ -34,6 +33,7 @@ import {
   EmbedBlock,
   QuoteBlock,
   AffiliateDisclosureBlock,
+  StoryBlock,
   BlockSettingsPanel,
   ProfileStats,
   BlockContainer,
@@ -46,7 +46,9 @@ import CelebrationModal from '@/components/CelebrationModal';
 import { FloatingEditButton } from '@/components/FloatingEditButton';
 import { GlobalPasteHandler } from '@/components/GlobalPasteHandler';
 import { CommandPalette } from '@/components/CommandPalette';
-import { FloatingActionHub } from '@/components/FloatingActionHub';
+import { ProfileActionBar } from '@/components/ProfileActionBar';
+import { AddSocialFlow } from '@/components/add';
+import { useRouter } from 'next/navigation';
 
 type BagItem = {
   id: string;
@@ -105,14 +107,12 @@ function BlockRenderer({
   bags,
   isOwner,
   isDragging = false,
-  onAvatarClick,
 }: {
   block: ProfileBlock;
   profile: Profile;
   bags: Bag[];
   isOwner: boolean;
   isDragging?: boolean;
-  onAvatarClick?: (rect: DOMRect) => void;
 }) {
   const { isEditMode, toggleBlockVisibility, deleteBlock, duplicateBlock, selectedBlockId, selectBlock } = useEditMode();
 
@@ -141,7 +141,6 @@ function BlockRenderer({
               profile={profile}
               config={config}
               isOwner={isOwner}
-              onAvatarClick={onAvatarClick}
             />
             {/* Compact stats below header */}
             {bags.length > 0 && (
@@ -270,6 +269,25 @@ function BlockRenderer({
           </BlockContainer>
         );
 
+      case 'story':
+        return (
+          <BlockContainer
+            blockId={block.id}
+            blockType={block.block_type}
+            title={config.title || 'The Story'}
+            showTitle={config.showTitle}
+            isOwner={isOwner}
+            onEdit={handleOpenSettings}
+          >
+            <StoryBlock
+              profileId={profile.id}
+              bags={bags}
+              config={config}
+              isOwner={isOwner}
+            />
+          </BlockContainer>
+        );
+
       default:
         return null;
     }
@@ -299,7 +317,6 @@ function ProfileContent({
   onOpenThemeEditor,
   onUpdateProfile,
   previewDevice,
-  onAvatarClick,
 }: {
   profile: Profile;
   bags: Bag[];
@@ -307,7 +324,6 @@ function ProfileContent({
   onOpenThemeEditor?: () => void;
   onUpdateProfile?: (updates: { social_links?: Record<string, string> }) => Promise<void>;
   previewDevice: DeviceType;
-  onAvatarClick?: (rect: DOMRect) => void;
 }) {
   const { blocks, isEditMode, updateBlockLayout, selectBlock } = useEditMode();
 
@@ -321,7 +337,8 @@ function ProfileContent({
 
   // Calculate preview width based on device
   const previewWidth = DEVICE_WIDTHS[previewDevice];
-  const isMobilePreview = previewDevice !== 'desktop';
+  // Mobile/tablet portrait use constrained layouts, tablet_landscape and desktop use full layouts
+  const isMobilePreview = previewDevice === 'mobile' || previewDevice === 'tablet';
 
   // Handle layout changes from react-grid-layout
   const handleLayoutChange = useCallback(
@@ -377,10 +394,9 @@ function ProfileContent({
         bags={bags}
         isOwner={isOwnProfile}
         isDragging={isDragging}
-        onAvatarClick={onAvatarClick}
       />
     ),
-    [profile, bags, isOwnProfile, onAvatarClick]
+    [profile, bags, isOwnProfile]
   );
 
   // Render blocks using ProfileGridLayout
@@ -437,6 +453,7 @@ export default function UnifiedProfileView({
   showWelcome = false,
   memberNumber,
 }: UnifiedProfileViewProps) {
+  const router = useRouter();
   const [profile, setProfile] = useState<Profile>(initialProfile);
   const [theme, setTheme] = useState<ProfileTheme | null>(initialTheme);
   const [previewTheme, setPreviewTheme] = useState<ProfileTheme | null>(null);
@@ -450,28 +467,27 @@ export default function UnifiedProfileView({
   // Modal states for ProfileHub control
   const [isBlockPickerOpen, setIsBlockPickerOpen] = useState(false);
   const [isLinkAdderOpen, setIsLinkAdderOpen] = useState(false);
+  const [isSocialFlowOpen, setIsSocialFlowOpen] = useState(false);
 
-  // Avatar-triggered radial menu state
-  const [isRadialMenuOpen, setIsRadialMenuOpen] = useState(false);
-  const [avatarRect, setAvatarRect] = useState<DOMRect | null>(null);
+  // Handlers for ProminentAddBar
+  const handleAddBag = useCallback(() => {
+    router.push('/dashboard?action=new-bag');
+  }, [router]);
 
-  // Handle avatar click - opens radial menu
-  const handleAvatarClick = useCallback((rect: DOMRect) => {
-    setAvatarRect(rect);
-    setIsRadialMenuOpen(true);
-  }, []);
+  const handleSaveSocialLinks = useCallback(async (links: Record<string, string>) => {
+    const response = await fetch('/api/profile', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ social_links: links }),
+    });
 
-  // Listen for openRadialMenu events from block edit buttons
-  useEffect(() => {
-    const handleOpenRadialMenu = (e: CustomEvent<{ rect: DOMRect; blockId: string }>) => {
-      setAvatarRect(e.detail.rect);
-      setIsRadialMenuOpen(true);
-    };
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to save social links');
+    }
 
-    window.addEventListener('openRadialMenu', handleOpenRadialMenu as EventListener);
-    return () => {
-      window.removeEventListener('openRadialMenu', handleOpenRadialMenu as EventListener);
-    };
+    // Update local state
+    setProfile(prev => ({ ...prev, social_links: links }));
   }, []);
 
   // Handle profile updates from block settings
@@ -507,6 +523,20 @@ export default function UnifiedProfileView({
         profileId={profile.id}
         isOwner={isOwnProfile}
       >
+        {/* Profile Action Bar - Three main actions: Customize | ADD | Analyze */}
+        {isOwnProfile && (
+          <ProfileActionBarConnected
+            onAddBag={handleAddBag}
+            onAddBlock={() => setIsBlockPickerOpen(true)}
+            onAddLink={() => setIsLinkAdderOpen(true)}
+            onAddSocial={() => setIsSocialFlowOpen(true)}
+            onCustomizeTheme={() => setIsThemeEditorOpen(true)}
+            onCustomizeProfile={() => setIsThemeEditorOpen(true)}
+            onViewStats={() => router.push(`/u/${profile.handle}/stats`)}
+            profileHandle={profile.handle}
+          />
+        )}
+
         {/* Preview container with device frame when mobile/tablet */}
         <ProfilePreviewContainer
           previewDevice={previewDevice}
@@ -515,7 +545,6 @@ export default function UnifiedProfileView({
           isOwnProfile={isOwnProfile}
           onOpenThemeEditor={() => setIsThemeEditorOpen(true)}
           onUpdateProfile={handleUpdateProfile}
-          onAvatarClick={handleAvatarClick}
         />
 
         {/* Block Settings Panel - uses provider state */}
@@ -526,22 +555,7 @@ export default function UnifiedProfileView({
           />
         )}
 
-        {/* ProfileHub - Avatar-triggered radial menu */}
-        <ProfileHub
-          isOwnProfile={isOwnProfile}
-          profileId={profile.id}
-          profileHandle={profile.handle}
-          onOpenThemeEditor={() => setIsThemeEditorOpen(true)}
-          onOpenBlockPicker={() => setIsBlockPickerOpen(true)}
-          onOpenLinkAdder={() => setIsLinkAdderOpen(true)}
-          previewDevice={previewDevice}
-          onDeviceChange={setPreviewDevice}
-          isMenuOpen={isRadialMenuOpen}
-          onMenuClose={() => setIsRadialMenuOpen(false)}
-          avatarRect={avatarRect}
-        />
-
-        {/* BlockPicker Modal - controlled by ProfileHub */}
+        {/* BlockPicker Modal */}
         {isOwnProfile && (
           <BlockPicker
             profileId={profile.id}
@@ -557,6 +571,16 @@ export default function UnifiedProfileView({
             onUpdateProfile={handleUpdateProfile}
             isOpen={isLinkAdderOpen}
             onClose={() => setIsLinkAdderOpen(false)}
+          />
+        )}
+
+        {/* AddSocialFlow Modal - for managing social links */}
+        {isOwnProfile && (
+          <AddSocialFlow
+            isOpen={isSocialFlowOpen}
+            onClose={() => setIsSocialFlowOpen(false)}
+            currentSocialLinks={profile.social_links || {}}
+            onSave={handleSaveSocialLinks}
           />
         )}
 
@@ -600,12 +624,6 @@ export default function UnifiedProfileView({
             tier={profile.beta_tier || 'founder'}
           />
         )}
-
-        {/* Floating Action Hub - Quick creation menu */}
-        <FloatingActionHub
-          onOpenBlockPicker={() => setIsBlockPickerOpen(true)}
-          onOpenLinkAdder={() => setIsLinkAdderOpen(true)}
-        />
 
         {/* Floating Edit Button - Showcase Mode toggle */}
         <FloatingEditButton />
@@ -711,6 +729,43 @@ function EditModeHintsConnected() {
   return <EditModeHints isEditMode={isEditMode} />;
 }
 
+// Connected ProfileActionBar that uses EditModeProvider
+function ProfileActionBarConnected({
+  onAddBag,
+  onAddBlock,
+  onAddLink,
+  onAddSocial,
+  onCustomizeTheme,
+  onCustomizeProfile,
+  onViewStats,
+  profileHandle,
+}: {
+  onAddBag: () => void;
+  onAddBlock: () => void;
+  onAddLink: () => void;
+  onAddSocial: () => void;
+  onCustomizeTheme: () => void;
+  onCustomizeProfile: () => void;
+  onViewStats: () => void;
+  profileHandle: string;
+}) {
+  const { setEditMode } = useEditMode();
+
+  return (
+    <ProfileActionBar
+      onAddBag={onAddBag}
+      onAddBlock={onAddBlock}
+      onAddLink={onAddLink}
+      onAddSocial={onAddSocial}
+      onCustomizeTheme={onCustomizeTheme}
+      onCustomizeProfile={onCustomizeProfile}
+      onEditBlocks={() => setEditMode(true)}
+      onViewStats={onViewStats}
+      profileHandle={profileHandle}
+    />
+  );
+}
+
 // Preview container with device frame
 function ProfilePreviewContainer({
   previewDevice,
@@ -719,7 +774,6 @@ function ProfilePreviewContainer({
   isOwnProfile,
   onOpenThemeEditor,
   onUpdateProfile,
-  onAvatarClick,
 }: {
   previewDevice: DeviceType;
   profile: Profile;
@@ -727,12 +781,21 @@ function ProfilePreviewContainer({
   isOwnProfile: boolean;
   onOpenThemeEditor: () => void;
   onUpdateProfile: (updates: { social_links?: Record<string, string> }) => Promise<void>;
-  onAvatarClick?: (rect: DOMRect) => void;
 }) {
   const { isEditMode } = useEditMode();
 
-  // Only show device frame in edit mode
+  // Only show device frame in edit mode for non-desktop devices
   const showDeviceFrame = isEditMode && previewDevice !== 'desktop';
+
+  // Get appropriate min height for each device type
+  const getDeviceMinHeight = () => {
+    switch (previewDevice) {
+      case 'mobile': return '667px'; // iPhone SE
+      case 'tablet': return '1024px'; // iPad portrait
+      case 'tablet_landscape': return '768px'; // iPad landscape
+      default: return '800px';
+    }
+  };
 
   if (showDeviceFrame) {
     return (
@@ -742,7 +805,7 @@ function ProfilePreviewContainer({
             className="bg-[var(--surface)] rounded-3xl shadow-2xl overflow-hidden border-8 border-gray-800"
             style={{
               width: DEVICE_WIDTHS[previewDevice],
-              minHeight: previewDevice === 'mobile' ? '667px' : '1024px',
+              minHeight: getDeviceMinHeight(),
             }}
           >
             <ProfileContent
@@ -752,7 +815,6 @@ function ProfilePreviewContainer({
               onOpenThemeEditor={onOpenThemeEditor}
               onUpdateProfile={onUpdateProfile}
               previewDevice={previewDevice}
-              onAvatarClick={onAvatarClick}
             />
           </div>
         </div>
@@ -768,7 +830,6 @@ function ProfilePreviewContainer({
       onOpenThemeEditor={onOpenThemeEditor}
       onUpdateProfile={onUpdateProfile}
       previewDevice={previewDevice}
-      onAvatarClick={onAvatarClick}
     />
   );
 }

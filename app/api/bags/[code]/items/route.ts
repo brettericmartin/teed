@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
+import { checkItemBadges } from '@/lib/badges';
 
 /**
  * PATCH /api/bags/[code]/items
@@ -243,6 +244,27 @@ export async function POST(
       .from('bags')
       .update({ updated_at: new Date().toISOString() })
       .eq('id', bag.id);
+
+    // Check and award item badges (non-blocking)
+    // Get total item count across all user's bags
+    const { data: userBags } = await supabase
+      .from('bags')
+      .select('id')
+      .eq('owner_id', user.id);
+
+    if (userBags && userBags.length > 0) {
+      const { count: totalItemCount } = await supabase
+        .from('bag_items')
+        .select('*', { count: 'exact', head: true })
+        .in('bag_id', userBags.map(b => b.id));
+
+      if (totalItemCount) {
+        // Fire and forget - don't block the response
+        checkItemBadges(user.id, totalItemCount).catch((err) => {
+          console.error('[Badges] Error checking item badges:', err);
+        });
+      }
+    }
 
     return NextResponse.json(item, { status: 201 });
   } catch (error) {

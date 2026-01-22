@@ -50,6 +50,28 @@ export async function POST(request: NextRequest) {
     const referrer = request.headers.get('referer') || event_data?.referrer || null;
     const pageUrl = event_data?.page_url || null;
 
+    // Extract country code from Vercel geo headers (privacy-friendly, country-level only)
+    const countryCode = request.headers.get('x-vercel-ip-country') || null;
+
+    // Extract referrer domain for traffic source analysis
+    let referrerDomain: string | null = null;
+    if (referrer) {
+      try {
+        const referrerUrl = new URL(referrer);
+        referrerDomain = referrerUrl.hostname.replace(/^www\./, '').toLowerCase();
+      } catch {
+        // Invalid URL, leave as null
+      }
+    }
+
+    // Add country and referrer domain to event data for stats aggregation
+    if (countryCode) {
+      enrichedEventData.country_code = countryCode;
+    }
+    if (referrerDomain) {
+      enrichedEventData.referrer_domain = referrerDomain;
+    }
+
     // Parse user agent for device info
     const isMobile = /Mobile|Android|iPhone|iPad/i.test(userAgent);
     const isTablet = /Tablet|iPad/i.test(userAgent);

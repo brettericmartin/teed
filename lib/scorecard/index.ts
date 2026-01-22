@@ -21,16 +21,26 @@ export { getPersona, getPersonaById, getCategoryFeedback, PERSONAS } from './per
 export { generateOpportunities, getOpportunityForCategory, getTopActionMessage } from './opportunities';
 
 /**
- * Determine scoring mode based on user's monetization interest
+ * Determine scoring mode based on user's profile and monetization interest
  */
 export function determineScoringMode(survey: SurveyResponses): ScorecardMode {
-  // If user explicitly says they're not interested in monetization, use impact mode
+  // Personal mode: purely casual users or those sharing only with friends/family
+  // These users are here for themselves, not an audience
+  if (
+    survey.creator_type === 'purely_casual' ||
+    survey.audience_size === 'friends_family'
+  ) {
+    return 'personal';
+  }
+
+  // Impact mode: interested in helping audience but not monetization
   if (
     survey.affiliate_status === 'not_interested' ||
     survey.revenue_goals === 'not_priority'
   ) {
     return 'impact';
   }
+
   return 'monetization';
 }
 
@@ -43,11 +53,13 @@ export function calculateOrganizationScore(survey: SurveyResponses): number {
 
   // Creator type (up to 30 points)
   // Professional creators tend to need better organization
+  // Casual users still benefit from organization, give them reasonable score
   const creatorTypeScores: Record<string, number> = {
     professional_creator: 30,
     brand_ambassador: 25,
     serious_hobbyist: 20,
     building_audience: 15,
+    purely_casual: 20, // Personal organization is valuable too
   };
   score += creatorTypeScores[survey.creator_type || ''] || 10;
 
@@ -79,18 +91,20 @@ export function calculateOrganizationScore(survey: SurveyResponses): number {
 
 /**
  * Calculate Sharing score (0-100)
- * Based on: audience_size, primary_platform, biggest_frustration
+ * Based on: audience_size, primary_platform, biggest_frustrations
  */
 export function calculateSharingScore(survey: SurveyResponses): number {
   let score = 0;
 
   // Audience size (up to 45 points)
   // Larger audience = more sharing experience
+  // Friends & family still share, just differently
   const audienceScores: Record<string, number> = {
     '50k_plus': 45,
     '10k_50k': 38,
     '1k_10k': 28,
     under_1k: 18,
+    friends_family: 15, // Still sharing, just with close circle
   };
   score += audienceScores[survey.audience_size || ''] || 15;
 
@@ -107,6 +121,7 @@ export function calculateSharingScore(survey: SurveyResponses): number {
   score += platformScores[survey.primary_platform || ''] || 15;
 
   // Frustration signals sharing awareness (up to 20 points)
+  // Now handles both array (new) and single string (legacy)
   const frustrationScores: Record<string, number> = {
     repeated_questions: 20, // Lots of audience engagement
     time_consuming: 15, // Actively sharing
@@ -114,7 +129,12 @@ export function calculateSharingScore(survey: SurveyResponses): number {
     affiliate_complexity: 10,
     no_analytics: 8,
   };
-  score += frustrationScores[survey.biggest_frustration || ''] || 5;
+
+  // Get frustrations from array or legacy single field
+  const frustrations = survey.biggest_frustrations || (survey.biggest_frustration ? [survey.biggest_frustration] : []);
+  // Use highest scoring frustration
+  const frustrationScore = Math.max(...frustrations.map(f => frustrationScores[f] || 0), 0);
+  score += frustrationScore || 5;
 
   return Math.min(Math.round(score), 100);
 }
@@ -169,6 +189,7 @@ export function calculateImpactScore(survey: SurveyResponses): number {
     '10k_50k': 38,
     '1k_10k': 30,
     under_1k: 22,
+    friends_family: 18, // Still can impact friends' buying decisions
   };
   score += audienceScores[survey.audience_size || ''] || 20;
 
@@ -196,8 +217,46 @@ export function calculateImpactScore(survey: SurveyResponses): number {
 }
 
 /**
+ * Calculate Personal score (0-100)
+ * Based on: documentation_habits, usage_intent, current_tools
+ * Used when mode = 'personal' (casual users focused on self-organization)
+ */
+export function calculatePersonalScore(survey: SurveyResponses): number {
+  let score = 0;
+
+  // Documentation habits (up to 50 points) - key signal for personal organization
+  const habitsScores: Record<string, number> = {
+    detailed_notes: 50,
+    basic_tracking: 38,
+    scattered_info: 25, // Wants to be organized but isn't yet - opportunity
+    nothing_organized: 15,
+  };
+  score += habitsScores[survey.documentation_habits || ''] || 20;
+
+  // Usage intent (up to 30 points)
+  const intentScores: Record<string, number> = {
+    immediately: 30,
+    this_week: 24,
+    explore_first: 18,
+    not_sure: 12,
+  };
+  score += intentScores[survey.usage_intent || ''] || 12;
+
+  // Tool awareness (up to 20 points)
+  const tools = survey.current_tools || [];
+  const personalTools = ['notion', 'nothing']; // Notion users want organization, "nothing" users need it
+  if (tools.some(t => personalTools.includes(t))) {
+    score += 20;
+  } else if (tools.length > 0) {
+    score += 10;
+  }
+
+  return Math.min(Math.round(score), 100);
+}
+
+/**
  * Calculate Documentation score (0-100)
- * Based on: documentation_habits, primary_niche, biggest_frustration
+ * Based on: documentation_habits, primary_niche, biggest_frustrations
  */
 export function calculateDocumentationScore(survey: SurveyResponses): number {
   let score = 0;
@@ -223,6 +282,7 @@ export function calculateDocumentationScore(survey: SurveyResponses): number {
   }
 
   // Frustration signals documentation awareness (up to 25 points)
+  // Now handles both array (new) and single string (legacy)
   const frustrationScores: Record<string, number> = {
     time_consuming: 25, // Wants to document but it's slow
     repeated_questions: 22, // Has knowledge worth documenting
@@ -230,7 +290,12 @@ export function calculateDocumentationScore(survey: SurveyResponses): number {
     looks_bad: 15,
     affiliate_complexity: 12,
   };
-  score += frustrationScores[survey.biggest_frustration || ''] || 10;
+
+  // Get frustrations from array or legacy single field
+  const frustrations = survey.biggest_frustrations || (survey.biggest_frustration ? [survey.biggest_frustration] : []);
+  // Use highest scoring frustration
+  const frustrationScore = Math.max(...frustrations.map(f => frustrationScores[f] || 0), 0);
+  score += frustrationScore || 10;
 
   return Math.min(Math.round(score), 100);
 }
@@ -259,7 +324,18 @@ export function calculateScorecardResult(survey: SurveyResponses): ScorecardResu
     overallScore = Math.round(
       organization * 0.3 + sharing * 0.25 + monetization * 0.25 + documentation * 0.2
     );
+  } else if (mode === 'personal') {
+    const personal = calculatePersonalScore(survey);
+    // For personal mode, use 'impact' slot in categoryScores but label it differently in UI
+    categoryScores = { organization, sharing, impact: personal, documentation };
+
+    // Weighted average: Organization 40%, Documentation 30%, Personal 20%, Sharing 10%
+    // Organization and documentation are most important for personal users
+    overallScore = Math.round(
+      organization * 0.4 + documentation * 0.3 + personal * 0.2 + sharing * 0.1
+    );
   } else {
+    // impact mode
     const impact = calculateImpactScore(survey);
     categoryScores = { organization, sharing, impact, documentation };
 
@@ -269,8 +345,8 @@ export function calculateScorecardResult(survey: SurveyResponses): ScorecardResu
     );
   }
 
-  // Get persona based on score
-  const persona = getPersona(overallScore);
+  // Get persona based on score and mode
+  const persona = getPersona(overallScore, mode);
 
   // Generate top opportunities based on weakest categories
   const topOpportunities = generateOpportunities(categoryScores, mode);

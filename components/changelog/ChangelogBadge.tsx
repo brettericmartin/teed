@@ -62,43 +62,22 @@ export default function ChangelogBadge({ bag, size = 'sm', showTooltip = true }:
   );
 }
 
-// Simple variant for lists that just shows "Updated" badge without date
+/**
+ * DOCTRINE: Removed time-based "Updated" badges.
+ * Time-relative badges ("3 days ago", "Yesterday") create implicit freshness pressure
+ * and suggest that curations become stale over time.
+ *
+ * This component is deprecated and returns null.
+ * Use achievement-based badges instead (e.g., "Evolved 5x", "3-Year Curation").
+ *
+ * @deprecated Time-based update badges removed per doctrine compliance
+ */
 interface SimpleUpdateBadgeProps {
   lastUpdate: string | null;
   size?: 'sm' | 'md';
 }
 
 export function SimpleUpdateBadge({ lastUpdate, size = 'sm' }: SimpleUpdateBadgeProps) {
-  if (!lastUpdate) return null;
-
-  const daysSinceUpdate = Math.floor(
-    (new Date().getTime() - new Date(lastUpdate).getTime()) / (1000 * 60 * 60 * 24)
-  );
-
-  // Only show badge for updates within the last 30 days
-  if (daysSinceUpdate > 30) return null;
-
-  const sizeClasses = size === 'sm'
-    ? 'text-xs px-1.5 py-0.5'
-    : 'text-sm px-2 py-0.5';
-
-  const label = daysSinceUpdate === 0
-    ? 'Today'
-    : daysSinceUpdate === 1
-      ? 'Yesterday'
-      : daysSinceUpdate <= 7
-        ? `${daysSinceUpdate}d ago`
-        : `${Math.floor(daysSinceUpdate / 7)}w ago`;
-
-  return (
-    <span
-      className={`
-        inline-flex items-center rounded font-medium
-        bg-[var(--sky-3)] text-[var(--sky-11)] border border-[var(--sky-6)]
-        ${sizeClasses}
-      `}
-    >
-      {label}
-    </span>
-  );
+  // DOCTRINE: Removed - time-based badges create freshness pressure
+  return null;
 }

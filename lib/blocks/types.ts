@@ -11,7 +11,8 @@ export type BlockType =
   | 'spacer'
   | 'divider'
   | 'quote'
-  | 'affiliate_disclosure';
+  | 'affiliate_disclosure'
+  | 'story';
 
 // Embed platforms supported by Link Intelligence library
 export type EmbedPlatform =
@@ -66,6 +67,7 @@ export const DEFAULT_BLOCK_GRID: Record<BlockType, { w: number; h: number; minH?
   divider: { w: 12, h: 1, minH: 1, maxH: 1 },
   quote: { w: 12, h: 2, minH: 1, maxH: 4 },
   affiliate_disclosure: { w: 12, h: 1, minH: 1, maxH: 2 },
+  story: { w: 12, h: 4, minH: 2, maxH: 10 },
 };
 
 // Base block interface
@@ -102,7 +104,8 @@ export type BlockConfig =
   | SpacerBlockConfig
   | DividerBlockConfig
   | QuoteBlockConfig
-  | AffiliateDisclosureBlockConfig;
+  | AffiliateDisclosureBlockConfig
+  | StoryBlockConfig;
 
 export interface HeaderBlockConfig {
   show_avatar?: boolean;
@@ -208,6 +211,23 @@ export interface AffiliateDisclosureBlockConfig {
   disclosureType: 'amazon' | 'general' | 'custom';
   customText?: string;
   style?: 'minimal' | 'notice' | 'card';
+}
+
+/**
+ * Story Block - "The Story" timeline feature
+ * DOCTRINE: Narrative framing, positions changes as curator's journey.
+ * Uses month/year timestamps only (no "days ago" freshness pressure).
+ * Neutral colors for removals (no red/urgent).
+ */
+export interface StoryBlockConfig {
+  title?: string; // Custom section title (default: "The Story")
+  showTitle?: boolean; // Show/hide section title (default: true)
+  maxItems?: number; // Max timeline entries to show (default: 5)
+  showFiltersBar?: boolean; // Show filter chips (default: true)
+  groupByTimePeriod?: boolean; // Group entries by time period (default: true)
+  defaultFilters?: string[]; // Which filters are active by default (all if empty)
+  showProfileChanges?: boolean; // Include profile/dashboard changes (default: true)
+  showBagChanges?: boolean; // Include bag-related changes (default: true)
 }
 
 // Theme types

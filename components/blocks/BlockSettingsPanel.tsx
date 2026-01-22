@@ -4,9 +4,9 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   X, User, FileText, Link, Video, Package, Type, Minus, MoreHorizontal,
   RectangleHorizontal, Square, Plus, Trash2, Edit2, Check, ExternalLink,
-  Instagram, Twitter, Youtube, Globe, Music, Quote, Info
+  Instagram, Twitter, Youtube, Globe, Music, Quote, Info, BookOpen
 } from 'lucide-react';
-import { ProfileBlock, BlockType, BlockConfig, BlockWidth, HeaderBlockConfig, BioBlockConfig, CustomTextBlockConfig, FeaturedBagsBlockConfig, SocialLinksBlockConfig, SpacerBlockConfig, DividerBlockConfig, EmbedBlockConfig, DEFAULT_BLOCK_GRID } from '@/lib/blocks/types';
+import { ProfileBlock, BlockType, BlockConfig, BlockWidth, HeaderBlockConfig, BioBlockConfig, CustomTextBlockConfig, FeaturedBagsBlockConfig, SocialLinksBlockConfig, SpacerBlockConfig, DividerBlockConfig, EmbedBlockConfig, StoryBlockConfig, DEFAULT_BLOCK_GRID } from '@/lib/blocks/types';
 import { useEditMode } from '@/app/u/[handle]/components/EditModeProvider';
 
 // Social platform definitions
@@ -65,6 +65,7 @@ const BLOCK_TYPE_INFO: Record<BlockType, { label: string; icon: typeof User }> =
   destinations: { label: 'Destinations', icon: MoreHorizontal },
   quote: { label: 'Quote', icon: Quote },
   affiliate_disclosure: { label: 'Disclosure', icon: Info },
+  story: { label: 'The Story', icon: BookOpen },
 };
 
 // Size options per block type
@@ -108,6 +109,7 @@ const SUPPORTS_HALF_WIDTH: BlockType[] = [
   'divider',
   'embed',
   'featured_bags',
+  'story',
 ];
 
 export default function BlockSettingsPanel({
@@ -228,6 +230,8 @@ export default function BlockSettingsPanel({
         return renderDividerSettings();
       case 'embed':
         return renderEmbedSettings();
+      case 'story':
+        return renderStorySettings();
       default:
         return <p className="text-[var(--text-tertiary)] text-sm">No settings available for this block type.</p>;
     }
@@ -990,6 +994,110 @@ export default function BlockSettingsPanel({
             rows={3}
             className="w-full px-3 py-2 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--teed-green-7)] resize-none"
           />
+        </div>
+      </>
+    );
+  };
+
+  const renderStorySettings = () => {
+    const storyConfig = config as StoryBlockConfig;
+    return (
+      <>
+        {/* Section Title Settings */}
+        <div>
+          <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
+            Section Title
+          </label>
+          <input
+            type="text"
+            value={storyConfig.title ?? 'The Story'}
+            onChange={(e) => updateConfig('title', e.target.value)}
+            placeholder="The Story"
+            className="w-full px-3 py-2 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--teed-green-7)]"
+          />
+        </div>
+
+        <div className="border-t border-[var(--border-subtle)] pt-4">
+          <ToggleOption
+            label="Show Section Title"
+            description="Display the section header above this block"
+            checked={storyConfig.showTitle !== false}
+            onChange={(v) => updateConfig('showTitle', v)}
+          />
+        </div>
+
+        {/* Max Items */}
+        <div className="border-t border-[var(--border-subtle)] pt-4">
+          <label className="block text-sm font-medium text-[var(--text-secondary)] mb-3">
+            Maximum Events to Show
+          </label>
+          <div className="grid grid-cols-4 gap-2">
+            {[3, 5, 10, 15].map((count) => (
+              <button
+                key={count}
+                onClick={() => updateConfig('maxItems', count)}
+                className={`py-2 px-2 rounded-lg text-sm font-medium transition-colors ${
+                  storyConfig.maxItems === count || (!storyConfig.maxItems && count === 5)
+                    ? 'bg-[var(--teed-green-9)] text-white'
+                    : 'bg-[var(--surface-elevated)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)]'
+                }`}
+              >
+                {count}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Display Options */}
+        <div className="border-t border-[var(--border-subtle)] pt-4">
+          <label className="block text-sm font-medium text-[var(--text-secondary)] mb-3">
+            Display Options
+          </label>
+          <div className="space-y-3">
+            <ToggleOption
+              label="Show Filter Bar"
+              description="Let viewers filter by action type (Added, Retired, etc.)"
+              checked={storyConfig.showFiltersBar !== false}
+              onChange={(v) => updateConfig('showFiltersBar', v)}
+            />
+            <ToggleOption
+              label="Group by Time Period"
+              description="Organize events into This Week, This Month, Earlier"
+              checked={storyConfig.groupByTimePeriod !== false}
+              onChange={(v) => updateConfig('groupByTimePeriod', v)}
+            />
+          </div>
+        </div>
+
+        {/* Content Sources */}
+        <div className="border-t border-[var(--border-subtle)] pt-4">
+          <label className="block text-sm font-medium text-[var(--text-secondary)] mb-3">
+            Content Sources
+          </label>
+          <div className="space-y-3">
+            <ToggleOption
+              label="Profile Changes"
+              description="Include bio, social links, theme changes"
+              checked={storyConfig.showProfileChanges !== false}
+              onChange={(v) => updateConfig('showProfileChanges', v)}
+            />
+            <ToggleOption
+              label="Bag Changes"
+              description="Include items added/retired from bags"
+              checked={storyConfig.showBagChanges !== false}
+              onChange={(v) => updateConfig('showBagChanges', v)}
+            />
+          </div>
+        </div>
+
+        {/* Info about visibility controls */}
+        <div className="border-t border-[var(--border-subtle)] pt-4">
+          <div className="p-3 rounded-lg bg-[var(--surface-elevated)] border border-[var(--border-subtle)]">
+            <p className="text-sm text-[var(--text-secondary)]">
+              <span className="font-medium">Tip:</span> Hover over individual events to show/hide them from viewers.
+              You can also manage default visibility in <strong>Settings → Story Preferences</strong>.
+            </p>
+          </div>
         </div>
       </>
     );

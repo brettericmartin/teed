@@ -30,7 +30,7 @@ interface FormData {
   current_tools: string[];
 
   // Step 3: Your Needs (4 questions)
-  biggest_frustration: string;
+  biggest_frustrations: string[];  // Changed to array for multi-select
   documentation_habits: string;
   magic_wand_feature: string;
   usage_intent: string;
@@ -48,6 +48,7 @@ const CREATOR_TYPES = [
   { id: 'serious_hobbyist', label: 'Serious Hobbyist', icon: '🎯', description: 'I create content consistently as a passion' },
   { id: 'brand_ambassador', label: 'Brand Ambassador', icon: '🤝', description: 'I work with brands and do sponsorships' },
   { id: 'building_audience', label: 'Building My Audience', icon: '📈', description: 'Actively growing, not yet established' },
+  { id: 'purely_casual', label: 'Purely Casual', icon: '🏡', description: 'I just share what I love with friends' },
 ];
 
 const NICHES = [
@@ -61,6 +62,7 @@ const NICHES = [
 ];
 
 const AUDIENCE_SIZES = [
+  { id: 'friends_family', label: 'Just Friends & Family', description: 'Sharing with people I know' },
   { id: 'under_1k', label: 'Under 1,000', description: 'Just getting started' },
   { id: '1k_10k', label: '1,000 - 10,000', description: 'Growing steadily' },
   { id: '10k_50k', label: '10,000 - 50,000', description: 'Established creator' },
@@ -145,7 +147,7 @@ export default function ApplyForm() {
     affiliate_status: '',
     revenue_goals: '',
     current_tools: [],
-    biggest_frustration: '',
+    biggest_frustrations: [],  // Changed to array for multi-select
     documentation_habits: '',
     magic_wand_feature: '',
     usage_intent: '',
@@ -167,7 +169,7 @@ export default function ApplyForm() {
     setError(null);
   };
 
-  const toggleArrayField = (field: 'current_tools', value: string) => {
+  const toggleArrayField = (field: 'current_tools' | 'biggest_frustrations', value: string) => {
     setFormData(prev => {
       const current = prev[field] as string[];
       if (current.includes(value)) {
@@ -193,7 +195,7 @@ export default function ApplyForm() {
       case 3:
         return formData.affiliate_status && formData.revenue_goals && formData.current_tools.length > 0;
       case 4:
-        return formData.biggest_frustration && formData.documentation_habits && formData.usage_intent;
+        return formData.biggest_frustrations.length > 0 && formData.documentation_habits && formData.usage_intent;
       default:
         return false;
     }
@@ -227,7 +229,7 @@ export default function ApplyForm() {
         affiliate_status: formData.affiliate_status as SurveyResponses['affiliate_status'],
         revenue_goals: formData.revenue_goals as SurveyResponses['revenue_goals'],
         current_tools: formData.current_tools,
-        biggest_frustration: formData.biggest_frustration as SurveyResponses['biggest_frustration'],
+        biggest_frustrations: formData.biggest_frustrations,  // Now an array
         documentation_habits: formData.documentation_habits as SurveyResponses['documentation_habits'],
         magic_wand_feature: formData.magic_wand_feature,
         usage_intent: formData.usage_intent as SurveyResponses['usage_intent'],
@@ -270,7 +272,7 @@ export default function ApplyForm() {
           follower_range: formData.audience_size,
           social_platform: formData.primary_platform,
           monetization_interest: formData.affiliate_status === 'actively' || formData.affiliate_status === 'sometimes',
-          biggest_challenge: formData.biggest_frustration,
+          biggest_challenge: formData.biggest_frustrations[0] || null,  // First frustration for backward compat
           survey_responses: surveyResponses,
           referred_by_code: isInviteCode ? refValue : null, // Only set if it's an invite code (TEED-xxx)
           referred_by_application_id: referrerAppId, // Set if we resolved an application ID
@@ -563,25 +565,26 @@ export default function ApplyForm() {
               <p className="text-sm text-[var(--text-secondary)] mt-1">Help us understand what you need</p>
             </div>
 
-            {/* Q8: Biggest Frustration */}
+            {/* Q8: Biggest Frustrations (multi-select) */}
             <div>
               <label className="block text-sm font-medium text-[var(--text-primary)] mb-3">
-                Biggest frustration with sharing product recommendations?
+                What frustrates you about sharing product recommendations? <span className="text-[var(--text-tertiary)]">(select all that apply)</span>
               </label>
-              <div className="grid gap-3">
+              <div className="flex flex-wrap gap-2">
                 {FRUSTRATIONS.map((frustration) => (
                   <button
                     key={frustration.id}
                     type="button"
-                    onClick={() => updateField('biggest_frustration', frustration.id)}
-                    className={`p-4 rounded-xl border-2 text-left transition-all ${
-                      formData.biggest_frustration === frustration.id
-                        ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
-                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300'
+                    onClick={() => toggleArrayField('biggest_frustrations', frustration.id)}
+                    className={`px-4 py-2 rounded-full border-2 text-sm transition-all ${
+                      formData.biggest_frustrations.includes(frustration.id)
+                        ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-9)] text-white'
+                        : 'border-gray-200 dark:border-zinc-700 text-[var(--text-primary)] hover:border-gray-300'
                     }`}
+                    title={frustration.description}
                   >
-                    <p className="font-medium text-[var(--text-primary)]">{frustration.label}</p>
-                    <p className="text-sm text-[var(--text-secondary)]">{frustration.description}</p>
+                    {formData.biggest_frustrations.includes(frustration.id) && <Check className="w-3 h-3 inline mr-1" />}
+                    {frustration.label}
                   </button>
                 ))}
               </div>

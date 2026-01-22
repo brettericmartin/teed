@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Share2, ExternalLink, User, X, Package } from 'lucide-react';
+import { Share2, ExternalLink, User, X, Package, BookOpen } from 'lucide-react';
+import StoryTimeline from '@/components/story/StoryTimeline';
 
 interface ItemLink {
   id: string;
@@ -36,6 +37,7 @@ interface PublicBagViewProps {
   items: Item[];
   ownerHandle: string;
   ownerName: string;
+  isOwner?: boolean;
 }
 
 export default function PublicBagView({
@@ -43,6 +45,7 @@ export default function PublicBagView({
   items,
   ownerHandle,
   ownerName,
+  isOwner = false,
 }: PublicBagViewProps) {
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 
@@ -256,8 +259,25 @@ export default function PublicBagView({
         </div>
       )}
 
+      {/* The Story Section */}
+      <div className="max-w-5xl mx-auto px-4 py-8 mt-8 border-t border-[var(--border-subtle)]">
+        <div className="flex items-center gap-2 mb-6">
+          <BookOpen className="w-5 h-5 text-[var(--text-secondary)]" />
+          <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+            The Story
+          </h3>
+        </div>
+        <StoryTimeline
+          bagCode={bag.code}
+          maxItems={5}
+          showFilters={true}
+          groupByTimePeriod={true}
+          isOwner={isOwner}
+        />
+      </div>
+
       {/* Footer */}
-      <div className="max-w-5xl mx-auto px-4 py-12 mt-16 border-t border-[var(--border-subtle)]">
+      <div className="max-w-5xl mx-auto px-4 py-12 mt-8 border-t border-[var(--border-subtle)]">
         <div className="text-center">
           <p className="text-[var(--text-secondary)] mb-2">Created with</p>
           <h2 className="text-[var(--font-size-8)] font-semibold text-[var(--text-primary)]">

@@ -57,10 +57,10 @@ export type ApplicationStatus = 'pending' | 'approved' | 'waitlisted' | 'rejecte
 
 export interface SurveyResponses {
   // Creator Profile (4 questions)
-  creator_type?: 'professional_creator' | 'serious_hobbyist' | 'brand_ambassador' | 'building_audience';
+  creator_type?: 'professional_creator' | 'serious_hobbyist' | 'brand_ambassador' | 'building_audience' | 'purely_casual';
   primary_niche?: 'golf' | 'tech_gadgets' | 'fashion' | 'outdoor_adventure' | 'home_office' | 'fitness' | 'other';
   primary_niche_other?: string;
-  audience_size?: 'under_1k' | '1k_10k' | '10k_50k' | '50k_plus';
+  audience_size?: 'friends_family' | 'under_1k' | '1k_10k' | '10k_50k' | '50k_plus';
   primary_platform?: 'instagram' | 'tiktok' | 'youtube' | 'twitter' | 'blog' | 'other';
 
   // Monetization Intent (3 questions)
@@ -68,8 +68,9 @@ export interface SurveyResponses {
   revenue_goals?: 'side_income' | 'meaningful_income' | 'significant_income' | 'not_priority';
   current_tools?: string[]; // ['linktree', 'amazon_storefront', 'ltk', 'notion', 'instagram_guides', 'nothing', 'other']
 
-  // Pain Points (3 questions)
-  biggest_frustration?: 'time_consuming' | 'looks_bad' | 'no_analytics' | 'affiliate_complexity' | 'repeated_questions';
+  // Pain Points (3 questions) - biggest_frustrations is now an array for multi-select
+  biggest_frustrations?: string[];  // ['time_consuming', 'looks_bad', 'no_analytics', 'affiliate_complexity', 'repeated_questions']
+  biggest_frustration?: string;  // Legacy single field for backward compatibility
   magic_wand_feature?: string;
   usage_intent?: 'immediately' | 'this_week' | 'explore_first' | 'not_sure';
 
@@ -378,14 +379,15 @@ export interface SuccessPageData {
 // Scorecard Types
 // ============================================================================
 
-export type ScorecardMode = 'monetization' | 'impact';
+export type ScorecardMode = 'monetization' | 'impact' | 'personal';
 
 export type ScorecardPersonaId =
   | 'gear_architect'
   | 'organized_creator'
   | 'aspiring_organizer'
   | 'emerging_curator'
-  | 'fresh_start';
+  | 'fresh_start'
+  | 'personal_organizer';
 
 export interface ScorecardPersona {
   id: ScorecardPersonaId;

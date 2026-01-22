@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
+import { checkCollectionBadges } from '@/lib/badges';
 
 /**
  * POST /api/bags
@@ -118,6 +119,19 @@ export async function POST(request: NextRequest) {
         { error: 'Failed to create bag' },
         { status: 500 }
       );
+    }
+
+    // Check and award collection badges (non-blocking)
+    const { count: bagCount } = await supabase
+      .from('bags')
+      .select('*', { count: 'exact', head: true })
+      .eq('owner_id', user.id);
+
+    if (bagCount) {
+      // Fire and forget - don't block the response
+      checkCollectionBadges(user.id, bagCount).catch((err) => {
+        console.error('[Badges] Error checking collection badges:', err);
+      });
     }
 
     return NextResponse.json(bag, { status: 201 });

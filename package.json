@@ -16,7 +16,11 @@
     "test:webkit": "playwright test --project=webkit",
     "test:mobile": "playwright test --project='Mobile Chrome' --project='Mobile Safari'",
     "test:report": "playwright show-report",
-    "test:codegen": "playwright codegen http://localhost:3000"
+    "test:codegen": "playwright codegen http://localhost:3000",
+    "sync-domains": "npx tsx scripts/sync-domains.ts",
+    "sync-domains:generate": "npx tsx scripts/sync-domains.ts generate",
+    "sync-domains:mark-added": "npx tsx scripts/sync-domains.ts mark-added",
+    "sync-domains:status": "npx tsx scripts/sync-domains.ts status"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.0",
@@ -55,6 +59,7 @@
     "@tailwindcss/postcss": "^4",
     "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^20",
+    "@types/pg": "^8.16.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

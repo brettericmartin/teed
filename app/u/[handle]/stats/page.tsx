@@ -1,13 +1,19 @@
 import { redirect } from 'next/navigation';
 import { createServerSupabase } from '@/lib/serverSupabase';
-import CreatorStatsClient from './CreatorStatsClient';
+import { getCreatorStats } from '@/lib/stats/creatorStats';
+import { getUserBadges, checkImpactBadges } from '@/lib/badges';
+import StatsPageClient from './StatsPageClient';
 
 type PageProps = {
   params: Promise<{ handle: string }>;
+  searchParams: Promise<{ days?: string }>;
 };
 
-export default async function CreatorStatsPage({ params }: PageProps) {
+export default async function CreatorStatsPage({ params, searchParams }: PageProps) {
   const { handle } = await params;
+  const { days: daysParam } = await searchParams;
+  const days = parseInt(daysParam || '30');
+
   const supabase = await createServerSupabase();
 
   // Check authentication
@@ -30,9 +36,33 @@ export default async function CreatorStatsPage({ params }: PageProps) {
 
   // Verify this is the authenticated user's profile
   if (profile.id !== user.id) {
-    // Can't view other people's stats
     redirect(`/u/${handle}`);
   }
 
-  return <CreatorStatsClient profile={profile} />;
+  // Fetch stats server-side
+  const stats = await getCreatorStats(supabase, user.id, days);
+
+  // Fetch user's earned badges
+  const badges = await getUserBadges(user.id);
+
+  // Check and award any impact badges based on current stats (non-blocking)
+  if (stats) {
+    checkImpactBadges(user.id, {
+      peopleReached: stats.impact.peopleReached,
+      countriesReached: stats.geography.countriesReached,
+      saves: stats.impact.curationsBookmarked,
+      clones: stats.impact.curationsInspired,
+    }).catch((err) => {
+      console.error('[Badges] Error checking impact badges:', err);
+    });
+  }
+
+  return (
+    <StatsPageClient
+      profile={profile}
+      stats={stats}
+      selectedDays={days}
+      badges={badges}
+    />
+  );
 }

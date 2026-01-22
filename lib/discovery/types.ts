@@ -143,6 +143,16 @@ export interface GapAnalysisReport {
 
 export type DiscoveryRunStatus = 'running' | 'completed' | 'failed';
 
+export type DiscoveryPhase =
+  | 'starting'
+  | 'searching'
+  | 'extracting'
+  | 'enriching'
+  | 'creating_bags'
+  | 'gap_analysis'
+  | 'completed'
+  | 'failed';
+
 export interface DiscoveryRun {
   id: string;
   category: DiscoveryCategory;
@@ -156,6 +166,10 @@ export interface DiscoveryRun {
   completedAt?: Date;
   errorMessage?: string;
   config: DiscoveryRunConfig;
+  // Progress tracking
+  currentPhase?: DiscoveryPhase;
+  phaseProgress?: number; // 0-100
+  lastProgressUpdate?: Date;
 }
 
 export interface DiscoveryRunConfig {
@@ -248,6 +262,10 @@ export interface DbDiscoveryRun {
   completed_at: string | null;
   error_message: string | null;
   run_config: DiscoveryRunConfig;
+  // Progress tracking
+  current_phase: DiscoveryPhase | null;
+  phase_progress: number | null;
+  last_progress_update: string | null;
 }
 
 export interface DbLibraryGap {

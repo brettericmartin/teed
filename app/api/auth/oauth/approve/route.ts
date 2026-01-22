@@ -1,54 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import crypto from 'crypto';
 import { createServerClient } from '@supabase/ssr';
-
-// Use a secret key for encrypting auth codes
-// In production, this should be an environment variable
-const AUTH_CODE_SECRET = process.env.AUTH_CODE_SECRET || crypto.randomBytes(32).toString('hex');
-
-/**
- * Encrypt data into an auth code
- */
-function encryptAuthCode(data: object): string {
-  const iv = crypto.randomBytes(16);
-  const key = crypto.scryptSync(AUTH_CODE_SECRET, 'salt', 32);
-  const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
-
-  const jsonData = JSON.stringify(data);
-  let encrypted = cipher.update(jsonData, 'utf8', 'base64');
-  encrypted += cipher.final('base64');
-
-  const authTag = cipher.getAuthTag();
-
-  // Combine IV + authTag + encrypted data
-  const combined = Buffer.concat([iv, authTag, Buffer.from(encrypted, 'base64')]);
-  return combined.toString('base64url');
-}
-
-/**
- * Decrypt auth code to get data
- */
-export function decryptAuthCode(authCode: string): object | null {
-  try {
-    const combined = Buffer.from(authCode, 'base64url');
-    const iv = combined.subarray(0, 16);
-    const authTag = combined.subarray(16, 32);
-    const encrypted = combined.subarray(32);
-
-    const key = crypto.scryptSync(AUTH_CODE_SECRET, 'salt', 32);
-    const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
-    decipher.setAuthTag(authTag);
-
-    let decrypted = decipher.update(encrypted.toString('base64'), 'base64', 'utf8');
-    decrypted += decipher.final('utf8');
-
-    return JSON.parse(decrypted);
-  } catch (err) {
-    console.error('Failed to decrypt auth code:', err);
-    return null;
-  }
-}
+import { encryptAuthCode, isSecretConfigured, type AuthCodeData } from '@/lib/oauthCrypto';
 
 /**
  * POST /api/auth/oauth/approve
@@ -56,6 +9,15 @@ export function decryptAuthCode(authCode: string): object | null {
  * Generates an auth code and returns the redirect URL
  */
 export async function POST(request: NextRequest) {
+  // Check if OAuth secret is configured
+  if (!isSecretConfigured()) {
+    console.error('[OAuth] AUTH_CODE_SECRET not configured - OAuth will fail');
+    return NextResponse.json(
+      { error: 'OAuth not properly configured. Contact support.' },
+      { status: 500 }
+    );
+  }
+
   const cookieStore = await cookies();
 
   // Get the OAuth request from the cookie

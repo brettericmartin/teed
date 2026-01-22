@@ -82,9 +82,12 @@ export async function PATCH(request: Request) {
     }
 
     const body = await request.json();
-    const { id, status, notes } = body;
+    const { id, ids, status, notes } = body;
 
-    if (!id || !status) {
+    // Support both single id and bulk ids array
+    const targetIds = ids || (id ? [id] : []);
+
+    if (targetIds.length === 0 || !status) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -104,19 +107,23 @@ export async function PATCH(request: Request) {
       updateData.added_to_database_at = new Date().toISOString();
     }
 
+    // Use .in() for bulk updates
     const { data, error } = await supabase
       .from('unrecognized_domains')
       .update(updateData)
-      .eq('id', id)
-      .select()
-      .single();
+      .in('id', targetIds)
+      .select();
 
     if (error) {
-      console.error('Error updating domain:', error);
+      console.error('Error updating domain(s):', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ domain: data });
+    // Return appropriate response for single vs bulk
+    if (ids) {
+      return NextResponse.json({ domains: data, count: data?.length || 0 });
+    }
+    return NextResponse.json({ domain: data?.[0] });
   } catch (error) {
     console.error('Update domain error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

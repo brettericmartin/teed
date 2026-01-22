@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, X, Link2, Camera, Package, LayoutGrid, Command } from 'lucide-react';
+import { Plus, X, Link2, Camera, Package, LayoutGrid, Command, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useEditMode } from '@/app/u/[handle]/components/EditModeProvider';
 
@@ -34,16 +34,33 @@ export function FloatingActionHub({
   onOpenLinkAdder,
 }: FloatingActionHubProps) {
   const router = useRouter();
-  const { isOwner } = useEditMode();
+  const { isOwner, isEditMode } = useEditMode();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showHint, setShowHint] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
+
+  // Show hint when entering edit mode for the first time
+  useEffect(() => {
+    if (isEditMode && !hasInteracted) {
+      const timer = setTimeout(() => setShowHint(true), 1000);
+      const hideTimer = setTimeout(() => setShowHint(false), 6000);
+      return () => {
+        clearTimeout(timer);
+        clearTimeout(hideTimer);
+      };
+    }
+  }, [isEditMode, hasInteracted]);
 
   const handleToggle = useCallback(() => {
     setIsExpanded(prev => !prev);
+    setHasInteracted(true);
+    setShowHint(false);
   }, []);
 
   const handleAction = useCallback((action: () => void) => {
     action();
     setIsExpanded(false);
+    setHasInteracted(true);
   }, []);
 
   // Don't show for non-owners
@@ -148,7 +165,9 @@ export function FloatingActionHub({
             'focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2',
             isExpanded
               ? 'bg-gray-800 hover:bg-gray-900 rotate-45'
-              : 'bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)]'
+              : 'bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)]',
+            // Pulsing animation when in edit mode and not yet interacted
+            isEditMode && !hasInteracted && !isExpanded && 'animate-pulse ring-4 ring-[var(--teed-green-4)]'
           )}
         >
           {isExpanded ? (
@@ -158,8 +177,24 @@ export function FloatingActionHub({
           )}
         </button>
 
-        {/* Keyboard hint - shows on hover */}
-        {!isExpanded && (
+        {/* Onboarding hint - shows after entering edit mode */}
+        {showHint && !isExpanded && (
+          <div className={cn(
+            'absolute left-16 top-1/2 -translate-y-1/2',
+            'px-3 py-2 bg-[var(--teed-green-9)] rounded-lg shadow-lg',
+            'text-sm text-white font-medium',
+            'animate-in slide-in-from-left-2 duration-300',
+            'flex items-center gap-2 whitespace-nowrap'
+          )}>
+            <Sparkles className="w-4 h-4" />
+            <span>Tap to add blocks & links!</span>
+            {/* Arrow pointing to button */}
+            <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-0 h-0 border-t-8 border-b-8 border-r-8 border-transparent border-r-[var(--teed-green-9)]" />
+          </div>
+        )}
+
+        {/* Keyboard hint - shows on hover (when hint is not showing) */}
+        {!isExpanded && !showHint && (
           <div className={cn(
             'absolute left-16 top-1/2 -translate-y-1/2',
             'px-2 py-1 bg-gray-800 rounded text-xs text-white',

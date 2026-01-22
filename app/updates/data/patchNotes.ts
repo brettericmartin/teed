@@ -3,6 +3,7 @@ export type CategoryType = 'feature' | 'improvement' | 'bugfix';
 export interface PatchNoteChange {
   text: string;
   category: CategoryType;
+  isAdminOnly?: boolean;
 }
 
 export interface PatchNote {
@@ -48,18 +49,18 @@ export const PATCH_NOTES: PatchNote[] = [
     summary: 'Introducing automated content discovery that finds trending gear across YouTube, TikTok, and RSS feeds, then curates them into polished collections under @teed.',
     isLatest: true,
     changes: [
-      { text: 'Discovery System: AI agents research trending gear content across YouTube, TikTok, and RSS feeds', category: 'feature' },
-      { text: 'Multi-phase YouTube search finds trending videos, new releases, and content from known reliable channels', category: 'feature' },
-      { text: 'Product enrichment extracts specs, prices, and "why it\'s notable" from source content', category: 'feature' },
-      { text: 'Two-link system: every product gets a source link (where discovered) and purchase links (where to buy)', category: 'feature' },
-      { text: 'Review workflow lets admins approve, reject, or archive discovered products before publishing', category: 'feature' },
-      { text: 'Smart deduplication avoids over-repeating products while allowing trending items to resurface', category: 'feature' },
-      { text: 'Gap analysis tracks products not in our library for future catalog expansion', category: 'feature' },
+      { text: 'Discovery System: AI agents research trending gear content across YouTube, TikTok, and RSS feeds', category: 'feature', isAdminOnly: true },
+      { text: 'Multi-phase YouTube search finds trending videos, new releases, and content from known reliable channels', category: 'feature', isAdminOnly: true },
+      { text: 'Product enrichment extracts specs, prices, and "why it\'s notable" from source content', category: 'feature', isAdminOnly: true },
+      { text: 'Two-link system: every product gets a source link (where discovered) and purchase links (where to buy)', category: 'feature', isAdminOnly: true },
+      { text: 'Review workflow lets admins approve, reject, or archive discovered products before publishing', category: 'feature', isAdminOnly: true },
+      { text: 'Smart deduplication avoids over-repeating products while allowing trending items to resurface', category: 'feature', isAdminOnly: true },
+      { text: 'Gap analysis tracks products not in our library for future catalog expansion', category: 'feature', isAdminOnly: true },
       { text: 'Beta Scorecard: applicants receive personalized scorecards showing their creator potential', category: 'feature' },
       { text: 'Opportunity recommendations match applicants to platform features based on their niche', category: 'feature' },
-      { text: 'MCP Server package enables Claude Code and other AI tools to interact with teed', category: 'feature' },
-      { text: 'Strategic initiatives dashboard for tracking platform development priorities', category: 'improvement' },
-      { text: 'Enhanced YouTube API integration with channel search and configurable time windows', category: 'improvement' }
+      { text: 'MCP Server package enables Claude Code and other AI tools to interact with teed', category: 'feature', isAdminOnly: true },
+      { text: 'Strategic initiatives dashboard for tracking platform development priorities', category: 'improvement', isAdminOnly: true },
+      { text: 'Enhanced YouTube API integration with channel search and configurable time windows', category: 'improvement', isAdminOnly: true }
     ]
   },
   {

@@ -15,6 +15,7 @@ import {
   Youtube,
   Music,
   AlertCircle,
+  BookOpen,
 } from 'lucide-react';
 import { useEditMode } from './EditModeProvider';
 import { BlockType, BlockConfig, DEFAULT_BLOCK_GRID } from '@/lib/blocks/types';
@@ -122,6 +123,21 @@ const BLOCK_OPTIONS: BlockOption[] = [
     defaultConfig: {
       style: 'solid',
       width: 'half',
+    },
+  },
+  {
+    type: 'story',
+    label: 'The Story',
+    description: 'Timeline of your journey',
+    icon: <BookOpen className="w-5 h-5" />,
+    defaultConfig: {
+      title: 'The Story',
+      showTitle: true,
+      maxItems: 5,
+      showFiltersBar: true,
+      groupByTimePeriod: true,
+      showProfileChanges: true,
+      showBagChanges: true,
     },
   },
 ];

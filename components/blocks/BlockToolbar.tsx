@@ -16,6 +16,7 @@ const BLOCK_TYPE_LABELS: Record<BlockType, string> = {
   destinations: 'Links',
   quote: 'Quote',
   affiliate_disclosure: 'Disclosure',
+  story: 'The Story',
 };
 
 interface BlockToolbarProps {

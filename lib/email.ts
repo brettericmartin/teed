@@ -363,7 +363,7 @@ export async function sendScorecardResultEmail(
     personaName: string;
     personaEmoji: string;
     personaFrame: string;
-    mode: 'monetization' | 'impact';
+    mode: 'monetization' | 'impact' | 'personal';
     topOpportunity?: {
       title: string;
       description: string;
@@ -430,7 +430,7 @@ export async function sendScorecardResultEmail(
 
   <p>Hey ${data.name},</p>
 
-  <p>Based on your responses, we've created your personalized Creator Scorecard. ${data.mode === 'monetization' ? 'Your score reflects your readiness to monetize your gear recommendations.' : 'Your score reflects your potential impact in helping your audience.'}</p>
+  <p>Based on your responses, we've created your personalized Creator Scorecard. ${data.mode === 'monetization' ? 'Your score reflects your readiness to monetize your gear recommendations.' : data.mode === 'personal' ? 'We love that you\'re here for yourself. Teed is perfect for personal gear organization.' : 'Your score reflects your potential impact in helping your audience.'}</p>
 
   ${data.topOpportunity ? `
   <!-- Top Opportunity -->

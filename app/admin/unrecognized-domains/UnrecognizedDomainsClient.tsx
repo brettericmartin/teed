@@ -55,6 +55,10 @@ export default function UnrecognizedDomainsClient() {
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [copiedDomain, setCopiedDomain] = useState<string | null>(null);
   const [addingDomain, setAddingDomain] = useState<UnrecognizedDomain | null>(null);
+  // Bulk selection state
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkAdding, setBulkAdding] = useState(false);
+  const [showBulkModal, setShowBulkModal] = useState(false);
 
   const fetchDomains = useCallback(async () => {
     setLoading(true);
@@ -152,6 +156,63 @@ export default function UnrecognizedDomainsClient() {
     const tier = domain.suggested_tier || 'mid';
 
     return `'${domain.domain}': { brand: '${brand}', category: '${category}', tier: '${tier}', aliases: [], isRetailer: false },`;
+  };
+
+  // Generate code snippet for multiple domains
+  const generateBulkCodeSnippet = (domainsToAdd: UnrecognizedDomain[]) => {
+    return domainsToAdd.map(d => generateCodeSnippet(d)).join('\n');
+  };
+
+  // Get selected domains
+  const selectedDomains = domains.filter(d => selectedIds.has(d.id));
+
+  // Bulk selection helpers
+  const toggleSelection = (id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
+
+  const selectAll = () => {
+    setSelectedIds(new Set(domains.map(d => d.id)));
+  };
+
+  const deselectAll = () => {
+    setSelectedIds(new Set());
+  };
+
+  // Bulk mark as added
+  const handleBulkAdd = async () => {
+    if (selectedIds.size === 0) return;
+    setBulkAdding(true);
+    try {
+      const response = await fetch('/api/admin/unrecognized-domains', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: Array.from(selectedIds), status: 'added' }),
+      });
+
+      if (response.ok) {
+        // Remove from list if filtering by pending
+        if (statusFilter === 'pending') {
+          setDomains(prev => prev.filter(d => !selectedIds.has(d.id)));
+        } else {
+          fetchDomains();
+        }
+        setSelectedIds(new Set());
+        setShowBulkModal(false);
+      }
+    } catch (error) {
+      console.error('Error bulk updating domains:', error);
+    } finally {
+      setBulkAdding(false);
+    }
   };
 
   return (
@@ -269,6 +330,39 @@ export default function UnrecognizedDomainsClient() {
               <option value="last_seen_at">Last Seen</option>
             </select>
           </div>
+
+          {/* Bulk Actions */}
+          {statusFilter === 'pending' && domains.length > 0 && (
+            <div className="flex items-center gap-2 ml-auto">
+              {selectedIds.size > 0 ? (
+                <>
+                  <span className="text-sm text-[var(--text-secondary)]">
+                    {selectedIds.size} selected
+                  </span>
+                  <button
+                    onClick={deselectAll}
+                    className="px-3 py-1.5 text-sm text-[var(--text-secondary)] hover:bg-[var(--grey-4)] rounded-lg transition-colors"
+                  >
+                    Deselect All
+                  </button>
+                  <button
+                    onClick={() => setShowBulkModal(true)}
+                    className="flex items-center gap-1 px-3 py-1.5 text-sm bg-[var(--teed-green-9)] text-white rounded-lg hover:bg-[var(--teed-green-10)] transition-colors"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Selected ({selectedIds.size})
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={selectAll}
+                  className="px-3 py-1.5 text-sm bg-[var(--surface)] border border-[var(--border-subtle)] hover:bg-[var(--grey-4)] rounded-lg transition-colors"
+                >
+                  Select All
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -290,11 +384,24 @@ export default function UnrecognizedDomainsClient() {
             {domains.map((domain) => (
               <div
                 key={domain.id}
-                className="p-4 bg-[var(--surface)] rounded-lg border border-[var(--border-subtle)]"
+                className={`p-4 bg-[var(--surface)] rounded-lg border transition-colors ${
+                  selectedIds.has(domain.id)
+                    ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
+                    : 'border-[var(--border-subtle)]'
+                }`}
               >
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
+                      {/* Checkbox for bulk selection (pending only) */}
+                      {statusFilter === 'pending' && (
+                        <input
+                          type="checkbox"
+                          checked={selectedIds.has(domain.id)}
+                          onChange={() => toggleSelection(domain.id)}
+                          className="w-4 h-4 rounded border-[var(--border-subtle)] text-[var(--teed-green-9)] focus:ring-[var(--teed-green-9)] cursor-pointer"
+                        />
+                      )}
                       <span className="text-lg font-mono font-semibold text-[var(--text-primary)]">
                         {domain.domain}
                       </span>
@@ -546,6 +653,127 @@ export default function UnrecognizedDomainsClient() {
               >
                 <Check className="w-4 h-4" />
                 Done - Mark as Added
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Bulk Add Modal */}
+      {showBulkModal && selectedDomains.length > 0 && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-[var(--surface)] rounded-xl max-w-2xl w-full shadow-xl max-h-[90vh] flex flex-col">
+            <div className="p-6 border-b border-[var(--border-subtle)]">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-[var(--teed-green-4)] rounded-lg flex items-center justify-center">
+                  <FileCode className="w-5 h-5 text-[var(--teed-green-11)]" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold text-[var(--text-primary)]">
+                    Bulk Add to Brand Library
+                  </h2>
+                  <p className="text-sm text-[var(--text-secondary)]">
+                    {selectedDomains.length} domains selected
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 space-y-4 overflow-auto flex-1">
+              {/* Step 1 */}
+              <div className="flex gap-3">
+                <div className="w-6 h-6 rounded-full bg-[var(--sky-9)] text-white flex items-center justify-center text-sm font-medium shrink-0">
+                  1
+                </div>
+                <div className="flex-1">
+                  <p className="font-medium text-[var(--text-primary)] mb-2">
+                    Copy all code snippets:
+                  </p>
+                  <div className="relative">
+                    <pre className="p-3 bg-[var(--grey-4)] rounded-lg text-xs font-mono overflow-x-auto text-[var(--text-primary)] max-h-64 overflow-y-auto">
+                      {generateBulkCodeSnippet(selectedDomains)}
+                    </pre>
+                    <button
+                      onClick={() => {
+                        copyToClipboard(generateBulkCodeSnippet(selectedDomains));
+                      }}
+                      className="absolute top-2 right-2 p-1.5 bg-[var(--surface)] rounded hover:bg-[var(--grey-6)] transition-colors"
+                    >
+                      {copiedDomain === generateBulkCodeSnippet(selectedDomains) ? (
+                        <Check className="w-4 h-4 text-[var(--teed-green-9)]" />
+                      ) : (
+                        <Copy className="w-4 h-4 text-[var(--text-secondary)]" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Selected domains list */}
+              <div className="flex gap-3">
+                <div className="w-6 h-6 shrink-0" />
+                <div className="flex-1">
+                  <details className="text-sm">
+                    <summary className="text-[var(--text-secondary)] cursor-pointer hover:text-[var(--text-primary)]">
+                      View selected domains ({selectedDomains.length})
+                    </summary>
+                    <ul className="mt-2 space-y-1 pl-4 text-[var(--text-secondary)]">
+                      {selectedDomains.map(d => (
+                        <li key={d.id} className="font-mono text-xs">
+                          {d.domain} - {d.suggested_brand || 'Unknown'}
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                </div>
+              </div>
+
+              {/* Step 2 */}
+              <div className="flex gap-3">
+                <div className="w-6 h-6 rounded-full bg-[var(--sky-9)] text-white flex items-center justify-center text-sm font-medium shrink-0">
+                  2
+                </div>
+                <div className="flex-1">
+                  <p className="font-medium text-[var(--text-primary)]">
+                    Paste into the brand library file:
+                  </p>
+                  <code className="text-xs text-[var(--text-secondary)] bg-[var(--grey-4)] px-2 py-1 rounded mt-1 inline-block">
+                    lib/linkIdentification/domainBrands.ts
+                  </code>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div className="flex gap-3">
+                <div className="w-6 h-6 rounded-full bg-[var(--sky-9)] text-white flex items-center justify-center text-sm font-medium shrink-0">
+                  3
+                </div>
+                <div className="flex-1">
+                  <p className="font-medium text-[var(--text-primary)]">
+                    Commit and deploy the change
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-4 border-t border-[var(--border-subtle)] flex justify-end gap-3">
+              <button
+                onClick={() => setShowBulkModal(false)}
+                className="px-4 py-2 text-[var(--text-secondary)] hover:bg-[var(--grey-4)] rounded-lg transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleBulkAdd}
+                disabled={bulkAdding}
+                className="flex items-center gap-2 px-4 py-2 bg-[var(--teed-green-9)] text-white rounded-lg hover:bg-[var(--teed-green-10)] transition-colors disabled:opacity-50"
+              >
+                {bulkAdding ? (
+                  <RefreshCw className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Check className="w-4 h-4" />
+                )}
+                Mark All as Added ({selectedDomains.length})
               </button>
             </div>
           </div>

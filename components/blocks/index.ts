@@ -10,6 +10,7 @@ export { default as DividerBlock } from './DividerBlock';
 export { default as EmbedBlock } from './EmbedBlock';
 export { default as QuoteBlock } from './QuoteBlock';
 export { default as AffiliateDisclosureBlock } from './AffiliateDisclosureBlock';
+export { default as StoryBlock } from './StoryBlock';
 export { default as SortableBlockItem } from './SortableBlockItem';
 export { default as SectionHeader } from './SectionHeader';
 export { default as ProfileStats } from './ProfileStats';

@@ -1,4 +1,4 @@
-import { PatchNote, CategoryType } from '../data/patchNotes';
+import { PatchNote, PatchNoteChange, CategoryType } from '../data/patchNotes';
 import { CategoryBadge } from './CategoryBadge';
 
 interface PatchNoteCardProps {
@@ -16,14 +16,26 @@ function formatDate(dateString: string): string {
   });
 }
 
-function getUniqueCategories(note: PatchNote): CategoryType[] {
+// Filter out admin-only changes for public display
+function getVisibleChanges(changes: PatchNoteChange[]): PatchNoteChange[] {
+  return changes.filter(change => !change.isAdminOnly);
+}
+
+function getUniqueCategories(changes: PatchNoteChange[]): CategoryType[] {
   const categories = new Set<CategoryType>();
-  note.changes.forEach(change => categories.add(change.category));
+  changes.forEach(change => categories.add(change.category));
   return Array.from(categories);
 }
 
 export function PatchNoteCard({ note, isHero = false, animationDelay = '' }: PatchNoteCardProps) {
-  const categories = getUniqueCategories(note);
+  // Filter out admin-only changes for public display
+  const visibleChanges = getVisibleChanges(note.changes);
+  const categories = getUniqueCategories(visibleChanges);
+
+  // Don't render if no visible changes
+  if (visibleChanges.length === 0) {
+    return null;
+  }
 
   if (isHero) {
     return (
@@ -63,7 +75,7 @@ export function PatchNoteCard({ note, isHero = false, animationDelay = '' }: Pat
 
           {/* Changes list */}
           <div className="space-y-3">
-            {note.changes.map((change, index) => (
+            {visibleChanges.map((change, index) => (
               <div key={index} className="flex items-start gap-3">
                 <div className={`
                   w-2 h-2 rounded-full mt-2 flex-shrink-0
@@ -114,7 +126,7 @@ export function PatchNoteCard({ note, isHero = false, animationDelay = '' }: Pat
 
         {/* Changes list (condensed) */}
         <ul className="space-y-1.5">
-          {note.changes.slice(0, 3).map((change, index) => (
+          {visibleChanges.slice(0, 3).map((change, index) => (
             <li key={index} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
               <span className={`
                 w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0
@@ -125,9 +137,9 @@ export function PatchNoteCard({ note, isHero = false, animationDelay = '' }: Pat
               <span className="line-clamp-2">{change.text}</span>
             </li>
           ))}
-          {note.changes.length > 3 && (
+          {visibleChanges.length > 3 && (
             <li className="text-xs text-[var(--text-tertiary)] pl-3.5">
-              +{note.changes.length - 3} more
+              +{visibleChanges.length - 3} more
             </li>
           )}
         </ul>
