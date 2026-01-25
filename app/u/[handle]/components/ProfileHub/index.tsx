@@ -5,7 +5,7 @@
  *
  * When owners click their profile avatar, a radial menu appears with options:
  * - Edit Profile (enters edit mode)
- * - Add Block
+ * - Add Panel
  * - Add Links
  * - Customize (theme)
  *

@@ -281,6 +281,7 @@ function BlockRenderer({
           >
             <StoryBlock
               profileId={profile.id}
+              profileHandle={profile.handle}
               bags={bags}
               config={config}
               isOwner={isOwner}
@@ -436,7 +437,7 @@ function ProfileContent({
       {sortedBlocks.length === 0 && isOwnProfile && (
         <div className="text-center py-12">
           <p className="text-[var(--text-secondary)] mb-4">
-            Your profile is empty. Click the Edit button to add blocks.
+            Your profile is empty. Click the Edit button to add panels.
           </p>
         </div>
       )}

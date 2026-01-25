@@ -270,7 +270,7 @@ export default function BlockPicker({ profileId, isOpen: externalIsOpen, onClose
           "
         >
           <Plus className="w-6 h-6" strokeWidth={2.5} />
-          <span className="font-semibold text-base">Add Block</span>
+          <span className="font-semibold text-base">Add Panel</span>
         </button>
       )}
 
@@ -383,7 +383,7 @@ export default function BlockPicker({ profileId, isOpen: externalIsOpen, onClose
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-subtle)]">
               <h2 className="text-lg font-semibold text-[var(--text-primary)]">
-                Add Block
+                Add Panel
               </h2>
               <button
                 onClick={() => setIsOpen(false)}

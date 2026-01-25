@@ -172,8 +172,8 @@ export function CommandPalette({
         quickActions.push({
           id: 'add-block',
           icon: <Plus className="w-4 h-4" />,
-          label: 'Add Block',
-          description: 'Add a new block to your profile',
+          label: 'Add Panel',
+          description: 'Add a new panel to your profile',
           onSelect: () => {
             onOpenBlockPicker();
             handleClose();

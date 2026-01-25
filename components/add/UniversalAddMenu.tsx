@@ -37,8 +37,8 @@ const ADD_OPTIONS: AddOption[] = [
   {
     id: 'block',
     icon: <LayoutGrid className="w-6 h-6" />,
-    label: 'Add Block',
-    description: 'Add a block to your profile',
+    label: 'Add Panel',
+    description: 'Add a panel to your profile',
     color: 'text-[var(--teed-green-10)]',
     bgColor: 'bg-[var(--teed-green-3)] hover:bg-[var(--teed-green-4)]',
   },
@@ -67,7 +67,7 @@ interface UniversalAddMenuProps {
   isProfileView: boolean;
   /** Callback when user selects Add Item */
   onAddItem: () => void;
-  /** Callback when user selects Add Block (profile only) */
+  /** Callback when user selects Add Panel (profile only) */
   onAddBlock?: () => void;
   /** Callback when user selects Add Link */
   onAddLink: () => void;

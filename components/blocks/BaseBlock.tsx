@@ -77,7 +77,7 @@ export default function BaseBlock({
   };
 
   const handleDelete = () => {
-    if (confirm('Delete this block?')) {
+    if (confirm('Delete this panel?')) {
       onDelete?.(block.id);
     }
   };
@@ -143,7 +143,7 @@ export default function BaseBlock({
               transition-all
               hover:scale-105 hover:shadow-lg hover:bg-[var(--teed-green-10)]
               focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--teed-green-7)]"
-            title="Edit block"
+            title="Edit panel"
           >
             <Pencil className="w-3.5 h-3.5" />
             <span className="text-xs font-medium">Edit</span>
@@ -162,7 +162,7 @@ export default function BaseBlock({
               transition-all
               hover:scale-105 hover:shadow-lg hover:bg-[var(--copper-2)] hover:border-[var(--copper-6)]
               focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--copper-7)]"
-            title="Delete block"
+            title="Delete panel"
           >
             <Trash2 className="w-3.5 h-3.5" />
           </button>

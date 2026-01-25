@@ -32,8 +32,8 @@ const ADD_OPTIONS: AddOption[] = [
   {
     id: 'block',
     icon: <LayoutGrid className="w-5 h-5" />,
-    label: 'Add Block',
-    shortLabel: 'Block',
+    label: 'Add Panel',
+    shortLabel: 'Panel',
   },
   {
     id: 'link',

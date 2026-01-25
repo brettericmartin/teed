@@ -210,9 +210,9 @@ export default function DestinationStep({
         <div className="p-4 rounded-xl bg-[var(--teed-green-1)] border border-[var(--teed-green-4)]">
           <p className="text-sm text-[var(--teed-green-11)]">
             {embedCount > 0 && socialCount > 0
-              ? 'Embeds will be added as profile blocks and social links will be added to your profile.'
+              ? 'Embeds will be added as profile panels and social links will be added to your profile.'
               : embedCount > 0
-                ? 'Embeds will be added as blocks to your profile.'
+                ? 'Embeds will be added as panels to your profile.'
                 : 'Social links will be added to your profile.'
             }
           </p>

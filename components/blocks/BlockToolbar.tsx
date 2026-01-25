@@ -82,7 +82,7 @@ export default function BlockToolbar({
 
       {/* Block Type Label */}
       <span className="px-2 py-1 text-sm font-medium text-[var(--text-secondary)] whitespace-nowrap">
-        {BLOCK_TYPE_LABELS[block.block_type] || 'Block'}
+        {BLOCK_TYPE_LABELS[block.block_type] || 'Panel'}
       </span>
 
       {/* Divider */}
@@ -98,7 +98,7 @@ export default function BlockToolbar({
             : 'text-[var(--copper-9)] bg-[var(--copper-2)] hover:bg-[var(--copper-3)]'
           }
         `}
-        title={block.is_visible ? 'Hide block' : 'Show block'}
+        title={block.is_visible ? 'Hide panel' : 'Show panel'}
       >
         {block.is_visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
         <span className="hidden sm:inline">{block.is_visible ? 'Visible' : 'Hidden'}</span>
@@ -110,7 +110,7 @@ export default function BlockToolbar({
         className="flex items-center gap-1.5 px-2 py-1.5 rounded-md text-sm
                    text-[var(--text-secondary)] hover:bg-[var(--surface-hover)]
                    transition-colors whitespace-nowrap"
-        title="Block settings"
+        title="Panel settings"
       >
         <Settings className="w-4 h-4" />
         <span className="hidden sm:inline">Settings</span>
@@ -124,7 +124,7 @@ export default function BlockToolbar({
         onClick={onDuplicate}
         className="p-2 rounded-md text-[var(--text-tertiary)] hover:bg-[var(--surface-hover)]
                    transition-colors"
-        title="Duplicate block"
+        title="Duplicate panel"
       >
         <Copy className="w-4 h-4" />
       </button>
@@ -135,7 +135,7 @@ export default function BlockToolbar({
         className="p-2 rounded-md text-[var(--text-tertiary)]
                    hover:bg-[var(--copper-2)] hover:text-[var(--copper-9)]
                    transition-colors"
-        title="Delete block"
+        title="Delete panel"
       >
         <Trash2 className="w-4 h-4" />
       </button>

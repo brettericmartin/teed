@@ -69,7 +69,7 @@ export default function ProfileHub({
         {
           key: 'add-block',
           icon: <Plus className="w-4 h-4" />,
-          label: 'Add Block',
+          label: 'Add Panel',
           onClick: onOpenBlockPicker,
         },
         {
@@ -117,7 +117,7 @@ export default function ProfileHub({
         {
           key: 'add-block',
           icon: <Plus className="w-4 h-4" />,
-          label: 'Add Block',
+          label: 'Add Panel',
           onClick: () => {
             handleEnterEditMode();
             setTimeout(onOpenBlockPicker, 100);

@@ -27,7 +27,7 @@ interface ActionItem {
  * - Link: Open link adder or paste URL
  * - Photo: TapToIdentify (coming soon)
  * - Bag: Create new bag
- * - Block: Add profile block
+ * - Panel: Add profile panel
  */
 export function FloatingActionHub({
   onOpenBlockPicker,
@@ -95,7 +95,7 @@ export function FloatingActionHub({
     {
       id: 'block',
       icon: <LayoutGrid className="w-5 h-5" />,
-      label: 'Add Block',
+      label: 'Add Panel',
       color: 'bg-teed-green-600 hover:bg-teed-green-700',
       onClick: () => handleAction(onOpenBlockPicker),
     },
@@ -187,7 +187,7 @@ export function FloatingActionHub({
             'flex items-center gap-2 whitespace-nowrap'
           )}>
             <Sparkles className="w-4 h-4" />
-            <span>Tap to add blocks & links!</span>
+            <span>Tap to add panels & links!</span>
             {/* Arrow pointing to button */}
             <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-0 h-0 border-t-8 border-b-8 border-r-8 border-transparent border-r-[var(--teed-green-9)]" />
           </div>
