@@ -287,7 +287,7 @@ export default function ProfileGridLayout({
   return (
     <div
       ref={containerRef}
-      className={`relative ${isEditMode ? 'pt-4' : ''}`}
+      className={`relative ${isEditMode ? 'pt-8' : ''}`}
     >
       {/* Grid lines overlay - shows column structure */}
       {isEditMode && (() => {
@@ -362,8 +362,8 @@ export default function ProfileGridLayout({
             key={block.id}
             className="w-full h-full"
             style={{
-              // Allow featured_bags blocks to overflow when expanded
-              overflow: block.block_type === 'featured_bags' ? 'visible' : undefined,
+              // Allow overflow for edit controls and featured_bags dropdowns
+              overflow: 'visible',
             }}
           >
             {renderBlock(block, draggingId === block.id)}

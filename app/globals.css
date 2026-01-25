@@ -2247,3 +2247,24 @@ body {
 .block-content {
   transition: transform 150ms ease, box-shadow 150ms ease;
 }
+
+/* Override react-grid-layout overflow to allow edit controls above panels */
+.react-grid-item {
+  overflow: visible !important;
+}
+
+/* ============================================
+   STORY TIMELINE ANIMATIONS
+   ============================================ */
+
+/* Timeline entry appear animation */
+@keyframes timeline-entry-appear {
+  0% {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
