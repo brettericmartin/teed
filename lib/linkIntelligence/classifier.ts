@@ -358,12 +358,39 @@ export function isValidUrl(str: string): boolean {
 
 /**
  * Parse URLs from raw text input (newlines, commas, spaces)
+ * Also detects concatenated URLs by splitting on http://, https://, or www.
  */
 export function parseUrlsFromInput(input: string, maxUrls: number = 25): string[] {
   if (!input) return [];
 
-  // Split by newlines, commas, or whitespace
-  const parts = input.split(/[\n,\s]+/).filter(Boolean);
+  // Pre-process: Split on URL markers (http://, https://, www.) to handle
+  // concatenated URLs like "amazon.com/dp/123https://rei.com/product"
+  // Uses lookahead to keep the delimiter with the following text
+  const urlMarkerPattern = /(https?:\/\/|www\.)/gi;
+
+  // Split while preserving delimiters, then rejoin delimiter with following part
+  const segments = input.split(urlMarkerPattern);
+  const preSplitParts: string[] = [];
+
+  for (let i = 0; i < segments.length; i++) {
+    const segment = segments[i];
+    if (!segment) continue;
+
+    // Check if this segment is a URL marker (http://, https://, www.)
+    if (/^(https?:\/\/|www\.)$/i.test(segment)) {
+      // Combine with the next segment
+      if (i + 1 < segments.length) {
+        preSplitParts.push(segment + segments[i + 1]);
+        i++; // Skip next segment since we consumed it
+      }
+    } else {
+      // Regular segment - could be a URL without protocol or just text
+      preSplitParts.push(segment);
+    }
+  }
+
+  // Now split by newlines, commas, or whitespace
+  const parts = preSplitParts.flatMap(part => part.split(/[\n,\s]+/)).filter(Boolean);
 
   // Filter to valid URLs
   const urls: string[] = [];
