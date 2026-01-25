@@ -43,7 +43,7 @@ export interface BagSnapshot {
 
 export interface ItemVersionHistory {
   id: string;
-  item_id: string;
+  item_id: string | null; // NULL if item was deleted (FK SET NULL)
   bag_id: string;
   change_type: ItemChangeType;
   field_changed: string | null;
@@ -52,6 +52,21 @@ export interface ItemVersionHistory {
   change_note: string | null;
   is_visible: boolean;
   created_at: string;
+  // Enhanced fields for Timeline Story feature
+  item_snapshot?: ItemSnapshot | null;
+  note_updated_at?: string | null;
+}
+
+// Snapshot of item data preserved for deleted items
+export interface ItemSnapshot {
+  custom_name: string | null;
+  photo_url: string | null;
+  brand: string | null;
+  custom_description: string | null;
+  why_chosen?: string | null;
+  specs?: Record<string, unknown>;
+  compared_to?: string | null;
+  price_paid?: number | null;
 }
 
 // For UI display
@@ -69,6 +84,15 @@ export interface TimelineEntry {
     newValue?: string;
     itemsAffected?: number;
   };
+
+  // Item linking for click-to-item feature
+  itemId?: string | null;       // UUID of the item (null if deleted)
+  itemExists?: boolean;          // false if item was deleted
+  itemSnapshot?: ItemSnapshot;   // Preserved data for deleted items
+
+  // Curator notes
+  curatorNote?: string | null;   // User-provided note about the change
+  noteUpdatedAt?: string | null; // When the note was last edited
 }
 
 export interface VersionHistoryResponse {

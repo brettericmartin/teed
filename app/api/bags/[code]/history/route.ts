@@ -5,11 +5,21 @@ import type {
   ItemVersionHistory,
   TimelineEntry,
   VersionHistoryResponse,
+  ItemSnapshot,
 } from '@/lib/types/versionHistory';
 
 type RouteParams = {
   params: Promise<{ code: string }>;
 };
+
+// Simple item info for checking existence
+interface BagItem {
+  id: string;
+  custom_name: string | null;
+  photo_url: string | null;
+  brand: string | null;
+  custom_description: string | null;
+}
 
 /**
  * GET /api/bags/[code]/history
@@ -19,6 +29,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { code } = await params;
     const supabase = await createServerSupabase();
+    const { searchParams } = new URL(request.url);
+    const includeHidden = searchParams.get('include_hidden') === 'true';
 
     // Get authenticated user (optional - public bags are viewable by anyone)
     const {
@@ -54,7 +66,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       console.error('Error fetching version history:', versionsError);
     }
 
-    // Fetch item change history
+    // Fetch item change history with new columns
     const { data: itemChanges, error: itemChangesError } = await supabase
       .from('item_version_history')
       .select('*')
@@ -66,8 +78,30 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       console.error('Error fetching item history:', itemChangesError);
     }
 
-    // Build unified timeline
-    const timeline = buildTimeline(versions || [], itemChanges || [], bag.created_at);
+    // Fetch current bag items to check which still exist
+    const { data: currentItems, error: itemsError } = await supabase
+      .from('bag_items')
+      .select('id, custom_name, photo_url, brand, custom_description')
+      .eq('bag_id', bag.id);
+
+    if (itemsError) {
+      console.error('Error fetching bag items:', itemsError);
+    }
+
+    // Create a map of existing items for quick lookup
+    const existingItemsMap = new Map<string, BagItem>();
+    (currentItems || []).forEach((item: BagItem) => {
+      existingItemsMap.set(item.id, item);
+    });
+
+    // Build unified timeline with enriched data
+    const timeline = buildTimeline(
+      versions || [],
+      itemChanges || [],
+      bag.created_at,
+      existingItemsMap,
+      isOwner && includeHidden
+    );
 
     const response: VersionHistoryResponse = {
       bag: {
@@ -155,13 +189,52 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
 /**
  * Build a unified timeline from version history and item changes
+ * Now includes itemId, itemExists, itemSnapshot for click-to-item feature
  */
 function buildTimeline(
   versions: BagVersionHistory[],
   itemChanges: ItemVersionHistory[],
-  bagCreatedAt: string
+  bagCreatedAt: string,
+  existingItemsMap: Map<string, BagItem>,
+  includeHidden: boolean
 ): TimelineEntry[] {
   const entries: TimelineEntry[] = [];
+
+  // Helper to check if item exists and get current data
+  const getItemInfo = (itemId: string | null, historyEntry: ItemVersionHistory) => {
+    if (!itemId) {
+      // Item was deleted (FK set to NULL) - use snapshot
+      const snapshot = historyEntry.item_snapshot || historyEntry.old_value || historyEntry.new_value;
+      return {
+        itemId: null,
+        itemExists: false,
+        itemSnapshot: snapshot as ItemSnapshot | undefined,
+      };
+    }
+
+    const existingItem = existingItemsMap.get(itemId);
+    if (existingItem) {
+      // Item still exists - use current data
+      return {
+        itemId,
+        itemExists: true,
+        itemSnapshot: {
+          custom_name: existingItem.custom_name,
+          photo_url: existingItem.photo_url,
+          brand: existingItem.brand,
+          custom_description: existingItem.custom_description,
+        } as ItemSnapshot,
+      };
+    }
+
+    // Item ID exists in history but not in bag - was deleted
+    const snapshot = historyEntry.item_snapshot || historyEntry.old_value || historyEntry.new_value;
+    return {
+      itemId,
+      itemExists: false,
+      itemSnapshot: snapshot as ItemSnapshot | undefined,
+    };
+  };
 
   // Add bag creation entry
   entries.push({
@@ -170,6 +243,7 @@ function buildTimeline(
     type: 'bag',
     changeType: 'created',
     summary: 'Created this bag',
+    isVisible: true,
   });
 
   // Add version history entries
@@ -183,100 +257,96 @@ function buildTimeline(
       type: 'bag',
       changeType: version.change_type,
       summary: version.change_summary || getDefaultSummary(version.change_type),
+      isVisible: true,
       details: {
         itemsAffected: version.items_changed,
       },
     });
   }
 
-  // Add item change entries (group by date to avoid clutter)
-  const itemChangesByDate = new Map<string, ItemVersionHistory[]>();
+  // Process individual item changes (don't group - show each as clickable entry)
   for (const change of itemChanges) {
-    const dateKey = change.created_at.split('T')[0];
-    if (!itemChangesByDate.has(dateKey)) {
-      itemChangesByDate.set(dateKey, []);
-    }
-    itemChangesByDate.get(dateKey)!.push(change);
-  }
+    // Filter by visibility if not including hidden
+    const isVisible = change.is_visible !== false;
+    if (!includeHidden && !isVisible) continue;
 
-  // Add grouped item changes
-  for (const [dateKey, changes] of itemChangesByDate) {
-    // For each day, group similar changes
-    const addedItems = changes.filter((c) => c.change_type === 'added');
-    const updatedItems = changes.filter((c) => c.change_type === 'updated');
-    const replacedItems = changes.filter((c) => c.change_type === 'replaced');
-    const removedItems = changes.filter((c) => c.change_type === 'removed');
+    const itemInfo = getItemInfo(change.item_id, change);
+    const itemName = getItemName(change);
 
-    if (addedItems.length > 0) {
-      const firstChange = addedItems[0];
-      entries.push({
-        id: `added-${dateKey}`,
-        date: firstChange.created_at,
-        type: 'item',
-        changeType: 'added',
-        summary: addedItems.length === 1
-          ? `Added "${(firstChange.new_value as any)?.custom_name || 'item'}"`
-          : `Added ${addedItems.length} items`,
-        itemName: addedItems.length === 1 ? (firstChange.new_value as any)?.custom_name : undefined,
-        details: {
-          itemsAffected: addedItems.length,
-        },
-      });
+    // Use doctrine-compliant language: "Retired" instead of "Removed"
+    let summary: string;
+    switch (change.change_type) {
+      case 'added':
+        summary = `Added "${itemName}"`;
+        break;
+      case 'removed':
+        summary = `Retired "${itemName}"`;
+        break;
+      case 'updated':
+        summary = `Refined "${itemName}"`;
+        break;
+      case 'replaced':
+        summary = change.change_note || `Switched to "${itemName}"`;
+        break;
+      case 'restored':
+        summary = `Restored "${itemName}"`;
+        break;
+      default:
+        summary = `Changed "${itemName}"`;
     }
 
-    // Show individual replaced items (they're more significant)
-    for (const change of replacedItems) {
-      entries.push({
-        id: change.id,
-        date: change.created_at,
-        type: 'item',
-        changeType: 'replaced',
-        summary: change.change_note || 'Replaced item',
-        itemName: (change.new_value as any)?.custom_name,
-        details: {
-          fieldChanged: 'replacement',
-        },
-      });
-    }
-
-    // Group updates
-    if (updatedItems.length > 0) {
-      const firstChange = updatedItems[0];
-      entries.push({
-        id: `updated-${dateKey}`,
-        date: firstChange.created_at,
-        type: 'item',
-        changeType: 'updated',
-        summary: updatedItems.length === 1
-          ? `Updated "${(firstChange.new_value as any) || 'item'}"`
-          : `Updated ${updatedItems.length} items`,
-        details: {
-          itemsAffected: updatedItems.length,
-          fieldChanged: updatedItems.length === 1 ? firstChange.field_changed || undefined : undefined,
-        },
-      });
-    }
-
-    if (removedItems.length > 0) {
-      entries.push({
-        id: `removed-${dateKey}`,
-        date: removedItems[0].created_at,
-        type: 'item',
-        changeType: 'removed',
-        summary: removedItems.length === 1
-          ? `Removed "${(removedItems[0].old_value as any)?.custom_name || 'item'}"`
-          : `Removed ${removedItems.length} items`,
-        details: {
-          itemsAffected: removedItems.length,
-        },
-      });
-    }
+    entries.push({
+      id: change.id,
+      date: change.created_at,
+      type: 'item',
+      changeType: change.change_type,
+      summary,
+      itemName,
+      isVisible,
+      // Item linking for click-to-item
+      itemId: itemInfo.itemId,
+      itemExists: itemInfo.itemExists,
+      itemSnapshot: itemInfo.itemSnapshot,
+      // Curator notes
+      curatorNote: change.change_note,
+      noteUpdatedAt: change.note_updated_at,
+      details: {
+        fieldChanged: change.field_changed || undefined,
+        oldValue: typeof change.old_value === 'string' ? change.old_value : undefined,
+        newValue: typeof change.new_value === 'string' ? change.new_value : undefined,
+      },
+    });
   }
 
   // Sort by date descending
   entries.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   return entries;
+}
+
+/**
+ * Get item name from history entry
+ */
+function getItemName(change: ItemVersionHistory): string {
+  // Try item_snapshot first (most complete)
+  if (change.item_snapshot && typeof change.item_snapshot === 'object') {
+    const snapshot = change.item_snapshot as any;
+    if (snapshot.custom_name) return snapshot.custom_name;
+  }
+
+  // Try new_value (for added/updated items)
+  if (change.new_value && typeof change.new_value === 'object') {
+    const newVal = change.new_value as any;
+    if (newVal.custom_name) return newVal.custom_name;
+  }
+
+  // Try old_value (for removed items)
+  if (change.old_value && typeof change.old_value === 'object') {
+    const oldVal = change.old_value as any;
+    if (oldVal.custom_name) return oldVal.custom_name;
+  }
+
+  return 'item';
 }
 
 function getDefaultSummary(changeType: string): string {

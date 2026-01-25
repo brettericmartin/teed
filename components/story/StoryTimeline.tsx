@@ -10,6 +10,7 @@ import {
   Sparkles,
   ChevronDown,
   ChevronUp,
+  ChevronRight,
   Loader2,
   Eye,
   EyeOff,
@@ -26,6 +27,10 @@ import {
   PlusSquare,
   MinusSquare,
   Edit,
+  Pencil,
+  Check,
+  X,
+  Package,
 } from 'lucide-react';
 import type {
   ProfileTimelineEntry,
@@ -40,7 +45,7 @@ import {
   groupEntriesByPeriod,
   ACTION_TYPE_LABELS,
 } from '@/lib/types/profileStory';
-import type { TimelineEntry, ItemChangeType } from '@/lib/types/versionHistory';
+import type { TimelineEntry, ItemChangeType, ItemSnapshot } from '@/lib/types/versionHistory';
 import {
   formatTimelineEntry,
   getItemChangeTypeColors,
@@ -54,6 +59,7 @@ interface StoryTimelineProps {
   // Data source - either bag-specific or profile-wide
   bagCode?: string;
   profileId?: string;
+  profileHandle?: string; // Used for public profile story fetch
 
   // Display options
   maxItems?: number;
@@ -107,6 +113,7 @@ const FILTER_CHIPS: FilterChip[] = [
 export default function StoryTimeline({
   bagCode,
   profileId,
+  profileHandle,
   maxItems = 5,
   isExpanded = false,
   showFilters = true,
@@ -127,18 +134,28 @@ export default function StoryTimeline({
   // Fetch timeline data
   useEffect(() => {
     fetchTimeline();
-  }, [bagCode, profileId]);
+  }, [bagCode, profileId, profileHandle, isOwner]);
 
   const fetchTimeline = async () => {
     try {
       setIsLoading(true);
       setError(null);
 
-      const endpoint = bagCode
-        ? `/api/bags/${bagCode}/history${isOwner ? '?include_hidden=true' : ''}`
-        : profileId
-          ? `/api/profile/story${isOwner ? '?include_hidden=true' : ''}`
-          : null;
+      let endpoint: string | null = null;
+
+      if (bagCode) {
+        // Bag-specific timeline
+        endpoint = `/api/bags/${bagCode}/history${isOwner ? '?include_hidden=true' : ''}`;
+      } else if (profileHandle && !isOwner) {
+        // Public profile timeline (uses handle for public API)
+        endpoint = `/api/users/${profileHandle}/story`;
+      } else if (profileId && isOwner) {
+        // Owner's profile timeline (authenticated endpoint)
+        endpoint = `/api/profile/story?include_hidden=true`;
+      } else if (profileHandle) {
+        // Fallback: use public API with handle
+        endpoint = `/api/users/${profileHandle}/story`;
+      }
 
       if (!endpoint) {
         setError('No data source specified');
@@ -247,6 +264,20 @@ export default function StoryTimeline({
       }
     },
     [bagCode]
+  );
+
+  // Update note for an entry
+  const handleNoteUpdate = useCallback(
+    (entryId: string, note: string) => {
+      setTimeline((prev) =>
+        prev.map((entry) =>
+          entry.id === entryId
+            ? { ...entry, curatorNote: note || undefined }
+            : entry
+        )
+      );
+    },
+    []
   );
 
   // Handle entry click
@@ -370,6 +401,8 @@ export default function StoryTimeline({
           showHidden={showHidden}
           onEntryClick={handleEntryClick}
           onToggleVisibility={toggleEntryVisibility}
+          onNoteUpdate={handleNoteUpdate}
+          bagCode={bagCode}
           maxItems={maxItems}
           showAll={showAll}
         />
@@ -380,6 +413,8 @@ export default function StoryTimeline({
           isOwner={isOwner}
           onEntryClick={handleEntryClick}
           onToggleVisibility={toggleEntryVisibility}
+          onNoteUpdate={handleNoteUpdate}
+          bagCode={bagCode}
         />
       )}
 
@@ -414,6 +449,8 @@ function GroupedTimelineView({
   showHidden,
   onEntryClick,
   onToggleVisibility,
+  onNoteUpdate,
+  bagCode,
   maxItems,
   showAll,
 }: {
@@ -423,6 +460,8 @@ function GroupedTimelineView({
   showHidden: boolean;
   onEntryClick: (entry: UnifiedTimelineEntry) => void;
   onToggleVisibility: (id: string, isVisible: boolean) => void;
+  onNoteUpdate: (entryId: string, note: string) => void;
+  bagCode?: string;
   maxItems: number;
   showAll: boolean;
 }) {
@@ -452,7 +491,7 @@ function GroupedTimelineView({
             <div className="relative mt-2">
               {/* Gradient timeline line */}
               <div
-                className="absolute left-3 top-0 bottom-0 w-px"
+                className="absolute left-5 top-0 bottom-0 w-px"
                 style={{
                   background:
                     group.period === 'this_week'
@@ -471,6 +510,8 @@ function GroupedTimelineView({
                     onToggleVisibility={() =>
                       onToggleVisibility(entry.id, entry.isVisible)
                     }
+                    onNoteUpdate={onNoteUpdate}
+                    bagCode={bagCode}
                     animationDelay={index * 50}
                   />
                 ))}
@@ -490,17 +531,21 @@ function FlatTimelineView({
   isOwner,
   onEntryClick,
   onToggleVisibility,
+  onNoteUpdate,
+  bagCode,
 }: {
   entries: UnifiedTimelineEntry[];
   expandedEntryId: string | null;
   isOwner: boolean;
   onEntryClick: (entry: UnifiedTimelineEntry) => void;
   onToggleVisibility: (id: string, isVisible: boolean) => void;
+  onNoteUpdate: (entryId: string, note: string) => void;
+  bagCode?: string;
 }) {
   return (
     <div className="relative">
       {/* Timeline line */}
-      <div className="absolute left-3 top-0 bottom-0 w-px bg-[var(--border-subtle)]" />
+      <div className="absolute left-5 top-0 bottom-0 w-px bg-[var(--border-subtle)]" />
       <div className="space-y-1">
         {entries.map((entry, index) => (
           <TimelineItem
@@ -512,6 +557,8 @@ function FlatTimelineView({
             onToggleVisibility={() =>
               onToggleVisibility(entry.id, entry.isVisible ?? true)
             }
+            onNoteUpdate={onNoteUpdate}
+            bagCode={bagCode}
             animationDelay={index * 50}
           />
         ))}
@@ -562,13 +609,15 @@ function TimePeriodHeader({
   );
 }
 
-// Single timeline item
+// Single timeline item with thumbnail support
 function TimelineItem({
   entry,
   isExpanded,
   isOwner,
   onExpand,
   onToggleVisibility,
+  onNoteUpdate,
+  bagCode,
   animationDelay = 0,
 }: {
   entry: UnifiedTimelineEntry;
@@ -576,13 +625,31 @@ function TimelineItem({
   isOwner: boolean;
   onExpand: () => void;
   onToggleVisibility: () => void;
+  onNoteUpdate?: (entryId: string, note: string) => void;
+  bagCode?: string;
   animationDelay?: number;
 }) {
+  const [isEditingNote, setIsEditingNote] = useState(false);
+  const [noteValue, setNoteValue] = useState('');
+  const [isSavingNote, setIsSavingNote] = useState(false);
+
   const isHidden = entry.isVisible === false;
   const changeType = entry.changeType as ProfileChangeType | ItemChangeType;
   const colors = isProfileChangeType(changeType)
     ? getChangeTypeColors(changeType)
     : getItemChangeTypeColors(changeType as ItemChangeType);
+
+  // Check if this is a bag item entry with click-to-item support
+  const timelineEntry = entry as TimelineEntry;
+  const isItemEntry = 'type' in entry && entry.type === 'item';
+  const itemExists = 'itemExists' in timelineEntry ? timelineEntry.itemExists : false;
+  const itemSnapshot = 'itemSnapshot' in timelineEntry ? timelineEntry.itemSnapshot as ItemSnapshot | undefined : undefined;
+  const curatorNote = 'curatorNote' in timelineEntry ? timelineEntry.curatorNote : undefined;
+  const isRetired = changeType === 'removed';
+  const isClickable = isItemEntry && itemExists;
+
+  // Get photo URL - from current item or preserved snapshot
+  const photoUrl = itemSnapshot?.photo_url || null;
 
   // Format date - month/year only (doctrine compliant)
   const formattedDate = formatStoryDate(entry.date);
@@ -592,6 +659,40 @@ function TimelineItem({
     'summary' in entry
       ? entry.summary
       : formatTimelineEntry(entry as TimelineEntry);
+
+  // Handle note editing
+  const handleStartEditNote = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setNoteValue(curatorNote || '');
+    setIsEditingNote(true);
+  };
+
+  const handleSaveNote = async () => {
+    if (!bagCode) return;
+
+    setIsSavingNote(true);
+    try {
+      const response = await fetch(`/api/bags/${bagCode}/history/${entry.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ change_note: noteValue.trim() || null }),
+      });
+
+      if (response.ok) {
+        onNoteUpdate?.(entry.id, noteValue.trim());
+        setIsEditingNote(false);
+      }
+    } catch (err) {
+      console.error('Failed to save note:', err);
+    } finally {
+      setIsSavingNote(false);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditingNote(false);
+    setNoteValue('');
+  };
 
   return (
     <div
@@ -608,71 +709,171 @@ function TimelineItem({
       {/* Main entry row */}
       <div
         className={`
-          relative flex items-start gap-3 pl-1 py-2 cursor-pointer
-          rounded-lg transition-colors -mx-2 px-3
-          ${
-            isExpanded
-              ? 'bg-[var(--teed-green-2)]'
-              : 'hover:bg-[var(--surface-hover)]'
-          }
+          relative flex items-start gap-3 pl-1 py-2.5
+          rounded-lg transition-all -mx-2 px-3
+          ${isClickable ? 'cursor-pointer hover:translate-x-0.5 hover:shadow-sm' : isRetired ? 'cursor-default' : 'cursor-pointer'}
+          ${isExpanded ? 'bg-[var(--teed-green-2)]' : 'hover:bg-[var(--surface-hover)]'}
+          ${isRetired && !isExpanded ? 'border border-dashed border-[var(--grey-5)] bg-[var(--grey-1)]' : ''}
         `}
         onClick={onExpand}
       >
-        {/* Icon */}
-        <TimelineIcon
-          changeType={changeType}
-          colors={colors}
-          isExpanded={isExpanded}
-        />
+        {/* Thumbnail for item entries (40x40) */}
+        {isItemEntry && photoUrl ? (
+          <div
+            className={`
+              w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden
+              ${isRetired ? 'grayscale opacity-60 border border-[var(--grey-6)]' : 'border border-[var(--border-subtle)]'}
+              transition-all duration-200 group-hover:scale-105
+            `}
+          >
+            <img
+              src={photoUrl}
+              alt=""
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+        ) : isItemEntry ? (
+          /* Placeholder for items without photos */
+          <div
+            className={`
+              w-10 h-10 rounded-lg flex-shrink-0 flex items-center justify-center
+              ${isRetired ? 'bg-[var(--grey-3)] border border-dashed border-[var(--grey-6)]' : 'bg-[var(--surface-elevated)] border border-[var(--border-subtle)]'}
+            `}
+          >
+            <Package className={`w-5 h-5 ${isRetired ? 'text-[var(--grey-8)]' : 'text-[var(--text-tertiary)]'}`} />
+          </div>
+        ) : (
+          /* Icon for non-item entries */
+          <TimelineIcon
+            changeType={changeType}
+            colors={colors}
+            isExpanded={isExpanded}
+          />
+        )}
 
         {/* Content */}
         <div className="flex-1 min-w-0 pt-0.5">
-          <p className="text-sm text-[var(--text-primary)]">{summaryText}</p>
+          <div className="flex items-center gap-2">
+            <p className={`text-sm ${isHidden ? 'line-through text-[var(--text-tertiary)]' : 'text-[var(--text-primary)]'}`}>
+              {summaryText}
+            </p>
+            {isRetired && (
+              <span className="text-[10px] uppercase tracking-wide px-1.5 py-0.5 bg-[var(--grey-3)] text-[var(--grey-10)] rounded font-medium">
+                retired
+              </span>
+            )}
+          </div>
           <p className="text-xs text-[var(--text-tertiary)] mt-0.5">
             {formattedDate}
           </p>
+
+          {/* Curator note display */}
+          {curatorNote && !isEditingNote && (
+            <p className="text-xs text-[var(--text-secondary)] mt-1.5 italic border-l-2 border-[var(--teed-green-6)] pl-2">
+              "{curatorNote}"
+            </p>
+          )}
+
+          {/* Inline note editor (owner only) */}
+          {isEditingNote && (
+            <div className="mt-2 flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+              <input
+                type="text"
+                value={noteValue}
+                onChange={(e) => setNoteValue(e.target.value.slice(0, 140))}
+                placeholder="Add a note (140 chars max)..."
+                className="flex-1 text-xs px-2 py-1.5 rounded border border-[var(--border-subtle)] bg-[var(--surface)] focus:outline-none focus:border-[var(--teed-green-6)] focus:ring-1 focus:ring-[var(--teed-green-6)]"
+                autoFocus
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleSaveNote();
+                  if (e.key === 'Escape') handleCancelEdit();
+                }}
+              />
+              <button
+                onClick={handleSaveNote}
+                disabled={isSavingNote}
+                className="p-1 text-[var(--teed-green-9)] hover:bg-[var(--teed-green-2)] rounded transition-colors"
+              >
+                <Check className="w-4 h-4" />
+              </button>
+              <button
+                onClick={handleCancelEdit}
+                className="p-1 text-[var(--text-tertiary)] hover:bg-[var(--surface-alt)] rounded transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+              <span className="text-[10px] text-[var(--text-tertiary)]">{noteValue.length}/140</span>
+            </div>
+          )}
         </div>
 
-        {/* Owner visibility toggle - appears on hover */}
-        {isOwner && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleVisibility();
-            }}
-            className={`
-              opacity-0 group-hover:opacity-100 transition-opacity
-              p-1.5 rounded-md hover:bg-[var(--surface-alt)]
-              ${
-                isHidden
-                  ? 'text-[var(--text-tertiary)]'
-                  : 'text-[var(--text-secondary)]'
-              }
-            `}
-            title={isHidden ? 'Show event' : 'Hide event'}
-          >
-            {isHidden ? (
-              <EyeOff className="w-3.5 h-3.5" />
-            ) : (
-              <Eye className="w-3.5 h-3.5" />
-            )}
-          </button>
-        )}
+        {/* Action buttons container */}
+        <div className="flex items-center gap-1 flex-shrink-0">
+          {/* Note edit button (owner only) - appears on hover */}
+          {isOwner && !isEditingNote && (
+            <button
+              onClick={handleStartEditNote}
+              className={`
+                opacity-0 group-hover:opacity-100 transition-opacity
+                p-1.5 rounded-md hover:bg-[var(--surface-alt)] text-[var(--text-tertiary)]
+              `}
+              title={curatorNote ? 'Edit note' : 'Add note'}
+            >
+              <Pencil className="w-3.5 h-3.5" />
+            </button>
+          )}
 
-        {/* Expand indicator for item entries */}
-        {'itemName' in entry && entry.itemName && (
-          <ChevronDown
-            className={`
-              w-4 h-4 text-[var(--text-tertiary)] transition-transform
-              ${isExpanded ? 'rotate-180' : ''}
-            `}
-          />
-        )}
+          {/* Owner visibility toggle - appears on hover */}
+          {isOwner && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleVisibility();
+              }}
+              className={`
+                opacity-0 group-hover:opacity-100 transition-opacity
+                p-1.5 rounded-md hover:bg-[var(--surface-alt)]
+                ${isHidden ? 'text-[var(--text-tertiary)]' : 'text-[var(--text-secondary)]'}
+              `}
+              title={isHidden ? 'Show event' : 'Hide event'}
+            >
+              {isHidden ? (
+                <EyeOff className="w-3.5 h-3.5" />
+              ) : (
+                <Eye className="w-3.5 h-3.5" />
+              )}
+            </button>
+          )}
+
+          {/* Clickable indicator - chevron for items that exist */}
+          {isClickable && (
+            <ChevronRight className="w-4 h-4 text-[var(--text-tertiary)] group-hover:text-[var(--teed-green-9)] transition-colors" />
+          )}
+        </div>
       </div>
 
-      {/* Inline expansion panel */}
-      {isExpanded && entry.details && (
-        <div className="ml-9 mt-2 p-4 bg-[var(--surface)] rounded-xl border border-[var(--border-subtle)] shadow-sm">
+      {/* Inline expansion panel for retired items (show snapshot) */}
+      {isExpanded && isRetired && itemSnapshot && (
+        <div className="ml-12 mt-2 p-4 bg-[var(--grey-2)] rounded-xl border border-dashed border-[var(--grey-5)] shadow-sm">
+          <div className="text-xs text-[var(--grey-11)] mb-2 font-medium">This item was retired</div>
+          <div className="text-sm space-y-1">
+            {itemSnapshot.custom_name && (
+              <p className="text-[var(--text-primary)]">{itemSnapshot.custom_name}</p>
+            )}
+            {itemSnapshot.brand && (
+              <p className="text-[var(--text-secondary)] text-xs">{itemSnapshot.brand}</p>
+            )}
+            {itemSnapshot.custom_description && (
+              <p className="text-[var(--text-tertiary)] text-xs mt-2">{itemSnapshot.custom_description}</p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Inline expansion panel for other entries */}
+      {isExpanded && !isRetired && entry.details && (
+        <div className="ml-12 mt-2 p-4 bg-[var(--surface)] rounded-xl border border-[var(--border-subtle)] shadow-sm">
           <InlineDetails entry={entry} />
         </div>
       )}
@@ -766,7 +967,7 @@ function InlineDetails({ entry }: { entry: UnifiedTimelineEntry }) {
 
       {details.oldValue !== undefined && details.oldValue !== null && (
         <div className="flex items-start gap-2">
-          <span className="text-[var(--stone-9)]">Previous:</span>
+          <span className="text-[var(--grey-9)]">Previous:</span>
           <span className="text-[var(--text-tertiary)] line-through">
             {formatValue(details.oldValue)}
           </span>

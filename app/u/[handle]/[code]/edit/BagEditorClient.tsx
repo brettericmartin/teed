@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Share2, Trash2, Camera, ChevronLeft, Package, Images, Link, Sparkles, Upload, Image, X, Eye, Loader2 } from 'lucide-react';
+import { ArrowLeft, Share2, Trash2, Camera, ChevronLeft, Package, Images, Link, Sparkles, Upload, Image, X, Eye, Loader2, BookOpen } from 'lucide-react';
 import { GolfLoader } from '@/components/ui/GolfLoader';
 import NextLink from 'next/link';
 import ItemList from './components/ItemList';
@@ -18,7 +18,6 @@ import EnrichmentPreview from './components/EnrichmentPreview';
 import AIAssistantHub from './components/AIAssistantHub';
 import BagAnalytics from './components/BagAnalytics';
 import CoverPhotoCropper, { type AspectRatioId } from './components/CoverPhotoCropper';
-import SectionManager from './components/SectionManager';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
@@ -28,6 +27,7 @@ import { CATEGORIES } from '@/lib/categories';
 import { useCelebration } from '@/lib/celebrations';
 import BagCompletionButton from '@/components/BagCompletionButton';
 import { EditorOnboarding } from '@/components/EditorOnboarding';
+import StoryTimeline from '@/components/story/StoryTimeline';
 
 /**
  * Robust data URL to Blob converter that handles mobile browser quirks.
@@ -688,36 +688,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       }
     } catch (error) {
       console.error('Error updating hero item:', error);
-    }
-  };
-
-  // Handle section changes
-  const handleSectionsChange = (newSections: Section[]) => {
-    setBag((prev) => ({
-      ...prev,
-      sections: newSections,
-    }));
-  };
-
-  // Handle item section assignment change
-  const handleItemSectionChange = async (itemId: string, sectionId: string | null) => {
-    // Update local state
-    setBag((prev) => ({
-      ...prev,
-      items: prev.items.map((item) =>
-        item.id === itemId ? { ...item, section_id: sectionId } : item
-      ),
-    }));
-
-    // Persist to server
-    try {
-      await fetch(`/api/items/${itemId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ section_id: sectionId }),
-      });
-    } catch (error) {
-      console.error('Error updating item section:', error);
     }
   };
 
@@ -1760,23 +1730,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           )}
         </div>
 
-        {/* Sections Manager */}
-        {bag.items.length > 0 && (
-          <div className="mb-6 bg-[var(--surface)] rounded-xl border border-[var(--border-subtle)] p-4">
-            <SectionManager
-              bagCode={bag.code}
-              sections={bag.sections}
-              items={bag.items.map(item => ({
-                id: item.id,
-                custom_name: item.custom_name,
-                section_id: item.section_id,
-              }))}
-              onSectionsChange={handleSectionsChange}
-              onItemSectionChange={handleItemSectionChange}
-            />
-          </div>
-        )}
-
         {/* Items List */}
         {bag.items.length > 0 ? (
           <ItemList
@@ -1787,7 +1740,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             bagCode={bag.code}
             heroItemId={bag.hero_item_id}
             onToggleHero={handleToggleHero}
-            sections={bag.sections}
             onItemMoved={handleItemMoved}
           />
         ) : (
@@ -1811,6 +1763,41 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             </p>
           </div>
         )}
+
+        {/* The Story - Timeline with visibility controls */}
+        <div className="mt-8 pt-8 border-t border-[var(--border-subtle)]">
+          <div className="flex items-center gap-2 mb-4">
+            <BookOpen className="w-5 h-5 text-[var(--text-secondary)]" />
+            <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+              The Story
+            </h3>
+            <span className="text-xs text-[var(--text-tertiary)] ml-2">
+              Click the eye icon to show/hide entries from public view
+            </span>
+          </div>
+          <StoryTimeline
+            bagCode={bag.code}
+            maxItems={10}
+            showFilters={true}
+            groupByTimePeriod={true}
+            isOwner={true}
+            onItemClick={(entry) => {
+              // Scroll to item and highlight it
+              if ('itemId' in entry && entry.itemId && 'itemExists' in entry && entry.itemExists) {
+                const itemId = entry.itemId;
+                const el = document.getElementById(`item-${itemId}`);
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  // Add highlight effect
+                  el.classList.add('ring-2', 'ring-[var(--teed-green-6)]', 'ring-offset-2');
+                  setTimeout(() => {
+                    el.classList.remove('ring-2', 'ring-[var(--teed-green-6)]', 'ring-offset-2');
+                  }, 2000);
+                }
+              }
+            }}
+          />
+        </div>
       </main>
 
       {/* Share Modal */}

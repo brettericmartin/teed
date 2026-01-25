@@ -924,6 +924,15 @@ export default function PublicBagView({
             showFilters={true}
             groupByTimePeriod={true}
             isOwner={isOwnBag}
+            onItemClick={(entry) => {
+              // Only open modal for items that still exist
+              if ('itemId' in entry && entry.itemId && 'itemExists' in entry && entry.itemExists) {
+                const item = items.find((i) => i.id === entry.itemId);
+                if (item) {
+                  handleItemClick(item);
+                }
+              }
+            }}
           />
         </ContentContainer>
       </div>

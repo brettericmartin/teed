@@ -4,7 +4,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical } from 'lucide-react';
 import ItemCard from './ItemCard';
-import { Item, Section } from './ItemList';
+import { Item } from './ItemList';
 
 type SortableItemCardProps = {
   item: Item;
@@ -13,11 +13,10 @@ type SortableItemCardProps = {
   bagCode: string;
   isHero?: boolean;
   onToggleHero?: (itemId: string) => void;
-  sections?: Section[];
   onItemMoved?: (itemId: string, targetBagTitle: string) => void;
 };
 
-export default function SortableItemCard({ item, onDelete, onUpdate, bagCode, isHero, onToggleHero, sections = [], onItemMoved }: SortableItemCardProps) {
+export default function SortableItemCard({ item, onDelete, onUpdate, bagCode, isHero, onToggleHero, onItemMoved }: SortableItemCardProps) {
   const {
     attributes,
     listeners,
@@ -36,7 +35,7 @@ export default function SortableItemCard({ item, onDelete, onUpdate, bagCode, is
   };
 
   return (
-    <div ref={setNodeRef} style={style} className="relative group">
+    <div ref={setNodeRef} style={style} className="relative group" id={`item-${item.id}`}>
       {/* Drag Handle - always visible on mobile, hover on desktop */}
       <button
         {...attributes}
@@ -53,7 +52,6 @@ export default function SortableItemCard({ item, onDelete, onUpdate, bagCode, is
         bagCode={bagCode}
         isHero={isHero}
         onToggleHero={onToggleHero}
-        sections={sections}
         onItemMoved={onItemMoved}
       />
     </div>
