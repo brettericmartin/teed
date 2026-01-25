@@ -43,11 +43,27 @@ export const CATEGORY_META: Record<CategoryType, {
 
 export const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.1.0',
+    releaseDate: '2026-01-25',
+    title: 'The Story: Click-to-Item & Curator Notes',
+    summary: 'Your timeline now tells a richer story. Click any entry to jump to that item, add curator notes to explain your decisions, and see preserved data for retired items.',
+    isLatest: true,
+    changes: [
+      { text: 'Click timeline entries to open item modal or scroll to item in editor', category: 'feature' },
+      { text: 'Add curator notes (140 char captions) to any timeline entry', category: 'feature' },
+      { text: 'Inline note editor with auto-save for bag owners', category: 'feature' },
+      { text: 'Retired items display preserved name, photo (grayscale), and description', category: 'feature' },
+      { text: 'Show/hide individual timeline entries from public view', category: 'feature' },
+      { text: 'Visual indicators distinguish clickable vs retired items (chevron, badge)', category: 'improvement' },
+      { text: 'History preserved when items deleted (FK cascade fix)', category: 'bugfix' }
+    ]
+  },
+  {
     version: '2.0.0',
     releaseDate: '2026-01-12',
     title: 'Discovery Curation Team',
     summary: 'Introducing automated content discovery that finds trending gear across YouTube, TikTok, and RSS feeds, then curates them into polished collections under @teed.',
-    isLatest: true,
+    isLatest: false,
     changes: [
       { text: 'Discovery System: AI agents research trending gear content across YouTube, TikTok, and RSS feeds', category: 'feature', isAdminOnly: true },
       { text: 'Multi-phase YouTube search finds trending videos, new releases, and content from known reliable channels', category: 'feature', isAdminOnly: true },
