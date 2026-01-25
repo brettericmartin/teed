@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   X, User, FileText, Link, Video, Package, Type, Minus, MoreHorizontal,
   RectangleHorizontal, Square, Plus, Trash2, Edit2, Check, ExternalLink,
-  Instagram, Twitter, Youtube, Globe, Music, Quote, Info, BookOpen
+  Instagram, Twitter, Youtube, Globe, Music, Quote, Info, BookOpen, Camera
 } from 'lucide-react';
+import AvatarCropper from '@/components/ui/AvatarCropper';
 import { ProfileBlock, BlockType, BlockConfig, BlockWidth, HeaderBlockConfig, BioBlockConfig, CustomTextBlockConfig, FeaturedBagsBlockConfig, SocialLinksBlockConfig, SpacerBlockConfig, DividerBlockConfig, EmbedBlockConfig, StoryBlockConfig, DEFAULT_BLOCK_GRID } from '@/lib/blocks/types';
 import { useEditMode } from '@/app/u/[handle]/components/EditModeProvider';
 
@@ -275,13 +276,39 @@ export default function BlockSettingsPanel({
           </div>
         </div>
 
-        {/* Avatar note */}
+        {/* Avatar Upload */}
         <div className="border-t border-[var(--border-subtle)] pt-4">
-          <div className="p-3 rounded-lg bg-[var(--surface-elevated)] border border-[var(--border-subtle)]">
-            <p className="text-sm text-[var(--text-secondary)]">
-              To change your avatar, go to <strong>Settings</strong> in the main menu.
-            </p>
-          </div>
+          <label className="block text-sm font-medium text-[var(--text-secondary)] mb-3">
+            Profile Picture
+          </label>
+          <AvatarUploadSection
+            avatarUrl={profile?.avatar_url}
+            onAvatarChange={async (blob) => {
+              if (!onUpdateProfile) return;
+              // Upload the avatar
+              const file = new File([blob], 'avatar.jpg', { type: blob.type || 'image/jpeg' });
+              const formData = new FormData();
+              formData.append('file', file);
+
+              try {
+                const response = await fetch('/api/profile/avatar', {
+                  method: 'POST',
+                  body: formData,
+                });
+
+                if (!response.ok) {
+                  const data = await response.json();
+                  throw new Error(data.error || 'Failed to upload avatar');
+                }
+
+                const data = await response.json();
+                // Update the profile with new avatar URL
+                await onUpdateProfile({ avatar_url: data.avatar_url });
+              } catch (error) {
+                console.error('Failed to upload avatar:', error);
+              }
+            }}
+          />
         </div>
 
         {/* Size selector */}
@@ -1443,5 +1470,129 @@ function SocialLinkAdder({
       </div>
       <span className="text-xs text-[var(--text-secondary)]">{platform.name}</span>
     </button>
+  );
+}
+
+// Avatar Upload Section component
+function AvatarUploadSection({
+  avatarUrl,
+  onAvatarChange,
+}: {
+  avatarUrl?: string | null;
+  onAvatarChange: (blob: Blob) => Promise<void>;
+}) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [showCropper, setShowCropper] = useState(false);
+  const [imageToCrop, setImageToCrop] = useState<string | null>(null);
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file');
+      return;
+    }
+
+    // Validate file size (max 5MB for cropping)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image must be smaller than 5MB');
+      return;
+    }
+
+    // Read file and open cropper
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImageToCrop(reader.result as string);
+      setShowCropper(true);
+    };
+    reader.readAsDataURL(file);
+
+    // Clear input for re-selection
+    e.target.value = '';
+  };
+
+  const handleCropComplete = async (croppedBlob: Blob) => {
+    setShowCropper(false);
+    setImageToCrop(null);
+    setIsUploading(true);
+
+    try {
+      await onAvatarChange(croppedBlob);
+    } catch (error) {
+      console.error('Failed to upload avatar:', error);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  return (
+    <>
+      <div className="flex items-center gap-4">
+        {/* Avatar Preview */}
+        <div className="relative flex-shrink-0">
+          {avatarUrl ? (
+            <img
+              src={avatarUrl}
+              alt="Avatar"
+              className="w-16 h-16 rounded-full border-2 border-[var(--border-subtle)] object-cover"
+            />
+          ) : (
+            <div className="w-16 h-16 rounded-full border-2 border-[var(--border-subtle)] bg-gradient-to-br from-[var(--teed-green-6)] to-[var(--sky-6)] flex items-center justify-center">
+              <User className="w-8 h-8 text-white" />
+            </div>
+          )}
+          {isUploading && (
+            <div className="absolute inset-0 rounded-full bg-black/50 flex items-center justify-center">
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            </div>
+          )}
+        </div>
+
+        {/* Upload Button */}
+        <div className="flex-1">
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isUploading}
+            className="
+              flex items-center gap-2 px-4 py-2 rounded-lg
+              bg-[var(--surface-elevated)] border border-[var(--border-subtle)]
+              text-sm font-medium text-[var(--text-primary)]
+              hover:bg-[var(--surface-hover)] hover:border-[var(--teed-green-7)]
+              disabled:opacity-50 disabled:cursor-not-allowed
+              transition-all
+            "
+          >
+            <Camera className="w-4 h-4" />
+            {avatarUrl ? 'Change Photo' : 'Upload Photo'}
+          </button>
+          <p className="text-xs text-[var(--text-tertiary)] mt-1.5">
+            Max 5MB. Square recommended.
+          </p>
+        </div>
+
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          onChange={handleFileSelect}
+          className="hidden"
+        />
+      </div>
+
+      {/* Avatar Cropper Modal */}
+      {showCropper && imageToCrop && (
+        <AvatarCropper
+          imageSrc={imageToCrop}
+          onComplete={handleCropComplete}
+          onCancel={() => {
+            setShowCropper(false);
+            setImageToCrop(null);
+          }}
+        />
+      )}
+    </>
   );
 }

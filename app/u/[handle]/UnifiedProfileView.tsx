@@ -141,6 +141,10 @@ function BlockRenderer({
               profile={profile}
               config={config}
               isOwner={isOwner}
+              onAvatarClick={(_rect) => {
+                // Select this header block to open settings panel
+                selectBlock(block.id);
+              }}
             />
             {/* Compact stats below header */}
             {bags.length > 0 && (
