@@ -9,7 +9,7 @@
  */
 
 import { ReactNode, useState, useRef } from 'react';
-import { GripVertical, EyeOff, Pencil } from 'lucide-react';
+import { GripVertical, EyeOff, Pencil, Trash2 } from 'lucide-react';
 import { ProfileBlock } from '@/lib/blocks/types';
 import BlockToolbar from './BlockToolbar';
 
@@ -143,10 +143,28 @@ export default function BaseBlock({
               transition-all
               hover:scale-105 hover:shadow-lg hover:bg-[var(--teed-green-10)]
               focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--teed-green-7)]"
-            title="Edit profile"
+            title="Edit block"
           >
             <Pencil className="w-3.5 h-3.5" />
             <span className="text-xs font-medium">Edit</span>
+          </button>
+
+          {/* Delete button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDelete();
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5
+              bg-[var(--surface-elevated)] text-[var(--copper-9)]
+              border border-[var(--border-subtle)]
+              rounded-full shadow-md
+              transition-all
+              hover:scale-105 hover:shadow-lg hover:bg-[var(--copper-2)] hover:border-[var(--copper-6)]
+              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--copper-7)]"
+            title="Delete block"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
           </button>
         </div>
 

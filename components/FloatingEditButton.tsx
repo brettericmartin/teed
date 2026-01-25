@@ -52,7 +52,11 @@ export function FloatingEditButton() {
   return (
     <>
       {/* Floating button with tooltip */}
-      <div className="fixed bottom-6 right-6 z-50 group">
+      {/* On desktop in edit mode, shift left to avoid overlap with settings panel (380px + margin) */}
+      <div className={cn(
+        "fixed bottom-6 z-50 group transition-all duration-300",
+        isEditMode ? "right-6 lg:right-[420px]" : "right-6"
+      )}>
         <button
           onClick={handleClick}
           disabled={isExiting}
@@ -87,7 +91,8 @@ export function FloatingEditButton() {
       {/* Success toast */}
       <div
         className={cn(
-          'fixed bottom-20 right-6 z-50',
+          'fixed bottom-20 z-50',
+          'right-6',
           'px-4 py-2.5 rounded-lg',
           'bg-teed-green text-white shadow-lg',
           'text-sm font-medium',
