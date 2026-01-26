@@ -1,5 +1,20 @@
 # Teed Development Plan
 
+> **STATUS: V1.0 COMPLETE** (January 2026)
+>
+> Core epics A, B, and C are complete. The foundation is solid.
+>
+> | Epic | Status | Notes |
+> |------|--------|-------|
+> | Epic A: Bags Core | ✅ Complete | Full bag/item CRUD, hero items, public views, sharing |
+> | Epic B: Safe Evolution | ✅ Complete | Item history tracking, version history via migrations 082-083 |
+> | Epic C: Profiles as Maps | ✅ Complete | Profile blocks, featured bags, panel system |
+> | Epic D: Reference Blocks | ✅ Complete | Embed panel, link panels on profiles |
+> | Epic E: Email Capture | ⚠️ Deferred | External newsletter integrations work via links |
+> | Epic F: Constructive Validation | ✅ Complete | Badge system, bag analyzer, subtle social proof |
+
+---
+
 This roadmap translates Teed doctrine into execution. It bounds features without over-specifying implementation.
 
 ---
