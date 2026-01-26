@@ -98,13 +98,14 @@ export default function UniversalLinkAdder({
     try {
       const response = await fetch('/api/user/bags');
       if (response.ok) {
-        const bags = await response.json();
+        const data = await response.json();
+        const bags = data.bags || [];
         setUserBags(
           bags.map((bag: any) => ({
             id: bag.id,
             code: bag.code,
             title: bag.title,
-            itemCount: bag.items?.length || 0,
+            itemCount: bag.item_count || 0,
             updatedAt: bag.updated_at,
           }))
         );

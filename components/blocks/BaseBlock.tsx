@@ -113,8 +113,8 @@ export default function BaseBlock({
           ${!block.is_visible ? 'opacity-50' : ''}
         `}
       >
-        {/* Edit controls - pills at top of block */}
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+        {/* Edit controls - pills at top of block, inside panel bounds to avoid clipping */}
+        <div className="absolute top-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
           {/* Drag handle */}
           <div
             className={`

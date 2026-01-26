@@ -2,6 +2,7 @@
 
 import { useState, FormEvent, useEffect, useCallback } from 'react';
 import AISuggestions from './AISuggestions';
+import ItemPreviewModal from './ItemPreviewModal';
 
 type ProductSuggestion = {
   custom_name: string;
@@ -9,6 +10,7 @@ type ProductSuggestion = {
   notes: string;
   category: string;
   confidence: number;
+  brand?: string;
 };
 
 type ClarificationQuestion = {
@@ -29,6 +31,8 @@ type AddItemFormProps = {
     custom_description?: string;
     notes?: string;
     quantity?: number;
+    brand?: string;
+    selectedPhotoUrl?: string;
   }) => Promise<void>;
   onCancel: () => void;
   bagTitle?: string; // Optional: for context
@@ -40,6 +44,10 @@ export default function AddItemForm({ onSubmit, onCancel, bagTitle }: AddItemFor
   const [notes, setNotes] = useState('');
   const [quantity, setQuantity] = useState('1');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Preview modal state
+  const [previewModalOpen, setPreviewModalOpen] = useState(false);
+  const [selectedSuggestion, setSelectedSuggestion] = useState<ProductSuggestion | null>(null);
 
   // AI Enrichment state
   const [suggestions, setSuggestions] = useState<ProductSuggestion[]>([]);
@@ -109,40 +117,58 @@ export default function AddItemForm({ onSubmit, onCancel, bagTitle }: AddItemFor
     return () => clearTimeout(timer);
   }, [name, existingAnswers, fetchSuggestions]);
 
-  const handleSelectSuggestion = async (suggestion: ProductSuggestion) => {
-    // Auto-fill form with suggestion
-    setName(suggestion.custom_name);
-    setDescription(suggestion.custom_description);
-    setNotes(suggestion.notes);
+  const handleSelectSuggestion = (suggestion: ProductSuggestion) => {
+    // Open preview modal instead of auto-submitting
+    // This allows user to review details and select a photo
+    setSelectedSuggestion(suggestion);
+    setPreviewModalOpen(true);
 
-    // Clear suggestions
+    // Clear suggestions UI (modal takes over)
     setSuggestions([]);
     setQuestions([]);
     setClarificationNeeded(false);
+  };
 
-    // Auto-submit if we have confidence
-    if (suggestion.confidence >= 0.85) {
-      setIsSubmitting(true);
-      try {
-        await onSubmit({
-          custom_name: suggestion.custom_name,
-          custom_description: suggestion.custom_description || undefined,
-          notes: suggestion.notes || undefined,
-          quantity: parseInt(quantity) || 1,
-        });
+  const handleConfirmItem = async (finalItem: {
+    custom_name: string;
+    brand?: string;
+    custom_description?: string;
+    notes?: string;
+    selectedPhotoUrl?: string;
+  }) => {
+    try {
+      await onSubmit({
+        custom_name: finalItem.custom_name,
+        brand: finalItem.brand,
+        custom_description: finalItem.custom_description,
+        notes: finalItem.notes,
+        quantity: parseInt(quantity) || 1,
+        selectedPhotoUrl: finalItem.selectedPhotoUrl,
+      });
 
-        // Reset form
-        setName('');
-        setDescription('');
-        setNotes('');
-        setQuantity('1');
-        setExistingAnswers({});
-      } catch (error) {
-        console.error('Error adding item:', error);
-      } finally {
-        setIsSubmitting(false);
-      }
+      // Close modal and reset state
+      setPreviewModalOpen(false);
+      setSelectedSuggestion(null);
+      setName('');
+      setDescription('');
+      setNotes('');
+      setQuantity('1');
+      setExistingAnswers({});
+    } catch (error) {
+      console.error('Error adding item:', error);
+      throw error; // Re-throw so modal knows it failed
     }
+  };
+
+  const handleCancelPreview = () => {
+    setPreviewModalOpen(false);
+    // Keep the suggestion data in the form for manual editing if they want
+    if (selectedSuggestion) {
+      setName(selectedSuggestion.custom_name);
+      setDescription(selectedSuggestion.custom_description || '');
+      setNotes(selectedSuggestion.notes || '');
+    }
+    setSelectedSuggestion(null);
   };
 
   const handleAnswerQuestion = (answers: Record<string, string>) => {
@@ -321,6 +347,15 @@ export default function AddItemForm({ onSubmit, onCancel, bagTitle }: AddItemFor
           {isSubmitting ? 'Adding...' : 'Add Item'}
         </button>
       </div>
+
+      {/* Item Preview Modal - for photo selection */}
+      <ItemPreviewModal
+        isOpen={previewModalOpen}
+        suggestion={selectedSuggestion}
+        bagTitle={bagTitle}
+        onConfirm={handleConfirmItem}
+        onCancel={handleCancelPreview}
+      />
     </form>
   );
 }

@@ -173,8 +173,8 @@ export function ProfileActionBar({
                   />
                   <MenuRow
                     icon={<LayoutGrid className="w-5 h-5" />}
-                    label="Block Settings"
-                    description="Arrange and configure blocks"
+                    label="Panel Settings"
+                    description="Arrange and configure panels"
                     onClick={() => handleCustomizeOption('blocks')}
                   />
                 </div>

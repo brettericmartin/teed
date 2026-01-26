@@ -415,24 +415,10 @@ function analyzeOrganization(bag: BagData): DimensionScore {
 
   const itemCount = bag.items.length;
 
-  // Sections (30 points)
-  const sectionCount = bag.sections.length;
-  if (itemCount > 8 && sectionCount === 0) {
-    issues.push(createIssue('organization', 'warning', 'no-sections',
-      'Large bag without sections',
-      `You have ${itemCount} items but no sections.`,
-      'Organize items into logical sections for better navigation.',
-      6, 'medium'));
-  } else if (sectionCount > 0) {
-    score += 30;
-  } else if (itemCount <= 8) {
-    score += 20; // Small bags don't need sections
-  }
-
-  // Featured items (25 points)
+  // Featured items (35 points)
   const featuredCount = bag.items.filter((i) => i.is_featured).length;
   if (featuredCount >= 1 && featuredCount <= 8) {
-    score += 25;
+    score += 35;
   } else if (itemCount > 5) {
     issues.push(createIssue('organization', 'suggestion', 'no-featured',
       'No featured items',
@@ -441,17 +427,17 @@ function analyzeOrganization(bag: BagData): DimensionScore {
       4, 'easy'));
   }
 
-  // Sort order (20 points)
+  // Sort order (30 points)
   const hasSortOrder = bag.items.every((item, idx) =>
     item.sort_index !== null && item.sort_index !== undefined
   );
   if (hasSortOrder) {
-    score += 20;
+    score += 30;
   }
 
-  // Hero item (15 points)
+  // Hero item (25 points)
   if (bag.hero_item_id) {
-    score += 15;
+    score += 25;
   } else if (itemCount > 0) {
     issues.push(createIssue('organization', 'suggestion', 'no-hero',
       'No hero item set',
@@ -460,13 +446,15 @@ function analyzeOrganization(bag: BagData): DimensionScore {
       3, 'easy'));
   }
 
-  // Items per section balance (10 points)
-  if (sectionCount > 0) {
-    const itemsInSections = bag.items.filter((i) => i.section_id).length;
-    const ratio = itemsInSections / itemCount;
-    score += Math.round(ratio * 10);
-  } else if (itemCount <= 8) {
+  // Good item count (10 points) - not too few, not overwhelming
+  if (itemCount >= 3 && itemCount <= 20) {
     score += 10;
+  } else if (itemCount > 20) {
+    issues.push(createIssue('organization', 'suggestion', 'many-items',
+      'Large collection',
+      `You have ${itemCount} items which may be hard to browse.`,
+      'Consider creating multiple focused bags.',
+      2, 'medium'));
   }
 
   return {
@@ -767,9 +755,6 @@ function identifyStrengths(bag: BagData, dimensions: DimensionScore[]): string[]
   // Check specific strengths
   if (bag.items.length >= 10) {
     strengths.push('Comprehensive item collection');
-  }
-  if (bag.sections.length >= 3) {
-    strengths.push('Well-sectioned for easy browsing');
   }
   const featuredCount = bag.items.filter((i) => i.is_featured).length;
   if (featuredCount >= 3) {

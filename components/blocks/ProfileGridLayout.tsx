@@ -287,7 +287,7 @@ export default function ProfileGridLayout({
   return (
     <div
       ref={containerRef}
-      className={`relative ${isEditMode ? 'pt-8' : ''}`}
+      className="relative"
     >
       {/* Grid lines overlay - shows column structure */}
       {isEditMode && (() => {

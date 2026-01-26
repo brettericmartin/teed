@@ -11,6 +11,7 @@ interface Bag {
 
 interface StoryBlockProps {
   profileId: string;
+  profileHandle?: string;
   bags?: Bag[];
   config?: StoryBlockConfig;
   isOwner?: boolean;
@@ -27,6 +28,7 @@ interface StoryBlockProps {
  */
 export default function StoryBlock({
   profileId,
+  profileHandle,
   bags = [],
   config = {},
   isOwner = false,
@@ -57,6 +59,7 @@ export default function StoryBlock({
     <div className="h-full flex flex-col py-2 px-4">
       <StoryTimeline
         profileId={profileId}
+        profileHandle={profileHandle}
         maxItems={maxItems}
         showFilters={showFiltersBar}
         groupByTimePeriod={groupByTimePeriod}

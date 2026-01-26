@@ -3,7 +3,7 @@ import { createServerSupabase } from '@/lib/serverSupabase';
 
 /**
  * GET /api/user/bags
- * Get the current user's bags (lightweight: id, code, title only)
+ * Get the current user's bags with item counts
  * Used for the "Add to Bag" selector modal
  */
 export async function GET() {
@@ -20,10 +20,10 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Fetch user's bags (lightweight fields only)
+    // Fetch user's bags with item count
     const { data: bags, error: bagsError } = await supabase
       .from('bags')
-      .select('id, code, title')
+      .select('id, code, title, updated_at, bag_items(count)')
       .eq('owner_id', user.id)
       .order('updated_at', { ascending: false, nullsFirst: false });
 
@@ -35,7 +35,16 @@ export async function GET() {
       );
     }
 
-    return NextResponse.json({ bags: bags || [] });
+    // Transform the response to include item_count
+    const bagsWithCount = (bags || []).map((bag: any) => ({
+      id: bag.id,
+      code: bag.code,
+      title: bag.title,
+      updated_at: bag.updated_at,
+      item_count: bag.bag_items?.[0]?.count || 0,
+    }));
+
+    return NextResponse.json({ bags: bagsWithCount });
   } catch (error) {
     console.error('Unexpected error in GET /api/user/bags:', error);
     return NextResponse.json(

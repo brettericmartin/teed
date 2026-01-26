@@ -307,6 +307,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     brand?: string;
     imageUrl?: string; // External image URL from APIS
     photo_url?: string; // Direct photo URL
+    selectedPhotoUrl?: string; // Photo URL selected from preview modal
   }) => {
     try {
       // Map imageUrl to photo_url for API
@@ -314,8 +315,9 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         ...itemData,
         photo_url: itemData.photo_url || itemData.imageUrl || undefined,
       };
-      // Remove imageUrl from payload (API doesn't expect it)
+      // Remove non-API fields from payload
       delete (apiPayload as any).imageUrl;
+      delete (apiPayload as any).selectedPhotoUrl;
 
       const response = await fetch(`/api/bags/${bag.code}/items`, {
         method: 'POST',
@@ -328,10 +330,59 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       }
 
       const newItem = await response.json();
+      let finalPhotoUrl = newItem.photo_url;
+      let finalCustomPhotoId = newItem.custom_photo_id;
+
+      // If a photo was selected in the preview modal, upload it to storage
+      if (itemData.selectedPhotoUrl) {
+        try {
+          console.log('[handleAddItem] Uploading selected photo:', itemData.selectedPhotoUrl.substring(0, 50));
+          const sanitizedName = itemData.custom_name.replace(/[^a-zA-Z0-9-_]/g, '-').substring(0, 50);
+          const uploadResponse = await fetch('/api/media/upload-from-url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              imageUrl: itemData.selectedPhotoUrl,
+              itemId: newItem.id,
+              filename: `${sanitizedName}.jpg`,
+            }),
+          });
+
+          if (uploadResponse.ok) {
+            const uploadResult = await uploadResponse.json();
+            console.log('[handleAddItem] Photo uploaded:', uploadResult);
+
+            // Update item with the custom_photo_id
+            await fetch(`/api/items/${newItem.id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                custom_photo_id: uploadResult.mediaAssetId,
+              }),
+            });
+
+            finalPhotoUrl = uploadResult.url;
+            finalCustomPhotoId = uploadResult.mediaAssetId;
+          } else {
+            console.error('[handleAddItem] Failed to upload photo:', await uploadResponse.text());
+            // Continue without photo - don't fail the whole operation
+            toast.showError('Photo upload failed, but item was added');
+          }
+        } catch (photoError) {
+          console.error('[handleAddItem] Error uploading photo:', photoError);
+          toast.showError('Photo upload failed, but item was added');
+        }
+      }
+
       const newItemCount = bag.items.length + 1;
       setBag((prev) => ({
         ...prev,
-        items: [...prev.items, { ...newItem, links: [] }],
+        items: [...prev.items, {
+          ...newItem,
+          photo_url: finalPhotoUrl,
+          custom_photo_id: finalCustomPhotoId,
+          links: [],
+        }],
       }));
       // QuickAddItem component handles its own state reset
 
@@ -342,10 +393,14 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       celebrateMilestone(newItemCount);
 
       // Trigger background auto-enrichment (don't await - run silently)
-      autoEnrichItem(newItem.id, itemData.custom_name);
+      // Skip if we already have brand (from preview modal)
+      if (!itemData.brand) {
+        autoEnrichItem(newItem.id, itemData.custom_name);
+      }
     } catch (error) {
       console.error('Error adding item:', error);
       alert('Failed to add item. Please try again.');
+      throw error; // Re-throw so caller knows it failed
     }
   };
 

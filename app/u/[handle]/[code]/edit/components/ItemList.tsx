@@ -71,11 +71,10 @@ type ItemListProps = {
   bagCode: string;
   heroItemId?: string | null;
   onToggleHero?: (itemId: string) => void;
-  sections?: Section[];
   onItemMoved?: (itemId: string, targetBagTitle: string) => void;
 };
 
-export default function ItemList({ items, onDelete, onUpdate, onReorder, bagCode, heroItemId, onToggleHero, sections = [], onItemMoved }: ItemListProps) {
+export default function ItemList({ items, onDelete, onUpdate, onReorder, bagCode, heroItemId, onToggleHero, onItemMoved }: ItemListProps) {
   // Sort items by sort_index
   const [sortedItems, setSortedItems] = useState([...items].sort((a, b) => a.sort_index - b.sort_index));
   const [isMounted, setIsMounted] = useState(false);
@@ -157,7 +156,6 @@ export default function ItemList({ items, onDelete, onUpdate, onReorder, bagCode
               bagCode={bagCode}
               isHero={heroItemId === item.id}
               onToggleHero={onToggleHero}
-              sections={sections}
               onItemMoved={onItemMoved}
             />
           </div>
@@ -179,7 +177,6 @@ export default function ItemList({ items, onDelete, onUpdate, onReorder, bagCode
               bagCode={bagCode}
               isHero={heroItemId === item.id}
               onToggleHero={onToggleHero}
-              sections={sections}
               onItemMoved={onItemMoved}
             />
           ))}

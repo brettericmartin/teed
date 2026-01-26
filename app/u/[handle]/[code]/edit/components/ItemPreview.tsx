@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Check, Edit2, X, Sparkles } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Check, Edit2, X, Sparkles, ImageOff, AlertCircle, Loader2 } from 'lucide-react';
 import { GolfLoader } from '@/components/ui/GolfLoader';
 
 type ProductSuggestion = {
@@ -31,6 +31,87 @@ export default function ItemPreview({ suggestion, onConfirm, onCancel, isAdding 
   const [showFactOptions, setShowFactOptions] = useState(false);
   const [isGeneratingFacts, setIsGeneratingFacts] = useState(false);
   const [customNote, setCustomNote] = useState('');
+
+  // Photo search state
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
+  const [isLoadingPhotos, setIsLoadingPhotos] = useState(false);
+  const [photoError, setPhotoError] = useState<string | null>(null);
+  const [failedPhotos, setFailedPhotos] = useState<Set<number>>(new Set());
+
+  // Fetch product photos on mount (if no existing image)
+  useEffect(() => {
+    if (!suggestion.imageUrl) {
+      fetchPhotos();
+    }
+  }, [suggestion]);
+
+  const fetchPhotos = async () => {
+    setIsLoadingPhotos(true);
+    setPhotoError(null);
+    setFailedPhotos(new Set());
+
+    try {
+      // Build search query from name and brand
+      const searchQuery = editedSuggestion.brand
+        ? `${editedSuggestion.brand} ${editedSuggestion.custom_name}`
+        : editedSuggestion.custom_name;
+
+      const response = await fetch('/api/ai/find-product-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: searchQuery }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to search for photos');
+      }
+
+      const data = await response.json();
+      const imageUrls = data.images || [];
+
+      // Take first 6 images
+      setPhotos(imageUrls.slice(0, 6));
+
+      // Auto-select first image if available
+      if (imageUrls.length > 0) {
+        setSelectedPhotoIndex(0);
+        setEditedSuggestion(prev => ({ ...prev, imageUrl: imageUrls[0] }));
+      }
+    } catch (error: any) {
+      console.error('Error fetching product photos:', error);
+      setPhotoError(error.message || 'Could not load photos');
+    } finally {
+      setIsLoadingPhotos(false);
+    }
+  };
+
+  const handlePhotoSelect = (index: number) => {
+    if (failedPhotos.has(index)) return;
+    setSelectedPhotoIndex(index);
+    setEditedSuggestion(prev => ({ ...prev, imageUrl: photos[index] }));
+  };
+
+  const handlePhotoError = (index: number) => {
+    setFailedPhotos(prev => new Set(prev).add(index));
+    // If the failed photo was selected, try to select next valid one
+    if (selectedPhotoIndex === index) {
+      const nextValid = photos.findIndex((_, i) => i !== index && !failedPhotos.has(i));
+      if (nextValid >= 0) {
+        setSelectedPhotoIndex(nextValid);
+        setEditedSuggestion(prev => ({ ...prev, imageUrl: photos[nextValid] }));
+      } else {
+        setSelectedPhotoIndex(null);
+        setEditedSuggestion(prev => ({ ...prev, imageUrl: undefined }));
+      }
+    }
+  };
+
+  const handleSkipPhoto = () => {
+    setSelectedPhotoIndex(null);
+    setEditedSuggestion(prev => ({ ...prev, imageUrl: undefined }));
+  };
 
   const handleConfirm = () => {
     // Use selected fun fact, custom note, or empty
@@ -100,22 +181,116 @@ export default function ItemPreview({ suggestion, onConfirm, onCancel, isAdding 
 
         {/* Content */}
         <div className="p-6 space-y-6">
-          {/* Image Preview */}
-          {editedSuggestion.imageUrl && (
-            <div className="flex justify-center">
-              <div className="relative w-48 h-48 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
-                <img
-                  src={editedSuggestion.imageUrl}
-                  alt={editedSuggestion.custom_name}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    // Hide image on error
-                    (e.target as HTMLImageElement).style.display = 'none';
-                  }}
-                />
+          {/* Photo Selection Section */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Choose Photo
+            </label>
+
+            {/* If suggestion came with an image (e.g., from link scraping), show it */}
+            {suggestion.imageUrl && !photos.length && !isLoadingPhotos ? (
+              <div className="flex justify-center">
+                <div className="relative w-48 h-48 rounded-lg overflow-hidden bg-gray-100 border-2 border-[var(--teed-green-8)]">
+                  <img
+                    src={suggestion.imageUrl}
+                    alt={editedSuggestion.custom_name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
+                  <div className="absolute top-2 right-2 w-6 h-6 bg-[var(--teed-green-8)] rounded-full flex items-center justify-center">
+                    <Check className="w-4 h-4 text-white" />
+                  </div>
+                </div>
               </div>
-            </div>
-          )}
+            ) : isLoadingPhotos ? (
+              /* Loading skeleton */
+              <div className="grid grid-cols-3 gap-2">
+                {[...Array(6)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="aspect-square rounded-lg bg-gray-100 animate-pulse"
+                  />
+                ))}
+              </div>
+            ) : photoError ? (
+              /* Error state */
+              <div className="flex flex-col items-center justify-center py-6 px-4 bg-gray-50 rounded-lg border border-gray-200">
+                <AlertCircle className="w-8 h-8 text-gray-400 mb-2" />
+                <p className="text-sm text-gray-600 text-center">{photoError}</p>
+                <button
+                  onClick={fetchPhotos}
+                  className="mt-3 text-sm text-[var(--teed-green-9)] hover:text-[var(--teed-green-10)] font-medium"
+                >
+                  Try again
+                </button>
+              </div>
+            ) : photos.length === 0 ? (
+              /* No photos found */
+              <div className="flex flex-col items-center justify-center py-6 px-4 bg-gray-50 rounded-lg border border-gray-200">
+                <ImageOff className="w-8 h-8 text-gray-400 mb-2" />
+                <p className="text-sm text-gray-600 text-center">No photos found</p>
+                <p className="text-xs text-gray-500 mt-1">You can add one later</p>
+              </div>
+            ) : (
+              /* Photo grid */
+              <div className="space-y-3">
+                <div className="grid grid-cols-3 gap-2">
+                  {photos.map((photoUrl, index) => {
+                    const isFailed = failedPhotos.has(index);
+                    const isSelected = selectedPhotoIndex === index && !isFailed;
+
+                    if (isFailed) {
+                      return (
+                        <div
+                          key={index}
+                          className="aspect-square rounded-lg bg-gray-100 flex items-center justify-center"
+                        >
+                          <ImageOff className="w-6 h-6 text-gray-300" />
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => handlePhotoSelect(index)}
+                        className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                          isSelected
+                            ? 'border-[var(--teed-green-8)] ring-2 ring-[var(--teed-green-6)] ring-offset-1'
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                      >
+                        <img
+                          src={photoUrl}
+                          alt={`Product photo option ${index + 1}`}
+                          className="w-full h-full object-cover"
+                          onError={() => handlePhotoError(index)}
+                        />
+                        {isSelected && (
+                          <div className="absolute top-1 right-1 w-5 h-5 bg-[var(--teed-green-8)] rounded-full flex items-center justify-center">
+                            <Check className="w-3 h-3 text-white" />
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Skip photo option */}
+                {selectedPhotoIndex !== null && (
+                  <button
+                    onClick={handleSkipPhoto}
+                    className="text-sm text-gray-500 hover:text-gray-700"
+                  >
+                    Skip photo
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Brand */}
           <div>
