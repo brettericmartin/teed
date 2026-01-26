@@ -326,6 +326,48 @@ npx playwright test tests/e2e/05-user-profile.spec.ts
 
 ---
 
+## Manual Testing Philosophy
+
+QA testing follows Teed doctrine:
+
+- **No urgency**: Testing is calm and thorough
+- **Automated first**: Run the script before manual testing
+- **Complete flows**: Test full user journeys, not isolated features
+- **Living documentation**: Checklist evolves with the product
+
+### Quick QA Check
+
+```bash
+# Run automated tests (takes ~10 seconds)
+npx tsx scripts/manual-qa-test.ts --auth
+```
+
+### Testing Documentation
+
+| Document | Location | Purpose |
+|----------|----------|---------|
+| QA Test Script | `/scripts/manual-qa-test.ts` | Automated API testing |
+| Manual Checklist | `/docs/MANUAL_TESTING_CHECKLIST.md` | Browser-based testing |
+| Research Log | `/docs/testing/NICHE_RESEARCH_LOG.md` | Rotating test data |
+| Session Template | `/docs/testing/TEST_SESSION_TEMPLATE.md` | Per-session records |
+
+### When to Run Tests
+
+1. **Before any production release** - Full automated + manual checklist
+2. **After major feature additions** - Automated tests + affected manual sections
+3. **Quick verification** - Just the automated script
+
+### New Feature Protocol
+
+When adding a new feature:
+
+1. Implement and merge the feature
+2. Add test cases to `/scripts/manual-qa-test.ts` for API-testable features
+3. Add test items to `/docs/MANUAL_TESTING_CHECKLIST.md` for UI features
+4. Run automated tests immediately
+
+---
+
 ## Anti-Drift Reminder
 
 Every commit should ask:
