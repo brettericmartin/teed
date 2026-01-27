@@ -337,10 +337,10 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
                 )}
               </Link>
 
-              {/* Sign In - hidden on mobile */}
+              {/* Sign In */}
               <Link
                 href="/login"
-                className="hidden sm:flex px-4 py-2.5 min-h-[44px] items-center text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                className="flex px-3 sm:px-4 py-2.5 min-h-[44px] items-center text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
               >
                 Sign In
               </Link>
