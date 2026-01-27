@@ -152,6 +152,16 @@ export default function BlockSettingsPanel({
     }
   }, [isOpen]);
 
+  // Add body class to coordinate with mobile navigation
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('settings-panel-open');
+    } else {
+      document.body.classList.remove('settings-panel-open');
+    }
+    return () => document.body.classList.remove('settings-panel-open');
+  }, [isOpen]);
+
   // Save profile updates
   const handleSaveProfileField = useCallback(async (updates: Partial<ProfileData>) => {
     if (!onUpdateProfile) return;
@@ -1485,6 +1495,10 @@ function AvatarUploadSection({
   const [isUploading, setIsUploading] = useState(false);
   const [showCropper, setShowCropper] = useState(false);
   const [imageToCrop, setImageToCrop] = useState<string | null>(null);
+  const [localPreviewUrl, setLocalPreviewUrl] = useState<string | null>(null);
+
+  // Use local preview when available for immediate feedback
+  const displayUrl = localPreviewUrl || avatarUrl;
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -1519,10 +1533,20 @@ function AvatarUploadSection({
     setImageToCrop(null);
     setIsUploading(true);
 
+    // Create immediate preview from blob
+    const previewUrl = URL.createObjectURL(croppedBlob);
+    setLocalPreviewUrl(previewUrl);
+
     try {
       await onAvatarChange(croppedBlob);
+      // Success - clear local preview, let prop take over
+      setLocalPreviewUrl(null);
+      URL.revokeObjectURL(previewUrl);
     } catch (error) {
       console.error('Failed to upload avatar:', error);
+      // Revert on failure
+      setLocalPreviewUrl(null);
+      URL.revokeObjectURL(previewUrl);
     } finally {
       setIsUploading(false);
     }
@@ -1533,9 +1557,9 @@ function AvatarUploadSection({
       <div className="flex items-center gap-4">
         {/* Avatar Preview */}
         <div className="relative flex-shrink-0">
-          {avatarUrl ? (
+          {displayUrl ? (
             <img
-              src={avatarUrl}
+              src={displayUrl}
               alt="Avatar"
               className="w-16 h-16 rounded-full border-2 border-[var(--border-subtle)] object-cover"
             />

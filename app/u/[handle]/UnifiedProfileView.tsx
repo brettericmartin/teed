@@ -114,7 +114,7 @@ function BlockRenderer({
   isOwner: boolean;
   isDragging?: boolean;
 }) {
-  const { isEditMode, toggleBlockVisibility, deleteBlock, duplicateBlock, selectedBlockId, selectBlock } = useEditMode();
+  const { isEditMode, setEditMode, toggleBlockVisibility, deleteBlock, duplicateBlock, selectedBlockId, selectBlock } = useEditMode();
 
   const isSelected = selectedBlockId === block.id;
 
@@ -142,7 +142,10 @@ function BlockRenderer({
               config={config}
               isOwner={isOwner}
               onAvatarClick={(_rect) => {
-                // Select this header block to open settings panel
+                // Enable edit mode if not already, then select block to open settings
+                if (!isEditMode) {
+                  setEditMode(true);
+                }
                 selectBlock(block.id);
               }}
             />
@@ -322,6 +325,7 @@ function ProfileContent({
   onOpenThemeEditor,
   onUpdateProfile,
   previewDevice,
+  editingLayout,
 }: {
   profile: Profile;
   bags: Bag[];
@@ -329,16 +333,12 @@ function ProfileContent({
   onOpenThemeEditor?: () => void;
   onUpdateProfile?: (updates: { social_links?: Record<string, string> }) => Promise<void>;
   previewDevice: DeviceType;
+  editingLayout: 'desktop' | 'mobile';
 }) {
-  const { blocks, isEditMode, updateBlockLayout, selectBlock } = useEditMode();
+  const { blocks, isEditMode, updateBlockLayout, selectBlock, reorderBlocks } = useEditMode();
 
-  // Sort blocks by grid position (y first, then x)
-  const sortedBlocks = [...blocks].sort((a, b) => {
-    const aY = a.gridY ?? a.sort_order;
-    const bY = b.gridY ?? b.sort_order;
-    if (aY !== bY) return aY - bY;
-    return (a.gridX ?? 0) - (b.gridX ?? 0);
-  });
+  // Sort blocks for mobile view (by sort_order)
+  const sortedBlocks = [...blocks].sort((a, b) => a.sort_order - b.sort_order);
 
   // Calculate preview width based on device
   const previewWidth = DEVICE_WIDTHS[previewDevice];
@@ -404,13 +404,29 @@ function ProfileContent({
     [profile, bags, isOwnProfile]
   );
 
+  // Handle mobile reorder (arrow buttons)
+  const handleReorderBlock = useCallback(
+    (blockId: string, direction: 'up' | 'down') => {
+      const currentIndex = sortedBlocks.findIndex((b) => b.id === blockId);
+      if (currentIndex === -1) return;
+
+      const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+      if (newIndex < 0 || newIndex >= sortedBlocks.length) return;
+
+      reorderBlocks(currentIndex, newIndex);
+    },
+    [sortedBlocks, reorderBlocks]
+  );
+
   // Render blocks using ProfileGridLayout
   const renderBlocks = () => {
     return (
       <ProfileGridLayout
         blocks={sortedBlocks}
         isEditMode={isEditMode && isOwnProfile}
+        editingLayout={editingLayout}
         onLayoutChange={handleLayoutChange}
+        onReorderBlock={handleReorderBlock}
         renderBlock={renderBlock}
       />
     );
@@ -465,6 +481,7 @@ export default function UnifiedProfileView({
   const [isThemeEditorOpen, setIsThemeEditorOpen] = useState(false);
   const [previewDevice, setPreviewDevice] = useState<DeviceType>('desktop');
   const [showCelebration, setShowCelebration] = useState(showWelcome);
+  const [editingLayout, setEditingLayout] = useState<'desktop' | 'mobile'>('desktop');
 
   // Use preview theme while editing, otherwise saved theme
   const displayTheme = previewTheme ?? theme;
@@ -536,9 +553,10 @@ export default function UnifiedProfileView({
             onAddLink={() => setIsLinkAdderOpen(true)}
             onAddSocial={() => setIsSocialFlowOpen(true)}
             onCustomizeTheme={() => setIsThemeEditorOpen(true)}
-            onCustomizeProfile={() => setIsThemeEditorOpen(true)}
             onViewStats={() => router.push(`/u/${profile.handle}/stats`)}
             profileHandle={profile.handle}
+            editingLayout={editingLayout}
+            onToggleEditingLayout={() => setEditingLayout(l => l === 'desktop' ? 'mobile' : 'desktop')}
           />
         )}
 
@@ -550,6 +568,7 @@ export default function UnifiedProfileView({
           isOwnProfile={isOwnProfile}
           onOpenThemeEditor={() => setIsThemeEditorOpen(true)}
           onUpdateProfile={handleUpdateProfile}
+          editingLayout={editingLayout}
         />
 
         {/* Block Settings Panel - uses provider state */}
@@ -741,20 +760,31 @@ function ProfileActionBarConnected({
   onAddLink,
   onAddSocial,
   onCustomizeTheme,
-  onCustomizeProfile,
   onViewStats,
   profileHandle,
+  editingLayout,
+  onToggleEditingLayout,
 }: {
   onAddBag: () => void;
   onAddBlock: () => void;
   onAddLink: () => void;
   onAddSocial: () => void;
   onCustomizeTheme: () => void;
-  onCustomizeProfile: () => void;
   onViewStats: () => void;
   profileHandle: string;
+  editingLayout: 'desktop' | 'mobile';
+  onToggleEditingLayout: () => void;
 }) {
-  const { setEditMode } = useEditMode();
+  const { setEditMode, isEditMode, blocks, selectBlock } = useEditMode();
+
+  // Handle "Profile Info" menu item - opens header block settings
+  const handleCustomizeProfile = useCallback(() => {
+    const headerBlock = blocks.find(b => b.block_type === 'header');
+    setEditMode(true);
+    if (headerBlock) {
+      selectBlock(headerBlock.id);
+    }
+  }, [blocks, setEditMode, selectBlock]);
 
   return (
     <ProfileActionBar
@@ -763,10 +793,13 @@ function ProfileActionBarConnected({
       onAddLink={onAddLink}
       onAddSocial={onAddSocial}
       onCustomizeTheme={onCustomizeTheme}
-      onCustomizeProfile={onCustomizeProfile}
+      onCustomizeProfile={handleCustomizeProfile}
       onEditBlocks={() => setEditMode(true)}
       onViewStats={onViewStats}
       profileHandle={profileHandle}
+      isEditMode={isEditMode}
+      editingLayout={editingLayout}
+      onToggleEditingLayout={onToggleEditingLayout}
     />
   );
 }
@@ -779,6 +812,7 @@ function ProfilePreviewContainer({
   isOwnProfile,
   onOpenThemeEditor,
   onUpdateProfile,
+  editingLayout,
 }: {
   previewDevice: DeviceType;
   profile: Profile;
@@ -786,20 +820,35 @@ function ProfilePreviewContainer({
   isOwnProfile: boolean;
   onOpenThemeEditor: () => void;
   onUpdateProfile: (updates: { social_links?: Record<string, string> }) => Promise<void>;
+  editingLayout: 'desktop' | 'mobile';
 }) {
   const { isEditMode } = useEditMode();
 
-  // Only show device frame in edit mode for non-desktop devices
-  const showDeviceFrame = isEditMode && previewDevice !== 'desktop';
+  // Show device frame when:
+  // - In edit mode with non-desktop preview device, OR
+  // - In edit mode on desktop editing mobile layout (show phone frame)
+  const showMobileFrame = isEditMode && editingLayout === 'mobile';
+  const showDeviceFrame = isEditMode && (previewDevice !== 'desktop' || showMobileFrame);
 
   // Get appropriate min height for each device type
   const getDeviceMinHeight = () => {
+    if (showMobileFrame && previewDevice === 'desktop') {
+      return '667px'; // iPhone SE height for mobile preview on desktop
+    }
     switch (previewDevice) {
       case 'mobile': return '667px'; // iPhone SE
       case 'tablet': return '1024px'; // iPad portrait
       case 'tablet_landscape': return '768px'; // iPad landscape
       default: return '800px';
     }
+  };
+
+  // Get frame width - use mobile width when editing mobile layout on desktop
+  const getFrameWidth = () => {
+    if (showMobileFrame && previewDevice === 'desktop') {
+      return DEVICE_WIDTHS['mobile']; // 375px
+    }
+    return DEVICE_WIDTHS[previewDevice];
   };
 
   if (showDeviceFrame) {
@@ -809,7 +858,7 @@ function ProfilePreviewContainer({
           <div
             className="bg-[var(--surface)] rounded-3xl shadow-2xl overflow-hidden border-8 border-gray-800"
             style={{
-              width: DEVICE_WIDTHS[previewDevice],
+              width: getFrameWidth(),
               minHeight: getDeviceMinHeight(),
             }}
           >
@@ -820,6 +869,7 @@ function ProfilePreviewContainer({
               onOpenThemeEditor={onOpenThemeEditor}
               onUpdateProfile={onUpdateProfile}
               previewDevice={previewDevice}
+              editingLayout={editingLayout}
             />
           </div>
         </div>
@@ -835,6 +885,7 @@ function ProfilePreviewContainer({
       onOpenThemeEditor={onOpenThemeEditor}
       onUpdateProfile={onUpdateProfile}
       previewDevice={previewDevice}
+      editingLayout={editingLayout}
     />
   );
 }

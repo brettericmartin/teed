@@ -115,10 +115,10 @@ export default function BaseBlock({
       >
         {/* Edit controls - pills at top of block, inside panel bounds to avoid clipping */}
         <div className="absolute top-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
-          {/* Drag handle */}
+          {/* Drag handle - hidden on mobile (mobile uses arrow buttons instead) */}
           <div
             className={`
-              drag-handle flex items-center gap-1.5 px-3 py-1.5
+              drag-handle hidden md:flex items-center gap-1.5 px-3 py-1.5
               bg-[var(--surface-elevated)] text-[var(--text-secondary)]
               border border-[var(--border-subtle)]
               rounded-full shadow-md

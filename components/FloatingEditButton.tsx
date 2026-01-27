@@ -53,9 +53,13 @@ export function FloatingEditButton() {
     <>
       {/* Floating button with tooltip */}
       {/* On desktop in edit mode, shift left to avoid overlap with settings panel (380px + margin) */}
+      {/* On mobile, position above the navigation bar using CSS custom property */}
       <div className={cn(
-        "fixed bottom-6 z-50 group transition-all duration-300",
-        isEditMode ? "right-6 lg:right-[420px]" : "right-6"
+        "fixed z-50 group transition-all duration-300",
+        "right-6",
+        isEditMode && "lg:right-[420px]",
+        // Mobile: above nav. Desktop: standard
+        "bottom-[calc(var(--mobile-bottom-base,0px)+16px)] md:bottom-6"
       )}>
         <button
           onClick={handleClick}
@@ -91,12 +95,14 @@ export function FloatingEditButton() {
       {/* Success toast */}
       <div
         className={cn(
-          'fixed bottom-20 z-50',
+          'fixed z-50',
           'right-6',
           'px-4 py-2.5 rounded-lg',
           'bg-teed-green text-white shadow-lg',
           'text-sm font-medium',
           'transition-all duration-300 ease-out',
+          // Mobile: above nav + button. Desktop: standard
+          'bottom-[calc(var(--mobile-bottom-base,0px)+80px)] md:bottom-20',
           showToast
             ? 'opacity-100 translate-y-0'
             : 'opacity-0 translate-y-2 pointer-events-none'

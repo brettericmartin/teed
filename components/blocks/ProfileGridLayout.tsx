@@ -17,6 +17,7 @@ import GridLayout, { Layout, LayoutItem, verticalCompactor } from 'react-grid-la
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { ProfileBlock, GRID_BREAKPOINTS, GRID_COLS, DEFAULT_BLOCK_GRID } from '@/lib/blocks/types';
+import MobileReorderControls from './MobileReorderControls';
 
 // Mutable layout item for our internal use
 type MutableLayoutItem = {
@@ -35,7 +36,9 @@ type MutableLayoutItem = {
 interface ProfileGridLayoutProps {
   blocks: ProfileBlock[];
   isEditMode: boolean;
+  editingLayout?: 'desktop' | 'mobile'; // Which layout is being edited
   onLayoutChange?: (layouts: MutableLayoutItem[]) => void;
+  onReorderBlock?: (blockId: string, direction: 'up' | 'down') => void;
   renderBlock: (block: ProfileBlock, isDragging: boolean) => React.ReactNode;
 }
 
@@ -51,7 +54,9 @@ function getBreakpoint(width: number): keyof typeof GRID_COLS {
 export default function ProfileGridLayout({
   blocks,
   isEditMode,
+  editingLayout = 'desktop',
   onLayoutChange,
+  onReorderBlock,
   renderBlock,
 }: ProfileGridLayoutProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -213,20 +218,30 @@ export default function ProfileGridLayout({
 
   const visibleBlocks = blocks.filter(b => b.is_visible);
 
-  // Sort blocks by grid position for consistent ordering
-  const sortedBlocks = [...visibleBlocks].sort((a, b) => {
+  // Sort blocks differently for mobile vs desktop
+  // Mobile: by sort_order (user-defined mobile order)
+  // Desktop: by grid position (gridY, then gridX)
+  const sortedForMobile = [...visibleBlocks].sort((a, b) => a.sort_order - b.sort_order);
+  const sortedForDesktop = [...visibleBlocks].sort((a, b) => {
     const aY = a.gridY ?? a.sort_order;
     const bY = b.gridY ?? b.sort_order;
     if (aY !== bY) return aY - bY;
     return (a.gridX ?? 0) - (b.gridX ?? 0);
   });
 
+  // Determine if we should show mobile layout
+  // - On actual mobile device (width < 768): always show mobile
+  // - On desktop with editingLayout='mobile': show mobile preview for editing
+  const isMobileDevice = width < 768;
+  const showMobileLayout = isMobileDevice || editingLayout === 'mobile';
+  const sortedBlocks = showMobileLayout ? sortedForMobile : sortedForDesktop;
+
   // SSR fallback only - simple mobile-style stack
   if (!mounted) {
     return (
       <div ref={containerRef}>
         <div className="flex flex-col gap-4">
-          {sortedBlocks.map(block => (
+          {sortedForMobile.map(block => (
             <div key={block.id}>
               {renderBlock(block, false)}
             </div>
@@ -236,13 +251,25 @@ export default function ProfileGridLayout({
     );
   }
 
-  // Mobile view - simple stack (both edit and view mode)
-  if (width < 768) {
+  // Mobile layout view - stacked with reorder controls
+  // Shown when: actual mobile device OR desktop user editing mobile layout
+  if (showMobileLayout) {
     return (
       <div ref={containerRef}>
         <div className="flex flex-col gap-4">
-          {sortedBlocks.map(block => (
-            <div key={block.id}>
+          {sortedBlocks.map((block, index) => (
+            <div key={block.id} className="relative">
+              {/* Mobile reorder controls - shown in edit mode */}
+              {isEditMode && onReorderBlock && (
+                <div className="absolute top-2 right-2 z-20">
+                  <MobileReorderControls
+                    blockIndex={index}
+                    totalBlocks={sortedBlocks.length}
+                    onMoveUp={() => onReorderBlock(block.id, 'up')}
+                    onMoveDown={() => onReorderBlock(block.id, 'down')}
+                  />
+                </div>
+              )}
               {renderBlock(block, false)}
             </div>
           ))}

@@ -18,12 +18,22 @@ interface NavigationProps {
 
 export default function Navigation({ userHandle, displayName, avatarUrl, isAuthenticated, isAdmin }: NavigationProps) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [settingsPanelOpen, setSettingsPanelOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const pathname = usePathname();
 
   // Track if user has seen the latest updates
   const updatesDiscovery = useFeatureDiscovery('share-embed-tab', FEATURE_RELEASES['share-embed-tab']);
+
+  // Watch for settings panel open/close via body class
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setSettingsPanelOpen(document.body.classList.contains('settings-panel-open'));
+    });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -351,7 +361,7 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
 
       {/* Mobile Bottom Navigation - Only visible on mobile when authenticated */}
       {isAuthenticated && (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--surface)]/95 backdrop-blur-md border-t border-[var(--border-subtle)] pb-safe">
+        <div className={`md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--surface)]/95 backdrop-blur-md border-t border-[var(--border-subtle)] pb-safe transition-transform duration-300 ${settingsPanelOpen ? 'translate-y-full' : ''}`}>
           <div className="flex items-center justify-around px-2 py-1">
             <Link
               href="/dashboard"

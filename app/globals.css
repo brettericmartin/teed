@@ -2254,6 +2254,30 @@ body {
 }
 
 /* ============================================
+   MOBILE BOTTOM UI COORDINATION
+   ============================================ */
+
+/* CSS Custom Properties for mobile stacking */
+:root {
+  --mobile-nav-height: 56px;
+  --mobile-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --mobile-bottom-base: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom));
+}
+
+/* When settings panel is open, nav is hidden */
+body.settings-panel-open {
+  --mobile-bottom-base: var(--mobile-safe-bottom);
+}
+
+/* Mobile reorder button touch targets */
+.mobile-reorder-btn {
+  min-width: 44px;
+  min-height: 44px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ============================================
    STORY TIMELINE ANIMATIONS
    ============================================ */
 

@@ -13,6 +13,8 @@ import {
   User,
   ChevronRight,
   ChevronUp,
+  Monitor,
+  Smartphone,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -33,6 +35,10 @@ interface ProfileActionBarProps {
   // Analyze handlers
   onViewStats: () => void;
   profileHandle: string;
+  // Layout editing mode
+  isEditMode?: boolean;
+  editingLayout?: 'desktop' | 'mobile';
+  onToggleEditingLayout?: () => void;
 }
 
 /**
@@ -53,6 +59,9 @@ export function ProfileActionBar({
   onEditBlocks,
   onViewStats,
   profileHandle,
+  isEditMode = false,
+  editingLayout = 'desktop',
+  onToggleEditingLayout,
 }: ProfileActionBarProps) {
   const [activeMenu, setActiveMenu] = useState<ActionType | null>(null);
 
@@ -106,7 +115,9 @@ export function ProfileActionBar({
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: 'spring', duration: 0.25 }}
             className={cn(
-              'fixed left-1/2 -translate-x-1/2 bottom-24 z-[100]',
+              'fixed left-1/2 -translate-x-1/2 z-[100]',
+              // Mobile: above nav + bar. Desktop: standard
+              'bottom-[calc(var(--mobile-bottom-base,0px)+72px)] md:bottom-24',
               'bg-[var(--surface)] rounded-2xl shadow-2xl',
               'border border-[var(--border-subtle)]',
               'overflow-hidden',
@@ -191,7 +202,9 @@ export function ProfileActionBar({
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: 'spring', duration: 0.5, delay: 0.2 }}
         className={cn(
-          'fixed bottom-4 left-1/2 -translate-x-1/2 z-[95]',
+          'fixed left-1/2 -translate-x-1/2 z-[95]',
+          // Mobile: above nav. Desktop: standard
+          'bottom-[calc(var(--mobile-bottom-base,0px)+8px)] md:bottom-4',
           'bg-[var(--surface)]/95 backdrop-blur-md rounded-2xl',
           'border border-[var(--border-subtle)]',
           'shadow-xl',
@@ -260,6 +273,41 @@ export function ProfileActionBar({
             <BarChart3 className="w-4 h-4" />
             <span className="hidden sm:inline">Stats</span>
           </motion.button>
+
+          {/* Device Layout Toggle - Only visible in edit mode on desktop */}
+          {isEditMode && onToggleEditingLayout && (
+            <>
+              <div className="w-px h-8 bg-[var(--border-subtle)] hidden md:block" />
+              <div className="hidden md:flex items-center gap-1 bg-[var(--surface-elevated)] rounded-lg p-1">
+                <motion.button
+                  onClick={editingLayout === 'desktop' ? undefined : onToggleEditingLayout}
+                  className={cn(
+                    'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all',
+                    editingLayout === 'desktop'
+                      ? 'bg-[var(--teed-green-9)] text-white'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]'
+                  )}
+                  whileTap={{ scale: 0.98 }}
+                  title="Edit desktop layout"
+                >
+                  <Monitor className="w-4 h-4" />
+                </motion.button>
+                <motion.button
+                  onClick={editingLayout === 'mobile' ? undefined : onToggleEditingLayout}
+                  className={cn(
+                    'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all',
+                    editingLayout === 'mobile'
+                      ? 'bg-[var(--teed-green-9)] text-white'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]'
+                  )}
+                  whileTap={{ scale: 0.98 }}
+                  title="Edit mobile layout"
+                >
+                  <Smartphone className="w-4 h-4" />
+                </motion.button>
+              </div>
+            </>
+          )}
         </div>
       </motion.div>
     </>
