@@ -366,6 +366,18 @@ When adding a new feature:
 3. Add test items to `/docs/MANUAL_TESTING_CHECKLIST.md` for UI features
 4. Run automated tests immediately
 
+### Work-In-Progress Documentation
+
+For multi-step tasks or complex refactors:
+
+1. **Create a WIP doc** in `/docs/WIP_<FEATURE_NAME>.md` before starting
+2. **Document the problem** being solved and the planned approach
+3. **Track progress** with a checklist of completed/remaining steps
+4. **Update as you go** so work can be resumed if interrupted
+5. **Mark complete or delete** when the work is finished
+
+This ensures continuity if a session crashes or context is lost mid-implementation.
+
 ---
 
 ## Anti-Drift Reminder

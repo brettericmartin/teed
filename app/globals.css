@@ -2258,10 +2258,13 @@ body {
    ============================================ */
 
 /* CSS Custom Properties for mobile stacking */
+/* Mobile nav actual height: 56px (items) + 4px (py-1 top) + max(20px, safe-area) */
+/* On non-notch devices: 56 + 4 + 20 = 80px */
+/* On notched devices: 56 + 4 + env(safe-area-inset-bottom) */
 :root {
-  --mobile-nav-height: 56px;
-  --mobile-safe-bottom: env(safe-area-inset-bottom, 0px);
-  --mobile-bottom-base: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom));
+  --mobile-nav-content-height: 60px; /* 56px items + 4px top padding */
+  --mobile-safe-bottom: max(20px, env(safe-area-inset-bottom, 0px));
+  --mobile-bottom-base: calc(var(--mobile-nav-content-height) + var(--mobile-safe-bottom));
 }
 
 /* When settings panel is open, nav is hidden */

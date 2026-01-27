@@ -12,7 +12,7 @@ import {
   Share2,
   User,
   ChevronRight,
-  ChevronUp,
+  ChevronDown,
   Monitor,
   Smartphone,
 } from 'lucide-react';
@@ -106,18 +106,18 @@ export function ProfileActionBar({
         )}
       </AnimatePresence>
 
-      {/* Dropdown Menus - positioned above the bar */}
+      {/* Dropdown Menus - positioned below the bar */}
       <AnimatePresence>
         {activeMenu && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ type: 'spring', duration: 0.25 }}
             className={cn(
               'fixed left-1/2 -translate-x-1/2 z-[100]',
-              // Mobile: above nav + bar. Desktop: standard
-              'bottom-[calc(var(--mobile-bottom-base,0px)+72px)] md:bottom-24',
+              // Below top nav (64px + safe area) + action bar (~56px) + gap
+              'top-[calc(64px+env(safe-area-inset-top,0px)+56px+8px)]',
               'bg-[var(--surface)] rounded-2xl shadow-2xl',
               'border border-[var(--border-subtle)]',
               'overflow-hidden',
@@ -196,15 +196,15 @@ export function ProfileActionBar({
         )}
       </AnimatePresence>
 
-      {/* Fixed Bottom Action Bar */}
+      {/* Fixed Top Action Bar - below main nav */}
       <motion.div
-        initial={{ y: 100, opacity: 0 }}
+        initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: 'spring', duration: 0.5, delay: 0.2 }}
         className={cn(
           'fixed left-1/2 -translate-x-1/2 z-[95]',
-          // Mobile: above nav. Desktop: standard
-          'bottom-[calc(var(--mobile-bottom-base,0px)+8px)] md:bottom-4',
+          // Below top nav (64px + safe area) + small gap
+          'top-[calc(64px+env(safe-area-inset-top,0px)+8px)]',
           'bg-[var(--surface)]/95 backdrop-blur-md rounded-2xl',
           'border border-[var(--border-subtle)]',
           'shadow-xl',
@@ -249,7 +249,7 @@ export function ProfileActionBar({
           >
             <Plus className="w-5 h-5" strokeWidth={2.5} />
             <span>Add</span>
-            <ChevronUp className={cn(
+            <ChevronDown className={cn(
               'w-4 h-4 transition-transform duration-200',
               activeMenu === 'add' && 'rotate-180'
             )} />

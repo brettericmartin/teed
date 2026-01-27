@@ -53,13 +53,13 @@ export function FloatingEditButton() {
     <>
       {/* Floating button with tooltip */}
       {/* On desktop in edit mode, shift left to avoid overlap with settings panel (380px + margin) */}
-      {/* On mobile, position above the navigation bar using CSS custom property */}
+      {/* On mobile, position above the ProfileActionBar which is ~60px tall above the nav */}
       <div className={cn(
         "fixed z-50 group transition-all duration-300",
         "right-6",
         isEditMode && "lg:right-[420px]",
-        // Mobile: above nav. Desktop: standard
-        "bottom-[calc(var(--mobile-bottom-base,0px)+16px)] md:bottom-6"
+        // Mobile: above nav + action bar (~80px). Desktop: standard
+        "bottom-[calc(var(--mobile-bottom-base,0px)+80px)] md:bottom-6"
       )}>
         <button
           onClick={handleClick}
@@ -101,8 +101,8 @@ export function FloatingEditButton() {
           'bg-teed-green text-white shadow-lg',
           'text-sm font-medium',
           'transition-all duration-300 ease-out',
-          // Mobile: above nav + button. Desktop: standard
-          'bottom-[calc(var(--mobile-bottom-base,0px)+80px)] md:bottom-20',
+          // Mobile: above edit button. Desktop: standard
+          'bottom-[calc(var(--mobile-bottom-base,0px)+140px)] md:bottom-20',
           showToast
             ? 'opacity-100 translate-y-0'
             : 'opacity-0 translate-y-2 pointer-events-none'

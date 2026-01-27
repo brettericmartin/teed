@@ -23,6 +23,13 @@ export default function FeedbackWidget({ position = 'bottom-right' }: FeedbackWi
     });
   }, []);
 
+  // Listen for external open requests (from mobile nav)
+  useEffect(() => {
+    const handleOpenFeedback = () => setIsOpen(true);
+    window.addEventListener('openFeedback', handleOpenFeedback);
+    return () => window.removeEventListener('openFeedback', handleOpenFeedback);
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userId) return;
@@ -73,10 +80,10 @@ export default function FeedbackWidget({ position = 'bottom-right' }: FeedbackWi
 
   return (
     <>
-      {/* Floating Button */}
+      {/* Floating Button - hidden on mobile (feedback in nav), visible on desktop */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-4 ${positionClasses} z-40 p-3 bg-[var(--teed-green-9)] text-white rounded-full shadow-lg hover:bg-[var(--teed-green-10)] transition-all hover:scale-105 ${
+        className={`hidden md:block fixed bottom-4 ${positionClasses} z-40 p-3 bg-[var(--teed-green-9)] text-white rounded-full shadow-lg hover:bg-[var(--teed-green-10)] transition-all hover:scale-105 ${
           isOpen ? 'rotate-45' : ''
         }`}
         aria-label="Open feedback"

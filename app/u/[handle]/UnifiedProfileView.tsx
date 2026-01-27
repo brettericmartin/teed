@@ -43,7 +43,6 @@ import type { DeviceType } from '@/components/blocks';
 import { ThemeEditor } from '@/components/theme';
 import UniversalLinkAdder from './components/UniversalLinkAdder';
 import CelebrationModal from '@/components/CelebrationModal';
-import { FloatingEditButton } from '@/components/FloatingEditButton';
 import { GlobalPasteHandler } from '@/components/GlobalPasteHandler';
 import { CommandPalette } from '@/components/CommandPalette';
 import { ProfileActionBar } from '@/components/ProfileActionBar';
@@ -649,8 +648,6 @@ export default function UnifiedProfileView({
           />
         )}
 
-        {/* Floating Edit Button - Showcase Mode toggle */}
-        <FloatingEditButton />
 
         {/* Command Palette - Power user keyboard interface */}
         <CommandPalette

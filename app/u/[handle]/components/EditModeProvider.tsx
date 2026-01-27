@@ -197,12 +197,17 @@ export function EditModeProvider({
 
   const reorderBlocks = useCallback((fromIndex: number, toIndex: number) => {
     setBlocks(prev => {
-      const result = [...prev];
-      const [removed] = result.splice(fromIndex, 1);
-      result.splice(toIndex, 0, removed);
+      // CRITICAL: Sort by sort_order first to match what the caller sees
+      // The caller (handleReorderBlock) finds indices in sortedBlocks which is
+      // sorted by sort_order, so we must operate on the same sorted order
+      const sorted = [...prev].sort((a, b) => a.sort_order - b.sort_order);
 
-      // Update sort_order for all blocks
-      return result.map((block, index) => ({
+      // Perform the reorder on the sorted array
+      const [removed] = sorted.splice(fromIndex, 1);
+      sorted.splice(toIndex, 0, removed);
+
+      // Update sort_order for all blocks based on new positions
+      return sorted.map((block, index) => ({
         ...block,
         sort_order: index,
         updated_at: new Date().toISOString(),
