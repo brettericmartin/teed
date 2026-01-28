@@ -43,11 +43,34 @@ export const CATEGORY_META: Record<CategoryType, {
 
 export const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.2.0',
+    releaseDate: '2026-01-28',
+    title: 'Mobile-First & Collections Overhaul',
+    summary: 'Major mobile experience improvements with dedicated layouts, a rebuilt collections panel that actually works, and smoother editing everywhere.',
+    isLatest: true,
+    changes: [
+      { text: 'Rebuilt Collections panel with full-screen modal that escapes grid constraints', category: 'feature' },
+      { text: 'Shared BagCard component with 4 photo layouts and 3 size options', category: 'feature' },
+      { text: 'Separate mobile and desktop layout editing - changes on one don\'t affect the other', category: 'feature' },
+      { text: 'Edit your avatar directly from the profile header panel', category: 'feature' },
+      { text: 'Enhanced add-item flow with integrated photo search', category: 'feature' },
+      { text: 'Mobile edit mode: tap hint replaces floating button, cleaner toolbar at top', category: 'improvement' },
+      { text: 'Renamed "blocks" to "panels" throughout the UI for clarity', category: 'improvement' },
+      { text: 'Sign-in link now visible on mobile navigation', category: 'improvement' },
+      { text: 'Collections modal properly centered and responsive on all screen sizes', category: 'improvement' },
+      { text: 'Fixed admin bag delete modal - button was invisible due to CSS issue', category: 'bugfix' },
+      { text: 'Fixed bag deletion using proper authentication', category: 'bugfix' },
+      { text: 'Fixed panel edit controls being clipped at top of screen', category: 'bugfix' },
+      { text: 'Fixed Done button overlap with delete controls', category: 'bugfix' },
+      { text: 'Fixed concatenated URL detection when pasting multiple links', category: 'bugfix' }
+    ]
+  },
+  {
     version: '2.1.0',
     releaseDate: '2026-01-25',
     title: 'The Story: Click-to-Item & Curator Notes',
     summary: 'Your timeline now tells a richer story. Click any entry to jump to that item, add curator notes to explain your decisions, and see preserved data for retired items.',
-    isLatest: true,
+    isLatest: false,
     changes: [
       { text: 'Click timeline entries to open item modal or scroll to item in editor', category: 'feature' },
       { text: 'Add curator notes (140 char captions) to any timeline entry', category: 'feature' },
