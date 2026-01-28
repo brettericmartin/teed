@@ -258,7 +258,7 @@ export default function BagControlClient({ adminRole }: Props) {
       badges.push(
         <span
           key="flagged"
-          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-[var(--red-4)] text-[var(--red-11)]"
+          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-[var(--copper-2)] text-[var(--copper-11)]"
         >
           <Flag className="w-3 h-3" />
           Flagged
@@ -511,7 +511,7 @@ export default function BagControlClient({ adminRole }: Props) {
                             )}
                         </div>
                         {bag.flag_reason && (
-                          <p className="text-xs text-[var(--red-11)] mt-1">
+                          <p className="text-xs text-[var(--copper-11)] mt-1">
                             {bag.flag_reason}
                           </p>
                         )}
@@ -592,7 +592,7 @@ export default function BagControlClient({ adminRole }: Props) {
                                         onClick={() => setFlagModalBag(bag)}
                                         className="w-full px-4 py-2 text-left text-sm hover:bg-[var(--surface-elevated)] flex items-center gap-2"
                                       >
-                                        <Flag className="w-4 h-4 text-[var(--red-9)]" />
+                                        <Flag className="w-4 h-4 text-[var(--copper-9)]" />
                                         Flag Content
                                       </button>
                                     )}
@@ -640,7 +640,7 @@ export default function BagControlClient({ adminRole }: Props) {
                                     <div className="border-t border-[var(--border-subtle)] my-1" />
                                     <button
                                       onClick={() => setConfirmDelete(bag)}
-                                      className="w-full px-4 py-2 text-left text-sm text-[var(--red-9)] hover:bg-[var(--red-4)] flex items-center gap-2"
+                                      className="w-full px-4 py-2 text-left text-sm text-[var(--copper-9)] hover:bg-[var(--copper-2)] flex items-center gap-2"
                                     >
                                       <Trash2 className="w-4 h-4" />
                                       Delete
@@ -703,7 +703,7 @@ export default function BagControlClient({ adminRole }: Props) {
           </div>
           <div className="p-4 bg-[var(--surface)] rounded-lg border border-[var(--border-subtle)]">
             <p className="text-sm text-[var(--text-secondary)]">Flagged</p>
-            <p className="text-2xl font-bold text-[var(--red-11)]">
+            <p className="text-2xl font-bold text-[var(--copper-11)]">
               {stats.flagged}
             </p>
           </div>
@@ -722,8 +722,8 @@ export default function BagControlClient({ adminRole }: Props) {
           <div className="bg-[var(--surface)] rounded-xl border border-[var(--border-subtle)] w-full max-w-md">
             <div className="p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-[var(--red-4)] flex items-center justify-center">
-                  <Flag className="w-5 h-5 text-[var(--red-9)]" />
+                <div className="w-10 h-10 rounded-full bg-[var(--copper-2)] flex items-center justify-center">
+                  <Flag className="w-5 h-5 text-[var(--copper-9)]" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-[var(--text-primary)]">
@@ -782,7 +782,7 @@ export default function BagControlClient({ adminRole }: Props) {
                 <button
                   onClick={() => handleAction(flagModalBag.id, 'flag')}
                   disabled={!flagReason}
-                  className="flex-1 px-4 py-2.5 bg-[var(--red-9)] text-white rounded-lg hover:bg-[var(--red-10)] disabled:opacity-50"
+                  className="flex-1 px-4 py-2.5 bg-[var(--button-destructive-bg)] text-[var(--button-destructive-text)] rounded-lg hover:bg-[var(--button-destructive-bg-hover)] disabled:opacity-50"
                 >
                   Flag Bag
                 </button>
@@ -798,8 +798,8 @@ export default function BagControlClient({ adminRole }: Props) {
           <div className="bg-[var(--surface)] rounded-xl border border-[var(--border-subtle)] w-full max-w-md">
             <div className="p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-[var(--red-4)] flex items-center justify-center">
-                  <AlertTriangle className="w-5 h-5 text-[var(--red-9)]" />
+                <div className="w-10 h-10 rounded-full bg-[var(--copper-2)] flex items-center justify-center">
+                  <AlertTriangle className="w-5 h-5 text-[var(--copper-9)]" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-[var(--text-primary)]">
@@ -828,7 +828,7 @@ export default function BagControlClient({ adminRole }: Props) {
                 <button
                   onClick={() => handleDelete(confirmDelete)}
                   disabled={actionLoading === confirmDelete.id}
-                  className="flex-1 px-4 py-2.5 bg-[var(--red-9)] text-white rounded-lg hover:bg-[var(--red-10)] disabled:opacity-50"
+                  className="flex-1 px-4 py-2.5 bg-[var(--button-destructive-bg)] text-[var(--button-destructive-text)] rounded-lg hover:bg-[var(--button-destructive-bg-hover)] disabled:opacity-50"
                 >
                   {actionLoading === confirmDelete.id
                     ? 'Deleting...'
