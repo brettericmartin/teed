@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
-import { createClient } from '@supabase/supabase-js';
 
 /**
  * GET /api/bags/[code]
@@ -412,16 +411,9 @@ export async function DELETE(
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    // Use service role client to bypass RLS for delete
-    // (ownership already verified above)
-    const adminClient = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      { auth: { autoRefreshToken: false, persistSession: false } }
-    );
-
-    // Delete the bag (cascade will handle items and links)
-    const { error: deleteError } = await adminClient
+    // Delete the bag using authenticated client
+    // RLS policies allow owners to delete their own bags
+    const { error: deleteError } = await supabase
       .from('bags')
       .delete()
       .eq('id', bag.id);
