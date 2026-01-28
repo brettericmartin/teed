@@ -133,11 +133,11 @@ export default function BaseBlock({
             <span className="text-xs font-medium">Drag</span>
           </div>
 
-          {/* Edit button - opens radial menu */}
+          {/* Edit button - opens radial menu (hidden on mobile - tap panel instead) */}
           <button
             ref={editButtonRef}
             onClick={handleEditClick}
-            className="edit-button flex items-center gap-1.5 px-3 py-1.5
+            className="edit-button hidden md:flex items-center gap-1.5 px-3 py-1.5
               bg-[var(--teed-green-9)] text-white
               rounded-full shadow-md
               transition-all

@@ -9,11 +9,18 @@ interface Hint {
   emoji: string;
 }
 
-const HINTS: Hint[] = [
+// Desktop hints
+const DESKTOP_HINTS: Hint[] = [
   { id: 'edit', emoji: '✏️', message: 'Click the green "Edit" pill to open the menu' },
   { id: 'drag', emoji: '↕️', message: 'Grab "Drag" to reorder blocks' },
   { id: 'select', emoji: '👆', message: 'Click any block to select it and see options' },
   { id: 'resize', emoji: '↔️', message: 'Drag block edges to resize on desktop' },
+];
+
+// Mobile hints - simpler, tap-focused
+const MOBILE_HINTS: Hint[] = [
+  { id: 'tap', emoji: '👆', message: 'Tap any panel to open its settings' },
+  { id: 'reorder', emoji: '↕️', message: 'Use arrow buttons to reorder panels' },
 ];
 
 const HINTS_STORAGE_KEY = 'teed-edit-hints-dismissed';
@@ -27,12 +34,19 @@ export default function EditModeHints({ isEditMode }: EditModeHintsProps) {
   const [dismissed, setDismissed] = useState(false);
   const [allDismissed, setAllDismissed] = useState(true); // Default true for SSR
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Check localStorage on mount
+  // Check localStorage and screen size on mount
   useEffect(() => {
     setMounted(true);
     const stored = localStorage.getItem(HINTS_STORAGE_KEY);
     setAllDismissed(stored === 'true');
+
+    // Check if mobile (matches md: breakpoint at 768px)
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   // Reset when entering edit mode
@@ -43,8 +57,11 @@ export default function EditModeHints({ isEditMode }: EditModeHintsProps) {
     }
   }, [isEditMode, allDismissed, mounted]);
 
+  // Select hints based on device
+  const hints = isMobile ? MOBILE_HINTS : DESKTOP_HINTS;
+
   const handleNext = () => {
-    if (currentHintIndex < HINTS.length - 1) {
+    if (currentHintIndex < hints.length - 1) {
       setCurrentHintIndex(prev => prev + 1);
     } else {
       setDismissed(true);
@@ -59,7 +76,7 @@ export default function EditModeHints({ isEditMode }: EditModeHintsProps) {
   // Don't render during SSR or if not in edit mode
   if (!mounted || !isEditMode || dismissed || allDismissed) return null;
 
-  const hint = HINTS[currentHintIndex];
+  const hint = hints[currentHintIndex];
 
   return (
     <div
@@ -78,7 +95,7 @@ export default function EditModeHints({ isEditMode }: EditModeHintsProps) {
               onClick={handleNext}
               className="text-sm font-medium text-[var(--teed-green-9)] hover:underline"
             >
-              {currentHintIndex < HINTS.length - 1 ? 'Next tip →' : 'Got it!'}
+              {currentHintIndex < hints.length - 1 ? 'Next tip →' : 'Got it!'}
             </button>
             <button
               onClick={handleDismissAll}
@@ -98,7 +115,7 @@ export default function EditModeHints({ isEditMode }: EditModeHintsProps) {
 
       {/* Progress dots */}
       <div className="flex justify-center gap-1.5 mt-3">
-        {HINTS.map((_, i) => (
+        {hints.map((_, i) => (
           <div
             key={i}
             className={`w-1.5 h-1.5 rounded-full transition-colors ${
