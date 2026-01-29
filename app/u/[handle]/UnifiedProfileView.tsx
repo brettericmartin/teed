@@ -98,6 +98,10 @@ interface UnifiedProfileViewProps {
   isOwnProfile: boolean;
   showWelcome?: boolean;
   memberNumber?: number;
+  /** Auto-open a modal based on URL action param */
+  initialAction?: 'link' | 'block' | 'social';
+  /** Start in edit mode from URL param */
+  startInEditMode?: boolean;
 }
 
 function BlockRenderer({
@@ -472,6 +476,8 @@ export default function UnifiedProfileView({
   isOwnProfile,
   showWelcome = false,
   memberNumber,
+  initialAction,
+  startInEditMode,
 }: UnifiedProfileViewProps) {
   const router = useRouter();
   const [profile, setProfile] = useState<Profile>(initialProfile);
@@ -485,10 +491,23 @@ export default function UnifiedProfileView({
   // Use preview theme while editing, otherwise saved theme
   const displayTheme = previewTheme ?? theme;
 
-  // Modal states for ProfileHub control
-  const [isBlockPickerOpen, setIsBlockPickerOpen] = useState(false);
-  const [isLinkAdderOpen, setIsLinkAdderOpen] = useState(false);
-  const [isSocialFlowOpen, setIsSocialFlowOpen] = useState(false);
+  // Modal states for ProfileHub control - initialize based on URL params
+  const [isBlockPickerOpen, setIsBlockPickerOpen] = useState(initialAction === 'block');
+  const [isLinkAdderOpen, setIsLinkAdderOpen] = useState(initialAction === 'link');
+  const [isSocialFlowOpen, setIsSocialFlowOpen] = useState(initialAction === 'social');
+
+  // Clean up URL params after handling the initial action
+  useEffect(() => {
+    if (initialAction || startInEditMode) {
+      // Remove action and edit params from URL without triggering navigation
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('action');
+        url.searchParams.delete('edit');
+        window.history.replaceState({}, '', url.toString());
+      }
+    }
+  }, [initialAction, startInEditMode]);
 
   // Handlers for ProminentAddBar
   const handleAddBag = useCallback(() => {
@@ -543,6 +562,7 @@ export default function UnifiedProfileView({
         initialBlocks={blocks}
         profileId={profile.id}
         isOwner={isOwnProfile}
+        initialEditMode={startInEditMode}
       >
         {/* Profile Action Bar - Three main actions: Customize | ADD | Analyze */}
         {isOwnProfile && (
@@ -594,6 +614,13 @@ export default function UnifiedProfileView({
             onUpdateProfile={handleUpdateProfile}
             isOpen={isLinkAdderOpen}
             onClose={() => setIsLinkAdderOpen(false)}
+            bags={bags.map(bag => ({
+              id: bag.id,
+              code: bag.code,
+              title: bag.title,
+              itemCount: bag.items?.length || 0,
+              updatedAt: bag.updated_at || bag.created_at,
+            }))}
           />
         )}
 

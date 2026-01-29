@@ -28,6 +28,8 @@ interface UniversalLinkAdderProps {
   onUpdateProfile: (updates: { social_links?: Record<string, string> }) => Promise<void>;
   isOpen?: boolean;
   onClose?: () => void;
+  /** Pre-loaded bags from parent - avoids extra API fetch */
+  bags?: BagOption[];
 }
 
 export default function UniversalLinkAdder({
@@ -35,6 +37,7 @@ export default function UniversalLinkAdder({
   onUpdateProfile,
   isOpen: externalIsOpen,
   onClose: externalOnClose,
+  bags: propBags,
 }: UniversalLinkAdderProps) {
   // Determine if externally controlled (by ProfileHub)
   const isExternallyControlled = externalOnClose !== undefined;
@@ -87,33 +90,49 @@ export default function UniversalLinkAdder({
     setParsedUrls(urls);
   }, [inputText]);
 
-  // Fetch user's bags when modal opens
-  useEffect(() => {
-    if (isOpen) {
-      fetchUserBags();
-    }
-  }, [isOpen]);
-
-  const fetchUserBags = async () => {
+  // Fetch user's bags - wrapped in useCallback for stable reference
+  const fetchUserBags = useCallback(async () => {
+    console.log('fetchUserBags called');
     try {
       const response = await fetch('/api/user/bags');
-      if (response.ok) {
-        const data = await response.json();
-        const bags = data.bags || [];
-        setUserBags(
-          bags.map((bag: any) => ({
-            id: bag.id,
-            code: bag.code,
-            title: bag.title,
-            itemCount: bag.item_count || 0,
-            updatedAt: bag.updated_at,
-          }))
-        );
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error('Failed to fetch bags:', data.error);
+        return;
       }
+
+      const bags = data.bags || [];
+      console.log('Fetched bags for destination:', bags);
+      setUserBags(
+        bags.map((bag: any) => ({
+          id: bag.id,
+          code: bag.code,
+          title: bag.title,
+          itemCount: bag.item_count || 0,
+          updatedAt: bag.updated_at || new Date().toISOString(),
+        }))
+      );
     } catch (error) {
       console.error('Failed to fetch bags:', error);
     }
-  };
+  }, []);
+
+  // Initialize bags from props or fetch when modal opens
+  useEffect(() => {
+    console.log('UniversalLinkAdder useEffect - isOpen:', isOpen, 'propBags:', propBags?.length);
+    if (isOpen) {
+      if (propBags && propBags.length > 0) {
+        // Use bags passed from parent (already loaded in UnifiedProfileView)
+        console.log('Using bags from props:', propBags.length);
+        setUserBags(propBags);
+      } else {
+        // Fallback: fetch from API if no bags prop provided
+        console.log('Fetching user bags from API...');
+        fetchUserBags();
+      }
+    }
+  }, [isOpen, propBags, fetchUserBags]);
 
   // Handle modal close
   const handleClose = useCallback(() => {
