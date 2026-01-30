@@ -50,6 +50,8 @@ interface EditModeProviderProps {
   initialBlocks: ProfileBlock[];
   profileId: string;
   isOwner: boolean;
+  /** Start in edit mode (e.g., from URL param) */
+  initialEditMode?: boolean;
 }
 
 export function EditModeProvider({
@@ -57,10 +59,11 @@ export function EditModeProvider({
   initialBlocks,
   profileId,
   isOwner,
+  initialEditMode = false,
 }: EditModeProviderProps) {
   // Showcase Mode: Owners see their profile as visitors see it by default
   // They can press 'E' or click the floating edit button to enter edit mode
-  const [isEditMode, setEditMode] = useState(false);
+  const [isEditMode, setEditMode] = useState(initialEditMode && isOwner);
   const [blocks, setBlocks] = useState<ProfileBlock[]>(initialBlocks);
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [isDirty, setIsDirty] = useState(false);

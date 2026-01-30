@@ -21,6 +21,8 @@ type PageProps = {
   }>;
   searchParams: Promise<{
     welcome?: string;
+    edit?: string;
+    action?: 'link' | 'block' | 'social';
   }>;
 };
 
@@ -92,6 +94,8 @@ export default async function UserProfilePage({ params, searchParams }: PageProp
   const { handle } = await params;
   const search = await searchParams;
   const showWelcome = search.welcome === 'true';
+  const initialAction = search.action;
+  const startInEditMode = search.edit === 'true';
 
   // Query database directly instead of HTTP fetch
   const supabase = await createServerSupabase();
@@ -277,6 +281,8 @@ export default async function UserProfilePage({ params, searchParams }: PageProp
         isOwnProfile={isOwnProfile}
         showWelcome={showWelcome && isOwnProfile}
         memberNumber={memberNumber}
+        initialAction={initialAction}
+        startInEditMode={startInEditMode && isOwnProfile}
       />
     </>
   );

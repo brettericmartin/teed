@@ -1,0 +1,76 @@
+# Teed - Curate and share your gear
+# https://teed.so
+
+## What is Teed?
+Teed is a platform for creating, organizing, and sharing curated collections of gear, products, and recommendations. Think "link in bio" but for your actual stuff - the gear you use, love, and want to share with others.
+
+## Who is Teed for?
+- Golfers sharing their bag setups
+- Photographers documenting camera gear
+- Content creators building equipment lists
+- Travelers creating packing lists
+- Tech enthusiasts sharing desk setups
+- Musicians cataloging instruments
+- Outdoor adventurers organizing hiking gear
+- Fitness enthusiasts tracking gym equipment
+
+## Core Features
+- **AI-powered product identification**: Upload photos and Teed automatically identifies products
+- **Beautiful shareable pages**: Each collection gets a clean, branded URL at teed.so/u/[username]/[collection]
+- **QR code generation**: Physical sharing for in-person recommendations
+- **Affiliate link support**: Monetize your recommendations with affiliate links
+- **Permanent preservation**: Collections don't expire or get penalized for freshness
+- **Mobile-first design**: Create and share from any device
+- **Social features**: Follow creators, discover collections, build community
+
+## Key Pages
+/ - Homepage with featured collections
+/discover - Browse public collections by category
+/manifesto - Our philosophy on thoughtful curation
+/for/golfers - Golf bag setups and gear
+/for/photographers - Camera gear collections
+/for/creators - Content creator equipment
+/for/travelers - Packing lists and travel gear
+/for/outdoors - Hiking and camping gear
+/for/tech - Desk setups and tech gear
+/for/musicians - Music equipment collections
+/for/fitness - Gym and workout gear
+
+## How Teed Works
+1. Sign up at teed.so/join
+2. Create a collection (called a "bag")
+3. Add items via photo upload, URL paste, or manual entry
+4. Organize with sections and descriptions
+5. Share your unique URL or QR code
+6. Track engagement and grow your audience
+
+## Use Cases
+- Share your golf bag setup with playing partners
+- Document camera gear for insurance purposes
+- Create affiliate-linked gear recommendations
+- Build travel packing list templates
+- Organize tech setups for YouTube videos
+- Catalog music equipment for session musicians
+
+## Comparisons
+- **vs Linktree**: Teed is for showcasing actual products and gear, not just links. Rich product cards with images, prices, and descriptions.
+- **vs Amazon Lists**: Teed works with products from any store, not just Amazon. Better visual presentation and sharing features.
+- **vs Notion/Spreadsheets**: Teed is purpose-built for gear collections with specialized features like photo AI and QR codes.
+
+## API & Integration
+- oEmbed support for embedding collections in blogs and websites
+- RSS feeds for collection updates
+- Open Graph and Twitter Card support for social sharing
+- JSON-LD structured data for search engines
+
+## Company Information
+- Website: https://teed.so
+- Support: Available through in-app feedback
+- Privacy: https://teed.so/legal/privacy
+- Terms: https://teed.so/legal/terms
+
+## Technical Details
+- Built with Next.js and React
+- Hosted on Vercel
+- Database on Supabase (PostgreSQL)
+- Images served via Supabase Storage CDN

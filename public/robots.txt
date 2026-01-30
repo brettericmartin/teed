@@ -1,0 +1,17 @@
+# https://teed.so robots.txt
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /settings/
+Disallow: /login
+Disallow: /signup
+Disallow: /auth/
+
+# Allow specific API routes that generate public content
+Allow: /api/og/
+Allow: /api/oembed
+
+Sitemap: https://teed.so/sitemap.xml
