@@ -49,6 +49,33 @@ const NON_PRODUCT_PATHS = [
   'search', 'cart', 'checkout', 'account', 'help', 'about',
 ];
 
+// Category path patterns - segments that are likely categories, not products
+// These get penalized in slug scoring to favor actual product names
+const CATEGORY_PATH_PATTERNS = [
+  // Gender-based categories
+  /^(men|women|mens|womens|unisex|boys|girls|kids|children|youth|adult)s?$/i,
+  // Clothing categories
+  /^(tops|bottoms|pants|shorts|joggers|jackets|hoodies|sweaters|shirts|tees|t-shirts|dresses|skirts|jeans|leggings|activewear)$/i,
+  // Footwear categories
+  /^(shoes|sneakers|boots|sandals|slippers|running|training|casual|dress|athletic)$/i,
+  // Accessory categories
+  /^(accessories|bags|hats|caps|belts|socks|gloves|scarves|sunglasses|watches|jewelry)$/i,
+  // Collection/section indicators
+  /^(new|sale|featured|trending|bestsellers|bestselling|clearance|outlet|arrivals|latest)$/i,
+  // Sport/activity categories
+  /^(golf|tennis|running|yoga|hiking|outdoor|gym|fitness|training|sports|athletic)$/i,
+];
+
+// Pure category words for slug scoring (single words that are definitely categories)
+const PURE_CATEGORY_WORDS = new Set([
+  'men', 'women', 'mens', 'womens', 'unisex', 'boys', 'girls', 'kids', 'children',
+  'tops', 'bottoms', 'pants', 'shorts', 'joggers', 'jackets', 'hoodies', 'shirts',
+  'shoes', 'sneakers', 'boots', 'sandals', 'running', 'training',
+  'accessories', 'bags', 'hats', 'socks',
+  'new', 'sale', 'featured', 'clearance', 'outlet',
+  'golf', 'tennis', 'yoga', 'hiking', 'outdoor', 'gym', 'fitness',
+]);
+
 // SKU/Model patterns that appear in URLs
 const SKU_PATTERNS = [
   /\b([A-Z]{2,4}[\d]{4,8})\b/i,           // GMF000027, ABC12345
@@ -222,7 +249,7 @@ export function parseProductUrl(urlString: string): ParsedProductUrl {
 
   // Extract product slug from path
   const pathParts = pathname.split('/').filter(Boolean);
-  const productSlug = extractProductSlug(pathParts, parsed.search);
+  const productSlug = extractProductSlug(pathParts, parsed.search, brandInfo);
 
   // For retailers, try to extract brand from the product slug
   let slugBrand: string | null = null;
@@ -303,41 +330,160 @@ function applyModelCorrections(name: string): string {
 }
 
 /**
+ * Score a URL segment as a potential product slug
+ * Higher scores indicate more likely product names
+ */
+function scoreSlugCandidate(slug: string): number {
+  let score = 0;
+  // Strip common file extensions before scoring
+  const cleanedSlug = slug.replace(/\.(html?|aspx?|php|jsp)$/i, '');
+  const lower = cleanedSlug.toLowerCase();
+
+  // Check if it's a pure category word (strong penalty)
+  if (PURE_CATEGORY_WORDS.has(lower)) {
+    score -= 50;
+  }
+
+  // Check if it matches category patterns (penalty)
+  for (const pattern of CATEGORY_PATH_PATTERNS) {
+    if (pattern.test(slug)) {
+      score -= 30;
+      break;
+    }
+  }
+
+  // ID-like patterns (penalty) - things like prod12345, SKU-123
+  if (/^prod\d+$/i.test(cleanedSlug) || /^[A-Z]{2,4}\d{5,}$/i.test(cleanedSlug) || /^sku[-_]?\d+$/i.test(cleanedSlug)) {
+    score -= 20;
+  }
+
+  // SKU-style patterns: XX-XXXXX (2-3 letters, hyphen, 4-6 alphanumeric) - strong penalty
+  // Examples: DW-TA127, AB-12345, XYZ-ABC1
+  if (/^[A-Z]{2,3}-[A-Z0-9]{4,7}$/i.test(cleanedSlug)) {
+    score -= 30;
+  }
+
+  // Amazon ref parameters (penalty)
+  if (/^ref=/i.test(cleanedSlug)) {
+    score -= 50;
+  }
+
+  // Underscore-prefixed identifiers like _/prod123 (penalty)
+  if (/^_$/.test(cleanedSlug)) {
+    score -= 40;
+  }
+
+  // Has hyphens (product-name-style) - bonus
+  if (cleanedSlug.includes('-')) {
+    score += 20;
+    // More hyphens = more specific name (max +25 bonus)
+    const hyphenCount = (cleanedSlug.match(/-/g) || []).length;
+    score += Math.min(hyphenCount * 5, 25);
+  }
+
+  // Length bonus (longer = more specific, max +50)
+  score += Math.min(cleanedSlug.length, 50);
+
+  // Mixed case bonus (Title-Case product names)
+  if (/[a-z]/.test(cleanedSlug) && /[A-Z]/.test(cleanedSlug)) {
+    score += 10;
+  }
+
+  // Alphanumeric mix in product names (like "Qi10-Driver" or "Pro-V1") - bonus
+  // But only if it also has descriptive words (more than just alphanumeric codes)
+  if (/[a-zA-Z]/.test(cleanedSlug) && /\d/.test(cleanedSlug) && cleanedSlug.includes('-')) {
+    // Check if it has at least one word-like segment (3+ consecutive letters)
+    if (/[a-zA-Z]{3,}/.test(cleanedSlug)) {
+      score += 10;
+    }
+  }
+
+  return score;
+}
+
+/**
+ * Check if a path segment matches a category pattern
+ */
+function isCategorySegment(segment: string): boolean {
+  const lower = segment.toLowerCase();
+  if (PURE_CATEGORY_WORDS.has(lower)) {
+    return true;
+  }
+  for (const pattern of CATEGORY_PATH_PATTERNS) {
+    if (pattern.test(segment)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
  * Extract the product slug from URL path parts
  */
-function extractProductSlug(pathParts: string[], queryString: string): string | null {
-  // Strategy 1: Find slug after product indicators
-  for (let i = 0; i < pathParts.length; i++) {
-    const part = pathParts[i].toLowerCase();
-    if (PRODUCT_PATH_INDICATORS.includes(part)) {
-      // Return the next meaningful part
-      const nextPart = pathParts[i + 1];
-      if (nextPart && !PRODUCT_PATH_INDICATORS.includes(nextPart.toLowerCase())) {
-        return cleanSlug(nextPart);
+function extractProductSlug(
+  pathParts: string[],
+  queryString: string,
+  brandInfo?: DomainBrandInfo | null
+): string | null {
+  // Strategy 1: If we have site-specific URL config, use it
+  if (brandInfo?.urlConfig?.productSlugIndex !== undefined) {
+    // Find the product indicator and get the slug at the specified index
+    for (let i = 0; i < pathParts.length; i++) {
+      const part = pathParts[i].toLowerCase();
+      if (PRODUCT_PATH_INDICATORS.includes(part)) {
+        const targetIndex = i + 1 + brandInfo.urlConfig.productSlugIndex;
+        const targetPart = pathParts[targetIndex];
+        if (targetPart && !targetPart.startsWith('_')) {
+          return cleanSlug(targetPart);
+        }
       }
     }
   }
 
-  // Strategy 2: Find the longest meaningful slug-like path segment
+  // Strategy 2: Score candidates after product indicators
+  for (let i = 0; i < pathParts.length; i++) {
+    const part = pathParts[i].toLowerCase();
+    if (PRODUCT_PATH_INDICATORS.includes(part)) {
+      // Collect up to 4 candidates after the indicator
+      const candidates: Array<{ slug: string; score: number }> = [];
+      for (let j = 1; j <= 4 && i + j < pathParts.length; j++) {
+        const candidate = pathParts[i + j];
+        // Skip underscore-only segments (like Lululemon's /_/)
+        if (candidate === '_' || candidate.startsWith('_')) continue;
+        // Skip product indicators
+        if (PRODUCT_PATH_INDICATORS.includes(candidate.toLowerCase())) continue;
+
+        const score = scoreSlugCandidate(candidate);
+        candidates.push({ slug: candidate, score });
+      }
+
+      // Return the highest-scoring candidate
+      if (candidates.length > 0) {
+        candidates.sort((a, b) => b.score - a.score);
+        return cleanSlug(candidates[0].slug);
+      }
+    }
+  }
+
+  // Strategy 3: Find the highest-scoring slug-like path segment
   const slugCandidates = pathParts
     .filter(part => {
-      // Skip common non-product paths
       const lower = part.toLowerCase();
+      // Skip very short segments and non-product paths
       return !NON_PRODUCT_PATHS.includes(lower) && part.length > 3;
     })
     .filter(part => {
-      // Slug should have letters and possibly numbers/hyphens
-      return /[a-zA-Z]/.test(part) && /[-_a-zA-Z0-9]/.test(part);
+      // Slug should have letters
+      return /[a-zA-Z]/.test(part);
     })
-    .sort((a, b) => {
-      // Prefer slugs with hyphens (product-name-style)
-      const aScore = (a.includes('-') ? 10 : 0) + a.length;
-      const bScore = (b.includes('-') ? 10 : 0) + b.length;
-      return bScore - aScore;
-    });
+    .map(part => ({
+      slug: part,
+      score: scoreSlugCandidate(part),
+    }))
+    .sort((a, b) => b.score - a.score);
 
-  if (slugCandidates.length > 0) {
-    return cleanSlug(slugCandidates[0]);
+  if (slugCandidates.length > 0 && slugCandidates[0].score > 0) {
+    return cleanSlug(slugCandidates[0].slug);
   }
 
   return null;

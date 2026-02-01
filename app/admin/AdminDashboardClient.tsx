@@ -20,6 +20,7 @@ import {
   Map,
   Cpu,
   Search,
+  Link2,
 } from 'lucide-react';
 import { ROLE_PERMISSIONS, getRoleDisplayName, type AdminRole } from '@/lib/types/admin';
 
@@ -196,6 +197,14 @@ export default function AdminDashboardClient({
       gradient: 'from-[var(--copper-4)] to-[var(--copper-6)]',
       borderHover: 'hover:border-[var(--copper-6)]',
       permission: 'canViewAnalytics',
+    },
+    {
+      href: '/dev/link-process',
+      title: 'Link ID Process',
+      description: 'Technical docs for the link identification pipeline',
+      icon: <Link2 className="w-6 h-6 text-[var(--sky-11)]" />,
+      gradient: 'from-[var(--sky-4)] to-[var(--sky-6)]',
+      borderHover: 'hover:border-[var(--sky-6)]',
     },
   ];
 

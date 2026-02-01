@@ -12,6 +12,13 @@ export interface DomainBrandInfo {
   aliases: string[];
   isRetailer: boolean;
   productPatterns?: RegExp[];  // Patterns to extract product info from URL
+  urlConfig?: {
+    // Which segment after the product indicator contains the product slug (0-indexed)
+    // e.g., /p/category/slug -> productSlugIndex: 1 means skip category, take slug
+    productSlugIndex?: number;
+    // Patterns to skip when looking for product slug
+    skipPatterns?: RegExp[];
+  };
 }
 
 /**
@@ -58,10 +65,13 @@ export const DOMAIN_BRAND_MAP: Record<string, DomainBrandInfo> = {
   'footjoy.com': { brand: 'FootJoy', category: 'golf', tier: 'premium', aliases: ['FJ'], isRetailer: false },
   'travismathew.com': { brand: 'TravisMathew', category: 'golf', tier: 'premium', aliases: ['Travis Mathew'], isRetailer: false },
   'pumagolf.com': { brand: 'Puma Golf', category: 'golf', tier: 'premium', aliases: ['Puma', 'Cobra Puma'], isRetailer: false },
-  'nike.com': { brand: 'Nike', category: 'apparel', tier: 'premium', aliases: [], isRetailer: false },
-  'adidas.com': { brand: 'adidas', category: 'apparel', tier: 'premium', aliases: ['Adidas'], isRetailer: false },
+  // Nike URL pattern: /t/{category}/{product-slug}/{sku}
+  'nike.com': { brand: 'Nike', category: 'apparel', tier: 'premium', aliases: [], isRetailer: false, urlConfig: { productSlugIndex: 1 } },
+  // Adidas URL pattern: /us/{category}/{product-slug}.html
+  'adidas.com': { brand: 'adidas', category: 'apparel', tier: 'premium', aliases: ['Adidas'], isRetailer: false, urlConfig: { productSlugIndex: 1 } },
   'adidasgolf.com': { brand: 'adidas Golf', category: 'golf', tier: 'premium', aliases: ['Adidas Golf'], isRetailer: false },
-  'underarmour.com': { brand: 'Under Armour', category: 'apparel', tier: 'premium', aliases: ['UA'], isRetailer: false },
+  // Under Armour URL pattern: /p/{category}/{product-slug}
+  'underarmour.com': { brand: 'Under Armour', category: 'apparel', tier: 'premium', aliases: ['UA'], isRetailer: false, urlConfig: { productSlugIndex: 1 } },
   'greysonclothiers.com': { brand: 'Greyson', category: 'golf', tier: 'luxury', aliases: ['Greyson Clothiers'], isRetailer: false },
   'bonobos.com': { brand: 'Bonobos', category: 'apparel', tier: 'premium', aliases: [], isRetailer: false },
   'petermillar.com': { brand: 'Peter Millar', category: 'golf', tier: 'luxury', aliases: [], isRetailer: false },
@@ -131,7 +141,8 @@ export const DOMAIN_BRAND_MAP: Record<string, DomainBrandInfo> = {
   'nothing.tech': { brand: 'Nothing', category: 'tech', tier: 'mid', aliases: [], isRetailer: false },
 
   // Tech Retailers
-  'bestbuy.com': { brand: null, category: 'tech', tier: 'mid', aliases: ['Best Buy'], isRetailer: true },
+  // Best Buy URL pattern: /site/{product-slug}/{sku}.p
+  'bestbuy.com': { brand: null, category: 'tech', tier: 'mid', aliases: ['Best Buy'], isRetailer: true, urlConfig: { productSlugIndex: 0 } },
   'bhphotovideo.com': { brand: null, category: 'tech', tier: 'mid', aliases: ['B&H Photo'], isRetailer: true },
   'adorama.com': { brand: null, category: 'tech', tier: 'mid', aliases: [], isRetailer: true },
   'newegg.com': { brand: null, category: 'tech', tier: 'value', aliases: [], isRetailer: true },
@@ -169,7 +180,8 @@ export const DOMAIN_BRAND_MAP: Record<string, DomainBrandInfo> = {
   'scarpa.com': { brand: 'Scarpa', category: 'outdoor', tier: 'premium', aliases: [], isRetailer: false },
 
   // Outdoor Retailers
-  'rei.com': { brand: null, category: 'outdoor', tier: 'premium', aliases: ['REI Co-op'], isRetailer: true },
+  // REI URL pattern: /product/{id}/{product-slug}
+  'rei.com': { brand: null, category: 'outdoor', tier: 'premium', aliases: ['REI Co-op'], isRetailer: true, urlConfig: { productSlugIndex: 1 } },
   'backcountry.com': { brand: null, category: 'outdoor', tier: 'premium', aliases: [], isRetailer: true },
   'moosejaw.com': { brand: null, category: 'outdoor', tier: 'mid', aliases: [], isRetailer: true },
   'ems.com': { brand: null, category: 'outdoor', tier: 'mid', aliases: ['Eastern Mountain Sports'], isRetailer: true },
@@ -244,7 +256,8 @@ export const DOMAIN_BRAND_MAP: Record<string, DomainBrandInfo> = {
   'acnestudios.com': { brand: 'Acne Studios', category: 'fashion', tier: 'luxury', aliases: [], isRetailer: false },
 
   // Fashion Retailers
-  'nordstrom.com': { brand: null, category: 'fashion', tier: 'premium', aliases: [], isRetailer: true },
+  // Nordstrom URL pattern: /s/{product-slug}/{id}
+  'nordstrom.com': { brand: null, category: 'fashion', tier: 'premium', aliases: [], isRetailer: true, urlConfig: { productSlugIndex: 0 } },
   'ssense.com': { brand: null, category: 'fashion', tier: 'luxury', aliases: [], isRetailer: true },
   'mrporter.com': { brand: null, category: 'fashion', tier: 'luxury', aliases: ['Mr Porter'], isRetailer: true },
   'net-a-porter.com': { brand: null, category: 'fashion', tier: 'luxury', aliases: ['Net-a-Porter'], isRetailer: true },
@@ -331,7 +344,8 @@ export const DOMAIN_BRAND_MAP: Record<string, DomainBrandInfo> = {
   // ============================================
 
   // Major Home Retailers
-  'wayfair.com': { brand: null, category: 'home', tier: 'mid', aliases: [], isRetailer: true },
+  // Wayfair URL pattern: /keyword/{product-slug}/{sku}
+  'wayfair.com': { brand: null, category: 'home', tier: 'mid', aliases: [], isRetailer: true, urlConfig: { productSlugIndex: 0 } },
   'crateandbarrel.com': { brand: 'Crate and Barrel', category: 'home', tier: 'mid', aliases: ['Crate & Barrel'], isRetailer: true },
   'potterybarn.com': { brand: 'Pottery Barn', category: 'home', tier: 'mid', aliases: [], isRetailer: true },
   'westelm.com': { brand: 'West Elm', category: 'home', tier: 'mid', aliases: [], isRetailer: true },
@@ -380,7 +394,9 @@ export const DOMAIN_BRAND_MAP: Record<string, DomainBrandInfo> = {
   // ============================================
 
   // Premium Activewear
-  'lululemon.com': { brand: 'Lululemon', category: 'activewear', tier: 'luxury', aliases: [], isRetailer: false },
+  // Lululemon URL pattern: /p/{category}/{product-slug}/_/{product-id}
+  'lululemon.com': { brand: 'Lululemon', category: 'activewear', tier: 'luxury', aliases: [], isRetailer: false, urlConfig: { productSlugIndex: 1 } },
+  'shop.lululemon.com': { brand: 'Lululemon', category: 'activewear', tier: 'luxury', aliases: [], isRetailer: false, urlConfig: { productSlugIndex: 1 } },
   'aloyoga.com': { brand: 'Alo Yoga', category: 'activewear', tier: 'luxury', aliases: ['Alo'], isRetailer: false },
   'vuori.com': { brand: 'Vuori', category: 'activewear', tier: 'premium', aliases: [], isRetailer: false },
   'rhone.com': { brand: 'Rhone', category: 'activewear', tier: 'premium', aliases: [], isRetailer: false },
@@ -533,8 +549,10 @@ export const DOMAIN_BRAND_MAP: Record<string, DomainBrandInfo> = {
   'amazon.ca': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
   'amazon.de': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
   'ebay.com': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
-  'walmart.com': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
-  'target.com': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
+  // Walmart URL pattern: /ip/{product-slug}/{id}
+  'walmart.com': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true, urlConfig: { productSlugIndex: 0 } },
+  // Target URL pattern: /p/{product-slug}/-/A-{id}
+  'target.com': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true, urlConfig: { productSlugIndex: 0 } },
   'costco.com': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
   'homedepot.com': { brand: null, category: 'home', tier: 'value', aliases: ['Home Depot'], isRetailer: true },
   'lowes.com': { brand: null, category: 'home', tier: 'value', aliases: ["Lowe's"], isRetailer: true },
