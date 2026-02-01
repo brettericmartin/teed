@@ -21,6 +21,7 @@ import {
   Cpu,
   Search,
   Link2,
+  Lightbulb,
 } from 'lucide-react';
 import { ROLE_PERMISSIONS, getRoleDisplayName, type AdminRole } from '@/lib/types/admin';
 
@@ -56,6 +57,15 @@ export default function AdminDashboardClient({
       icon: <Map className="w-6 h-6 text-[var(--evergreen-11)]" />,
       gradient: 'from-[var(--evergreen-4)] to-[var(--evergreen-6)]',
       borderHover: 'hover:border-[var(--evergreen-6)]',
+    },
+    {
+      href: '/admin/proposals',
+      title: 'Strategic Proposals',
+      description: 'Review research proposals and make strategic decisions',
+      icon: <Lightbulb className="w-6 h-6 text-[var(--amber-11)]" />,
+      gradient: 'from-[var(--amber-4)] to-[var(--amber-6)]',
+      borderHover: 'hover:border-[var(--amber-6)]',
+      permission: 'canViewAnalytics',
     },
     {
       href: '/admin/users',
