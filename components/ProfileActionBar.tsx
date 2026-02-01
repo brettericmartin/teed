@@ -65,13 +65,13 @@ export function ProfileActionBar({
   onToggleEditingLayout,
 }: ProfileActionBarProps) {
   const [activeMenu, setActiveMenu] = useState<ActionType | null>(null);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
-  // Persist collapsed state
+  // Persist collapsed state (default to collapsed)
   useEffect(() => {
     const stored = localStorage.getItem('profileActionBar:collapsed');
-    if (stored === 'true') {
-      setIsCollapsed(true);
+    if (stored === 'false') {
+      setIsCollapsed(false);
     }
   }, []);
 
