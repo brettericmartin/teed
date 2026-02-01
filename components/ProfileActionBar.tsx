@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Plus,
@@ -13,6 +13,7 @@ import {
   User,
   ChevronRight,
   ChevronDown,
+  ChevronUp,
   Monitor,
   Smartphone,
 } from 'lucide-react';
@@ -64,6 +65,25 @@ export function ProfileActionBar({
   onToggleEditingLayout,
 }: ProfileActionBarProps) {
   const [activeMenu, setActiveMenu] = useState<ActionType | null>(null);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  // Persist collapsed state
+  useEffect(() => {
+    const stored = localStorage.getItem('profileActionBar:collapsed');
+    if (stored === 'true') {
+      setIsCollapsed(true);
+    }
+  }, []);
+
+  const toggleCollapsed = () => {
+    const newValue = !isCollapsed;
+    setIsCollapsed(newValue);
+    localStorage.setItem('profileActionBar:collapsed', String(newValue));
+    // Close any open menu when collapsing
+    if (newValue) {
+      setActiveMenu(null);
+    }
+  };
 
   const closeMenu = () => setActiveMenu(null);
 
@@ -197,119 +217,179 @@ export function ProfileActionBar({
       </AnimatePresence>
 
       {/* Fixed Top Action Bar - below main nav */}
-      <motion.div
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ type: 'spring', duration: 0.5, delay: 0.2 }}
-        className={cn(
-          'fixed left-1/2 -translate-x-1/2 z-[95]',
-          // Below top nav (64px + safe area) + small gap
-          'top-[calc(64px+env(safe-area-inset-top,0px)+8px)]',
-          'bg-[var(--surface)]/95 backdrop-blur-md rounded-2xl',
-          'border border-[var(--border-subtle)]',
-          'shadow-xl',
-          'px-2 py-2'
+      <AnimatePresence mode="wait">
+        {isCollapsed ? (
+          /* Collapsed State - Compact pill tucked into nav */
+          <motion.div
+            key="collapsed"
+            initial={{ y: -20, opacity: 0, scale: 0.8 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: 10, opacity: 0, scale: 0.9 }}
+            transition={{ type: 'spring', duration: 0.3, bounce: 0.2 }}
+            className={cn(
+              'fixed left-1/2 -translate-x-1/2 z-[95]',
+              // Position at bottom edge of nav bar (64px) minus half the pill height (~20px)
+              'top-[calc(64px+env(safe-area-inset-top,0px)-10px)]',
+            )}
+          >
+            <motion.button
+              onClick={toggleCollapsed}
+              className={cn(
+                'flex items-center justify-center',
+                'w-11 h-11 rounded-full',
+                'bg-gradient-to-br from-[var(--teed-green-9)] to-[var(--teed-green-10)]',
+                'text-white',
+                'shadow-lg shadow-[var(--teed-green-9)]/25',
+                'border-2 border-white/20',
+                'transition-all duration-200',
+                'hover:from-[var(--teed-green-10)] hover:to-[var(--evergreen-9)]',
+                'hover:shadow-xl hover:shadow-[var(--teed-green-9)]/30',
+                'active:scale-95'
+              )}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              title="Expand edit menu"
+            >
+              <Plus className="w-5 h-5" strokeWidth={2.5} />
+            </motion.button>
+          </motion.div>
+        ) : (
+          /* Expanded State - Full bar */
+          <motion.div
+            key="expanded"
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -20, opacity: 0, scale: 0.95 }}
+            transition={{ type: 'spring', duration: 0.5, delay: 0.1 }}
+            className={cn(
+              'fixed left-1/2 -translate-x-1/2 z-[95]',
+              'top-[calc(64px+env(safe-area-inset-top,0px)+8px)]',
+              'bg-[var(--surface)]/95 backdrop-blur-md rounded-2xl',
+              'border border-[var(--border-subtle)]',
+              'shadow-xl',
+              'px-2 py-2'
+            )}
+          >
+            <div className="flex items-center gap-2">
+              {/* Customize Button (Left) */}
+              <motion.button
+                onClick={() => setActiveMenu(activeMenu === 'customize' ? null : 'customize')}
+                className={cn(
+                  'flex items-center gap-2 px-4 py-2.5 rounded-xl',
+                  'font-medium text-sm',
+                  'transition-all duration-200',
+                  activeMenu === 'customize'
+                    ? 'bg-[var(--sand-9)] text-white'
+                    : 'text-[var(--text-primary)] hover:bg-[var(--sand-3)]'
+                )}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Palette className="w-4 h-4" />
+                <span className="hidden sm:inline">Customize</span>
+              </motion.button>
+
+              {/* Divider */}
+              <div className="w-px h-8 bg-[var(--border-subtle)]" />
+
+              {/* ADD Button (Center - Primary) */}
+              <motion.button
+                onClick={() => setActiveMenu(activeMenu === 'add' ? null : 'add')}
+                className={cn(
+                  'relative flex items-center gap-2 px-6 py-3 rounded-xl',
+                  'font-semibold text-sm',
+                  'transition-all duration-200',
+                  activeMenu === 'add'
+                    ? 'bg-[var(--evergreen-11)] text-white'
+                    : 'bg-gradient-to-r from-[var(--teed-green-9)] to-[var(--teed-green-10)] text-white hover:from-[var(--teed-green-10)] hover:to-[var(--evergreen-9)]'
+                )}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Plus className="w-5 h-5" strokeWidth={2.5} />
+                <span>Add</span>
+                <ChevronDown className={cn(
+                  'w-4 h-4 transition-transform duration-200',
+                  activeMenu === 'add' && 'rotate-180'
+                )} />
+              </motion.button>
+
+              {/* Divider */}
+              <div className="w-px h-8 bg-[var(--border-subtle)]" />
+
+              {/* Stats Button (Right) - Direct navigation, no menu */}
+              <motion.button
+                onClick={handleViewStats}
+                className={cn(
+                  'flex items-center gap-2 px-4 py-2.5 rounded-xl',
+                  'font-medium text-sm',
+                  'transition-all duration-200',
+                  'text-[var(--text-primary)] hover:bg-[var(--sky-3)]'
+                )}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <BarChart3 className="w-4 h-4" />
+                <span className="hidden sm:inline">Stats</span>
+              </motion.button>
+
+              {/* Device Layout Toggle - Only visible in edit mode on desktop */}
+              {isEditMode && onToggleEditingLayout && (
+                <>
+                  <div className="w-px h-8 bg-[var(--border-subtle)] hidden md:block" />
+                  <div className="hidden md:flex items-center gap-1 bg-[var(--surface-elevated)] rounded-lg p-1">
+                    <motion.button
+                      onClick={editingLayout === 'desktop' ? undefined : onToggleEditingLayout}
+                      className={cn(
+                        'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all',
+                        editingLayout === 'desktop'
+                          ? 'bg-[var(--teed-green-9)] text-white'
+                          : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]'
+                      )}
+                      whileTap={{ scale: 0.98 }}
+                      title="Edit desktop layout"
+                    >
+                      <Monitor className="w-4 h-4" />
+                    </motion.button>
+                    <motion.button
+                      onClick={editingLayout === 'mobile' ? undefined : onToggleEditingLayout}
+                      className={cn(
+                        'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all',
+                        editingLayout === 'mobile'
+                          ? 'bg-[var(--teed-green-9)] text-white'
+                          : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]'
+                      )}
+                      whileTap={{ scale: 0.98 }}
+                      title="Edit mobile layout"
+                    >
+                      <Smartphone className="w-4 h-4" />
+                    </motion.button>
+                  </div>
+                </>
+              )}
+
+              {/* Divider */}
+              <div className="w-px h-8 bg-[var(--border-subtle)]" />
+
+              {/* Collapse Button (Far Right) */}
+              <motion.button
+                onClick={toggleCollapsed}
+                className={cn(
+                  'flex items-center justify-center w-10 h-10 rounded-xl',
+                  'text-[var(--text-tertiary)] hover:text-[var(--text-primary)]',
+                  'hover:bg-[var(--surface-hover)]',
+                  'transition-all duration-200'
+                )}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.9 }}
+                title="Collapse menu"
+              >
+                <ChevronUp className="w-5 h-5" />
+              </motion.button>
+            </div>
+          </motion.div>
         )}
-      >
-        <div className="flex items-center gap-2">
-          {/* Customize Button (Left) */}
-          <motion.button
-            onClick={() => setActiveMenu(activeMenu === 'customize' ? null : 'customize')}
-            className={cn(
-              'flex items-center gap-2 px-4 py-2.5 rounded-xl',
-              'font-medium text-sm',
-              'transition-all duration-200',
-              activeMenu === 'customize'
-                ? 'bg-[var(--sand-9)] text-white'
-                : 'text-[var(--text-primary)] hover:bg-[var(--sand-3)]'
-            )}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <Palette className="w-4 h-4" />
-            <span className="hidden sm:inline">Customize</span>
-          </motion.button>
-
-          {/* Divider */}
-          <div className="w-px h-8 bg-[var(--border-subtle)]" />
-
-          {/* ADD Button (Center - Primary) */}
-          <motion.button
-            onClick={() => setActiveMenu(activeMenu === 'add' ? null : 'add')}
-            className={cn(
-              'relative flex items-center gap-2 px-6 py-3 rounded-xl',
-              'font-semibold text-sm',
-              'transition-all duration-200',
-              activeMenu === 'add'
-                ? 'bg-[var(--evergreen-11)] text-white'
-                : 'bg-gradient-to-r from-[var(--teed-green-9)] to-[var(--teed-green-10)] text-white hover:from-[var(--teed-green-10)] hover:to-[var(--evergreen-9)]'
-            )}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <Plus className="w-5 h-5" strokeWidth={2.5} />
-            <span>Add</span>
-            <ChevronDown className={cn(
-              'w-4 h-4 transition-transform duration-200',
-              activeMenu === 'add' && 'rotate-180'
-            )} />
-          </motion.button>
-
-          {/* Divider */}
-          <div className="w-px h-8 bg-[var(--border-subtle)]" />
-
-          {/* Stats Button (Right) - Direct navigation, no menu */}
-          <motion.button
-            onClick={handleViewStats}
-            className={cn(
-              'flex items-center gap-2 px-4 py-2.5 rounded-xl',
-              'font-medium text-sm',
-              'transition-all duration-200',
-              'text-[var(--text-primary)] hover:bg-[var(--sky-3)]'
-            )}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <BarChart3 className="w-4 h-4" />
-            <span className="hidden sm:inline">Stats</span>
-          </motion.button>
-
-          {/* Device Layout Toggle - Only visible in edit mode on desktop */}
-          {isEditMode && onToggleEditingLayout && (
-            <>
-              <div className="w-px h-8 bg-[var(--border-subtle)] hidden md:block" />
-              <div className="hidden md:flex items-center gap-1 bg-[var(--surface-elevated)] rounded-lg p-1">
-                <motion.button
-                  onClick={editingLayout === 'desktop' ? undefined : onToggleEditingLayout}
-                  className={cn(
-                    'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all',
-                    editingLayout === 'desktop'
-                      ? 'bg-[var(--teed-green-9)] text-white'
-                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]'
-                  )}
-                  whileTap={{ scale: 0.98 }}
-                  title="Edit desktop layout"
-                >
-                  <Monitor className="w-4 h-4" />
-                </motion.button>
-                <motion.button
-                  onClick={editingLayout === 'mobile' ? undefined : onToggleEditingLayout}
-                  className={cn(
-                    'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all',
-                    editingLayout === 'mobile'
-                      ? 'bg-[var(--teed-green-9)] text-white'
-                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]'
-                  )}
-                  whileTap={{ scale: 0.98 }}
-                  title="Edit mobile layout"
-                >
-                  <Smartphone className="w-4 h-4" />
-                </motion.button>
-              </div>
-            </>
-          )}
-        </div>
-      </motion.div>
+      </AnimatePresence>
     </>
   );
 }
