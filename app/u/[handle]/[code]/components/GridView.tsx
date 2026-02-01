@@ -2,45 +2,12 @@
 
 import { useState } from 'react';
 import { ExternalLink } from 'lucide-react';
-
-interface ItemLink {
-  id: string;
-  url: string;
-  kind: string;
-  label: string | null;
-  metadata: any;
-  is_auto_generated?: boolean;
-}
-
-interface ItemSpecs {
-  [key: string]: string | number | boolean;
-}
-
-interface Item {
-  id: string;
-  custom_name: string | null;
-  brand: string | null;
-  custom_description: string | null;
-  notes: string | null;
-  quantity: number;
-  sort_index: number;
-  photo_url: string | null;
-  promo_codes: string | null;
-  is_featured: boolean;
-  // Context fields (Phase 1)
-  why_chosen: string | null;
-  specs: ItemSpecs;
-  compared_to: string | null;
-  alternatives: string[] | null;
-  price_paid: number | null;
-  purchase_date: string | null;
-  links: ItemLink[];
-}
+import type { BagViewItem } from '@/lib/types/bagViewTypes';
 
 interface GridViewProps {
-  items: Item[];
+  items: BagViewItem[];
   heroItemId: string | null;
-  onItemClick: (item: Item) => void;
+  onItemClick: (item: BagViewItem) => void;
   onLinkClick: (linkId: string, itemId: string, url: string) => void;
 }
 
@@ -50,7 +17,7 @@ function GridCard({
   onItemClick,
   onLinkClick,
 }: {
-  item: Item;
+  item: BagViewItem;
   isHero: boolean;
   onItemClick: () => void;
   onLinkClick: (linkId: string, itemId: string, url: string) => void;

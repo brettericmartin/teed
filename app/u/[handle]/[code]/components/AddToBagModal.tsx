@@ -4,38 +4,7 @@ import { useState, useEffect } from 'react';
 import { X, Plus, Package, Check } from 'lucide-react';
 import { GolfLoader } from '@/components/ui/GolfLoader';
 import { Button } from '@/components/ui/Button';
-
-interface ItemLink {
-  id: string;
-  url: string;
-  kind: string;
-  label: string | null;
-  metadata: any;
-}
-
-interface ItemSpecs {
-  [key: string]: string | number | boolean;
-}
-
-interface Item {
-  id: string;
-  custom_name: string | null;
-  brand: string | null;
-  custom_description: string | null;
-  notes: string | null;
-  quantity: number;
-  photo_url: string | null;
-  promo_codes: string | null;
-  is_featured: boolean;
-  // Context fields (Phase 1)
-  why_chosen: string | null;
-  specs: ItemSpecs;
-  compared_to: string | null;
-  alternatives: string[] | null;
-  price_paid: number | null;
-  purchase_date: string | null;
-  links: ItemLink[];
-}
+import type { BagViewItem } from '@/lib/types/bagViewTypes';
 
 interface Bag {
   id: string;
@@ -46,7 +15,7 @@ interface Bag {
 interface AddToBagModalProps {
   isOpen: boolean;
   onClose: () => void;
-  item: Item | null;
+  item: BagViewItem | null;
   onSuccess: (bagTitle: string) => void;
 }
 

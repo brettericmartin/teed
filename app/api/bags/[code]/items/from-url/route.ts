@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
+import { inferItemType } from '@/lib/itemTypes/inference';
 
 /**
  * POST /api/bags/[code]/items/from-url
@@ -30,10 +31,10 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get the bag and verify ownership
+    // Get the bag and verify ownership (include context for item type inference)
     const { data: bag, error: bagError } = await supabase
       .from('bags')
-      .select('id, owner_id')
+      .select('id, owner_id, title, category, tags')
       .eq('code', code)
       .single();
 
@@ -115,7 +116,17 @@ export async function POST(
       };
     }
 
-    // Create the item
+    // Infer item type from URL, product info, and bag context
+    const inferredType = inferItemType({
+      url,
+      productName: productInfo.name,
+      brand: productInfo.brand,
+      bagTitle: bag.title,
+      bagCategory: bag.category,
+      bagTags: bag.tags,
+    });
+
+    // Create the item with inferred type
     const { data: newItem, error: insertError } = await supabase
       .from('bag_items')
       .insert({
@@ -126,6 +137,7 @@ export async function POST(
         photo_url: productInfo.imageUrl || null,
         sort_index: nextSortIndex,
         quantity: 1,
+        item_type: inferredType,
       })
       .select()
       .single();

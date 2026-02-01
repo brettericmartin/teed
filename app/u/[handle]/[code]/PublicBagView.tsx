@@ -27,61 +27,15 @@ import { PageContainer, ContentContainer } from '@/components/layout/PageContain
 import { analytics } from '@/lib/analytics';
 import { ChangelogBadge } from '@/components/changelog';
 import type { BagWithVersioning } from '@/lib/types/versionHistory';
+import type { TimingPeriod, PricingModel, PricingPeriod } from '@/lib/types/itemTypes';
+import type { BagViewItem, BagViewBag, ItemLink } from '@/lib/types/bagViewTypes';
+import { ItemTypeBadge } from '@/components/item/ItemTypeSelector';
+import { SupplementTimingBadges } from '@/components/item/SupplementTimingBadges';
+import { PricingBadge } from '@/components/item/PricingBadge';
 
-interface ItemLink {
-  id: string;
-  url: string;
-  kind: string;
-  label: string | null;
-  metadata: any;
-  is_auto_generated?: boolean;
-}
-
-interface ItemSpecs {
-  [key: string]: string | number | boolean;
-}
-
-interface Item {
-  id: string;
-  custom_name: string | null;
-  brand: string | null;
-  custom_description: string | null;
-  notes: string | null;
-  quantity: number;
-  sort_index: number;
-  photo_url: string | null;
-  promo_codes: string | null;
-  is_featured: boolean;
-  // Context fields (Phase 1)
-  why_chosen: string | null;
-  specs: ItemSpecs;
-  compared_to: string | null;
-  alternatives: string[] | null;
-  price_paid: number | null;
-  purchase_date: string | null;
-  links: ItemLink[];
-}
-
-interface Bag {
-  id: string;
-  code: string;
-  title: string;
-  description: string | null;
-  is_public: boolean;
-  is_complete?: boolean;
-  completed_at?: string | null;
-  hero_item_id: string | null;
-  cover_photo_id: string | null;
-  cover_photo_url: string | null;
-  cover_photo_aspect: string | null;
-  created_at: string;
-  tags?: string[];
-  category?: string;
-  // Version history fields
-  version_number?: number;
-  update_count?: number;
-  last_major_update?: string | null;
-}
+// Re-export types for component props
+type Item = BagViewItem;
+type Bag = BagViewBag;
 
 interface PublicBagViewProps {
   bag: Bag;
@@ -705,6 +659,10 @@ export default function PublicBagView({
                       ×{selectedItem.quantity}
                     </span>
                   )}
+                  {/* Item Type Badge - only show for non-physical products */}
+                  {selectedItem.item_type && selectedItem.item_type !== 'physical_product' && (
+                    <ItemTypeBadge itemType={selectedItem.item_type} size="md" />
+                  )}
                 </div>
                 {selectedItem.custom_description && (
                   <p className="mt-2 text-[var(--text-secondary)]">{selectedItem.custom_description}</p>
@@ -734,6 +692,91 @@ export default function PublicBagView({
                 </div>
               )}
 
+              {/* Software/Service Pricing Info */}
+              {(selectedItem.item_type === 'software' || selectedItem.item_type === 'service') &&
+                selectedItem.specs?.pricing_model && (
+                  <div className="bg-[var(--surface-alt)] rounded-lg p-4">
+                    <div className="flex items-center justify-between flex-wrap gap-4">
+                      <PricingBadge
+                        pricingModel={selectedItem.specs.pricing_model as PricingModel}
+                        priceAmount={selectedItem.specs.price_amount as number | undefined}
+                        pricePeriod={selectedItem.specs.price_period as PricingPeriod | undefined}
+                        freeTierAvailable={selectedItem.specs.free_tier_available as boolean | undefined}
+                        size="md"
+                      />
+                      {selectedItem.specs.platforms && (selectedItem.specs.platforms as string[]).length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {(selectedItem.specs.platforms as string[]).map((platform) => (
+                            <span
+                              key={platform}
+                              className="px-2 py-0.5 text-xs font-medium bg-[var(--sky-2)] text-[var(--sky-11)] rounded-full capitalize"
+                            >
+                              {platform}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    {selectedItem.specs.url && (
+                      <a
+                        href={selectedItem.specs.url as string}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-3 inline-flex items-center gap-1 text-sm text-[var(--teed-green-9)] hover:text-[var(--teed-green-11)]"
+                      >
+                        Visit website <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                  </div>
+                )}
+
+              {/* Supplement Info */}
+              {selectedItem.item_type === 'supplement' && selectedItem.specs && (
+                <div className="bg-gradient-to-r from-[var(--amber-1)] to-[var(--amber-2)] border border-[var(--amber-6)] rounded-lg p-4 space-y-3">
+                  {/* Dosage and Frequency */}
+                  <div className="flex flex-wrap gap-4">
+                    {selectedItem.specs.dosage && (
+                      <div>
+                        <span className="text-xs text-[var(--text-secondary)] block mb-0.5">Dosage</span>
+                        <span className="font-medium text-[var(--text-primary)]">{selectedItem.specs.dosage}</span>
+                      </div>
+                    )}
+                    {selectedItem.specs.serving_size && (
+                      <div>
+                        <span className="text-xs text-[var(--text-secondary)] block mb-0.5">Serving</span>
+                        <span className="font-medium text-[var(--text-primary)]">{selectedItem.specs.serving_size}</span>
+                      </div>
+                    )}
+                    {selectedItem.specs.frequency && (
+                      <div>
+                        <span className="text-xs text-[var(--text-secondary)] block mb-0.5">Frequency</span>
+                        <span className="font-medium text-[var(--text-primary)]">{selectedItem.specs.frequency}</span>
+                      </div>
+                    )}
+                    {selectedItem.specs.form && (
+                      <div>
+                        <span className="text-xs text-[var(--text-secondary)] block mb-0.5">Form</span>
+                        <span className="font-medium text-[var(--text-primary)] capitalize">{selectedItem.specs.form}</span>
+                      </div>
+                    )}
+                  </div>
+                  {/* Timing */}
+                  {selectedItem.specs.timing && (selectedItem.specs.timing as TimingPeriod[]).length > 0 && (
+                    <div>
+                      <span className="text-xs text-[var(--text-secondary)] block mb-1.5">When to Take</span>
+                      <SupplementTimingBadges timing={selectedItem.specs.timing as TimingPeriod[]} size="md" />
+                    </div>
+                  )}
+                  {/* Stack Notes */}
+                  {selectedItem.specs.stack_notes && (
+                    <div className="pt-2 border-t border-[var(--amber-6)]">
+                      <span className="text-xs text-[var(--text-secondary)] block mb-1">Stack Notes</span>
+                      <p className="text-sm text-[var(--text-primary)]">{selectedItem.specs.stack_notes}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Why I Chose This - Hero context field */}
               {selectedItem.why_chosen && (
                 <div className="bg-gradient-to-r from-[var(--teed-green-1)] to-[var(--teed-green-2)] border border-[var(--teed-green-6)] rounded-lg p-4">
@@ -753,19 +796,34 @@ export default function PublicBagView({
               )}
 
               {/* Specifications */}
-              {selectedItem.specs && Object.keys(selectedItem.specs).length > 0 && (
-                <div>
-                  <h3 className="text-sm font-medium text-[var(--text-primary)] mb-3">Specifications</h3>
-                  <div className="grid grid-cols-2 gap-2">
-                    {Object.entries(selectedItem.specs).map(([key, value]) => (
-                      <div key={key} className="flex justify-between items-center px-3 py-2 bg-[var(--surface-alt)] rounded-lg">
-                        <span className="text-sm text-[var(--text-secondary)] capitalize">{key.replace(/_/g, ' ')}</span>
-                        <span className="text-sm font-medium text-[var(--text-primary)]">{String(value)}</span>
-                      </div>
-                    ))}
+              {selectedItem.specs && Object.keys(selectedItem.specs).length > 0 && (() => {
+                // Filter out type-specific fields that are displayed separately
+                const typeSpecificFields = [
+                  'pricing_model', 'price_amount', 'price_period', 'platforms', 'free_tier_available', 'url',
+                  'dosage', 'serving_size', 'timing', 'frequency', 'form', 'stack_notes', 'category'
+                ];
+                const genericSpecs = Object.entries(selectedItem.specs).filter(
+                  ([key, value]) => !typeSpecificFields.includes(key) && value !== undefined && value !== null && value !== ''
+                );
+
+                if (genericSpecs.length === 0) return null;
+
+                return (
+                  <div>
+                    <h3 className="text-sm font-medium text-[var(--text-primary)] mb-3">Specifications</h3>
+                    <div className="grid grid-cols-2 gap-2">
+                      {genericSpecs.map(([key, value]) => (
+                        <div key={key} className="flex justify-between items-center px-3 py-2 bg-[var(--surface-alt)] rounded-lg">
+                          <span className="text-sm text-[var(--text-secondary)] capitalize">{key.replace(/_/g, ' ')}</span>
+                          <span className="text-sm font-medium text-[var(--text-primary)]">
+                            {Array.isArray(value) ? value.join(', ') : String(value)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                );
+              })()}
 
               {/* Alternatives Considered */}
               {selectedItem.alternatives && selectedItem.alternatives.length > 0 && (

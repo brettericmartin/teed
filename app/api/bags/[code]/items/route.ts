@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import { checkItemBadges } from '@/lib/badges';
+import { isValidItemType } from '@/lib/types/itemTypes';
+import { inferItemType } from '@/lib/itemTypes/inference';
 
 /**
  * PATCH /api/bags/[code]/items
@@ -140,6 +142,8 @@ export async function PATCH(
  *   catalog_item_id?: uuid
  *   custom_photo_id?: uuid
  *   photo_url?: string (external image URL)
+ *   item_type?: ItemType (default: 'physical_product')
+ *   specs?: object (type-specific specifications)
  * }
  *
  * Returns: Created item object
@@ -162,10 +166,10 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get the bag and verify ownership
+    // Get the bag and verify ownership (include context for item type inference)
     const { data: bag, error: bagError } = await supabase
       .from('bags')
-      .select('id, owner_id')
+      .select('id, owner_id, title, category, tags')
       .eq('code', code)
       .single();
 
@@ -189,8 +193,27 @@ export async function POST(
       catalog_item_id,
       custom_photo_id,
       photo_url,
+      item_type,
+      specs,
+      url, // Optional URL for inference
     } = body;
     console.log('[Items API] Extracted photo_url:', photo_url);
+
+    // Determine item_type: use provided value if valid, otherwise infer from context
+    let validatedItemType: string;
+    if (item_type && isValidItemType(item_type)) {
+      validatedItemType = item_type;
+    } else {
+      // Infer from available context
+      validatedItemType = inferItemType({
+        url,
+        productName: custom_name,
+        brand,
+        bagTitle: bag.title,
+        bagCategory: bag.category,
+        bagTags: bag.tags,
+      });
+    }
 
     // Validate required fields
     if (!custom_name || typeof custom_name !== 'string' || custom_name.trim().length === 0) {
@@ -225,6 +248,8 @@ export async function POST(
         custom_photo_id: custom_photo_id || null,
         photo_url: photo_url || null,
         sort_index: nextSortIndex,
+        item_type: validatedItemType,
+        specs: specs || {},
       })
       .select()
       .single();

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
+import { isValidItemType } from '@/lib/types/itemTypes';
 
 /**
  * PUT /api/items/[id]
@@ -17,6 +18,7 @@ import { createServerSupabase } from '@/lib/serverSupabase';
  *   promo_codes?: string | null
  *   is_featured?: boolean
  *   featured_position?: number | null
+ *   item_type?: ItemType
  * }
  *
  * Returns: Updated item object
@@ -133,6 +135,17 @@ export async function PUT(
 
     if (body.section_id !== undefined) {
       updates.section_id = body.section_id || null;
+    }
+
+    // Item type field
+    if (body.item_type !== undefined) {
+      if (!isValidItemType(body.item_type)) {
+        return NextResponse.json(
+          { error: 'Invalid item_type. Must be one of: physical_product, software, service, supplement, consumable' },
+          { status: 400 }
+        );
+      }
+      updates.item_type = body.item_type;
     }
 
     // Update the item
