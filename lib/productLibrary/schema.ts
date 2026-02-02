@@ -10,17 +10,71 @@
 // =============================================================================
 
 export type Category =
+  // Sports & Recreation
   | 'golf'
-  | 'tech'
-  | 'fashion'
-  | 'makeup'
-  | 'outdoor'
-  | 'photography'
-  | 'gaming'
-  | 'music'
+  | 'tennis'
+  | 'basketball'
+  | 'soccer'
+  | 'sports'
+  | 'cycling'
+  | 'running'
+  | 'snow'
+  | 'surf'
+  | 'motorcycle'
+  // Fitness & Wellness
   | 'fitness'
+  | 'activewear'
+  | 'athletic'
+  | 'wearables'
+  | 'supplements'
+  // Tech & Electronics
+  | 'tech'
+  | 'audio'
+  | 'gaming'
+  | 'streaming'
+  | 'photography'
+  // Fashion & Apparel
+  | 'fashion'
+  | 'apparel'
+  | 'footwear'
+  | 'eyewear'
+  | 'bags'
+  | 'watches'
+  // Beauty & Personal Care
+  | 'beauty'
+  | 'makeup'
+  | 'skincare'
+  | 'haircare'
+  | 'grooming'
+  // Home & Living
+  | 'home'
+  | 'kitchen'
+  | 'bedding'
+  | 'office'
+  // Outdoor & Adventure
+  | 'outdoor'
   | 'travel'
-  | 'edc';
+  | 'edc'
+  // Hobbies & Entertainment
+  | 'music'
+  | 'hobbies'
+  | 'art'
+  | 'books'
+  // Food & Beverage
+  | 'coffee'
+  | 'food'
+  | 'spirits'
+  // Automotive
+  | 'automotive'
+  // Family
+  | 'baby'
+  | 'kids'
+  | 'pet'
+  // Health
+  | 'health'
+  // General
+  | 'retail'
+  | 'other';
 
 export type Availability = 'current' | 'discontinued' | 'limited';
 

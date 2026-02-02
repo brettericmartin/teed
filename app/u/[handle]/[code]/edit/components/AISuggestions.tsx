@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import InlineClarificationCard from '@/components/clarification/InlineClarificationCard';
+import { getConfidenceLevel } from '@/lib/analytics/identificationTelemetry';
 
 type ProductSuggestion = {
   custom_name: string;
@@ -50,8 +52,7 @@ export default function AISuggestions({
   onForceAI,
   onAddManually,
 }: AISuggestionsProps) {
-  const [showClarification, setShowClarification] = useState(false);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [clarificationDismissed, setClarificationDismissed] = useState(false);
   const [loadingStage, setLoadingStage] = useState(0);
 
   // Progress through loading stages
@@ -70,16 +71,22 @@ export default function AISuggestions({
     }
   }, [isLoading, loadingStage]);
 
-  const handleAnswerChange = (questionId: string, answer: string) => {
-    const newAnswers = { ...answers, [questionId]: answer };
-    setAnswers(newAnswers);
+  // Reset clarification dismissed state when questions change
+  useEffect(() => {
+    setClarificationDismissed(false);
+  }, [questions]);
+
+  const handleClarificationAnswer = (answers: Record<string, string>) => {
+    setClarificationDismissed(true);
+    onAnswerQuestion(answers);
   };
 
-  const handleSubmitAnswers = () => {
-    onAnswerQuestion(answers);
-    setAnswers({});
-    setShowClarification(false);
+  const handleClarificationSkip = () => {
+    setClarificationDismissed(true);
   };
+
+  // Show inline clarification if needed and not dismissed
+  const showInlineClarification = clarificationNeeded && questions.length > 0 && !clarificationDismissed;
 
   if (isLoading) {
     const currentStage = LOADING_STAGES[loadingStage];
@@ -143,7 +150,40 @@ export default function AISuggestions({
     return null;
   }
 
-  // Get tier label
+  // Get confidence-based label using highest suggestion confidence
+  const getConfidenceLabel = () => {
+    const topConfidence = suggestions[0]?.confidence || 0;
+    const level = getConfidenceLevel(topConfidence);
+
+    // Add source icon based on search tier
+    let icon = '';
+    switch (searchTier) {
+      case 'library':
+        icon = '📚';
+        break;
+      case 'library+ai':
+        icon = '📚🤖';
+        break;
+      case 'ai':
+        icon = '🤖';
+        break;
+      case 'vision':
+        icon = '👁️';
+        break;
+      default:
+        icon = level.level === 'high' ? '✓' : level.level === 'medium' ? '○' : '?';
+    }
+
+    return {
+      text: level.label,
+      description: level.description,
+      icon,
+      color: level.color,
+      level: level.level,
+    };
+  };
+
+  // Legacy tier label for backwards compatibility
   const getTierLabel = () => {
     switch (searchTier) {
       case 'library':
@@ -174,20 +214,47 @@ export default function AISuggestions({
     }
   };
 
-  const tierInfo = getTierLabel();
+  const confidenceInfo = getConfidenceLabel();
 
   return (
     <div className="space-y-3">
+      {/* Inline Clarification Card - Shows ABOVE suggestions when needed */}
+      {showInlineClarification && (
+        <InlineClarificationCard
+          questions={questions}
+          onAnswer={handleClarificationAnswer}
+          onSkip={handleClarificationSkip}
+          isLoading={isLoading}
+        />
+      )}
+
       <div className="flex items-center justify-between">
         <div className="text-sm text-gray-600">
-          Suggestions (click to add):
+          {confidenceInfo.level === 'minimal'
+            ? 'Possible matches:'
+            : 'Suggestions (click to add):'}
         </div>
-        {tierInfo && (
-          <span className={`text-xs px-2 py-1 rounded-full font-medium ${tierInfo.color}`}>
-            {tierInfo.icon} {tierInfo.text}
+        <div className="flex items-center gap-2">
+          <span
+            className={`text-xs px-2 py-1 rounded-full font-medium ${confidenceInfo.color}`}
+            title={confidenceInfo.description}
+          >
+            {confidenceInfo.icon} {confidenceInfo.text}
           </span>
-        )}
+        </div>
       </div>
+
+      {/* Show helpful context for lower confidence results */}
+      {confidenceInfo.level === 'low' && (
+        <div className="text-xs text-amber-600 bg-amber-50 px-3 py-2 rounded-lg">
+          These are possible matches. Please verify the details are correct.
+        </div>
+      )}
+      {confidenceInfo.level === 'minimal' && (
+        <div className="text-xs text-gray-600 bg-gray-100 px-3 py-2 rounded-lg">
+          We couldn&apos;t find a strong match. You may want to add this manually for accuracy.
+        </div>
+      )}
 
       {/* Suggestions */}
       <div className="space-y-2">
@@ -280,55 +347,6 @@ export default function AISuggestions({
           </button>
         )}
       </div>
-
-      {/* Clarification Toggle */}
-      {clarificationNeeded && questions.length > 0 && (
-        <div className="mt-4">
-          <button
-            onClick={() => setShowClarification(!showClarification)}
-            className="w-full text-center py-2 px-4 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-          >
-            {showClarification ? '▲ Hide questions' : "▼ Tell us more to refine suggestions"}
-          </button>
-
-          {/* Clarification Questions */}
-          {showClarification && (
-            <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg space-y-4">
-              {questions.map((question) => (
-                <div key={question.id}>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {question.question}
-                  </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {question.options.map((option) => (
-                      <button
-                        key={option}
-                        onClick={() => handleAnswerChange(question.id, option)}
-                        className={`p-3 border-2 rounded-lg text-sm transition-all ${
-                          answers[question.id] === option
-                            ? 'border-[var(--sky-6)] bg-[var(--sky-2)] text-[var(--sky-11)] font-medium'
-                            : 'border-gray-200 hover:border-gray-300 text-gray-700'
-                        }`}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ))}
-
-              {Object.keys(answers).length === questions.length && (
-                <button
-                  onClick={handleSubmitAnswers}
-                  className="w-full mt-4 py-2 px-4 bg-[var(--sky-5)] text-[var(--sky-11)] rounded-lg hover:bg-[var(--sky-6)] font-medium transition-colors"
-                >
-                  Get Refined Suggestions
-                </button>
-              )}
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 }

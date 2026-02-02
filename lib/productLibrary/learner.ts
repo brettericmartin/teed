@@ -4,26 +4,12 @@
  * Automatically adds new products to the library when AI provides
  * enrichment that the library didn't have. This creates a feedback
  * loop that improves the library over time.
+ *
+ * Storage: Supabase learned_products table
  */
 
-import { readFileSync, writeFileSync, existsSync } from 'fs';
-import { resolve } from 'path';
-import type { Product, ProductLibrary, Category } from './schema';
-
-// Path to golf library (we can extend this to other categories later)
-const LIBRARY_PATHS: Record<Category, string> = {
-  golf: resolve(process.cwd(), 'lib/productLibrary/data/golf.json'),
-  makeup: resolve(process.cwd(), 'lib/productLibrary/data/makeup.json'),
-  tech: resolve(process.cwd(), 'lib/productLibrary/data/tech.json'),
-  fashion: resolve(process.cwd(), 'lib/productLibrary/data/fashion.json'),
-  outdoor: resolve(process.cwd(), 'lib/productLibrary/data/outdoor.json'),
-  photography: resolve(process.cwd(), 'lib/productLibrary/data/photography.json'),
-  gaming: resolve(process.cwd(), 'lib/productLibrary/data/gaming.json'),
-  music: resolve(process.cwd(), 'lib/productLibrary/data/music.json'),
-  fitness: resolve(process.cwd(), 'lib/productLibrary/data/fitness.json'),
-  travel: resolve(process.cwd(), 'lib/productLibrary/data/travel.json'),
-  edc: resolve(process.cwd(), 'lib/productLibrary/data/edc.json'),
-};
+import { createClient } from '@supabase/supabase-js';
+import type { Category } from './schema';
 
 // Minimum confidence for AI results to be added to library
 const MIN_CONFIDENCE_FOR_LEARNING = 0.75;
@@ -43,95 +29,41 @@ export interface LearnableProduct {
   msrp?: number;
   productUrl?: string;
   imageUrl?: string;
+  specifications?: Record<string, unknown>;
+}
+
+// Create Supabase admin client
+function getSupabaseAdmin() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !supabaseServiceKey) {
+    return null;
+  }
+
+  return createClient(supabaseUrl, supabaseServiceKey);
 }
 
 /**
- * Check if a product already exists in the library
+ * Check if a product already exists in learned_products
  */
-function productExists(library: ProductLibrary, brand: string, name: string): boolean {
-  const brandLower = brand.toLowerCase();
-  const nameLower = name.toLowerCase();
+async function productExistsInDatabase(brand: string, name: string): Promise<boolean> {
+  const supabase = getSupabaseAdmin();
+  if (!supabase) return false;
 
-  // Check recently added in this session
-  const key = `${brandLower}-${nameLower}`;
-  if (recentlyAdded.has(key)) {
-    return true;
-  }
+  const { data, error } = await supabase
+    .from('learned_products')
+    .select('id')
+    .ilike('brand', brand)
+    .ilike('name', name)
+    .limit(1);
 
-  // Check library brands
-  const existingBrand = library.brands.find(
-    b => b.name.toLowerCase() === brandLower
-  );
-
-  if (!existingBrand) {
+  if (error) {
+    console.error('[Learner] Error checking existence:', error);
     return false;
   }
 
-  // Check products in brand
-  return existingBrand.products.some(p => {
-    const pNameLower = p.name.toLowerCase();
-    // Exact match
-    if (pNameLower === nameLower) return true;
-    // Close match (one contains the other)
-    if (pNameLower.includes(nameLower) || nameLower.includes(pNameLower)) {
-      // Only consider it a match if very similar
-      const shorter = Math.min(pNameLower.length, nameLower.length);
-      const longer = Math.max(pNameLower.length, nameLower.length);
-      return shorter / longer > 0.7;
-    }
-    return false;
-  });
-}
-
-/**
- * Create a product entry from AI result
- */
-function createProductEntry(product: LearnableProduct): Product {
-  const id = generateId(product.brand, product.name);
-
-  return {
-    id,
-    name: product.name,
-    brand: product.brand,
-    category: mapCategory(product.category),
-    subcategory: product.subcategory || detectSubcategory(product.name, product.category),
-    releaseYear: product.releaseYear || new Date().getFullYear(),
-    msrp: product.msrp,
-    visualSignature: {
-      primaryColors: ['black'],
-      secondaryColors: ['silver'],
-      patterns: ['solid'],
-      finish: 'matte',
-      designCues: [],
-      distinguishingFeatures: [],
-    },
-    referenceImages: product.imageUrl
-      ? { primary: product.imageUrl }
-      : { primary: '' },
-    specifications: {},
-    description: product.description || `${product.brand} ${product.name}`,
-    searchKeywords: generateSearchKeywords(product.brand, product.name),
-    aliases: [],
-    variants: [
-      {
-        sku: id,
-        variantName: 'Standard',
-        colorway: 'Default',
-        availability: 'current',
-        specifications: {},
-      },
-    ],
-    productUrl: product.productUrl,
-    lastUpdated: new Date().toISOString(),
-    source: 'ai',
-    dataConfidence: Math.round(product.confidence * 100),
-  };
-}
-
-function generateId(brand: string, name: string): string {
-  const cleanBrand = brand.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
-  const cleanName = name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
-  return `${cleanBrand}-${cleanName}`.replace(/-+/g, '-').replace(/^-|-$/g, '');
+  return data && data.length > 0;
 }
 
 function mapCategory(category: string): Category {
@@ -140,12 +72,13 @@ function mapCategory(category: string): Category {
     'golf equipment': 'golf',
     'makeup': 'makeup',
     'cosmetics': 'makeup',
-    'beauty': 'makeup',
+    'beauty': 'beauty',
     'tech': 'tech',
     'technology': 'tech',
     'electronics': 'tech',
     'fashion': 'fashion',
     'clothing': 'fashion',
+    'apparel': 'apparel',
     'outdoor': 'outdoor',
     'photography': 'photography',
     'gaming': 'gaming',
@@ -153,9 +86,15 @@ function mapCategory(category: string): Category {
     'fitness': 'fitness',
     'travel': 'travel',
     'edc': 'edc',
+    'audio': 'audio',
+    'watches': 'watches',
+    'home': 'home',
+    'kitchen': 'kitchen',
+    'skincare': 'skincare',
+    'haircare': 'haircare',
   };
 
-  return mapping[category.toLowerCase()] || 'golf';
+  return mapping[category.toLowerCase()] || 'other';
 }
 
 function detectSubcategory(name: string, category: string): string {
@@ -191,13 +130,17 @@ function generateSearchKeywords(brand: string, name: string): string[] {
   // Add full name
   keywords.add(name.toLowerCase());
 
+  // Add brand + name combo
+  keywords.add(`${brand} ${name}`.toLowerCase());
+
   return Array.from(keywords);
 }
 
 /**
  * Learn a new product from AI enrichment
  *
- * Returns true if product was added, false if skipped (already exists or low confidence)
+ * Stores in Supabase learned_products table.
+ * Returns true if product was added, false if skipped.
  */
 export async function learnProduct(product: LearnableProduct): Promise<{
   added: boolean;
@@ -219,68 +162,96 @@ export async function learnProduct(product: LearnableProduct): Promise<{
     };
   }
 
-  // Determine category
-  const category = mapCategory(product.category);
-  const libraryPath = LIBRARY_PATHS[category];
-
-  if (!libraryPath || !existsSync(libraryPath)) {
+  // Check session cache first
+  const key = `${product.brand.toLowerCase()}-${product.name.toLowerCase()}`;
+  if (recentlyAdded.has(key)) {
     return {
       added: false,
-      reason: `No library for category: ${category}`,
+      reason: 'Already added in this session',
+    };
+  }
+
+  const supabase = getSupabaseAdmin();
+  if (!supabase) {
+    return {
+      added: false,
+      reason: 'Supabase not configured',
     };
   }
 
   try {
-    // Load library
-    const library: ProductLibrary = JSON.parse(readFileSync(libraryPath, 'utf-8'));
+    // Check if already exists in database
+    const exists = await productExistsInDatabase(product.brand, product.name);
+    if (exists) {
+      // Update occurrence count for existing product
+      const { error: updateError } = await supabase
+        .from('learned_products')
+        .update({
+          last_seen_at: new Date().toISOString(),
+          // occurrence_count is auto-incremented by trigger
+        })
+        .ilike('brand', product.brand)
+        .ilike('name', product.name);
 
-    // Check for duplicates
-    if (productExists(library, product.brand, product.name)) {
+      if (updateError) {
+        console.error('[Learner] Error updating occurrence:', updateError);
+      }
+
       return {
         added: false,
-        reason: 'Product already exists in library',
+        reason: 'Product already exists, updated occurrence count',
       };
     }
 
-    // Find or create brand
-    let brand = library.brands.find(
-      b => b.name.toLowerCase() === product.brand.toLowerCase()
-    );
+    // Determine category
+    const category = mapCategory(product.category);
+    const subcategory = product.subcategory || detectSubcategory(product.name, product.category);
+    const searchKeywords = generateSearchKeywords(product.brand, product.name);
 
-    if (!brand) {
-      brand = {
-        name: product.brand,
+    // Insert new product
+    const { error } = await supabase
+      .from('learned_products')
+      .insert({
+        brand: product.brand,
+        name: product.name,
+        category,
+        subcategory,
+        description: product.description || `${product.brand} ${product.name}`,
+        image_url: product.imageUrl,
+        product_url: product.productUrl,
+        price: product.msrp ? `$${product.msrp}` : null,
+        release_year: product.releaseYear || new Date().getFullYear(),
+        source: product.source === 'ai' ? 'ai_enrichment' : 'web_scrape',
+        confidence: product.confidence,
+        specifications: product.specifications || {},
+        search_keywords: searchKeywords,
         aliases: [],
-        products: [],
-        lastUpdated: new Date().toISOString(),
+      });
+
+    if (error) {
+      // Handle unique constraint violation (race condition)
+      if (error.code === '23505') {
+        return {
+          added: false,
+          reason: 'Product already exists (concurrent insert)',
+        };
+      }
+
+      console.error('[Learner] Error inserting product:', error);
+      return {
+        added: false,
+        reason: `Database error: ${error.message}`,
       };
-      library.brands.push(brand);
     }
 
-    // Create and add product
-    const productEntry = createProductEntry(product);
-    brand.products.push(productEntry);
-    brand.lastUpdated = new Date().toISOString();
+    // Track in session cache
+    recentlyAdded.add(key);
 
-    // Update library counts
-    library.productCount = library.brands.reduce((sum, b) => sum + b.products.length, 0);
-    library.variantCount = library.brands.reduce(
-      (sum, b) => sum + b.products.reduce((pSum, p) => pSum + (p.variants?.length || 0), 0),
-      0
-    );
-    library.lastUpdated = new Date().toISOString();
-
-    // Save library
-    writeFileSync(libraryPath, JSON.stringify(library, null, 2));
-
-    // Track in session
-    recentlyAdded.add(`${product.brand.toLowerCase()}-${product.name.toLowerCase()}`);
-
-    console.log(`[Learner] Added: ${product.brand} ${product.name} to ${category} library`);
+    console.log(`[Learner] Added: ${product.brand} ${product.name} to learned_products`);
 
     return {
       added: true,
-      reason: `Added to ${category} library`,
+      reason: 'Added to learned_products',
     };
   } catch (error) {
     console.error('[Learner] Error adding product:', error);
@@ -318,4 +289,121 @@ export async function learnProducts(products: LearnableProduct[]): Promise<{
   }
 
   return { added, skipped, details };
+}
+
+/**
+ * Search learned products by query
+ * Used by smartSearch to merge with static library results
+ */
+export async function searchLearnedProducts(
+  query: string,
+  category?: Category,
+  limit: number = 10
+): Promise<Array<{
+  brand: string;
+  name: string;
+  category: string;
+  description: string | null;
+  imageUrl: string | null;
+  confidence: number;
+  occurrenceCount: number;
+}>> {
+  const supabase = getSupabaseAdmin();
+  if (!supabase) return [];
+
+  try {
+    let queryBuilder = supabase
+      .from('learned_products')
+      .select('brand, name, category, description, image_url, confidence, occurrence_count')
+      .order('occurrence_count', { ascending: false })
+      .limit(limit);
+
+    // Add category filter if provided
+    if (category) {
+      queryBuilder = queryBuilder.eq('category', category);
+    }
+
+    // Add text search
+    // Use ilike for simple matching (could be upgraded to full-text search)
+    const searchTerms = query.toLowerCase().split(/\s+/);
+    for (const term of searchTerms) {
+      if (term.length >= 2) {
+        queryBuilder = queryBuilder.or(`brand.ilike.%${term}%,name.ilike.%${term}%,search_keywords.cs.{${term}}`);
+      }
+    }
+
+    const { data, error } = await queryBuilder;
+
+    if (error) {
+      console.error('[Learner] Search error:', error);
+      return [];
+    }
+
+    return (data || []).map(row => ({
+      brand: row.brand,
+      name: row.name,
+      category: row.category,
+      description: row.description,
+      imageUrl: row.image_url,
+      confidence: row.confidence,
+      occurrenceCount: row.occurrence_count,
+    }));
+  } catch (error) {
+    console.error('[Learner] Search error:', error);
+    return [];
+  }
+}
+
+/**
+ * Get stats about learned products
+ */
+export async function getLearnedProductStats(): Promise<{
+  totalProducts: number;
+  byCategory: Record<string, number>;
+  topBrands: Array<{ brand: string; count: number }>;
+} | null> {
+  const supabase = getSupabaseAdmin();
+  if (!supabase) return null;
+
+  try {
+    // Get total count
+    const { count } = await supabase
+      .from('learned_products')
+      .select('*', { count: 'exact', head: true });
+
+    // Get by category
+    const { data: categoryData } = await supabase
+      .from('learned_products')
+      .select('category');
+
+    const byCategory: Record<string, number> = {};
+    for (const row of categoryData || []) {
+      byCategory[row.category] = (byCategory[row.category] || 0) + 1;
+    }
+
+    // Get top brands
+    const { data: brandData } = await supabase
+      .from('learned_products')
+      .select('brand')
+      .order('occurrence_count', { ascending: false });
+
+    const brandCounts: Record<string, number> = {};
+    for (const row of brandData || []) {
+      brandCounts[row.brand] = (brandCounts[row.brand] || 0) + 1;
+    }
+
+    const topBrands = Object.entries(brandCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10)
+      .map(([brand, count]) => ({ brand, count }));
+
+    return {
+      totalProducts: count || 0,
+      byCategory,
+      topBrands,
+    };
+  } catch (error) {
+    console.error('[Learner] Stats error:', error);
+    return null;
+  }
 }

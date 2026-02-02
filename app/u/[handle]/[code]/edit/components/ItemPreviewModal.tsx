@@ -10,6 +10,11 @@ type ProductSuggestion = {
   category: string;
   confidence: number;
   brand?: string;
+  // Variant hints from parsing
+  detectedSize?: string;
+  detectedColor?: string;
+  suggestedSizes?: string[];
+  suggestedColors?: string[];
 };
 
 type ItemPreviewModalProps = {
@@ -39,6 +44,11 @@ export default function ItemPreviewModal({
   const [description, setDescription] = useState('');
   const [notes, setNotes] = useState('');
 
+  // Variant state
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [showVariantSection, setShowVariantSection] = useState(false);
+
   // Photo state
   const [photos, setPhotos] = useState<string[]>([]);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
@@ -60,6 +70,17 @@ export default function ItemPreviewModal({
       setPhotos([]);
       setPhotoError(null);
       setFailedPhotos(new Set());
+
+      // Initialize variants
+      setSelectedSize(suggestion.detectedSize || null);
+      setSelectedColor(suggestion.detectedColor || null);
+
+      // Show variant section if we have detected variants or suggestions
+      const hasVariants = suggestion.detectedSize ||
+        suggestion.detectedColor ||
+        (suggestion.suggestedSizes && suggestion.suggestedSizes.length > 0) ||
+        (suggestion.suggestedColors && suggestion.suggestedColors.length > 0);
+      setShowVariantSection(!!hasVariants);
     }
   }, [suggestion]);
 
@@ -122,13 +143,34 @@ export default function ItemPreviewModal({
     }
   };
 
+  // Build final description with variant info
+  const buildFinalDescription = () => {
+    const parts: string[] = [];
+
+    // Add base description
+    if (description.trim()) {
+      parts.push(description.trim());
+    }
+
+    // Add variant info
+    const variantParts: string[] = [];
+    if (selectedSize) variantParts.push(`Size: ${selectedSize}`);
+    if (selectedColor) variantParts.push(`Color: ${selectedColor}`);
+
+    if (variantParts.length > 0) {
+      parts.push(variantParts.join(' | '));
+    }
+
+    return parts.join(' • ') || undefined;
+  };
+
   const handleConfirm = async () => {
     setIsSubmitting(true);
     try {
       await onConfirm({
         custom_name: name.trim(),
         brand: brand.trim() || undefined,
-        custom_description: description.trim() || undefined,
+        custom_description: buildFinalDescription(),
         notes: notes.trim() || undefined,
         selectedPhotoUrl:
           selectedPhotoIndex !== null && !failedPhotos.has(selectedPhotoIndex)
@@ -148,7 +190,7 @@ export default function ItemPreviewModal({
       await onConfirm({
         custom_name: name.trim(),
         brand: brand.trim() || undefined,
-        custom_description: description.trim() || undefined,
+        custom_description: buildFinalDescription(),
         notes: notes.trim() || undefined,
         // No photo
       });
@@ -256,6 +298,141 @@ export default function ItemPreviewModal({
                 className="w-full px-3 py-2.5 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--teed-green-6)] focus:border-transparent resize-none disabled:bg-gray-100"
               />
             </div>
+
+            {/* Variant selection section - optional */}
+            {showVariantSection && (
+              <div className="pt-2 space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Variant (optional)
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedSize(null);
+                      setSelectedColor(null);
+                      setShowVariantSection(false);
+                    }}
+                    className="text-xs text-gray-500 hover:text-gray-700"
+                  >
+                    Clear
+                  </button>
+                </div>
+
+                {/* Size selection */}
+                {(suggestion?.detectedSize || (suggestion?.suggestedSizes && suggestion.suggestedSizes.length > 0)) && (
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1.5">Size</label>
+                    <div className="flex flex-wrap gap-2">
+                      {/* Pre-fill with detected size */}
+                      {suggestion?.detectedSize && (
+                        <button
+                          type="button"
+                          onClick={() => setSelectedSize(suggestion.detectedSize!)}
+                          disabled={isSubmitting}
+                          className={`px-3 py-1.5 text-sm font-medium rounded-full border transition-all ${
+                            selectedSize === suggestion.detectedSize
+                              ? 'border-[var(--teed-green-8)] bg-[var(--teed-green-8)] text-white'
+                              : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+                          }`}
+                        >
+                          {suggestion.detectedSize}
+                        </button>
+                      )}
+                      {/* Suggested sizes */}
+                      {suggestion?.suggestedSizes?.filter(s => s !== suggestion.detectedSize).map((size) => (
+                        <button
+                          key={size}
+                          type="button"
+                          onClick={() => setSelectedSize(size)}
+                          disabled={isSubmitting}
+                          className={`px-3 py-1.5 text-sm font-medium rounded-full border transition-all ${
+                            selectedSize === size
+                              ? 'border-[var(--teed-green-8)] bg-[var(--teed-green-8)] text-white'
+                              : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+                          }`}
+                        >
+                          {size}
+                        </button>
+                      ))}
+                      {/* Clear option */}
+                      {selectedSize && (
+                        <button
+                          type="button"
+                          onClick={() => setSelectedSize(null)}
+                          disabled={isSubmitting}
+                          className="px-2 py-1.5 text-xs text-gray-500 hover:text-gray-700"
+                        >
+                          Clear
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Color selection */}
+                {(suggestion?.detectedColor || (suggestion?.suggestedColors && suggestion.suggestedColors.length > 0)) && (
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1.5">Color</label>
+                    <div className="flex flex-wrap gap-2">
+                      {/* Pre-fill with detected color */}
+                      {suggestion?.detectedColor && (
+                        <button
+                          type="button"
+                          onClick={() => setSelectedColor(suggestion.detectedColor!)}
+                          disabled={isSubmitting}
+                          className={`px-3 py-1.5 text-sm font-medium rounded-full border transition-all ${
+                            selectedColor === suggestion.detectedColor
+                              ? 'border-[var(--teed-green-8)] bg-[var(--teed-green-8)] text-white'
+                              : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+                          }`}
+                        >
+                          {suggestion.detectedColor}
+                        </button>
+                      )}
+                      {/* Suggested colors */}
+                      {suggestion?.suggestedColors?.filter(c => c !== suggestion.detectedColor).map((color) => (
+                        <button
+                          key={color}
+                          type="button"
+                          onClick={() => setSelectedColor(color)}
+                          disabled={isSubmitting}
+                          className={`px-3 py-1.5 text-sm font-medium rounded-full border transition-all ${
+                            selectedColor === color
+                              ? 'border-[var(--teed-green-8)] bg-[var(--teed-green-8)] text-white'
+                              : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+                          }`}
+                        >
+                          {color}
+                        </button>
+                      ))}
+                      {/* Clear option */}
+                      {selectedColor && (
+                        <button
+                          type="button"
+                          onClick={() => setSelectedColor(null)}
+                          disabled={isSubmitting}
+                          className="px-2 py-1.5 text-xs text-gray-500 hover:text-gray-700"
+                        >
+                          Clear
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Show "Add variant" button if no variant section but could have variants */}
+            {!showVariantSection && (
+              <button
+                type="button"
+                onClick={() => setShowVariantSection(true)}
+                className="text-sm text-[var(--teed-green-9)] hover:text-[var(--teed-green-10)] font-medium"
+              >
+                + Add size/color
+              </button>
+            )}
 
             {/* Photo selection section */}
             <div className="pt-2">

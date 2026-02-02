@@ -2,9 +2,58 @@ import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { generateBrandContext } from '@/lib/brandKnowledge';
 import { smartSearch, loadLibrary, getProductsByBrand } from '@/lib/productLibrary';
-import { learnProduct } from '@/lib/productLibrary/learner';
+import { learnProduct, searchLearnedProducts } from '@/lib/productLibrary/learner';
 import type { Category, SearchResult } from '@/lib/productLibrary/schema';
 import { trackApiUsage } from '@/lib/apiUsageTracker';
+import {
+  parseText,
+  needsClarification,
+  suggestClarificationQuestions,
+  buildSearchQuery,
+  type ParsedTextResult,
+} from '@/lib/textParsing';
+import { createClient } from '@supabase/supabase-js';
+
+// Helper to get previous corrections for this input
+async function getPreviousCorrection(inputValue: string): Promise<{
+  brand: string | null;
+  name: string | null;
+  category: string | null;
+} | null> {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !supabaseServiceKey) return null;
+
+  try {
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Create a simple hash of the input for lookup
+    const inputNormalized = inputValue.toLowerCase().trim();
+
+    // Look for corrections that match this input (using simple text matching)
+    const { data, error } = await supabase
+      .from('identification_corrections')
+      .select('corrected_brand, corrected_name, corrected_category')
+      .ilike('input_value', `%${inputNormalized.slice(0, 50)}%`)
+      .order('created_at', { ascending: false })
+      .limit(1);
+
+    if (error || !data || data.length === 0) {
+      return null;
+    }
+
+    console.log(`[enrich-item] Found previous correction for similar input`);
+    return {
+      brand: data[0].corrected_brand,
+      name: data[0].corrected_name,
+      category: data[0].corrected_category,
+    };
+  } catch (err) {
+    console.error('[enrich-item] Error checking corrections:', err);
+    return null;
+  }
+}
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -15,6 +64,7 @@ type EnrichmentRequest = {
   bagContext?: string;
   existingAnswers?: Record<string, string>;
   forceAI?: boolean; // Skip library-only results and always use AI
+  categoryHint?: Category; // Hint from the bag context
 };
 
 type ProductSuggestion = {
@@ -48,6 +98,7 @@ type EnrichmentResponse = {
   questions: ClarificationQuestion[];
   searchTier?: string;
   learning?: LearningInfo;
+  parsed?: ParsedTextResult; // NEW: Include parsed components for transparency
 };
 
 // =============================================================================
@@ -247,19 +298,31 @@ function detectBrandAndCategory(query: string): { brand: string | null; category
     return { brand: bestMatch.brand, category: bestMatch.category };
   }
 
-  // Category-only detection
-  const categoryPatterns: Record<Category, string[]> = {
+  // Category-only detection (subset of most common categories)
+  const categoryPatterns: Partial<Record<Category, string[]>> = {
     golf: ['driver', 'iron', 'wedge', 'putter', 'fairway', 'hybrid', 'golf', 'shaft', 'ball', 'grip', 'bag'],
-    makeup: ['lipstick', 'eyeshadow', 'foundation', 'mascara', 'blush', 'concealer', 'beauty'],
-    tech: ['phone', 'laptop', 'tablet', 'airpods', 'headphones', 'earbuds', 'speaker'],
-    fashion: ['shirt', 'pants', 'jacket', 'dress', 'shoes', 'sneakers'],
-    outdoor: ['tent', 'sleeping bag', 'backpack', 'camping', 'hiking'],
-    photography: ['camera', 'lens', 'flash', 'tripod'],
+    beauty: ['lipstick', 'eyeshadow', 'foundation', 'mascara', 'blush', 'concealer', 'beauty', 'makeup'],
+    skincare: ['serum', 'moisturizer', 'cleanser', 'toner', 'sunscreen', 'retinol'],
+    tech: ['phone', 'laptop', 'tablet', 'airpods', 'headphones', 'earbuds', 'speaker', 'computer'],
+    audio: ['headphones', 'earbuds', 'speaker', 'soundbar', 'amplifier', 'turntable'],
+    fashion: ['shirt', 'pants', 'jacket', 'dress', 'suit', 'blazer'],
+    footwear: ['shoes', 'sneakers', 'boots', 'sandals'],
+    outdoor: ['tent', 'sleeping bag', 'backpack', 'camping', 'hiking', 'cooler'],
+    photography: ['camera', 'lens', 'flash', 'tripod', 'drone'],
     gaming: ['console', 'controller', 'playstation', 'xbox', 'nintendo'],
     music: ['guitar', 'piano', 'drum', 'amp', 'instrument'],
-    fitness: ['dumbbell', 'kettlebell', 'treadmill', 'workout'],
+    fitness: ['dumbbell', 'kettlebell', 'treadmill', 'workout', 'weights'],
+    activewear: ['leggings', 'sports bra', 'jogger', 'athletic'],
     travel: ['luggage', 'suitcase', 'carry-on'],
-    edc: ['knife', 'flashlight', 'wallet', 'pen'],
+    edc: ['knife', 'flashlight', 'wallet', 'pen', 'multitool'],
+    watches: ['watch', 'chronograph', 'automatic', 'mechanical'],
+    cycling: ['bike', 'bicycle', 'cycling', 'groupset'],
+    tennis: ['racket', 'racquet', 'tennis'],
+    coffee: ['coffee', 'espresso', 'grinder', 'pour over'],
+    kitchen: ['cookware', 'pan', 'pot', 'knife', 'blender'],
+    home: ['furniture', 'sofa', 'chair', 'table', 'desk'],
+    baby: ['stroller', 'car seat', 'crib', 'bassinet'],
+    pet: ['dog food', 'cat food', 'pet toy', 'leash'],
   };
 
   for (const [category, patterns] of Object.entries(categoryPatterns)) {
@@ -320,7 +383,8 @@ async function searchWithAI(
   existingAnswers: Record<string, string>,
   category: Category | null,
   brandContext: string,
-  detectedBrand: string | null // The brand we detected from the user's query
+  detectedBrand: string | null, // The brand we detected from the user's query
+  parsed: ParsedTextResult | null // Parsed text components
 ): Promise<EnrichmentResponse> {
   console.log(`[enrich-item] TIER 2: Using AI with web knowledge for "${userInput}"`);
 
@@ -334,8 +398,33 @@ async function searchWithAI(
     ? `\nIMPORTANT: The user is searching for a "${detectedBrand.toUpperCase()}" brand product. ALL suggestions should use this brand. Other words in their query (like product line names) should NOT be used as the brand.\n`
     : '';
 
+  // Build parsed context for the AI
+  let parsedContext = '';
+  if (parsed && (parsed.brand || parsed.specifications.length > 0 || parsed.color || parsed.size)) {
+    const parts: string[] = [];
+    if (parsed.brand) parts.push(`Brand detected: ${parsed.brand.value}`);
+    if (parsed.productName) parts.push(`Product name inferred: ${parsed.productName.value}`);
+    if (parsed.color) parts.push(`Color: ${parsed.color}`);
+    if (parsed.size) parts.push(`Size: ${parsed.size.value}`);
+    if (parsed.specifications.length > 0) {
+      parts.push(`Specs: ${parsed.specifications.map(s => `${s.type}=${s.value}`).join(', ')}`);
+    }
+    if (parsed.quantity > 1) parts.push(`Quantity: ${parsed.quantity}`);
+    if (parsed.priceConstraint) {
+      const pc = parsed.priceConstraint;
+      if (pc.type === 'max') parts.push(`Price max: $${pc.max}`);
+      else if (pc.type === 'min') parts.push(`Price min: $${pc.min}`);
+      else if (pc.type === 'range') parts.push(`Price range: $${pc.min}-$${pc.max}`);
+      else if (pc.type === 'approximate') parts.push(`Price ~$${pc.value}`);
+    }
+    parsedContext = `\nPARSED INPUT COMPONENTS:\n${parts.join('\n')}\n`;
+  }
+
+  // Determine if clarification might be needed
+  const shouldAskClarification = parsed ? needsClarification(parsed) : false;
+
   const systemPrompt = `You are a product enrichment assistant for Teed, an app that helps users catalog their belongings.
-${brandContext}${brandHint}
+${brandContext}${brandHint}${parsedContext}
 
 CRITICAL: The user is searching for a product. You MUST provide suggestions even if the product is:
 - Very new (2024-2025 releases)
@@ -380,6 +469,20 @@ IMPORTANT FOR NEW/UNKNOWN PRODUCTS:
 - "Callaway Elyte" = 2025 Callaway driver line, if unknown use Paradym or Ai Smoke as similar suggestions
 - Always include at least one "exact match" attempt and several "similar products"
 
+CLARIFICATION QUESTIONS:
+${shouldAskClarification ? `The user's input is ambiguous or generic. You SHOULD generate 1-2 clarification questions to help narrow down results.` : `The user's input is specific enough. Only generate clarification questions if genuinely needed.`}
+
+When to ask clarification questions (set clarificationNeeded: true):
+1. Generic product type with no brand (e.g., "polo shirt", "driver", "earbuds")
+2. Multiple possible interpretations (e.g., "air max" could be different models)
+3. Missing crucial specs for equipment (e.g., golf club without handedness)
+4. Low confidence on all suggestions (< 0.7)
+
+Clarification question format:
+- id: Unique identifier (e.g., "brand_preference", "model_variant", "handedness")
+- question: Short, direct question (e.g., "Any brand preference?")
+- options: 2-4 options including the most popular choices for that category
+
 Return ONLY valid JSON in this exact format:
 {
   "suggestions": [
@@ -398,14 +501,21 @@ Return ONLY valid JSON in this exact format:
     }
   ],
   "clarificationNeeded": false,
-  "questions": []
+  "questions": [
+    {
+      "id": "brand_preference",
+      "question": "Any brand preference?",
+      "options": ["TaylorMade", "Callaway", "Titleist", "Any"]
+    }
+  ]
 }
 
 NEVER return empty suggestions. If unsure, make educated guesses based on brand and context.`;
 
   const userPrompt = `${contextPrompt}${answersPrompt}User input: "${userInput}"
 
-Generate product suggestions. Remember: ALWAYS return at least 3-5 suggestions, even if you have to guess.`;
+Generate product suggestions. Remember: ALWAYS return at least 3-5 suggestions, even if you have to guess.
+${shouldAskClarification ? 'The input seems generic - consider asking a clarification question.' : ''}`;
 
   try {
     const startTime = Date.now();
@@ -570,7 +680,7 @@ function libraryResultsToSuggestions(results: SearchResult[]): ProductSuggestion
 export async function POST(request: NextRequest) {
   try {
     const body: EnrichmentRequest = await request.json();
-    const { userInput, bagContext, existingAnswers = {}, forceAI = false } = body;
+    const { userInput, bagContext, existingAnswers = {}, forceAI = false, categoryHint } = body;
 
     if (!userInput || userInput.trim().length === 0) {
       return NextResponse.json(
@@ -581,8 +691,23 @@ export async function POST(request: NextRequest) {
 
     console.log(`[enrich-item] Processing: "${userInput}"`);
 
-    // Detect brand and category from the text
-    const { brand: textBrand, category } = detectBrandAndCategory(userInput);
+    // ========================================
+    // Check for previous corrections first
+    // ========================================
+    const previousCorrection = await getPreviousCorrection(userInput);
+    if (previousCorrection) {
+      console.log(`[enrich-item] Using previous correction: brand=${previousCorrection.brand}, name=${previousCorrection.name}`);
+    }
+
+    // ========================================
+    // Parse text input using smart text parsing
+    // ========================================
+    const parsed = parseText(userInput, { categoryHint: categoryHint || undefined });
+    console.log(`[enrich-item] Parsed in ${parsed.parseTimeMs}ms: brand=${parsed.brand?.value || 'none'}, product=${parsed.productName?.value || 'none'}, category=${parsed.inferredCategory || 'none'}, confidence=${parsed.parseConfidence.toFixed(2)}`);
+
+    // Use parsed results for brand and category detection
+    // Fall back to legacy detection if parsing didn't find anything
+    const { brand: textBrand, category: legacyCategory } = detectBrandAndCategory(userInput);
 
     // Try to extract brand from URL if the input contains a URL
     const urlMatch = userInput.match(/https?:\/\/[^\s]+/);
@@ -595,17 +720,37 @@ export async function POST(request: NextRequest) {
     // Try to extract brand from the product name/description in userInput
     const textExtractedBrand = extractBrandFromText(userInput);
 
-    // Priority: URL brand > text-detected brand > text-extracted brand
-    const brand = urlBrand || textBrand || textExtractedBrand;
-    console.log(`[enrich-item] Final brand: ${brand || 'none'} (url: ${urlBrand}, detected: ${textBrand}, extracted: ${textExtractedBrand}), category: ${category}`);
+    // Priority: correction > URL brand > parsed brand > text-detected brand > text-extracted brand
+    const brand = previousCorrection?.brand || urlBrand || parsed.brand?.value || textBrand || textExtractedBrand;
+
+    // Priority: correction > parsed category > legacy category > categoryHint
+    const category = (previousCorrection?.category as Category) || parsed.inferredCategory || legacyCategory || categoryHint || null;
+
+    // If we have a correction, also use it to improve search query
+    const correctionSearchHint = previousCorrection?.name || null;
+
+    console.log(`[enrich-item] Final brand: ${brand || 'none'} (correction: ${previousCorrection?.brand}, url: ${urlBrand}, parsed: ${parsed.brand?.value}), category: ${category}`);
+
+    // Build optimized search query from parsed result
+    // If we have a previous correction, use corrected name as primary search
+    let searchQuery = buildSearchQuery(parsed);
+    if (correctionSearchHint && previousCorrection?.brand) {
+      searchQuery = `${previousCorrection.brand} ${correctionSearchHint}`;
+      console.log(`[enrich-item] Using correction-based search query: "${searchQuery}"`);
+    }
 
     // Load brand context for AI
     const brandContext = category
       ? generateBrandContext([category], 'standard')
       : '';
 
-    // TIER 1: Search product library
-    const { results: libraryResults, relatedProducts } = await searchProductLibrary(userInput, category);
+    // TIER 1: Search product library using optimized search query
+    // The searchQuery is built from parsed components (brand + product name) for better matching
+    const { results: libraryResults, relatedProducts } = await searchProductLibrary(
+      searchQuery || userInput,
+      category
+    );
+    console.log(`[enrich-item] Search query: "${searchQuery}" (original: "${userInput}")`);
 
     // Check if we have an EXACT match (confidence > 92% - very strict to avoid bad library matches)
     const exactMatches = libraryResults.filter(r => r.confidence > 92);
@@ -625,6 +770,7 @@ export async function POST(request: NextRequest) {
         clarificationNeeded: false,
         questions: [],
         searchTier: 'library',
+        parsed, // Include parsed result for UI transparency
       });
     }
 
@@ -641,7 +787,7 @@ export async function POST(request: NextRequest) {
 
     // TIER 2: Use AI for enrichment (especially for new/unknown products)
     try {
-      const aiResult = await searchWithAI(userInput, bagContext, existingAnswers, category, brandContext, brand);
+      const aiResult = await searchWithAI(userInput, bagContext, existingAnswers, category, brandContext, brand, parsed);
 
       // When forceAI is true, SKIP library results entirely - user explicitly wants AI only
       // Otherwise, filter library results by word relevance before including
@@ -670,11 +816,28 @@ export async function POST(request: NextRequest) {
       // Sort by confidence
       uniqueSuggestions.sort((a, b) => b.confidence - a.confidence);
 
-      // Apply extracted brand to suggestions that don't have one
+      // Apply extracted brand to suggestions that don't have one OR when parsed brand is more accurate
       if (brand) {
         for (const suggestion of uniqueSuggestions) {
-          if (!suggestion.brand || suggestion.brand === 'Unknown' || suggestion.brand === 'Not specified') {
-            console.log(`[enrich-item] Filling in missing brand "${brand}" for "${suggestion.custom_name}"`);
+          const needsBrandOverride =
+            !suggestion.brand ||
+            suggestion.brand === 'Unknown' ||
+            suggestion.brand === 'Not specified';
+
+          // Also override if: we have a high-confidence parsed brand AND
+          // the product name contains our parsed brand (e.g., "Blue Yeti" contains "Blue")
+          const parsedBrandInName =
+            parsed?.brand &&
+            parsed.brand.confidence >= 0.8 &&
+            suggestion.custom_name.toLowerCase().includes(parsed.brand.value.toLowerCase().split(' ')[0]);
+
+          // Don't override if AI brand is already correct (matches parsed brand)
+          const aiMatchesParsed =
+            parsed?.brand &&
+            suggestion.brand?.toLowerCase() === parsed.brand.value.toLowerCase();
+
+          if (needsBrandOverride || (parsedBrandInName && !aiMatchesParsed)) {
+            console.log(`[enrich-item] Setting brand "${brand}" for "${suggestion.custom_name}" (was: ${suggestion.brand || 'none'})`);
             suggestion.brand = brand;
           }
         }
@@ -695,12 +858,27 @@ export async function POST(request: NextRequest) {
 
       console.log(`[enrich-item] Final result: ${uniqueSuggestions.length} suggestions (forceAI=${forceAI})`);
 
+      // Merge AI clarification questions with local suggestions if needed
+      let questions = aiResult.questions || [];
+      let clarificationNeeded = aiResult.clarificationNeeded;
+
+      // If AI didn't suggest questions but local parsing thinks we need them, add them
+      if (!clarificationNeeded && needsClarification(parsed) && questions.length === 0) {
+        const localQuestions = suggestClarificationQuestions(parsed);
+        if (localQuestions.length > 0) {
+          questions = localQuestions.slice(0, 2); // Max 2 questions
+          clarificationNeeded = true;
+          console.log(`[enrich-item] Added ${questions.length} local clarification questions`);
+        }
+      }
+
       return NextResponse.json({
         suggestions: uniqueSuggestions.slice(0, 5),
-        clarificationNeeded: aiResult.clarificationNeeded,
-        questions: aiResult.questions || [],
+        clarificationNeeded,
+        questions,
         searchTier: forceAI ? 'ai' : (libraryResults.length > 0 ? 'library+ai' : 'ai'),
         learning: aiResult.learning,
+        parsed, // Include parsed result for UI transparency
       });
     } catch (aiError) {
       console.error('[enrich-item] AI failed, using fallback:', aiError);
@@ -732,6 +910,7 @@ export async function POST(request: NextRequest) {
         clarificationNeeded: false,
         questions: [],
         searchTier: 'fallback',
+        parsed, // Include parsed result for UI transparency
       });
     }
   } catch (error) {
