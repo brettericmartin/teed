@@ -1,7 +1,11 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import AISuggestions from './AISuggestions';
+import {
+  startIdentificationSession,
+  recordIdentificationOutcome,
+} from '@/lib/analytics/identificationTelemetry';
 
 type ProductSuggestion = {
   custom_name: string;
@@ -32,6 +36,9 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
   const [existingAnswers, setExistingAnswers] = useState<Record<string, string>>({});
   const [isAdding, setIsAdding] = useState(false);
 
+  // Telemetry session tracking
+  const telemetrySessionRef = useRef<string | null>(null);
+
   // Fetch AI suggestions with debounce
   const fetchSuggestions = useCallback(async (userInput: string, answers: Record<string, string> = {}) => {
     if (userInput.trim().length < 2) {
@@ -59,6 +66,11 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
         setSuggestions(data.suggestions || []);
         setQuestions(data.questions || []);
         setClarificationNeeded(data.clarificationNeeded || false);
+
+        // Start telemetry session when we have results
+        if (data.suggestions?.length > 0) {
+          telemetrySessionRef.current = startIdentificationSession('text', userInput);
+        }
       } else {
         console.error('Failed to fetch suggestions');
         setSuggestions([]);
@@ -83,6 +95,18 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
   }, [input, existingAnswers, fetchSuggestions]);
 
   const handleSelectSuggestion = async (suggestion: ProductSuggestion) => {
+    // Record telemetry for accepted suggestion
+    if (telemetrySessionRef.current) {
+      recordIdentificationOutcome(
+        telemetrySessionRef.current,
+        'text_parsing',
+        suggestion.confidence,
+        suggestions.length,
+        'accepted'
+      );
+      telemetrySessionRef.current = null;
+    }
+
     setIsAdding(true);
     try {
       await onAdd(suggestion);

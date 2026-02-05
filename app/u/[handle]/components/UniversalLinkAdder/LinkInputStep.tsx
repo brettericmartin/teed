@@ -191,7 +191,7 @@ export default function LinkInputStep({
           value={inputText}
           onChange={(e) => onInputChange(e.target.value)}
           placeholder="Paste any link here - we'll automatically detect what it is"
-          rows={4}
+          rows={2}
           className="
             w-full px-4 py-3 rounded-xl
             border border-[var(--border-subtle)]
@@ -200,6 +200,7 @@ export default function LinkInputStep({
             placeholder:text-[var(--text-tertiary)]
             focus:outline-none focus:ring-2 focus:ring-[var(--teed-green-7)]
             resize-none text-sm
+            min-h-[60px] md:min-h-[120px]
           "
           autoFocus
         />

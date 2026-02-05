@@ -440,15 +440,13 @@ export default function UniversalLinkAdder({
             onClick={handleClose}
           />
 
-          {/* Modal Content */}
+          {/* Modal Content - Full-screen on mobile, centered card on desktop */}
           <div className="
-            fixed z-[201]
-            inset-x-4 top-1/2 -translate-y-1/2 sm:inset-auto
-            sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2
-            bg-[var(--surface)] rounded-2xl
-            max-w-2xl w-full max-h-[85vh]
-            overflow-hidden shadow-2xl
-            flex flex-col
+            fixed inset-0 z-[201]
+            flex flex-col bg-[var(--surface)]
+            md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2
+            md:max-w-2xl md:w-full md:max-h-[85vh] md:rounded-2xl
+            overflow-hidden md:shadow-2xl
           ">
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-subtle)]">
@@ -541,9 +539,10 @@ export default function UniversalLinkAdder({
               )}
             </div>
 
-            {/* Footer */}
-            <div className="flex items-center justify-between px-5 py-4 border-t border-[var(--border-subtle)] bg-[var(--surface-elevated)]">
-              <div className="text-sm text-[var(--text-tertiary)]">
+            {/* Footer - Stacks on mobile, side-by-side on desktop */}
+            <div className="flex-shrink-0 px-4 py-4 border-t border-[var(--border-subtle)] bg-[var(--surface-elevated)] safe-area-inset-bottom">
+              {/* Status text - hidden on mobile to save space, shown on md+ */}
+              <div className="hidden md:block text-sm text-[var(--text-tertiary)] mb-3">
                 {step === 'input' && parsedUrls.length > 0 && (
                   <span>{parsedUrls.length} link{parsedUrls.length !== 1 ? 's' : ''} detected</span>
                 )}
@@ -558,24 +557,29 @@ export default function UniversalLinkAdder({
                 )}
               </div>
 
-              <div className="flex items-center gap-3">
+              {/* Buttons - stack vertically on mobile (reverse order for primary on top), row on desktop */}
+              <div className="flex flex-col-reverse gap-2 md:flex-row md:justify-between md:items-center">
                 {/* Back button */}
                 {(step === 'review' || step === 'destination') && (
                   <button
                     onClick={handleBack}
-                    className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                    className="flex items-center justify-center gap-1 w-full md:w-auto px-4 py-3 md:py-2 text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors rounded-lg hover:bg-[var(--surface-hover)]"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     Back
                   </button>
                 )}
 
+                {/* Spacer for desktop layout when no back button */}
+                {step === 'input' && <div className="hidden md:block" />}
+                {step === 'processing' && <div className="hidden md:block" />}
+
                 {/* Main action button */}
                 {step === 'input' && (
                   <button
                     onClick={handleAnalyze}
                     disabled={parsedUrls.length === 0}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-[var(--teed-green-9)] text-white rounded-lg text-sm font-medium hover:bg-[var(--teed-green-10)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="flex items-center justify-center gap-2 w-full md:w-auto px-5 py-3 md:py-2.5 bg-[var(--teed-green-9)] text-white rounded-lg text-sm font-medium hover:bg-[var(--teed-green-10)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     Analyze {parsedUrls.length > 0 ? parsedUrls.length : ''} Link{parsedUrls.length !== 1 ? 's' : ''}
                     <ArrowRight className="w-4 h-4" />
@@ -585,7 +589,7 @@ export default function UniversalLinkAdder({
                 {step === 'processing' && (
                   <button
                     disabled
-                    className="flex items-center gap-2 px-5 py-2.5 bg-[var(--teed-green-9)] text-white rounded-lg text-sm font-medium opacity-50 cursor-not-allowed"
+                    className="flex items-center justify-center gap-2 w-full md:w-auto px-5 py-3 md:py-2.5 bg-[var(--teed-green-9)] text-white rounded-lg text-sm font-medium opacity-50 cursor-not-allowed"
                   >
                     <Loader2 className="w-4 h-4 animate-spin" />
                     Processing...
@@ -596,7 +600,7 @@ export default function UniversalLinkAdder({
                   <button
                     onClick={handleNext}
                     disabled={totalSelected === 0}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-[var(--teed-green-9)] text-white rounded-lg text-sm font-medium hover:bg-[var(--teed-green-10)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="flex items-center justify-center gap-2 w-full md:w-auto px-5 py-3 md:py-2.5 bg-[var(--teed-green-9)] text-white rounded-lg text-sm font-medium hover:bg-[var(--teed-green-10)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     {needsDestination ? 'Continue' : 'Add to Profile'}
                     <ArrowRight className="w-4 h-4" />
@@ -607,7 +611,7 @@ export default function UniversalLinkAdder({
                   <button
                     onClick={handleSave}
                     disabled={isSaving || !selectedBagCode || (selectedBagCode === 'new' && !newBagTitle.trim())}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-[var(--teed-green-9)] text-white rounded-lg text-sm font-medium hover:bg-[var(--teed-green-10)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="flex items-center justify-center gap-2 w-full md:w-auto px-5 py-3 md:py-2.5 bg-[var(--teed-green-9)] text-white rounded-lg text-sm font-medium hover:bg-[var(--teed-green-10)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     {isSaving ? (
                       <>

@@ -119,7 +119,7 @@ function PhotoGrid({
   }
 
   return (
-    <div className="grid grid-cols-5 gap-2">
+    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
       {photoOptions.map((photo, index) => (
         <button
           key={index}
@@ -475,10 +475,17 @@ export default function BulkLinkImportModal({
   const hasValidSelections = selectedCount > 0;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
+      {/* Modal - Full-screen on mobile, centered card on desktop */}
+      <div className="
+        fixed inset-0
+        flex flex-col bg-white
+        md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2
+        md:max-w-4xl md:w-full md:max-h-[90vh] md:rounded-xl
+        overflow-hidden md:shadow-xl
+      ">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex-shrink-0 flex items-center justify-between p-4 md:p-6 border-b border-gray-200">
           <div>
             <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
               <LinkIcon className="w-5 h-5" />
@@ -506,7 +513,7 @@ export default function BulkLinkImportModal({
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto overscroll-contain p-4 md:p-6">
           {/* Step 1: Input */}
           {step === 'input' && (
             <div className="space-y-4">
@@ -746,13 +753,13 @@ export default function BulkLinkImportModal({
           )}
         </div>
 
-        {/* Footer */}
-        <div className="border-t border-gray-200 p-6 bg-gray-50">
-          <div className="flex gap-3">
+        {/* Footer - Stack on mobile, row on desktop */}
+        <div className="flex-shrink-0 border-t border-gray-200 p-4 md:p-6 bg-gray-50 safe-area-inset-bottom">
+          <div className="flex flex-col-reverse gap-2 md:flex-row md:gap-3">
             <button
               onClick={handleClose}
               disabled={isProcessing || isSaving}
-              className="px-6 py-3 bg-white text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 font-medium"
+              className="w-full md:w-auto px-6 py-3 bg-white text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 font-medium"
             >
               Cancel
             </button>
@@ -761,7 +768,7 @@ export default function BulkLinkImportModal({
               <button
                 onClick={handleAnalyze}
                 disabled={parsedUrls.length === 0}
-                className="flex-1 px-8 py-3 bg-[var(--teed-green-9)] text-white rounded-lg hover:bg-[var(--teed-green-10)] disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
+                className="w-full md:flex-1 px-8 py-3 bg-[var(--teed-green-9)] text-white rounded-lg hover:bg-[var(--teed-green-10)] disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
               >
                 Analyze {parsedUrls.length} Link{parsedUrls.length !== 1 ? 's' : ''}
               </button>
@@ -771,16 +778,16 @@ export default function BulkLinkImportModal({
               <button
                 onClick={handleSave}
                 disabled={!hasValidSelections || isSaving}
-                className="flex-1 px-8 py-3 bg-[var(--teed-green-9)] text-white rounded-lg hover:bg-[var(--teed-green-10)] disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
+                className="w-full md:flex-1 px-8 py-3 bg-[var(--teed-green-9)] text-white rounded-lg hover:bg-[var(--teed-green-10)] disabled:opacity-50 disabled:cursor-not-allowed font-semibold flex items-center justify-center"
               >
                 {isSaving ? (
                   <>
-                    <Loader2 className="animate-spin h-5 w-5 mr-2 inline" />
+                    <Loader2 className="animate-spin h-5 w-5 mr-2" />
                     Saving...
                   </>
                 ) : (
                   <>
-                    <Check className="w-5 h-5 mr-2 inline" />
+                    <Check className="w-5 h-5 mr-2" />
                     Add {selectedCount} Item{selectedCount !== 1 ? 's' : ''} to Bag
                   </>
                 )}

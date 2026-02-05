@@ -336,15 +336,27 @@ export default function DashboardClient({
                 </div>
               </div>
 
-              {/* CTA */}
-              <button
+              {/* CTA with attention-grabbing pulse animation */}
+              <motion.button
                 onClick={() => setShowNewBagModal(true)}
-                className="w-full flex items-center justify-center gap-2 bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-md hover:shadow-lg active:scale-[0.98]"
+                className="w-full flex items-center justify-center gap-2 bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-md hover:shadow-lg active:scale-[0.98] relative overflow-hidden"
+                animate={{
+                  boxShadow: [
+                    '0 4px 6px -1px rgba(31, 58, 46, 0.1), 0 2px 4px -1px rgba(31, 58, 46, 0.06)',
+                    '0 10px 25px -5px rgba(31, 58, 46, 0.25), 0 8px 10px -6px rgba(31, 58, 46, 0.15)',
+                    '0 4px 6px -1px rgba(31, 58, 46, 0.1), 0 2px 4px -1px rgba(31, 58, 46, 0.06)',
+                  ],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
               >
                 <Plus className="w-5 h-5" />
                 Create Your First Bag
                 <ArrowRight className="w-4 h-4 ml-1" />
-              </button>
+              </motion.button>
             </div>
           </motion.div>
         ) : (

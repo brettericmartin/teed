@@ -110,10 +110,10 @@ export default function FeedbackWidget({ position = 'bottom-right' }: FeedbackWi
         />
       )}
 
-      {/* Feedback Panel */}
+      {/* Feedback Panel - Responsive width */}
       {isOpen && (
         <div
-          className={`fixed bottom-20 ${positionClasses} z-40 w-80 bg-white dark:bg-zinc-900 rounded-xl shadow-2xl border border-gray-200 dark:border-zinc-700 overflow-hidden`}
+          className={`fixed bottom-20 ${positionClasses} z-40 w-[calc(100vw-2rem)] max-w-80 bg-white dark:bg-zinc-900 rounded-xl shadow-2xl border border-gray-200 dark:border-zinc-700 overflow-hidden`}
         >
           {isSuccess ? (
             <div className="p-6 text-center">

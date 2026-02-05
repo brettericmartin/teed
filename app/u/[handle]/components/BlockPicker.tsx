@@ -127,11 +127,11 @@ const BLOCK_OPTIONS: BlockOption[] = [
   },
   {
     type: 'story',
-    label: 'The Story',
+    label: 'History',
     description: 'Timeline of your journey',
     icon: <BookOpen className="w-5 h-5" />,
     defaultConfig: {
-      title: 'The Story',
+      title: 'History',
       showTitle: true,
       maxItems: 5,
       showFiltersBar: true,

@@ -66,7 +66,7 @@ const BLOCK_TYPE_INFO: Record<BlockType, { label: string; icon: typeof User }> =
   destinations: { label: 'Destinations', icon: MoreHorizontal },
   quote: { label: 'Quote', icon: Quote },
   affiliate_disclosure: { label: 'Disclosure', icon: Info },
-  story: { label: 'The Story', icon: BookOpen },
+  story: { label: 'History', icon: BookOpen },
 };
 
 // Size options per block type
@@ -1047,9 +1047,9 @@ export default function BlockSettingsPanel({
           </label>
           <input
             type="text"
-            value={storyConfig.title ?? 'The Story'}
+            value={storyConfig.title ?? 'History'}
             onChange={(e) => updateConfig('title', e.target.value)}
-            placeholder="The Story"
+            placeholder="History"
             className="w-full px-3 py-2 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--teed-green-7)]"
           />
         </div>

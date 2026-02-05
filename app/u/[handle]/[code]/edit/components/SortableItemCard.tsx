@@ -31,11 +31,14 @@ export default function SortableItemCard({ item, onDelete, onUpdate, bagCode, is
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1,
+    opacity: isDragging ? 0.5 : item._isPending ? 0.7 : 1,
   };
 
+  // Disable dragging for pending items
+  const isPending = item._isPending;
+
   return (
-    <div ref={setNodeRef} style={style} className="relative group" id={`item-${item.id}`}>
+    <div ref={setNodeRef} style={style} className={`relative group ${isPending ? 'pointer-events-none' : ''}`} id={`item-${item.id}`}>
       {/* Drag Handle - always visible on mobile, hover on desktop */}
       <button
         {...attributes}

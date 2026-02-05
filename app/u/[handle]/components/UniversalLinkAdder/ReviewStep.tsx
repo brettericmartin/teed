@@ -48,37 +48,40 @@ export default function ReviewStep({
 
   return (
     <div className="flex flex-col h-full">
-      {/* Tab bar */}
-      <div className="flex border-b border-[var(--border-subtle)]">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            disabled={tab.count === 0}
-            className={`
-              flex-1 flex items-center justify-center gap-2 px-4 py-3
-              text-sm font-medium transition-colors
-              ${activeTab === tab.id
-                ? 'text-[var(--text-primary)] border-b-2 border-[var(--teed-green-9)]'
-                : tab.count === 0
-                  ? 'text-[var(--text-tertiary)] cursor-not-allowed'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-              }
-            `}
-          >
-            <tab.icon className="w-4 h-4" />
-            <span>{tab.label}</span>
-            <span className={`
-              px-1.5 py-0.5 rounded-full text-xs
-              ${activeTab === tab.id
-                ? 'bg-[var(--teed-green-3)] text-[var(--teed-green-11)]'
-                : 'bg-[var(--surface-elevated)] text-[var(--text-tertiary)]'
-              }
-            `}>
-              {tab.count}
-            </span>
-          </button>
-        ))}
+      {/* Tab bar - scrollable on mobile */}
+      <div className="overflow-x-auto horizontal-scroll border-b border-[var(--border-subtle)]">
+        <div className="flex min-w-max">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              disabled={tab.count === 0}
+              className={`
+                flex-shrink-0 min-w-[100px] md:flex-1 md:min-w-0
+                flex items-center justify-center gap-2 px-4 py-3
+                text-sm font-medium transition-colors
+                ${activeTab === tab.id
+                  ? 'text-[var(--text-primary)] border-b-2 border-[var(--teed-green-9)]'
+                  : tab.count === 0
+                    ? 'text-[var(--text-tertiary)] cursor-not-allowed'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                }
+              `}
+            >
+              <tab.icon className="w-4 h-4" />
+              <span>{tab.label}</span>
+              <span className={`
+                px-1.5 py-0.5 rounded-full text-xs
+                ${activeTab === tab.id
+                  ? 'bg-[var(--teed-green-3)] text-[var(--teed-green-11)]'
+                  : 'bg-[var(--surface-elevated)] text-[var(--text-tertiary)]'
+                }
+              `}>
+                {tab.count}
+              </span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Tab content */}
@@ -331,8 +334,8 @@ function ProductCard({
           {product.selected && <Check className="w-4 h-4 text-white" />}
         </button>
 
-        {/* Photo */}
-        <div className="w-20 h-20 rounded-lg overflow-hidden bg-[var(--surface-elevated)] flex-shrink-0 relative">
+        {/* Photo - smaller on mobile */}
+        <div className="w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden bg-[var(--surface-elevated)] flex-shrink-0 relative">
           {selectedPhoto ? (
             <Image
               src={selectedPhoto.url}

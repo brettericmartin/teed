@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 import { ArrowLeft, Share2, Trash2, Camera, ChevronLeft, Package, Images, Link, Sparkles, Upload, Image, X, Eye, Loader2, BookOpen } from 'lucide-react';
 import { GolfLoader } from '@/components/ui/GolfLoader';
 import NextLink from 'next/link';
@@ -145,6 +146,9 @@ type Item = {
   price_paid: number | null;
   purchase_date: string | null;
   links: Link[];
+  // Optimistic UI state
+  _isPending?: boolean; // True while API call is in progress
+  _optimisticId?: string; // Temporary ID for optimistic items
 };
 
 type Bag = {
@@ -309,6 +313,47 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     photo_url?: string; // Direct photo URL
     selectedPhotoUrl?: string; // Photo URL selected from preview modal
   }) => {
+    // Generate a temporary ID for optimistic UI
+    const optimisticId = `optimistic-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+
+    // Create optimistic item immediately with pending state
+    const optimisticItem: Item = {
+      id: optimisticId,
+      _optimisticId: optimisticId,
+      _isPending: true,
+      bag_id: bag.id,
+      custom_name: itemData.custom_name,
+      brand: itemData.brand || null,
+      custom_description: itemData.custom_description || null,
+      notes: itemData.notes || null,
+      quantity: itemData.quantity || 1,
+      sort_index: bag.items.length,
+      custom_photo_id: null,
+      photo_url: itemData.photo_url || itemData.imageUrl || itemData.selectedPhotoUrl || null,
+      promo_codes: null,
+      is_featured: false,
+      featured_position: null,
+      section_id: null,
+      why_chosen: null,
+      specs: {},
+      compared_to: null,
+      alternatives: null,
+      price_paid: null,
+      purchase_date: null,
+      links: [],
+    };
+
+    // Add optimistic item to UI immediately
+    setBag((prev) => ({
+      ...prev,
+      items: [...prev.items, optimisticItem],
+    }));
+
+    // Celebrate the new item immediately (optimistic)
+    const newItemCount = bag.items.length + 1;
+    celebrateItemAdded();
+    celebrateMilestone(newItemCount);
+
     try {
       // Map imageUrl to photo_url for API
       const apiPayload = {
@@ -374,23 +419,22 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         }
       }
 
-      const newItemCount = bag.items.length + 1;
+      // Replace optimistic item with real item from server
       setBag((prev) => ({
         ...prev,
-        items: [...prev.items, {
-          ...newItem,
-          photo_url: finalPhotoUrl,
-          custom_photo_id: finalCustomPhotoId,
-          links: [],
-        }],
+        items: prev.items.map((item) =>
+          item._optimisticId === optimisticId
+            ? {
+                ...newItem,
+                photo_url: finalPhotoUrl,
+                custom_photo_id: finalCustomPhotoId,
+                links: [],
+                _isPending: false,
+                _optimisticId: undefined,
+              }
+            : item
+        ),
       }));
-      // QuickAddItem component handles its own state reset
-
-      // Celebrate the new item
-      celebrateItemAdded();
-
-      // Check for milestone celebrations
-      celebrateMilestone(newItemCount);
 
       // Trigger background auto-enrichment (don't await - run silently)
       // Skip if we already have brand (from preview modal)
@@ -399,7 +443,14 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       }
     } catch (error) {
       console.error('Error adding item:', error);
-      alert('Failed to add item. Please try again.');
+
+      // Remove optimistic item on failure
+      setBag((prev) => ({
+        ...prev,
+        items: prev.items.filter((item) => item._optimisticId !== optimisticId),
+      }));
+
+      toast.showError('Failed to add item. Please try again.');
       throw error; // Re-throw so caller knows it failed
     }
   };
@@ -1798,33 +1849,53 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             onItemMoved={handleItemMoved}
           />
         ) : (
-          <div className="text-center py-12">
-            <svg
-              className="mx-auto h-12 w-12 text-[var(--text-tertiary)]"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-12 px-4 bg-gradient-to-b from-[var(--teed-green-2)] to-transparent rounded-xl border-2 border-dashed border-[var(--teed-green-5)]"
+          >
+            <motion.div
+              animate={{
+                scale: [1, 1.05, 1],
+                opacity: [0.7, 1, 0.7],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-              />
-            </svg>
-            <h3 className="mt-2 text-sm font-medium text-[var(--text-primary)]">No items yet</h3>
-            <p className="mt-1 text-sm text-[var(--text-secondary)]">
-              Get started by adding your first item.
+              <Package className="mx-auto h-12 w-12 text-[var(--teed-green-8)]" />
+            </motion.div>
+            <h3 className="mt-3 text-base font-semibold text-[var(--text-primary)]">No items yet</h3>
+            <p className="mt-1 text-sm text-[var(--text-secondary)] max-w-xs mx-auto">
+              Use the Quick Add box above to add your first item - type a name or upload a photo!
             </p>
-          </div>
+            <motion.div
+              className="mt-4 flex justify-center gap-2"
+              animate={{
+                y: [0, -2, 0],
+              }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            >
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium text-[var(--teed-green-10)] bg-[var(--teed-green-3)] rounded-full">
+                <Sparkles className="w-3 h-3" />
+                AI-powered identification
+              </span>
+            </motion.div>
+          </motion.div>
         )}
 
-        {/* The Story - Timeline with visibility controls */}
+        {/* History - Timeline with visibility controls */}
         <div className="mt-8 pt-8 border-t border-[var(--border-subtle)]">
           <div className="flex items-center gap-2 mb-4">
             <BookOpen className="w-5 h-5 text-[var(--text-secondary)]" />
             <h3 className="text-lg font-semibold text-[var(--text-primary)]">
-              The Story
+              History
             </h3>
             <span className="text-xs text-[var(--text-tertiary)] ml-2">
               Click the eye icon to show/hide entries from public view

@@ -78,8 +78,15 @@ export default function ClarificationModal({
   );
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-black/50">
+      {/* Modal - Full-screen on mobile, centered card on desktop */}
+      <div className="
+        fixed inset-0
+        flex flex-col bg-white
+        md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2
+        md:max-w-lg md:w-full md:max-h-[90vh] md:rounded-2xl
+        overflow-hidden md:shadow-2xl
+      ">
         {/* Header */}
         <div className="px-6 py-4 bg-gradient-to-r from-[var(--sky-9)] to-[var(--sky-10)] text-white">
           <div className="flex items-center justify-between">
@@ -116,7 +123,7 @@ export default function ClarificationModal({
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div className="flex-1 overflow-y-auto overscroll-contain p-4 md:p-6">
           {/* Item name */}
           <div className="mb-4">
             <span className="text-sm text-[var(--text-secondary)]">For:</span>
@@ -132,7 +139,7 @@ export default function ClarificationModal({
                 <p className="text-sm font-medium text-[var(--text-primary)] mb-3">
                   {question.question}
                 </p>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {question.options.map((option) => {
                     const isSelected = answers[currentItemId]?.[question.id] === option;
                     return (
@@ -155,13 +162,13 @@ export default function ClarificationModal({
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="px-6 py-4 border-t border-gray-100 bg-gray-50">
-          <div className="flex gap-3">
+        {/* Footer - Stack on mobile, row on desktop */}
+        <div className="flex-shrink-0 px-4 md:px-6 py-4 border-t border-gray-100 bg-gray-50 safe-area-inset-bottom">
+          <div className="flex flex-col-reverse gap-2 md:flex-row md:gap-3">
             {currentItemIndex > 0 ? (
               <button
                 onClick={handlePrev}
-                className="px-4 py-3 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors"
+                className="w-full md:w-auto px-4 py-3 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors"
               >
                 Back
               </button>
@@ -169,19 +176,17 @@ export default function ClarificationModal({
               <button
                 onClick={onSkip}
                 disabled={isLoading || isSubmitting}
-                className="px-4 py-3 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors disabled:opacity-50"
+                className="w-full md:w-auto px-4 py-3 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors disabled:opacity-50"
               >
                 Skip All
               </button>
             )}
 
-            <div className="flex-1" />
-
             {isLastItem ? (
               <button
                 onClick={handleSubmit}
                 disabled={isLoading || isSubmitting}
-                className="flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-[var(--sky-9)] hover:bg-[var(--sky-10)] rounded-xl transition-colors disabled:opacity-50"
+                className="w-full md:flex-1 flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-[var(--sky-9)] hover:bg-[var(--sky-10)] rounded-xl transition-colors disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <>
@@ -198,7 +203,7 @@ export default function ClarificationModal({
             ) : (
               <button
                 onClick={handleNext}
-                className="flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-[var(--sky-9)] hover:bg-[var(--sky-10)] rounded-xl transition-colors"
+                className="w-full md:flex-1 flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-[var(--sky-9)] hover:bg-[var(--sky-10)] rounded-xl transition-colors"
               >
                 Next
                 <ChevronRight className="w-4 h-4" />

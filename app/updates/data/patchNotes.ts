@@ -43,11 +43,33 @@ export const CATEGORY_META: Record<CategoryType, {
 
 export const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.3.0',
+    releaseDate: '2026-02-05',
+    title: 'UX Polish & Smarter Identification',
+    summary: 'Faster, smoother experience with optimistic UI, streamlined signup, smart text parsing for bulk imports, and mobile-friendly bottom sheets.',
+    isLatest: true,
+    changes: [
+      { text: 'Optimistic UI for adding items - items appear instantly while saving in the background', category: 'feature' },
+      { text: '2-step signup flow - simpler onboarding with email/password first, then profile details', category: 'feature' },
+      { text: 'Getting Started checklist - dismissible progress tracker guides new users through first steps', category: 'feature' },
+      { text: 'Smart text parsing - paste product names or descriptions and AI extracts brand, model, and specs', category: 'feature' },
+      { text: 'Mobile bottom sheets - modals now swipe-to-dismiss on mobile for native feel', category: 'feature' },
+      { text: 'ProfileActionBar starts collapsed for cleaner profile viewing', category: 'feature' },
+      { text: 'Unified item type system with smart inference from URLs and text', category: 'feature' },
+      { text: 'Strategic proposals admin panel for tracking business opportunities', category: 'feature', isAdminOnly: true },
+      { text: 'Faster text feedback - reduced debounce from 500ms to 300ms with instant "looking" indicator', category: 'improvement' },
+      { text: 'Enhanced empty states - animated CTAs draw attention to first actions', category: 'improvement' },
+      { text: 'Link identification improved with slug scoring and site-specific configs', category: 'improvement' },
+      { text: 'SEO pages added for alternatives and use cases with dynamic sitemap', category: 'improvement' },
+      { text: 'Updated CLAUDE.md with architecture patterns, commands, and gotchas', category: 'improvement', isAdminOnly: true }
+    ]
+  },
+  {
     version: '2.2.0',
     releaseDate: '2026-01-28',
     title: 'Mobile-First & Collections Overhaul',
     summary: 'Major mobile experience improvements with dedicated layouts, a rebuilt collections panel that actually works, and smoother editing everywhere.',
-    isLatest: true,
+    isLatest: false,
     changes: [
       { text: 'Rebuilt Collections panel with full-screen modal that escapes grid constraints', category: 'feature' },
       { text: 'Shared BagCard component with 4 photo layouts and 3 size options', category: 'feature' },

@@ -412,7 +412,7 @@ export function validateProducts(products: unknown[]): Product[] {
 // =============================================================================
 
 // Category subcategories for multi-pass collection - ensures comprehensive coverage
-const CATEGORY_SUBCATEGORIES: Record<Category, Array<{ name: string; description: string }>> = {
+const CATEGORY_SUBCATEGORIES: Partial<Record<Category, Array<{ name: string; description: string }>>> = {
   golf: [
     { name: 'drivers', description: 'Drivers and driver heads (woods off the tee)' },
     { name: 'fairway-woods', description: 'Fairway woods (3-wood, 5-wood, 7-wood, etc.)' },
@@ -518,11 +518,16 @@ async function collectBrandProductsBySubcategory(
   const allProducts: Product[] = [];
   let totalTokens = 0;
 
-  const subcategories = CATEGORY_SUBCATEGORIES[category];
+  const subcategories = CATEGORY_SUBCATEGORIES[category] || [];
   const retailers = BULK_RETAILERS[category] || [];
   const retailerList = retailers.length > 0 ? retailers.map(r => `- ${r}`).join('\n') : 'Major retailers and brand official site';
 
   console.log(`[AIClient] Collecting ${brandName} (${category}) products by subcategory...`);
+
+  if (subcategories.length === 0) {
+    console.log(`[AIClient] No subcategories defined for ${category}, skipping subcategory collection`);
+    return { products: [], tokensUsed: 0, duration: Date.now() - startTime, provider: config.provider, model: config.model };
+  }
 
   for (const subcategory of subcategories) {
     console.log(`[AIClient]   → ${subcategory.name}...`);

@@ -284,7 +284,7 @@ function BlockRenderer({
           <BlockContainer
             blockId={block.id}
             blockType={block.block_type}
-            title={config.title || 'The Story'}
+            title={config.title || 'History'}
             showTitle={config.showTitle}
             isOwner={isOwner}
             onEdit={handleOpenSettings}

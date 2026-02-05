@@ -1,8 +1,13 @@
 'use client';
 
-import { useState, FormEvent, useEffect, useCallback } from 'react';
+import { useState, FormEvent, useEffect, useCallback, useRef } from 'react';
 import AISuggestions from './AISuggestions';
 import ItemPreviewModal from './ItemPreviewModal';
+import {
+  startIdentificationSession,
+  recordIdentificationOutcome,
+  type IdentificationStage,
+} from '@/lib/analytics/identificationTelemetry';
 
 type ProductSuggestion = {
   custom_name: string;
@@ -58,6 +63,21 @@ export default function AddItemForm({ onSubmit, onCancel, bagTitle }: AddItemFor
   const [learningInfo, setLearningInfo] = useState<LearningInfo | null>(null);
   const [searchTier, setSearchTier] = useState<'library' | 'library+ai' | 'ai' | 'fallback' | 'error' | undefined>();
 
+  // Telemetry session tracking
+  const telemetrySessionRef = useRef<string | null>(null);
+  const lastSearchTierRef = useRef<string | undefined>(undefined);
+
+  // Convert searchTier to IdentificationStage for telemetry
+  const getStageFromTier = (tier?: string): IdentificationStage => {
+    switch (tier) {
+      case 'library': return 'library_cache';
+      case 'library+ai': return 'ai_enrichment';
+      case 'ai': return 'ai_enrichment';
+      case 'fallback': return 'fallback';
+      default: return 'text_parsing';
+    }
+  };
+
   // Fetch AI suggestions with debounce
   const fetchSuggestions = useCallback(async (input: string, answers: Record<string, string> = {}, forceAI: boolean = false) => {
     if (input.trim().length < 2) {
@@ -87,6 +107,12 @@ export default function AddItemForm({ onSubmit, onCancel, bagTitle }: AddItemFor
         setQuestions(data.questions || []);
         setClarificationNeeded(data.clarificationNeeded || false);
         setSearchTier(data.searchTier);
+        lastSearchTierRef.current = data.searchTier;
+
+        // Start telemetry session when we have results
+        if (data.suggestions?.length > 0) {
+          telemetrySessionRef.current = startIdentificationSession('text', input);
+        }
 
         // Handle learning info
         if (data.learning?.isLearning) {
@@ -118,6 +144,18 @@ export default function AddItemForm({ onSubmit, onCancel, bagTitle }: AddItemFor
   }, [name, existingAnswers, fetchSuggestions]);
 
   const handleSelectSuggestion = (suggestion: ProductSuggestion) => {
+    // Record telemetry for accepted suggestion
+    if (telemetrySessionRef.current) {
+      recordIdentificationOutcome(
+        telemetrySessionRef.current,
+        getStageFromTier(lastSearchTierRef.current),
+        suggestion.confidence,
+        suggestions.length,
+        'accepted'
+      );
+      telemetrySessionRef.current = null;
+    }
+
     // Open preview modal instead of auto-submitting
     // This allows user to review details and select a photo
     setSelectedSuggestion(suggestion);

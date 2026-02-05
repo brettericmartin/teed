@@ -47,6 +47,9 @@ type Item = {
   price_paid: number | null;
   purchase_date: string | null;
   links: Link[];
+  // Optimistic UI state
+  _isPending?: boolean;
+  _optimisticId?: string;
 };
 
 type ItemCardProps = {
@@ -159,8 +162,19 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
     } as any);
   };
 
+  const isPending = item._isPending;
+
   return (
-    <div className="bg-[var(--surface)] border border-[var(--border-subtle)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] hover:shadow-[var(--shadow-3)] transition-all">
+    <div className={`bg-[var(--surface)] border border-[var(--border-subtle)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] hover:shadow-[var(--shadow-3)] transition-all ${isPending ? 'relative' : ''}`}>
+      {/* Pending overlay */}
+      {isPending && (
+        <div className="absolute inset-0 bg-white/60 rounded-[var(--radius-xl)] flex items-center justify-center z-10">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-full shadow-sm border border-gray-200">
+            <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin" />
+            <span className="text-sm text-gray-600">Adding...</span>
+          </div>
+        </div>
+      )}
       {/* Item Header */}
       <div className="p-3 sm:p-4">
         {/* Photo thumbnail - full width on mobile, left side on desktop */}

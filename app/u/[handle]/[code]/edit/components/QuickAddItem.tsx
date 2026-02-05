@@ -7,6 +7,11 @@ import AISuggestions from './AISuggestions';
 import ItemPreview from './ItemPreview';
 import { TapToIdentifyWizard } from '@/components/apis';
 import type { IdentifiedItem } from '@/components/apis/TapToIdentifyWizard';
+import {
+  startIdentificationSession,
+  recordIdentificationOutcome,
+  type IdentificationStage,
+} from '@/lib/analytics/identificationTelemetry';
 
 // Compress and convert image to JPEG (handles HEIC from mobile)
 async function compressImageForAPI(base64: string, maxSizeKB: number = 5000): Promise<string> {
@@ -187,10 +192,15 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
   const [previewingSuggestion, setPreviewingSuggestion] = useState<ProductSuggestion | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [isTyping, setIsTyping] = useState(false); // For instant "looking for matches" feedback
 
   // APIS Smart Identification Wizard state
   const [showSmartWizard, setShowSmartWizard] = useState(false);
   const [smartWizardImage, setSmartWizardImage] = useState<string | null>(null);
+
+  // Telemetry session tracking
+  const telemetrySessionRef = useRef<string | null>(null);
+  const lastSearchTierRef = useRef<string | undefined>(undefined);
 
   // Handle image selection - compress and launch APIS wizard
   const handleImageSelect = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -273,6 +283,12 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
         setQuestions(data.questions || []);
         setClarificationNeeded(data.clarificationNeeded || false);
         setSearchTier(data.searchTier);
+        lastSearchTierRef.current = data.searchTier;
+
+        // Start telemetry session when we have results
+        if (data.suggestions?.length > 0) {
+          telemetrySessionRef.current = startIdentificationSession('text', userInput);
+        }
       } else {
         console.error('Failed to fetch suggestions');
         setSuggestions([]);
@@ -285,16 +301,36 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
     }
   }, [bagTitle]);
 
-  // Debounced effect for text input
+  // Debounced effect for text input - faster 300ms debounce for snappier feel
   useEffect(() => {
+    // Show instant "looking" feedback when typing
+    if (input && input.trim().length >= 2) {
+      setIsTyping(true);
+    } else {
+      setIsTyping(false);
+    }
+
     const timer = setTimeout(() => {
       if (input && input.trim().length >= 2) {
+        setIsTyping(false); // Stop typing indicator, actual loading begins
         fetchSuggestions(input, existingAnswers);
       }
-    }, 500);
+    }, 300);
 
     return () => clearTimeout(timer);
   }, [input, existingAnswers, fetchSuggestions]);
+
+  // Convert searchTier to IdentificationStage for telemetry
+  const getStageFromTier = (tier?: string): IdentificationStage => {
+    switch (tier) {
+      case 'library': return 'library_cache';
+      case 'library+ai': return 'ai_enrichment';
+      case 'ai': return 'ai_enrichment';
+      case 'vision': return 'ai_semantic';
+      case 'fallback': return 'fallback';
+      default: return 'text_parsing';
+    }
+  };
 
   const handleSelectSuggestion = (suggestion: ProductSuggestion) => {
     console.log('[QuickAddItem] Selected suggestion:', {
@@ -302,6 +338,19 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
       productUrl: suggestion.productUrl,
       imageUrl: suggestion.imageUrl,
     });
+
+    // Record telemetry for accepted suggestion
+    if (telemetrySessionRef.current) {
+      recordIdentificationOutcome(
+        telemetrySessionRef.current,
+        getStageFromTier(lastSearchTierRef.current),
+        suggestion.confidence,
+        suggestions.length,
+        'accepted'
+      );
+      telemetrySessionRef.current = null;
+    }
+
     setPreviewingSuggestion(suggestion);
   };
 
@@ -339,12 +388,36 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
   };
 
   const handleForceAI = () => {
+    // Record telemetry for rejected suggestions (trying AI)
+    if (telemetrySessionRef.current && suggestions.length > 0) {
+      recordIdentificationOutcome(
+        telemetrySessionRef.current,
+        getStageFromTier(lastSearchTierRef.current),
+        suggestions[0]?.confidence || 0,
+        suggestions.length,
+        'rejected'
+      );
+      telemetrySessionRef.current = null;
+    }
+
     if (input.trim().length >= 2) {
       fetchSuggestions(input, existingAnswers, true);
     }
   };
 
   const handleAddManually = () => {
+    // Record telemetry for manual entry choice
+    if (telemetrySessionRef.current) {
+      recordIdentificationOutcome(
+        telemetrySessionRef.current,
+        getStageFromTier(lastSearchTierRef.current),
+        suggestions[0]?.confidence || 0,
+        suggestions.length,
+        'manual_entry'
+      );
+      telemetrySessionRef.current = null;
+    }
+
     setSuggestions([]);
     setQuestions([]);
     setClarificationNeeded(false);
@@ -453,8 +526,16 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
             </p>
           )}
 
+          {/* Instant "Looking for matches" feedback */}
+          {isTyping && !isLoadingSuggestions && input.trim().length >= 2 && (
+            <div className="mt-3 flex items-center gap-2 text-sm text-gray-500">
+              <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin" />
+              <span>Looking for matches...</span>
+            </div>
+          )}
+
           {/* AI Suggestions - only for text input */}
-          {input.trim().length >= 2 && (
+          {input.trim().length >= 2 && !isTyping && (
             <div className="mt-4">
               <AISuggestions
                 suggestions={suggestions}

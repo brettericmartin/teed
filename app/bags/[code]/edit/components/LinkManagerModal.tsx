@@ -207,10 +207,17 @@ export default function LinkManagerModal({
   ];
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[80vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
+      {/* Modal - Full-screen on mobile, centered card on desktop */}
+      <div className="
+        fixed inset-0
+        flex flex-col bg-white
+        md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2
+        md:max-w-2xl md:w-full md:max-h-[80vh] md:rounded-lg
+        overflow-hidden md:shadow-xl
+      ">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex-shrink-0 flex items-center justify-between p-4 md:p-6 border-b border-gray-200">
           <div>
             <h2 className="text-xl font-semibold text-gray-900">Manage Links</h2>
             <p className="text-sm text-gray-600 mt-1">{itemName}</p>
@@ -224,7 +231,7 @@ export default function LinkManagerModal({
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto overscroll-contain p-4 md:p-6">
           {error && (
             <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-3">
               <p className="text-sm text-red-600">{error}</p>
@@ -328,47 +335,46 @@ export default function LinkManagerModal({
             )}
           </div>
 
-          {/* Add Link Form - Always visible */}
-          <div className="border-t border-gray-200 pt-6 space-y-4">
-            <h3 className="font-medium text-gray-900">Add New Link</h3>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                URL
-              </label>
-              <input
-                ref={urlInputRef}
-                type="url"
-                value={newUrl}
-                onChange={(e) => setNewUrl(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && newUrl.trim()) {
-                    handleAddLink();
-                  }
-                }}
-                placeholder="https://example.com/product"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--teed-green-6)] focus:border-transparent"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Type
-              </label>
-              <select
-                value={newKind}
-                onChange={(e) => setNewKind(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--teed-green-6)] focus:border-transparent"
-              >
-                {linkKindOptions.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+        </div>
+
+        {/* Footer - Add Link Form - Always visible with safe area */}
+        <div className="flex-shrink-0 border-t border-gray-200 p-4 bg-gray-50 safe-area-inset-bottom">
+          <h3 className="font-medium text-gray-900 mb-3">Add New Link</h3>
+          <div className="space-y-3">
+            <div className="flex flex-col md:flex-row gap-3">
+              <div className="flex-1">
+                <input
+                  ref={urlInputRef}
+                  type="url"
+                  value={newUrl}
+                  onChange={(e) => setNewUrl(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && newUrl.trim()) {
+                      handleAddLink();
+                    }
+                  }}
+                  placeholder="https://example.com/product"
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--teed-green-6)] focus:border-transparent text-mobile-input"
+                />
+              </div>
+              <div className="md:w-32">
+                <select
+                  value={newKind}
+                  onChange={(e) => setNewKind(e.target.value)}
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--teed-green-6)] focus:border-transparent"
+                >
+                  {linkKindOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
             <button
               onClick={handleAddLink}
               disabled={isSubmitting || !newUrl.trim()}
-              className="w-full px-4 py-2 bg-[var(--button-create-bg)] text-white rounded-lg hover:bg-[var(--button-create-bg-hover)] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-4 py-3 bg-[var(--button-create-bg)] text-white rounded-lg hover:bg-[var(--button-create-bg-hover)] disabled:opacity-50 disabled:cursor-not-allowed font-medium"
             >
               {isSubmitting ? 'Adding...' : 'Add Link'}
             </button>

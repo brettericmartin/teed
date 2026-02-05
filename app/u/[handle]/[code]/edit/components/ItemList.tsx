@@ -59,6 +59,9 @@ export type Item = {
   price_paid: number | null;
   purchase_date: string | null;
   links: Link[];
+  // Optimistic UI state
+  _isPending?: boolean; // True while API call is in progress
+  _optimisticId?: string; // Temporary ID for optimistic items
 };
 
 type ReorderItem = { id: string; sort_index: number };

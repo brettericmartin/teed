@@ -72,18 +72,25 @@ function detectBrand(query: string): string | null {
 function detectCategory(query: string): Category | null {
   const queryLower = query.toLowerCase();
 
-  const categoryPatterns: Record<Category, string[]> = {
+  const categoryPatterns: Partial<Record<Category, string[]>> = {
     golf: ['golf', 'driver', 'iron', 'wedge', 'putter', 'fairway', 'hybrid', 'taylormade', 'callaway', 'titleist', 'ping', 'cobra', 'mizuno'],
-    makeup: ['makeup', 'beauty', 'lipstick', 'eyeshadow', 'foundation', 'mascara', 'blush', 'concealer', 'mac', 'nars', 'fenty', 'rare beauty'],
-    tech: ['phone', 'laptop', 'tablet', 'airpods', 'headphones', 'earbuds', 'speaker', 'watch', 'apple', 'samsung', 'sony', 'bose'],
-    fashion: ['shirt', 'pants', 'jacket', 'dress', 'shoes', 'sneakers', 'nike', 'adidas', 'patagonia'],
-    outdoor: ['tent', 'sleeping bag', 'backpack', 'camping', 'hiking', 'kayak', 'ski'],
+    beauty: ['makeup', 'beauty', 'lipstick', 'eyeshadow', 'foundation', 'mascara', 'blush', 'concealer', 'mac', 'nars', 'fenty', 'rare beauty'],
+    skincare: ['serum', 'moisturizer', 'cleanser', 'toner', 'sunscreen', 'skincare'],
+    tech: ['phone', 'laptop', 'tablet', 'airpods', 'computer', 'apple', 'samsung', 'google'],
+    audio: ['headphones', 'earbuds', 'speaker', 'watch', 'sony', 'bose', 'soundbar'],
+    fashion: ['shirt', 'pants', 'jacket', 'dress', 'blazer', 'suit'],
+    footwear: ['shoes', 'sneakers', 'boots', 'nike', 'adidas', 'hoka'],
+    outdoor: ['tent', 'sleeping bag', 'backpack', 'camping', 'hiking', 'kayak', 'patagonia'],
     photography: ['camera', 'lens', 'flash', 'tripod', 'canon', 'nikon', 'sony', 'fuji'],
     gaming: ['console', 'controller', 'playstation', 'xbox', 'nintendo', 'gaming'],
     music: ['guitar', 'piano', 'drum', 'amp', 'fender', 'gibson', 'instrument'],
     fitness: ['dumbbell', 'kettlebell', 'treadmill', 'peloton', 'fitness', 'gym'],
+    activewear: ['leggings', 'sports bra', 'lululemon', 'athletic'],
     travel: ['luggage', 'suitcase', 'carry-on', 'away', 'rimowa', 'samsonite'],
     edc: ['knife', 'flashlight', 'wallet', 'pen', 'benchmade', 'spyderco', 'leatherman'],
+    watches: ['watch', 'rolex', 'omega', 'seiko', 'chronograph'],
+    cycling: ['bike', 'bicycle', 'cycling', 'trek', 'specialized'],
+    snow: ['ski', 'snowboard', 'burton'],
   };
 
   for (const [category, patterns] of Object.entries(categoryPatterns)) {

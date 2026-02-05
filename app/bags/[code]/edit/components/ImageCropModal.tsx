@@ -90,10 +90,17 @@ export default function ImageCropModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 bg-black bg-opacity-75">
+      {/* Modal - Full-screen on mobile, centered card on desktop */}
+      <div className="
+        fixed inset-0
+        flex flex-col bg-white
+        md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2
+        md:max-w-2xl md:w-full md:max-h-[90vh] md:rounded-lg
+        overflow-hidden md:shadow-xl
+      ">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b">
+        <div className="flex-shrink-0 flex items-center justify-between p-4 border-b">
           <h3 className="text-lg font-semibold text-gray-900">Crop Image</h3>
           <button
             onClick={onClose}
@@ -105,8 +112,8 @@ export default function ImageCropModal({
           </button>
         </div>
 
-        {/* Cropper */}
-        <div className="relative flex-1 bg-gray-900" style={{ minHeight: '400px' }}>
+        {/* Cropper - responsive height */}
+        <div className="relative flex-1 bg-gray-900 min-h-[250px] md:min-h-[400px]">
           <Cropper
             image={imageUrl}
             crop={crop}
@@ -118,8 +125,8 @@ export default function ImageCropModal({
           />
         </div>
 
-        {/* Controls */}
-        <div className="p-4 border-t space-y-4">
+        {/* Controls - Footer with safe area */}
+        <div className="flex-shrink-0 p-4 border-t space-y-4 bg-white safe-area-inset-bottom">
           {/* Zoom Slider */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700">Zoom</label>
@@ -134,19 +141,19 @@ export default function ImageCropModal({
             />
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex gap-3 justify-end">
+          {/* Action Buttons - Stack on mobile, row on desktop */}
+          <div className="flex flex-col-reverse gap-2 md:flex-row md:justify-end md:gap-3">
             <button
               onClick={onClose}
               disabled={isProcessing}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full md:w-auto px-4 py-3 md:py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>
             <button
               onClick={handleSave}
               disabled={isProcessing}
-              className="px-4 py-2 text-sm font-medium text-white bg-[var(--button-create-bg)] rounded-md hover:bg-[var(--button-create-bg-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="w-full md:w-auto px-4 py-3 md:py-2 text-sm font-medium text-white bg-[var(--button-create-bg)] rounded-lg hover:bg-[var(--button-create-bg-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isProcessing ? (
                 <>

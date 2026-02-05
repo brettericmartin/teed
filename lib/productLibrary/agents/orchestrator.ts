@@ -48,7 +48,7 @@ export interface AgentResult {
 // Category Configurations
 // =============================================================================
 
-export const CATEGORY_CONFIGS: Record<Category, CategoryConfig> = {
+export const CATEGORY_CONFIGS: Partial<Record<Category, CategoryConfig>> = {
   golf: {
     category: 'golf',
     priorityBrands: [
@@ -397,6 +397,19 @@ export function getTasksByCategory(category: Category): AgentTask[] {
 export function generateCategoryLeadPrompt(category: Category): string {
   const config = CATEGORY_CONFIGS[category];
 
+  if (!config) {
+    return `You are the Category Lead Agent for ${category.toUpperCase()}.
+
+Your mission: Build a comprehensive product library covering ${category} brands from 2020-2024, at SKU-level granularity.
+
+For each brand, collect:
+1. All major product releases from 2020-2024
+2. Every colorway and variant (SKU-level)
+3. Reference images (primary product shot)
+4. Complete specifications
+5. Visual identification features (colors, patterns, design cues)`;
+  }
+
   return `You are the Category Lead Agent for ${category.toUpperCase()}.
 
 Your mission: Build a comprehensive product library covering ${category} brands from 2020-2024, at SKU-level granularity.
@@ -464,6 +477,9 @@ Start with the first priority brand and work through the list systematically.`;
  */
 export function generateBrandAgentPrompt(config: BrandAgentConfig): string {
   const categoryConfig = CATEGORY_CONFIGS[config.category];
+  const specKeys = categoryConfig?.specificationTemplate
+    ? Object.keys(categoryConfig.specificationTemplate).join(', ')
+    : 'all relevant specifications';
 
   return `You are a Brand Agent for ${config.brandName} in the ${config.category} category.
 
@@ -478,7 +494,7 @@ For each product, collect:
 1. Name and model number
 2. Release year and MSRP
 3. All colorways and variants
-4. Specifications: ${Object.keys(categoryConfig.specificationTemplate).join(', ')}
+4. Specifications: ${specKeys}
 5. Primary product image URL
 6. Visual identification features
 7. Search keywords
@@ -585,6 +601,10 @@ export function deployAllCategories(): AgentTask[] {
  */
 export function deployBrandAgents(category: Category): AgentTask[] {
   const config = CATEGORY_CONFIGS[category];
+  if (!config) {
+    console.log(`[Orchestrator] No config found for category ${category}, skipping brand agents`);
+    return [];
+  }
   return config.priorityBrands.map(brand => createBrandTask(category, brand));
 }
 

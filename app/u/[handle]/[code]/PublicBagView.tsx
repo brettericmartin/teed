@@ -967,13 +967,13 @@ export default function PublicBagView({
         </div>
       )}
 
-      {/* The Story Section */}
+      {/* History Section */}
       <div className="border-t border-[var(--border-subtle)] mt-12">
         <ContentContainer size="md" className="py-8">
           <div className="flex items-center gap-2 mb-6">
             <BookOpen className="w-5 h-5 text-[var(--text-secondary)]" />
             <h3 className="text-lg font-semibold text-[var(--text-primary)]">
-              The Story
+              History
             </h3>
           </div>
           <StoryTimeline

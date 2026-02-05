@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo, useAnimation } from 'framer-motion';
 import {
   X,
   Package,
@@ -19,6 +19,10 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import {
+  startIdentificationSession,
+  recordIdentificationOutcome,
+} from '@/lib/analytics/identificationTelemetry';
 
 type Bag = {
   id: string;
@@ -83,6 +87,9 @@ export function AddItemFlow({
   const [isLoadingPhotos, setIsLoadingPhotos] = useState(false);
   const [photoError, setPhotoError] = useState<string | null>(null);
   const [failedPhotos, setFailedPhotos] = useState<Set<number>>(new Set());
+
+  // Telemetry session tracking
+  const telemetrySessionRef = useRef<string | null>(null);
 
   // Reset state when closed
   useEffect(() => {
@@ -160,6 +167,11 @@ export function AddItemFlow({
       if (response.ok) {
         const data = await response.json();
         setSuggestions(data.suggestions || []);
+
+        // Start telemetry session when we have results
+        if (data.suggestions?.length > 0) {
+          telemetrySessionRef.current = startIdentificationSession('text', input);
+        }
       }
     } catch (error) {
       console.error('Error fetching suggestions:', error);
@@ -168,19 +180,31 @@ export function AddItemFlow({
     }
   }, [selectedBag?.title]);
 
-  // Debounced text input effect
+  // Debounced text input effect - faster 300ms debounce for snappier feel
   useEffect(() => {
     if (step !== 'text-search') return;
     const timer = setTimeout(() => {
       if (textInput.trim().length >= 2) {
         fetchSuggestions(textInput);
       }
-    }, 500);
+    }, 300);
     return () => clearTimeout(timer);
   }, [textInput, step, fetchSuggestions]);
 
   // Handle selecting a suggestion - go to preview
   const handleSelectSuggestion = useCallback((suggestion: ProductSuggestion) => {
+    // Record telemetry for accepted suggestion
+    if (telemetrySessionRef.current) {
+      recordIdentificationOutcome(
+        telemetrySessionRef.current,
+        'text_parsing',
+        suggestion.confidence,
+        suggestions.length,
+        'accepted'
+      );
+      telemetrySessionRef.current = null;
+    }
+
     setSelectedSuggestion(suggestion);
     setPreviewName(suggestion.custom_name);
     setPreviewBrand(suggestion.brand || '');
@@ -189,7 +213,7 @@ export function AddItemFlow({
 
     // Fetch photos
     fetchPhotos(suggestion);
-  }, []);
+  }, [suggestions.length]);
 
   // Fetch product photos
   const fetchPhotos = useCallback(async (suggestion: ProductSuggestion) => {
@@ -320,6 +344,22 @@ export function AddItemFlow({
     onClose();
   }, [selectedBag, onAddViaPhoto, onClose]);
 
+  // Swipe-to-dismiss state for mobile
+  const y = useMotionValue(0);
+  const controls = useAnimation();
+  const backdropOpacity = useTransform(y, [0, 300], [1, 0]);
+
+  const handleDragEnd = (_: any, info: PanInfo) => {
+    const threshold = 100;
+    const velocity = info.velocity.y;
+
+    if (info.offset.y > threshold || velocity > 500) {
+      onClose();
+    } else {
+      controls.start({ y: 0 });
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -329,26 +369,40 @@ export function AddItemFlow({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        style={{ opacity: backdropOpacity }}
         className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      {/* Modal */}
+      {/* Modal - Bottom sheet on mobile, center modal on desktop */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        transition={{ type: 'spring', duration: 0.3 }}
+        initial={{ y: '100%', opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: '100%', opacity: 0 }}
+        transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+        style={{ y }}
+        drag="y"
+        dragConstraints={{ top: 0 }}
+        dragElastic={{ top: 0, bottom: 0.5 }}
+        onDragEnd={handleDragEnd}
         className={cn(
-          'fixed z-[101]',
-          'inset-x-4 bottom-24 sm:inset-auto',
-          'sm:bottom-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2',
-          'bg-[var(--surface)] rounded-2xl shadow-2xl',
+          'fixed z-[101] touch-none',
+          // Mobile: Bottom sheet style
+          'inset-x-0 bottom-0',
+          // Desktop: Center modal
+          'sm:inset-auto sm:bottom-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2',
+          'bg-[var(--surface)] shadow-2xl',
           'max-w-md w-full mx-auto overflow-hidden',
           'border border-[var(--border-subtle)]',
-          'max-h-[80vh] flex flex-col'
+          'max-h-[85vh] flex flex-col',
+          // Mobile: Rounded top only, Desktop: Fully rounded
+          'rounded-t-2xl sm:rounded-2xl'
         )}
       >
+        {/* Drag handle (mobile only) */}
+        <div className="sm:hidden flex justify-center pt-3 pb-1">
+          <div className="w-10 h-1 bg-[var(--border)] rounded-full" />
+        </div>
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-subtle)] flex-shrink-0">
           <div className="flex items-center gap-3">
