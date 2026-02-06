@@ -611,6 +611,7 @@ export default function UnifiedProfileView({
         {isOwnProfile && (
           <UniversalLinkAdder
             profileId={profile.id}
+            profileHandle={profile.handle}
             onUpdateProfile={handleUpdateProfile}
             isOpen={isLinkAdderOpen}
             onClose={() => setIsLinkAdderOpen(false)}

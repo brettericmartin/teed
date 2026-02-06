@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Link2, X, ArrowRight, ArrowLeft, Check, Loader2 } from 'lucide-react';
 import { useEditMode } from '../EditModeProvider';
 import {
@@ -25,6 +26,7 @@ import DestinationStep from './DestinationStep';
 
 interface UniversalLinkAdderProps {
   profileId: string;
+  profileHandle: string;
   onUpdateProfile: (updates: { social_links?: Record<string, string> }) => Promise<void>;
   isOpen?: boolean;
   onClose?: () => void;
@@ -34,11 +36,14 @@ interface UniversalLinkAdderProps {
 
 export default function UniversalLinkAdder({
   profileId,
+  profileHandle,
   onUpdateProfile,
   isOpen: externalIsOpen,
   onClose: externalOnClose,
   bags: propBags,
 }: UniversalLinkAdderProps) {
+  const router = useRouter();
+
   // Determine if externally controlled (by ProfileHub)
   const isExternallyControlled = externalOnClose !== undefined;
 
@@ -355,8 +360,19 @@ export default function UniversalLinkAdder({
         });
       }
 
-      // Success - close modal
+      // Close modal first
       handleClose();
+
+      // Redirect to the bag if products were added
+      if (result.productsAdded > 0) {
+        const bagCode = result.newBagCode || selectedBagCode;
+        if (bagCode && bagCode !== 'new') {
+          // Short delay to let modal close animation complete
+          setTimeout(() => {
+            router.push(`/u/${profileHandle}/${bagCode}/edit`);
+          }, 100);
+        }
+      }
     } catch (error) {
       console.error('Save failed:', error);
       setSaveError(error instanceof Error ? error.message : 'Failed to save');
@@ -370,8 +386,10 @@ export default function UniversalLinkAdder({
     selectedBagCode,
     newBagTitle,
     profileId,
+    profileHandle,
     addBlock,
     handleClose,
+    router,
   ]);
 
   // Check if we need destination step
