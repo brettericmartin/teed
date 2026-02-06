@@ -231,6 +231,7 @@ export function LinkProcessorModal({
       <div className="flex min-h-full items-end sm:items-center justify-center p-0 sm:p-4">
         <div className={cn(
           'relative bg-white w-full sm:max-w-md sm:rounded-2xl rounded-t-2xl shadow-2xl',
+          'max-h-[85vh] overflow-y-auto',
           'animate-in fade-in slide-in-from-bottom-4 duration-300'
         )}>
           {/* Header */}

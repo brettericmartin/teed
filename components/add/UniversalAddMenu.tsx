@@ -212,24 +212,28 @@ export function UniversalAddMenu({
               transition={{ type: 'spring', duration: 0.3 }}
               className={cn(
                 'fixed z-[101]',
-                'inset-x-4 bottom-24 sm:inset-auto',
-                'sm:bottom-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2',
+                // Mobile: bottom sheet with safe margins
+                'inset-x-3 bottom-20 max-h-[70vh]',
+                // Desktop: centered modal
+                'sm:inset-auto sm:bottom-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2',
+                'sm:max-h-[85vh]',
                 'bg-[var(--surface)] rounded-2xl shadow-2xl',
                 'max-w-md w-full mx-auto overflow-hidden',
-                'border border-[var(--border-subtle)]'
+                'border border-[var(--border-subtle)]',
+                'flex flex-col'
               )}
             >
               {/* Header */}
-              <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-subtle)]">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--teed-green-9)] to-[var(--sky-9)] flex items-center justify-center">
-                    <Plus className="w-6 h-6 text-white" />
+              <div className="flex items-center justify-between px-4 py-3 sm:px-5 sm:py-4 border-b border-[var(--border-subtle)] flex-shrink-0">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[var(--teed-green-9)] to-[var(--sky-9)] flex items-center justify-center">
+                    <Plus className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-semibold text-[var(--text-primary)]">
+                    <h2 className="text-base sm:text-lg font-semibold text-[var(--text-primary)]">
                       What would you like to add?
                     </h2>
-                    <p className="text-sm text-[var(--text-tertiary)]">
+                    <p className="text-xs sm:text-sm text-[var(--text-tertiary)] hidden sm:block">
                       Choose an option to get started
                     </p>
                   </div>
@@ -243,7 +247,7 @@ export function UniversalAddMenu({
               </div>
 
               {/* Options */}
-              <div className="p-4 space-y-2">
+              <div className="p-3 sm:p-4 space-y-2 overflow-y-auto flex-1">
                 {availableOptions.map((option, index) => (
                   <motion.button
                     key={option.id}
@@ -252,7 +256,7 @@ export function UniversalAddMenu({
                     transition={{ delay: index * 0.05 }}
                     onClick={() => handleOptionClick(option.id)}
                     className={cn(
-                      'w-full flex items-center gap-4 p-4 rounded-xl',
+                      'w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl',
                       'transition-all duration-200 group',
                       'hover:scale-[1.02] active:scale-[0.98]',
                       option.bgColor
@@ -260,7 +264,7 @@ export function UniversalAddMenu({
                   >
                     {/* Icon */}
                     <div className={cn(
-                      'w-12 h-12 rounded-xl flex items-center justify-center',
+                      'w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center',
                       'bg-white/60 dark:bg-black/10',
                       option.color
                     )}>
@@ -269,10 +273,10 @@ export function UniversalAddMenu({
 
                     {/* Text */}
                     <div className="flex-1 text-left">
-                      <div className={cn('font-semibold', option.color)}>
+                      <div className={cn('font-semibold text-sm sm:text-base', option.color)}>
                         {option.label}
                       </div>
-                      <div className="text-sm text-[var(--text-secondary)]">
+                      <div className="text-xs sm:text-sm text-[var(--text-secondary)]">
                         {option.description}
                       </div>
                     </div>
@@ -288,10 +292,10 @@ export function UniversalAddMenu({
 
               {/* Hint for new users */}
               {!hasBags && (
-                <div className="px-4 pb-4">
-                  <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-[var(--teed-green-2)] border border-[var(--teed-green-4)]">
-                    <Sparkles className="w-5 h-5 text-[var(--teed-green-9)] flex-shrink-0" />
-                    <p className="text-sm text-[var(--teed-green-11)]">
+                <div className="px-3 pb-3 sm:px-4 sm:pb-4 flex-shrink-0">
+                  <div className="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-3 rounded-xl bg-[var(--teed-green-2)] border border-[var(--teed-green-4)]">
+                    <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--teed-green-9)] flex-shrink-0" />
+                    <p className="text-xs sm:text-sm text-[var(--teed-green-11)]">
                       <span className="font-medium">Tip:</span> Start by adding an item or link — we'll create a bag for you automatically!
                     </p>
                   </div>
