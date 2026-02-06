@@ -231,56 +231,56 @@ export function LinkProcessorModal({
       <div className="flex min-h-full items-end sm:items-center justify-center p-0 sm:p-4">
         <div className={cn(
           'relative bg-white w-full sm:max-w-md sm:rounded-2xl rounded-t-2xl shadow-2xl',
-          'max-h-[85vh] overflow-y-auto',
+          'max-h-[70vh] sm:max-h-[85vh] overflow-y-auto',
           'animate-in fade-in slide-in-from-bottom-4 duration-300'
         )}>
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-100">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between p-3 sm:p-4 border-b border-gray-100">
+            <div className="flex items-center gap-2 sm:gap-3">
               {step === 'select-bag' && (
                 <button
                   onClick={handleBack}
-                  className="p-2 -ml-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="p-1.5 sm:p-2 -ml-1 sm:-ml-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
                 >
-                  <ArrowLeft className="w-5 h-5" />
+                  <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
               )}
               <div className={cn(
-                'w-10 h-10 rounded-xl flex items-center justify-center',
+                'w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center',
                 typeInfo.color
               )}>
-                <TypeIcon className="w-5 h-5" />
+                <TypeIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <div>
-                <p className="font-semibold text-gray-900">{getPlatformName()}</p>
-                <p className="text-xs text-gray-500 flex items-center gap-1">
-                  <Link2 className="w-3 h-3" />
-                  {getDomain()}
+                <p className="font-semibold text-sm sm:text-base text-gray-900">{getPlatformName()}</p>
+                <p className="text-[10px] sm:text-xs text-gray-500 flex items-center gap-1">
+                  <Link2 className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                  <span className="truncate max-w-[120px] sm:max-w-none">{getDomain()}</span>
                 </p>
               </div>
             </div>
             <button
               onClick={handleClose}
               disabled={isProcessing}
-              className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50"
+              className="p-1.5 sm:p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
 
           {/* Content */}
-          <div className="p-4">
+          <div className="p-3 sm:p-4">
             {/* Error message */}
             {error && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
+              <div className="mb-3 sm:mb-4 p-2 sm:p-3 bg-red-50 border border-red-200 rounded-lg text-xs sm:text-sm text-red-600">
                 {error}
               </div>
             )}
 
             {/* Step: Choose action */}
             {step === 'choose' && (
-              <div className="space-y-3">
-                <p className="text-sm text-gray-600 mb-4">
+              <div className="space-y-2 sm:space-y-3">
+                <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-4">
                   What would you like to do with this link?
                 </p>
 
@@ -289,18 +289,18 @@ export function LinkProcessorModal({
                   <button
                     onClick={() => handleSelectAction('profile')}
                     className={cn(
-                      'w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all',
+                      'w-full flex items-center gap-2.5 sm:gap-4 p-2.5 sm:p-4 rounded-xl border-2 transition-all',
                       'border-purple-200 bg-purple-50 hover:bg-purple-100 hover:border-purple-300'
                     )}
                   >
-                    <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600">
-                      <LayoutGrid className="w-6 h-6" />
+                    <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600 flex-shrink-0">
+                      <LayoutGrid className="w-4 h-4 sm:w-6 sm:h-6" />
                     </div>
-                    <div className="flex-1 text-left">
-                      <p className="font-medium text-gray-900">Add to Profile</p>
-                      <p className="text-sm text-gray-500">Embed as a profile block</p>
+                    <div className="flex-1 text-left min-w-0">
+                      <p className="font-medium text-sm sm:text-base text-gray-900">Add to Profile</p>
+                      <p className="text-xs sm:text-sm text-gray-500 truncate">Embed as a profile block</p>
                     </div>
-                    <Sparkles className="w-5 h-5 text-purple-400" />
+                    <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400 flex-shrink-0" />
                   </button>
                 )}
 
@@ -309,16 +309,16 @@ export function LinkProcessorModal({
                   <button
                     onClick={() => handleSelectAction('social')}
                     className={cn(
-                      'w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all',
+                      'w-full flex items-center gap-2.5 sm:gap-4 p-2.5 sm:p-4 rounded-xl border-2 transition-all',
                       'border-blue-200 bg-blue-50 hover:bg-blue-100 hover:border-blue-300'
                     )}
                   >
-                    <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
-                      <User className="w-6 h-6" />
+                    <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0">
+                      <User className="w-4 h-4 sm:w-6 sm:h-6" />
                     </div>
-                    <div className="flex-1 text-left">
-                      <p className="font-medium text-gray-900">Add to Social Links</p>
-                      <p className="text-sm text-gray-500">Show on your profile</p>
+                    <div className="flex-1 text-left min-w-0">
+                      <p className="font-medium text-sm sm:text-base text-gray-900">Add to Social Links</p>
+                      <p className="text-xs sm:text-sm text-gray-500 truncate">Show on your profile</p>
                     </div>
                   </button>
                 )}
@@ -328,16 +328,16 @@ export function LinkProcessorModal({
                   <button
                     onClick={() => handleSelectAction('existing-bag')}
                     className={cn(
-                      'w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all',
+                      'w-full flex items-center gap-2.5 sm:gap-4 p-2.5 sm:p-4 rounded-xl border-2 transition-all',
                       'border-amber-200 bg-amber-50 hover:bg-amber-100 hover:border-amber-300'
                     )}
                   >
-                    <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600">
-                      <ShoppingBag className="w-6 h-6" />
+                    <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600 flex-shrink-0">
+                      <ShoppingBag className="w-4 h-4 sm:w-6 sm:h-6" />
                     </div>
-                    <div className="flex-1 text-left">
-                      <p className="font-medium text-gray-900">Add to a Bag</p>
-                      <p className="text-sm text-gray-500">
+                    <div className="flex-1 text-left min-w-0">
+                      <p className="font-medium text-sm sm:text-base text-gray-900">Add to a Bag</p>
+                      <p className="text-xs sm:text-sm text-gray-500 truncate">
                         {userBags.length > 0
                           ? `Choose from ${userBags.length} bag${userBags.length > 1 ? 's' : ''}`
                           : 'Create your first bag'
@@ -352,16 +352,16 @@ export function LinkProcessorModal({
                   <button
                     onClick={() => handleSelectAction('new-bag')}
                     className={cn(
-                      'w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all',
+                      'w-full flex items-center gap-2.5 sm:gap-4 p-2.5 sm:p-4 rounded-xl border-2 transition-all',
                       'border-gray-200 bg-gray-50 hover:bg-gray-100 hover:border-gray-300'
                     )}
                   >
-                    <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center text-gray-600">
-                      <FolderPlus className="w-6 h-6" />
+                    <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-gray-100 flex items-center justify-center text-gray-600 flex-shrink-0">
+                      <FolderPlus className="w-4 h-4 sm:w-6 sm:h-6" />
                     </div>
-                    <div className="flex-1 text-left">
-                      <p className="font-medium text-gray-900">Create New Bag</p>
-                      <p className="text-sm text-gray-500">Start a new collection with this item</p>
+                    <div className="flex-1 text-left min-w-0">
+                      <p className="font-medium text-sm sm:text-base text-gray-900">Create New Bag</p>
+                      <p className="text-xs sm:text-sm text-gray-500 truncate">Start a new collection</p>
                     </div>
                   </button>
                 )}
