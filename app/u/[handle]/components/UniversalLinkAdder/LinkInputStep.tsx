@@ -203,7 +203,7 @@ export default function LinkInputStep({
             text-[var(--text-primary)]
             placeholder:text-[var(--text-tertiary)]
             focus:outline-none focus:ring-2 focus:ring-[var(--teed-green-7)]
-            resize-none text-sm
+            resize-none text-base sm:text-sm
             min-h-[60px] sm:min-h-[100px]
           "
           autoFocus
