@@ -293,6 +293,14 @@ export default function UniversalLinkAdder({
       const selectedSocials = socials.filter((s) => s.selected);
       const selectedProducts = products.filter((p) => p.selected);
 
+      console.log('[UniversalLinkAdder] Save starting:', {
+        selectedEmbeds: selectedEmbeds.length,
+        selectedSocials: selectedSocials.length,
+        selectedProducts: selectedProducts.length,
+        selectedBagCode,
+        newBagTitle,
+      });
+
       // Build the save request
       const saveRequest: import('@/lib/types/universalLink').UniversalLinkSaveRequest = {
         profileId,
@@ -321,6 +329,8 @@ export default function UniversalLinkAdder({
         } : null,
       };
 
+      console.log('[UniversalLinkAdder] Save request:', JSON.stringify(saveRequest, null, 2));
+
       // Call the unified save API
       const response = await fetch('/api/universal-links/save', {
         method: 'POST',
@@ -328,12 +338,16 @@ export default function UniversalLinkAdder({
         body: JSON.stringify(saveRequest),
       });
 
+      console.log('[UniversalLinkAdder] API response status:', response.status);
+
       if (!response.ok) {
         const error = await response.json();
+        console.error('[UniversalLinkAdder] API error:', error);
         throw new Error(error.error || 'Failed to save');
       }
 
       const result: import('@/lib/types/universalLink').UniversalLinkSaveResponse = await response.json();
+      console.log('[UniversalLinkAdder] API result:', result);
 
       if (result.errors.length > 0) {
         console.warn('Save completed with errors:', result.errors);
@@ -364,8 +378,9 @@ export default function UniversalLinkAdder({
       handleClose();
 
       // Redirect to the bag if products were added
-      if (result.productsAdded > 0) {
+      if (result.productsAdded > 0 || result.newBagCode) {
         const bagCode = result.newBagCode || selectedBagCode;
+        console.log('[UniversalLinkAdder] Redirecting to bag:', bagCode);
         if (bagCode && bagCode !== 'new') {
           // Short delay to let modal close animation complete
           setTimeout(() => {

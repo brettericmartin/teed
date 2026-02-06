@@ -149,6 +149,7 @@ export default function DestinationStep({
                   placeholder:text-[var(--text-tertiary)]
                   focus:outline-none focus:ring-2 focus:ring-[var(--teed-green-7)]
                   disabled:opacity-50
+                  text-base
                 "
                 autoFocus
               />
