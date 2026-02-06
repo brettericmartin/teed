@@ -206,7 +206,7 @@ export async function POST(request: NextRequest) {
               owner_id: user.id,
               title,
               description: null,
-              visibility: 'public',
+              is_public: true,
             })
             .select()
             .single();

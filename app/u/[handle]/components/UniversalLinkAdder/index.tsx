@@ -349,8 +349,10 @@ export default function UniversalLinkAdder({
       const result: import('@/lib/types/universalLink').UniversalLinkSaveResponse = await response.json();
       console.log('[UniversalLinkAdder] API result:', result);
 
-      if (result.errors.length > 0) {
-        console.warn('Save completed with errors:', result.errors);
+      // Check if save actually succeeded
+      if (!result.success || result.errors.length > 0) {
+        console.error('[UniversalLinkAdder] Save failed:', result.errors);
+        throw new Error(result.errors[0] || 'Failed to save');
       }
 
       // Also add blocks locally for immediate UI update
