@@ -14,6 +14,7 @@ import type {
   VisualSignature,
   ProductVariant,
 } from './schema';
+import { levenshteinDistance } from '@/lib/utils';
 
 // =============================================================================
 // Text Search
@@ -56,36 +57,6 @@ export function textSimilarity(a: string, b: string): number {
 }
 
 /**
- * Calculate Levenshtein edit distance between two strings
- */
-function levenshteinDistance(a: string, b: string): number {
-  const matrix: number[][] = [];
-
-  for (let i = 0; i <= b.length; i++) {
-    matrix[i] = [i];
-  }
-  for (let j = 0; j <= a.length; j++) {
-    matrix[0][j] = j;
-  }
-
-  for (let i = 1; i <= b.length; i++) {
-    for (let j = 1; j <= a.length; j++) {
-      if (b.charAt(i - 1) === a.charAt(j - 1)) {
-        matrix[i][j] = matrix[i - 1][j - 1];
-      } else {
-        matrix[i][j] = Math.min(
-          matrix[i - 1][j - 1] + 1,
-          matrix[i][j - 1] + 1,
-          matrix[i - 1][j] + 1
-        );
-      }
-    }
-  }
-
-  return matrix[b.length][a.length];
-}
-
-/**
  * Search products by text query
  *
  * Improved to handle:
@@ -109,21 +80,53 @@ export function searchByText(
     const brandLower = product.brand.toLowerCase();
     const fullName = `${brandLower} ${productNameLower}`;
 
-    // === PRIORITY 1: All query words appear in brand+name ===
+    // === PRIORITY 1: All query words appear in brand+name (with fuzzy fallback) ===
     // This catches "TaylorMade Qi35 Driver" matching brand="TaylorMade" + name="Qi35 Driver"
-    const matchedWords = queryWords.filter(word =>
-      fullName.includes(word) ||
-      product.searchKeywords.some(k => k.toLowerCase().includes(word))
-    );
+    const fullNameWords = fullName.split(/\s+/);
+    let exactMatchCount = 0;
+    let fuzzyMatchCount = 0;
+    const matchedWords: string[] = [];
 
-    if (matchedWords.length === queryWords.length && queryWords.length > 0) {
-      // All words matched!
-      const wordMatchScore = 85 + (matchedWords.length * 3); // Bonus for more words
+    for (const word of queryWords) {
+      const exactMatch = fullName.includes(word) ||
+        product.searchKeywords.some(k => k.toLowerCase().includes(word));
+
+      if (exactMatch) {
+        exactMatchCount++;
+        matchedWords.push(word);
+      } else if (word.length >= 4) {
+        // Fuzzy fallback: check if any product word is within edit distance 1
+        const fuzzyMatch = fullNameWords.some(pw =>
+          pw.length >= 4 && levenshteinDistance(word, pw) <= 1
+        ) || product.searchKeywords.some(k => {
+          const kWords = k.toLowerCase().split(/\s+/);
+          return kWords.some(kw => kw.length >= 4 && levenshteinDistance(word, kw) <= 1);
+        });
+
+        if (fuzzyMatch) {
+          fuzzyMatchCount++;
+          matchedWords.push(`~${word}`);
+        }
+      }
+    }
+
+    const totalMatched = exactMatchCount + fuzzyMatchCount;
+
+    if (totalMatched === queryWords.length && queryWords.length > 0) {
+      // All words matched (exact or fuzzy)
+      // Fuzzy matches count as 0.8 of exact
+      const effectiveScore = exactMatchCount + (fuzzyMatchCount * 0.8);
+      const wordMatchScore = 85 + (effectiveScore * 3);
       maxScore = Math.max(maxScore, Math.min(98, wordMatchScore));
       matchReasons.push(`All words match: ${matchedWords.join(', ')}`);
-    } else if (matchedWords.length > 0) {
+    } else if (totalMatched === queryWords.length - 1 && queryWords.length >= 3) {
+      // "Mostly matched" tier: all-but-one words match
+      const mostlyScore = 78 + (exactMatchCount * 2);
+      maxScore = Math.max(maxScore, Math.min(85, mostlyScore));
+      matchReasons.push(`Mostly match: ${matchedWords.join(', ')}`);
+    } else if (totalMatched > 0) {
       // Partial word match
-      const partialScore = (matchedWords.length / queryWords.length) * 70;
+      const partialScore = (totalMatched / queryWords.length) * 70;
       if (partialScore > maxScore) {
         maxScore = partialScore;
         matchReasons.push(`Partial match: ${matchedWords.join(', ')}`);

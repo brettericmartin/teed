@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo, useAnimation } from 'framer-motion';
 import {
   X,
@@ -19,10 +19,8 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import {
-  startIdentificationSession,
-  recordIdentificationOutcome,
-} from '@/lib/analytics/identificationTelemetry';
+import { useProductSearch } from '@/hooks/useProductSearch';
+import ParsedPreview from '@/components/add/ParsedPreview';
 
 type Bag = {
   id: string;
@@ -72,10 +70,9 @@ export function AddItemFlow({
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Text search state
-  const [textInput, setTextInput] = useState('');
-  const [suggestions, setSuggestions] = useState<ProductSuggestion[]>([]);
-  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+  // Text search via shared hook
+  const productSearch = useProductSearch({ bagContext: selectedBag?.title });
+
   const [selectedSuggestion, setSelectedSuggestion] = useState<ProductSuggestion | null>(null);
 
   // Preview/photo state
@@ -88,9 +85,6 @@ export function AddItemFlow({
   const [photoError, setPhotoError] = useState<string | null>(null);
   const [failedPhotos, setFailedPhotos] = useState<Set<number>>(new Set());
 
-  // Telemetry session tracking
-  const telemetrySessionRef = useRef<string | null>(null);
-
   // Reset state when closed
   useEffect(() => {
     if (!isOpen) {
@@ -100,8 +94,7 @@ export function AddItemFlow({
         setSearchQuery('');
         setUrl('');
         setError(null);
-        setTextInput('');
-        setSuggestions([]);
+        productSearch.reset();
         setSelectedSuggestion(null);
         setPreviewName('');
         setPreviewBrand('');
@@ -134,8 +127,7 @@ export function AddItemFlow({
       setError(null);
     } else if (step === 'text-search') {
       setStep('add-method');
-      setTextInput('');
-      setSuggestions([]);
+      productSearch.reset();
     } else if (step === 'preview-item') {
       setStep('text-search');
       setSelectedSuggestion(null);
@@ -146,65 +138,9 @@ export function AddItemFlow({
     }
   }, [step]);
 
-  // Fetch suggestions for text input
-  const fetchSuggestions = useCallback(async (input: string) => {
-    if (input.trim().length < 2) {
-      setSuggestions([]);
-      return;
-    }
-
-    setIsLoadingSuggestions(true);
-    try {
-      const response = await fetch('/api/ai/enrich-item', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userInput: input,
-          bagContext: selectedBag?.title,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setSuggestions(data.suggestions || []);
-
-        // Start telemetry session when we have results
-        if (data.suggestions?.length > 0) {
-          telemetrySessionRef.current = startIdentificationSession('text', input);
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching suggestions:', error);
-    } finally {
-      setIsLoadingSuggestions(false);
-    }
-  }, [selectedBag?.title]);
-
-  // Debounced text input effect - faster 300ms debounce for snappier feel
-  useEffect(() => {
-    if (step !== 'text-search') return;
-    const timer = setTimeout(() => {
-      if (textInput.trim().length >= 2) {
-        fetchSuggestions(textInput);
-      }
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [textInput, step, fetchSuggestions]);
-
   // Handle selecting a suggestion - go to preview
   const handleSelectSuggestion = useCallback((suggestion: ProductSuggestion) => {
-    // Record telemetry for accepted suggestion
-    if (telemetrySessionRef.current) {
-      recordIdentificationOutcome(
-        telemetrySessionRef.current,
-        'text_parsing',
-        suggestion.confidence,
-        suggestions.length,
-        'accepted'
-      );
-      telemetrySessionRef.current = null;
-    }
-
+    productSearch.recordSelection(suggestion);
     setSelectedSuggestion(suggestion);
     setPreviewName(suggestion.custom_name);
     setPreviewBrand(suggestion.brand || '');
@@ -213,7 +149,7 @@ export function AddItemFlow({
 
     // Fetch photos
     fetchPhotos(suggestion);
-  }, [suggestions.length]);
+  }, [productSearch]);
 
   // Fetch product photos
   const fetchPhotos = useCallback(async (suggestion: ProductSuggestion) => {
@@ -693,34 +629,61 @@ export function AddItemFlow({
                   <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
                     Product Name
                   </label>
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--text-tertiary)]" />
-                    <input
-                      type="text"
-                      value={textInput}
-                      onChange={(e) => setTextInput(e.target.value)}
-                      placeholder="e.g., TaylorMade Stealth Driver"
-                      autoFocus
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--teed-green-7)]"
-                    />
+                  <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--text-tertiary)]" />
+                      <input
+                        type="text"
+                        value={productSearch.input}
+                        onChange={(e) => productSearch.setInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && productSearch.input.trim().length >= 2 && !productSearch.isLoading) {
+                            e.preventDefault();
+                            productSearch.search();
+                          }
+                        }}
+                        placeholder="e.g., TaylorMade Stealth Driver"
+                        autoFocus
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--teed-green-7)]"
+                      />
+                    </div>
+                    <button
+                      onClick={() => productSearch.search()}
+                      disabled={productSearch.input.trim().length < 2 || productSearch.isLoading}
+                      className={cn(
+                        'px-4 py-3 rounded-xl font-medium transition-colors flex items-center gap-2',
+                        'bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] text-white',
+                        'disabled:opacity-50 disabled:cursor-not-allowed'
+                      )}
+                    >
+                      <Search className="w-4 h-4" />
+                    </button>
                   </div>
+
+                  {/* Parsed Preview Chips */}
+                  {productSearch.parsedPreview && productSearch.input.trim().length >= 2 && (
+                    <ParsedPreview
+                      parsed={productSearch.parsedPreview}
+                      onUpdateField={productSearch.updateParsedField}
+                    />
+                  )}
                 </div>
 
                 {/* Loading state */}
-                {isLoadingSuggestions && (
+                {productSearch.isLoading && (
                   <div className="flex items-center justify-center py-6 text-[var(--text-tertiary)]">
                     <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                    Finding products...
+                    Finding matches...
                   </div>
                 )}
 
                 {/* Suggestions list */}
-                {!isLoadingSuggestions && suggestions.length > 0 && (
+                {!productSearch.isLoading && productSearch.suggestions.length > 0 && (
                   <div className="space-y-2">
                     <p className="text-sm text-[var(--text-tertiary)]">
                       Select a product:
                     </p>
-                    {suggestions.map((suggestion, i) => (
+                    {productSearch.suggestions.map((suggestion, i) => (
                       <button
                         key={i}
                         onClick={() => handleSelectSuggestion(suggestion)}
@@ -748,9 +711,9 @@ export function AddItemFlow({
                 )}
 
                 {/* No results */}
-                {!isLoadingSuggestions && textInput.trim().length >= 2 && suggestions.length === 0 && (
+                {!productSearch.isLoading && productSearch.hasSearched && productSearch.suggestions.length === 0 && (
                   <div className="text-center py-6 text-[var(--text-tertiary)]">
-                    <p>No products found for "{textInput}"</p>
+                    <p>No products found for &ldquo;{productSearch.input}&rdquo;</p>
                     <p className="text-sm mt-1">Try a different search term</p>
                   </div>
                 )}

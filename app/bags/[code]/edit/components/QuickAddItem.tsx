@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useCallback } from 'react';
+import { Search } from 'lucide-react';
 import AISuggestions from './AISuggestions';
-import {
-  startIdentificationSession,
-  recordIdentificationOutcome,
-} from '@/lib/analytics/identificationTelemetry';
+import ParsedPreview from '@/components/add/ParsedPreview';
+import { useProductSearch } from '@/hooks/useProductSearch';
 
 type ProductSuggestion = {
   custom_name: string;
@@ -15,12 +14,6 @@ type ProductSuggestion = {
   confidence: number;
 };
 
-type ClarificationQuestion = {
-  id: string;
-  question: string;
-  options: string[];
-};
-
 type QuickAddItemProps = {
   onAdd: (suggestion: ProductSuggestion) => Promise<void>;
   bagTitle?: string;
@@ -28,129 +21,88 @@ type QuickAddItemProps = {
 };
 
 export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: QuickAddItemProps) {
-  const [input, setInput] = useState('');
-  const [suggestions, setSuggestions] = useState<ProductSuggestion[]>([]);
-  const [questions, setQuestions] = useState<ClarificationQuestion[]>([]);
-  const [clarificationNeeded, setClarificationNeeded] = useState(false);
-  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
-  const [existingAnswers, setExistingAnswers] = useState<Record<string, string>>({});
   const [isAdding, setIsAdding] = useState(false);
 
-  // Telemetry session tracking
-  const telemetrySessionRef = useRef<string | null>(null);
+  const {
+    input,
+    setInput,
+    parsedPreview,
+    updateParsedField,
+    suggestions,
+    isLoading,
+    clarificationNeeded,
+    questions,
+    searchTier,
+    hasSearched,
+    search,
+    handleAnswerQuestion,
+    recordSelection,
+    reset,
+  } = useProductSearch({ bagContext: bagTitle });
 
-  // Fetch AI suggestions with debounce
-  const fetchSuggestions = useCallback(async (userInput: string, answers: Record<string, string> = {}) => {
-    if (userInput.trim().length < 2) {
-      setSuggestions([]);
-      setQuestions([]);
-      setClarificationNeeded(false);
-      return;
-    }
-
-    setIsLoadingSuggestions(true);
-
-    try {
-      const response = await fetch('/api/ai/enrich-item', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userInput,
-          bagContext: bagTitle,
-          existingAnswers: answers,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setSuggestions(data.suggestions || []);
-        setQuestions(data.questions || []);
-        setClarificationNeeded(data.clarificationNeeded || false);
-
-        // Start telemetry session when we have results
-        if (data.suggestions?.length > 0) {
-          telemetrySessionRef.current = startIdentificationSession('text', userInput);
-        }
-      } else {
-        console.error('Failed to fetch suggestions');
-        setSuggestions([]);
-      }
-    } catch (error) {
-      console.error('Error fetching suggestions:', error);
-      setSuggestions([]);
-    } finally {
-      setIsLoadingSuggestions(false);
-    }
-  }, [bagTitle]);
-
-  // Debounced effect for fetching suggestions
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (input && input.trim().length >= 2) {
-        fetchSuggestions(input, existingAnswers);
-      }
-    }, 500); // 500ms debounce
-
-    return () => clearTimeout(timer);
-  }, [input, existingAnswers, fetchSuggestions]);
-
-  const handleSelectSuggestion = async (suggestion: ProductSuggestion) => {
-    // Record telemetry for accepted suggestion
-    if (telemetrySessionRef.current) {
-      recordIdentificationOutcome(
-        telemetrySessionRef.current,
-        'text_parsing',
-        suggestion.confidence,
-        suggestions.length,
-        'accepted'
-      );
-      telemetrySessionRef.current = null;
-    }
+  const handleSelectSuggestion = useCallback(async (suggestion: ProductSuggestion) => {
+    recordSelection(suggestion);
 
     setIsAdding(true);
     try {
       await onAdd(suggestion);
-
-      // Reset form
-      setInput('');
-      setSuggestions([]);
-      setQuestions([]);
-      setExistingAnswers({});
+      reset();
     } catch (error) {
       console.error('Error adding item:', error);
     } finally {
       setIsAdding(false);
     }
-  };
+  }, [onAdd, recordSelection, reset]);
 
-  const handleAnswerQuestion = (answers: Record<string, string>) => {
-    setExistingAnswers(answers);
-    fetchSuggestions(input, answers);
-  };
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && input.trim().length >= 2 && !isLoading) {
+      e.preventDefault();
+      search();
+    }
+  }, [input, isLoading, search]);
 
   return (
     <div className="bg-white border-2 border-gray-200 rounded-lg p-4 shadow-sm">
       {/* Quick Input */}
       <div>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="What do you want to add? (e.g., driver, lipstick, tent...)"
-          disabled={isAdding}
-          className="w-full px-4 py-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
-          autoFocus
-        />
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="What do you want to add? (e.g., driver, lipstick, tent...)"
+            disabled={isAdding}
+            className="flex-1 px-4 py-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+            autoFocus
+          />
+          <button
+            onClick={() => search()}
+            disabled={input.trim().length < 2 || isLoading || isAdding}
+            className="px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2 font-medium"
+          >
+            <Search className="w-4 h-4" />
+            <span className="hidden sm:inline">Search</span>
+          </button>
+        </div>
+
+        {/* Parsed Preview Chips */}
+        {parsedPreview && input.trim().length >= 2 && (
+          <ParsedPreview
+            parsed={parsedPreview}
+            onUpdateField={updateParsedField}
+          />
+        )}
 
         {/* Help text */}
         {!input && (
           <p className="mt-2 text-xs text-gray-500">
-            Start typing and AI will suggest items with details
+            Type a product name and press Enter or click Search
           </p>
         )}
 
         {/* AI Suggestions */}
-        {input.trim().length >= 2 && (
+        {(hasSearched || isLoading) && (
           <div className="mt-4">
             <AISuggestions
               suggestions={suggestions}
@@ -158,19 +110,22 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
               questions={questions}
               onSelectSuggestion={handleSelectSuggestion}
               onAnswerQuestion={handleAnswerQuestion}
-              isLoading={isLoadingSuggestions}
+              isLoading={isLoading}
+              searchTier={searchTier}
+              onForceAI={() => search(true)}
+              onAddManually={onShowManualForm}
             />
           </div>
         )}
 
         {/* Manual Entry Link */}
-        {!isLoadingSuggestions && suggestions.length === 0 && input.trim().length >= 2 && (
+        {hasSearched && !isLoading && suggestions.length === 0 && (
           <div className="mt-4 text-center">
             <button
               onClick={onShowManualForm}
               className="text-sm text-gray-500 hover:text-blue-600 transition-colors"
             >
-              Can't find what you're looking for? Add manually →
+              Can&apos;t find what you&apos;re looking for? Add manually
             </button>
           </div>
         )}

@@ -17,6 +17,7 @@ import type {
   ExtractedSpec,
   ExtractedSize,
   PriceConstraint,
+  DictionaryMatchResult,
 } from './types';
 import type { Category } from '@/lib/productLibrary/schema';
 
@@ -24,6 +25,7 @@ import { normalize, splitIntoItems } from './stages/normalize';
 import { patternExtract } from './stages/patternExtract';
 import { dictionaryMatch, getBrandEntry } from './stages/dictionaryMatch';
 import { productInference, combineNameParts } from './stages/productInference';
+import { getColorSynonyms } from './dictionaries/colors';
 
 /**
  * Parse user text input through the multi-stage pipeline
@@ -58,8 +60,8 @@ export function parseText(input: string, options: ParseOptions = {}): ParsedText
   // e.g., "Blue Yeti" should match Blue Microphones before "Blue" is extracted as a color
   // ========================================
   stagesRun.push('dictionaryMatch');
-  const dictionaryResult = options.skipBrandDetection
-    ? { brand: null, inferredCategory: null, categoryConfidence: 0, extractedComponents: [], remainingText }
+  const dictionaryResult: DictionaryMatchResult = options.skipBrandDetection
+    ? { brand: null, fuzzyCorrection: null, inferredCategory: null, categoryConfidence: 0, extractedComponents: [], remainingText }
     : dictionaryMatch(remainingText);
 
   allComponents.push(...dictionaryResult.extractedComponents);
@@ -114,6 +116,10 @@ export function parseText(input: string, options: ParseOptions = {}): ParsedText
   // ========================================
   // Build Final Result
   // ========================================
+  const colorSynonyms = patternResult.extractedColor
+    ? getColorSynonyms(patternResult.extractedColor)
+    : [];
+
   return {
     originalInput: input,
     normalizedInput: normalizeResult.normalizedText,
@@ -131,6 +137,9 @@ export function parseText(input: string, options: ParseOptions = {}): ParsedText
 
     inferredCategory,
     categoryConfidence,
+
+    fuzzyCorrection: dictionaryResult.fuzzyCorrection,
+    colorSynonyms,
 
     parseConfidence,
     remainingText,
@@ -336,6 +345,8 @@ function createEmptyResult(input: string, startTime: number): ParsedTextResult {
     priceConstraint: null,
     inferredCategory: null,
     categoryConfidence: 0,
+    fuzzyCorrection: null,
+    colorSynonyms: [],
     parseConfidence: 0,
     remainingText: '',
     parseTimeMs: Date.now() - startTime,
@@ -443,3 +454,4 @@ export type {
 export { splitIntoItems } from './stages/normalize';
 export { getBrandEntry, getBrandsForCategory, BRAND_DICTIONARY } from './stages/dictionaryMatch';
 export { combineNameParts } from './stages/productInference';
+export { getColorSynonyms } from './dictionaries/colors';

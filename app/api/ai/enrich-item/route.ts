@@ -404,7 +404,12 @@ async function searchWithAI(
     const parts: string[] = [];
     if (parsed.brand) parts.push(`Brand detected: ${parsed.brand.value}`);
     if (parsed.productName) parts.push(`Product name inferred: ${parsed.productName.value}`);
-    if (parsed.color) parts.push(`Color: ${parsed.color}`);
+    if (parsed.color) {
+      parts.push(`Color: ${parsed.color}`);
+      if (parsed.colorSynonyms && parsed.colorSynonyms.length > 1) {
+        parts.push(`Color synonyms: also consider ${parsed.colorSynonyms.filter(s => s !== parsed.color).join(', ')}`);
+      }
+    }
     if (parsed.size) parts.push(`Size: ${parsed.size.value}`);
     if (parsed.specifications.length > 0) {
       parts.push(`Specs: ${parsed.specifications.map(s => `${s.type}=${s.value}`).join(', ')}`);

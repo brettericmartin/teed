@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { Camera, Sparkles, Info } from 'lucide-react';
-import { GolfLoader } from '@/components/ui/GolfLoader';
+import { useState, useCallback, useRef } from 'react';
+import { Camera, Sparkles, Info, Search } from 'lucide-react';
 import AISuggestions from './AISuggestions';
 import ItemPreview from './ItemPreview';
 import { TapToIdentifyWizard } from '@/components/apis';
@@ -12,6 +11,8 @@ import {
   recordIdentificationOutcome,
   type IdentificationStage,
 } from '@/lib/analytics/identificationTelemetry';
+import { parseText, type ParsedTextResult } from '@/lib/textParsing';
+import ParsedPreview from '@/components/add/ParsedPreview';
 
 // Compress and convert image to JPEG (handles HEIC from mobile)
 async function compressImageForAPI(base64: string, maxSizeKB: number = 5000): Promise<string> {
@@ -192,7 +193,8 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
   const [previewingSuggestion, setPreviewingSuggestion] = useState<ProductSuggestion | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showTooltip, setShowTooltip] = useState(false);
-  const [isTyping, setIsTyping] = useState(false); // For instant "looking for matches" feedback
+  const [parsedPreview, setParsedPreview] = useState<ParsedTextResult | null>(null);
+  const [hasSearched, setHasSearched] = useState(false);
 
   // APIS Smart Identification Wizard state
   const [showSmartWizard, setShowSmartWizard] = useState(false);
@@ -201,6 +203,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
   // Telemetry session tracking
   const telemetrySessionRef = useRef<string | null>(null);
   const lastSearchTierRef = useRef<string | undefined>(undefined);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   // Handle image selection - compress and launch APIS wizard
   const handleImageSelect = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -263,7 +266,15 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
       return;
     }
 
+    // Cancel any in-flight request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+
     setIsLoadingSuggestions(true);
+    setHasSearched(true);
 
     try {
       const response = await fetch('/api/ai/enrich-item', {
@@ -275,6 +286,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
           existingAnswers: answers,
           forceAI,
         }),
+        signal: abortController.signal,
       });
 
       if (response.ok) {
@@ -293,31 +305,38 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
         console.error('Failed to fetch suggestions');
         setSuggestions([]);
       }
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === 'AbortError') return;
       console.error('Error fetching suggestions:', error);
       setSuggestions([]);
     } finally {
-      setIsLoadingSuggestions(false);
+      if (abortControllerRef.current === abortController) {
+        setIsLoadingSuggestions(false);
+        abortControllerRef.current = null;
+      }
     }
   }, [bagTitle]);
 
-  // Debounced effect for text input - faster 300ms debounce for snappier feel
-  useEffect(() => {
-    // Show instant "looking" feedback when typing
-    if (input && input.trim().length >= 2) {
-      setIsTyping(true);
+  // Handle text input changes - runs client-side parsing only, no API call
+  const handleInputChange = useCallback((value: string) => {
+    setInput(value);
+    setHasSearched(false);
+
+    if (value.trim().length >= 2) {
+      const parsed = parseText(value);
+      setParsedPreview(parsed);
     } else {
-      setIsTyping(false);
+      setParsedPreview(null);
+      setSuggestions([]);
+      setQuestions([]);
+      setClarificationNeeded(false);
     }
+  }, []);
 
-    const timer = setTimeout(() => {
-      if (input && input.trim().length >= 2) {
-        setIsTyping(false); // Stop typing indicator, actual loading begins
-        fetchSuggestions(input, existingAnswers);
-      }
-    }, 300);
-
-    return () => clearTimeout(timer);
+  // Explicit search trigger - only fires on button click or Enter key
+  const handleSearch = useCallback((forceAI = false) => {
+    if (input.trim().length < 2) return;
+    fetchSuggestions(input, existingAnswers, forceAI);
   }, [input, existingAnswers, fetchSuggestions]);
 
   // Convert searchTier to IdentificationStage for telemetry
@@ -371,6 +390,8 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
       setQuestions([]);
       setExistingAnswers({});
       setPreviewingSuggestion(null);
+      setParsedPreview(null);
+      setHasSearched(false);
     } catch (error) {
       console.error('Error adding item:', error);
     } finally {
@@ -400,9 +421,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
       telemetrySessionRef.current = null;
     }
 
-    if (input.trim().length >= 2) {
-      fetchSuggestions(input, existingAnswers, true);
-    }
+    handleSearch(true);
   };
 
   const handleAddManually = () => {
@@ -494,13 +513,30 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
               <input
                 type="text"
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={(e) => handleInputChange(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSearch();
+                  }
+                }}
                 placeholder="Type item name (e.g., 'TaylorMade Stealth Driver')"
                 disabled={isAdding}
                 className="w-full px-4 py-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
                 autoFocus
               />
             </div>
+
+            {/* Search button */}
+            <button
+              type="button"
+              onClick={() => handleSearch()}
+              disabled={isAdding || input.trim().length < 2}
+              className="px-4 py-3 rounded-lg border-2 border-blue-500 bg-blue-500 hover:bg-blue-600 text-white transition-colors disabled:opacity-50 disabled:bg-gray-300 disabled:border-gray-300"
+              title="Search for matches"
+            >
+              <Search className="w-5 h-5" />
+            </button>
 
             {/* Camera button - launches APIS directly */}
             <button
@@ -526,16 +562,15 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
             </p>
           )}
 
-          {/* Instant "Looking for matches" feedback */}
-          {isTyping && !isLoadingSuggestions && input.trim().length >= 2 && (
-            <div className="mt-3 flex items-center gap-2 text-sm text-gray-500">
-              <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin" />
-              <span>Looking for matches...</span>
+          {/* Parsed Preview chips */}
+          {parsedPreview && input.trim().length >= 2 && (
+            <div className="mt-2">
+              <ParsedPreview parsed={parsedPreview} />
             </div>
           )}
 
-          {/* AI Suggestions - only for text input */}
-          {input.trim().length >= 2 && !isTyping && (
+          {/* AI Suggestions - only after explicit search */}
+          {hasSearched && (
             <div className="mt-4">
               <AISuggestions
                 suggestions={suggestions}
@@ -552,7 +587,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm }: Quic
           )}
 
           {/* Manual Entry Link */}
-          {!isLoadingSuggestions && suggestions.length === 0 && input.trim().length >= 2 && (
+          {hasSearched && !isLoadingSuggestions && suggestions.length === 0 && (
             <div className="mt-4 text-center">
               <button
                 onClick={onShowManualForm}

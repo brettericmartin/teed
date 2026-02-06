@@ -75,6 +75,12 @@ export interface ParsedTextResult {
   inferredCategory: Category | null;
   categoryConfidence: number;
 
+  // Fuzzy brand correction info (if brand was fuzzy-matched)
+  fuzzyCorrection: { original: string; corrected: string } | null;
+
+  // Color synonyms for the extracted color
+  colorSynonyms: string[];
+
   // Overall parse quality
   parseConfidence: number;
 
@@ -127,6 +133,7 @@ export interface PatternExtractResult {
  */
 export interface DictionaryMatchResult {
   brand: { value: string; confidence: number; source: string } | null;
+  fuzzyCorrection: { original: string; corrected: string } | null;
   inferredCategory: Category | null;
   categoryConfidence: number;
   extractedComponents: ParsedComponent[];

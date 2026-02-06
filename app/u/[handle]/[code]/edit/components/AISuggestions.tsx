@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Loader2 } from 'lucide-react';
 import InlineClarificationCard from '@/components/clarification/InlineClarificationCard';
 import { getConfidenceLevel } from '@/lib/analytics/identificationTelemetry';
 
@@ -35,11 +36,6 @@ type AISuggestionsProps = {
   onAddManually?: () => void; // Allow user to add item manually
 };
 
-// Staged loading messages
-const LOADING_STAGES = [
-  { message: 'Searching library...', icon: '📚', duration: 400 },
-  { message: 'Using AI to identify...', icon: '🤖', duration: 2000 },
-];
 
 export default function AISuggestions({
   suggestions,
@@ -53,23 +49,6 @@ export default function AISuggestions({
   onAddManually,
 }: AISuggestionsProps) {
   const [clarificationDismissed, setClarificationDismissed] = useState(false);
-  const [loadingStage, setLoadingStage] = useState(0);
-
-  // Progress through loading stages
-  useEffect(() => {
-    if (!isLoading) {
-      setLoadingStage(0);
-      return;
-    }
-
-    // Move to next stage after delay
-    if (loadingStage < LOADING_STAGES.length - 1) {
-      const timer = setTimeout(() => {
-        setLoadingStage(prev => prev + 1);
-      }, LOADING_STAGES[loadingStage].duration);
-      return () => clearTimeout(timer);
-    }
-  }, [isLoading, loadingStage]);
 
   // Reset clarification dismissed state when questions change
   useEffect(() => {
@@ -89,50 +68,12 @@ export default function AISuggestions({
   const showInlineClarification = clarificationNeeded && questions.length > 0 && !clarificationDismissed;
 
   if (isLoading) {
-    const currentStage = LOADING_STAGES[loadingStage];
     return (
       <div className="space-y-3">
-        {/* Progress indicator */}
-        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
-          <div className="flex items-center gap-2">
-            {LOADING_STAGES.map((stage, idx) => (
-              <div
-                key={idx}
-                className={`flex items-center gap-1.5 text-xs font-medium transition-all duration-300 ${
-                  idx < loadingStage
-                    ? 'text-emerald-600'
-                    : idx === loadingStage
-                    ? 'text-blue-600'
-                    : 'text-gray-400'
-                }`}
-              >
-                <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs ${
-                  idx < loadingStage
-                    ? 'bg-emerald-100'
-                    : idx === loadingStage
-                    ? 'bg-blue-100 animate-pulse'
-                    : 'bg-gray-100'
-                }`}>
-                  {idx < loadingStage ? '✓' : stage.icon}
-                </span>
-                <span className="hidden sm:inline">{stage.message.replace('...', '')}</span>
-                {idx < LOADING_STAGES.length - 1 && (
-                  <span className={`w-8 h-0.5 mx-1 ${
-                    idx < loadingStage ? 'bg-emerald-300' : 'bg-gray-200'
-                  }`} />
-                )}
-              </div>
-            ))}
-          </div>
+        <div className="flex items-center gap-2 p-3 text-sm text-gray-600">
+          <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
+          <span>Finding matches...</span>
         </div>
-
-        {/* Current stage message (mobile) */}
-        <div className="sm:hidden text-sm text-gray-600 flex items-center gap-2">
-          <span className="animate-pulse">{currentStage.icon}</span>
-          {currentStage.message}
-        </div>
-
-        {/* Loading skeletons */}
         {[1, 2].map((i) => (
           <div
             key={i}

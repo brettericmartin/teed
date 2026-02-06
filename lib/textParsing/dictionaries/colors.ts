@@ -113,6 +113,52 @@ export function findAllColors(text: string): Array<{ color: string; position: nu
 }
 
 /**
+ * Cross-linked color synonym groups
+ * Maps color terms to all related synonyms (including the term itself)
+ */
+const COLOR_SYNONYM_GROUPS: string[][] = [
+  ['tan', 'beige', 'khaki', 'camel', 'sand', 'oatmeal'],
+  ['navy', 'dark blue', 'indigo'],
+  ['charcoal', 'dark gray', 'dark grey', 'graphite', 'slate'],
+  ['cream', 'ivory', 'off-white', 'pearl', 'snow', 'chalk'],
+  ['burgundy', 'maroon', 'wine', 'oxblood'],
+  ['forest', 'hunter', 'dark green', 'pine'],
+  ['coral', 'salmon', 'peach'],
+  ['rose', 'blush', 'dusty rose', 'mauve'],
+  ['gold', 'golden', 'mustard'],
+  ['rust', 'copper', 'burnt orange'],
+  ['olive', 'army green', 'moss'],
+  ['sky blue', 'powder blue', 'baby blue', 'light blue'],
+  ['lavender', 'lilac', 'light purple'],
+  ['silver', 'chrome', 'metallic silver'],
+  ['espresso', 'chocolate', 'dark brown', 'mocha', 'coffee'],
+];
+
+/**
+ * Get all synonyms for a color term
+ * Returns an array of related color names (including the input term)
+ */
+export function getColorSynonyms(color: string): string[] {
+  const colorLower = color.toLowerCase();
+
+  // Check synonym groups for a match
+  for (const group of COLOR_SYNONYM_GROUPS) {
+    if (group.some(c => c === colorLower)) {
+      return group;
+    }
+  }
+
+  // Check if it maps to a primary color, and return the primary + all variants
+  const primary = colorLookup.get(colorLower);
+  if (primary && COLOR_DICTIONARY[primary]) {
+    return [primary, ...COLOR_DICTIONARY[primary]];
+  }
+
+  // No synonyms found, return just the input
+  return [color];
+}
+
+/**
  * Remove color terms from text
  * @param text - The original text
  * @returns Text with color terms removed

@@ -8,6 +8,7 @@
 
 import type { DictionaryMatchResult, ParsedComponent, BrandEntry } from '../types';
 import type { Category } from '@/lib/productLibrary/schema';
+import { levenshteinDistance } from '@/lib/utils';
 
 /**
  * Comprehensive brand dictionary with categories and aliases
@@ -21,8 +22,8 @@ export const BRAND_DICTIONARY: BrandEntry[] = [
   // Luxury Golf
   { name: 'G/FORE', normalizedName: 'g/fore', aliases: ['gfore', 'g fore', 'g-fore'], category: 'golf', tier: 'luxury' },
   { name: 'PXG', normalizedName: 'pxg', aliases: ['parsons xtreme golf'], category: 'golf', tier: 'luxury' },
-  { name: 'Scotty Cameron', normalizedName: 'scotty cameron', aliases: ['scotty'], category: 'golf', tier: 'luxury' },
-  { name: 'Bettinardi', normalizedName: 'bettinardi', aliases: [], category: 'golf', tier: 'luxury' },
+  { name: 'Scotty Cameron', normalizedName: 'scotty cameron', aliases: ['scotty', 'scottie cameron', 'scotty camron'], category: 'golf', tier: 'luxury' },
+  { name: 'Bettinardi', normalizedName: 'bettinardi', aliases: ['betinardi'], category: 'golf', tier: 'luxury' },
   { name: 'Miura', normalizedName: 'miura', aliases: ['miura golf'], category: 'golf', tier: 'luxury' },
   { name: 'Honma', normalizedName: 'honma', aliases: ['honma golf'], category: 'golf', tier: 'luxury' },
   { name: 'Vessel', normalizedName: 'vessel', aliases: ['vessel bags'], category: 'golf', tier: 'luxury' },
@@ -37,24 +38,24 @@ export const BRAND_DICTIONARY: BrandEntry[] = [
   { name: 'melin', normalizedName: 'melin', aliases: [], category: 'golf', tier: 'luxury' },
 
   // Premium Golf Equipment
-  { name: 'TaylorMade', normalizedName: 'taylormade', aliases: ['taylor made', 'tmag', 'tm'], category: 'golf', tier: 'premium' },
-  { name: 'Callaway', normalizedName: 'callaway', aliases: ['cally'], category: 'golf', tier: 'premium' },
-  { name: 'Titleist', normalizedName: 'titleist', aliases: ['acushnet'], category: 'golf', tier: 'premium' },
+  { name: 'TaylorMade', normalizedName: 'taylormade', aliases: ['taylor made', 'tmag', 'tm', 'taylermade', 'tailormade', 'talormade'], category: 'golf', tier: 'premium' },
+  { name: 'Callaway', normalizedName: 'callaway', aliases: ['cally', 'calaway', 'callway', 'calllaway'], category: 'golf', tier: 'premium' },
+  { name: 'Titleist', normalizedName: 'titleist', aliases: ['acushnet', 'titelist', 'titliest', 'titeleist'], category: 'golf', tier: 'premium' },
   { name: 'Vokey', normalizedName: 'vokey', aliases: ['vokey design', 'titleist vokey'], category: 'golf', tier: 'premium' },
   { name: 'PING', normalizedName: 'ping', aliases: [], category: 'golf', tier: 'premium' },
   { name: 'Cleveland', normalizedName: 'cleveland', aliases: ['cleveland golf'], category: 'golf', tier: 'premium' },
-  { name: 'Mizuno', normalizedName: 'mizuno', aliases: [], category: 'golf', tier: 'premium' },
-  { name: 'Srixon', normalizedName: 'srixon', aliases: ['dunlop'], category: 'golf', tier: 'premium' },
+  { name: 'Mizuno', normalizedName: 'mizuno', aliases: ['mizuono', 'misuno'], category: 'golf', tier: 'premium' },
+  { name: 'Srixon', normalizedName: 'srixon', aliases: ['dunlop', 'srixion'], category: 'golf', tier: 'premium' },
   { name: 'Cobra', normalizedName: 'cobra', aliases: ['cobra golf', 'cobra puma golf'], category: 'golf', tier: 'premium' },
-  { name: 'Bridgestone', normalizedName: 'bridgestone', aliases: ['bridgestone golf'], category: 'golf', tier: 'premium' },
+  { name: 'Bridgestone', normalizedName: 'bridgestone', aliases: ['bridgestone golf', 'bridgston'], category: 'golf', tier: 'premium' },
   { name: 'Wilson', normalizedName: 'wilson', aliases: ['wilson staff', 'wilson golf'], category: 'golf', tier: 'premium' },
   { name: 'XXIO', normalizedName: 'xxio', aliases: [], category: 'golf', tier: 'premium' },
   { name: 'Evnroll', normalizedName: 'evnroll', aliases: [], category: 'golf', tier: 'premium' },
   { name: 'Odyssey', normalizedName: 'odyssey', aliases: [], category: 'golf', tier: 'premium' },
 
   // Golf Apparel & Footwear
-  { name: 'FootJoy', normalizedName: 'footjoy', aliases: ['fj'], category: 'golf', tier: 'premium' },
-  { name: 'TravisMathew', normalizedName: 'travismathew', aliases: ['travis mathew'], category: 'golf', tier: 'premium' },
+  { name: 'FootJoy', normalizedName: 'footjoy', aliases: ['fj', 'foot joy'], category: 'golf', tier: 'premium' },
+  { name: 'TravisMathew', normalizedName: 'travismathew', aliases: ['travis mathew', 'travis matthew', 'travismathews'], category: 'golf', tier: 'premium' },
   { name: 'Puma Golf', normalizedName: 'puma golf', aliases: ['puma', 'cobra puma'], category: 'golf', tier: 'premium' },
   { name: 'adidas Golf', normalizedName: 'adidas golf', aliases: [], category: 'golf', tier: 'premium' },
   { name: 'Johnnie-O', normalizedName: 'johnnie-o', aliases: ['johnnie o'], category: 'golf', tier: 'premium' },
@@ -130,7 +131,7 @@ export const BRAND_DICTIONARY: BrandEntry[] = [
   { name: 'Shure', normalizedName: 'shure', aliases: [], category: 'audio', tier: 'luxury' },
   { name: 'Bose', normalizedName: 'bose', aliases: [], category: 'audio', tier: 'premium' },
   { name: 'Sonos', normalizedName: 'sonos', aliases: [], category: 'audio', tier: 'premium' },
-  { name: 'Sennheiser', normalizedName: 'sennheiser', aliases: [], category: 'audio', tier: 'premium' },
+  { name: 'Sennheiser', normalizedName: 'sennheiser', aliases: ['senheiser', 'sennheizer'], category: 'audio', tier: 'premium' },
   { name: 'Audio-Technica', normalizedName: 'audio-technica', aliases: [], category: 'audio', tier: 'premium' },
   { name: 'Beats', normalizedName: 'beats', aliases: ['beats by dre'], category: 'audio', tier: 'premium' },
   { name: 'RODE', normalizedName: 'rode', aliases: [], category: 'audio', tier: 'premium' },
@@ -185,7 +186,7 @@ export const BRAND_DICTIONARY: BrandEntry[] = [
 
   { name: 'Snow Peak', normalizedName: 'snow peak', aliases: [], category: 'outdoor', tier: 'luxury' },
   { name: "Arc'teryx", normalizedName: 'arcteryx', aliases: ['arc teryx', 'arcteryx'], category: 'outdoor', tier: 'luxury' },
-  { name: 'Patagonia', normalizedName: 'patagonia', aliases: ['pata'], category: 'outdoor', tier: 'premium' },
+  { name: 'Patagonia', normalizedName: 'patagonia', aliases: ['pata', 'patigonia', 'patogonia'], category: 'outdoor', tier: 'premium' },
   { name: 'The North Face', normalizedName: 'the north face', aliases: ['north face', 'tnf'], category: 'outdoor', tier: 'premium' },
   { name: 'Black Diamond', normalizedName: 'black diamond', aliases: ['bd'], category: 'outdoor', tier: 'premium' },
   { name: 'Marmot', normalizedName: 'marmot', aliases: [], category: 'outdoor', tier: 'premium' },
@@ -277,7 +278,7 @@ export const BRAND_DICTIONARY: BrandEntry[] = [
   // ACTIVEWEAR & FITNESS
   // ============================================
 
-  { name: 'Lululemon', normalizedName: 'lululemon', aliases: ['lulu'], category: 'activewear', tier: 'luxury' },
+  { name: 'Lululemon', normalizedName: 'lululemon', aliases: ['lulu', 'lulolemon', 'lululemmon'], category: 'activewear', tier: 'luxury' },
   { name: 'Alo Yoga', normalizedName: 'alo yoga', aliases: ['alo'], category: 'activewear', tier: 'luxury' },
   { name: 'Vuori', normalizedName: 'vuori', aliases: [], category: 'activewear', tier: 'premium' },
   { name: 'Rhone', normalizedName: 'rhone', aliases: [], category: 'activewear', tier: 'premium' },
@@ -782,6 +783,7 @@ const CATEGORY_PATTERNS: Record<Category, string[]> = {
 export function dictionaryMatch(text: string): DictionaryMatchResult {
   const extractedComponents: ParsedComponent[] = [];
   let brand: DictionaryMatchResult['brand'] = null;
+  let fuzzyCorrection: DictionaryMatchResult['fuzzyCorrection'] = null;
   let inferredCategory: Category | null = null;
   let categoryConfidence = 0;
   let remainingText = text;
@@ -853,6 +855,69 @@ export function dictionaryMatch(text: string): DictionaryMatchResult {
     }
   }
 
+  // === Fuzzy brand matching fallback when exact match fails ===
+  if (brandMatches.length === 0) {
+    // Extract contiguous word groups from the input for fuzzy matching
+    const inputWords = textLower.split(/\s+/);
+
+    let bestFuzzyMatch: {
+      brand: BrandEntry;
+      matchedText: string;
+      position: number;
+      distance: number;
+    } | null = null;
+
+    // Try single words and 2-word combinations
+    for (let i = 0; i < inputWords.length; i++) {
+      const candidates = [inputWords[i]];
+      if (i < inputWords.length - 1) {
+        candidates.push(`${inputWords[i]} ${inputWords[i + 1]}`);
+      }
+
+      for (const candidate of candidates) {
+        if (candidate.length < 3) continue; // Skip very short words
+
+        for (const brandEntry of sortedBrands) {
+          // Check against normalized name
+          const namesToCheck = [brandEntry.normalizedName, ...brandEntry.aliases.map(a => a.toLowerCase())];
+
+          for (const name of namesToCheck) {
+            if (name.length < 3) continue;
+
+            // Set max distance based on name length
+            const maxDist = name.length >= 6 ? 2 : name.length >= 3 ? 1 : 0;
+            if (maxDist === 0) continue;
+
+            const dist = levenshteinDistance(candidate, name);
+            if (dist > 0 && dist <= maxDist) {
+              // Better match than previous?
+              if (!bestFuzzyMatch || dist < bestFuzzyMatch.distance ||
+                  (dist === bestFuzzyMatch.distance && name.length > bestFuzzyMatch.matchedText.length)) {
+                // Find position in original text
+                const pos = textLower.indexOf(candidate);
+                bestFuzzyMatch = {
+                  brand: brandEntry,
+                  matchedText: candidate,
+                  position: pos >= 0 ? pos : 0,
+                  distance: dist,
+                };
+              }
+            }
+          }
+        }
+      }
+    }
+
+    if (bestFuzzyMatch) {
+      brandMatches.push({
+        brand: bestFuzzyMatch.brand,
+        matchedText: bestFuzzyMatch.matchedText,
+        position: bestFuzzyMatch.position,
+        confidence: 0.7, // Lower confidence for fuzzy matches
+      });
+    }
+  }
+
   // If we have brand matches, pick the best one
   // Prefer: longer match > later position (last mentioned brand is often the actual brand)
   if (brandMatches.length > 0) {
@@ -870,6 +935,14 @@ export function dictionaryMatch(text: string): DictionaryMatchResult {
       confidence: bestMatch.confidence,
       source: 'dictionary',
     };
+
+    // Track fuzzy correction if the matched text doesn't exactly match the brand name or aliases
+    if (bestMatch.confidence <= 0.7) {
+      fuzzyCorrection = {
+        original: bestMatch.matchedText,
+        corrected: bestMatch.brand.name,
+      };
+    }
 
     inferredCategory = bestMatch.brand.category;
     categoryConfidence = 0.9;
@@ -917,6 +990,7 @@ export function dictionaryMatch(text: string): DictionaryMatchResult {
 
   return {
     brand,
+    fuzzyCorrection,
     inferredCategory,
     categoryConfidence,
     extractedComponents,
