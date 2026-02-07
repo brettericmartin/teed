@@ -19,6 +19,7 @@ import EnrichmentPreview from './components/EnrichmentPreview';
 import AIAssistantHub from './components/AIAssistantHub';
 import BagAnalytics from './components/BagAnalytics';
 import CoverPhotoCropper, { type AspectRatioId } from './components/CoverPhotoCropper';
+import BagToolsMenu from '@/components/bag/BagToolsMenu';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
@@ -1555,10 +1556,9 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
 
       {/* Main Content */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Cover Photo Section */}
-        <div className="mb-6">
-          <h3 className="text-sm font-medium text-[var(--text-primary)] mb-2">Cover Photo</h3>
-          {bag.cover_photo_url ? (
+        {/* Cover Photo (display only when present) */}
+        {bag.cover_photo_url && (
+          <div className="mb-4">
             <div
               className="relative rounded-lg overflow-hidden bg-[var(--sky-2)] border border-[var(--border-subtle)]"
               style={{ aspectRatio: (bag.cover_photo_aspect || '21/9').replace('/', ' / ') }}
@@ -1569,7 +1569,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 className="w-full h-full object-cover"
               />
               <div className="absolute top-2 right-2 flex gap-2">
-                {/* Crop existing photo button */}
                 <button
                   onClick={() => handleCropExistingCover(bag.cover_photo_url!)}
                   className="p-2 bg-[var(--surface)] rounded-full shadow-md hover:bg-[var(--surface-hover)] transition-colors"
@@ -1580,7 +1579,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                     <path d="M18 22V8a2 2 0 0 0-2-2H2" />
                   </svg>
                 </button>
-                {/* Change photo button */}
                 <label
                   className="p-2 bg-[var(--surface)] rounded-full shadow-md hover:bg-[var(--surface-hover)] transition-colors cursor-pointer"
                   title="Upload new cover photo"
@@ -1593,7 +1591,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                     onChange={handleCoverPhotoSelect}
                   />
                 </label>
-                {/* Remove button */}
                 <button
                   onClick={handleRemoveCoverPhoto}
                   className="p-2 bg-[var(--surface)] rounded-full shadow-md hover:bg-[var(--surface-hover)] transition-colors"
@@ -1603,248 +1600,253 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 </button>
               </div>
             </div>
-          ) : (
-            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-[var(--border-subtle)] rounded-lg cursor-pointer hover:border-[var(--teed-green-8)] hover:bg-[var(--surface-hover)] transition-colors">
-              <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                <Image className="w-8 h-8 text-[var(--text-tertiary)] mb-2" />
-                <p className="text-sm text-[var(--text-secondary)]">
-                  <span className="font-medium text-[var(--teed-green-9)]">Click to upload</span> a cover photo
-                </p>
-                <p className="text-xs text-[var(--text-tertiary)] mt-1">PNG, JPG up to 10MB</p>
-              </div>
-              <input
-                type="file"
-                className="hidden"
-                accept="image/*"
-                onChange={handleCoverPhotoSelect}
-              />
-            </label>
-          )}
-        </div>
+          </div>
+        )}
 
-        {/* Add Item Section */}
-        <div className="mb-6 space-y-4">
-          {/* AI Assistant Hub (Curator) - Primary */}
-          <AIAssistantHub
+        {/* Bag Tools Menu */}
+        <div className="mb-6">
+          <BagToolsMenu
+            showAnalytics={isPublic}
+            hasCoverPhoto={!!bag.cover_photo_url}
             itemCount={bag.items.length}
-            itemsWithoutPhotos={bag.items.filter(item => !item.photo_url).length}
-            onAddFromPhoto={() => document.getElementById('tap-to-identify-input')?.click()}
-            onAddFromLinks={() => setShowBulkLinkImport(true)}
-            onFindPhotos={() => setShowItemSelection(true)}
-            onFillProductInfo={() => setShowEnrichmentItemSelection(true)}
-            isIdentifying={isIdentifying}
-            isFillingInfo={isFillingLinks}
-          />
+            renderQuickAdd={(onDismiss) => (
+              <>
+                {!showManualForm ? (
+                  <QuickAddItem
+                    onAdd={async (suggestion) => {
+                      const isVideoUrl = (url: string): boolean => {
+                        const videoPatterns = [
+                          /youtube\.com\/watch/,
+                          /youtu\.be\//,
+                          /youtube\.com\/shorts\//,
+                          /tiktok\.com\/@.+\/video\//,
+                          /tiktok\.com\/t\//,
+                          /vm\.tiktok\.com\//,
+                          /instagram\.com\/(?:p|reel|reels)\//,
+                        ];
+                        return videoPatterns.some(pattern => pattern.test(url));
+                      };
 
-          {/* Quick Add Single Item */}
-          {!showManualForm && (
-            <QuickAddItem
-              onAdd={async (suggestion) => {
-                // Helper to detect video URLs
-                const isVideoUrl = (url: string): boolean => {
-                  const videoPatterns = [
-                    /youtube\.com\/watch/,
-                    /youtu\.be\//,
-                    /youtube\.com\/shorts\//,
-                    /tiktok\.com\/@.+\/video\//,
-                    /tiktok\.com\/t\//,
-                    /vm\.tiktok\.com\//,
-                    /instagram\.com\/(?:p|reel|reels)\//,
-                  ];
-                  return videoPatterns.some(pattern => pattern.test(url));
-                };
-
-                // Create the item first
-                console.log('[QuickAddItem] Creating item:', {
-                  imageUrl: suggestion.imageUrl,
-                  productUrl: suggestion.productUrl,
-                  uploadedImageBase64: !!suggestion.uploadedImageBase64,
-                });
-                const response = await fetch(`/api/bags/${bag.code}/items`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    custom_name: suggestion.custom_name,
-                    custom_description: suggestion.custom_description || undefined,
-                    notes: suggestion.notes || undefined,
-                    quantity: 1,
-                    brand: suggestion.brand || undefined,
-                    // Set photo_url immediately as fallback (external URL)
-                    // If upload to storage succeeds later, custom_photo_id will override this
-                    photo_url: suggestion.imageUrl || undefined,
-                  }),
-                });
-
-                if (!response.ok) {
-                  throw new Error('Failed to add item');
-                }
-
-                const newItem = await response.json();
-                console.log('[QuickAddItem] Item created:', newItem.id);
-                let finalPhotoUrl: string | null = null;
-                let finalCustomPhotoId: string | null = null;
-
-                // Helper function to convert base64 data URL to Blob
-                const base64ToBlob = (base64DataUrl: string): Blob => {
-                  const [header, data] = base64DataUrl.split(',');
-                  const mimeMatch = header.match(/data:([^;]+);/);
-                  const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
-                  const byteString = atob(data);
-                  const arrayBuffer = new ArrayBuffer(byteString.length);
-                  const uint8Array = new Uint8Array(arrayBuffer);
-                  for (let i = 0; i < byteString.length; i++) {
-                    uint8Array[i] = byteString.charCodeAt(i);
-                  }
-                  return new Blob([uint8Array], { type: mimeType });
-                };
-
-                // Priority 1: User's uploaded photo (base64)
-                if (suggestion.uploadedImageBase64) {
-                  try {
-                    console.log('[QuickAddItem] Uploading user photo (base64)...');
-                    const blob = base64ToBlob(suggestion.uploadedImageBase64);
-                    const file = new File([blob], `${suggestion.custom_name || 'product'}-photo.jpg`, { type: blob.type });
-
-                    const formData = new FormData();
-                    formData.append('file', file);
-                    formData.append('itemId', newItem.id);
-
-                    const uploadResponse = await fetch('/api/media/upload', {
-                      method: 'POST',
-                      body: formData,
-                    });
-
-                    if (uploadResponse.ok) {
-                      const uploadResult = await uploadResponse.json();
-                      console.log('[QuickAddItem] User photo uploaded:', uploadResult);
-
-                      // Update item with the custom_photo_id
-                      await fetch(`/api/items/${newItem.id}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                          custom_photo_id: uploadResult.mediaAssetId,
-                        }),
-                      });
-
-                      finalPhotoUrl = uploadResult.url;
-                      finalCustomPhotoId = uploadResult.mediaAssetId;
-                    } else {
-                      console.error('[QuickAddItem] Failed to upload user photo:', await uploadResponse.text());
-                    }
-                  } catch (error) {
-                    console.error('[QuickAddItem] Error uploading user photo:', error);
-                  }
-                }
-                // Priority 2: If there's an imageUrl (e.g., YouTube thumbnail), upload it to storage
-                else if (suggestion.imageUrl) {
-                  try {
-                    console.log('[QuickAddItem] Uploading image from URL:', suggestion.imageUrl);
-                    const uploadResponse = await fetch('/api/media/upload-from-url', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
+                      console.log('[QuickAddItem] Creating item:', {
                         imageUrl: suggestion.imageUrl,
-                        itemId: newItem.id,
-                        filename: `${suggestion.custom_name || 'product'}-thumbnail.jpg`,
-                      }),
-                    });
-
-                    if (uploadResponse.ok) {
-                      const uploadResult = await uploadResponse.json();
-                      console.log('[QuickAddItem] Image uploaded:', uploadResult);
-
-                      // Update item with the custom_photo_id
-                      await fetch(`/api/items/${newItem.id}`, {
-                        method: 'PUT',
+                        productUrl: suggestion.productUrl,
+                        uploadedImageBase64: !!suggestion.uploadedImageBase64,
+                      });
+                      const response = await fetch(`/api/bags/${bag.code}/items`, {
+                        method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                          custom_photo_id: uploadResult.mediaAssetId,
+                          custom_name: suggestion.custom_name,
+                          custom_description: suggestion.custom_description || undefined,
+                          notes: suggestion.notes || undefined,
+                          quantity: 1,
+                          brand: suggestion.brand || undefined,
+                          photo_url: suggestion.imageUrl || undefined,
                         }),
                       });
 
-                      finalPhotoUrl = uploadResult.url;
-                      finalCustomPhotoId = uploadResult.mediaAssetId;
-                    } else {
-                      console.error('[QuickAddItem] Failed to upload image:', await uploadResponse.text());
-                    }
-                  } catch (error) {
-                    console.error('[QuickAddItem] Error uploading image:', error);
-                  }
-                }
+                      if (!response.ok) {
+                        throw new Error('Failed to add item');
+                      }
 
-                // If there's a product URL from scraping, add it as a link
-                let newLinks: any[] = [];
-                if (suggestion.productUrl) {
-                  try {
-                    // Determine the link kind based on URL type
-                    const linkKind = isVideoUrl(suggestion.productUrl) ? 'video' : 'product';
+                      const newItem = await response.json();
+                      console.log('[QuickAddItem] Item created:', newItem.id);
+                      let finalPhotoUrl: string | null = null;
+                      let finalCustomPhotoId: string | null = null;
 
-                    const linkResponse = await fetch(`/api/items/${newItem.id}/links`, {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        url: suggestion.productUrl,
-                        kind: linkKind,
-                        label: suggestion.custom_name || 'Product Link',
-                      }),
-                    });
-                    if (linkResponse.ok) {
-                      const newLink = await linkResponse.json();
-                      newLinks = [newLink];
-                    }
-                  } catch (error) {
-                    console.error('Failed to add product link:', error);
-                  }
-                }
+                      const base64ToBlob = (base64DataUrl: string): Blob => {
+                        const [header, data] = base64DataUrl.split(',');
+                        const mimeMatch = header.match(/data:([^;]+);/);
+                        const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+                        const byteString = atob(data);
+                        const arrayBuffer = new ArrayBuffer(byteString.length);
+                        const uint8Array = new Uint8Array(arrayBuffer);
+                        for (let i = 0; i < byteString.length; i++) {
+                          uint8Array[i] = byteString.charCodeAt(i);
+                        }
+                        return new Blob([uint8Array], { type: mimeType });
+                      };
 
-                // Update local state with the new item and its links
-                setBag((prev) => ({
-                  ...prev,
-                  items: [...prev.items, {
-                    ...newItem,
-                    photo_url: finalPhotoUrl,
-                    custom_photo_id: finalCustomPhotoId,
-                    links: newLinks,
-                  }],
-                }));
+                      if (suggestion.uploadedImageBase64) {
+                        try {
+                          console.log('[QuickAddItem] Uploading user photo (base64)...');
+                          const blob = base64ToBlob(suggestion.uploadedImageBase64);
+                          const file = new File([blob], `${suggestion.custom_name || 'product'}-photo.jpg`, { type: blob.type });
 
-                // Show success toast
-                toast.showSuccess(`Added "${suggestion.custom_name}" to bag`);
-              }}
-              bagTitle={bag.title}
-              onShowManualForm={() => setShowManualForm(true)}
-            />
-          )}
+                          const formData = new FormData();
+                          formData.append('file', file);
+                          formData.append('itemId', newItem.id);
 
-          {/* Analytics (only show for public bags) */}
-          {isPublic && (
-            <BagAnalytics bagId={bag.id} />
-          )}
+                          const uploadResponse = await fetch('/api/media/upload', {
+                            method: 'POST',
+                            body: formData,
+                          });
 
-          {/* Manual Form (Hidden by default) */}
-          {showManualForm && (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium text-[var(--text-primary)]">Manual Entry</h3>
-                <button
-                  onClick={() => setShowManualForm(false)}
-                  className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] inline-flex items-center gap-1"
-                >
-                  <ChevronLeft className="w-3 h-3" />
-                  Back to quick add
-                </button>
-              </div>
-              <AddItemForm
-                onSubmit={async (data) => {
-                  await handleAddItem(data);
-                  setShowManualForm(false);
+                          if (uploadResponse.ok) {
+                            const uploadResult = await uploadResponse.json();
+                            console.log('[QuickAddItem] User photo uploaded:', uploadResult);
+
+                            await fetch(`/api/items/${newItem.id}`, {
+                              method: 'PUT',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                custom_photo_id: uploadResult.mediaAssetId,
+                              }),
+                            });
+
+                            finalPhotoUrl = uploadResult.url;
+                            finalCustomPhotoId = uploadResult.mediaAssetId;
+                          } else {
+                            console.error('[QuickAddItem] Failed to upload user photo:', await uploadResponse.text());
+                          }
+                        } catch (error) {
+                          console.error('[QuickAddItem] Error uploading user photo:', error);
+                        }
+                      } else if (suggestion.imageUrl) {
+                        try {
+                          console.log('[QuickAddItem] Uploading image from URL:', suggestion.imageUrl);
+                          const uploadResponse = await fetch('/api/media/upload-from-url', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              imageUrl: suggestion.imageUrl,
+                              itemId: newItem.id,
+                              filename: `${suggestion.custom_name || 'product'}-thumbnail.jpg`,
+                            }),
+                          });
+
+                          if (uploadResponse.ok) {
+                            const uploadResult = await uploadResponse.json();
+                            console.log('[QuickAddItem] Image uploaded:', uploadResult);
+
+                            await fetch(`/api/items/${newItem.id}`, {
+                              method: 'PUT',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                custom_photo_id: uploadResult.mediaAssetId,
+                              }),
+                            });
+
+                            finalPhotoUrl = uploadResult.url;
+                            finalCustomPhotoId = uploadResult.mediaAssetId;
+                          } else {
+                            console.error('[QuickAddItem] Failed to upload image:', await uploadResponse.text());
+                          }
+                        } catch (error) {
+                          console.error('[QuickAddItem] Error uploading image:', error);
+                        }
+                      }
+
+                      let newLinks: any[] = [];
+                      if (suggestion.productUrl) {
+                        try {
+                          const linkKind = isVideoUrl(suggestion.productUrl) ? 'video' : 'product';
+
+                          const linkResponse = await fetch(`/api/items/${newItem.id}/links`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              url: suggestion.productUrl,
+                              kind: linkKind,
+                              label: suggestion.custom_name || 'Product Link',
+                            }),
+                          });
+                          if (linkResponse.ok) {
+                            const newLink = await linkResponse.json();
+                            newLinks = [newLink];
+                          }
+                        } catch (error) {
+                          console.error('Failed to add product link:', error);
+                        }
+                      }
+
+                      setBag((prev) => ({
+                        ...prev,
+                        items: [...prev.items, {
+                          ...newItem,
+                          photo_url: finalPhotoUrl,
+                          custom_photo_id: finalCustomPhotoId,
+                          links: newLinks,
+                        }],
+                      }));
+
+                      toast.showSuccess(`Added "${suggestion.custom_name}" to bag`);
+                    }}
+                    bagTitle={bag.title}
+                    onShowManualForm={() => setShowManualForm(true)}
+                  />
+                ) : (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-medium text-[var(--text-primary)]">Manual Entry</h3>
+                      <button
+                        onClick={() => setShowManualForm(false)}
+                        className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] inline-flex items-center gap-1"
+                      >
+                        <ChevronLeft className="w-3 h-3" />
+                        Back to quick add
+                      </button>
+                    </div>
+                    <AddItemForm
+                      onSubmit={async (data) => {
+                        await handleAddItem(data);
+                        setShowManualForm(false);
+                      }}
+                      onCancel={() => setShowManualForm(false)}
+                      bagTitle={bag.title}
+                    />
+                  </div>
+                )}
+              </>
+            )}
+            renderCurator={(onDismiss) => (
+              <AIAssistantHub
+                itemCount={bag.items.length}
+                itemsWithoutPhotos={bag.items.filter(item => !item.photo_url).length}
+                onAddFromPhoto={() => {
+                  onDismiss();
+                  document.getElementById('tap-to-identify-input')?.click();
                 }}
-                onCancel={() => setShowManualForm(false)}
-                bagTitle={bag.title}
+                onAddFromLinks={() => {
+                  onDismiss();
+                  setShowBulkLinkImport(true);
+                }}
+                onFindPhotos={() => {
+                  onDismiss();
+                  setShowItemSelection(true);
+                }}
+                onFillProductInfo={() => {
+                  onDismiss();
+                  setShowEnrichmentItemSelection(true);
+                }}
+                isIdentifying={isIdentifying}
+                isFillingInfo={isFillingLinks}
               />
-            </div>
-          )}
+            )}
+            renderCoverPhoto={(onDismiss) => (
+              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-[var(--border-subtle)] rounded-lg cursor-pointer hover:border-[var(--teed-green-8)] hover:bg-[var(--surface-hover)] transition-colors">
+                <div className="flex flex-col items-center justify-center py-6">
+                  <Image className="w-8 h-8 text-[var(--text-tertiary)] mb-2" />
+                  <p className="text-sm text-[var(--text-secondary)]">
+                    <span className="font-medium text-[var(--teed-green-9)]">Click to upload</span> a cover photo
+                  </p>
+                  <p className="text-xs text-[var(--text-tertiary)] mt-1">PNG, JPG up to 10MB</p>
+                </div>
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={(e) => {
+                    onDismiss();
+                    handleCoverPhotoSelect(e);
+                  }}
+                />
+              </label>
+            )}
+            renderAnalytics={(onDismiss) => (
+              <BagAnalytics bagId={bag.id} />
+            )}
+          />
         </div>
 
         {/* Items List */}

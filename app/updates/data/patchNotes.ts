@@ -43,11 +43,30 @@ export const CATEGORY_META: Record<CategoryType, {
 
 export const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.5.0',
+    releaseDate: '2026-02-07',
+    title: 'Bag Tools Menu & Better Mobile Editor',
+    summary: 'Compressed the bag editor top section into a compact tools menu, reclaiming 500-800px of vertical space on mobile. Plus smarter link finding, fuzzy search, and iOS fixes.',
+    isLatest: true,
+    changes: [
+      { text: 'Bag Tools menu — all editor tools (Quick Add, Curator AI, Cover Photo, Analytics) collapsed into a centered pill that opens as bottom sheets', category: 'feature' },
+      { text: 'Smart Link Finder — brand-site search with multi-result UI and per-item enrichment', category: 'feature' },
+      { text: 'Fuzzy matching and color synonyms for smarter product search', category: 'feature' },
+      { text: 'Explicit search UX — search triggers on button tap or Enter instead of auto-debounce', category: 'improvement' },
+      { text: 'Cover photo only displays inline when set; empty state moved to tools menu', category: 'improvement' },
+      { text: 'Curator AI actions (Tap to Identify, Bulk Import) properly layer over the tools bottom sheet', category: 'improvement' },
+      { text: 'Fixed iOS Safari auto-zoom on input fields in link paste modals', category: 'bugfix' },
+      { text: 'Fixed redirect after adding links via UniversalLinkAdder', category: 'bugfix' },
+      { text: 'Fixed critical bug with bag creation using wrong column name', category: 'bugfix' },
+      { text: 'Improved mobile responsiveness for add links modals', category: 'bugfix' },
+    ]
+  },
+  {
     version: '2.3.0',
     releaseDate: '2026-02-05',
     title: 'UX Polish & Smarter Identification',
     summary: 'Faster, smoother experience with optimistic UI, streamlined signup, smart text parsing for bulk imports, and mobile-friendly bottom sheets.',
-    isLatest: true,
+    isLatest: false,
     changes: [
       { text: 'Optimistic UI for adding items - items appear instantly while saving in the background', category: 'feature' },
       { text: '2-step signup flow - simpler onboarding with email/password first, then profile details', category: 'feature' },
