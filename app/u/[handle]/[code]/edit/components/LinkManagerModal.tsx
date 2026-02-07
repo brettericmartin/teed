@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { X } from 'lucide-react';
+import { X, Bot, Loader2, Plus, ExternalLink } from 'lucide-react';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
 
 interface Link {
@@ -10,6 +10,15 @@ interface Link {
   kind: string;
   metadata: any;
   created_at: string;
+}
+
+interface FoundLink {
+  url: string;
+  source: string;
+  reason: string;
+  label: string;
+  priority: number;
+  affiliatable: boolean;
 }
 
 interface LinkManagerModalProps {
@@ -38,6 +47,10 @@ export default function LinkManagerModal({
   const [editingLinkId, setEditingLinkId] = useState<string | null>(null);
   const [editUrl, setEditUrl] = useState('');
   const [editKind, setEditKind] = useState('');
+  const [isFindingLink, setIsFindingLink] = useState(false);
+  const [findLinkMessage, setFindLinkMessage] = useState('');
+  const [foundLinks, setFoundLinks] = useState<FoundLink[]>([]);
+  const [addingFoundUrl, setAddingFoundUrl] = useState<string | null>(null);
   const urlInputRef = useRef<HTMLInputElement>(null);
   const confirm = useConfirm();
 
@@ -120,6 +133,79 @@ export default function LinkManagerModal({
       setError(err.message || 'Failed to add link');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleFindLink = async () => {
+    setError('');
+    setFindLinkMessage('');
+    setFoundLinks([]);
+    setIsFindingLink(true);
+
+    try {
+      const findResponse = await fetch(`/api/items/${itemId}/find-link`, {
+        method: 'POST',
+      });
+
+      if (!findResponse.ok) {
+        throw new Error('Failed to find product link');
+      }
+
+      const result = await findResponse.json();
+      const recommendations: FoundLink[] = result.recommendations || [];
+
+      if (recommendations.length === 0) {
+        setFindLinkMessage('No product links found');
+        return;
+      }
+
+      // Filter out URLs that are already linked
+      const existingUrls = new Set(links.map(l => l.url.toLowerCase()));
+      const newRecommendations = recommendations.filter(
+        r => !existingUrls.has(r.url.toLowerCase())
+      );
+
+      if (newRecommendations.length === 0) {
+        setFindLinkMessage('Links found, but they\'re already added');
+        return;
+      }
+
+      setFoundLinks(newRecommendations);
+      setFindLinkMessage(`Found ${newRecommendations.length} link${newRecommendations.length === 1 ? '' : 's'}`);
+    } catch (err: any) {
+      setError(err.message || 'Failed to find product link');
+    } finally {
+      setIsFindingLink(false);
+    }
+  };
+
+  const handleAddFoundLink = async (foundLink: FoundLink) => {
+    setError('');
+    setAddingFoundUrl(foundLink.url);
+
+    try {
+      const addResponse = await fetch(`/api/items/${itemId}/links`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          url: foundLink.url,
+          kind: 'product',
+        }),
+      });
+
+      if (!addResponse.ok) {
+        throw new Error('Failed to save link');
+      }
+
+      const newLink = await addResponse.json();
+      onLinksChange([...links, newLink]);
+
+      // Remove from found links list
+      setFoundLinks(prev => prev.filter(l => l.url !== foundLink.url));
+    } catch (err: any) {
+      setError(err.message || 'Failed to save link');
+    } finally {
+      setAddingFoundUrl(null);
     }
   };
 
@@ -351,7 +437,61 @@ export default function LinkManagerModal({
 
           {/* Add Link Form - Always visible */}
           <div className="border-t border-gray-200 pt-6 space-y-4">
-            <h3 className="font-medium text-gray-900">Add New Link</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="font-medium text-gray-900">Add New Link</h3>
+              <button
+                onClick={handleFindLink}
+                disabled={isFindingLink || isSubmitting}
+                title="Find link with AI"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-[var(--teed-green-3)] text-[var(--teed-green-11)] hover:bg-[var(--teed-green-4)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {isFindingLink ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Bot className="w-4 h-4" />
+                )}
+                {isFindingLink ? 'Searching...' : 'Find Link'}
+              </button>
+            </div>
+            {findLinkMessage && foundLinks.length === 0 && (
+              <div className="bg-[var(--teed-green-2)] border border-[var(--teed-green-6)] rounded-lg p-3">
+                <p className="text-sm text-[var(--teed-green-11)]">{findLinkMessage}</p>
+              </div>
+            )}
+            {foundLinks.length > 0 && (
+              <div className="bg-[var(--teed-green-2)] border border-[var(--teed-green-6)] rounded-lg p-3 space-y-2">
+                <p className="text-xs font-medium text-[var(--teed-green-11)]">{findLinkMessage}</p>
+                {foundLinks.map((fl) => {
+                  const domain = (() => { try { return new URL(fl.url).hostname.replace(/^www\./, ''); } catch { return fl.url; } })();
+                  const isAdding = addingFoundUrl === fl.url;
+                  return (
+                    <div key={fl.url} className="flex items-center gap-2 bg-white rounded-md p-2 border border-[var(--teed-green-4)]">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">{fl.label}</p>
+                        <p className="text-xs text-gray-500 truncate">{domain}</p>
+                      </div>
+                      <a
+                        href={fl.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-gray-600 shrink-0"
+                        title="Preview link"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                      <button
+                        onClick={() => handleAddFoundLink(fl)}
+                        disabled={isAdding || isSubmitting}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-md bg-[var(--button-create-bg)] text-white hover:bg-[var(--button-create-bg-hover)] disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+                      >
+                        {isAdding ? <Loader2 className="w-3 h-3 animate-spin" /> : <Plus className="w-3 h-3" />}
+                        Add
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 URL

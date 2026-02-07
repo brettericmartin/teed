@@ -110,6 +110,7 @@ export default function EnrichmentPreview({
   };
 
   const selectedCount = selectedItems.size;
+  const isSingleItem = suggestions.length === 1;
   const fieldKey = (field: string) => `${currentSuggestion.itemId}-${field}`;
 
   return (
@@ -128,9 +129,11 @@ export default function EnrichmentPreview({
                 <Sparkles className="w-5 h-5 text-[var(--sky-11)]" />
                 <span className="truncate">AI Suggestions</span>
               </h2>
-              <p className="text-sm text-gray-500 mt-0.5">
-                Item {currentIndex + 1} of {suggestions.length}
-              </p>
+              {!isSingleItem && (
+                <p className="text-sm text-gray-500 mt-0.5">
+                  Item {currentIndex + 1} of {suggestions.length}
+                </p>
+              )}
             </div>
             <button
               onClick={onCancel}
@@ -142,56 +145,60 @@ export default function EnrichmentPreview({
           </div>
 
           {/* Progress bar */}
-          <div className="mt-3 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-[var(--sky-5)] transition-all duration-300"
-              style={{ width: `${((currentIndex + 1) / suggestions.length) * 100}%` }}
-            />
+          {!isSingleItem && (
+            <div className="mt-3 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-[var(--sky-5)] transition-all duration-300"
+                style={{ width: `${((currentIndex + 1) / suggestions.length) * 100}%` }}
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Navigation arrows - inside header on mobile (hidden for single item) */}
+        {!isSingleItem && (
+          <div className="flex-shrink-0 flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-100">
+            <button
+              onClick={handlePrev}
+              disabled={currentIndex === 0}
+              className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed rounded-lg hover:bg-gray-100 active:bg-gray-200"
+            >
+              <ChevronLeft className="w-5 h-5" />
+              <span className="hidden sm:inline">Previous</span>
+            </button>
+
+            {/* Item toggle in center */}
+            <button
+              onClick={() => toggleItem(currentSuggestion.itemId)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                isSelected
+                  ? 'bg-green-100 text-green-700'
+                  : 'bg-gray-200 text-gray-600'
+              }`}
+            >
+              {isSelected ? (
+                <>
+                  <Check className="w-4 h-4" />
+                  <span>Selected</span>
+                </>
+              ) : (
+                <>
+                  <X className="w-4 h-4" />
+                  <span>Skipped</span>
+                </>
+              )}
+            </button>
+
+            <button
+              onClick={handleNext}
+              disabled={currentIndex === suggestions.length - 1}
+              className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed rounded-lg hover:bg-gray-100 active:bg-gray-200"
+            >
+              <span className="hidden sm:inline">Next</span>
+              <ChevronRight className="w-5 h-5" />
+            </button>
           </div>
-        </div>
-
-        {/* Navigation arrows - inside header on mobile */}
-        <div className="flex-shrink-0 flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-100">
-          <button
-            onClick={handlePrev}
-            disabled={currentIndex === 0}
-            className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed rounded-lg hover:bg-gray-100 active:bg-gray-200"
-          >
-            <ChevronLeft className="w-5 h-5" />
-            <span className="hidden sm:inline">Previous</span>
-          </button>
-
-          {/* Item toggle in center */}
-          <button
-            onClick={() => toggleItem(currentSuggestion.itemId)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-              isSelected
-                ? 'bg-green-100 text-green-700'
-                : 'bg-gray-200 text-gray-600'
-            }`}
-          >
-            {isSelected ? (
-              <>
-                <Check className="w-4 h-4" />
-                <span>Selected</span>
-              </>
-            ) : (
-              <>
-                <X className="w-4 h-4" />
-                <span>Skipped</span>
-              </>
-            )}
-          </button>
-
-          <button
-            onClick={handleNext}
-            disabled={currentIndex === suggestions.length - 1}
-            className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed rounded-lg hover:bg-gray-100 active:bg-gray-200"
-          >
-            <span className="hidden sm:inline">Next</span>
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
+        )}
 
         {/* Content - scrollable */}
         <div className="flex-1 overflow-y-auto overscroll-contain">
@@ -294,7 +301,7 @@ export default function EnrichmentPreview({
               ) : (
                 <>
                   <Sparkles className="w-5 h-5" />
-                  Apply {selectedCount} {selectedCount === 1 ? 'Change' : 'Changes'}
+                  {isSingleItem ? 'Apply Changes' : `Apply ${selectedCount} ${selectedCount === 1 ? 'Change' : 'Changes'}`}
                 </>
               )}
             </button>

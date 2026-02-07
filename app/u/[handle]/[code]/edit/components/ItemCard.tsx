@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ChevronDown, Edit2, Trash2, X, Check, Link as LinkIcon, Copy, CheckCheck, Star, Trophy, Sparkles, Loader2, FolderInput } from 'lucide-react';
+import { ChevronDown, Edit2, Trash2, X, Check, Link as LinkIcon, Copy, CheckCheck, Star, Trophy, Sparkles, Loader2, FolderInput, Bot } from 'lucide-react';
 import LinkManagerModal from './LinkManagerModal';
 import MoveToBagModal from './MoveToBagModal';
 import ItemPhotoUpload from './ItemPhotoUpload';
@@ -60,9 +60,11 @@ type ItemCardProps = {
   isHero?: boolean;
   onToggleHero?: (itemId: string) => void;
   onItemMoved?: (itemId: string, targetBagTitle: string) => void;
+  onEnrichItem?: (itemId: string) => void;
+  isEnrichingItem?: boolean;
 };
 
-export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = false, onToggleHero, onItemMoved }: ItemCardProps) {
+export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = false, onToggleHero, onItemMoved, onEnrichItem, isEnrichingItem }: ItemCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isMoveModalOpen, setIsMoveModalOpen] = useState(false);
@@ -534,6 +536,27 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
               <span className="text-sm font-medium">Delete</span>
             </button>
           </div>
+
+          {/* Enhance Details Button */}
+          {onEnrichItem && (
+            <button
+              onClick={() => onEnrichItem(item.id)}
+              disabled={isEnrichingItem}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium bg-[var(--sky-3)] hover:bg-[var(--sky-4)] text-[var(--sky-11)] border border-[var(--sky-6)] rounded-lg transition-colors disabled:opacity-50"
+            >
+              {isEnrichingItem ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Enhancing...
+                </>
+              ) : (
+                <>
+                  <Bot className="w-4 h-4" />
+                  Enhance Details
+                </>
+              )}
+            </button>
+          )}
 
           {/* Photo Upload/Display */}
           <div>

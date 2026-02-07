@@ -213,6 +213,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [showCoverCropper, setShowCoverCropper] = useState(false);
   const [coverImageToCrop, setCoverImageToCrop] = useState<string | null>(null);
   const [showEnrichmentItemSelection, setShowEnrichmentItemSelection] = useState(false);
+  const [enrichingItemId, setEnrichingItemId] = useState<string | null>(null);
   const [isGeneratingDescription, setIsGeneratingDescription] = useState(false);
 
   const handleGenerateDescription = async () => {
@@ -1204,6 +1205,16 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     }
   };
 
+  // Enrich a single item — triggers preview-enrichment for just that item
+  const handleEnrichSingleItem = async (itemId: string) => {
+    setEnrichingItemId(itemId);
+    try {
+      await handleFillLinks([itemId]);
+    } finally {
+      setEnrichingItemId(null);
+    }
+  };
+
   // Apply approved enrichments
   const handleApproveEnrichments = async (approvedItemIds: string[], editedValues: Record<string, any>) => {
     try {
@@ -1847,6 +1858,8 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             heroItemId={bag.hero_item_id}
             onToggleHero={handleToggleHero}
             onItemMoved={handleItemMoved}
+            onEnrichItem={handleEnrichSingleItem}
+            enrichingItemId={enrichingItemId}
           />
         ) : (
           <motion.div
