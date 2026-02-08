@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
+import { CATEGORIES } from '@/lib/categories';
 
 /**
  * GET /api/bags/[code]
@@ -259,20 +260,8 @@ export async function PUT(
     }
 
     if (body.category !== undefined) {
-      // Validate category is one of the allowed values
-      const allowedCategories = [
-        'golf',
-        'travel',
-        'tech',
-        'camping',
-        'photography',
-        'fitness',
-        'cooking',
-        'music',
-        'art',
-        'gaming',
-        'other',
-      ];
+      // Validate category against shared CATEGORIES list
+      const allowedCategories = CATEGORIES.map(c => c.value);
       if (body.category && !allowedCategories.includes(body.category)) {
         return NextResponse.json(
           { error: 'Invalid category value' },
@@ -280,22 +269,6 @@ export async function PUT(
         );
       }
       updates.category = body.category?.trim() || null;
-    }
-
-    if (body.tags !== undefined) {
-      // Validate tags is an array of strings
-      if (!Array.isArray(body.tags)) {
-        return NextResponse.json(
-          { error: 'Tags must be an array' },
-          { status: 400 }
-        );
-      }
-      // Clean and validate tag strings
-      const cleanedTags = body.tags
-        .filter((tag: any) => typeof tag === 'string' && tag.trim().length > 0)
-        .map((tag: string) => tag.trim().toLowerCase());
-      // Pass the array directly - Supabase will serialize it as JSONB
-      updates.tags = cleanedTags;
     }
 
     // Handle hero_item_id (the designated hero item for this bag)

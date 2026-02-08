@@ -89,16 +89,6 @@ async function dataUrlToBlob(dataUrl: string): Promise<Blob> {
   return new Blob([bytes], { type: mimeType });
 }
 
-// Predefined categorical tags (matches discovery filter and AI generation)
-const CATEGORICAL_TAGS = [
-  'golf', 'travel', 'tech', 'edc', 'camping', 'photography', 'fitness',
-  'gaming', 'music', 'outdoor', 'work', 'fashion', 'cooking', 'fishing',
-  'hiking', 'cycling', 'running', 'yoga', 'skiing', 'snowboarding',
-  'surfing', 'diving', 'hunting', 'woodworking', 'art', 'crafts',
-  'streaming', 'podcasting', 'video', 'audio', 'productivity', 'minimal',
-  'luxury', 'budget', 'vintage', 'everyday', 'weekend', 'professional',
-  'beginner', 'enthusiast', 'creator', 'athlete', 'commuter', 'home-office'
-];
 
 type Link = {
   id: string;
@@ -162,7 +152,6 @@ type Bag = {
   completed_at: string | null;
   background_image: string | null;
   category: string | null;
-  tags: string[];
   hero_item_id: string | null;
   cover_photo_id: string | null;
   cover_photo_url: string | null;
@@ -188,7 +177,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [description, setDescription] = useState(bag.description || '');
   const [isPublic, setIsPublic] = useState(bag.is_public);
   const [category, setCategory] = useState(bag.category || '');
-  const [tags, setTags] = useState<string[]>(bag.tags || []);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [showManualForm, setShowManualForm] = useState(false);
@@ -252,8 +240,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       title !== bag.title ||
       description !== (bag.description || '') ||
       isPublic !== bag.is_public ||
-      category !== (bag.category || '') ||
-      JSON.stringify(tags) !== JSON.stringify(bag.tags || []);
+      category !== (bag.category || '');
 
     if (!hasChanges) return;
 
@@ -262,7 +249,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     }, 500); // 500ms debounce
 
     return () => clearTimeout(timeoutId);
-  }, [title, description, isPublic, category, tags]);
+  }, [title, description, isPublic, category]);
 
   const saveBagMetadata = async () => {
     setIsSaving(true);
@@ -276,7 +263,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           description: description || null,
           is_public: isPublic,
           category: category || null,
-          tags: tags,
         }),
       });
 
@@ -291,19 +277,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       setIsSaving(false);
     }
   };
-
-  const handleAddTag = (tag: string) => {
-    if (tag && !tags.includes(tag) && tags.length < 5) {
-      setTags([...tags, tag]);
-    }
-  };
-
-  const handleRemoveTag = (tagToRemove: string) => {
-    setTags(tags.filter(tag => tag !== tagToRemove));
-  };
-
-  // Get available tags (not already selected)
-  const availableTags = CATEGORICAL_TAGS.filter(tag => !tags.includes(tag));
 
   const handleAddItem = async (itemData: {
     custom_name: string;
@@ -1253,10 +1226,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       if (bagResponse.ok) {
         const updatedBag = await bagResponse.json();
         setBag(updatedBag);
-        // Update local tags state if tags were generated
-        if (updatedBag.tags) {
-          setTags(updatedBag.tags);
-        }
       }
 
       // Close modal
@@ -1271,10 +1240,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       if (result.linksAdded > 0) {
         messages.push(`🔗 Added ${result.linksAdded} link${result.linksAdded > 1 ? 's' : ''}`);
       }
-      if (result.tagsGenerated && result.tagsGenerated.length > 0) {
-        messages.push(`🏷️ Added tags: ${result.tagsGenerated.join(', ')}`);
-      }
-
       if (messages.length > 0) {
         toast.showAI(`${messages.join(' • ')} — Bag updated!`);
       }
@@ -1507,49 +1472,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
               </select>
             </div>
 
-            {/* Tags Input */}
-            <div className="flex-1 min-w-[200px]">
-              <div className="flex items-center gap-2 mb-1">
-                <label className="text-xs font-medium text-[var(--text-secondary)]">Tags:</label>
-                <select
-                  value=""
-                  onChange={(e) => {
-                    if (e.target.value) {
-                      handleAddTag(e.target.value);
-                    }
-                  }}
-                  disabled={tags.length >= 5}
-                  className="flex-1 text-xs bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] rounded px-2 py-1 focus:outline-none focus:border-[var(--teed-green-8)] transition-colors disabled:opacity-50"
-                >
-                  <option value="">{tags.length >= 5 ? 'Max 5 tags' : 'Select a tag...'}</option>
-                  {availableTags.map((tag) => (
-                    <option key={tag} value={tag}>
-                      {tag}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              {/* Tag Display */}
-              {tags.length > 0 && (
-                <div className="flex flex-wrap gap-1">
-                  {tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex items-center gap-1 px-2 py-0.5 bg-[var(--sky-2)] text-[var(--sky-11)] rounded text-xs"
-                    >
-                      #{tag}
-                      <button
-                        onClick={() => handleRemoveTag(tag)}
-                        className="hover:text-[var(--sky-12)] transition-colors"
-                        type="button"
-                      >
-                        ×
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
           </div>
         </div>
       </header>
