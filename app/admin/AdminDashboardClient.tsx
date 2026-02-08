@@ -78,8 +78,8 @@ export default function AdminDashboardClient({
     },
     {
       href: '/admin/beta',
-      title: 'Beta Applications',
-      description: 'Review and approve founding member applications',
+      title: 'Beta Manager',
+      description: 'Applications, controls, and survey insights',
       icon: <UserPlus className="w-6 h-6 text-[var(--teed-green-11)]" />,
       gradient: 'from-[var(--teed-green-4)] to-[var(--teed-green-6)]',
       borderHover: 'hover:border-[var(--teed-green-6)]',

@@ -22,6 +22,8 @@ import type { AdminUser } from '@/lib/types/admin';
 import ApplicationRow from './components/ApplicationRow';
 import BatchApproveModal from './components/BatchApproveModal';
 import CapacityModal from './components/CapacityModal';
+import BetaControlsTab from './components/BetaControlsTab';
+import SurveyNotesTab from './components/SurveyNotesTab';
 
 interface BetaDashboardClientProps {
   admin: AdminUser;
@@ -73,6 +75,7 @@ interface Counts {
 
 type StatusFilter = 'all' | 'pending' | 'approved' | 'rejected' | 'waitlisted';
 type SortOption = 'priority' | 'newest' | 'oldest' | 'referrals' | 'odds';
+type TopTab = 'applications' | 'controls' | 'survey';
 
 export default function BetaDashboardClient({ admin }: BetaDashboardClientProps) {
   const [applications, setApplications] = useState<Application[]>([]);
@@ -85,6 +88,9 @@ export default function BetaDashboardClient({ admin }: BetaDashboardClientProps)
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('pending');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('priority');
+
+  // Top tabs
+  const [activeTab, setActiveTab] = useState<TopTab>('applications');
 
   // Modals
   const [showBatchModal, setShowBatchModal] = useState(false);
@@ -232,7 +238,7 @@ export default function BetaDashboardClient({ admin }: BetaDashboardClientProps)
             </div>
 
             <div className="flex items-center gap-3">
-              {/* Capacity indicator */}
+              {/* Capacity indicator — always visible */}
               {capacity && (
                 <div className="flex items-center gap-2 px-3 py-2 bg-[var(--sand-2)] rounded-lg">
                   <div className="text-right">
@@ -256,43 +262,73 @@ export default function BetaDashboardClient({ admin }: BetaDashboardClientProps)
                 </div>
               )}
 
-              {/* Actions */}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => fetchApplications(true)}
-                disabled={refreshing}
-              >
-                <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
-              </Button>
+              {/* Actions — only on Applications tab */}
+              {activeTab === 'applications' && (
+                <>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => fetchApplications(true)}
+                    disabled={refreshing}
+                  >
+                    <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+                  </Button>
 
-              {admin.role === 'super_admin' && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowCapacityModal(true)}
-                >
-                  <Settings className="w-4 h-4 mr-1" />
-                  Capacity
-                </Button>
+                  {admin.role === 'super_admin' && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowCapacityModal(true)}
+                    >
+                      <Settings className="w-4 h-4 mr-1" />
+                      Capacity
+                    </Button>
+                  )}
+
+                  <Button
+                    variant="create"
+                    size="sm"
+                    onClick={() => setShowBatchModal(true)}
+                    disabled={!capacity || capacity.available === 0}
+                  >
+                    <Zap className="w-4 h-4 mr-1" />
+                    Batch Approve
+                  </Button>
+                </>
               )}
-
-              <Button
-                variant="create"
-                size="sm"
-                onClick={() => setShowBatchModal(true)}
-                disabled={!capacity || capacity.available === 0}
-              >
-                <Zap className="w-4 h-4 mr-1" />
-                Batch Approve
-              </Button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Filters Bar */}
+      {/* Top Tabs */}
       <div className="sticky top-[73px] z-10 bg-white dark:bg-zinc-900 border-b border-[var(--border-subtle)]">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center gap-1 py-2">
+            {([
+              { key: 'applications' as TopTab, label: 'Applications', icon: <Users className="w-4 h-4" /> },
+              { key: 'controls' as TopTab, label: 'Controls', icon: <Settings className="w-4 h-4" /> },
+              { key: 'survey' as TopTab, label: 'Survey', icon: <Sparkles className="w-4 h-4" /> },
+            ]).map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  activeTab === tab.key
+                    ? 'bg-[var(--teed-green-9)] text-white'
+                    : 'text-[var(--text-secondary)] hover:bg-[var(--sand-3)] hover:text-[var(--text-primary)]'
+                }`}
+              >
+                {tab.icon}
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Filters Bar — Applications tab only */}
+      {activeTab === 'applications' && <div className="sticky top-[121px] z-10 bg-white dark:bg-zinc-900 border-b border-[var(--border-subtle)]">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center gap-4">
             {/* Search */}
@@ -342,37 +378,49 @@ export default function BetaDashboardClient({ admin }: BetaDashboardClientProps)
             </select>
           </div>
         </div>
-      </div>
+      </div>}
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-6">
-        {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <RefreshCw className="w-8 h-8 animate-spin text-[var(--text-tertiary)]" />
-          </div>
-        ) : applications.length === 0 ? (
-          <div className="text-center py-20">
-            <Users className="w-12 h-12 mx-auto text-[var(--text-tertiary)] mb-4" />
-            <h3 className="text-lg font-medium text-[var(--text-primary)]">
-              No applications found
-            </h3>
-            <p className="text-sm text-[var(--text-secondary)]">
-              {searchQuery
-                ? `No results for "${searchQuery}"`
-                : `No ${statusFilter === 'all' ? '' : statusFilter} applications`}
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {applications.map((app) => (
-              <ApplicationRow
-                key={app.id}
-                application={app}
-                onApprove={handleApprove}
-                onReject={handleReject}
-              />
-            ))}
-          </div>
+        {activeTab === 'applications' && (
+          <>
+            {loading ? (
+              <div className="flex items-center justify-center py-20">
+                <RefreshCw className="w-8 h-8 animate-spin text-[var(--text-tertiary)]" />
+              </div>
+            ) : applications.length === 0 ? (
+              <div className="text-center py-20">
+                <Users className="w-12 h-12 mx-auto text-[var(--text-tertiary)] mb-4" />
+                <h3 className="text-lg font-medium text-[var(--text-primary)]">
+                  No applications found
+                </h3>
+                <p className="text-sm text-[var(--text-secondary)]">
+                  {searchQuery
+                    ? `No results for "${searchQuery}"`
+                    : `No ${statusFilter === 'all' ? '' : statusFilter} applications`}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {applications.map((app) => (
+                  <ApplicationRow
+                    key={app.id}
+                    application={app}
+                    onApprove={handleApprove}
+                    onReject={handleReject}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
+        {activeTab === 'controls' && (
+          <BetaControlsTab admin={admin} />
+        )}
+
+        {activeTab === 'survey' && (
+          <SurveyNotesTab />
         )}
       </main>
 
