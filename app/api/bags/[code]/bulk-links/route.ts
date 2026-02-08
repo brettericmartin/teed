@@ -133,6 +133,12 @@ function parseUrls(input: string[]): string[] {
 
 async function resolveRedirects(url: string): Promise<string> {
   try {
+    // Skip redirect resolution for retailers that block HEAD requests with bot detection
+    const hostname = new URL(url).hostname.replace(/^www\./, '');
+    if (hostname.includes('walmart')) {
+      return url;
+    }
+
     // Follow redirects to get final URL with a 3s timeout
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 3000);
@@ -147,7 +153,16 @@ async function resolveRedirects(url: string): Promise<string> {
     });
 
     clearTimeout(timeoutId);
-    return response.url || url;
+
+    const resolvedUrl = response.url || url;
+
+    // If the resolved URL looks like a bot redirect, use the original
+    const resolvedPath = new URL(resolvedUrl).pathname.toLowerCase();
+    if (/\/(blocked|captcha|challenge|verify|security|robot)/.test(resolvedPath)) {
+      return url;
+    }
+
+    return resolvedUrl;
   } catch {
     return url;
   }
