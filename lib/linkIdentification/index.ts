@@ -157,6 +157,71 @@ export async function identifyProduct(
     }
   }
 
+  // ========================================
+  // STAGE 1.5: Walmart Fast Path (skip fetching — bot walls)
+  // ========================================
+  // Walmart blocks all scraping attempts. Their URL slugs are descriptive
+  // enough to identify products without fetching the page.
+  const isWalmart = parsedUrl.domain.includes('walmart');
+  if (isWalmart && parsedUrl.humanizedName) {
+    sources.push('walmart_fast_path');
+
+    // Use quick AI polish if available
+    if (!skipAI) {
+      const quickResult = await quickAIAnalysis(url, parsedUrl);
+      if (quickResult && quickResult.confidence >= 0.7) {
+        sources.push('ai_quick');
+
+        // Try Google Images for a product photo
+        const searchQuery = buildProductSearchQuery(
+          quickResult.brand || parsedUrl.brand || '',
+          quickResult.productName
+        );
+        const googleImages = await searchGoogleImages(searchQuery, 3);
+        const imageUrl = googleImages.length > 0 ? googleImages[0] : null;
+
+        return buildResult({
+          brand: quickResult.brand,
+          productName: quickResult.productName,
+          fullName: quickResult.fullName,
+          category: quickResult.category,
+          specifications: quickResult.specifications,
+          imageUrl,
+          confidence: quickResult.confidence,
+          primarySource: 'ai_quick',
+          sources,
+          parsedUrl,
+          fetchResult: null,
+          startTime,
+        });
+      }
+    }
+
+    // Fall back to URL parsing + Google Images
+    const brand = parsedUrl.brand;
+    const productName = parsedUrl.humanizedName;
+    const fullName = brand ? `${brand} ${productName}` : productName;
+
+    const searchQuery = buildProductSearchQuery(brand || '', productName);
+    const googleImages = await searchGoogleImages(searchQuery, 3);
+    const imageUrl = googleImages.length > 0 ? googleImages[0] : null;
+
+    return buildResult({
+      brand,
+      productName,
+      fullName,
+      category: parsedUrl.category,
+      specifications: [],
+      imageUrl,
+      confidence: Math.max(parsedUrl.urlConfidence, 0.75), // Walmart slugs are reliable
+      primarySource: 'url_parsing',
+      sources,
+      parsedUrl,
+      fetchResult: null,
+      startTime,
+    });
+  }
+
   // If URL-only mode, return what we have
   if (urlOnly) {
     return buildResult({
