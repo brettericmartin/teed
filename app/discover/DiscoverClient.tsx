@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Compass, Package, Search, Filter, X, Heart, Eye, ChevronDown, User, TrendingUp, Bookmark, Zap } from 'lucide-react';
+import { Compass, Package, Search, Filter, X, Heart, ChevronDown, User, Bookmark, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { BetaCapacityBadge } from '@/components/BetaCapacityCounter';
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -69,11 +69,24 @@ type DiscoverClientProps = {
 };
 
 const SORT_OPTIONS = [
-  { value: 'newest', label: 'Newest First', icon: '🆕' },
-  { value: 'oldest', label: 'Oldest First', icon: '📅' },
+  { value: 'hot', label: 'Hot', icon: '🔥' },
+  { value: 'newest', label: 'Newest', icon: '🆕' },
   { value: 'most_items', label: 'Most Items', icon: '📦' },
-  { value: 'popular', label: 'Most Active', icon: '🔥' },
 ];
+
+// Hot ranking: combines recency of activity + item count
+const getHotScore = (bag: Bag) => {
+  const updatedAt = new Date(bag.updated_at || bag.created_at);
+  const hoursAgo = (Date.now() - updatedAt.getTime()) / (1000 * 60 * 60);
+  const itemCount = bag.items?.length || 0;
+
+  // Time decay: recent activity scores higher, decays over days
+  const recencyScore = 1 / (1 + hoursAgo / 24);
+  // Item bonus: more items = higher score (log scale so diminishing returns)
+  const itemBonus = Math.log2(Math.max(itemCount, 1) + 1);
+
+  return recencyScore * itemBonus;
+};
 
 // Use getCategoryColors from shared lib/categories.ts
 const getCategoryColor = (categoryValue: string) => getCategoryColors(categoryValue);
@@ -115,7 +128,9 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
-  const [bags, setBags] = useState<Bag[]>(initialBags);
+  const [bags, setBags] = useState<Bag[]>(() =>
+    [...initialBags].sort((a, b) => getHotScore(b) - getHotScore(a))
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -126,7 +141,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
   const [selectedTags, setSelectedTags] = useState<string[]>(searchParams.get('tags')?.split(',').filter(Boolean) || []);
-  const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'newest');
+  const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'hot');
   const [showSortMenu, setShowSortMenu] = useState(false);
 
   // Autocomplete states
@@ -137,13 +152,9 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   // Popular tags state
   const [popularTags, setPopularTags] = useState<Array<{ tag: string; count: number }>>([]);
 
-  // Spotlight bags state
-  const [spotlightBags, setSpotlightBags] = useState<Bag[]>([]);
-
   useEffect(() => {
     checkAuth();
     fetchPopularTags();
-    fetchSpotlightBags();
 
     // Track discover page view
     fetch('/api/analytics/track', {
@@ -228,18 +239,6 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
     }
   };
 
-  const fetchSpotlightBags = async () => {
-    try {
-      const response = await fetch('/api/discover/spotlight');
-      if (response.ok) {
-        const data = await response.json();
-        setSpotlightBags(data.spotlight || []);
-      }
-    } catch (error) {
-      console.error('Error fetching spotlight bags:', error);
-    }
-  };
-
   const fetchBags = async () => {
     setIsLoading(true);
     try {
@@ -254,7 +253,11 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
       const response = await fetch(`/api/discover?${params.toString()}`);
       if (response.ok) {
         const data = await response.json();
-        setBags(data.bags || []);
+        let fetchedBags = data.bags || [];
+        if (sortBy === 'hot') {
+          fetchedBags = [...fetchedBags].sort((a: Bag, b: Bag) => getHotScore(b) - getHotScore(a));
+        }
+        setBags(fetchedBags);
       }
     } catch (error) {
       console.error('Error fetching bags:', error);
@@ -288,7 +291,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
     setSearchQuery('');
     setSearchInput('');
     setSelectedTags([]);
-    setSortBy('newest');
+    setSortBy('hot');
   };
 
   const toggleTag = (tag: string) => {
@@ -299,7 +302,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
     );
   };
 
-  const hasActiveFilters = showFollowing || showSaved || selectedCategory || searchQuery || selectedTags.length > 0 || sortBy !== 'newest';
+  const hasActiveFilters = showFollowing || showSaved || selectedCategory || searchQuery || selectedTags.length > 0 || sortBy !== 'hot';
 
   const hasSuggestions = suggestions && (
     suggestions.bags.length > 0 ||
@@ -556,126 +559,6 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
         </ContentContainer>
       </PageHeader>
 
-      {/* Spotlight Section - Featured bags from database */}
-      {!selectedCategory && !searchQuery && !showFollowing && !showSaved && spotlightBags.length > 0 && (
-        <ContentContainer className="pt-6">
-          <div className="flex items-center gap-2 mb-4">
-            <TrendingUp className="w-5 h-5 text-[var(--teed-green-9)]" />
-            <h2 className="text-lg font-semibold text-[var(--text-primary)]">Spotlight</h2>
-          </div>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
-            {spotlightBags.map((bag) => {
-              const category = bag.category || 'other';
-              const categoryInfo = CATEGORIES.find(c => c.value === category);
-              const colors = getCategoryColor(category);
-
-              // Get items with photos
-              const allItemsWithPhotos = bag.items?.filter(item => item.photo_url) || [];
-              const featuredItems = allItemsWithPhotos
-                .filter(item => item.is_featured)
-                .sort((a, b) => (a.featured_position || 0) - (b.featured_position || 0));
-              const nonFeaturedItems = allItemsWithPhotos.filter(item => !item.is_featured);
-              const itemsToShow = [...featuredItems, ...nonFeaturedItems].slice(0, 8);
-
-              // Get border color based on category
-              const getBorderColor = (cat: string) => {
-                const colorVars: Record<string, string> = {
-                  golf: 'var(--teed-green-6)',
-                  wishlist: 'var(--sky-6)',
-                  photography: 'var(--sand-6)',
-                  travel: 'var(--sky-6)',
-                  tech: 'var(--sky-7)',
-                  fitness: 'var(--copper-8)',
-                  music: 'var(--sand-8)',
-                };
-                return colorVars[cat] || 'var(--teed-green-6)';
-              };
-
-              return (
-                <div
-                  key={bag.id}
-                  className={`bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border-2 overflow-hidden hover:shadow-glow-teed hover:-translate-y-1 transition-all duration-300 group relative`}
-                  style={{ borderColor: getBorderColor(category) }}
-                >
-                  {/* Category Label Banner */}
-                  <div className={`${colors.bg} px-3 py-1.5 flex items-center gap-2`}>
-                    <span>{categoryInfo?.icon}</span>
-                    <span className="text-sm font-semibold text-white">
-                      {categoryInfo?.label || 'Featured'}
-                    </span>
-                  </div>
-
-                  {/* Card Image */}
-                  <div
-                    onClick={() => router.push(`/u/${bag.owner.handle}/${bag.code}`)}
-                    className={`h-[180px] bg-gradient-to-br ${getBagGradient(bag.id)} relative overflow-hidden cursor-pointer`}
-                  >
-                    {itemsToShow.length > 0 ? (
-                      <div className="grid grid-cols-4 gap-1.5 p-2 h-full">
-                        {itemsToShow.map((item) => (
-                          <div key={item.id} className="relative bg-white rounded overflow-hidden shadow-sm">
-                            <img
-                              src={item.photo_url!}
-                              alt={item.custom_name || 'Item'}
-                              className="w-full h-full object-contain"
-                              loading="lazy"
-                            />
-                          </div>
-                        ))}
-                        {Array.from({ length: Math.max(0, 8 - itemsToShow.length) }).map((_, i) => (
-                          <div key={`placeholder-${i}`} className={`${getPlaceholderColor(i)} rounded opacity-40`}></div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <Package className="w-16 h-16 text-[var(--evergreen-12)] opacity-20" />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Owner Badge */}
-                  <div className="absolute bottom-[52px] left-3 z-10">
-                    <Link
-                      href={`/u/${bag.owner.handle}`}
-                      onClick={(e) => e.stopPropagation()}
-                      className="flex items-center gap-1.5 bg-white/95 rounded-full pl-1 pr-2.5 py-1 shadow-md hover:shadow-lg transition-shadow group/owner"
-                    >
-                      {bag.owner.avatar_url ? (
-                        <img src={bag.owner.avatar_url} alt="" className="w-5 h-5 rounded-full object-cover" />
-                      ) : (
-                        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[var(--teed-green-6)] to-[var(--sky-6)] flex items-center justify-center text-[10px] font-bold text-white">
-                          {getInitials(bag.owner.display_name || bag.owner.handle)}
-                        </div>
-                      )}
-                      <span className="text-xs font-medium text-[var(--text-primary)] group-hover/owner:text-[var(--teed-green-9)] transition-colors max-w-[120px] truncate">
-                        {bag.owner.display_name}
-                      </span>
-                    </Link>
-                  </div>
-
-                  {/* Card Info */}
-                  <div className="p-3">
-                    <h3
-                      onClick={() => router.push(`/u/${bag.owner.handle}/${bag.code}`)}
-                      className="text-base font-semibold text-[var(--text-primary)] group-hover:text-[var(--teed-green-9)] transition-colors line-clamp-1 cursor-pointer mb-1"
-                    >
-                      {bag.title}
-                    </h3>
-                    <div className="flex items-center justify-between text-xs text-[var(--text-tertiary)]">
-                      <span className="flex items-center gap-1 text-[var(--teed-green-10)]">
-                        <Package className="w-3.5 h-3.5" />
-                        <span className="font-medium">{bag.items?.length || 0}</span>
-                      </span>
-                      <span className="text-[var(--text-secondary)]">/{bag.code}</span>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </ContentContainer>
-      )}
-
       {/* Main Content */}
       <ContentContainer className="py-6">
         {/* Loading State */}
@@ -722,7 +605,8 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                 key={bag.id}
                 variants={cardVariants}
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className="bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden hover:shadow-glow-teed transition-all duration-300 group"
+                className={`bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] ${bag.category ? 'border-2' : 'border border-[var(--border-subtle)]'} overflow-hidden hover:shadow-glow-teed transition-all duration-300 group`}
+                style={bag.category ? { borderColor: getCategoryColors(bag.category).border } : undefined}
               >
                 {/* Cover Image or Featured Items Grid - Flexible Hero Layout */}
                 <div

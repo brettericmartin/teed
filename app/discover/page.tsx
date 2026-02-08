@@ -40,7 +40,7 @@ export default async function DiscoverPage() {
       )
     `)
     .eq('is_public', true)
-    .order('created_at', { ascending: false })
+    .order('updated_at', { ascending: false, nullsFirst: false })
     .limit(100);
 
   // Get all photo IDs from all bags

@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category');
     const search = searchParams.get('search');
     const tags = searchParams.get('tags')?.split(',').filter(Boolean); // Comma-separated tags
-    const sort = searchParams.get('sort') || 'newest'; // newest, popular, most_items
+    const sort = searchParams.get('sort') || 'hot';
     const trending = searchParams.get('trending') === 'true'; // Get trending bags only
 
     // Check authentication for "following" or "saved" filter
@@ -115,21 +115,17 @@ export async function GET(request: NextRequest) {
 
     // Apply sorting
     switch (sort) {
-      case 'popular':
-        // For now, sort by updated_at as proxy for activity
-        // TODO: Add proper view count column to bags table
-        query = query.order('updated_at', { ascending: false, nullsFirst: false });
+      case 'newest':
+        query = query.order('created_at', { ascending: false });
         break;
       case 'most_items':
-        // This will be sorted client-side after fetching
+        // Sorted client-side after fetching
         query = query.order('created_at', { ascending: false });
         break;
-      case 'oldest':
-        query = query.order('created_at', { ascending: true });
-        break;
-      case 'newest':
+      case 'hot':
       default:
-        query = query.order('created_at', { ascending: false });
+        // Server provides updated_at ordering; client re-sorts with hot score
+        query = query.order('updated_at', { ascending: false, nullsFirst: false });
         break;
     }
 
