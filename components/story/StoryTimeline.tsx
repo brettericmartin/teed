@@ -816,6 +816,7 @@ function TimelineItem({
               onClick={handleStartEditNote}
               className={`
                 opacity-0 group-hover:opacity-100 transition-opacity
+                ${isExpanded ? '!opacity-100' : ''}
                 p-1.5 rounded-md hover:bg-[var(--surface-alt)] text-[var(--text-tertiary)]
               `}
               title={curatorNote ? 'Edit note' : 'Add note'}
@@ -833,6 +834,7 @@ function TimelineItem({
               }}
               className={`
                 opacity-0 group-hover:opacity-100 transition-opacity
+                ${isExpanded ? '!opacity-100' : ''}
                 p-1.5 rounded-md hover:bg-[var(--surface-alt)]
                 ${isHidden ? 'text-[var(--text-tertiary)]' : 'text-[var(--text-secondary)]'}
               `}
