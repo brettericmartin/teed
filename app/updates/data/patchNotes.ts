@@ -43,11 +43,26 @@ export const CATEGORY_META: Record<CategoryType, {
 
 export const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.6.0',
+    releaseDate: '2026-02-08',
+    title: 'Discover Revamp, Beta Manager & Cleanup',
+    summary: 'Redesigned Discover page with hot ranking and category borders, new admin Beta Manager with Controls and Survey tabs, removed unused tags system, and fixed timeline editing on mobile.',
+    isLatest: true,
+    changes: [
+      { text: 'Discover page redesigned — removed Spotlight section, added hot ranking algorithm and category border accents', category: 'feature' },
+      { text: 'Beta Manager — admin beta dashboard now has Applications, Controls, and Survey tabs', category: 'feature', isAdminOnly: true },
+      { text: 'Beta Controls tab — manage capacity, founding deadline, auto-approval, beta phase, and waitlist message', category: 'feature', isAdminOnly: true },
+      { text: 'Survey Notes tab — view all survey questions with admin annotation support', category: 'feature', isAdminOnly: true },
+      { text: 'Removed unused tags system from bag editor and API; category validation now uses shared CATEGORIES constant', category: 'improvement' },
+      { text: 'Fixed timeline edit/visibility buttons not appearing on mobile (touch devices)', category: 'bugfix' },
+    ]
+  },
+  {
     version: '2.5.0',
     releaseDate: '2026-02-07',
     title: 'Bag Tools Menu & Better Mobile Editor',
     summary: 'Compressed the bag editor top section into a compact tools menu, reclaiming 500-800px of vertical space on mobile. Plus smarter link finding, fuzzy search, and iOS fixes.',
-    isLatest: true,
+    isLatest: false,
     changes: [
       { text: 'Bag Tools menu — all editor tools (Quick Add, Curator AI, Cover Photo, Analytics) collapsed into a centered pill that opens as bottom sheets', category: 'feature' },
       { text: 'Smart Link Finder — brand-site search with multi-result UI and per-item enrichment', category: 'feature' },
