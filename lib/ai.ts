@@ -686,7 +686,7 @@ export async function fetchProductImage(
       q: query,
       searchType: 'image',
       num: '3', // Get top 3 results
-      imgSize: 'medium', // Medium size images
+      imgSize: 'large', // Large images for crisp display
       imgType: 'photo', // Only photos, not clipart
       safe: 'active', // Family-safe results
       fileType: 'jpg,png', // Only JPG/PNG

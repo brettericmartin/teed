@@ -273,7 +273,7 @@ async function searchGoogleImages(query: string): Promise<string[]> {
       q: query.trim(),
       searchType: 'image',
       num: '6',
-      imgSize: 'medium',
+      imgSize: 'large',
       imgType: 'photo',
       safe: 'active',
     });
@@ -288,7 +288,25 @@ async function searchGoogleImages(query: string): Promise<string[]> {
     }
 
     const data = await response.json();
-    return (data.items || []).map((item: any) => item.link);
+    const items = data.items || [];
+
+    // Sort by image dimensions: prefer images with shortest side >= 400px
+    const withDimensions = items.map((item: any) => ({
+      url: item.link,
+      width: item.image?.width || 0,
+      height: item.image?.height || 0,
+    }));
+
+    withDimensions.sort((a: any, b: any) => {
+      const aMin = Math.min(a.width, a.height);
+      const bMin = Math.min(b.width, b.height);
+      const aAbove400 = aMin >= 400 ? 1 : 0;
+      const bAbove400 = bMin >= 400 ? 1 : 0;
+      if (aAbove400 !== bAbove400) return bAbove400 - aAbove400;
+      return bMin - aMin;
+    });
+
+    return withDimensions.map((item: any) => item.url);
   } catch (error) {
     console.error('[extract-product-images] Google search error:', error);
     return [];

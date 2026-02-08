@@ -139,6 +139,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Parse image dimensions from binary headers (lightweight, no dependencies)
+    let imgWidth: number | undefined;
+    let imgHeight: number | undefined;
+    try {
+      const buffer = new Uint8Array(await imageBlob.arrayBuffer());
+      const dimensions = parseImageDimensions(buffer, imageBlob.type);
+      if (dimensions) {
+        imgWidth = dimensions.width;
+        imgHeight = dimensions.height;
+        console.log(`[upload-from-url] Image dimensions: ${imgWidth}x${imgHeight}`);
+        if (imgWidth < 200 || imgHeight < 200) {
+          console.warn(`[upload-from-url] WARNING: Small image (${imgWidth}x${imgHeight}) from ${imageUrl}`);
+        }
+      }
+    } catch (dimError) {
+      console.warn('[upload-from-url] Could not parse image dimensions:', dimError);
+    }
+
     // Convert blob to File
     const file = new File(
       [imageBlob],
@@ -149,9 +167,11 @@ export async function POST(request: NextRequest) {
     // Upload to Supabase Storage
     const { url, path } = await uploadItemPhoto(file, user.id, itemId);
 
-    // Create media_assets record
+    // Create media_assets record with dimensions
     const mediaAssetId = await createMediaAsset(url, user.id, {
       sourceType: 'user_upload', // Only 'user_upload' and null are allowed by DB constraint
+      width: imgWidth,
+      height: imgHeight,
     });
 
     console.log('Successfully uploaded image from URL:', { mediaAssetId, url });
@@ -186,4 +206,44 @@ export async function GET() {
     { error: 'Method not allowed. Use POST.' },
     { status: 405 }
   );
+}
+
+/**
+ * Parse image dimensions from binary data without external dependencies.
+ * Supports JPEG (SOF0/SOF2 markers) and PNG (IHDR chunk).
+ */
+function parseImageDimensions(
+  buffer: Uint8Array,
+  mimeType: string
+): { width: number; height: number } | null {
+  if (mimeType === 'image/png' && buffer.length >= 24) {
+    // PNG: width and height are at bytes 16-23 in the IHDR chunk (big-endian uint32)
+    if (buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4e && buffer[3] === 0x47) {
+      const width = (buffer[16] << 24) | (buffer[17] << 16) | (buffer[18] << 8) | buffer[19];
+      const height = (buffer[20] << 24) | (buffer[21] << 16) | (buffer[22] << 8) | buffer[23];
+      if (width > 0 && height > 0) return { width, height };
+    }
+  }
+
+  if ((mimeType === 'image/jpeg' || mimeType === 'image/jpg') && buffer.length >= 2) {
+    // JPEG: scan for SOF0 (0xFFC0) or SOF2 (0xFFC2) marker
+    if (buffer[0] === 0xff && buffer[1] === 0xd8) {
+      let offset = 2;
+      while (offset < buffer.length - 9) {
+        if (buffer[offset] !== 0xff) { offset++; continue; }
+        const marker = buffer[offset + 1];
+        // SOF0 or SOF2 marker
+        if (marker === 0xc0 || marker === 0xc2) {
+          const height = (buffer[offset + 5] << 8) | buffer[offset + 6];
+          const width = (buffer[offset + 7] << 8) | buffer[offset + 8];
+          if (width > 0 && height > 0) return { width, height };
+        }
+        // Skip to next marker using segment length
+        const segmentLength = (buffer[offset + 2] << 8) | buffer[offset + 3];
+        offset += 2 + segmentLength;
+      }
+    }
+  }
+
+  return null;
 }

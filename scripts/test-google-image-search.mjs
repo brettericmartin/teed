@@ -53,7 +53,7 @@ async function searchProductImage(productName, brand) {
     q: query,
     searchType: 'image',
     num: '3',
-    imgSize: 'medium',
+    imgSize: 'large',
     imgType: 'photo',
     safe: 'active',
     fileType: 'jpg,png',

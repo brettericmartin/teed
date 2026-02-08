@@ -101,7 +101,7 @@ async function compressImageForAPI(base64: string, maxSizeKB: number = 5000): Pr
     let quality = 0.92;
     let result = canvas.toDataURL('image/jpeg', quality);
 
-    while (result.length > maxSizeKB * 1024 * 1.37 && quality > 0.5) {
+    while (result.length > maxSizeKB * 1024 * 1.37 && quality > 0.7) {
       quality -= 0.05;
       result = canvas.toDataURL('image/jpeg', quality);
     }

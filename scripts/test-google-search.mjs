@@ -36,7 +36,7 @@ const searchParams = new URLSearchParams({
   q: query,
   searchType: 'image',
   num: '3',
-  imgSize: 'medium',
+  imgSize: 'large',
   imgType: 'photo',
   safe: 'active',
 });

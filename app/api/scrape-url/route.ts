@@ -144,7 +144,7 @@ async function searchGoogleImages(query: string): Promise<string | null> {
       q: query.trim(),
       searchType: 'image',
       num: '1',
-      imgSize: 'medium',
+      imgSize: 'large',
       imgType: 'photo',
       safe: 'active',
     });

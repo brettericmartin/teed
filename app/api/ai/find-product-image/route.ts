@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
       q: query.trim(),
       searchType: 'image',
       num: '10', // Get 10 results to pick from
-      imgSize: 'medium', // Medium size images
+      imgSize: 'large', // Large images for crisp display
       imgType: 'photo', // Only photos, not clipart
       safe: 'active', // Family-safe results
     });
@@ -101,8 +101,24 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Return array of image URLs
-    const images = data.items.map((item: any) => item.link);
+    // Extract image URLs with dimension metadata and sort by quality
+    const itemsWithDimensions = data.items.map((item: any) => ({
+      url: item.link,
+      width: item.image?.width || 0,
+      height: item.image?.height || 0,
+    }));
+
+    // Sort: images with shortest side >= 400px first, then by largest shortest side
+    itemsWithDimensions.sort((a: any, b: any) => {
+      const aMin = Math.min(a.width, a.height);
+      const bMin = Math.min(b.width, b.height);
+      const aAbove400 = aMin >= 400 ? 1 : 0;
+      const bAbove400 = bMin >= 400 ? 1 : 0;
+      if (aAbove400 !== bAbove400) return bAbove400 - aAbove400;
+      return bMin - aMin;
+    });
+
+    const images = itemsWithDimensions.map((item: any) => item.url);
     console.log(`Found ${images.length} images for query:`, query);
 
     // Track API usage - Google Custom Search ($5 per 1000 queries)

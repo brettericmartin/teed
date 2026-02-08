@@ -241,7 +241,7 @@ Always respond with valid JSON in this format:
             q: searchQuery,
             searchType: 'image',
             num: '1', // Just get the top result
-            imgSize: 'medium',
+            imgSize: 'large',
             imgType: 'photo',
             safe: 'active',
           });
