@@ -45,35 +45,50 @@ export const PATCH_NOTES: PatchNote[] = [
   {
     version: '2.6.0',
     releaseDate: '2026-02-08',
-    title: 'Discover Revamp, Beta Manager & Cleanup',
-    summary: 'Redesigned Discover page with hot ranking and category borders, new admin Beta Manager with Controls and Survey tabs, removed unused tags system, and fixed timeline editing on mobile.',
+    title: 'Sharper Images, Discover Revamp & Cleanup',
+    summary: 'Product photos are now noticeably sharper across the app. Redesigned Discover page with hot ranking, new admin Beta Manager, and several bug fixes.',
     isLatest: true,
     changes: [
+      { text: 'Sharper product images — upgraded Google Image Search to return high-resolution photos and sort results by dimension quality', category: 'improvement' },
+      { text: 'Image dimension tracking — uploaded photos now record width and height, with warnings for low-resolution sources', category: 'improvement' },
+      { text: 'Raised compression quality floor to prevent visible JPEG artifacts on uploaded photos', category: 'improvement' },
       { text: 'Discover page redesigned — removed Spotlight section, added hot ranking algorithm and category border accents', category: 'feature' },
       { text: 'Beta Manager — admin beta dashboard now has Applications, Controls, and Survey tabs', category: 'feature', isAdminOnly: true },
       { text: 'Beta Controls tab — manage capacity, founding deadline, auto-approval, beta phase, and waitlist message', category: 'feature', isAdminOnly: true },
       { text: 'Survey Notes tab — view all survey questions with admin annotation support', category: 'feature', isAdminOnly: true },
       { text: 'Removed unused tags system from bag editor and API; category validation now uses shared CATEGORIES constant', category: 'improvement' },
       { text: 'Fixed timeline edit/visibility buttons not appearing on mobile (touch devices)', category: 'bugfix' },
+      { text: 'Fixed iOS auto-zoom when tapping bag title input', category: 'bugfix' },
     ]
   },
   {
     version: '2.5.0',
     releaseDate: '2026-02-07',
-    title: 'Bag Tools Menu & Better Mobile Editor',
-    summary: 'Compressed the bag editor top section into a compact tools menu, reclaiming 500-800px of vertical space on mobile. Plus smarter link finding, fuzzy search, and iOS fixes.',
+    title: 'Bag Tools Menu & Smart Link Finder',
+    summary: 'Compressed the bag editor top section into a compact tools menu, reclaiming 500-800px of vertical space on mobile. Plus a new Smart Link Finder for discovering product links.',
     isLatest: false,
     changes: [
       { text: 'Bag Tools menu — all editor tools (Quick Add, Curator AI, Cover Photo, Analytics) collapsed into a centered pill that opens as bottom sheets', category: 'feature' },
       { text: 'Smart Link Finder — brand-site search with multi-result UI and per-item enrichment', category: 'feature' },
-      { text: 'Fuzzy matching and color synonyms for smarter product search', category: 'feature' },
-      { text: 'Explicit search UX — search triggers on button tap or Enter instead of auto-debounce', category: 'improvement' },
       { text: 'Cover photo only displays inline when set; empty state moved to tools menu', category: 'improvement' },
       { text: 'Curator AI actions (Tap to Identify, Bulk Import) properly layer over the tools bottom sheet', category: 'improvement' },
       { text: 'Fixed iOS Safari auto-zoom on input fields in link paste modals', category: 'bugfix' },
       { text: 'Fixed redirect after adding links via UniversalLinkAdder', category: 'bugfix' },
       { text: 'Fixed critical bug with bag creation using wrong column name', category: 'bugfix' },
       { text: 'Improved mobile responsiveness for add links modals', category: 'bugfix' },
+    ]
+  },
+  {
+    version: '2.4.0',
+    releaseDate: '2026-02-06',
+    title: 'Smarter Search',
+    summary: 'Fuzzy matching, color synonyms, and a more intentional search experience. Type what you mean and find what you need.',
+    isLatest: false,
+    changes: [
+      { text: 'Fuzzy matching — misspelled brand names are auto-corrected using Levenshtein distance (e.g., "taylormaid" finds TaylorMade)', category: 'feature' },
+      { text: 'Color synonyms — searching "grey" also matches "gray", "silver", and "charcoal"', category: 'feature' },
+      { text: 'Parsed preview chips — see how the system interprets your search (brand, model, color) before results load', category: 'feature' },
+      { text: 'Explicit search UX — search triggers on button tap or Enter instead of auto-debounce for more intentional results', category: 'improvement' },
     ]
   },
   {
@@ -95,7 +110,8 @@ export const PATCH_NOTES: PatchNote[] = [
       { text: 'Enhanced empty states - animated CTAs draw attention to first actions', category: 'improvement' },
       { text: 'Link identification improved with slug scoring and site-specific configs', category: 'improvement' },
       { text: 'SEO pages added for alternatives and use cases with dynamic sitemap', category: 'improvement' },
-      { text: 'Updated CLAUDE.md with architecture patterns, commands, and gotchas', category: 'improvement', isAdminOnly: true }
+      { text: 'Updated CLAUDE.md with architecture patterns, commands, and gotchas', category: 'improvement', isAdminOnly: true },
+      { text: 'Fixed existing bags not appearing in "Choose Destination" step when adding links', category: 'bugfix' },
     ]
   },
   {
@@ -124,10 +140,13 @@ export const PATCH_NOTES: PatchNote[] = [
   {
     version: '2.1.0',
     releaseDate: '2026-01-25',
-    title: 'The Story: Click-to-Item & Curator Notes',
-    summary: 'Your timeline now tells a richer story. Click any entry to jump to that item, add curator notes to explain your decisions, and see preserved data for retired items.',
+    title: 'The Story: Badges, Analytics & Curator Notes',
+    summary: 'Your timeline now tells a richer story. Earn achievement badges, see enhanced impact analytics, click entries to jump to items, and add curator notes.',
     isLatest: false,
     changes: [
+      { text: 'Achievement badges — earn badges displayed on your profile as you hit milestones', category: 'feature' },
+      { text: 'Enhanced impact analytics — richer stats about your reach and engagement', category: 'feature' },
+      { text: 'Profile Story — a visual narrative of your curation journey', category: 'feature' },
       { text: 'Click timeline entries to open item modal or scroll to item in editor', category: 'feature' },
       { text: 'Add curator notes (140 char captions) to any timeline entry', category: 'feature' },
       { text: 'Inline note editor with auto-save for bag owners', category: 'feature' },
@@ -237,9 +256,10 @@ export const PATCH_NOTES: PatchNote[] = [
   {
     version: '1.4.0',
     releaseDate: '2025-12-17',
-    title: 'Speed & Polish',
-    summary: 'Faster bulk imports, better caching, and visual refinements across the platform.',
+    title: 'ChatGPT Integration & Speed',
+    summary: 'Ask ChatGPT about your bags with a custom GPT integration. Plus faster bulk imports, better caching, and visual refinements.',
     changes: [
+      { text: 'ChatGPT custom GPT — interact with your teed bags and discover gear through ChatGPT', category: 'feature' },
       { text: 'Product library caches Firecrawl results for instant reuse', category: 'feature' },
       { text: 'Parallel batch processing makes bulk imports 5x faster', category: 'improvement' },
       { text: 'Curated view system with visual design overhaul', category: 'improvement' },
@@ -251,25 +271,41 @@ export const PATCH_NOTES: PatchNote[] = [
   {
     version: '1.3.0',
     releaseDate: '2025-12-13',
-    title: 'Bulk Link Import',
-    summary: 'Import multiple product links at once with real-time progress tracking and enhanced Amazon support.',
+    title: 'Bulk Link Import & Updates Page',
+    summary: 'Import multiple product links at once with real-time progress tracking, enhanced Amazon support, and a new Updates page to track what\'s new.',
     changes: [
       { text: 'Streaming progress UI shows each link as it processes in real-time', category: 'feature' },
       { text: 'Firecrawl integration for scraping Amazon and other blocked sites', category: 'feature' },
+      { text: 'Updates page — see what\'s new at /updates with categorized patch notes', category: 'feature' },
       { text: 'Automatic Amazon product title cleaning for cleaner results', category: 'improvement' },
       { text: 'AI-powered ASIN detection for accurate Amazon product identification', category: 'improvement' },
       { text: 'Warning indicators for unverified Amazon products', category: 'improvement' }
     ]
   },
   {
-    version: '1.1.0',
+    version: '1.2.0',
     releaseDate: '2025-12-11',
+    title: 'Open Signup & Engagement',
+    summary: 'Teed is now open to everyone. Save bags, follow creators from any bag page, and enjoy context-aware link buttons.',
+    changes: [
+      { text: 'Open signup — beta gate removed, anyone can create an account and start curating', category: 'feature' },
+      { text: 'Save and bookmark bags directly from the bag view page', category: 'feature' },
+      { text: 'Follow creators from any bag view without navigating to their profile', category: 'feature' },
+      { text: 'Context-aware link CTAs — buttons show "Watch on YouTube", "Shop on Amazon", etc. instead of generic "Visit"', category: 'improvement' },
+      { text: 'Video thumbnail auto-extraction — YouTube and video links automatically use the video thumbnail as the item photo', category: 'improvement' },
+      { text: 'QR codes are now tappable with a download modal for easy sharing', category: 'improvement' },
+      { text: '"View" button in bag editor header for quick preview of the public view', category: 'improvement' },
+    ]
+  },
+  {
+    version: '1.1.0',
+    releaseDate: '2025-12-09',
     title: 'Advanced Product Identification',
-    summary: 'Upload photos and let AI identify your products.',
+    summary: 'Upload photos and let AI identify your products with the new Advanced Product ID System.',
     changes: [
       { text: 'APIS (Advanced Product ID System) for photo-based product identification', category: 'feature' },
+      { text: 'Support for multiple photo uploads in a single session', category: 'feature' },
       { text: 'Improved AI accuracy for recognizing products from images', category: 'improvement' },
-      { text: 'Support for multiple photo uploads in a single session', category: 'feature' }
     ]
   },
   {
@@ -298,13 +334,19 @@ export const PATCH_NOTES: PatchNote[] = [
   {
     version: '0.8.0',
     releaseDate: '2025-11-25',
-    title: 'Beta System & Analytics',
-    summary: 'Beta gating and user engagement tracking.',
+    title: 'Beta System, Polish & Social',
+    summary: 'Beta gating for controlled rollout, plus cover photo cropping, follower counts, enhanced discovery search, and cleaner UI throughout.',
     changes: [
       { text: 'Beta gating system for controlled rollout', category: 'feature' },
+      { text: 'Cover photo cropping with 16:9 aspect ratio and crop button for existing photos', category: 'feature' },
+      { text: 'Follower and following counts displayed on user profiles', category: 'feature' },
+      { text: 'Discovery page enhanced with autocomplete search and sort options', category: 'feature' },
       { text: 'User engagement analytics and tracking', category: 'feature' },
       { text: 'Feedback collection system', category: 'feature' },
-      { text: 'Tag system with categorical selectors', category: 'feature' }
+      { text: 'Avatar cropper — crop your profile photo when uploading', category: 'improvement' },
+      { text: 'Styled confirmation dialogs replace browser-native confirm() popups', category: 'improvement' },
+      { text: 'Themed toast notifications for success and error feedback', category: 'improvement' },
+      { text: 'iPhone photo support — client-side compression and 10MB upload limit', category: 'improvement' },
     ]
   },
   {
@@ -333,10 +375,11 @@ export const PATCH_NOTES: PatchNote[] = [
     version: '0.5.0',
     releaseDate: '2025-11-19',
     title: 'AI Image Search',
-    summary: 'Custom AI-powered product image finder.',
+    summary: 'Custom AI-powered product image finder with interactive preview.',
     changes: [
       { text: 'AI-enhanced custom search for product images', category: 'feature' },
       { text: 'Batch photo finder with retry logic', category: 'feature' },
+      { text: 'Interactive AI enrichment preview — see what AI found before accepting changes', category: 'feature' },
       { text: 'Item selection workflow for bulk identification', category: 'improvement' }
     ]
   },
