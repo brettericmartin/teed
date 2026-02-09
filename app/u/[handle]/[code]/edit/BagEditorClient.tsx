@@ -182,6 +182,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [showManualForm, setShowManualForm] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showBulkLinkImport, setShowBulkLinkImport] = useState(false);
+  const [linkImportInitialUrl, setLinkImportInitialUrl] = useState<string | undefined>();
   const [showProductReview, setShowProductReview] = useState(false);
   const [showTapToIdentify, setShowTapToIdentify] = useState(false);
   const [tapToIdentifyImage, setTapToIdentifyImage] = useState<string | null>(null);
@@ -1696,6 +1697,10 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                     }}
                     bagTitle={bag.title}
                     onShowManualForm={() => setShowManualForm(true)}
+                    onAddFromLink={(url) => {
+                      setLinkImportInitialUrl(url);
+                      setShowBulkLinkImport(true);
+                    }}
                   />
                 ) : (
                   <div className="space-y-3">
@@ -1899,8 +1904,12 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       {/* Bulk Link Import Modal */}
       <BulkLinkImportModal
         isOpen={showBulkLinkImport}
-        onClose={() => setShowBulkLinkImport(false)}
+        onClose={() => {
+          setShowBulkLinkImport(false);
+          setLinkImportInitialUrl(undefined);
+        }}
         bagCode={bag.code}
+        initialUrl={linkImportInitialUrl}
         onItemsAdded={(count) => {
           // Refresh the bag data to get new items
           toast.showAI(`Added ${count} item${count !== 1 ? 's' : ''} from links!`);

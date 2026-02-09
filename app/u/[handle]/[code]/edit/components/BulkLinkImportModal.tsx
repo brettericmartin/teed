@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { X, Check, Loader2, Link as LinkIcon, ChevronDown, ChevronUp, ExternalLink, AlertCircle, Image as ImageIcon } from 'lucide-react';
 import { BulkLinkProcessingView } from './BulkLinkProcessingView';
 import type {
@@ -70,6 +70,7 @@ interface BulkLinkImportModalProps {
   onClose: () => void;
   bagCode: string;
   onItemsAdded: (count: number) => void;
+  initialUrl?: string;
 }
 
 type Step = 'input' | 'processing' | 'review';
@@ -161,6 +162,7 @@ export default function BulkLinkImportModal({
   onClose,
   bagCode,
   onItemsAdded,
+  initialUrl,
 }: BulkLinkImportModalProps) {
   const [step, setStep] = useState<Step>('input');
   const [inputText, setInputText] = useState('');
@@ -176,6 +178,111 @@ export default function BulkLinkImportModal({
   const [streamingResults, setStreamingResults] = useState<Map<number, StreamingItem>>(new Map());
   const [currentStages, setCurrentStages] = useState<Map<number, ProcessingStage>>(new Map());
   const [completedCount, setCompletedCount] = useState(0);
+
+  const isSingleLinkMode = initialUrl !== undefined;
+  const hasAutoStartedRef = useRef(false);
+
+  // Auto-start analysis when initialUrl is provided
+  useEffect(() => {
+    if (isOpen && initialUrl && !hasAutoStartedRef.current) {
+      hasAutoStartedRef.current = true;
+      setParsedUrls([initialUrl]);
+      // Defer to next tick so parsedUrls state is set before handleAnalyze reads it
+      setTimeout(() => {
+        setStep('processing');
+        setIsProcessing(true);
+        setProcessingProgress(0);
+        setCompletedCount(0);
+
+        const urls = [initialUrl];
+        const initialItems = new Map<number, StreamingItem>();
+        urls.forEach((url, i) => {
+          initialItems.set(i, { status: 'pending', url });
+        });
+        setStreamingResults(initialItems);
+        setCurrentStages(new Map());
+
+        // Start the fetch inline
+        (async () => {
+          const collectedResults: StreamedLinkResult[] = [];
+          try {
+            const response = await fetch(`/api/bags/${bagCode}/bulk-links`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream' },
+              body: JSON.stringify({ urls }),
+            });
+            if (!response.ok) throw new Error('Failed to process links');
+            const reader = response.body?.getReader();
+            if (!reader) throw new Error('No response body');
+            const decoder = new TextDecoder();
+            let buffer = '';
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              buffer += decoder.decode(value, { stream: true });
+              const events = buffer.split('\n\n');
+              buffer = events.pop() || '';
+              for (const eventText of events) {
+                if (!eventText.trim()) continue;
+                const lines = eventText.split('\n');
+                for (const line of lines) {
+                  if (line.startsWith('data: ')) {
+                    try {
+                      const event: BulkLinkStreamEvent = JSON.parse(line.slice(6));
+                      switch (event.type) {
+                        case 'url_started':
+                          setStreamingResults(prev => { const next = new Map(prev); next.set(event.index, { status: 'processing', url: event.url }); return next; });
+                          break;
+                        case 'url_stage_update':
+                          setCurrentStages(prev => { const next = new Map(prev); next.set(event.index, event.stage); return next; });
+                          break;
+                        case 'url_completed':
+                          collectedResults.push(event.result);
+                          setStreamingResults(prev => { const next = new Map(prev); next.set(event.index, { status: 'completed', url: event.result.originalUrl, result: event.result }); return next; });
+                          setCurrentStages(prev => { const next = new Map(prev); next.delete(event.index); return next; });
+                          break;
+                        case 'batch_progress':
+                          setCompletedCount(event.completed);
+                          setProcessingProgress((event.completed / event.total) * 100);
+                          break;
+                        case 'complete':
+                          setSummary(event.summary);
+                          break;
+                        case 'error':
+                          console.error('Stream error:', event.message);
+                          break;
+                      }
+                    } catch (e) { console.error('Error parsing SSE event:', e); }
+                  }
+                }
+              }
+            }
+            const resultsByIndex = new Map(collectedResults.map(r => [r.index, r]));
+            const allResults: StreamedLinkResult[] = urls.map((url, index) => {
+              const existing = resultsByIndex.get(index);
+              if (existing) return existing;
+              return { index, originalUrl: url, resolvedUrl: url, status: 'failed' as const, error: 'No response received from server', scraped: null, analysis: null, photoOptions: [], suggestedItem: { custom_name: 'Unknown Product', brand: '', custom_description: '' } };
+            });
+            const editedResults: EditedResult[] = allResults.sort((a, b) => a.index - b.index).map((r) => ({
+              ...r, isSelected: r.status !== 'failed', editedName: r.suggestedItem.custom_name, editedBrand: r.suggestedItem.brand, editedDescription: r.suggestedItem.custom_description,
+              selectedPhotoIndex: r.photoOptions.findIndex(p => p.isPrimary) >= 0 ? r.photoOptions.findIndex(p => p.isPrimary) : 0,
+            }));
+            setResults(editedResults);
+            setStep('review');
+          } catch (error) {
+            console.error('Error processing links:', error);
+            alert('Failed to process link. Please try again.');
+            setStep('input');
+          } finally {
+            setIsProcessing(false);
+          }
+        })();
+      }, 0);
+    }
+    if (!isOpen) {
+      hasAutoStartedRef.current = false;
+    }
+  }, [isOpen, initialUrl, bagCode]);
 
   // Parse URLs from input text
   const parseInput = useCallback((text: string) => {
@@ -489,13 +596,13 @@ export default function BulkLinkImportModal({
           <div>
             <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
               <LinkIcon className="w-5 h-5" />
-              {step === 'input' && 'Import from Links'}
-              {step === 'processing' && 'Analyzing Links...'}
+              {step === 'input' && (isSingleLinkMode ? 'Add from Link' : 'Import from Links')}
+              {step === 'processing' && (parsedUrls.length === 1 ? 'Analyzing link...' : 'Analyzing Links...')}
               {step === 'review' && 'Review Items'}
             </h2>
             <p className="text-sm text-gray-500 mt-1">
-              {step === 'input' && 'Paste product links to import (up to 25)'}
-              {step === 'processing' && `Processing ${parsedUrls.length} links`}
+              {step === 'input' && (isSingleLinkMode ? 'Paste a product link' : 'Paste product links to import (up to 25)')}
+              {step === 'processing' && (parsedUrls.length === 1 ? 'Processing 1 link' : `Processing ${parsedUrls.length} links`)}
               {step === 'review' && summary && (
                 <>
                   {summary.successful} found, {summary.partial} partial, {summary.failed} failed
@@ -517,45 +624,78 @@ export default function BulkLinkImportModal({
           {/* Step 1: Input */}
           {step === 'input' && (
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Paste product links (one per line or separated by commas)
-                </label>
-                <textarea
-                  value={inputText}
-                  onChange={handleInputChange}
-                  placeholder="https://amazon.com/dp/B08N5WRWNW&#10;https://golfgalaxy.com/product/...&#10;https://rei.com/product/..."
-                  className="w-full h-48 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--sky-5)] focus:border-transparent resize-none font-mono text-sm"
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="text-sm text-gray-600">
-                  {parsedUrls.length > 0 ? (
-                    <span className="text-green-600 font-medium">
-                      {parsedUrls.length} valid link{parsedUrls.length !== 1 ? 's' : ''} detected
-                    </span>
-                  ) : (
-                    'No valid links detected'
-                  )}
-                  {parsedUrls.length >= 25 && (
-                    <span className="text-orange-600 ml-2">(max 25)</span>
-                  )}
+              {isSingleLinkMode ? (
+                /* Single URL input for single-link mode */
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Product URL
+                  </label>
+                  <input
+                    type="url"
+                    value={inputText}
+                    onChange={(e) => {
+                      const text = e.target.value;
+                      setInputText(text);
+                      setParsedUrls(parseInput(text));
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && parsedUrls.length > 0) {
+                        e.preventDefault();
+                        handleAnalyze();
+                      }
+                    }}
+                    placeholder="https://amazon.com/dp/..."
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--sky-5)] focus:border-transparent font-mono text-sm"
+                    autoFocus
+                  />
+                  <p className="mt-2 text-xs text-gray-500">
+                    Paste a link from Amazon, REI, or any retailer
+                  </p>
                 </div>
-              </div>
+              ) : (
+                /* Multi-URL textarea for bulk mode */
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Paste product links (one per line or separated by commas)
+                    </label>
+                    <textarea
+                      value={inputText}
+                      onChange={handleInputChange}
+                      placeholder="https://amazon.com/dp/B08N5WRWNW&#10;https://golfgalaxy.com/product/...&#10;https://rei.com/product/..."
+                      className="w-full h-48 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--sky-5)] focus:border-transparent resize-none font-mono text-sm"
+                    />
+                  </div>
 
-              {parsedUrls.length > 0 && (
-                <div className="border border-gray-200 rounded-lg p-4 max-h-48 overflow-y-auto">
-                  <p className="text-xs font-medium text-gray-500 uppercase mb-2">Detected Links:</p>
-                  <ul className="space-y-1">
-                    {parsedUrls.map((url, i) => (
-                      <li key={i} className="flex items-center gap-2 text-sm">
-                        <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
-                        <span className="text-gray-600 truncate">{url}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm text-gray-600">
+                      {parsedUrls.length > 0 ? (
+                        <span className="text-green-600 font-medium">
+                          {parsedUrls.length} valid link{parsedUrls.length !== 1 ? 's' : ''} detected
+                        </span>
+                      ) : (
+                        'No valid links detected'
+                      )}
+                      {parsedUrls.length >= 25 && (
+                        <span className="text-orange-600 ml-2">(max 25)</span>
+                      )}
+                    </div>
+                  </div>
+
+                  {parsedUrls.length > 0 && (
+                    <div className="border border-gray-200 rounded-lg p-4 max-h-48 overflow-y-auto">
+                      <p className="text-xs font-medium text-gray-500 uppercase mb-2">Detected Links:</p>
+                      <ul className="space-y-1">
+                        {parsedUrls.map((url, i) => (
+                          <li key={i} className="flex items-center gap-2 text-sm">
+                            <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                            <span className="text-gray-600 truncate">{url}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}
@@ -770,7 +910,7 @@ export default function BulkLinkImportModal({
                 disabled={parsedUrls.length === 0}
                 className="w-full md:flex-1 px-8 py-3 bg-[var(--teed-green-9)] text-white rounded-lg hover:bg-[var(--teed-green-10)] disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
               >
-                Analyze {parsedUrls.length} Link{parsedUrls.length !== 1 ? 's' : ''}
+                {parsedUrls.length === 1 ? 'Analyze Link' : `Analyze ${parsedUrls.length} Links`}
               </button>
             )}
 
