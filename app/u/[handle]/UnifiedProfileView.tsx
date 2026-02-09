@@ -511,7 +511,7 @@ export default function UnifiedProfileView({
 
   // Handlers for ProminentAddBar
   const handleAddBag = useCallback(() => {
-    router.push('/dashboard?action=new-bag');
+    router.push('/bags/new');
   }, [router]);
 
   const handleSaveSocialLinks = useCallback(async (links: Record<string, string>) => {

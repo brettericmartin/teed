@@ -33,36 +33,36 @@ export async function createBag(
   page: Page,
   bag: TestBag
 ): Promise<{ code: string }> {
-  await page.goto('/dashboard');
+  // Use the canonical /bags/new page directly
+  // (Note: /dashboard redirects to /u/{handle} and has no "Create New Bag" button)
+  await page.goto('/bags/new');
+  await page.waitForLoadState('domcontentloaded');
 
-  // Click "Create New Bag" button
-  await page.click('button:has-text("Create New Bag")');
+  // Wait for the form to load (it fetches user handle on mount)
+  await page.waitForSelector('input#title, input[placeholder*="curating"], input[placeholder*="Golf"]', { timeout: 10000 });
 
   // Fill in the form
-  await page.fill('input[name="title"], input[placeholder*="title"]', bag.title);
+  await page.fill('input#title, input[placeholder*="curating"], input[placeholder*="Golf"]', bag.title);
 
   if (bag.description) {
     await page.fill(
-      'textarea[name="description"], textarea[placeholder*="description"]',
+      'textarea#description, textarea[placeholder*="description"]',
       bag.description
     );
   }
 
   // Set privacy toggle if needed
-  if (bag.isPublic) {
-    const toggle = page.locator('button[role="switch"], input[type="checkbox"]').first();
-    const isChecked = await toggle.isChecked().catch(() => false);
-    if (!isChecked) {
-      await toggle.click();
-    }
+  if (!bag.isPublic) {
+    // Default is public, so toggle to private
+    const toggle = page.locator('button[role="switch"]').first();
+    await toggle.click();
   }
 
-  // Submit the form - wait for modal to be ready and use force to bypass backdrop
-  await page.waitForTimeout(300); // Wait for modal animation
-  await page.locator('form button[type="submit"]:has-text("Create")').click({ force: true });
+  // Submit the form
+  await page.click('button:has-text("Create")');
 
-  // Wait for navigation to bag editor (new URL structure: /u/[handle]/[code]/edit)
-  await page.waitForURL(/\/u\/[^\/]+\/[^\/]+\/edit/, { timeout: 10000 });
+  // Wait for navigation to bag editor (URL structure: /u/[handle]/[code]/edit)
+  await page.waitForURL(/\/u\/[^\/]+\/[^\/]+\/edit/, { timeout: 15000 });
 
   // Extract bag code from URL
   const url = page.url();
@@ -155,8 +155,9 @@ export async function deleteBag(page: Page, bagCode: string): Promise<void> {
   // Click delete button
   await page.click('button:has-text("Delete")');
 
-  // Wait for redirect to dashboard
-  await page.waitForURL('/dashboard', { timeout: 10000 });
+  // Wait for redirect — bag deletion navigates to /dashboard which
+  // redirects to /u/{handle}, so wait for either
+  await page.waitForURL(/\/(dashboard|u\/)/, { timeout: 10000 });
 }
 
 /**

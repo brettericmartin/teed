@@ -53,16 +53,18 @@ export async function login(page: Page, user: TestUser = TEST_USER) {
   // Wait for auth cookies/storage to be set and then wait for navigation
   await page.waitForTimeout(1500);
 
-  // Manually navigate to dashboard to ensure we're there
+  // Navigate to dashboard - it redirects to /u/{handle} for authenticated users
+  // or to /login for unauthenticated users
   await page.goto('/dashboard', { waitUntil: 'domcontentloaded' });
 
   // Give it a moment to settle
   await page.waitForTimeout(500);
 
-  // Verify we're logged in by checking we're still on dashboard
+  // Verify we're logged in: /dashboard redirects to /u/{handle} on success,
+  // or to /login on failure
   const finalUrl = page.url();
-  if (!finalUrl.includes('/dashboard')) {
-    throw new Error(`Login failed - redirected to ${finalUrl} instead of /dashboard`);
+  if (finalUrl.includes('/login')) {
+    throw new Error(`Login failed - redirected back to /login`);
   }
 }
 
@@ -81,8 +83,9 @@ export async function logout(page: Page) {
 export async function isAuthenticated(page: Page): Promise<boolean> {
   try {
     await page.goto('/dashboard');
-    // If we can access dashboard, we're authenticated
-    return page.url().includes('/dashboard');
+    // /dashboard redirects to /u/{handle} for authenticated users,
+    // or /login for unauthenticated users
+    return !page.url().includes('/login');
   } catch {
     return false;
   }
