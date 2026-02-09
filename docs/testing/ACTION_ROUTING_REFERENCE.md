@@ -119,6 +119,8 @@ Standalone page. This is the canonical bag creation route.
 
 **Flow:** Auth check -> form -> `POST /api/bags` -> (optional URL save) -> confetti -> `-> /u/{handle}/{code}/edit`
 
+**Auth dependency:** Calls `GET /api/auth/session` and requires `{ user, profile: { handle } }` in the response. If `profile.handle` is missing, the page redirects to `/login` even for authenticated users.
+
 **Source:** `app/bags/new/page.tsx`
 
 ---
@@ -258,6 +260,65 @@ Run through each row. Mark pass/fail. Every action should produce visible feedba
 [ ] All modals close on backdrop click
 [ ] All modals close on Escape key
 [ ] AddItemFlow swipe-to-dismiss works on mobile
+```
+
+---
+
+## Auth & API Dependencies
+
+Routes don't just need to resolve — they need their **runtime dependencies** to return the right data. A page can load and still break silently if an API it calls is missing fields.
+
+### `GET /api/auth/session`
+
+Central auth endpoint used by client-side pages. Must return:
+
+```json
+{
+  "user": { "id": "...", "email": "..." },
+  "profile": { "handle": "...", "display_name": "..." }
+}
+```
+
+| Consumer | Fields Required | Breaks If Missing |
+|----------|----------------|-------------------|
+| `/bags/new` | `user`, `profile.handle` | Redirects to `/login` |
+| `UserProfileClient` | `user` (checks existence) | Shows logged-out state |
+| `DiscoverClient` | `user` (checks existence) | Shows logged-out state |
+| `PublicBagView` | `user` (checks existence) | Shows logged-out state |
+
+### `POST /api/bags`
+
+Creates a bag. Returns the full bag object including `code`.
+
+| Consumer | Fields Required | Breaks If Missing |
+|----------|----------------|-------------------|
+| `/bags/new` | `code` | Can't navigate to editor |
+| `DashboardClient.handleCreateBag` | `code` | Can't navigate to editor |
+
+### Route Auth Mechanisms
+
+Not all routes auth the same way. This matters because a page can "load" but still fail its auth check:
+
+| Route | Auth Method | Failure Mode |
+|-------|------------|--------------|
+| `/dashboard` | Server-side (`createServerSupabase`) | Redirects to `/login` (server) |
+| `/bags/new` | Client-side (`fetch /api/auth/session`) | Redirects to `/login` (client) |
+| `/u/{handle}/{code}/edit` | Server-side (`createServerSupabase`) | Redirects to `/login` (server) |
+| `/u/{handle}` | Server-side (public page, no auth required) | N/A |
+
+**Key rule:** When a page uses client-side auth via `/api/auth/session`, the API response shape is a contract. Adding a new field consumer? Verify the API returns it.
+
+---
+
+## API Contract Tests
+
+```
+[ ] GET /api/auth/session (authenticated)
+    Expected: 200, body has user.id AND profile.handle
+[ ] GET /api/auth/session (unauthenticated)
+    Expected: 200, body has user: null, profile: null
+[ ] POST /api/bags { title: "Test" }
+    Expected: 201, body has code (non-empty string)
 ```
 
 ---

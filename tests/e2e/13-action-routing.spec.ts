@@ -53,6 +53,65 @@ async function openAddMenu(page: Page) {
 }
 
 // ---------------------------------------------------------------------------
+// 0. API contract tests — these verify the data shape that pages depend on.
+//    A page can "load" and still break if its API dependency returns the
+//    wrong shape. These tests catch that.
+// ---------------------------------------------------------------------------
+
+test.describe('API contracts', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.context().clearCookies();
+    await login(page);
+  });
+
+  test('GET /api/auth/session returns user AND profile.handle when authenticated', async ({ page }) => {
+    const response = await page.request.get('/api/auth/session');
+    expect(response.ok()).toBeTruthy();
+
+    const data = await response.json();
+
+    // user must exist
+    expect(data.user).toBeTruthy();
+    expect(data.user.id).toBeTruthy();
+
+    // profile.handle is required by /bags/new — if missing, the page
+    // redirects to /login even for authenticated users
+    expect(data.profile).toBeTruthy();
+    expect(data.profile.handle).toBeTruthy();
+    expect(typeof data.profile.handle).toBe('string');
+  });
+
+  test('GET /api/auth/session returns nulls when unauthenticated', async ({ page }) => {
+    // Clear auth
+    await page.context().clearCookies();
+    await page.context().clearPermissions();
+
+    const response = await page.request.get('/api/auth/session');
+    expect(response.ok()).toBeTruthy();
+
+    const data = await response.json();
+    expect(data.user).toBeNull();
+  });
+
+  test('/bags/new stays on page (not /login) when authenticated', async ({ page }) => {
+    // This is the smoke test that would have caught the missing profile.handle bug.
+    // It verifies the FULL chain: auth session API -> client check -> form renders.
+    await page.goto('/bags/new');
+
+    // Wait for client-side auth check to complete
+    await page.waitForTimeout(3000);
+
+    // Must NOT have been redirected to /login
+    expect(page.url()).not.toContain('/login');
+
+    // The creation form should be visible
+    await expect(
+      page.locator('input#title, input[placeholder*="curating"], input[placeholder*="Golf"]')
+    ).toBeVisible({ timeout: 5000 });
+  });
+});
+
+// ---------------------------------------------------------------------------
 // 1. ProfileActionBar routing (profile page, owner view)
 // ---------------------------------------------------------------------------
 
