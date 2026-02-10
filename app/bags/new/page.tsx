@@ -1,54 +1,25 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Package, X, Loader2, Link2, Sparkles, Check } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Package, X, Loader2 } from 'lucide-react';
 import { useCelebration } from '@/lib/celebrations';
-import { classifyUrl, isValidUrl } from '@/lib/linkIntelligence/classifier';
-import { cn } from '@/lib/utils';
 
 /**
  * /bags/new - Quick bag creation page
  *
  * Provides a focused UI for creating a new bag.
- * Supports ?url= query param from link paste workflow.
  * After creation, redirects to the bag editor.
  */
 export default function NewBagPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isPublic, setIsPublic] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [userHandle, setUserHandle] = useState<string | null>(null);
-  const [quickStartUrl, setQuickStartUrl] = useState('');
-  const [urlClassification, setUrlClassification] = useState<string | null>(null);
   const { celebrateFirstBag, celebrateBagCreated } = useCelebration();
-
-  // Check for URL param (from link paste workflow)
-  useEffect(() => {
-    const urlParam = searchParams.get('url');
-    if (urlParam && isValidUrl(urlParam)) {
-      setQuickStartUrl(urlParam);
-      const result = classifyUrl(urlParam);
-      const platform = result.platform.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-      setUrlClassification(`${platform} ${result.type}`);
-    }
-  }, [searchParams]);
-
-  // Validate and classify URL as user types
-  const handleUrlChange = (url: string) => {
-    setQuickStartUrl(url);
-    if (url && isValidUrl(url)) {
-      const result = classifyUrl(url);
-      const platform = result.platform.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-      setUrlClassification(`${platform} ${result.type}`);
-    } else {
-      setUrlClassification(null);
-    }
-  };
 
   // Fetch user handle on mount
   useEffect(() => {
@@ -85,9 +56,9 @@ export default function NewBagPage() {
 
     try {
       // Check if this is the first bag
-      const bagsResponse = await fetch('/api/bags');
-      const existingBags = bagsResponse.ok ? await bagsResponse.json() : [];
-      const isFirstBag = existingBags.length === 0;
+      const bagsResponse = await fetch('/api/user/bags');
+      const bagsData = bagsResponse.ok ? await bagsResponse.json() : { bags: [] };
+      const isFirstBag = (bagsData.bags || []).length === 0;
 
       // Create the bag
       const response = await fetch('/api/bags', {
@@ -106,26 +77,6 @@ export default function NewBagPage() {
       }
 
       const newBag = await response.json();
-
-      // If there's a quick start URL, add it as the first item
-      if (quickStartUrl && isValidUrl(quickStartUrl)) {
-        try {
-          await fetch('/api/universal-links/save', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              url: quickStartUrl,
-              destination: {
-                type: 'bag',
-                bagId: newBag.id,
-              },
-            }),
-          });
-        } catch (e) {
-          console.error('Failed to add initial URL:', e);
-          // Don't block bag creation if URL add fails
-        }
-      }
 
       // Celebrate
       if (isFirstBag) {
@@ -224,44 +175,6 @@ export default function NewBagPage() {
                 className="w-full px-4 py-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--teed-green-7)] focus:border-transparent transition-all resize-none"
                 disabled={isLoading}
               />
-            </div>
-
-            {/* Quick Start: Add First Link */}
-            <div className={cn(
-              'p-4 rounded-xl border transition-all',
-              quickStartUrl && urlClassification
-                ? 'bg-[var(--teed-green-2)] border-[var(--teed-green-6)]'
-                : 'bg-[var(--surface-secondary)] border-[var(--border-subtle)]'
-            )}>
-              <div className="flex items-center gap-2 mb-2">
-                <Sparkles className="w-4 h-4 text-[var(--teed-green-9)]" />
-                <span className="text-sm font-medium text-[var(--text-primary)]">
-                  Quick Start
-                </span>
-                <span className="text-xs text-[var(--text-tertiary)]">(optional)</span>
-              </div>
-              <p className="text-xs text-[var(--text-secondary)] mb-3">
-                Paste a link to add your first item immediately
-              </p>
-              <div className="relative">
-                <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-tertiary)]" />
-                <input
-                  type="url"
-                  id="quickStartUrl"
-                  value={quickStartUrl}
-                  onChange={(e) => handleUrlChange(e.target.value)}
-                  placeholder="https://amazon.com/product..."
-                  disabled={isLoading}
-                  className="w-full pl-10 pr-4 py-2.5 text-sm bg-white rounded-lg border border-[var(--border-subtle)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--teed-green-7)] focus:border-transparent transition-all disabled:opacity-50"
-                  data-no-paste-handler
-                />
-              </div>
-              {quickStartUrl && urlClassification && (
-                <div className="mt-2 flex items-center gap-2 text-sm text-[var(--teed-green-9)]">
-                  <Check className="w-4 h-4" />
-                  <span>{urlClassification} detected</span>
-                </div>
-              )}
             </div>
 
             {/* Privacy Toggle */}

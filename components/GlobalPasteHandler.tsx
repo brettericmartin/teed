@@ -49,10 +49,10 @@ export function GlobalPasteHandler({
     if (!isOwner) return;
     async function fetchBags() {
       try {
-        const response = await fetch('/api/bags');
+        const response = await fetch('/api/user/bags');
         if (response.ok) {
-          const bags = await response.json();
-          setUserBags(bags.slice(0, 5)); // Only show 5 most recent
+          const data = await response.json();
+          setUserBags((data.bags || []).slice(0, 5)); // Only show 5 most recent
         }
       } catch (error) {
         console.error('Failed to fetch bags:', error);

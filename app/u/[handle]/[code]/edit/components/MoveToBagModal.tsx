@@ -7,8 +7,7 @@ type Bag = {
   id: string;
   code: string;
   title: string;
-  category: string | null;
-  is_public: boolean;
+  item_count: number;
 };
 
 type MoveToBagModalProps = {
@@ -45,11 +44,11 @@ export default function MoveToBagModal({
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/bags');
+      const response = await fetch('/api/user/bags');
       if (!response.ok) throw new Error('Failed to fetch bags');
       const data = await response.json();
       // Filter out the current bag
-      const otherBags = data.filter((bag: Bag) => bag.id !== currentBagId);
+      const otherBags = (data.bags || []).filter((bag: Bag) => bag.id !== currentBagId);
       setBags(otherBags);
     } catch (err) {
       setError('Failed to load your curations');
@@ -156,20 +155,9 @@ export default function MoveToBagModal({
                       <h3 className="font-medium text-[var(--text-primary)] truncate">
                         {bag.title}
                       </h3>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        {bag.category && (
-                          <span className="text-xs text-[var(--text-tertiary)]">
-                            {bag.category}
-                          </span>
-                        )}
-                        <span className={`text-xs px-1.5 py-0.5 rounded ${
-                          bag.is_public
-                            ? 'bg-[var(--teed-green-3)] text-[var(--teed-green-11)]'
-                            : 'bg-[var(--sky-3)] text-[var(--sky-11)]'
-                        }`}>
-                          {bag.is_public ? 'Public' : 'Private'}
-                        </span>
-                      </div>
+                      <span className="text-xs text-[var(--text-tertiary)]">
+                        {bag.item_count} item{bag.item_count !== 1 ? 's' : ''}
+                      </span>
                     </div>
                     {selectedBagId === bag.id && (
                       <Check className="w-5 h-5 text-[var(--teed-green-9)] flex-shrink-0 ml-2" />
