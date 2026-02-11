@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, FormEvent } from 'react';
 import { X, Link2, Sparkles, Check } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { useToast } from '@/components/ui/Toast';
 import { classifyUrl, isValidUrl } from '@/lib/linkIntelligence/classifier';
 import { cn } from '@/lib/utils';
 
@@ -22,6 +23,7 @@ export default function NewBagModal({
   isLoading,
   initialUrl = '',
 }: NewBagModalProps) {
+  const { showError } = useToast();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isPublic, setIsPublic] = useState(true);
@@ -68,7 +70,7 @@ export default function NewBagModal({
     e.preventDefault();
 
     if (!title.trim()) {
-      alert('Title is required');
+      showError('Title is required');
       return;
     }
 

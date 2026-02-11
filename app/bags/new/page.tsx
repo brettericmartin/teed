@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Package, X, Loader2 } from 'lucide-react';
 import { useCelebration } from '@/lib/celebrations';
+import * as authApi from '@/lib/api/domains/auth';
+import * as bagsApi from '@/lib/api/domains/bags';
 
 /**
  * /bags/new - Quick bag creation page
@@ -25,14 +27,13 @@ export default function NewBagPage() {
   useEffect(() => {
     async function fetchHandle() {
       try {
-        const response = await fetch('/api/auth/session');
-        if (!response.ok) {
+        const { user, profile } = await authApi.getSession();
+        if (!user) {
           router.push('/login');
           return;
         }
-        const { user, profile } = await response.json();
-        if (!user || !profile?.handle) {
-          router.push('/login');
+        if (!profile?.handle) {
+          router.push('/settings');
           return;
         }
         setUserHandle(profile.handle);
@@ -56,27 +57,20 @@ export default function NewBagPage() {
 
     try {
       // Check if this is the first bag
-      const bagsResponse = await fetch('/api/user/bags');
-      const bagsData = bagsResponse.ok ? await bagsResponse.json() : { bags: [] };
-      const isFirstBag = (bagsData.bags || []).length === 0;
-
-      // Create the bag
-      const response = await fetch('/api/bags', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: title.trim(),
-          description: description.trim() || null,
-          is_public: isPublic,
-        }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to create bag');
+      let isFirstBag = false;
+      try {
+        const bagsData = await bagsApi.listMine();
+        isFirstBag = (bagsData.bags || []).length === 0;
+      } catch (err) {
+        console.error('Failed to check bag count:', err);
       }
 
-      const newBag = await response.json();
+      // Create the bag
+      const newBag = await bagsApi.create({
+        title: title.trim(),
+        description: description.trim() || undefined,
+        is_public: isPublic,
+      });
 
       // Celebrate
       if (isFirstBag) {

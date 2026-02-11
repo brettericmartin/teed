@@ -22,6 +22,11 @@ export async function GET() {
       .eq('id', user.id)
       .single();
 
+    if (!profile) {
+      console.warn(`Session API: user ${user.id} has no profile row`);
+      return NextResponse.json({ user, profile: null, profileMissing: true }, { status: 200 });
+    }
+
     return NextResponse.json({ user, profile }, { status: 200 });
   } catch (error) {
     console.error('Session API error:', error);

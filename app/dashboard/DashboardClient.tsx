@@ -9,6 +9,7 @@ import NewBagModal from './components/NewBagModal';
 import { Button } from '@/components/ui/Button';
 import ProfileStats from '@/components/ProfileStats';
 import { useCelebration } from '@/lib/celebrations';
+import { useToast } from '@/components/ui/Toast';
 import { staggerContainer, cardVariants } from '@/lib/animations';
 import { PageContainer, PageHeader, ContentContainer } from '@/components/layout/PageContainer';
 import { UniversalAddMenu, AddItemFlow, AddSocialFlow } from '@/components/add';
@@ -87,6 +88,7 @@ export default function DashboardClient({
   profileStats,
 }: DashboardClientProps) {
   const router = useRouter();
+  const { showError } = useToast();
   const [bags, setBags] = useState<Bag[]>(initialBags);
   const [showNewBagModal, setShowNewBagModal] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
@@ -180,7 +182,7 @@ export default function DashboardClient({
       router.push(`/u/${userHandle}/${newBag.code}/edit`);
     } catch (error) {
       console.error('Error creating bag:', error);
-      alert('Failed to create bag. Please try again.');
+      showError('Failed to create bag. Please try again.');
     } finally {
       setIsCreating(false);
     }
@@ -206,7 +208,7 @@ export default function DashboardClient({
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.error || 'Failed to toggle pin');
+        showError(data.error || 'Failed to toggle pin');
         return;
       }
 
@@ -228,7 +230,7 @@ export default function DashboardClient({
       );
     } catch (error) {
       console.error('Error toggling pin:', error);
-      alert('Failed to toggle pin. Please try again.');
+      showError('Failed to toggle pin. Please try again.');
     }
   };
 
