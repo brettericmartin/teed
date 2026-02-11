@@ -7,30 +7,37 @@ import { Input } from '@/components/ui/Input';
 import { supabase } from '@/lib/supabaseClient';
 import { BetaCapacityBadge } from '@/components/BetaCapacityCounter';
 import type { SurveyResponses } from '@/lib/types/beta';
-import { ChevronLeft, ChevronRight, Check, Loader2 } from 'lucide-react';
-import { calculateScorecardResult, serializeScorecardForDB } from '@/lib/scorecard';
+import {
+  CREATOR_TYPES, NICHES, AUDIENCE_SIZES, PLATFORMS,
+  AFFILIATE_STATUS, REVENUE_GOALS, CURRENT_TOOLS,
+  FRUSTRATIONS, USAGE_INTENT, DOCUMENTATION_HABITS,
+} from '@/lib/surveyConstants';
+import { ChevronLeft, ChevronRight, Check, Loader2, X } from 'lucide-react';
 
 type Step = 1 | 2 | 3 | 4;
 
 interface FormData {
-  // Basic info
+  // Basic info + account
   email: string;
   name: string;
+  password: string;
+  confirmPassword: string;
+  handle: string;
 
-  // Step 1: Who You Are (4 questions)
+  // Step 2: Who You Are (4 questions)
   creator_type: string;
   primary_niche: string;
   primary_niche_other: string;
   audience_size: string;
   primary_platform: string;
 
-  // Step 2: Monetization (3 questions)
+  // Step 3: Monetization (3 questions)
   affiliate_status: string;
   revenue_goals: string;
   current_tools: string[];
 
-  // Step 3: Your Needs (4 questions)
-  biggest_frustrations: string[];  // Changed to array for multi-select
+  // Step 4: Your Needs (4 questions)
+  biggest_frustrations: string[];
   documentation_habits: string;
   magic_wand_feature: string;
   usage_intent: string;
@@ -38,91 +45,6 @@ interface FormData {
   // Referral
   referral_code: string;
 }
-
-// ============================================================================
-// Question Options
-// ============================================================================
-
-const CREATOR_TYPES = [
-  { id: 'professional_creator', label: 'Professional Creator', icon: '🎬', description: 'Content creation is my career' },
-  { id: 'serious_hobbyist', label: 'Serious Hobbyist', icon: '🎯', description: 'I create content consistently as a passion' },
-  { id: 'brand_ambassador', label: 'Brand Ambassador', icon: '🤝', description: 'I work with brands and do sponsorships' },
-  { id: 'building_audience', label: 'Building My Audience', icon: '📈', description: 'Actively growing, not yet established' },
-  { id: 'purely_casual', label: 'Purely Casual', icon: '🏡', description: 'I just share what I love with friends' },
-];
-
-const NICHES = [
-  { id: 'golf', label: 'Golf', icon: '⛳' },
-  { id: 'tech_gadgets', label: 'Tech & Gadgets', icon: '📱' },
-  { id: 'fashion', label: 'Fashion & Style', icon: '👔' },
-  { id: 'outdoor_adventure', label: 'Outdoor & Adventure', icon: '🏔️' },
-  { id: 'home_office', label: 'Home & Office', icon: '🏠' },
-  { id: 'fitness', label: 'Fitness & Wellness', icon: '💪' },
-  { id: 'other', label: 'Something Else', icon: '✨' },
-];
-
-const AUDIENCE_SIZES = [
-  { id: 'friends_family', label: 'Just Friends & Family', description: 'Sharing with people I know' },
-  { id: 'under_1k', label: 'Under 1,000', description: 'Just getting started' },
-  { id: '1k_10k', label: '1,000 - 10,000', description: 'Growing steadily' },
-  { id: '10k_50k', label: '10,000 - 50,000', description: 'Established creator' },
-  { id: '50k_plus', label: '50,000+', description: 'Significant reach' },
-];
-
-const PLATFORMS = [
-  { id: 'instagram', label: 'Instagram', icon: '📸' },
-  { id: 'tiktok', label: 'TikTok', icon: '🎵' },
-  { id: 'youtube', label: 'YouTube', icon: '🎥' },
-  { id: 'twitter', label: 'X (Twitter)', icon: '🐦' },
-  { id: 'blog', label: 'Blog / Website', icon: '✍️' },
-  { id: 'other', label: 'Other', icon: '🌐' },
-];
-
-const AFFILIATE_STATUS = [
-  { id: 'actively', label: 'Yes, actively', description: 'I earn from affiliates regularly' },
-  { id: 'sometimes', label: 'Sometimes', description: 'I use them occasionally' },
-  { id: 'want_to_start', label: 'Want to start', description: "Haven't figured it out yet" },
-  { id: 'not_interested', label: 'Not really', description: 'Not my focus right now' },
-];
-
-const REVENUE_GOALS = [
-  { id: 'side_income', label: '$100-500/month', description: 'Nice side income' },
-  { id: 'meaningful_income', label: '$500-2,000/month', description: 'Meaningful revenue' },
-  { id: 'significant_income', label: '$2,000+/month', description: 'Significant income stream' },
-  { id: 'not_priority', label: "Money isn't the goal", description: 'I just want to share' },
-];
-
-const CURRENT_TOOLS = [
-  { id: 'linktree', label: 'Linktree' },
-  { id: 'amazon_storefront', label: 'Amazon Storefront' },
-  { id: 'ltk', label: 'LTK (Like to Know)' },
-  { id: 'notion', label: 'Notion / Docs' },
-  { id: 'instagram_guides', label: 'Instagram Guides' },
-  { id: 'nothing', label: 'Nothing yet' },
-  { id: 'other', label: 'Something else' },
-];
-
-const FRUSTRATIONS = [
-  { id: 'time_consuming', label: 'Too time-consuming', description: 'Creating lists takes forever' },
-  { id: 'looks_bad', label: "Doesn't look good", description: 'Current tools are ugly' },
-  { id: 'no_analytics', label: 'No good analytics', description: "I don't know what works" },
-  { id: 'affiliate_complexity', label: 'Affiliate links are complicated', description: 'Hard to set up and manage' },
-  { id: 'repeated_questions', label: 'Audience keeps asking', description: 'Same questions over and over' },
-];
-
-const USAGE_INTENT = [
-  { id: 'immediately', label: 'Within 24 hours', description: "I'm ready to go" },
-  { id: 'this_week', label: 'This week', description: 'Soon, just need to gather items' },
-  { id: 'explore_first', label: "I'd explore first", description: "Want to see what's possible" },
-  { id: 'not_sure', label: 'Not sure', description: 'Depends on the experience' },
-];
-
-const DOCUMENTATION_HABITS = [
-  { id: 'detailed_notes', label: 'I keep detailed notes', description: 'About why I chose each product' },
-  { id: 'basic_tracking', label: 'Basic tracking', description: 'I know what I have, roughly' },
-  { id: 'scattered_info', label: 'Info is scattered', description: 'Across apps, notes, bookmarks' },
-  { id: 'nothing_organized', label: 'Nothing organized', description: 'I just remember or search again' },
-];
 
 // ============================================================================
 // Main Component
@@ -136,9 +58,19 @@ export default function ApplyForm() {
   const [error, setError] = useState<string | null>(null);
   const [applicationNumber, setApplicationNumber] = useState<number | null>(null);
 
+  // Handle availability state
+  const [handleAvailability, setHandleAvailability] = useState<{
+    checking: boolean;
+    available: boolean | null;
+    error: string | null;
+  }>({ checking: false, available: null, error: null });
+
   const [formData, setFormData] = useState<FormData>({
     email: '',
     name: '',
+    password: '',
+    confirmPassword: '',
+    handle: '',
     creator_type: '',
     primary_niche: '',
     primary_niche_other: '',
@@ -147,7 +79,7 @@ export default function ApplyForm() {
     affiliate_status: '',
     revenue_goals: '',
     current_tools: [],
-    biggest_frustrations: [],  // Changed to array for multi-select
+    biggest_frustrations: [],
     documentation_habits: '',
     magic_wand_feature: '',
     usage_intent: '',
@@ -163,6 +95,57 @@ export default function ApplyForm() {
         setApplicationNumber((count || 0) + 1);
       });
   }, []);
+
+  // Check handle availability with debouncing
+  useEffect(() => {
+    const cleanHandle = formData.handle.trim().toLowerCase();
+
+    if (cleanHandle.length === 0) {
+      setHandleAvailability({ checking: false, available: null, error: null });
+      return;
+    }
+
+    if (cleanHandle.length < 3) {
+      setHandleAvailability({
+        checking: false,
+        available: false,
+        error: 'Handle must be at least 3 characters',
+      });
+      return;
+    }
+
+    if (!/^[a-z0-9_]+$/.test(cleanHandle)) {
+      setHandleAvailability({
+        checking: false,
+        available: false,
+        error: 'Only lowercase letters, numbers, and underscores',
+      });
+      return;
+    }
+
+    setHandleAvailability({ checking: true, available: null, error: null });
+
+    const timeoutId = setTimeout(async () => {
+      try {
+        const response = await fetch(`/api/profile/handle-available/${cleanHandle}`);
+        const data = await response.json();
+
+        if (data.error) {
+          setHandleAvailability({ checking: false, available: false, error: data.error });
+        } else {
+          setHandleAvailability({
+            checking: false,
+            available: data.available,
+            error: data.available ? null : 'Handle is already taken',
+          });
+        }
+      } catch {
+        setHandleAvailability({ checking: false, available: false, error: 'Failed to check availability' });
+      }
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [formData.handle]);
 
   const updateField = (field: keyof FormData, value: string | string[]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -180,10 +163,25 @@ export default function ApplyForm() {
     });
   };
 
+  const passwordError = formData.password && formData.password.length < 6
+    ? 'Password must be at least 6 characters'
+    : null;
+
+  const confirmPasswordError = formData.confirmPassword && formData.password !== formData.confirmPassword
+    ? 'Passwords do not match'
+    : null;
+
   const canProceed = () => {
     switch (step) {
       case 1:
-        return formData.email && formData.name;
+        return (
+          formData.email &&
+          formData.name &&
+          formData.password.length >= 6 &&
+          formData.password === formData.confirmPassword &&
+          formData.handle.length >= 3 &&
+          handleAvailability.available === true
+        );
       case 2:
         return (
           formData.creator_type &&
@@ -229,71 +227,48 @@ export default function ApplyForm() {
         affiliate_status: formData.affiliate_status as SurveyResponses['affiliate_status'],
         revenue_goals: formData.revenue_goals as SurveyResponses['revenue_goals'],
         current_tools: formData.current_tools,
-        biggest_frustrations: formData.biggest_frustrations,  // Now an array
+        biggest_frustrations: formData.biggest_frustrations,
         documentation_habits: formData.documentation_habits as SurveyResponses['documentation_habits'],
         magic_wand_feature: formData.magic_wand_feature,
         usage_intent: formData.usage_intent as SurveyResponses['usage_intent'],
       };
 
-      // Calculate the scorecard from survey responses
-      const scorecardResult = calculateScorecardResult(surveyResponses);
-      const scorecardData = serializeScorecardForDB(scorecardResult);
-
-      // The ref parameter can be:
-      // 1. An invite code (TEED-ABC123) -> goes in referred_by_code
-      // 2. An application UUID -> goes in referred_by_application_id
-      // 3. A custom referral code (SARAH2024) -> lookup the application ID
-      const refValue = formData.referral_code || null;
-      const isUUID = refValue && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(refValue);
-      const isInviteCode = refValue && /^TEED-[A-Z0-9]+$/i.test(refValue);
-
-      // If it's not a UUID and not an invite code, it might be a custom referral code
-      // Try to lookup the referrer application ID
-      let referrerAppId: string | null = isUUID ? refValue : null;
-
-      if (refValue && !isUUID && !isInviteCode) {
-        // Lookup custom referral code
-        const { data: lookupData } = await supabase.rpc('lookup_referrer', {
-          ref_value: refValue,
-        });
-        if (lookupData) {
-          referrerAppId = lookupData;
-        }
-      }
-
-      const { data, error: insertError } = await supabase
-        .from('beta_applications')
-        .insert({
+      const response = await fetch('/api/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           email: formData.email,
+          password: formData.password,
           name: formData.name,
-          full_name: formData.name,
-          primary_use_case: formData.primary_niche === 'other' ? formData.primary_niche_other : formData.primary_niche,
-          use_case: formData.primary_niche === 'other' ? formData.primary_niche_other : formData.primary_niche,
-          follower_range: formData.audience_size,
-          social_platform: formData.primary_platform,
-          monetization_interest: formData.affiliate_status === 'actively' || formData.affiliate_status === 'sometimes',
-          biggest_challenge: formData.biggest_frustrations[0] || null,  // First frustration for backward compat
-          survey_responses: surveyResponses,
-          referred_by_code: isInviteCode ? refValue : null, // Only set if it's an invite code (TEED-xxx)
-          referred_by_application_id: referrerAppId, // Set if we resolved an application ID
-          source: refValue ? 'referral' : 'organic',
-          // Scorecard data
-          ...scorecardData,
-        })
-        .select('waitlist_position, id')
-        .single();
+          handle: formData.handle.trim().toLowerCase(),
+          surveyResponses,
+          referralCode: formData.referral_code || undefined,
+          primaryNiche: formData.primary_niche,
+          primaryNicheOther: formData.primary_niche_other,
+          audienceSize: formData.audience_size,
+          primaryPlatform: formData.primary_platform,
+          affiliateStatus: formData.affiliate_status,
+          biggestFrustrations: formData.biggest_frustrations,
+        }),
+      });
 
-      if (insertError) {
-        if (insertError.code === '23505') {
-          setError('This email has already applied. Check your inbox for updates!');
-        } else {
-          throw insertError;
-        }
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || 'Something went wrong. Please try again.');
         return;
       }
 
-      // Redirect to success page with position
-      router.push(`/apply/success?position=${data?.waitlist_position || 0}&id=${data?.id}`);
+      // Sign in to establish client session
+      await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      // Redirect to success page
+      router.push(
+        `/apply/success?position=${data.waitlistPosition || 0}&id=${data.applicationId}&approved=${data.autoApproved}`
+      );
     } catch (err) {
       console.error('Application error:', err);
       setError('Something went wrong. Please try again.');
@@ -303,14 +278,14 @@ export default function ApplyForm() {
   };
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-lg overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
       {/* Header */}
       <div className="bg-gradient-to-r from-[var(--teed-green-9)] to-[var(--teed-green-8)] p-6 text-white">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold">Founding Member Application</h2>
             <p className="text-white/80 mt-1">
-              Step {step} of 4: {step === 1 ? 'Your Info' : step === 2 ? 'Who You Are' : step === 3 ? 'Monetization' : 'Your Needs'}
+              Step {step} of 4: {step === 1 ? 'Your Account' : step === 2 ? 'Who You Are' : step === 3 ? 'Monetization' : 'Your Needs'}
             </p>
           </div>
           <div className="text-right">
@@ -325,7 +300,7 @@ export default function ApplyForm() {
       </div>
 
       {/* Progress Bar */}
-      <div className="h-1 bg-gray-100 dark:bg-zinc-800">
+      <div className="h-1 bg-gray-100">
         <div
           className="h-full bg-[var(--teed-green-9)] transition-all duration-300"
           style={{ width: `${(step / 4) * 100}%` }}
@@ -333,12 +308,12 @@ export default function ApplyForm() {
       </div>
 
       <div className="p-6">
-        {/* Step 1: Basic Info */}
+        {/* Step 1: Account Info */}
         {step === 1 && (
-          <div className="space-y-6">
+          <div className="space-y-4">
             <div className="text-center mb-6">
-              <h3 className="text-xl font-semibold text-[var(--text-primary)]">Let's get started</h3>
-              <p className="text-sm text-[var(--text-secondary)] mt-1">We'll use this to keep you updated</p>
+              <h3 className="text-xl font-semibold text-[var(--text-primary)]">Create your account</h3>
+              <p className="text-sm text-[var(--text-secondary)] mt-1">This creates your Teed account so you can sign in anytime</p>
             </div>
             <Input
               label="Your Name"
@@ -353,6 +328,61 @@ export default function ApplyForm() {
               value={formData.email}
               onChange={(e) => updateField('email', e.target.value)}
             />
+            <Input
+              label="Password"
+              type="password"
+              placeholder="At least 6 characters"
+              value={formData.password}
+              onChange={(e) => updateField('password', e.target.value)}
+              error={passwordError || undefined}
+            />
+            <Input
+              label="Confirm Password"
+              type="password"
+              placeholder="Confirm your password"
+              value={formData.confirmPassword}
+              onChange={(e) => updateField('confirmPassword', e.target.value)}
+              error={confirmPasswordError || undefined}
+            />
+
+            {/* Handle */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Choose a Handle
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                  @
+                </div>
+                <input
+                  type="text"
+                  value={formData.handle}
+                  onChange={(e) => updateField('handle', e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
+                  className="w-full pl-8 pr-12 px-3 py-2 border rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 hover:border-gray-400 dark:hover:border-zinc-600 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                  placeholder="your_handle"
+                />
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                  {handleAvailability.checking && (
+                    <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
+                  )}
+                  {!handleAvailability.checking && handleAvailability.available === true && (
+                    <Check className="w-5 h-5 text-[var(--teed-green-9)]" />
+                  )}
+                  {!handleAvailability.checking && handleAvailability.available === false && (
+                    <X className="w-5 h-5 text-red-500" />
+                  )}
+                </div>
+              </div>
+              {handleAvailability.error && (
+                <p className="mt-1 text-xs text-red-500">{handleAvailability.error}</p>
+              )}
+              {handleAvailability.available && (
+                <p className="mt-1 text-xs text-[var(--teed-green-9)]">Handle is available!</p>
+              )}
+              <p className="mt-1 text-xs text-gray-400">
+                Your unique URL: teed.co/@{formData.handle || 'you'}
+              </p>
+            </div>
           </div>
         )}
 
@@ -378,7 +408,7 @@ export default function ApplyForm() {
                     className={`p-4 rounded-xl border-2 text-left transition-all ${
                       formData.creator_type === type.id
                         ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
-                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300'
+                        : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -407,7 +437,7 @@ export default function ApplyForm() {
                     className={`p-3 rounded-lg border-2 text-center transition-all ${
                       formData.primary_niche === niche.id
                         ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
-                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300'
+                        : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
                     <span className="text-xl block mb-1">{niche.icon}</span>
@@ -439,7 +469,7 @@ export default function ApplyForm() {
                     className={`p-3 rounded-lg border-2 text-left transition-all ${
                       formData.audience_size === size.id
                         ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
-                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300'
+                        : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
                     <p className="font-medium text-[var(--text-primary)]">{size.label}</p>
@@ -463,7 +493,7 @@ export default function ApplyForm() {
                     className={`p-3 rounded-lg border-2 text-center transition-all ${
                       formData.primary_platform === platform.id
                         ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
-                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300'
+                        : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
                     <span className="text-xl block mb-1">{platform.icon}</span>
@@ -497,7 +527,7 @@ export default function ApplyForm() {
                     className={`p-4 rounded-xl border-2 text-left transition-all ${
                       formData.affiliate_status === status.id
                         ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
-                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300'
+                        : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
                     <p className="font-medium text-[var(--text-primary)]">{status.label}</p>
@@ -521,7 +551,7 @@ export default function ApplyForm() {
                     className={`p-3 rounded-lg border-2 text-left transition-all ${
                       formData.revenue_goals === goal.id
                         ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
-                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300'
+                        : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
                     <p className="font-medium text-[var(--text-primary)]">{goal.label}</p>
@@ -545,7 +575,7 @@ export default function ApplyForm() {
                     className={`px-4 py-2 rounded-full border-2 text-sm transition-all ${
                       formData.current_tools.includes(tool.id)
                         ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-9)] text-white'
-                        : 'border-gray-200 dark:border-zinc-700 text-[var(--text-primary)] hover:border-gray-300'
+                        : 'border-gray-200 text-[var(--text-primary)] hover:border-gray-300'
                     }`}
                   >
                     {formData.current_tools.includes(tool.id) && <Check className="w-3 h-3 inline mr-1" />}
@@ -579,7 +609,7 @@ export default function ApplyForm() {
                     className={`px-4 py-2 rounded-full border-2 text-sm transition-all ${
                       formData.biggest_frustrations.includes(frustration.id)
                         ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-9)] text-white'
-                        : 'border-gray-200 dark:border-zinc-700 text-[var(--text-primary)] hover:border-gray-300'
+                        : 'border-gray-200 text-[var(--text-primary)] hover:border-gray-300'
                     }`}
                     title={frustration.description}
                   >
@@ -604,7 +634,7 @@ export default function ApplyForm() {
                     className={`p-4 rounded-xl border-2 text-left transition-all ${
                       formData.documentation_habits === habit.id
                         ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
-                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300'
+                        : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
                     <p className="font-medium text-[var(--text-primary)]">{habit.label}</p>
@@ -628,7 +658,7 @@ export default function ApplyForm() {
                     className={`p-3 rounded-lg border-2 text-left transition-all ${
                       formData.usage_intent === intent.id
                         ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-2)]'
-                        : 'border-gray-200 dark:border-zinc-700 hover:border-gray-300'
+                        : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
                     <p className="font-medium text-[var(--text-primary)]">{intent.label}</p>
@@ -642,8 +672,8 @@ export default function ApplyForm() {
 
         {/* Error Message */}
         {error && (
-          <div className="mt-4 p-3 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg">
-            <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+          <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-sm text-red-600">{error}</p>
           </div>
         )}
 
@@ -675,7 +705,7 @@ export default function ApplyForm() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Submitting...
+                  Creating account...
                 </>
               ) : (
                 'Submit Application'

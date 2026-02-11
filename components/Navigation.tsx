@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { User, Settings, LogOut, ChevronDown, Compass, LayoutDashboard, Shield, Sparkles, MessageCircle } from 'lucide-react';
+import { User, Settings, LogOut, ChevronDown, Compass, LayoutDashboard, Shield, Sparkles, MessageCircle, BookOpen } from 'lucide-react';
 import { BetaCapacityBadge } from './BetaCapacityCounter';
 import { BetaCountdownBadge } from './BetaCountdown';
 import { useFeatureDiscovery, FEATURE_RELEASES } from './ui/FeatureBadge';
@@ -143,6 +143,17 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
                   {updatesDiscovery.shouldShow && (
                     <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[var(--teed-green-9)] rounded-full animate-pulse" />
                   )}
+                </Link>
+                <Link
+                  href="/blog"
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    pathname?.startsWith('/blog')
+                      ? 'bg-[var(--surface-hover)] text-[var(--text-primary)]'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]'
+                  }`}
+                >
+                  <BookOpen className="w-4 h-4" />
+                  <span>Blog</span>
                 </Link>
                 {isAdmin && (
                   <Link
@@ -322,6 +333,17 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
                 <span className="hidden sm:inline">Discover</span>
               </Link>
               <Link
+                href="/blog"
+                className={`hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  pathname?.startsWith('/blog')
+                    ? 'bg-[var(--surface-hover)] text-[var(--text-primary)]'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]'
+                }`}
+              >
+                <BookOpen className="w-4 h-4" />
+                <span>Blog</span>
+              </Link>
+              <Link
                 href="/updates"
                 onClick={() => updatesDiscovery.markAsSeen()}
                 className={`hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors relative ${
@@ -337,13 +359,12 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
                 )}
               </Link>
 
-              {/* Apply for Beta - primary CTA */}
+              {/* Sign Up - primary CTA */}
               <Link
-                href="/join"
+                href="/signup"
                 className="px-3 sm:px-4 py-2.5 min-h-[44px] flex items-center text-sm font-medium text-white bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] rounded-lg transition-colors"
               >
-                <span className="sm:hidden">Apply</span>
-                <span className="hidden sm:inline">Apply for Beta</span>
+                Sign Up
               </Link>
               {/* Sign In */}
               <Link
