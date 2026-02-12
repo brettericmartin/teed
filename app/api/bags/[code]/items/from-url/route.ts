@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import { inferItemType } from '@/lib/itemTypes/inference';
+import { classifyUrl } from '@/lib/links/classifyUrl';
+import { fetchOEmbed } from '@/lib/linkIntelligence';
 
 /**
  * POST /api/bags/[code]/items/from-url
@@ -80,16 +82,6 @@ export async function POST(
     const nextSortIndex = (maxSortItem?.sort_index ?? -1) + 1;
 
     // Process the URL to extract product information
-    // Call our AI endpoint to analyze the product URL
-    const analyzeResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/ai/analyze-product-url`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url }),
-      }
-    );
-
     let productInfo: {
       name?: string;
       description?: string;
@@ -98,22 +90,53 @@ export async function POST(
       price?: string;
     } = {};
 
-    if (analyzeResponse.ok) {
-      const result = await analyzeResponse.json();
-      productInfo = {
-        name: result.productName || result.name,
-        description: result.description,
-        brand: result.brand,
-        imageUrl: result.imageUrl || result.image,
-        price: result.price,
-      };
+    // Check if this is an embed URL (YouTube, TikTok, etc.) — use oEmbed instead of AI
+    const classification = classifyUrl(url);
+
+    if (classification.type === 'embed') {
+      // Use oEmbed to get channel name, video title, and thumbnail
+      const oembed = await fetchOEmbed(url);
+      if (oembed) {
+        productInfo = {
+          name: oembed.title,
+          brand: oembed.authorName,
+          imageUrl: oembed.thumbnailUrl,
+        };
+      } else {
+        // oEmbed failed — use basic info from embed data
+        productInfo = {
+          name: `${classification.platform} video`,
+          brand: classification.platform,
+        };
+      }
     } else {
-      // If AI analysis fails, extract basic info from URL
-      const domain = parsedUrl.hostname.replace('www.', '');
-      productInfo = {
-        name: `Product from ${domain}`,
-        brand: domain.split('.')[0],
-      };
+      // Product URL — call AI endpoint to analyze
+      const analyzeResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/ai/analyze-product-url`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url }),
+        }
+      );
+
+      if (analyzeResponse.ok) {
+        const result = await analyzeResponse.json();
+        productInfo = {
+          name: result.productName || result.name,
+          description: result.description,
+          brand: result.brand,
+          imageUrl: result.imageUrl || result.image,
+          price: result.price,
+        };
+      } else {
+        // If AI analysis fails, extract basic info from URL
+        const domain = parsedUrl.hostname.replace('www.', '');
+        productInfo = {
+          name: `Product from ${domain}`,
+          brand: domain.split('.')[0],
+        };
+      }
     }
 
     // Infer item type from URL, product info, and bag context
@@ -150,13 +173,14 @@ export async function POST(
       );
     }
 
-    // Add the purchase link to the item
+    // Add the link to the item
+    const isEmbed = classification.type === 'embed';
     const { error: linkError } = await supabase
       .from('links')
       .insert({
         bag_item_id: newItem.id,
         url: url,
-        kind: 'purchase',
+        kind: isEmbed ? 'video' : 'purchase',
         label: parsedUrl.hostname.replace('www.', ''),
         metadata: productInfo.price ? { price: productInfo.price } : null,
       });

@@ -290,11 +290,5 @@ function extractBrandFromTitle(title: string | null): string | null {
     }
   }
 
-  // Try to extract first word(s) as brand
-  const firstWords = title.match(/^([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\s+/);
-  if (firstWords && firstWords[1].length > 2) {
-    return firstWords[1];
-  }
-
   return null;
 }
