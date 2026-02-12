@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
+import { checkBetaAccess } from '@/lib/betaGating';
 
 // POST /api/follows - Follow a user
 export async function POST(request: NextRequest) {
@@ -14,6 +15,15 @@ export async function POST(request: NextRequest) {
 
     if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Check beta access
+    const { approved } = await checkBetaAccess(supabase, user.id);
+    if (!approved) {
+      return NextResponse.json(
+        { error: 'Beta access required to follow users. Please apply or wait for approval.' },
+        { status: 403 }
+      );
     }
 
     const body = await request.json();
