@@ -43,11 +43,28 @@ export const CATEGORY_META: Record<CategoryType, {
 
 export const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.8.0',
+    releaseDate: '2026-02-11',
+    title: 'Massive Brand Dictionary Expansion & Smarter AI Search',
+    summary: 'Brand dictionary expanded from 680 to 1,467 brands across 48 categories. Fuzzy matching is tighter, AI search no longer hallucinates products from known brands, and video URLs are now handled natively.',
+    isLatest: true,
+    changes: [
+      { text: 'Brand dictionary expanded from 680 to 1,467 brands across 48 categories — golf, tech, audio, photography, automotive, motorcycle, coffee, EDC, fitness, baby, pet, kitchen, and dozens more', category: 'feature' },
+      { text: 'Fuzzy matching tightened to prevent false positives — short brand names now require first-character match (e.g. "golf" no longer matches "Wolf")', category: 'improvement' },
+      { text: 'AI product search rewritten to try multiple brand interpretations instead of substituting known brands — searching "Ripper Golf Club Headcover" now treats Ripper as the brand instead of guessing TaylorMade', category: 'improvement' },
+      { text: 'AI enrichment now uses the shared 1,467-brand dictionary instead of a separate 70-brand list, eliminating drift between search and AI', category: 'improvement' },
+      { text: 'AI temperature lowered and learning threshold raised to reduce hallucinated product suggestions polluting the product library', category: 'bugfix' },
+      { text: 'Video URLs (YouTube, TikTok, etc.) now use oEmbed for metadata instead of AI analysis — faster and more accurate titles, thumbnails, and creator names', category: 'feature' },
+      { text: 'Video links automatically tagged as "video" kind instead of "purchase"', category: 'improvement' },
+      { text: 'Beta access gating added to bag creation, bag copying, and follow endpoints', category: 'feature' },
+    ]
+  },
+  {
     version: '2.7.0',
     releaseDate: '2026-02-11',
     title: 'Full Analytics Dashboard & Creator Stats Expansion',
     summary: 'Complete analytics system for admin and creators. Your stats page now shows profile views, social link clicks, follower counts, and bag shares. Per-bag analytics include saves, clones, and shares.',
-    isLatest: true,
+    isLatest: false,
     changes: [
       { text: 'Creator stats page now shows profile views, social link clicks by platform, follower counts, and total bag shares', category: 'feature' },
       { text: 'Per-bag analytics now include saves, clones, and shares alongside views and clicks', category: 'feature' },

@@ -1,0 +1,77 @@
+---
+title: "1,400 Brands and Counting: How Teed Recognizes Almost Everything You Own"
+description: "From golf clubs to espresso machines, motorcycle helmets to mechanical keyboards — Teed's brand dictionary now covers 1,467 brands across 48 categories. Here's how it works and why it matters."
+publishedAt: "2026-02-11"
+author: "Teed"
+category: "build-log"
+tags: ["build-log", "search", "brand matching", "product identification"]
+keywords: ["product identification app", "brand recognition", "gear organization app", "whats in my bag", "product collection tool", "brand dictionary", "fuzzy search brands", "organize gear online"]
+relatedSlugs: ["smarter-search", "building-ai-product-identification", "making-bulk-import-work"]
+---
+
+## The problem with niche brands
+
+When you're building a product that lets people catalog their gear, you immediately hit a problem: people own weird stuff. Not weird as in strange — weird as in niche. The golf world alone has dozens of brands that most people have never heard of. Photography has more. Coffee has an entire subculture of grinder manufacturers that would fill a spreadsheet.
+
+Early versions of Teed's brand dictionary had about 200 entries. Mostly golf and camera equipment, because that's where the first users came from. It worked — until someone tried to add their Akrapovic motorcycle exhaust, their Comandante coffee grinder, or their Civivi pocket knife. The system would shrug and treat it as unrecognized text.
+
+That's a bad experience. When you type a brand name and the system doesn't recognize it, it can't do any of the smart things — auto-categorization, model suggestions, search matching. You're back to manual entry for everything.
+
+## From 200 to 1,467
+
+The dictionary now has 1,467 brands across 48 categories. That's not a typo. Here's what we cover:
+
+- **Golf** — TaylorMade, Callaway, Titleist, Ping, down to niche brands like PXG, Miura, and Vessel
+- **Tech** — Apple, Samsung, Google, plus the full spectrum from Razer to Framework to Nothing
+- **Audio** — Sennheiser, Sony, Bose, but also Campfire Audio, Audeze, Moondrop, and the whole audiophile ecosystem
+- **Photography** — Canon, Nikon, Sony, Fujifilm, plus accessories like SmallRig, Tilta, Aputure, and Atomos
+- **Coffee** — La Marzocco, Comandante, 1Zpresso, Acaia, Fellow, Timemore — the whole specialty coffee world
+- **EDC** — Benchmade, Spyderco, Microtech, Olight, plus pen makers like Tactile Turn and Kaweco
+- **Fitness** — Rogue, REP, Eleiko, Concept2, TRX, down to Kabuki Strength and Bells of Steel
+- **Automotive** — Car brands, tire brands, parts brands, tools — from Porsche to Snap-on
+- **Motorcycle** — Shoei, Alpinestars, Klim, AGV, Rev'It, plus accessory brands like Akrapovic and Yoshimura
+- **Kitchen** — Le Creuset, Staub, Wolf, Wusthof, HexClad, Made In, Our Place
+- **Baby & Kids** — UPPAbaby, Nuna, LEGO, Nugget, plus feeding, monitoring, and clothing brands
+- **Pet** — Ruffwear, Kong, Litter-Robot, Wisdom Panel, and 20+ more
+- **Home & Office** — Herman Miller, Steelcase, Secretlab, plus bedding brands like Casper and Brooklinen
+- **Supplements** — Athletic Greens, LMNT, Seed, Ghost, Vital Proteins, and the whole wellness stack
+
+Plus outdoor gear, watches, eyewear, apparel, gaming peripherals, art supplies, streaming equipment, wearables, and more. Forty-eight categories total, with 37 of them having 20 or more brands.
+
+## Why a dictionary matters more than you'd think
+
+You might wonder: why maintain a manual dictionary at all? Why not just let AI figure it out?
+
+Three reasons.
+
+**Speed.** A dictionary lookup takes microseconds. An AI call takes seconds. When you're typing in a search box and seeing parsed preview chips update in real-time, the difference between "instant" and "two seconds" is the difference between a feature that feels magical and one that feels broken.
+
+**Accuracy.** AI is great at many things but surprisingly bad at brand names, especially niche ones. Ask an AI about "Civivi" and it might hallucinate. Ask a dictionary and you get: brand: Civivi, category: EDC, tier: mid. No guessing.
+
+**Fuzzy matching.** A dictionary lets us do controlled fuzzy matching with Levenshtein distance. "Taylormaid" becomes TaylorMade. "Senheiser" becomes Sennheiser. "Benchmaid" becomes Benchmade. The matching thresholds are tuned per word length — short brand names need very close matches to avoid false positives, while longer names can tolerate more typos.
+
+The AI enrichment pipeline still exists for brands the dictionary doesn't know. But the dictionary is the fast path, and for 1,467 brands, it covers the vast majority of what people actually own.
+
+## Smarter fuzzy matching
+
+Expanding from 200 to 1,467 brands created a new problem: more brands means more potential false positives in fuzzy matching. When you had 200 brands, a short word in your search query was unlikely to accidentally match a brand name. With 1,467 brands, the chances go up.
+
+We found that typing "golf club headcover" was matching "Wolf" (a kitchen appliance brand) because "golf" and "wolf" differ by only one character. The fix: for short brand names under 6 characters, the first character of your search word must match the first character of the brand. This eliminates false positives from common English words while still catching legitimate typos where the first letter is correct — like "nkon" matching "Nikon."
+
+The fuzzy matching thresholds also got tighter across the board. Minimum word length for fuzzy matching went from 3 to 4 characters, and the distance threshold for medium-length names was raised. The result: fewer ghost matches, better real matches.
+
+## AI that doesn't make things up
+
+The other big change was to how AI handles brands it doesn't recognize. Previously, if you searched for a niche brand the system hadn't seen before, the AI would substitute products from well-known brands instead. Search "Ripper Golf Club Headcover" and you'd get TaylorMade and Callaway headcovers — real products, but not what you asked for.
+
+Now the AI tries multiple interpretations of your input. It'll try "Ripper Golf Club" as a brand with "Headcover" as the product. It'll try "Ripper" as a brand with "Golf Club Headcover" as the product. It'll try the full string as a specific product name. The critical rule: all suggestions must use a brand name derived from what you actually typed, not substituted from a known brand.
+
+This is a philosophical stance. When someone types a brand name, they know what they're looking for. The system should help them find it, not redirect them to something more popular.
+
+## What comes next
+
+The dictionary will keep growing. Every time a brand shows up in discovery data without a dictionary match, it gets flagged for addition. The community effectively trains the system by using it.
+
+We're also looking at sub-brand and product line detection. Right now, "Jordan" and "Nike Basketball" are separate entries. Eventually the system should understand that Jordan is a Nike sub-brand and relate them accordingly.
+
+But the foundation is solid. Fourteen hundred brands, forty-eight categories, fuzzy matching that catches typos without hallucinating, and an AI layer that respects what you actually searched for. Type almost any brand you own — there's a good chance we already know about it.
