@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
+import { analytics } from '@/lib/analytics';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -12,6 +13,10 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    analytics.pageViewed('login');
+  }, []);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -30,6 +35,7 @@ export default function LoginPage() {
       }
 
       if (data.session) {
+        analytics.userLoggedIn('email');
         const destination = redirectTo || '/dashboard';
         window.location.href = destination;
       } else {

@@ -141,6 +141,72 @@ export const analytics = {
    */
   userLoggedIn: (method: 'email' | 'google' | 'apple') =>
     trackEvent('user_logged_in', { method }),
+
+  /**
+   * Track bag creation
+   */
+  bagCreated: (bagId: string, bagCode: string, title: string, isFirstBag: boolean) =>
+    trackEvent('bag_created', { bag_id: bagId, bag_code: bagCode, title, is_first_bag: isFirstBag }),
+
+  /**
+   * Track item added to bag
+   */
+  itemAdded: (itemId: string, bagId: string, bagCode: string, method: 'text_search' | 'url' | 'photo' | 'paste' | 'copy') =>
+    trackEvent('item_added', { item_id: itemId, bag_id: bagId, bag_code: bagCode, method }),
+
+  /**
+   * Track search performed
+   */
+  searchPerformed: (query: string, resultCount: number, tier: string) =>
+    trackEvent('search_performed', { query, result_count: resultCount, tier }),
+
+  /**
+   * Track profile view
+   */
+  profileViewed: (profileId: string, profileHandle: string) =>
+    trackEvent('profile_viewed', { profile_id: profileId, profile_handle: profileHandle }),
+
+  /**
+   * Track CTA click
+   */
+  ctaClicked: (ctaId: string, page: string, destination: string) =>
+    trackEvent('cta_clicked', { cta_id: ctaId, page, destination }),
+
+  /**
+   * Track social link click on profile
+   */
+  socialLinkClicked: (platform: string, profileHandle: string) =>
+    trackEvent('social_link_clicked', { platform, profile_handle: profileHandle }),
+
+  /**
+   * Track beta application
+   */
+  betaApplied: (applicationId: string, referralCode?: string, creatorType?: string) =>
+    trackEvent('beta_applied', { application_id: applicationId, referral_code: referralCode, creator_type: creatorType }),
+
+  /**
+   * Track referral share
+   */
+  referralShared: (applicationId: string, shareMethod: string) =>
+    trackEvent('referral_shared', { application_id: applicationId, share_method: shareMethod }),
+
+  /**
+   * Track settings saved
+   */
+  settingsSaved: (fieldsChanged: string[]) =>
+    trackEvent('settings_saved', { fields_changed: fieldsChanged }),
+
+  /**
+   * Track item copied to another bag
+   */
+  itemCopiedToBag: (sourceItemId: string, targetBagCode: string, sourceBagCode?: string) =>
+    trackEvent('item_copied_to_bag', { source_item_id: sourceItemId, target_bag_code: targetBagCode, source_bag_code: sourceBagCode }),
+
+  /**
+   * Track paste detection
+   */
+  pasteDetected: (url: string, classification: string, actionTaken: string) =>
+    trackEvent('paste_detected', { url, classification, action_taken: actionTaken }),
 };
 
 export default analytics;

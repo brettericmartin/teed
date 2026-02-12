@@ -17,6 +17,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { analytics } from '@/lib/analytics';
 import BetaCapacityCounter from '@/components/BetaCapacityCounter';
 import ReferralNotifications from '@/components/ReferralNotifications';
 import CustomCodeClaim from './components/CustomCodeClaim';
@@ -103,6 +104,7 @@ export default function SuccessContent() {
   const searchParams = useSearchParams();
   const position = searchParams.get('position');
   const applicationId = searchParams.get('id');
+  const approvedParam = searchParams.get('approved') === 'true';
   const [copied, setCopied] = useState(false);
   const [capacity, setCapacity] = useState<BetaCapacity | null>(null);
   const [stats, setStats] = useState<ApplicationStats | null>(null);
@@ -168,6 +170,7 @@ export default function SuccessContent() {
     };
 
     fetchData();
+    analytics.pageViewed('apply_success', { application_id: applicationId });
   }, [applicationId]);
 
   const referralLink =
@@ -180,6 +183,7 @@ export default function SuccessContent() {
       await navigator.clipboard.writeText(referralLink);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+      if (applicationId) analytics.referralShared(applicationId, 'copy_link');
     } catch (err) {
       console.error('Failed to copy:', err);
     }
@@ -190,7 +194,7 @@ export default function SuccessContent() {
 
   // Determine states
   const isBetaFull = capacity?.is_at_capacity;
-  const hasInstantApproval = stats?.has_instant_approval;
+  const hasInstantApproval = approvedParam || stats?.has_instant_approval;
   const approvalOdds = stats?.approval_odds ?? 50;
   const currentTier = stats?.current_tier;
   const nextTier = stats?.next_tier;
@@ -214,7 +218,7 @@ export default function SuccessContent() {
 
           <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">
             {hasInstantApproval
-              ? "You're approved!"
+              ? "You're in!"
               : isBetaFull
                 ? "You're on the waitlist"
                 : 'Application received'}
@@ -222,11 +226,20 @@ export default function SuccessContent() {
 
           <p className="text-lg text-[var(--text-secondary)]">
             {hasInstantApproval
-              ? 'Welcome to the founding cohort! Check your email for next steps.'
+              ? 'Welcome to the founding cohort! Your account is ready to go.'
               : isBetaFull
                 ? "The founding cohort is full, but you're on our list for the next wave."
                 : 'Your application is being reviewed.'}
           </p>
+
+          {hasInstantApproval && (
+            <Link href="/dashboard">
+              <Button variant="create" className="mt-4">
+                Go to Dashboard
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+          )}
         </div>
 
         {/* Creator Scorecard */}
@@ -423,6 +436,7 @@ export default function SuccessContent() {
                   href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(referralLink)}`}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => applicationId && analytics.referralShared(applicationId, 'twitter')}
                 >
                   <Button variant="secondary" size="sm" className="gap-2">
                     <Twitter className="w-4 h-4" />
@@ -432,6 +446,7 @@ export default function SuccessContent() {
 
                 <a
                   href={`mailto:?subject=Join Teed with me&body=${encodeURIComponent(`Hey! I just applied to Teed, a beautiful way to share your favorite products. Apply with my link and we both benefit:\n\n${referralLink}\n\nIf 5 friends join, I get instant approval - help me out!`)}`}
+                  onClick={() => applicationId && analytics.referralShared(applicationId, 'email')}
                 >
                   <Button variant="secondary" size="sm" className="gap-2">
                     <Mail className="w-4 h-4" />
@@ -518,10 +533,13 @@ export default function SuccessContent() {
                 </span>
                 <div>
                   <p className="font-medium text-[var(--text-primary)]">
-                    You'll get an email with your status
+                    Sign in anytime to check your status
                   </p>
                   <p className="text-sm text-[var(--text-secondary)]">
-                    Keep an eye on your inbox (and spam folder)
+                    Your account is ready — just sign in at{' '}
+                    <Link href="/login" className="text-[var(--teed-green-9)] hover:underline">
+                      /login
+                    </Link>
                   </p>
                 </div>
               </li>
@@ -531,10 +549,10 @@ export default function SuccessContent() {
                 </span>
                 <div>
                   <p className="font-medium text-[var(--text-primary)]">
-                    If accepted, you'll receive an invite code
+                    If accepted, you can start curating immediately
                   </p>
                   <p className="text-sm text-[var(--text-secondary)]">
-                    Create your account and start curating
+                    No extra steps needed — your account is already set up
                   </p>
                 </div>
               </li>

@@ -6,6 +6,9 @@ import { classifyUrl, isValidUrl } from '@/lib/linkIntelligence/classifier';
 import type { ClassifiedUrl } from '@/lib/linkIntelligence/types';
 import { LinkProcessorModal } from './LinkProcessorModal';
 import { useCelebration } from '@/lib/celebrations';
+import * as bagsApi from '@/lib/api/domains/bags';
+import * as universalLinksApi from '@/lib/api/domains/universal-links';
+import { analytics } from '@/lib/analytics';
 
 interface Bag {
   id: string;
@@ -49,11 +52,8 @@ export function GlobalPasteHandler({
     if (!isOwner) return;
     async function fetchBags() {
       try {
-        const response = await fetch('/api/user/bags');
-        if (response.ok) {
-          const data = await response.json();
-          setUserBags((data.bags || []).slice(0, 5)); // Only show 5 most recent
-        }
+        const data = await bagsApi.listMine();
+        setUserBags((data.bags || []).slice(0, 5)); // Only show 5 most recent
       } catch (error) {
         console.error('Failed to fetch bags:', error);
       }
@@ -88,6 +88,7 @@ export function GlobalPasteHandler({
     const result = classifyUrl(text);
     setClassification(result);
     setShowToast(true);
+    analytics.pasteDetected(text, result.type, 'showed_modal');
   }, []);
 
   // Listen for paste events (only if owner)
@@ -128,21 +129,13 @@ export function GlobalPasteHandler({
         handleDismiss();
       } else {
         // Add item to existing bag via API
-        const response = await fetch('/api/universal-links/save', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            url: classification.normalizedUrl,
-            destination: {
-              type: 'bag',
-              bagId,
-            },
-          }),
+        await universalLinksApi.save({
+          url: classification.normalizedUrl,
+          destination: {
+            type: 'bag',
+            bagId,
+          },
         });
-
-        if (!response.ok) {
-          throw new Error('Failed to add item to bag');
-        }
 
         celebrateItemAdded();
         handleDismiss();

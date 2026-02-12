@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import { PageTracker } from '@/components/analytics/PageTracker';
 import {
   Camera,
   Share2,
@@ -15,6 +16,8 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { getUseCaseBySlug, getAllUseCaseSlugs, UseCase } from '@/lib/data/useCases';
+import { getPostsForUseCase } from '@/lib/blog/crosslinks';
+import { RelatedArticles } from '@/components/blog/RelatedArticles';
 
 type PageProps = {
   params: Promise<{ useCase: string }>;
@@ -125,6 +128,7 @@ export default async function UseCasePage({ params }: PageProps) {
 
   const faqSchema = generateFaqSchema(useCase);
   const breadcrumbSchema = generateBreadcrumbSchema(useCase);
+  const relatedPosts = getPostsForUseCase(slug);
 
   return (
     <>
@@ -137,6 +141,7 @@ export default async function UseCasePage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
+      <PageTracker page={`for/${slug}`} />
       <div className="min-h-screen bg-[var(--background)]">
         {/* Breadcrumb */}
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -260,6 +265,9 @@ export default async function UseCasePage({ params }: PageProps) {
             </div>
           </div>
         </section>
+
+        {/* Related Blog Posts */}
+        <RelatedArticles posts={relatedPosts} heading={`${useCase.title} on the Blog`} />
 
         {/* CTA Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[var(--teed-green-2)] via-[var(--teed-green-3)] to-[var(--sky-2)]">

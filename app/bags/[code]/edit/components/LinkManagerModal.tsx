@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
+import * as itemsApi from '@/lib/api/domains/items';
 
 interface Link {
   id: string;
@@ -76,20 +77,7 @@ export default function LinkManagerModal({
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`/api/items/${itemId}/links`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          url: newUrl,
-          kind: newKind,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to add link');
-      }
-
-      const newLink = await response.json();
+      const newLink = await itemsApi.addLink(itemId, { url: newUrl, kind: newKind }) as unknown as Link;
       onLinksChange([...links, newLink]);
       setNewUrl('');
       setNewKind('product');
@@ -120,20 +108,7 @@ export default function LinkManagerModal({
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`/api/links/${linkId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          url: editUrl,
-          kind: editKind,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update link');
-      }
-
-      const updatedLink = await response.json();
+      const updatedLink = await itemsApi.updateLink(linkId, { url: editUrl, kind: editKind }) as unknown as Link;
       onLinksChange(links.map(link => link.id === linkId ? updatedLink : link));
       setEditingLinkId(null);
     } catch (err: any) {
@@ -161,13 +136,7 @@ export default function LinkManagerModal({
     onLinksChange(links.filter(link => link.id !== linkId));
 
     try {
-      const response = await fetch(`/api/links/${linkId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete link');
-      }
+      await itemsApi.deleteLink(linkId);
     } catch (err: any) {
       // Revert on error
       onLinksChange(originalLinks);

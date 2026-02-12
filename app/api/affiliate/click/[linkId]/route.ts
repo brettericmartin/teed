@@ -103,6 +103,25 @@ export async function GET(
         console.error('[Affiliate Click] Failed to log click:', insertError);
         // Don't block redirect on tracking failure
       }
+
+      // Also insert into user_activity for unified analytics pipeline (fire-and-forget)
+      supabase
+        .from('user_activity')
+        .insert({
+          event_type: 'affiliate_link_clicked',
+          event_data: {
+            affiliate_link_id: linkId,
+            affiliate_url: affiliateLink.affiliate_url,
+            device_type: deviceType,
+            referrer: referrer || undefined,
+          },
+          session_id: sessionId,
+        })
+        .then(({ error: activityError }) => {
+          if (activityError) {
+            console.error('[Affiliate Click] Failed to log to user_activity:', activityError);
+          }
+        });
     } else {
       console.log('[Affiliate Click] Tracking disabled (DNT header present)');
     }

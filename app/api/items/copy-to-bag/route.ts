@@ -15,6 +15,7 @@ interface SourceItem {
   notes: string | null;
   quantity: number;
   photo_url: string | null;
+  custom_photo_id: string | null;
   promo_codes: string | null;
   links: SourceLink[];
 }
@@ -113,6 +114,7 @@ export async function POST(request: NextRequest) {
         notes: source_item.notes?.trim() || null,
         quantity: source_item.quantity || 1,
         photo_url: source_item.photo_url || null,
+        custom_photo_id: source_item.custom_photo_id || null,
         promo_codes: source_item.promo_codes || null,
         sort_index: nextSortIndex,
       })

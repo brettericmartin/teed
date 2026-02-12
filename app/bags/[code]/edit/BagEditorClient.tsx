@@ -13,6 +13,9 @@ import { TapToIdentifyWizard } from '@/components/apis';
 import type { IdentifiedItem } from '@/components/apis/TapToIdentifyWizard';
 import { Button } from '@/components/ui/Button';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
+import * as bags from '@/lib/api/domains/bags';
+import * as items from '@/lib/api/domains/items';
+import * as media from '@/lib/api/domains/media';
 
 type Link = {
   id: string;
@@ -94,21 +97,14 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
     setIsSaving(true);
 
     try {
-      const response = await fetch(`/api/bags/${bag.code}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title,
-          description: description || null,
-          is_public: isPublic,
-        }),
+      const updatedBag = await bags.update(bag.code, {
+        title,
+        description: description || null,
+        is_public: isPublic,
       });
 
-      if (response.ok) {
-        const updatedBag = await response.json();
-        setBag((prev) => ({ ...prev, ...updatedBag }));
-        setLastSaved(new Date());
-      }
+      setBag((prev) => ({ ...prev, ...updatedBag }));
+      setLastSaved(new Date());
     } catch (error) {
       console.error('Error saving bag:', error);
     } finally {
@@ -123,17 +119,7 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
     quantity?: number;
   }) => {
     try {
-      const response = await fetch(`/api/bags/${bag.code}/items`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(itemData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to add item');
-      }
-
-      const newItem = await response.json();
+      const newItem = await bags.addItem(bag.code, itemData);
       setBag((prev) => ({
         ...prev,
         items: [...prev.items, { ...newItem, links: [] }],
@@ -160,13 +146,7 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
     if (!confirmed) return;
 
     try {
-      const response = await fetch(`/api/items/${itemId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete item');
-      }
+      await items.del(itemId);
 
       setBag((prev) => ({
         ...prev,
@@ -183,17 +163,7 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
     updates: Partial<Omit<Item, 'id' | 'bag_id' | 'links'>>
   ) => {
     try {
-      const response = await fetch(`/api/items/${itemId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update item');
-      }
-
-      const updatedItem = await response.json();
+      const updatedItem = await items.update(itemId, updates);
       setBag((prev) => ({
         ...prev,
         items: prev.items.map((item) => {
@@ -242,13 +212,7 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
     if (!confirmed) return;
 
     try {
-      const response = await fetch(`/api/bags/${bag.code}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete bag');
-      }
+      await bags.del(bag.code);
 
       // Navigate back to dashboard
       router.push('/dashboard');
@@ -273,26 +237,21 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
   };
 
   // Tap-to-Identify: Handle wizard completion
-  const handleTapToIdentifyComplete = async (items: IdentifiedItem[]) => {
+  const handleTapToIdentifyComplete = async (identifiedItems: IdentifiedItem[]) => {
     setShowTapToIdentify(false);
     setTapToIdentifyImage(null);
 
     // Add each identified item to the bag
-    for (const item of items) {
-      await fetch(`/api/bags/${bag.code}/items`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          custom_name: item.name,
-          brand: item.brand || null,
-          custom_description: item.visualDescription || null,
-        }),
+    for (const item of identifiedItems) {
+      await bags.addItem(bag.code, {
+        custom_name: item.name,
+        brand: item.brand || null,
+        custom_description: item.visualDescription || null,
       });
     }
 
     // Refresh items list
-    const response = await fetch(`/api/bags/${bag.code}`);
-    const updatedBag = await response.json();
+    const updatedBag = await bags.get(bag.code);
     if (updatedBag?.items) {
       setBag((prev: any) => ({ ...prev, items: updatedBag.items }));
     }
@@ -310,32 +269,22 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
       // Create all items in parallel for better performance
       const createdItems = await Promise.all(
         selectedProducts.map(async (product) => {
-          const response = await fetch(`/api/bags/${bag.code}/items`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              custom_name: product.name,
-              brand: product.brand || null,
-              custom_description: product.specifications
-                ? product.specifications.join(' | ')
-                : product.category,
-              notes: product.estimatedPrice
-                ? `Est. price: ${product.estimatedPrice}`
-                : undefined,
-              quantity: 1,
-            }),
+          const newItem = await bags.addItem(bag.code, {
+            custom_name: product.name,
+            brand: product.brand || null,
+            custom_description: product.specifications
+              ? product.specifications.join(' | ')
+              : product.category,
+            notes: product.estimatedPrice
+              ? `Est. price: ${product.estimatedPrice}`
+              : undefined,
+            quantity: 1,
           });
-
-          if (!response.ok) {
-            throw new Error(`Failed to add ${product.name}`);
-          }
-
-          const newItem = await response.json();
 
           // If product has a Google image, download and upload it
           if (product.productImage?.imageUrl) {
             try {
-              // Download the Google image
+              // Download the Google image (external URL — keep raw fetch)
               const imageResponse = await fetch(product.productImage.imageUrl);
               const imageBlob = await imageResponse.blob();
 
@@ -346,26 +295,15 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
               formData.append('file', imageBlob, `${sanitizedName}.jpg`);
               formData.append('itemId', newItem.id);
 
-              const uploadResponse = await fetch('/api/media/upload', {
-                method: 'POST',
-                body: formData,
+              const uploadData = await media.upload(formData);
+
+              // Update item with photo
+              await items.update(newItem.id, {
+                custom_photo_id: uploadData.mediaAssetId,
               });
 
-              if (uploadResponse.ok) {
-                const uploadData = await uploadResponse.json();
-
-                // Update item with photo
-                await fetch(`/api/items/${newItem.id}`, {
-                  method: 'PUT',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    custom_photo_id: uploadData.mediaAssetId,
-                  }),
-                });
-
-                newItem.custom_photo_id = uploadData.mediaAssetId;
-                newItem.photo_url = uploadData.url;
-              }
+              newItem.custom_photo_id = uploadData.mediaAssetId;
+              newItem.photo_url = uploadData.url;
             } catch (photoError) {
               console.error(`Failed to upload product image for ${product.name}:`, photoError);
               // Continue without photo - don't fail the whole operation

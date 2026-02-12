@@ -6,11 +6,16 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { supabase } from '@/lib/supabaseClient';
 import { Check, Loader2, X } from 'lucide-react';
+import { analytics } from '@/lib/analytics';
 
 export default function SignupForm() {
   const searchParams = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    analytics.pageViewed('signup');
+  }, []);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -128,6 +133,8 @@ export default function SignupForm() {
         email: formData.email,
         password: formData.password,
       });
+
+      analytics.userSignedUp('email');
 
       // Preserve ref param for onboarding survey
       const ref = searchParams.get('ref');

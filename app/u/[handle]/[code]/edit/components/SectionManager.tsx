@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Plus, GripVertical, Trash2, Edit2, Check, X, FolderOpen, ChevronDown, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
+import * as bagsApi from '@/lib/api/domains/bags';
 
 type Section = {
   id: string;
@@ -50,25 +51,14 @@ export default function SectionManager({
 
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/bags/${bagCode}/sections`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: newSectionName.trim() }),
-      });
-
-      if (response.ok) {
-        const newSection = await response.json();
-        onSectionsChange([...sections, newSection]);
-        setExpandedSections(prev => new Set([...prev, newSection.id]));
-        setNewSectionName('');
-        setIsCreating(false);
-        showSuccess('Section created');
-      } else {
-        const error = await response.json();
-        showError(error.error || 'Failed to create section');
-      }
-    } catch (error) {
-      showError('Failed to create section');
+      const newSection = await bagsApi.createSection(bagCode, newSectionName.trim());
+      onSectionsChange([...sections, newSection]);
+      setExpandedSections(prev => new Set([...prev, newSection.id]));
+      setNewSectionName('');
+      setIsCreating(false);
+      showSuccess('Section created');
+    } catch (err: any) {
+      showError(err.message || 'Failed to create section');
     } finally {
       setIsLoading(false);
     }
@@ -79,23 +69,12 @@ export default function SectionManager({
 
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/bags/${bagCode}/sections/${sectionId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: editingName.trim() }),
-      });
-
-      if (response.ok) {
-        const updatedSection = await response.json();
-        onSectionsChange(sections.map(s => s.id === sectionId ? updatedSection : s));
-        setEditingId(null);
-        showSuccess('Section updated');
-      } else {
-        const error = await response.json();
-        showError(error.error || 'Failed to update section');
-      }
-    } catch (error) {
-      showError('Failed to update section');
+      const updatedSection = await bagsApi.updateSection(bagCode, sectionId, editingName.trim());
+      onSectionsChange(sections.map(s => s.id === sectionId ? updatedSection : s));
+      setEditingId(null);
+      showSuccess('Section updated');
+    } catch (err: any) {
+      showError(err.message || 'Failed to update section');
     } finally {
       setIsLoading(false);
     }
@@ -111,22 +90,15 @@ export default function SectionManager({
 
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/bags/${bagCode}/sections/${sectionId}`, {
-        method: 'DELETE',
+      await bagsApi.deleteSection(bagCode, sectionId);
+      onSectionsChange(sections.filter(s => s.id !== sectionId));
+      // Update items that were in this section
+      sectionItems.forEach(item => {
+        onItemSectionChange(item.id, null);
       });
-
-      if (response.ok) {
-        onSectionsChange(sections.filter(s => s.id !== sectionId));
-        // Update items that were in this section
-        sectionItems.forEach(item => {
-          onItemSectionChange(item.id, null);
-        });
-        showSuccess('Section deleted');
-      } else {
-        showError('Failed to delete section');
-      }
-    } catch (error) {
-      showError('Failed to delete section');
+      showSuccess('Section deleted');
+    } catch (err: any) {
+      showError(err.message || 'Failed to delete section');
     } finally {
       setIsLoading(false);
     }

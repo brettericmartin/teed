@@ -3,6 +3,9 @@
 
 @import "tailwindcss";
 
+/* Disable media-query dark mode — app uses light palette only */
+@variant dark (&:where(.dark, .dark *));
+
 /* ============================================
    TEED DESIGN SYSTEM - DESIGN TOKENS
    ============================================ */

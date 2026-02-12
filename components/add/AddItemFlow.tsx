@@ -21,6 +21,11 @@ import {
 import { cn } from '@/lib/utils';
 import { useProductSearch } from '@/hooks/useProductSearch';
 import ParsedPreview from '@/components/add/ParsedPreview';
+import * as bagsApi from '@/lib/api/domains/bags';
+import * as itemsApi from '@/lib/api/domains/items';
+import * as mediaApi from '@/lib/api/domains/media';
+import * as aiApi from '@/lib/api/domains/ai';
+import { analytics } from '@/lib/analytics';
 
 type Bag = {
   id: string;
@@ -162,17 +167,7 @@ export function AddItemFlow({
         ? `${suggestion.brand} ${suggestion.custom_name}`
         : suggestion.custom_name;
 
-      const response = await fetch('/api/ai/find-product-image', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: searchQuery }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to search for photos');
-      }
-
-      const data = await response.json();
+      const data = await aiApi.findProductImage({ query: searchQuery });
       const imageUrls = data.images || [];
       setPhotos(imageUrls.slice(0, 6));
 
@@ -204,46 +199,26 @@ export function AddItemFlow({
 
     try {
       // Create the item
-      const response = await fetch(`/api/bags/${selectedBag.code}/items`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          custom_name: previewName.trim(),
-          brand: previewBrand.trim() || undefined,
-          custom_description: previewDescription.trim() || undefined,
-        }),
+      const newItem = await bagsApi.addItem(selectedBag.code, {
+        custom_name: previewName.trim(),
+        brand: previewBrand.trim() || undefined,
+        custom_description: previewDescription.trim() || undefined,
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to add item');
-      }
-
-      const newItem = await response.json();
+      analytics.itemAdded(newItem.id, selectedBag.id, selectedBag.code, 'text_search');
 
       // If photo selected, upload it
       if (selectedPhotoIndex !== null && !failedPhotos.has(selectedPhotoIndex) && photos[selectedPhotoIndex]) {
         try {
           const sanitizedName = previewName.replace(/[^a-zA-Z0-9-_]/g, '-').substring(0, 50);
-          const uploadResponse = await fetch('/api/media/upload-from-url', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              imageUrl: photos[selectedPhotoIndex],
-              itemId: newItem.id,
-              filename: `${sanitizedName}.jpg`,
-            }),
+          const uploadResult = await mediaApi.uploadFromUrl({
+            imageUrl: photos[selectedPhotoIndex],
+            itemId: newItem.id,
+            filename: `${sanitizedName}.jpg`,
           });
-
-          if (uploadResponse.ok) {
-            const uploadResult = await uploadResponse.json();
-            await fetch(`/api/items/${newItem.id}`, {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                custom_photo_id: uploadResult.mediaAssetId,
-              }),
-            });
-          }
+          await itemsApi.update(newItem.id, {
+            custom_photo_id: uploadResult.mediaAssetId,
+          });
         } catch (photoError) {
           console.error('Photo upload failed:', photoError);
           // Continue without photo

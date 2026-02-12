@@ -1,5 +1,7 @@
 import { MetadataRoute } from 'next';
 import { createClient } from '@supabase/supabase-js';
+import { getAllPosts } from '@/lib/blog';
+import { getAllRoundupSlugs } from '@/lib/blog/categories';
 
 const BASE_URL = 'https://teed.so';
 
@@ -122,11 +124,41 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     };
   });
 
+  // Blog listing page
+  const blogStaticEntries: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/blog`,
+      lastModified: now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    },
+  ];
+
+  // Blog posts
+  const blogPosts = getAllPosts();
+  const blogPostEntries: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date(post.publishedAt),
+    changeFrequency: post.category === 'showcase' ? ('weekly' as const) : ('monthly' as const),
+    priority: 0.7,
+  }));
+
+  // Blog roundup pages
+  const roundupEntries: MetadataRoute.Sitemap = getAllRoundupSlugs().map((slug) => ({
+    url: `${BASE_URL}/blog/best/${slug}`,
+    lastModified: now,
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }));
+
   return [
     ...staticEntries,
     ...useCaseEntries,
     ...comparisonEntries,
     ...authorityEntries,
+    ...blogStaticEntries,
+    ...blogPostEntries,
+    ...roundupEntries,
     ...profileEntries,
     ...bagEntries,
   ];

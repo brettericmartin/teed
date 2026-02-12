@@ -1,0 +1,63 @@
+---
+title: "Smarter Search: Fuzzy Matching and the Text Parsing Pipeline"
+description: "Misspell a brand name? We'll fix it. Search 'grey'? We'll find 'gray' too. Inside the text parsing pipeline that makes search actually work."
+publishedAt: "2026-02-06"
+author: "Teed"
+category: "build-log"
+tags: ["build-log", "search", "text parsing", "fuzzy matching"]
+keywords: ["fuzzy search", "brand matching", "text parsing", "product search", "levenshtein distance", "smart search"]
+relatedSlugs: ["building-ai-product-identification", "making-bulk-import-work", "from-idea-to-first-bag"]
+---
+
+## People can't spell
+
+This isn't an insult. It's a design constraint. People type "taylormaid" when they mean TaylorMade. They write "Bose Quiet Comfort" as one word or two, with or without the number at the end. They search "grey" when the product listing says "gray." They drop hyphens, add spaces where there aren't any, and capitalize randomly.
+
+If your search requires exact matches, it's broken for real users. So I built a text parsing pipeline that handles the mess.
+
+## The pipeline
+
+Search input goes through four stages, each one building on the last.
+
+**Stage 1: Normalize.** Strip extra whitespace, normalize unicode characters, lowercase everything for matching purposes. This is the boring but necessary foundation. "  TaylorMade  STEALTH " becomes a clean, consistent input.
+
+**Stage 2: Dictionary match.** Compare the input against a brand dictionary with 680+ entries across 50+ categories. Golf brands, camera manufacturers, audio equipment, desk accessories, outdoor gear. The dictionary knows that "TaylorMade" is a golf brand, "Sennheiser" makes headphones, and "Peak Design" has a space in the middle.
+
+This is where fuzzy matching kicks in. If the input doesn't exactly match any brand, we calculate the Levenshtein distance — the minimum number of single-character edits needed to transform one string into another. "taylormaid" is distance 1 from "TaylorMade" (one letter swap). Below a certain threshold, we treat it as a match and correct the spelling.
+
+The threshold scales with word length. Short brand names like "Bose" need a very close match (distance 1 max), while longer names like "Sennheiser" can tolerate more edits. This prevents "Boss" from matching "Bose" while still catching "Senheiser" as "Sennheiser."
+
+**Stage 3: Pattern extract.** After identifying the brand, parse the remaining input for model names, product types, colors, and other attributes. "TaylorMade Stealth 2 Driver black" becomes brand: TaylorMade, model: Stealth 2, type: Driver, color: black.
+
+**Stage 4: Product inference.** If the brand is known, infer likely product categories. TaylorMade is golf, so "Stealth 2" is probably a club. Peak Design is photography/EDC, so "Everyday Backpack" is probably a bag. This inference helps rank search results even when the query is vague.
+
+## Color synonyms
+
+Colors are surprisingly messy. The same shade gets called different things depending on the manufacturer, the region, and the person typing. We maintain a synonym map:
+
+- grey, gray, silver, slate, charcoal
+- off-white, cream, ivory, bone
+- navy, dark blue, midnight
+- gold, champagne, sand
+
+When you search "grey backpack," the system also matches items tagged as gray, silver, or slate. The synonyms aren't exact equivalences — champagne and gold aren't the same color — but for search purposes, someone looking for "gold" would probably want to see "champagne" in the results too.
+
+## Parsed preview chips
+
+Before results even load, you can see how the system interpreted your search. Type "taylormaid stealth grey" and a row of chips appears: `TaylorMade (corrected)` `Stealth` `grey → gray, silver, slate`. It's a transparency feature. You can see the fuzzy correction happening, the color expansion, and the parsed structure.
+
+If the system got something wrong — maybe it matched "Boss" to "Bose" when you actually meant the Hugo Boss brand — you can see it immediately and adjust. The chips are editable. Tap one to remove it or change the interpretation.
+
+## Explicit search over auto-debounce
+
+Earlier versions of the search used a debounced auto-search pattern. You'd type, wait 300ms, and results would start loading. It felt responsive but had problems. Partial queries fired searches that returned garbage results. Typo corrections mid-word triggered unnecessary requests. And on slower connections, results from an old query would sometimes flash before the current one loaded.
+
+We switched to explicit search: type your query, press Enter or tap the search button. Results load once, for the query you intended. The parsed preview chips give you feedback while typing, so you can verify the interpretation before committing to the search.
+
+It's less flashy than real-time results. But it's more intentional, and intentionality is a theme on Teed.
+
+## 680 brands and growing
+
+The brand dictionary started with about 200 entries, mostly golf and camera equipment. It's now at 680+ across categories including audio, cycling, outdoor gear, desk accessories, kitchen equipment, and more. Each entry includes the canonical brand name, common misspellings, and the product category.
+
+The dictionary grows based on gap analysis from the discovery system. When products show up in discovery results with brand names that don't match any dictionary entry, they get flagged for addition. The two systems feed each other.

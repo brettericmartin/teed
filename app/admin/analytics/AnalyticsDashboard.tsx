@@ -17,6 +17,15 @@ import {
   Pie,
   Cell,
 } from 'recharts';
+import dynamic from 'next/dynamic';
+
+const GrowthFunnelTab = dynamic(() => import('./components/GrowthFunnelTab'), { ssr: false });
+const RetentionTab = dynamic(() => import('./components/RetentionTab'), { ssr: false });
+const ContentPerformanceTab = dynamic(() => import('./components/ContentPerformanceTab'), { ssr: false });
+const FeatureAdoptionTab = dynamic(() => import('./components/FeatureAdoptionTab'), { ssr: false });
+const LiveActivityTab = dynamic(() => import('./components/LiveActivityTab'), { ssr: false });
+
+type AdminTab = 'overview' | 'growth' | 'retention' | 'content' | 'features' | 'live';
 
 interface AnalyticsDashboardProps {
   adminRole: AdminRole;
@@ -99,7 +108,17 @@ function formatNumber(num: number): string {
   return num.toString();
 }
 
+const TABS: { id: AdminTab; label: string }[] = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'growth', label: 'Growth & Funnels' },
+  { id: 'retention', label: 'Retention' },
+  { id: 'content', label: 'Content' },
+  { id: 'features', label: 'Features' },
+  { id: 'live', label: 'Live' },
+];
+
 export default function AnalyticsDashboard({ adminRole }: AnalyticsDashboardProps) {
+  const [activeTab, setActiveTab] = useState<AdminTab>('overview');
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -164,29 +183,60 @@ export default function AnalyticsDashboard({ adminRole }: AnalyticsDashboardProp
   const platform = data.platform || { totalUsers: 0, totalBags: 0, totalItems: 0, publicBags: 0 };
 
   return (
-    <div className="space-y-8">
-      {/* Date Range Selector */}
-      <div className="flex justify-end">
-        <div className="inline-flex rounded-md shadow-sm">
-          {(['7d', '30d', '90d'] as const).map((range) => (
+    <div className="space-y-6">
+      {/* Tab Navigation */}
+      <div className="border-b border-gray-200 dark:border-gray-700">
+        <nav className="-mb-px flex space-x-6 overflow-x-auto" aria-label="Tabs">
+          {TABS.map((tab) => (
             <button
-              key={range}
-              onClick={() => setDateRange(range)}
-              className={`px-4 py-2 text-sm font-medium ${
-                dateRange === range
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
-              } ${
-                range === '7d' ? 'rounded-l-md' : ''
-              } ${
-                range === '90d' ? 'rounded-r-md' : ''
-              } border border-gray-300 dark:border-gray-600`}
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`whitespace-nowrap border-b-2 py-3 px-1 text-sm font-medium transition-colors ${
+                activeTab === tab.id
+                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+              }`}
             >
-              {range === '7d' ? '7 Days' : range === '30d' ? '30 Days' : '90 Days'}
+              {tab.label}
             </button>
           ))}
-        </div>
+        </nav>
       </div>
+
+      {/* Date Range Selector — visible on all tabs except Live */}
+      {activeTab !== 'live' && (
+        <div className="flex justify-end">
+          <div className="inline-flex rounded-md shadow-sm">
+            {(['7d', '30d', '90d'] as const).map((range) => (
+              <button
+                key={range}
+                onClick={() => setDateRange(range)}
+                className={`px-4 py-2 text-sm font-medium ${
+                  dateRange === range
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                } ${
+                  range === '7d' ? 'rounded-l-md' : ''
+                } ${
+                  range === '90d' ? 'rounded-r-md' : ''
+                } border border-gray-300 dark:border-gray-600`}
+              >
+                {range === '7d' ? '7 Days' : range === '30d' ? '30 Days' : '90 Days'}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Non-overview tabs */}
+      {activeTab === 'growth' && <GrowthFunnelTab dateRange={dateRange} />}
+      {activeTab === 'retention' && <RetentionTab dateRange={dateRange} />}
+      {activeTab === 'content' && <ContentPerformanceTab dateRange={dateRange} />}
+      {activeTab === 'features' && <FeatureAdoptionTab dateRange={dateRange} />}
+      {activeTab === 'live' && <LiveActivityTab />}
+
+      {/* Overview tab — original content */}
+      {activeTab === 'overview' && <div className="space-y-8">
 
       {/* Platform Overview */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
@@ -684,6 +734,7 @@ export default function AnalyticsDashboard({ adminRole }: AnalyticsDashboardProp
           </p>
         )}
       </div>
+    </div>}
     </div>
   );
 }

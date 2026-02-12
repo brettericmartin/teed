@@ -179,18 +179,28 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
       )}
       {/* Item Header */}
       <div className="p-3 sm:p-4">
-        {/* Photo thumbnail - full width on mobile, left side on desktop */}
+        {/* Photo - full width on mobile */}
         {item.photo_url && !isEditing && (
-          <div className="mb-3 sm:mb-0 sm:float-left sm:mr-4">
+          <div className="sm:hidden mb-3">
             <img
               src={item.photo_url}
               alt={item.custom_name || 'Item photo'}
-              className="w-full sm:w-20 h-auto sm:h-20 max-h-48 sm:max-h-20 object-contain bg-[var(--sky-2)] rounded border-2 border-[var(--border-subtle)]"
+              className="w-full h-auto max-h-48 object-contain bg-[var(--sky-2)] rounded border-2 border-[var(--border-subtle)]"
             />
           </div>
         )}
 
         <div className="flex items-start gap-2 sm:gap-4">
+          {/* Photo thumbnail - desktop only, inside flex row */}
+          {item.photo_url && !isEditing && (
+            <div className="hidden sm:block flex-shrink-0">
+              <img
+                src={item.photo_url}
+                alt={item.custom_name || 'Item photo'}
+                className="w-16 md:w-20 h-16 md:h-20 object-contain bg-[var(--sky-2)] rounded border-2 border-[var(--border-subtle)]"
+              />
+            </div>
+          )}
           <div className="flex-1 min-w-0">
             {isEditing ? (
               <div className="space-y-3">
@@ -721,6 +731,8 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
           itemId={item.id}
           itemName={item.custom_name || 'Item'}
           currentBagId={item.bag_id}
+          item={item}
+          itemLinks={itemLinks}
           onItemMoved={(targetBagId, targetBagTitle) => {
             onItemMoved(item.id, targetBagTitle);
           }}

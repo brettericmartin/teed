@@ -1,0 +1,68 @@
+---
+title: "Making Bulk Import Actually Work"
+description: "Importing 20 product links shouldn't take 20 minutes. Here's how we built streaming bulk import with real-time progress."
+publishedAt: "2025-12-14"
+author: "Teed"
+category: "build-log"
+tags: ["build-log", "bulk import", "web scraping", "product links"]
+keywords: ["bulk import products", "product link scraper", "amazon product import", "gear list import"]
+relatedSlugs: ["building-ai-product-identification", "smarter-search", "collections-without-borders"]
+---
+
+## The pain of one-at-a-time
+
+People kept asking for the same thing: "I have a list of 20 Amazon links. Can I just paste them all in?"
+
+The answer was no. You had to add each item individually — paste a link, wait for identification, confirm, repeat. For someone migrating an existing gear list, that's 20 minutes of mechanical clicking. Nobody's going to do that.
+
+Bulk import was the most requested feature after launch. It also turned out to be the most technically annoying.
+
+## The scraping problem
+
+The basic idea is simple: take a list of URLs, scrape each page for product info (title, image, price, description), and create items from that data.
+
+In practice, scraping product pages is a mess.
+
+Amazon actively blocks automated requests. Their bot detection is aggressive — you'll get CAPTCHAs, redirects to dog food pages, or just empty responses. Rotating user agents and adding delays helps, but it's a constant cat-and-mouse game.
+
+Other retailers are more forgiving but wildly inconsistent in their HTML structure. Some use Open Graph meta tags (thank you). Some render everything client-side with JavaScript (less helpful). Some have product data buried in JSON-LD scripts. Some have all three, and they disagree with each other.
+
+We integrated Firecrawl for the heavy lifting. It handles JavaScript rendering, anti-bot navigation, and returns clean markdown. It's not free, but it's cheaper than building and maintaining a scraping infrastructure.
+
+## Amazon title cleaning
+
+Here's something that surprised me: Amazon product titles are almost unusable as-is.
+
+A typical Amazon title looks like this: "Sony WH-1000XM5 Wireless Industry Leading Noise Canceling Headphones with Auto Noise Canceling Optimizer, Crystal Clear Hands-Free Calling, and Alexa Voice Control, Black"
+
+That's 230 characters of SEO keyword stuffing. The actual product name is "Sony WH-1000XM5." The rest is garbage designed to rank in Amazon search, not to describe the product to a human.
+
+We built a title cleaning pipeline that strips the SEO spam. It detects the core product name (brand + model), removes repeated feature keywords, drops color/size variants that belong in separate fields, and truncates intelligently. The goal: turn that 230-character mess into "Sony WH-1000XM5 Wireless Headphones."
+
+ASIN detection helps here too. Every Amazon product has an ASIN (Amazon Standard Identification Number) in its URL. We extract it and use it for accurate product matching — two different Amazon URLs with different titles but the same ASIN are the same product.
+
+## Streaming progress
+
+Scraping 20 links takes time. Even with Firecrawl, each URL takes 2-5 seconds to process. That's up to a minute and a half of waiting, and a blank loading spinner for 90 seconds is a terrible experience.
+
+So we built a streaming progress UI. As each link processes, the result appears immediately — product name, image thumbnail, confidence score. You can see items filling in one by one. Failed links show an error state with a retry option. The whole thing feels alive instead of frozen.
+
+The implementation uses server-sent events from the API route. Each link processes independently, and results stream back as they complete. The client renders items optimistically as they arrive, with a progress bar showing overall completion.
+
+This was one of those features where the technical choice (streaming vs. batch) completely changes the user experience. Same total wait time, but it feels fast because you see progress continuously.
+
+## Edge cases that bit us
+
+**Shortened URLs.** People paste bit.ly links, amzn.to links, affiliate links with multiple redirects. We follow redirects to resolve the final URL before scraping.
+
+**Out-of-stock products.** Amazon sometimes returns different page structures for out-of-stock items. The title might be there but the image and price aren't. We handle partial results — better to create an item with a name and no image than to fail silently.
+
+**Duplicate detection.** If you paste the same link twice (or two different Amazon URLs for the same ASIN), we catch it and skip the duplicate.
+
+**Rate limiting ourselves.** Firing 20 scrape requests simultaneously gets you blocked fast. We process links with controlled concurrency — a few at a time with small delays between batches.
+
+## What it looks like now
+
+You paste a list of URLs (one per line, or comma-separated, or just a messy block of text with links mixed in — we extract them). Hit import. Watch items appear in real-time. Review the results, edit anything that needs fixing, confirm. Your bag goes from empty to populated in under two minutes.
+
+It's not glamorous work. Scraping is inherently fragile and full of edge cases. But getting 20 items into a bag in 90 seconds instead of 20 minutes is the difference between someone actually using Teed and giving up halfway through.

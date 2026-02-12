@@ -7,6 +7,8 @@ import { User, Check, X, Upload, Trash2, Camera, ArrowLeft, Instagram, Twitter, 
 import { GolfLoader } from '@/components/ui/GolfLoader';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
 import AvatarCropper from '@/components/ui/AvatarCropper';
+import * as profileApi from '@/lib/api/domains/profile';
+import { analytics } from '@/lib/analytics';
 
 type Profile = {
   id: string;
@@ -66,6 +68,10 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
 
   const handleChanged = handle !== profile.handle;
 
+  useEffect(() => {
+    analytics.pageViewed('settings');
+  }, []);
+
   // Check handle availability with debouncing (only if handle changed)
   useEffect(() => {
     if (!handleChanged) {
@@ -97,8 +103,7 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
       setHandleAvailability({ checking: true, available: null, error: null });
 
       try {
-        const response = await fetch(`/api/profile/handle-available/${cleanHandle}`);
-        const data = await response.json();
+        const data = await profileApi.checkHandle(cleanHandle);
 
         if (data.error) {
           setHandleAvailability({
@@ -158,25 +163,21 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
         }
       });
 
-      const response = await fetch('/api/profile', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          display_name: displayName.trim(),
-          handle: handle.trim().toLowerCase(),
-          bio: bio.trim() || null,
-          social_links: cleanedSocialLinks,
-        }),
+      const updatedProfile = await profileApi.update({
+        display_name: displayName.trim(),
+        handle: handle.trim().toLowerCase(),
+        bio: bio.trim() || undefined,
+        social_links: cleanedSocialLinks,
       });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to update profile');
-      }
-
-      const updatedProfile = await response.json();
       setProfile(updatedProfile);
       setSaveSuccess(true);
+
+      const changedFields: string[] = [];
+      if (displayName.trim() !== profile.display_name) changedFields.push('display_name');
+      if (handle.trim().toLowerCase() !== profile.handle) changedFields.push('handle');
+      if ((bio.trim() || null) !== profile.bio) changedFields.push('bio');
+      if (JSON.stringify(cleanedSocialLinks) !== JSON.stringify(profile.social_links || {})) changedFields.push('social_links');
+      if (changedFields.length > 0) analytics.settingsSaved(changedFields);
 
       // Hide success message after 3 seconds
       setTimeout(() => setSaveSuccess(false), 3000);
@@ -257,20 +258,7 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
       formData.append('file', file);
 
       console.log('[Avatar Upload] Sending request to /api/profile/avatar');
-      const response = await fetch('/api/profile/avatar', {
-        method: 'POST',
-        body: formData,
-      });
-
-      console.log('[Avatar Upload] Response status:', response.status);
-
-      if (!response.ok) {
-        const data = await response.json();
-        console.log('[Avatar Upload] Error response:', data);
-        throw new Error(data.error || 'Failed to upload avatar');
-      }
-
-      const data = await response.json();
+      const data = await profileApi.uploadAvatar(formData);
       console.log('[Avatar Upload] Success:', data);
       setProfile(data.profile);
       setAvatarPreview(data.avatar_url);
@@ -299,20 +287,7 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
       formData.append('file', file);
 
       console.log('[Avatar Upload Blob] Sending request to /api/profile/avatar');
-      const response = await fetch('/api/profile/avatar', {
-        method: 'POST',
-        body: formData,
-      });
-
-      console.log('[Avatar Upload Blob] Response status:', response.status);
-
-      if (!response.ok) {
-        const data = await response.json();
-        console.log('[Avatar Upload Blob] Error response:', data);
-        throw new Error(data.error || 'Failed to upload avatar');
-      }
-
-      const data = await response.json();
+      const data = await profileApi.uploadAvatar(formData);
       console.log('[Avatar Upload Blob] Success:', data);
       setProfile(data.profile);
       setAvatarPreview(data.avatar_url);
@@ -342,16 +317,7 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
     setError('');
 
     try {
-      const response = await fetch('/api/profile/avatar', {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to remove avatar');
-      }
-
-      const data = await response.json();
+      const data = await profileApi.removeAvatar();
       setProfile(data.profile);
       setAvatarPreview(null);
       setSaveSuccess(true);

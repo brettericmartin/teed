@@ -229,6 +229,16 @@ export type CreatorStats = {
     description: string;   // 'love your bags'
     views: number;
   }>;
+  followers: {
+    total: number;
+    newInPeriod: number;
+  };
+  profileViews: number;
+  socialClicks: Array<{
+    platform: string;
+    clicks: number;
+  }>;
+  totalShares: number;
 };
 
 export async function getCreatorStats(
@@ -305,6 +315,10 @@ export async function getCreatorStats(
         highlights: [],
         geography: { countriesReached: 0, topCountries: [] },
         trafficSources: [],
+        followers: { total: 0, newInPeriod: 0 },
+        profileViews: 0,
+        socialClicks: [],
+        totalShares: 0,
       };
     }
 
@@ -573,6 +587,66 @@ export async function getCreatorStats(
       });
     }
 
+    // Follower data
+    const { count: totalFollowers } = await supabase
+      .from('follows')
+      .select('*', { count: 'exact', head: true })
+      .eq('following_id', userId);
+
+    const { count: newFollowersInPeriod } = await supabase
+      .from('follows')
+      .select('*', { count: 'exact', head: true })
+      .eq('following_id', userId)
+      .gte('created_at', startDate.toISOString());
+
+    // Profile views — how many people visited creator's profile
+    const { count: profileViews } = await supabase
+      .from('user_activity')
+      .select('*', { count: 'exact', head: true })
+      .eq('event_type', 'profile_viewed')
+      .contains('event_data', { profile_id: userId })
+      .gte('created_at', startDate.toISOString());
+
+    // Social link clicks — which social links on profile get clicks
+    // Get user handle to filter social click events
+    const { data: profileData } = await supabase
+      .from('profiles')
+      .select('handle')
+      .eq('id', userId)
+      .single();
+
+    const userHandle = profileData?.handle;
+    let socialClicks: Array<{ platform: string; clicks: number }> = [];
+    if (userHandle) {
+      const { data: socialClickEvents } = await supabase
+        .from('user_activity')
+        .select('event_data')
+        .eq('event_type', 'social_link_clicked')
+        .contains('event_data', { profile_handle: userHandle })
+        .gte('created_at', startDate.toISOString());
+
+      const socialPlatformCounts: Record<string, number> = {};
+      (socialClickEvents || []).forEach(e => {
+        const platform = e.event_data?.platform || 'unknown';
+        socialPlatformCounts[platform] = (socialPlatformCounts[platform] || 0) + 1;
+      });
+      socialClicks = Object.entries(socialPlatformCounts)
+        .map(([platform, clicks]) => ({ platform, clicks }))
+        .sort((a, b) => b.clicks - a.clicks);
+    }
+
+    // Bag shares — how many times creator's bags were shared
+    const { data: shareEvents } = await supabase
+      .from('user_activity')
+      .select('event_data')
+      .eq('event_type', 'bag_shared')
+      .gte('created_at', startDate.toISOString());
+
+    const totalShares = (shareEvents || []).filter(e => {
+      const bagId = e.event_data?.bag_id;
+      return bagId && bagIds.includes(bagId);
+    }).length;
+
     // Generate impact story (natural language summary)
     const impactStory = generateImpactStoryInternal({
       peopleReached: totalViews,
@@ -613,6 +687,13 @@ export async function getCreatorStats(
       highlights,
       geography,
       trafficSources,
+      followers: {
+        total: totalFollowers || 0,
+        newInPeriod: newFollowersInPeriod || 0,
+      },
+      profileViews: profileViews || 0,
+      socialClicks,
+      totalShares,
     };
   } catch (error) {
     console.error('[Stats] Unexpected error:', error);

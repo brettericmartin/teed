@@ -10,6 +10,7 @@ import { staggerContainer, cardVariants } from '@/lib/animations';
 import { SkeletonBagGrid } from '@/components/ui/Skeleton';
 import { PageContainer, PageHeader, ContentContainer } from '@/components/layout/PageContainer';
 import { CATEGORIES, getCategoryColors } from '@/lib/categories';
+import { analytics } from '@/lib/analytics';
 
 type BagItem = {
   id: string;
@@ -156,15 +157,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
     checkAuth();
     fetchPopularTags();
 
-    // Track discover page view
-    fetch('/api/analytics/track', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        event_type: 'page_viewed',
-        event_data: { page: 'discover' },
-      }),
-    }).catch(() => {});
+    analytics.pageViewed('discover');
   }, []);
 
   useEffect(() => {

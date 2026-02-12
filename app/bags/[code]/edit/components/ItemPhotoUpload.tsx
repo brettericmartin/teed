@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect, ChangeEvent } from 'react';
 import ImageCropModal from './ImageCropModal';
+import * as aiApi from '@/lib/api/domains/ai';
+import * as mediaApi from '@/lib/api/domains/media';
 
 type ItemPhotoUploadProps = {
   itemId: string;
@@ -103,26 +105,20 @@ export default function ItemPhotoUpload({
       if (itemDescription && itemDescription.trim()) {
         console.log('Enhancing search query with AI from description:', itemDescription);
 
-        const enhanceResponse = await fetch('/api/ai/enhance-search-query', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+        try {
+          const enhanceData = await aiApi.enhanceSearchQuery({
             description: itemDescription.trim(),
             productName: itemName,
             brand: itemBrand || undefined,
-          }),
-        });
-
-        if (!enhanceResponse.ok) {
+          });
+          searchQuery = enhanceData.query;
+          console.log('AI-enhanced query:', searchQuery);
+        } catch {
           console.warn('AI enhancement failed, falling back to basic query');
           // Fall back to basic query if AI enhancement fails
           const queryParts = [itemName];
           if (itemBrand) queryParts.unshift(itemBrand);
           searchQuery = queryParts.join(' ');
-        } else {
-          const enhanceData = await enhanceResponse.json();
-          searchQuery = enhanceData.query;
-          console.log('AI-enhanced query:', searchQuery);
         }
       } else {
         // Build basic query from item name and brand
@@ -133,18 +129,7 @@ export default function ItemPhotoUpload({
       }
 
       // Use Google Custom Search to find product images
-      const response = await fetch('/api/ai/find-product-image', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: searchQuery }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to find product images');
-      }
-
-      const data = await response.json();
+      const data = await aiApi.findProductImage({ query: searchQuery });
       console.log('Found images:', data.images);
 
       if (data.images && data.images.length > 0) {
@@ -169,23 +154,12 @@ export default function ItemPhotoUpload({
       console.log('Uploading image from URL:', imageUrl);
 
       // Use server-side endpoint to bypass CORS
-      const uploadResponse = await fetch('/api/media/upload-from-url', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          imageUrl,
-          itemId,
-          filename: `${itemName.replace(/[^a-z0-9]/gi, '-')}.jpg`,
-          existingMediaAssetId: existingMediaAssetId || undefined,
-        }),
+      const uploadData = await mediaApi.uploadFromUrl({
+        imageUrl,
+        itemId,
+        filename: `${itemName.replace(/[^a-z0-9]/gi, '-')}.jpg`,
+        existingMediaAssetId: existingMediaAssetId || undefined,
       });
-
-      if (!uploadResponse.ok) {
-        const errorData = await uploadResponse.json();
-        throw new Error(errorData.error || 'Failed to upload image');
-      }
-
-      const uploadData = await uploadResponse.json();
       console.log('Image uploaded successfully:', uploadData);
 
       onPhotoUploaded(uploadData.mediaAssetId, uploadData.url);
@@ -237,17 +211,7 @@ export default function ItemPhotoUpload({
         formData.append('existingMediaAssetId', existingMediaAssetId);
       }
 
-      const response = await fetch('/api/media/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to upload photo');
-      }
-
-      const data = await response.json();
+      const data = await mediaApi.upload(formData);
 
       // Call parent callback with media asset ID and URL
       onPhotoUploaded(data.mediaAssetId, data.url);

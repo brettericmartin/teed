@@ -1,0 +1,52 @@
+---
+title: "Showcase Mode: Your Profile as a Gallery"
+description: "Your profile should look like a gallery, not a construction site. Here's how Showcase Mode changed the way people see their own pages."
+publishedAt: "2026-01-11"
+author: "Teed"
+category: "build-log"
+tags: ["build-log", "showcase mode", "UX design", "profiles"]
+keywords: ["profile design", "showcase mode", "gear gallery", "profile customization", "creator profile page"]
+relatedSlugs: ["mobile-first-collections", "the-story-feature", "permanence-over-recency"]
+---
+
+## The construction site problem
+
+Every time someone visited their own profile on Teed, they saw edit buttons, drag handles, section borders, and delete icons. The whole page screamed "you're still working on this." Which was accurate, technically — but it also meant you never got to *see* what visitors see.
+
+Your profile looked like a construction site. Even if the content was polished, the interface told you it wasn't done. That's a bad feeling for a platform built around curation.
+
+## Showcase Mode
+
+The fix was conceptual before it was technical. Your profile should default to the visitor view. The finished, clean, gallery version. You made something worth looking at — you should get to look at it.
+
+Showcase Mode makes the visitor view the default. When you land on your own profile, you see exactly what everyone else sees. Clean layout, no edit chrome, just your curated bags and items presented the way you designed them.
+
+Want to make changes? Press E. Edit mode slides in with all the tools you need. Make your changes, and when you're done, press E again to drop back to Showcase Mode. There's a small celebration animation when you exit edit mode — confetti is overdone, so it's more of a subtle pulse that says "nice work, you're done."
+
+The keyboard shortcut matters. It needed to feel like toggling a light switch, not navigating to a settings page.
+
+## Quick creation, everywhere
+
+While rethinking how people interact with their profiles, I also rebuilt how things get added.
+
+**Paste any link, anywhere.** Copy a product URL, paste it on Teed, and you get a choice: add it to a bag, put it on your profile, or save it as a social link. The system detects the URL type and suggests the right destination. An Amazon link? Probably a bag item. An Instagram URL? Probably a social link. You can override the suggestion, but most of the time it just gets it right.
+
+**Command Palette.** Hit Cmd+K (or Ctrl+K) and you get a search-driven command palette. Create a new bag, jump to a specific collection, toggle edit mode, open settings. Power users shouldn't have to click through menus for things they do constantly.
+
+**Floating + button.** On mobile, there's a persistent floating action button for quick creation. Tap it and you get the same options: new bag, new item, paste a link. It stays out of the way in Showcase Mode and appears when you enter edit mode.
+
+**Quick-start bag URL.** Visit `/bags/new` and you can create a bag in about ten seconds. Pick a name, choose a layout, done. You get a shareable URL immediately. The idea is that creating a bag should feel as fast as creating a new note — zero friction, worry about details later.
+
+## First-time editor tips
+
+New users don't know about the E shortcut, the paste trick, or the Command Palette. So the first time you enter edit mode, you get a brief overlay showing three key actions: keyboard shortcut to toggle, where to drag items, and how to add new things. It appears once and never again.
+
+I debated whether tips like this feel patronizing. But after watching a few people use the app for the first time, it was clear that discoverability was a real problem. Nobody reads docs for a curation tool. A five-second visual hint during the moment they need it is the right tradeoff.
+
+## The philosophy
+
+There's a subtle but important shift here. Before Showcase Mode, your profile was a workspace that happened to be shareable. Now it's a gallery that happens to be editable.
+
+That changes how you think about your own page. You spend more time considering how things look to visitors because that's the view you see by default. The edit tools are always one keypress away, but they're not in your face.
+
+Curation tools should disappear when you're not curating. The thing you made should be the main character.

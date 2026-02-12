@@ -189,6 +189,55 @@ export function generateBreadcrumbJsonLd(
 }
 
 /**
+ * Generate JSON-LD for a blog post.
+ * Uses BlogPosting schema for rich search results.
+ */
+export function generateBlogPostJsonLd(post: {
+  title: string;
+  description: string;
+  url: string;
+  publishedAt: string;
+  updatedAt?: string;
+  author: string;
+  keywords: string[];
+  heroImage?: string;
+}): object {
+  const baseUrl = 'https://teed.club';
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.description,
+    url: post.url,
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt || post.publishedAt,
+    author: {
+      '@type': post.author === 'Teed' ? 'Organization' : 'Person',
+      name: post.author,
+      url: baseUrl,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Teed',
+      url: baseUrl,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${baseUrl}/logo.png`,
+      },
+    },
+    keywords: post.keywords.join(', '),
+    ...(post.heroImage && {
+      image: { '@type': 'ImageObject', url: post.heroImage },
+    }),
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': post.url,
+    },
+  };
+}
+
+/**
  * Serialize JSON-LD to a script tag string for embedding in HTML.
  */
 export function jsonLdScript(data: object | object[]): string {

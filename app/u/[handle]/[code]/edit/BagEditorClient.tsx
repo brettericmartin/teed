@@ -27,6 +27,10 @@ import { TapToIdentifyWizard } from '@/components/apis';
 import type { IdentifiedItem } from '@/components/apis/TapToIdentifyWizard';
 import { CATEGORIES } from '@/lib/categories';
 import { useCelebration } from '@/lib/celebrations';
+import * as bagsApi from '@/lib/api/domains/bags';
+import * as itemsApi from '@/lib/api/domains/items';
+import * as mediaApi from '@/lib/api/domains/media';
+import * as aiApi from '@/lib/api/domains/ai';
 import BagCompletionButton from '@/components/BagCompletionButton';
 import { EditorOnboarding } from '@/components/EditorOnboarding';
 import StoryTimeline from '@/components/story/StoryTimeline';
@@ -209,25 +213,16 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const handleGenerateDescription = async () => {
     setIsGeneratingDescription(true);
     try {
-      const response = await fetch('/api/ai/generate-bag-description', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          bagCode: bag.code,
-          type: 'description',
-        }),
+      const data = await aiApi.generateBagDescription({
+        bagCode: bag.code,
+        type: 'description',
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to generate');
-      }
-
-      const data = await response.json();
       if (data.description) {
         setDescription(data.description);
         toast.showSuccess('Description generated!');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error generating description:', error);
       toast.showError('Failed to generate description');
     } finally {
@@ -256,22 +251,15 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     setIsSaving(true);
 
     try {
-      const response = await fetch(`/api/bags/${bag.code}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title,
-          description: description || null,
-          is_public: isPublic,
-          category: category || null,
-        }),
+      const updatedBag = await bagsApi.update(bag.code, {
+        title,
+        description: description || null,
+        is_public: isPublic,
+        category: category || undefined,
       });
 
-      if (response.ok) {
-        const updatedBag = await response.json();
-        setBag((prev) => ({ ...prev, ...updatedBag }));
-        setLastSaved(new Date());
-      }
+      setBag((prev) => ({ ...prev, ...updatedBag }));
+      setLastSaved(new Date());
     } catch (error) {
       console.error('Error saving bag:', error);
     } finally {
@@ -340,17 +328,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       delete (apiPayload as any).imageUrl;
       delete (apiPayload as any).selectedPhotoUrl;
 
-      const response = await fetch(`/api/bags/${bag.code}/items`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(apiPayload),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to add item');
-      }
-
-      const newItem = await response.json();
+      const newItem = await bagsApi.addItem(bag.code, apiPayload);
       let finalPhotoUrl = newItem.photo_url;
       let finalCustomPhotoId = newItem.custom_photo_id;
 
@@ -359,36 +337,21 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         try {
           console.log('[handleAddItem] Uploading selected photo:', itemData.selectedPhotoUrl.substring(0, 50));
           const sanitizedName = itemData.custom_name.replace(/[^a-zA-Z0-9-_]/g, '-').substring(0, 50);
-          const uploadResponse = await fetch('/api/media/upload-from-url', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              imageUrl: itemData.selectedPhotoUrl,
-              itemId: newItem.id,
-              filename: `${sanitizedName}.jpg`,
-            }),
+          const uploadResult = await mediaApi.uploadFromUrl({
+            imageUrl: itemData.selectedPhotoUrl,
+            itemId: newItem.id,
+            filename: `${sanitizedName}.jpg`,
           });
 
-          if (uploadResponse.ok) {
-            const uploadResult = await uploadResponse.json();
-            console.log('[handleAddItem] Photo uploaded:', uploadResult);
+          console.log('[handleAddItem] Photo uploaded:', uploadResult);
 
-            // Update item with the custom_photo_id
-            await fetch(`/api/items/${newItem.id}`, {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                custom_photo_id: uploadResult.mediaAssetId,
-              }),
-            });
+          // Update item with the custom_photo_id
+          await itemsApi.update(newItem.id, {
+            custom_photo_id: uploadResult.mediaAssetId,
+          });
 
-            finalPhotoUrl = uploadResult.url;
-            finalCustomPhotoId = uploadResult.mediaAssetId;
-          } else {
-            console.error('[handleAddItem] Failed to upload photo:', await uploadResponse.text());
-            // Continue without photo - don't fail the whole operation
-            toast.showError('Photo upload failed, but item was added');
-          }
+          finalPhotoUrl = uploadResult.url;
+          finalCustomPhotoId = uploadResult.mediaAssetId;
         } catch (photoError) {
           console.error('[handleAddItem] Error uploading photo:', photoError);
           toast.showError('Photo upload failed, but item was added');
@@ -437,21 +400,10 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       console.log(`[auto-enrich] Starting for "${itemName}" (${itemId})`);
 
       // Get AI suggestions for this item
-      const enrichResponse = await fetch('/api/ai/enrich-item', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userInput: itemName,
-          bagContext: bag.title,
-        }),
+      const enrichResult = await aiApi.enrichItem({
+        userInput: itemName,
+        bagContext: bag.title,
       });
-
-      if (!enrichResponse.ok) {
-        console.log(`[auto-enrich] Failed to get suggestions for "${itemName}"`);
-        return;
-      }
-
-      const enrichResult = await enrichResponse.json();
 
       // Pick the top suggestion if confidence is high enough
       const topSuggestion = enrichResult.suggestions?.[0];
@@ -478,68 +430,45 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
 
       // Apply updates if we have any
       if (Object.keys(updates).length > 0) {
-        const updateResponse = await fetch(`/api/items/${itemId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(updates),
-        });
+        const updatedItem = await itemsApi.update(itemId, updates);
+        console.log(`[auto-enrich] Updated "${itemName}" with:`, Object.keys(updates));
 
-        if (updateResponse.ok) {
-          const updatedItem = await updateResponse.json();
-          console.log(`[auto-enrich] Updated "${itemName}" with:`, Object.keys(updates));
-
-          // Update local state
-          setBag((prev) => ({
-            ...prev,
-            items: prev.items.map((item) =>
-              item.id === itemId ? { ...item, ...updatedItem } : item
-            ),
-          }));
-        }
+        // Update local state
+        setBag((prev) => ({
+          ...prev,
+          items: prev.items.map((item) =>
+            item.id === itemId ? { ...item, ...updatedItem } : item
+          ),
+        }));
       }
 
       // Also try to find and add a product link
       try {
         const linkSearchQuery = `${topSuggestion.brand || ''} ${itemName}`.trim();
-        const linkResponse = await fetch('/api/ai/find-product-image', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            productName: linkSearchQuery,
-            brandName: topSuggestion.brand,
-          }),
+        const linkResult = await aiApi.findProductImage({
+          productName: linkSearchQuery,
+          brandName: topSuggestion.brand,
         });
 
-        if (linkResponse.ok) {
-          const linkResult = await linkResponse.json();
+        // If we found a product URL, add it as a link
+        if ((linkResult as any).productUrl) {
+          const newLink = await itemsApi.addLink(itemId, {
+            url: (linkResult as any).productUrl,
+            kind: 'shop',
+            is_auto_generated: true,
+          }) as any as Link;
 
-          // If we found a product URL, add it as a link
-          if (linkResult.productUrl) {
-            const addLinkResponse = await fetch(`/api/items/${itemId}/links`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                url: linkResult.productUrl,
-                kind: 'shop',
-                is_auto_generated: true,
-              }),
-            });
+          console.log(`[auto-enrich] Added link for "${itemName}":`, (linkResult as any).productUrl);
 
-            if (addLinkResponse.ok) {
-              const newLink = await addLinkResponse.json();
-              console.log(`[auto-enrich] Added link for "${itemName}":`, linkResult.productUrl);
-
-              // Update local state with new link
-              setBag((prev) => ({
-                ...prev,
-                items: prev.items.map((item) =>
-                  item.id === itemId
-                    ? { ...item, links: [...item.links, newLink] }
-                    : item
-                ),
-              }));
-            }
-          }
+          // Update local state with new link
+          setBag((prev) => ({
+            ...prev,
+            items: prev.items.map((item) =>
+              item.id === itemId
+                ? { ...item, links: [...item.links, newLink] }
+                : item
+            ),
+          }));
         }
       } catch (linkError) {
         console.log(`[auto-enrich] Link search failed for "${itemName}":`, linkError);
@@ -558,48 +487,30 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       console.log(`[auto-link] Starting for "${itemName}" (${itemId})`);
 
       const searchQuery = `${brand || ''} ${itemName}`.trim();
-      const linkResponse = await fetch('/api/ai/find-product-image', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          productName: searchQuery,
-          brandName: brand,
-        }),
+      const linkResult = await aiApi.findProductImage({
+        productName: searchQuery,
+        brandName: brand || undefined,
       });
 
-      if (!linkResponse.ok) {
-        console.log(`[auto-link] Failed to find link for "${itemName}"`);
-        return;
-      }
-
-      const linkResult = await linkResponse.json();
-
       // If we found a product URL, add it as a link
-      if (linkResult.productUrl) {
-        const addLinkResponse = await fetch(`/api/items/${itemId}/links`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            url: linkResult.productUrl,
-            kind: 'shop',
-            is_auto_generated: true,
-          }),
-        });
+      if ((linkResult as any).productUrl) {
+        const newLink = await itemsApi.addLink(itemId, {
+          url: (linkResult as any).productUrl,
+          kind: 'shop',
+          is_auto_generated: true,
+        }) as any as Link;
 
-        if (addLinkResponse.ok) {
-          const newLink = await addLinkResponse.json();
-          console.log(`[auto-link] Added link for "${itemName}":`, linkResult.productUrl);
+        console.log(`[auto-link] Added link for "${itemName}":`, (linkResult as any).productUrl);
 
-          // Update local state with new link
-          setBag((prev) => ({
-            ...prev,
-            items: prev.items.map((item) =>
-              item.id === itemId
-                ? { ...item, links: [...item.links, newLink] }
-                : item
-            ),
-          }));
-        }
+        // Update local state with new link
+        setBag((prev) => ({
+          ...prev,
+          items: prev.items.map((item) =>
+            item.id === itemId
+              ? { ...item, links: [...item.links, newLink] }
+              : item
+          ),
+        }));
       } else {
         console.log(`[auto-link] No product URL found for "${itemName}"`);
       }
@@ -626,13 +537,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     if (!confirmed) return;
 
     try {
-      const response = await fetch(`/api/items/${itemId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete item');
-      }
+      await itemsApi.del(itemId);
 
       setBag((prev) => ({
         ...prev,
@@ -663,16 +568,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   // Batch reorder items - only sends changed items to API
   const handleReorderItems = async (items: Array<{ id: string; sort_index: number }>) => {
     try {
-      const response = await fetch(`/api/bags/${bag.code}/items`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to reorder items');
-      }
+      await bagsApi.reorderItems(bag.code, items);
 
       // Update local state with new sort indices
       setBag((prev) => ({
@@ -695,25 +591,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     try {
       console.log('[UpdateItem] Updating item:', itemId, 'with:', updates);
 
-      const response = await fetch(`/api/items/${itemId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
-      });
-
-      if (!response.ok) {
-        let errorMessage = 'Failed to update item';
-        try {
-          const errorData = await response.json();
-          console.error('[UpdateItem] Server error:', errorData);
-          errorMessage = errorData.error || errorMessage;
-        } catch {
-          console.error('[UpdateItem] Failed to parse error response');
-        }
-        throw new Error(errorMessage);
-      }
-
-      const updatedItem = await response.json();
+      const updatedItem = await itemsApi.update(itemId, updates);
       console.log('[UpdateItem] Success:', updatedItem);
 
       // Preserve photo_url since API doesn't return it
@@ -756,18 +634,11 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     const newHeroId = bag.hero_item_id === itemId ? null : itemId;
 
     try {
-      const response = await fetch(`/api/bags/${bag.code}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          hero_item_id: newHeroId,
-        }),
+      const updatedBag = await bagsApi.update(bag.code, {
+        hero_item_id: newHeroId,
       });
 
-      if (response.ok) {
-        const updatedBag = await response.json();
-        setBag((prev) => ({ ...prev, hero_item_id: updatedBag.hero_item_id }));
-      }
+      setBag((prev) => ({ ...prev, hero_item_id: updatedBag.hero_item_id }));
     } catch (error) {
       console.error('Error updating hero item:', error);
     }
@@ -828,17 +699,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       formData.append('file', croppedBlob, 'cover-photo.jpg');
       formData.append('aspectRatio', aspectRatio);
 
-      const uploadResponse = await fetch(`/api/bags/${bag.code}/cover-photo`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!uploadResponse.ok) {
-        const errorData = await uploadResponse.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to upload cover photo');
-      }
-
-      const uploadData = await uploadResponse.json();
+      const uploadData = await bagsApi.uploadCoverPhoto(bag.code, formData);
 
       setBag((prev) => ({
         ...prev,
@@ -857,18 +718,14 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   // Handle removing cover photo
   const handleRemoveCoverPhoto = async () => {
     try {
-      const response = await fetch(`/api/bags/${bag.code}/cover-photo`, {
-        method: 'DELETE',
-      });
+      await bagsApi.deleteCoverPhoto(bag.code);
 
-      if (response.ok) {
-        setBag((prev) => ({
-          ...prev,
-          cover_photo_id: null,
-          cover_photo_url: null,
-          cover_photo_aspect: '21/9',
-        }));
-      }
+      setBag((prev) => ({
+        ...prev,
+        cover_photo_id: null,
+        cover_photo_url: null,
+        cover_photo_aspect: '21/9',
+      }));
     } catch (error) {
       console.error('Error removing cover photo:', error);
     }
@@ -886,13 +743,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     if (!confirmed) return;
 
     try {
-      const response = await fetch(`/api/bags/${bag.code}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete bag');
-      }
+      await bagsApi.del(bag.code);
 
       // Navigate back to dashboard
       router.push('/dashboard');
@@ -953,30 +804,20 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       // Create all items in parallel for better performance
       const createdItems = await Promise.all(
         selectedProducts.map(async (product, index) => {
-          const response = await fetch(`/api/bags/${bag.code}/items`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              custom_name: product.name,
-              brand: product.brand || null,
-              custom_description: product.specifications
-                ? product.specifications.join(' | ')
-                : product.category,
-              notes: product.estimatedPrice
-                ? `Est. price: ${product.estimatedPrice}`
-                : undefined,
-              quantity: 1,
-              // Set photo_url as fallback (external URL from product image)
-              // If upload to storage succeeds later, custom_photo_id will override this
-              photo_url: product.productImage?.imageUrl || undefined,
-            }),
+          const newItem = await bagsApi.addItem(bag.code, {
+            custom_name: product.name,
+            brand: product.brand || null,
+            custom_description: product.specifications
+              ? product.specifications.join(' | ')
+              : product.category,
+            notes: product.estimatedPrice
+              ? `Est. price: ${product.estimatedPrice}`
+              : undefined,
+            quantity: 1,
+            // Set photo_url as fallback (external URL from product image)
+            // If upload to storage succeeds later, custom_photo_id will override this
+            photo_url: product.productImage?.imageUrl || undefined,
           });
-
-          if (!response.ok) {
-            throw new Error(`Failed to add ${product.name}`);
-          }
-
-          const newItem = await response.json();
 
           // Try to upload a photo for this item
           // Priority: 1) User's source photo from bulk upload (via sourceImageIndex)
@@ -1038,26 +879,15 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
               formData.append('file', blob, `${sanitizedName}-${Date.now()}.jpg`);
               formData.append('itemId', newItem.id);
 
-              const uploadResponse = await fetch('/api/media/upload', {
-                method: 'POST',
-                body: formData,
+              const uploadData = await mediaApi.upload(formData);
+
+              // Update item with photo
+              await itemsApi.update(newItem.id, {
+                custom_photo_id: uploadData.mediaAssetId,
               });
 
-              if (uploadResponse.ok) {
-                const uploadData = await uploadResponse.json();
-
-                // Update item with photo
-                await fetch(`/api/items/${newItem.id}`, {
-                  method: 'PUT',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    custom_photo_id: uploadData.mediaAssetId,
-                  }),
-                });
-
-                newItem.custom_photo_id = uploadData.mediaAssetId;
-                newItem.photo_url = uploadData.url;
-              }
+              newItem.custom_photo_id = uploadData.mediaAssetId;
+              newItem.photo_url = uploadData.url;
             } catch (photoError) {
               console.error(`Failed to upload user photo for ${product.name}:`, photoError);
               // Continue without photo - don't fail the whole operation
@@ -1067,34 +897,19 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             try {
               // Sanitize filename
               const sanitizedName = product.name.replace(/[^a-zA-Z0-9-_]/g, '-').substring(0, 50);
-              const uploadResponse = await fetch('/api/media/upload-from-url', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  imageUrl: product.productImage.imageUrl,
-                  itemId: newItem.id,
-                  filename: `${sanitizedName}.jpg`,
-                }),
+              const uploadData = await mediaApi.uploadFromUrl({
+                imageUrl: product.productImage.imageUrl,
+                itemId: newItem.id,
+                filename: `${sanitizedName}.jpg`,
               });
 
-              if (uploadResponse.ok) {
-                const uploadData = await uploadResponse.json();
+              // Update item with photo
+              await itemsApi.update(newItem.id, {
+                custom_photo_id: uploadData.mediaAssetId,
+              });
 
-                // Update item with photo
-                await fetch(`/api/items/${newItem.id}`, {
-                  method: 'PUT',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    custom_photo_id: uploadData.mediaAssetId,
-                  }),
-                });
-
-                newItem.custom_photo_id = uploadData.mediaAssetId;
-                newItem.photo_url = uploadData.url;
-              } else {
-                const errorData = await uploadResponse.json().catch(() => ({}));
-                console.error(`Failed to upload Google image for ${product.name}:`, errorData);
-              }
+              newItem.custom_photo_id = uploadData.mediaAssetId;
+              newItem.photo_url = uploadData.url;
             } catch (photoError) {
               console.error(`Failed to upload product image for ${product.name}:`, photoError);
               // Continue without photo - don't fail the whole operation
@@ -1149,20 +964,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     setIsFillingLinks(true);
 
     try {
-      const response = await fetch('/api/items/preview-enrichment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          bagId: bag.id,
-          itemIds: itemIds,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to generate suggestions');
-      }
-
-      const result = await response.json();
+      const result = await itemsApi.previewEnrichment(bag.id, itemIds || []);
 
       if (!result.suggestions || result.suggestions.length === 0) {
         alert('No items to enrich! Add some items to your bag first.');
@@ -1207,26 +1009,17 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           };
         });
 
-      const response = await fetch('/api/items/apply-enrichment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          bagId: bag.id,
-          approvedSuggestions,
-        }),
+      const result = await itemsApi.applyEnrichment({
+        bagId: bag.id,
+        approvedSuggestions,
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to apply enrichments');
-      }
-
-      const result = await response.json();
-
       // Refresh bag
-      const bagResponse = await fetch(`/api/bags/${bag.code}`);
-      if (bagResponse.ok) {
-        const updatedBag = await bagResponse.json();
-        setBag(updatedBag);
+      try {
+        const updatedBag = await bagsApi.get(bag.code);
+        setBag(updatedBag as unknown as Bag);
+      } catch {
+        // Refresh failed, but enrichment was applied
       }
 
       // Close modal
@@ -1260,35 +1053,16 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         console.log('[BatchPhotos] Uploading photo for item:', itemId, imageUrl.substring(0, 50));
 
         // Use server-side upload-from-url to download and upload in one step
-        const uploadResponse = await fetch('/api/media/upload-from-url', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            imageUrl,
-            itemId,
-            filename: 'product.jpg',
-          }),
+        const uploadData = await mediaApi.uploadFromUrl({
+          imageUrl,
+          itemId,
+          filename: 'product.jpg',
         });
-
-        if (!uploadResponse.ok) {
-          const errorData = await uploadResponse.json().catch(() => ({}));
-          throw new Error(errorData.error || 'Failed to upload image');
-        }
-
-        const uploadData = await uploadResponse.json();
 
         // Update item with photo
-        const updateResponse = await fetch(`/api/items/${itemId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            custom_photo_id: uploadData.mediaAssetId,
-          }),
+        await itemsApi.update(itemId, {
+          custom_photo_id: uploadData.mediaAssetId,
         });
-
-        if (!updateResponse.ok) {
-          throw new Error('Failed to update item with photo');
-        }
 
         // Update local state
         setBag((prev) => ({
@@ -1555,24 +1329,14 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                         productUrl: suggestion.productUrl,
                         uploadedImageBase64: !!suggestion.uploadedImageBase64,
                       });
-                      const response = await fetch(`/api/bags/${bag.code}/items`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                          custom_name: suggestion.custom_name,
-                          custom_description: suggestion.custom_description || undefined,
-                          notes: suggestion.notes || undefined,
-                          quantity: 1,
-                          brand: suggestion.brand || undefined,
-                          photo_url: suggestion.imageUrl || undefined,
-                        }),
+                      const newItem = await bagsApi.addItem(bag.code, {
+                        custom_name: suggestion.custom_name,
+                        custom_description: suggestion.custom_description || undefined,
+                        notes: suggestion.notes || undefined,
+                        quantity: 1,
+                        brand: suggestion.brand || undefined,
+                        photo_url: suggestion.imageUrl || undefined,
                       });
-
-                      if (!response.ok) {
-                        throw new Error('Failed to add item');
-                      }
-
-                      const newItem = await response.json();
                       console.log('[QuickAddItem] Item created:', newItem.id);
                       let finalPhotoUrl: string | null = null;
                       let finalCustomPhotoId: string | null = null;
@@ -1600,61 +1364,34 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                           formData.append('file', file);
                           formData.append('itemId', newItem.id);
 
-                          const uploadResponse = await fetch('/api/media/upload', {
-                            method: 'POST',
-                            body: formData,
+                          const uploadResult = await mediaApi.upload(formData);
+                          console.log('[QuickAddItem] User photo uploaded:', uploadResult);
+
+                          await itemsApi.update(newItem.id, {
+                            custom_photo_id: uploadResult.mediaAssetId,
                           });
 
-                          if (uploadResponse.ok) {
-                            const uploadResult = await uploadResponse.json();
-                            console.log('[QuickAddItem] User photo uploaded:', uploadResult);
-
-                            await fetch(`/api/items/${newItem.id}`, {
-                              method: 'PUT',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({
-                                custom_photo_id: uploadResult.mediaAssetId,
-                              }),
-                            });
-
-                            finalPhotoUrl = uploadResult.url;
-                            finalCustomPhotoId = uploadResult.mediaAssetId;
-                          } else {
-                            console.error('[QuickAddItem] Failed to upload user photo:', await uploadResponse.text());
-                          }
+                          finalPhotoUrl = uploadResult.url;
+                          finalCustomPhotoId = uploadResult.mediaAssetId;
                         } catch (error) {
                           console.error('[QuickAddItem] Error uploading user photo:', error);
                         }
                       } else if (suggestion.imageUrl) {
                         try {
                           console.log('[QuickAddItem] Uploading image from URL:', suggestion.imageUrl);
-                          const uploadResponse = await fetch('/api/media/upload-from-url', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                              imageUrl: suggestion.imageUrl,
-                              itemId: newItem.id,
-                              filename: `${suggestion.custom_name || 'product'}-thumbnail.jpg`,
-                            }),
+                          const uploadResult = await mediaApi.uploadFromUrl({
+                            imageUrl: suggestion.imageUrl,
+                            itemId: newItem.id,
+                            filename: `${suggestion.custom_name || 'product'}-thumbnail.jpg`,
+                          });
+                          console.log('[QuickAddItem] Image uploaded:', uploadResult);
+
+                          await itemsApi.update(newItem.id, {
+                            custom_photo_id: uploadResult.mediaAssetId,
                           });
 
-                          if (uploadResponse.ok) {
-                            const uploadResult = await uploadResponse.json();
-                            console.log('[QuickAddItem] Image uploaded:', uploadResult);
-
-                            await fetch(`/api/items/${newItem.id}`, {
-                              method: 'PUT',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({
-                                custom_photo_id: uploadResult.mediaAssetId,
-                              }),
-                            });
-
-                            finalPhotoUrl = uploadResult.url;
-                            finalCustomPhotoId = uploadResult.mediaAssetId;
-                          } else {
-                            console.error('[QuickAddItem] Failed to upload image:', await uploadResponse.text());
-                          }
+                          finalPhotoUrl = uploadResult.url;
+                          finalCustomPhotoId = uploadResult.mediaAssetId;
                         } catch (error) {
                           console.error('[QuickAddItem] Error uploading image:', error);
                         }
@@ -1665,19 +1402,12 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                         try {
                           const linkKind = isVideoUrl(suggestion.productUrl) ? 'video' : 'product';
 
-                          const linkResponse = await fetch(`/api/items/${newItem.id}/links`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                              url: suggestion.productUrl,
-                              kind: linkKind,
-                              label: suggestion.custom_name || 'Product Link',
-                            }),
+                          const newLink = await itemsApi.addLink(newItem.id, {
+                            url: suggestion.productUrl,
+                            kind: linkKind,
+                            label: suggestion.custom_name || 'Product Link',
                           });
-                          if (linkResponse.ok) {
-                            const newLink = await linkResponse.json();
-                            newLinks = [newLink];
-                          }
+                          newLinks = [newLink];
                         } catch (error) {
                           console.error('Failed to add product link:', error);
                         }
@@ -1914,13 +1644,12 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           // Refresh the bag data to get new items
           toast.showAI(`Added ${count} item${count !== 1 ? 's' : ''} from links!`);
           // Trigger a refresh by fetching updated bag data
-          fetch(`/api/bags/${bag.code}`)
-            .then(res => res.json())
+          bagsApi.get(bag.code)
             .then(updatedBag => {
               if (updatedBag && updatedBag.items) {
                 setBag(prev => ({
                   ...prev,
-                  items: updatedBag.items,
+                  items: updatedBag.items as Item[],
                 }));
               }
             })

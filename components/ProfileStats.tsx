@@ -1,11 +1,12 @@
 'use client';
 
-import { TrendingUp, Package, Eye, Users } from 'lucide-react';
+import { TrendingUp, Package, Eye, Users, MousePointer } from 'lucide-react';
 
 type ProfileStatsProps = {
   totalBags: number;
   totalViews: number;
   totalFollowers: number;
+  totalClicks?: number;
   statsUpdatedAt?: string | null;
 };
 
@@ -13,6 +14,7 @@ export default function ProfileStats({
   totalBags,
   totalViews,
   totalFollowers,
+  totalClicks,
   statsUpdatedAt,
 }: ProfileStatsProps) {
   const stats = [
@@ -37,6 +39,17 @@ export default function ProfileStats({
       color: 'var(--evergreen-9)',
       bgColor: 'var(--evergreen-3)',
     },
+    ...(totalClicks !== undefined
+      ? [
+          {
+            label: 'Link Clicks',
+            value: totalClicks,
+            icon: MousePointer,
+            color: 'var(--copper-9)',
+            bgColor: 'var(--copper-3)',
+          },
+        ]
+      : []),
   ];
 
   const formatNumber = (num: number) => {
@@ -67,6 +80,8 @@ export default function ProfileStats({
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
+  const gridCols = stats.length === 4 ? 'sm:grid-cols-4' : 'sm:grid-cols-3';
+
   return (
     <div className="bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] p-6">
       <div className="flex items-center justify-between mb-6">
@@ -79,7 +94,7 @@ export default function ProfileStats({
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className={`grid grid-cols-2 ${gridCols} gap-4`}>
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (

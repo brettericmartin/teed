@@ -6,10 +6,15 @@ import { useEffect, useRef } from 'react';
 import { Camera, Share2, Sparkles, TrendingUp, Users, Zap } from 'lucide-react';
 import FeaturedBagsSection from '@/components/home/FeaturedBagsSection';
 import BetaSection from '@/components/home/BetaSection';
+import { analytics } from '@/lib/analytics';
 
 export default function HomeClient() {
   const featuresRef = useRef<HTMLDivElement>(null);
   const useCasesRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    analytics.pageViewed('home');
+  }, []);
 
   useEffect(() => {
     const observerOptions = {
@@ -215,6 +220,7 @@ export default function HomeClient() {
           </p>
           <Link
             href="/join"
+            onClick={() => analytics.ctaClicked('founding_access', 'home', '/join')}
             className="inline-block px-12 py-5 bg-[var(--teed-green-8)] text-white text-xl font-semibold rounded-[var(--radius-xl)] hover:bg-[var(--teed-green-9)] transition-all duration-300 shadow-[var(--shadow-4)] hover:shadow-[var(--shadow-5)] hover:scale-105"
           >
             Apply for Founding Access
@@ -233,6 +239,9 @@ export default function HomeClient() {
             Organize. Curate. Share.
           </p>
           <div className="flex justify-center gap-6 text-sm text-[var(--text-tertiary)]">
+            <Link href="/blog" className="hover:text-[var(--text-primary)] transition-colors">
+              Blog
+            </Link>
             <Link href="/login" className="hover:text-[var(--text-primary)] transition-colors">
               Sign In
             </Link>

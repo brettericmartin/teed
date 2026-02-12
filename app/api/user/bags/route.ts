@@ -23,7 +23,7 @@ export async function GET() {
     // Fetch user's bags with item count
     const { data: bags, error: bagsError } = await supabase
       .from('bags')
-      .select('id, code, title, updated_at, bag_items(count)')
+      .select('id, code, title, updated_at, bag_items!bag_items_bag_id_fkey(count)')
       .eq('owner_id', user.id)
       .order('updated_at', { ascending: false, nullsFirst: false });
 

@@ -1,44 +1,62 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { supabase } from '@/lib/supabaseClient';
+import { Clock, RefreshCw, LogOut } from 'lucide-react';
 
 interface BetaGateProps {
   userEmail: string;
   userName: string;
+  application: {
+    id: string;
+    status: string;
+    waitlist_position: number | null;
+    priority_score: number | null;
+    approval_odds_percent: number | null;
+  };
 }
 
-export default function BetaGate({ userEmail, userName }: BetaGateProps) {
-  const [hasApplied, setHasApplied] = useState(false);
-  const [waitlistPosition, setWaitlistPosition] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+function getOddsColor(odds: number): string {
+  if (odds >= 80) return 'text-emerald-600';
+  if (odds >= 60) return 'text-teal-600';
+  if (odds >= 40) return 'text-amber-600';
+  return 'text-orange-600';
+}
 
-  useEffect(() => {
-    // Check if user has already applied
-    async function checkApplication() {
-      const { data } = await supabase
-        .from('beta_applications')
-        .select('waitlist_position, status')
-        .eq('email', userEmail)
-        .single();
+function getOddsBarColor(odds: number): string {
+  if (odds >= 80) return 'bg-emerald-500';
+  if (odds >= 60) return 'bg-teal-500';
+  if (odds >= 40) return 'bg-amber-500';
+  return 'bg-orange-500';
+}
 
-      if (data) {
-        setHasApplied(true);
-        setWaitlistPosition(data.waitlist_position);
-      }
-      setIsLoading(false);
-    }
-    checkApplication();
-  }, [userEmail]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[var(--bg-page)]">
-        <div className="animate-pulse text-[var(--text-secondary)]">Loading...</div>
-      </div>
-    );
+function getStatusLabel(status: string): string {
+  switch (status) {
+    case 'pending': return 'Under Review';
+    case 'waitlisted': return 'Waitlisted';
+    default: return status;
   }
+}
+
+export default function BetaGate({ userEmail, userName, application }: BetaGateProps) {
+  const router = useRouter();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    router.refresh();
+    // Small delay so the spinner is visible
+    setTimeout(() => setIsRefreshing(false), 1000);
+  };
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    window.location.href = '/login';
+  };
+
+  const odds = application.approval_odds_percent ?? 50;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[var(--bg-page)] to-[var(--sky-2)]">
@@ -46,90 +64,97 @@ export default function BetaGate({ userEmail, userName }: BetaGateProps) {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-[var(--text-primary)] mb-4">
-            Welcome to the Beta
+            Welcome, {userName}
           </h1>
           <p className="text-lg text-[var(--text-secondary)]">
-            {hasApplied
-              ? "Thanks for signing up! We'll let you know when it's your turn."
-              : "Teed is currently in private beta. Apply for early access below."}
+            Your application is being reviewed. We'll let you know when it's your turn.
           </p>
         </div>
 
-        {hasApplied ? (
-          // Already applied - show status
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-lg p-8 text-center">
-            <div className="w-20 h-20 bg-[var(--teed-green-2)] rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg className="w-10 h-10 text-[var(--teed-green-9)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-2">You're on the list!</h2>
-            {waitlistPosition && (
-              <p className="text-3xl font-bold text-[var(--teed-green-9)] mb-4">
-                Position #{waitlistPosition}
-              </p>
-            )}
-            <p className="text-[var(--text-secondary)] mb-6">
-              We're reviewing applications and inviting users in waves.
-              Keep an eye on your inbox at <span className="font-medium">{userEmail}</span>
-            </p>
-
-            <div className="bg-[var(--sky-2)] dark:bg-[var(--sky-3)] rounded-xl p-6 text-left mb-6">
-              <h3 className="font-semibold text-[var(--text-primary)] mb-3">While you wait:</h3>
-              <ul className="space-y-2 text-sm text-[var(--text-secondary)]">
-                <li className="flex items-start gap-2">
-                  <span className="text-[var(--teed-green-9)]">1.</span>
-                  <span>Follow us on social media for updates</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[var(--teed-green-9)]">2.</span>
-                  <span>Share with friends - referrals move you up the list</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[var(--teed-green-9)]">3.</span>
-                  <span>Start thinking about what you want to curate!</span>
-                </li>
-              </ul>
-            </div>
-
-            <Button variant="secondary" onClick={() => supabase.auth.signOut()}>
-              Sign Out
-            </Button>
-          </div>
-        ) : (
-          // Not applied yet - show embedded apply form
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-lg overflow-hidden">
-            <div className="bg-gradient-to-r from-[var(--teed-green-9)] to-[var(--teed-green-8)] p-6 text-center text-white">
-              <h2 className="text-2xl font-bold">Apply for Beta Access</h2>
-              <p className="text-white/80 mt-1">Fill out a quick survey to join the waitlist</p>
-            </div>
-
-            <div className="p-6">
-              <p className="text-[var(--text-secondary)] mb-6">
-                Hi {userName || 'there'}! Since you already have an account, we just need a few more details to process your beta application.
-              </p>
-
-              <div className="space-y-4">
-                <a
-                  href="/apply"
-                  className="block w-full"
-                >
-                  <Button variant="create" className="w-full">
-                    Complete Application
-                  </Button>
-                </a>
-
-                <Button
-                  variant="ghost"
-                  className="w-full"
-                  onClick={() => supabase.auth.signOut()}
-                >
-                  Sign Out
-                </Button>
+        {/* Status Card */}
+        <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-lg p-8">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center">
+                <Clock className="w-6 h-6 text-amber-600" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-[var(--text-primary)]">
+                  {getStatusLabel(application.status)}
+                </h2>
+                {application.waitlist_position && (
+                  <p className="text-sm text-[var(--text-secondary)]">
+                    Position #{application.waitlist_position}
+                  </p>
+                )}
               </div>
             </div>
+            <button
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors disabled:opacity-50"
+              title="Check for updates"
+            >
+              <RefreshCw className={`w-5 h-5 text-[var(--text-tertiary)] ${isRefreshing ? 'animate-spin' : ''}`} />
+            </button>
           </div>
-        )}
+
+          {/* Approval Odds */}
+          <div className="mb-6">
+            <div className="flex items-baseline gap-2 mb-2">
+              <span className={`text-3xl font-bold ${getOddsColor(odds)}`}>
+                {odds}%
+              </span>
+              <span className="text-sm text-[var(--text-tertiary)]">
+                approval odds
+              </span>
+            </div>
+            <div className="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+              <div
+                className={`h-full ${getOddsBarColor(odds)} transition-all duration-500`}
+                style={{ width: `${odds}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Stats Grid */}
+          {application.priority_score !== null && (
+            <div className="grid grid-cols-2 gap-4 mb-6 pt-6 border-t border-[var(--border-subtle)]">
+              <div className="text-center p-3 bg-gray-50 dark:bg-zinc-800 rounded-lg">
+                <p className="text-2xl font-bold text-[var(--text-primary)]">{application.priority_score}</p>
+                <p className="text-xs text-[var(--text-tertiary)]">Priority Score</p>
+              </div>
+              <div className="text-center p-3 bg-gray-50 dark:bg-zinc-800 rounded-lg">
+                <p className="text-2xl font-bold text-[var(--text-primary)]">#{application.waitlist_position || '—'}</p>
+                <p className="text-xs text-[var(--text-tertiary)]">Queue Position</p>
+              </div>
+            </div>
+          )}
+
+          {/* Info */}
+          <div className="bg-[var(--sky-2)] dark:bg-[var(--sky-3)] rounded-xl p-5 mb-6">
+            <h3 className="font-semibold text-[var(--text-primary)] mb-3">While you wait:</h3>
+            <ul className="space-y-2 text-sm text-[var(--text-secondary)]">
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--teed-green-9)]">1.</span>
+                <span>Share your referral link to move up the queue</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--teed-green-9)]">2.</span>
+                <span>We review applications regularly</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--teed-green-9)]">3.</span>
+                <span>You'll get an email at <span className="font-medium">{userEmail}</span> when approved</span>
+              </li>
+            </ul>
+          </div>
+
+          <Button variant="secondary" onClick={handleSignOut} className="w-full gap-2">
+            <LogOut className="w-4 h-4" />
+            Sign Out
+          </Button>
+        </div>
 
         {/* Features Preview */}
         <div className="mt-12 grid md:grid-cols-3 gap-6">

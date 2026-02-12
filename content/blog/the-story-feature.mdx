@@ -1,0 +1,58 @@
+---
+title: "The Story Feature: Your Curation Journey, Visualized"
+description: "Achievement badges, curator notes, and a visual timeline of how your collections evolve. Here's why we built the Story feature."
+publishedAt: "2026-01-26"
+author: "Teed"
+category: "build-log"
+tags: ["build-log", "story feature", "badges", "timeline"]
+keywords: ["curation timeline", "achievement badges", "gear story", "collection history", "curator notes"]
+relatedSlugs: ["permanence-over-recency", "showcase-mode", "mobile-first-collections"]
+---
+
+## Collections change over time
+
+Your gear isn't static. You upgrade your camera, swap out a desk chair, try a new pair of headphones and never go back. On most platforms, those changes just... disappear. The old item gets deleted, the new one takes its place, and there's no record of the journey.
+
+That always felt like a missed opportunity. The evolution of what someone uses tells a story. A photographer who started with a kit lens and now shoots on a 70-200mm f/2.8 — that progression has meaning. It reflects learning, investment, and taste that developed over time.
+
+So we built the Story feature to make that visible.
+
+## Profile Story
+
+Your profile now includes a visual timeline of your curation activity. Every item added, every bag created, every swap — it all shows up as entries on a timeline. Click any entry and it jumps to the relevant item or bag.
+
+The timeline isn't just a log. It's designed to be browsable. Entries are grouped by time period, and you can scroll through months of activity in a few swipes. The goal was something between an Instagram story and a git commit history — personal and visual, but with enough structure to be useful.
+
+**Curator notes.** Any timeline entry can have a 140-character caption. "Replaced my Sony a6400 after 3 years — this thing survived everything" or "finally pulled the trigger on the standing desk." Short, personal context that turns a data point into a moment. The 140-character limit is intentional. It forces brevity. Nobody needs a paragraph explaining why they bought new headphones.
+
+**Retired items.** When you remove an item from a bag, it doesn't vanish. It moves to a retired state — shown in grayscale with all its original info preserved. Your bag shows what you use now; the timeline shows what you used to use. Both matter.
+
+**Show and hide.** Not every timeline entry is interesting. Added three items in one sitting? Maybe you only want to highlight one. You can show or hide individual entries without deleting them. Hidden entries still exist in the data — they just don't appear on your public Story.
+
+## Achievement badges
+
+Badges are earned automatically as you hit milestones. First bag created, tenth item added, first bag shared, one-year anniversary. They show up on your profile in a small badge row.
+
+I was skeptical about badges at first. They can feel gimmicky — digital participation trophies. But the implementation matters. These aren't gamification for engagement. They're markers of real activity. Creating ten curated bags with photos and links is genuine effort. Acknowledging that isn't gimmicky, it's respectful.
+
+The badges are small and don't dominate the profile. They're there for people who notice them, not as the main attraction.
+
+## Enhanced impact analytics
+
+Along with Story, we shipped better analytics for how your bags perform. Views over time, which items get the most clicks, where your traffic comes from. Nothing invasive — no tracking pixels or third-party analytics. Just first-party data from Supabase, showing you how your curated content is performing.
+
+The analytics are for creators, not advertisers. There's no "boost this item" prompt, no suggestions to post more frequently. Just clean data about what resonates.
+
+## The pressure question
+
+One concern with any timeline or activity feature: does it create pressure to keep posting? I don't want Teed to feel like a content treadmill where inactivity makes your profile look abandoned.
+
+The answer is in the design. The Story timeline doesn't show gaps. If you don't add anything for three months, there's no empty space or "no activity" message. It just picks up where it left off. The timeline is additive — it shows what you've done, not what you haven't.
+
+Retired items reinforce this. Removing something isn't failure, it's curation. The grayscale treatment makes retired items feel like a natural part of the story rather than a deletion.
+
+## Curation as narrative
+
+The underlying idea is that curation isn't a one-time act. It's ongoing. The things you choose to surround yourself with change as you change. A profile that captures that evolution is more honest and more interesting than one that only shows the current state.
+
+Your Story is the record of taste developing over time. That's worth showing.

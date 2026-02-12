@@ -7,6 +7,8 @@ import {
   startIdentificationSession,
   recordIdentificationOutcome,
 } from '@/lib/analytics/identificationTelemetry';
+import * as aiApi from '@/lib/api/domains/ai';
+import { analytics } from '@/lib/analytics';
 
 type ProductSuggestion = {
   custom_name: string;
@@ -103,27 +105,24 @@ export function useProductSearch({ bagContext, categoryHint }: UseProductSearchO
         categoryHint,
       };
 
-      const response = await fetch('/api/ai/enrich-item', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-        signal: abortController.signal,
-      });
+      const data = await aiApi.enrichItem({
+        userInput: searchInput,
+        bagContext,
+        existingAnswers,
+        forceAI,
+        categoryHint,
+      }, { signal: abortController.signal });
 
-      if (response.ok) {
-        const data = await response.json();
-        setSuggestions(data.suggestions || []);
-        setQuestions(data.questions || []);
-        setClarificationNeeded(data.clarificationNeeded || false);
-        setSearchTier(data.searchTier as typeof searchTier);
+      setSuggestions(data.suggestions || []);
+      setQuestions(data.questions || []);
+      setClarificationNeeded(data.clarificationNeeded || false);
+      setSearchTier(data.searchTier as typeof searchTier);
 
-        // Start telemetry session when we have results
-        if (data.suggestions?.length > 0) {
-          telemetrySessionRef.current = startIdentificationSession('text', searchInput);
-        }
-      } else {
-        console.error('Failed to fetch suggestions');
-        setSuggestions([]);
+      analytics.searchPerformed(searchInput, data.suggestions?.length || 0, data.searchTier || 'unknown');
+
+      // Start telemetry session when we have results
+      if (data.suggestions?.length > 0) {
+        telemetrySessionRef.current = startIdentificationSession('text', searchInput);
       }
     } catch (error: unknown) {
       if (error instanceof Error && error.name === 'AbortError') return;

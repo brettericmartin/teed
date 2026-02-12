@@ -1,0 +1,54 @@
+---
+title: "How We Built AI-Powered Content Discovery"
+description: "AI agents that research trending gear across YouTube and TikTok, extract products, and curate them into collections. Here's how the discovery system works."
+publishedAt: "2026-01-13"
+author: "Teed"
+category: "build-log"
+tags: ["build-log", "AI", "content discovery", "automation"]
+keywords: ["AI content discovery", "automated curation", "trending gear finder", "youtube gear extraction"]
+relatedSlugs: ["building-ai-product-identification", "bringing-teed-to-chatgpt", "smarter-search"]
+---
+
+## The empty shelf problem
+
+Teed had a good editor and clean public pages. But when someone new showed up, the platform felt empty. There was no content to browse unless you already followed someone who used it. Discovery was word-of-mouth only.
+
+I needed a way to populate the platform with high-quality, curated gear content — without manually researching and adding thousands of products. So I built an AI-powered discovery system that does the research for me.
+
+## How the discovery pipeline works
+
+The system runs in phases. Each phase feeds into the next.
+
+**Phase 1: Source scanning.** AI agents search YouTube, TikTok, and RSS feeds for gear-related content. On YouTube, it runs multi-phase searches: trending gear videos from the past week, new product releases, and recent uploads from a maintained list of known gear channels. Each source type has different search strategies because a "best desk setup 2026" video is structured very differently from a product unboxing.
+
+**Phase 2: Product extraction.** For each piece of content found, the system extracts individual products mentioned. A single YouTube video titled "My Photography Kit" might reference eight different items. The extraction pulls product names, approximate prices, and context about why the creator mentioned each one.
+
+**Phase 3: Product enrichment.** Each extracted product gets enriched with specs, current pricing, and a short note about why it's notable. "Why it's notable" is the important part — it's not just a spec sheet, it's context like "the most recommended travel tripod across three major YouTube channels this month." That editorial layer is what makes the output useful rather than just a data dump.
+
+**Phase 4: Deduplication and linking.** The same product shows up across multiple sources constantly. A popular new lens might appear in fifteen different videos. The system deduplicates by matching on brand, model, and key identifiers. Each product ends up with two types of links: the source link (where it was discovered — the YouTube video, the TikTok, the article) and purchase links (where to actually buy it). That distinction matters. People want to watch the review *and* buy the thing.
+
+## The review workflow
+
+Nothing goes live automatically. Every discovered product enters a review queue where I approve, edit, or reject it. The AI is good at finding and extracting products, but it still makes mistakes — misidentifying accessories, pulling sponsored products without flagging them, or getting specs wrong.
+
+The admin review screen shows each product with its source context, extracted details, and a confidence score. High-confidence items (known brand, clear product name, consistent across sources) take seconds to approve. Ambiguous ones need manual checking.
+
+I considered fully automating this. The error rate was low enough that most things could go live unreviewed. But curation is the whole point of Teed. Shipping AI-generated content without human review would undermine the thing we're building.
+
+## Gap analysis
+
+The system also tracks what's *not* in the product library. If a product keeps appearing in discovery results but doesn't match any existing library entry, it goes into a gap report. This tells me which brands and product categories are underrepresented and need attention.
+
+Over time, this feedback loop makes the library more complete, which makes future discovery more accurate, which finds more gaps. It compounds.
+
+## Other things shipped in v2.0
+
+**Beta Scorecard.** Teed is still invite-based, and the scorecard gives applicants a clear view of where their application stands. It tracks profile completeness, bag quality, and engagement signals. Transparent criteria instead of a black-box waitlist.
+
+**MCP Server.** I built an MCP (Model Context Protocol) server that lets AI assistants interact with Teed's bag management system. It lives in `packages/mcp-server/` and exposes tools for creating bags, adding items, and querying collections. This is an experiment in making Teed accessible from AI workflows — imagine telling Claude "add this product to my camera bag" and having it actually work.
+
+## The bigger picture
+
+Discovery is the hardest problem for any curation platform. You need content to attract users, but you need users to create content. The AI discovery system breaks that cycle by generating a baseline of quality curated content that makes the platform feel alive from the first visit.
+
+It's not a replacement for human curation. It's a research assistant that does the tedious part — scanning hundreds of videos and articles — so the editorial judgment can focus on what actually belongs.

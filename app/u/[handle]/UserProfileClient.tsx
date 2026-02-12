@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { Package, UserPlus, UserMinus, Instagram, Twitter, Youtube, Globe, Video, Settings, Lock } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
+import * as authApi from '@/lib/api/domains/auth';
+import * as followsApi from '@/lib/api/domains/follows';
+import { analytics } from '@/lib/analytics';
 
 type Bag = {
   id: string;
@@ -54,44 +57,33 @@ export default function UserProfileClient({ profile, bags, isOwnProfile: isOwnPr
     // Only check client-side auth if server didn't tell us we own the profile
     if (!isOwnProfileProp) {
       checkFollowStatus();
+      analytics.profileViewed(profile.id, profile.handle);
     }
     fetchFollowCounts();
   }, [profile.id, isOwnProfileProp]);
 
   const checkFollowStatus = async () => {
     try {
-      // Check if user is authenticated and if this is their own profile
-      const sessionResponse = await fetch('/api/auth/session');
-      if (!sessionResponse.ok) {
-        setIsAuthenticated(false);
-        return;
-      }
-
-      const sessionData = await sessionResponse.json();
+      const sessionData = await authApi.getSession();
       setIsAuthenticated(!!sessionData.user);
       setIsOwnProfile(sessionData.user?.id === profile.id);
 
       // Only check follow status if authenticated and not own profile
       if (sessionData.user && sessionData.user.id !== profile.id) {
-        const response = await fetch(`/api/follows/${profile.id}`);
-        if (response.ok) {
-          const data = await response.json();
-          setIsFollowing(data.isFollowing);
-        }
+        const data = await followsApi.getStatus(profile.id);
+        setIsFollowing(data.isFollowing);
       }
     } catch (error) {
+      setIsAuthenticated(false);
       console.error('Error checking follow status:', error);
     }
   };
 
   const fetchFollowCounts = async () => {
     try {
-      const response = await fetch(`/api/follows/counts/${profile.id}`);
-      if (response.ok) {
-        const data = await response.json();
-        setFollowerCount(data.followers);
-        setFollowingCount(data.following);
-      }
+      const data = await followsApi.getCounts(profile.id);
+      setFollowerCount(data.followers);
+      setFollowingCount(data.following);
     } catch (error) {
       console.error('Error fetching follow counts:', error);
     }
@@ -106,27 +98,15 @@ export default function UserProfileClient({ profile, bags, isOwnProfile: isOwnPr
     setIsLoading(true);
     try {
       if (isFollowing) {
-        // Unfollow
-        const response = await fetch(`/api/follows/${profile.id}`, {
-          method: 'DELETE',
-        });
-
-        if (response.ok) {
-          setIsFollowing(false);
-          setFollowerCount(prev => Math.max(0, prev - 1));
-        }
+        await followsApi.unfollow(profile.id);
+        setIsFollowing(false);
+        setFollowerCount(prev => Math.max(0, prev - 1));
+        analytics.userUnfollowed(profile.id, profile.handle);
       } else {
-        // Follow
-        const response = await fetch('/api/follows', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ following_id: profile.id }),
-        });
-
-        if (response.ok) {
-          setIsFollowing(true);
-          setFollowerCount(prev => prev + 1);
-        }
+        await followsApi.follow(profile.id);
+        setIsFollowing(true);
+        setFollowerCount(prev => prev + 1);
+        analytics.userFollowed(profile.id, profile.handle);
       }
     } catch (error) {
       console.error('Error toggling follow:', error);
@@ -286,6 +266,7 @@ export default function UserProfileClient({ profile, bags, isOwnProfile: isOwnPr
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => analytics.socialLinkClicked(platform, profile.handle)}
                         className="flex items-center gap-2 px-3 py-1.5 bg-[var(--surface-hover)] hover:bg-[var(--sand-3)] border border-[var(--border-subtle)] rounded-[var(--radius-md)] text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                         title={`${platform.charAt(0).toUpperCase() + platform.slice(1)}: ${value}`}
                       >

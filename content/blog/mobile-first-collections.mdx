@@ -1,0 +1,58 @@
+---
+title: "Going Mobile-First: Rebuilding Collections for Phones"
+description: "Most people discover gear on their phones. Here's how we rebuilt the entire collections experience to be mobile-first."
+publishedAt: "2026-01-29"
+author: "Teed"
+category: "build-log"
+tags: ["build-log", "mobile", "UX design", "collections"]
+keywords: ["mobile first design", "mobile collections", "responsive gear page", "mobile UX"]
+relatedSlugs: ["showcase-mode", "collections-without-borders", "the-story-feature"]
+---
+
+## Where people actually use Teed
+
+Someone shares a bag link in a group chat, a tweet, or an Instagram story. The person who clicks it is on their phone. That's the primary consumption path — mobile, in-app browsers, usually in a hurry.
+
+For the first several versions of Teed, the mobile experience was an afterthought. The desktop layout would squish down, some things would wrap awkwardly, and editing on a phone was genuinely painful. Buttons too small to tap, drag-and-drop that barely worked with touch, modals that didn't fill the screen properly.
+
+It was time for a proper mobile rewrite.
+
+## The collections panel
+
+The biggest change was the collections panel — the thing that shows all your bags on your profile. On desktop, it's a grid of cards. On mobile, it used to be the same grid, just narrower. That doesn't work. Cards that look good at 300px wide don't work at the full width of a phone screen. The information density is wrong.
+
+The mobile collections panel is now a full-screen modal. Tap your collections, and they expand to fill the viewport. Each bag card is sized for touch — large tap targets, readable text, photos that aren't thumbnailed into oblivion. Swipe to dismiss.
+
+## Shared BagCard component
+
+To pull this off cleanly, I built a shared `BagCard` component that handles both contexts. It supports four photo layouts (single hero image, 2-up, 3-up, and 4-up grid) and three size variants (compact, standard, and featured). The layout and size are determined by context — desktop grid gets standard cards, mobile modal gets compact or featured depending on the bag.
+
+The four photo layouts were a deliberate decision. A bag with one standout item should show a single large photo. A bag with four key pieces should show all four. The layout is either chosen manually or auto-selected based on how many items have photos. The auto-selection logic is simple: if you have one item with a photo, hero layout. Two or three, the corresponding multi-up. Four or more, the 4-up grid with the rest indicated by a "+N" badge.
+
+## Separate layout paths
+
+Here's a decision I debated for a while: mobile and desktop use completely separate layout components. Not responsive CSS on the same components — different components entirely.
+
+The argument against: code duplication. You're maintaining two versions of the same feature. The argument for: the interactions are fundamentally different. Desktop uses hover states, right-click menus, keyboard shortcuts, and drag-and-drop with a mouse. Mobile uses tap, long-press, swipe gestures, and full-screen modals. Trying to make one component handle both with CSS breakpoints leads to a mess of conditional logic and compromised experiences on both platforms.
+
+I went with separate paths. Changes on desktop don't accidentally break mobile. Each platform gets interactions that feel native. The shared pieces — data fetching, state management, the BagCard component — are properly extracted, so the duplication is only in the layout and interaction layer.
+
+## Mobile edit mode
+
+Editing on a phone needed its own interaction model. The desktop edit mode uses floating buttons, drag handles, and hover-to-reveal actions. None of that translates to touch.
+
+Mobile edit mode uses tap hints instead. When you enter edit mode, items show a subtle border and a small edit icon. Tap an item to open its edit sheet (a bottom drawer, not a modal). Long-press to enter reorder mode, where items get a gentle wobble animation and you can drag them with your finger.
+
+The floating action button (the + button for adding items) only appears in edit mode on mobile. In Showcase Mode, it's hidden — the profile stays clean.
+
+**Edit avatar from profile header.** On desktop, you change your avatar in settings. On mobile, there's a camera icon overlay on your profile photo. Tap it, pick a new photo, crop it inline. Small thing, but it means you don't have to navigate away from your profile to update your photo.
+
+## Naming things
+
+During this rewrite, I renamed "blocks" to "panels" across the codebase. Blocks sounded too technical, too CMS-like. Panels is clearer — it's a section of your profile that contains content. Profile panel, collections panel, links panel. The rename touched a lot of files but the result is more consistent language in the UI and code.
+
+## Why it matters
+
+Teed is a visual platform. People share photos of their gear, their setups, their collections. Photos are the primary content type. And photos are consumed on phones. A gear photo that looks great on a 27-inch monitor but loads at 200px wide on a phone with a cramped layout — that's a failed experience.
+
+Mobile-first isn't a technical philosophy. It's a recognition of how people actually find and consume this content. The share-to-phone pipeline is the primary flow, so it needs to be the best experience, not a scaled-down compromise.

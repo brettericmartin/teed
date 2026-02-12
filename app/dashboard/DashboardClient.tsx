@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -13,6 +13,7 @@ import { useToast } from '@/components/ui/Toast';
 import { staggerContainer, cardVariants } from '@/lib/animations';
 import { PageContainer, PageHeader, ContentContainer } from '@/components/layout/PageContainer';
 import { UniversalAddMenu, AddItemFlow, AddSocialFlow } from '@/components/add';
+import { analytics } from '@/lib/analytics';
 
 type BagItem = {
   id: string;
@@ -94,6 +95,10 @@ export default function DashboardClient({
   const [isCreating, setIsCreating] = useState(false);
   const { celebrateFirstBag, celebrateBagCreated } = useCelebration();
 
+  useEffect(() => {
+    analytics.pageViewed('dashboard');
+  }, []);
+
   // Add flow states
   const [showAddItemFlow, setShowAddItemFlow] = useState(false);
   const [showAddSocialFlow, setShowAddSocialFlow] = useState(false);
@@ -170,6 +175,8 @@ export default function DashboardClient({
       const newBag = await response.json();
       setBags([newBag, ...bags]);
       setShowNewBagModal(false);
+
+      analytics.bagCreated(newBag.id, newBag.code, data.title, isFirstBag);
 
       // Celebrate bag creation with confetti
       if (isFirstBag) {

@@ -5,6 +5,9 @@ import { X, Plus, Package, Check } from 'lucide-react';
 import { GolfLoader } from '@/components/ui/GolfLoader';
 import { Button } from '@/components/ui/Button';
 import type { BagViewItem } from '@/lib/types/bagViewTypes';
+import * as bagsApi from '@/lib/api/domains/bags';
+import * as itemsApi from '@/lib/api/domains/items';
+import { analytics } from '@/lib/analytics';
 
 interface Bag {
   id: string;
@@ -57,20 +60,16 @@ export default function AddToBagModal({
     setIsFetchingBags(true);
     setError(null);
     try {
-      const response = await fetch('/api/user/bags');
-      if (!response.ok) {
-        throw new Error('Failed to fetch bags');
-      }
-      const data = await response.json();
+      const data = await bagsApi.listMine();
       setBags(data.bags || []);
 
       // Auto-select first bag if exists
       if (data.bags?.length > 0 && !selectedBagCode) {
         setSelectedBagCode(data.bags[0].code);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error fetching bags:', err);
-      setError('Failed to load your bags');
+      setError(err.message || 'Failed to load your bags');
     } finally {
       setIsFetchingBags(false);
     }
@@ -85,21 +84,10 @@ export default function AddToBagModal({
     setIsCreatingBag(true);
     setError(null);
     try {
-      const response = await fetch('/api/bags', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: newBagTitle.trim(),
-          is_public: false, // Start as private
-        }),
+      const newBag = await bagsApi.create({
+        title: newBagTitle.trim(),
+        is_public: false, // Start as private
       });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to create bag');
-      }
-
-      const newBag = await response.json();
 
       // Add new bag to list and select it
       setBags(prev => [{ id: newBag.id, code: newBag.code, title: newBag.title }, ...prev]);
@@ -123,35 +111,27 @@ export default function AddToBagModal({
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/items/copy-to-bag', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          target_bag_code: selectedBagCode,
-          source_item: {
-            custom_name: item.custom_name,
-            brand: item.brand,
-            custom_description: item.custom_description,
-            notes: item.notes,
-            quantity: item.quantity,
-            photo_url: item.photo_url,
-            promo_codes: item.promo_codes,
-            links: item.links.map(link => ({
-              url: link.url,
-              kind: link.kind,
-              label: link.label,
-              metadata: link.metadata,
-            })),
-          },
-        }),
+      await itemsApi.copyToBag({
+        target_bag_code: selectedBagCode,
+        source_item: {
+          custom_name: item.custom_name,
+          brand: item.brand,
+          custom_description: item.custom_description,
+          notes: item.notes,
+          quantity: item.quantity,
+          photo_url: item.photo_url,
+          promo_codes: item.promo_codes,
+          links: item.links.map(link => ({
+            url: link.url,
+            kind: link.kind,
+            label: link.label,
+            metadata: link.metadata,
+          })),
+        },
       });
 
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to add item');
-      }
-
       const selectedBag = bags.find(b => b.code === selectedBagCode);
+      analytics.itemCopiedToBag(item.id, selectedBagCode);
       onSuccess(selectedBag?.title || 'your bag');
     } catch (err: any) {
       console.error('Error adding item to bag:', err);

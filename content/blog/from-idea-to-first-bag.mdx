@@ -1,0 +1,58 @@
+---
+title: "From Idea to First Bag"
+description: "How Teed went from a frustration with Amazon wishlists to a product curation platform. The founding story and first features."
+publishedAt: "2025-11-20"
+author: "Teed"
+category: "build-log"
+tags: ["build-log", "founding", "product development"]
+keywords: ["teed founding story", "gear sharing platform", "product curation app", "what is teed", "amazon wishlist alternative"]
+relatedSlugs: ["why-bags-not-lists", "building-ai-product-identification", "how-to-create-a-gear-page"]
+---
+
+## The thing that bothered me
+
+I kept running into the same problem. Someone would ask what camera gear I use, or what's in my desk setup, and I'd have no good way to answer.
+
+I'd tried everything. Amazon wishlists — ugly, cluttered with "customers also bought" noise, and you can't organize anything into sections. Google Sheets — functional but deeply unshareable. Linktree — built for links to your stuff, not links to actual products with context. Pinterest boards — close, but buried under algorithmic recommendations and "more ideas for you" garbage.
+
+What I wanted was simple: a clean page with my curated stuff, organized how I want, shareable as a single URL. No login wall for visitors. No algorithm deciding what shows up first. Just my things, my way.
+
+Nothing like that existed. So I started building it.
+
+## Why "bags"
+
+The metaphor matters. A list is infinite — it grows until it's useless. A bag has edges. You can only fit so much, which forces you to choose. That constraint is the whole point. It turns a random collection of links into a curated set that actually means something.
+
+On Teed, a bag is a collection of products organized into sections. A "Home Office Setup" bag might have sections for desk, display, audio, and peripherals. Each item gets a photo, a name, optional notes, and links to where you can buy it. The order is intentional. The grouping is intentional. It's a statement about what you actually use and recommend.
+
+## The first build
+
+I chose Next.js 14 with the App Router and Supabase for the backend. Next.js because I wanted server components and fast page loads for public bag pages — these are shareable URLs that need to feel instant. Supabase because it gave me Postgres, auth, file storage, and row-level security in one place. For a solo build, that stack eliminates a lot of plumbing.
+
+The first features were deliberately minimal:
+
+**Bags and items.** Create a bag, add items with photos and links, organize them into sections. Each item supports multiple purchase links because the same product is often available at different retailers.
+
+**Drag-and-drop reordering.** This was non-negotiable from day one. The order of items in a collection carries meaning. If someone puts their favorite lens first, that matters. I used dnd-kit for this — it handles touch devices well and the API is reasonable.
+
+**Public bag pages.** Every bag gets a permanent URL at `teed.so/u/handle/bag-code`. No login required to view. Fast loads, clean layout, responsive on mobile. This is the thing people actually share, so it had to feel good.
+
+**User profiles and handles.** You pick a handle, you get a profile page at `teed.so/u/handle` that shows all your public bags. Simple, but it turns a collection of bags into a personal reference page.
+
+## What I skipped
+
+I deliberately didn't build search, discovery, social features, comments, likes, or followers. Teed isn't a social network. It's a utility. You build a collection, you get a URL, you share it wherever you already have an audience.
+
+I also skipped image hosting at first — items just had URLs to external images. That was a mistake I fixed quickly. External images break constantly (especially Amazon product images), so I added Supabase Storage uploads pretty early.
+
+## What surprised me
+
+The hardest part wasn't any individual feature — it was getting the editing experience right. Adding an item needs to feel fast. Reordering needs to feel responsive. Auto-save needs to work without losing data. I ended up with a debounced auto-save pattern (1.5 second delay after you stop typing) that saves individual fields without page reloads. It took several iterations to get that feeling right.
+
+The other surprise: how much time I spent on the public bag page versus the editor. The editor is where creators spend time, but the public page is what 95% of visitors see. Every pixel there matters more.
+
+## Day one
+
+The first bag I published was my actual desk setup. Twelve items, three sections. It loaded fast, looked clean, and the URL was short enough to text to someone. That was the moment it felt real — not when the code worked, but when I used it for myself and thought, "yeah, I'd actually share this."
+
+That's where Teed started. A simple tool for a simple problem: show people what you use.

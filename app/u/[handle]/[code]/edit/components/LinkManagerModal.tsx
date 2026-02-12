@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { X, Bot, Loader2, Plus, ExternalLink } from 'lucide-react';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
+import * as itemsApi from '@/lib/api/domains/items';
 
 interface Link {
   id: string;
@@ -102,20 +103,7 @@ export default function LinkManagerModal({
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`/api/items/${itemId}/links`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          url: normalizedUrl,
-          kind: newKind,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to add link');
-      }
-
-      const newLink = await response.json();
+      const newLink = await itemsApi.addLink(itemId, { url: normalizedUrl, kind: newKind }) as unknown as Link;
       onLinksChange([...links, newLink]);
 
       // Check if the API auto-updated the item's photo (e.g., from video thumbnail)
@@ -143,15 +131,7 @@ export default function LinkManagerModal({
     setIsFindingLink(true);
 
     try {
-      const findResponse = await fetch(`/api/items/${itemId}/find-link`, {
-        method: 'POST',
-      });
-
-      if (!findResponse.ok) {
-        throw new Error('Failed to find product link');
-      }
-
-      const result = await findResponse.json();
+      const result = await itemsApi.findLink(itemId);
       const recommendations: FoundLink[] = result.recommendations || [];
 
       if (recommendations.length === 0) {
@@ -184,20 +164,7 @@ export default function LinkManagerModal({
     setAddingFoundUrl(foundLink.url);
 
     try {
-      const addResponse = await fetch(`/api/items/${itemId}/links`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          url: foundLink.url,
-          kind: 'product',
-        }),
-      });
-
-      if (!addResponse.ok) {
-        throw new Error('Failed to save link');
-      }
-
-      const newLink = await addResponse.json();
+      const newLink = await itemsApi.addLink(itemId, { url: foundLink.url, kind: 'product' }) as unknown as Link;
       onLinksChange([...links, newLink]);
 
       // Remove from found links list
@@ -227,20 +194,7 @@ export default function LinkManagerModal({
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`/api/links/${linkId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          url: normalizedUrl,
-          kind: editKind,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update link');
-      }
-
-      const updatedLink = await response.json();
+      const updatedLink = await itemsApi.updateLink(linkId, { url: normalizedUrl, kind: editKind }) as unknown as Link;
       onLinksChange(links.map(link => link.id === linkId ? updatedLink : link));
       setEditingLinkId(null);
     } catch (err: any) {
@@ -268,13 +222,7 @@ export default function LinkManagerModal({
     onLinksChange(links.filter(link => link.id !== linkId));
 
     try {
-      const response = await fetch(`/api/links/${linkId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete link');
-      }
+      await itemsApi.deleteLink(linkId);
     } catch (err: any) {
       // Revert on error
       onLinksChange(originalLinks);

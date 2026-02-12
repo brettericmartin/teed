@@ -46,7 +46,7 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
 
 export default function ApplyPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[var(--bg-page)] to-[var(--sky-2)]">
+    <div className="min-h-screen bg-white">
       {/* Header */}
       <div className="pt-12 pb-8 px-4 text-center">
         <a href="/" className="inline-block mb-6">

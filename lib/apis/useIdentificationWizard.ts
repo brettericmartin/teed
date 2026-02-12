@@ -13,6 +13,8 @@ import type {
   ObjectDetectionResult,
   ProductHints
 } from './types';
+import * as aiApi from '@/lib/api/domains/ai';
+import { ApiError } from '@/lib/api/errors';
 
 // ============================================================================
 // INITIAL STATE
@@ -248,24 +250,12 @@ export function useIdentificationWizard() {
     dispatch({ type: 'START', source });
 
     try {
-      // Call object detection API
-      const response = await fetch('/api/ai/detect-objects', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          imageBase64: source?.imageBase64,
-          imageUrl: source?.url,
-          textHint: source?.textHint
-        }),
-        signal: abortControllerRef.current.signal
-      });
+      const data = await aiApi.detectObjects({
+        imageBase64: source?.imageBase64,
+        imageUrl: source?.url,
+        textHint: source?.textHint
+      }, { signal: abortControllerRef.current.signal });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to detect objects');
-      }
-
-      const data = await response.json();
       if (data.success && data.result) {
         dispatch({ type: 'OBJECTS_DETECTED', result: data.result });
       } else {
@@ -298,19 +288,10 @@ export function useIdentificationWizard() {
     try {
       // Process all images in parallel
       const detectionPromises = images.map(async (imageBase64, index) => {
-        const response = await fetch('/api/ai/detect-objects', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ imageBase64 }),
-          signal: abortControllerRef.current!.signal
-        });
-
-        if (!response.ok) {
-          const error = await response.json();
-          throw new Error(`Image ${index + 1}: ${error.error || 'Failed to detect objects'}`);
-        }
-
-        const data = await response.json();
+        const data = await aiApi.detectObjects(
+          { imageBase64 },
+          { signal: abortControllerRef.current!.signal }
+        );
         return {
           imageIndex: index,
           result: data.result as ObjectDetectionResult
@@ -407,24 +388,14 @@ export function useIdentificationWizard() {
       }
 
       // Call product identification API
-      const response = await fetch('/api/ai/identify-products-v2', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          imageBase64,
-          imageUrl,
-          validatedObjects: allObjects,
-          userContext: corrections,
-          productHints
-        })
+      const data = await aiApi.identifyProductsV2({
+        imageBase64,
+        imageUrl,
+        validatedObjects: allObjects,
+        userContext: corrections,
+        productHints
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to identify products');
-      }
-
-      const data = await response.json();
       if (data.success && data.products) {
         dispatch({ type: 'PRODUCTS_IDENTIFIED', products: data.products });
       } else {
@@ -459,21 +430,11 @@ export function useIdentificationWizard() {
 
     try {
       // Call enrichment API
-      const response = await fetch('/api/ai/enrich-products-v2', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          products: confirmed,
-          yearAware: true
-        })
+      const data = await aiApi.enrichProductsV2({
+        products: confirmed,
+        yearAware: true
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to enrich products');
-      }
-
-      const data = await response.json();
       if (data.success && data.products) {
         dispatch({ type: 'ENRICHMENT_COMPLETE', products: data.products });
 
@@ -535,16 +496,17 @@ export function useIdentificationWizard() {
           productSourceImage = state.sourceImages[(product as any).sourceImageIndex] || sourceImage;
         }
 
-        const response = await fetch('/api/ai/validate-match', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+        try {
+          const data = await aiApi.validateMatch({
             sourceImage: productSourceImage,
             enrichedProduct: product
-          })
-        });
-
-        if (!response.ok) {
+          });
+          return {
+            ...product,
+            validation: data.validation,
+            finalConfidence: data.validation?.visualMatchScore || 50
+          } as ValidatedProduct;
+        } catch {
           // Return a default validation on error
           return {
             ...product,
@@ -564,13 +526,6 @@ export function useIdentificationWizard() {
             finalConfidence: 50
           } as ValidatedProduct;
         }
-
-        const data = await response.json();
-        return {
-          ...product,
-          validation: data.validation,
-          finalConfidence: data.validation?.visualMatchScore || 50
-        } as ValidatedProduct;
       });
 
       const validatedProducts = await Promise.all(validationPromises);
@@ -594,20 +549,12 @@ export function useIdentificationWizard() {
   ) => {
     dispatch({ type: 'USER_CORRECTION', correction });
 
-    try {
-      await fetch('/api/ai/store-correction', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          correction,
-          finalProduct,
-          sourceImage: state.source?.imageBase64 || state.source?.url
-        })
-      });
-    } catch (error) {
-      // Don't fail the flow if learning fails
-      console.error('Failed to store correction:', error);
-    }
+    // Fire-and-forget — don't fail the flow if learning fails
+    aiApi.storeCorrection({
+      correction,
+      finalProduct,
+      sourceImage: state.source?.imageBase64 || state.source?.url
+    });
   }, [state.source]);
 
   // -------------------------------------------------------------------------

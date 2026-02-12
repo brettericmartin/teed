@@ -24,6 +24,12 @@ import {
   Download,
   Calendar,
   MapPin,
+  Eye,
+  Share2,
+  Instagram,
+  Twitter,
+  Youtube,
+  Video,
 } from 'lucide-react';
 import { PageContainer, ContentContainer } from '@/components/layout/PageContainer';
 import { useCelebration } from '@/lib/celebrations';
@@ -178,7 +184,8 @@ export default function StatsPageClient({ profile, stats, selectedDays, badges =
 
   const {
     overview, impact, bags, topItems, clicksByRetailer, topLinks, recentActivity,
-    impactStory, highlights, geography, trafficSources
+    impactStory, highlights, geography, trafficSources, profileViews, socialClicks, totalShares,
+    followers
   } = stats;
   const heroStat = getHeroStat(stats);
   const earnedMilestones = MILESTONES.filter(m => impact.peopleReached >= m.threshold);
@@ -448,6 +455,72 @@ export default function StatsPageClient({ profile, stats, selectedDays, badges =
                   </span>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* Profile & Social Engagement */}
+        {(profileViews > 0 || totalShares > 0 || socialClicks.length > 0 || followers.total > 0) && (
+          <div className="bg-[var(--surface)] rounded-xl border border-[var(--border-subtle)] overflow-hidden">
+            <div className="px-5 py-4 border-b border-[var(--border-subtle)] flex items-center gap-2">
+              <Eye className="w-5 h-5 text-[var(--sky-9)]" />
+              <h2 className="font-semibold text-[var(--text-primary)]">Profile & Social</h2>
+            </div>
+            <div className="p-5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {profileViews > 0 && (
+                  <div className="bg-[var(--sky-2)] rounded-lg p-4">
+                    <div className="flex items-center gap-1.5 text-[var(--sky-11)] mb-1">
+                      <Eye className="w-4 h-4" />
+                      <span className="text-xs font-medium">Profile Views</span>
+                    </div>
+                    <p className="text-2xl font-bold text-[var(--text-primary)]">
+                      {profileViews.toLocaleString()}
+                    </p>
+                  </div>
+                )}
+                {totalShares > 0 && (
+                  <div className="bg-[var(--teed-green-2)] rounded-lg p-4">
+                    <div className="flex items-center gap-1.5 text-[var(--teed-green-11)] mb-1">
+                      <Share2 className="w-4 h-4" />
+                      <span className="text-xs font-medium">Bag Shares</span>
+                    </div>
+                    <p className="text-2xl font-bold text-[var(--text-primary)]">
+                      {totalShares.toLocaleString()}
+                    </p>
+                  </div>
+                )}
+                {followers.total > 0 && (
+                  <div className="bg-[var(--amber-2)] rounded-lg p-4">
+                    <div className="flex items-center gap-1.5 text-[var(--amber-11)] mb-1">
+                      <Users className="w-4 h-4" />
+                      <span className="text-xs font-medium">Followers</span>
+                    </div>
+                    <p className="text-2xl font-bold text-[var(--text-primary)]">
+                      {followers.total.toLocaleString()}
+                    </p>
+                    {followers.newInPeriod > 0 && (
+                      <p className="text-xs text-[var(--teed-green-9)] mt-1">+{followers.newInPeriod} new</p>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Social Link Clicks Breakdown */}
+              {socialClicks.length > 0 && (
+                <div className="mt-4">
+                  <h4 className="text-sm font-medium text-[var(--text-primary)] mb-3">Social Link Clicks</h4>
+                  <div className="space-y-2">
+                    {socialClicks.map((social) => (
+                      <div key={social.platform} className="flex items-center gap-3">
+                        <SocialIcon platform={social.platform} />
+                        <span className="flex-1 text-sm text-[var(--text-primary)] capitalize">{social.platform}</span>
+                        <span className="text-sm font-medium text-[var(--text-secondary)]">{social.clicks} clicks</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -833,6 +906,19 @@ function AppreciationPill({ activity }: { activity: { type: 'view' | 'click' | '
       Someone {config.label} {activity.bagTitle} <span className="opacity-60">{timeAgo}</span>
     </span>
   );
+}
+
+// Social platform icon
+function SocialIcon({ platform }: { platform: string }) {
+  const iconClass = "w-5 h-5";
+  switch (platform.toLowerCase()) {
+    case 'instagram': return <Instagram className={`${iconClass} text-pink-600`} />;
+    case 'twitter':
+    case 'x': return <Twitter className={`${iconClass} text-sky-500`} />;
+    case 'youtube': return <Youtube className={`${iconClass} text-red-600`} />;
+    case 'tiktok': return <Video className={`${iconClass} text-gray-900 dark:text-white`} />;
+    default: return <Globe className={`${iconClass} text-[var(--text-secondary)]`} />;
+  }
 }
 
 function getTimeAgo(date: Date): string {

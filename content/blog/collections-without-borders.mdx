@@ -1,0 +1,74 @@
+---
+title: "Collections Without Borders"
+description: "Embed your collection anywhere. Export for YouTube. Subscribe via RSS. Here's how we made bags portable."
+publishedAt: "2026-01-10"
+author: "Teed"
+category: "build-log"
+tags: ["build-log", "embeds", "RSS", "portability", "open web"]
+keywords: ["embed collection widget", "RSS feed collections", "oEmbed support", "portable gear list", "share collection anywhere"]
+relatedSlugs: ["embed-your-collection-anywhere", "the-calm-internet", "mobile-first-collections"]
+---
+
+## The walled garden trap
+
+Most platforms want your content to live on their platform and nowhere else. Post on Instagram, and the only way to share it is a link back to Instagram. Your content becomes bait to drive traffic to their app, their ads, their engagement metrics.
+
+That was never going to work for Teed. The entire point is that your curated collection should be useful wherever someone encounters it — in a blog post, a YouTube description, a newsletter, a Notion page, a forum thread. If your bag only works on teed.so, it's a walled garden with a nicer coat of paint.
+
+So we built portability into everything.
+
+## Embeddable widgets
+
+One line of code. That's it. Drop a script tag into any page and your bag renders as a clean, responsive widget. It shows your items with photos, names, and links. It respects the host page's width. It loads fast because it's a lightweight iframe, not a full application.
+
+The embed has a few display options — compact (just item names and photos), full (with descriptions and links), and single-item (for featuring one specific product). You can embed a whole bag or a single section.
+
+The technical decision here was iframe vs. web component. Iframes are simpler and provide better style isolation — the host page's CSS can't break your widget, and your widget can't break the host page. Web components are more modern but have shadow DOM quirks across browsers. We went with iframes. They work everywhere, including in platforms that strip JavaScript but allow iframes (like some newsletter tools and CMS platforms).
+
+## Export formats
+
+Not everyone wants an embed. A YouTuber putting gear links in their video description just wants formatted text. A newsletter author wants a clean list they can paste into their editor.
+
+We built export in multiple formats:
+
+**Plain text.** Item names with links, one per line. Copy, paste into a YouTube description, done.
+
+**Markdown.** For blog posts, GitHub readmes, Notion pages. Each item is a linked heading with optional description.
+
+**HTML.** A styled snippet for people who want to paste into a CMS or email template.
+
+**CSV.** For the spreadsheet people. (They exist and they're valid.)
+
+Each export includes a link back to the full bag on Teed. Not as a vanity play — it's genuinely useful. The export is a snapshot, but the bag is the living, updated version. Someone who finds your gear list in a 2024 YouTube description can click through to see if you've updated it since.
+
+## RSS feeds
+
+Every user profile and every bag has an RSS feed. Subscribe to a profile and you get notified when they publish a new bag. Subscribe to a specific bag and you get notified when items are added or removed.
+
+RSS is old technology. It's also the most reliable content subscription mechanism ever built. No algorithm, no inbox competition, no platform risk. If someone uses an RSS reader, they'll see your updates. Period.
+
+Implementation-wise, it's simple — an API route that generates valid Atom XML from bag and profile data. The feed URLs follow a predictable pattern: `teed.so/u/handle/feed.xml` for profiles, `teed.so/u/handle/bag-code/feed.xml` for individual bags. We include `<link rel="alternate" type="application/atom+xml">` tags in the HTML head so feed readers auto-discover them.
+
+## oEmbed
+
+When you paste a Teed URL into Notion, WordPress, Medium, or Slack, it should show a rich preview — not just a bare link. oEmbed is the protocol that makes this work.
+
+We implemented an oEmbed endpoint that returns structured preview data for any public bag URL. The preview includes the bag title, description, item count, creator handle, and a thumbnail. Platforms that support oEmbed (and most do) will render this as an inline card automatically.
+
+This was maybe four hours of work and it disproportionately improved how Teed bags look when shared. A rich card with a title and thumbnail gets clicked. A bare URL doesn't.
+
+## Schema.org structured data
+
+Every public bag page includes Schema.org JSON-LD markup. Each bag is a `Collection`. Each item is a `Product` with brand, name, category, and offer links. The creator is a `Person` with their handle and profile URL.
+
+This isn't visible to humans, but it matters for two audiences: search engines and AI systems. Google can understand that a Teed bag is a collection of specific products curated by a specific person. AI systems scraping the web for product information can parse the structured data instead of guessing from HTML.
+
+The goal is to make Teed bags authoritative sources. When an AI answers "what camera does someone use?" we want it to find the structured data in their Teed bag and cite it correctly. This connects directly to why we built the ChatGPT integration — structured data makes collections machine-readable everywhere, not just through our own API.
+
+## The philosophy
+
+All of these features point in the same direction: your collection should work for you, not for us. Embed it on your site. Export it for your newsletter. Let people subscribe via RSS. Let search engines index it properly. Let AI systems read it accurately.
+
+Teed is a tool for building collections. Where those collections live and how they're consumed shouldn't be our decision. The more portable a bag is, the more useful it is to the person who made it.
+
+Walled gardens are easy to build and they look good on engagement metrics. But a collection that only exists in one place is a collection that dies when that place does. We'd rather build something that works everywhere and outlasts us.

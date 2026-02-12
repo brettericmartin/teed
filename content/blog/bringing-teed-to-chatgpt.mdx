@@ -1,0 +1,64 @@
+---
+title: "Bringing Teed to ChatGPT"
+description: "We built a custom GPT that can browse curated collections. Ask it what gear someone uses and get answers from real bags."
+publishedAt: "2025-12-18"
+author: "Teed"
+category: "build-log"
+tags: ["build-log", "ChatGPT", "AI integration", "API"]
+keywords: ["ChatGPT custom GPT", "AI gear finder", "product recommendation AI", "chatgpt integration"]
+relatedSlugs: ["building-ai-product-identification", "discovery-curation-system", "collections-without-borders"]
+---
+
+## The question that started this
+
+Someone in a Discord server asked: "What camera does Peter McKinnon use?" Three people replied with three different answers, all partially right and partially outdated. One linked a two-year-old YouTube video. One guessed based on a recent Instagram post. One linked an affiliate blog that listed every camera Sony has ever made.
+
+This is the problem with gear questions on the internet. The information is scattered, outdated, and buried under affiliate content. But on Teed, someone could maintain a curated, up-to-date bag called "My Camera Kit" that answers that question definitively.
+
+The missing piece: people ask these questions in conversational tools now. They ask ChatGPT. If ChatGPT could browse Teed collections, it could answer gear questions with real, curated sources instead of hallucinated guesses.
+
+## Building the custom GPT
+
+OpenAI lets you create custom GPTs that can call external APIs. We built one called Teed that can:
+
+**List a user's bags.** Given a handle, return all their public collections with descriptions and item counts.
+
+**View bag contents.** Return every item in a bag — names, brands, categories, notes, and links. This is the core action. When someone asks "what's in this person's setup?" the GPT can pull the actual curated list.
+
+**Search across collections.** Find bags or items matching a query. "Camera bags" returns all public bags tagged with camera or photography gear.
+
+**Browse by category.** Discover collections in specific categories — tech setups, outdoor gear, kitchen tools.
+
+The technical implementation is an OpenAPI spec that describes these endpoints, connected to our existing API routes. The GPT is configured with a system prompt that explains what Teed is and how to use the API to answer gear questions.
+
+## The auth question
+
+Custom GPTs support OAuth flows, but we didn't want to require authentication. The whole point is answering questions about public collections. If someone asks ChatGPT about a public bag, the GPT shouldn't need the user to log in first.
+
+So the Teed GPT uses our public API endpoints only. It can read anything that's publicly visible on teed.so — the same data anyone can see by visiting the URL. No write access, no private data, no auth flow needed.
+
+We did add rate limiting. ChatGPT can generate a lot of API calls quickly, especially if someone asks a broad question like "find me the best photography gear." Each action is rate-limited per IP with sensible defaults — enough for normal conversational use, but not enough to scrape our entire database.
+
+## What works well
+
+The best interactions are specific questions about specific people's gear. "What microphone does @username use?" works well because it maps cleanly to a bag lookup, item search, and a direct answer with a source link.
+
+Category browsing also works. "Show me some curated desk setups" returns a list of relevant bags with descriptions, and the GPT can summarize the common items across them. That's a genuinely useful answer that would take a human 20 minutes of browsing to compile.
+
+The GPT also includes links back to teed.so for every answer. This matters. The answer isn't just "they use a Sony A7IV" — it's "they use a Sony A7IV, and here's their full kit at teed.so/u/handle/camera-kit." The collection provides context that a bare product name doesn't.
+
+## What's tricky
+
+**Freshness.** ChatGPT doesn't know when a bag was last updated. A collection from six months ago might still be perfectly accurate (we built Teed around permanence for this reason), but the GPT can't distinguish between "last updated yesterday" and "last updated in March." We include last-modified dates in the API response so the GPT can mention it.
+
+**Specificity.** Vague questions produce vague answers. "What's good for hiking?" is too broad — the GPT might return dozens of bags across different hiking subcategories. We found that the system prompt needs to guide the GPT toward asking clarifying questions instead of dumping a wall of results.
+
+**Attribution.** The GPT sometimes paraphrases bag contents instead of quoting them directly. We tuned the system prompt to emphasize linking to the source bag and attributing recommendations to the curator, not presenting them as the GPT's own opinions.
+
+## Why this matters for Teed
+
+Teed bags are curated by real people with real opinions. That's their value. But for that value to reach people, the bags need to be accessible where people are actually asking questions — and increasingly, that's inside AI tools.
+
+A custom GPT isn't the only distribution channel we're thinking about (more on embeds and RSS in a future post), but it's a meaningful one. Every time the Teed GPT answers a gear question with a real source, it demonstrates why human curation still matters in a world full of AI-generated content.
+
+The irony of using AI to surface human curation isn't lost on me. But that's exactly the point — AI is good at finding and retrieving information. Humans are good at curating it. Teed sits at that intersection.

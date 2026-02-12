@@ -1,0 +1,68 @@
+---
+title: "Building AI Product Identification"
+description: "How we built a system that identifies products from photos — and why showing confidence levels matters more than pretending AI is always right."
+publishedAt: "2025-12-10"
+author: "Teed"
+category: "build-log"
+tags: ["build-log", "AI", "product identification", "computer vision"]
+keywords: ["AI product identification", "image recognition", "product detection", "computer vision app", "gear identification"]
+relatedSlugs: ["smarter-search", "making-bulk-import-work", "from-idea-to-first-bag"]
+---
+
+## The problem with adding items manually
+
+Adding a product to a Teed bag meant typing its name, finding a photo, adding links. For one or two items, that's fine. For a bag with 15 items, it's tedious. And the whole point of Teed is to make sharing your gear easy — a painful editor defeats the purpose.
+
+The obvious fix: let people take a photo of a product and have the system figure out what it is.
+
+## How APIS works
+
+We call it APIS — Advanced Product Identification System. The pipeline has multiple stages, each feeding the next:
+
+**Image analysis.** The photo goes to Claude's Vision API. The prompt is specific: identify the product, brand, model, category, and any visible distinguishing features. We're not asking for a general image description — we're asking "what product is this, exactly?"
+
+**Text parsing.** If someone types a product name instead of uploading a photo, we run it through a text parsing pipeline first. This handles the messy reality of how people describe things — "taylormade stealth driver" needs to become brand: TaylorMade, model: Stealth, category: Driver. We have a brand dictionary with 680+ entries across 50+ categories that handles fuzzy matching and common misspellings.
+
+**Product library lookup.** Before hitting any API, we check our local product library. If we already know about this exact product, we skip the expensive AI call and return cached data. This is the fastest path and handles repeat products well.
+
+**AI enrichment.** For products the library doesn't know, we use the AI response to fill in details — full product name, typical price range, category classification, and a clean description.
+
+**Confidence scoring.** This is the part I'm most deliberate about.
+
+## Why confidence levels matter
+
+Every AI identification comes with a confidence score. We show it to users in three tiers:
+
+- **90%+ — "Identified."** We're confident this is the right product. Green badge.
+- **75-89% — "Best match."** Probably right, but verify. Yellow badge.
+- **Below 75% — "Possible match."** Our best guess, but you should check. Gray badge.
+
+The temptation with AI features is to hide uncertainty. Just show the result and let people assume it's correct. That's dishonest and it erodes trust fast. The first time someone's Nikon lens gets identified as a Canon, they stop trusting the whole system.
+
+By showing confidence levels, we set honest expectations. A "possible match" at 65% confidence tells the user "we tried, here's our best guess, please verify." That's a much better experience than a wrong answer presented with false certainty.
+
+## What makes product identification hard
+
+Photos of products are surprisingly difficult for AI. A few things that tripped us up:
+
+**Angles and partial views.** People don't photograph their gear like product shots. You get a camera on a desk shot from above. A headphone hanging off a monitor arm. A keyboard half-hidden behind a coffee mug. The AI needs to work with what it gets.
+
+**Similar-looking products.** Generations of the same product often look nearly identical. A Sony A7III and A7IV from a photo? Good luck. We lean on any visible text, model numbers, or color variations to differentiate.
+
+**Lighting.** Phone photos in mixed lighting shift colors. A matte black product can look dark gray or even brown depending on the light source. This affects brand identification more than you'd expect — color is a strong signal for many products.
+
+**Products within products.** A photo of a desk setup might contain 10 identifiable products. Right now we focus on the primary/central product. Multi-product identification from a single photo is on the roadmap but it's a harder problem.
+
+## The pipeline approach
+
+One thing I'd recommend to anyone building AI features: don't make it a single API call. The multi-stage pipeline means we can short-circuit early (product library hit = no API call), handle failures gracefully (if vision fails, fall back to text-only), and improve each stage independently.
+
+The text parsing stage, for example, has gotten significantly better over time with dictionary expansion and fuzzy matching. Those improvements help every identification, whether it started from a photo or typed text.
+
+## What I'd do differently
+
+I'd have built the confidence scoring UI from day one instead of retrofitting it. The original prototype just showed results without any indication of certainty, and even in testing, I caught myself assuming results were correct when they weren't.
+
+The product library cache was also a later addition that should have been first. Most bags contain common, popular products. A local lookup that resolves in milliseconds is always better than a 2-3 second API call, even when the API is right.
+
+Building AI features well is less about the AI and more about everything around it — the fallbacks, the honesty, the speed of the common case.

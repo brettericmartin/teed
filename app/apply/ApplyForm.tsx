@@ -13,6 +13,7 @@ import {
   FRUSTRATIONS, USAGE_INTENT, DOCUMENTATION_HABITS,
 } from '@/lib/surveyConstants';
 import { ChevronLeft, ChevronRight, Check, Loader2, X } from 'lucide-react';
+import { analytics } from '@/lib/analytics';
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -88,6 +89,7 @@ export default function ApplyForm() {
 
   // Fetch application count for "Application #X" display
   useEffect(() => {
+    analytics.pageViewed('apply');
     supabase
       .from('beta_applications')
       .select('id', { count: 'exact', head: true })
@@ -264,6 +266,8 @@ export default function ApplyForm() {
         email: formData.email,
         password: formData.password,
       });
+
+      analytics.betaApplied(data.applicationId, formData.referral_code || undefined, formData.creator_type || undefined);
 
       // Redirect to success page
       router.push(

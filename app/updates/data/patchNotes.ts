@@ -43,11 +43,26 @@ export const CATEGORY_META: Record<CategoryType, {
 
 export const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.7.0',
+    releaseDate: '2026-02-11',
+    title: 'Full Analytics Dashboard & Creator Stats Expansion',
+    summary: 'Complete analytics system for admin and creators. Your stats page now shows profile views, social link clicks, follower counts, and bag shares. Per-bag analytics include saves, clones, and shares.',
+    isLatest: true,
+    changes: [
+      { text: 'Creator stats page now shows profile views, social link clicks by platform, follower counts, and total bag shares', category: 'feature' },
+      { text: 'Per-bag analytics now include saves, clones, and shares alongside views and clicks', category: 'feature' },
+      { text: 'Admin Analytics Dashboard — 6-tab dashboard with Overview, Growth, Retention, Content, Features, and Live tabs', category: 'feature', isAdminOnly: true },
+      { text: 'Retention tracking fixed — user last_active_at now auto-updates via database trigger, powering DAU/WAU/MAU and health segments', category: 'improvement', isAdminOnly: true },
+      { text: 'Feature adoption now tracks all 20 event types (up from 9) with human-readable labels', category: 'improvement', isAdminOnly: true },
+      { text: 'Event tracking added to login, signup, and homepage CTA for complete funnel coverage', category: 'improvement' },
+    ]
+  },
+  {
     version: '2.6.0',
     releaseDate: '2026-02-08',
     title: 'Sharper Images, Discover Revamp & Cleanup',
     summary: 'Product photos are now noticeably sharper across the app. Redesigned Discover page with hot ranking, new admin Beta Manager, and several bug fixes.',
-    isLatest: true,
+    isLatest: false,
     changes: [
       { text: 'Sharper product images — upgraded Google Image Search to return high-resolution photos and sort results by dimension quality', category: 'improvement' },
       { text: 'Image dimension tracking — uploaded photos now record width and height, with warnings for low-resolution sources', category: 'improvement' },
