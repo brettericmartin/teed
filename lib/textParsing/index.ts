@@ -452,6 +452,6 @@ export type {
 } from './types';
 
 export { splitIntoItems } from './stages/normalize';
-export { getBrandEntry, getBrandsForCategory, BRAND_DICTIONARY } from './stages/dictionaryMatch';
+export { getBrandEntry, getBrandsForCategory, BRAND_DICTIONARY, CATEGORY_PATTERNS } from './stages/dictionaryMatch';
 export { combineNameParts } from './stages/productInference';
 export { getColorSynonyms } from './dictionaries/colors';

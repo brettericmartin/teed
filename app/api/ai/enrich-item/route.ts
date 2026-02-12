@@ -10,6 +10,8 @@ import {
   needsClarification,
   suggestClarificationQuestions,
   buildSearchQuery,
+  BRAND_DICTIONARY,
+  CATEGORY_PATTERNS,
   type ParsedTextResult,
 } from '@/lib/textParsing';
 import { createClient } from '@supabase/supabase-js';
@@ -215,117 +217,74 @@ function extractBrandFromUrl(url: string): string | null {
   }
 }
 
-// Extract brand from product name/description by scanning for known brand names
+// Extract brand from product name/description using the shared BRAND_DICTIONARY
 function extractBrandFromText(text: string): string | null {
   if (!text) return null;
 
   const textLower = text.toLowerCase();
-
-  // Check for known brands in the text
   const matches: { brand: string; position: number }[] = [];
 
-  for (const brand of Object.keys(KNOWN_BRANDS)) {
-    const position = textLower.indexOf(brand);
-    if (position !== -1) {
-      matches.push({ brand, position });
+  for (const entry of BRAND_DICTIONARY) {
+    // Check normalized name
+    const pos = textLower.indexOf(entry.normalizedName);
+    if (pos !== -1) {
+      matches.push({ brand: entry.name, position: pos });
+      continue;
+    }
+    // Check aliases
+    for (const alias of entry.aliases) {
+      const aliasPos = textLower.indexOf(alias.toLowerCase());
+      if (aliasPos !== -1) {
+        matches.push({ brand: entry.name, position: aliasPos });
+        break;
+      }
     }
   }
 
   if (matches.length > 0) {
-    // Pick the first matching brand (earliest in text - usually at the start)
     matches.sort((a, b) => a.position - b.position);
-    const bestMatch = matches[0].brand;
-
-    // Capitalize properly
-    const capitalizedBrand = bestMatch.split(' ').map(word =>
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
-
-    console.log(`[extractBrandFromText] Found brand "${capitalizedBrand}" in text`);
-    return capitalizedBrand;
+    console.log(`[extractBrandFromText] Found brand "${matches[0].brand}" in text`);
+    return matches[0].brand;
   }
 
   return null;
 }
 
-const KNOWN_BRANDS: Record<string, Category> = {
-  // Golf - Equipment
-  'taylormade': 'golf', 'callaway': 'golf', 'titleist': 'golf', 'ping': 'golf', 'cobra': 'golf',
-  'mizuno': 'golf', 'srixon': 'golf', 'cleveland': 'golf', 'bridgestone': 'golf', 'wilson': 'golf',
-  'vice golf': 'golf', 'kirkland': 'golf', 'bushnell': 'golf', 'garmin': 'golf', 'blue tees': 'golf',
-  // Golf - Apparel
-  'travis mathew': 'golf', 'g/fore': 'golf', 'peter millar': 'golf', 'greyson': 'golf',
-  'good good': 'golf', 'good good golf': 'golf', 'ace high': 'golf', 'bad birdie': 'golf',
-  'malbon': 'golf', 'eastside golf': 'golf', 'nocturnal': 'golf',
-  // Makeup
-  'charlotte tilbury': 'makeup', 'mac': 'makeup', 'fenty beauty': 'makeup', 'rare beauty': 'makeup',
-  'nars': 'makeup', 'urban decay': 'makeup', 'too faced': 'makeup', 'tarte': 'makeup', 'benefit': 'makeup',
-  'glossier': 'makeup', 'clinique': 'makeup', 'elf': 'makeup', 'maybelline': 'makeup', 'rhode': 'makeup',
-  'summer fridays': 'makeup', 'drunk elephant': 'makeup', 'the ordinary': 'makeup', 'cerave': 'makeup',
-  // Tech
-  'apple': 'tech', 'samsung': 'tech', 'sony': 'tech', 'bose': 'tech', 'google': 'tech',
-  'microsoft': 'tech', 'dell': 'tech', 'lenovo': 'tech', 'asus': 'tech', 'lg': 'tech',
-  // Fashion
-  'nike': 'fashion', 'adidas': 'fashion', 'patagonia': 'fashion', 'north face': 'fashion',
-  'arc\'teryx': 'fashion', 'lululemon': 'fashion', 'under armour': 'fashion',
-  // EDC
-  'benchmade': 'edc', 'spyderco': 'edc', 'chris reeve': 'edc', 'leatherman': 'edc', 'victorinox': 'edc',
-  // Photography
-  'canon': 'photography', 'nikon': 'photography', 'fujifilm': 'photography', 'leica': 'photography',
-};
-
 function detectBrandAndCategory(query: string): { brand: string | null; category: Category | null } {
   const queryLower = query.toLowerCase();
 
-  // Find ALL matching brands and their positions in the query
-  const matchingBrands: { brand: string; category: Category; position: number }[] = [];
+  // Find ALL matching brands from BRAND_DICTIONARY
+  const matchingBrands: { brand: string; displayName: string; category: Category; position: number; length: number }[] = [];
 
-  for (const [brand, category] of Object.entries(KNOWN_BRANDS)) {
-    const position = queryLower.indexOf(brand);
-    if (position !== -1) {
-      matchingBrands.push({ brand, category, position });
+  for (const entry of BRAND_DICTIONARY) {
+    // Check normalized name
+    const pos = queryLower.indexOf(entry.normalizedName);
+    if (pos !== -1) {
+      matchingBrands.push({ brand: entry.normalizedName, displayName: entry.name, category: entry.category, position: pos, length: entry.normalizedName.length });
+    }
+    // Check aliases
+    for (const alias of entry.aliases) {
+      const aliasLower = alias.toLowerCase();
+      const aliasPos = queryLower.indexOf(aliasLower);
+      if (aliasPos !== -1) {
+        matchingBrands.push({ brand: aliasLower, displayName: entry.name, category: entry.category, position: aliasPos, length: aliasLower.length });
+      }
     }
   }
 
-  // If we have multiple brand matches, prefer the one that appears LAST in the query
-  // This is because users typically write "Product Line Brand" (e.g., "ace high polo good good")
-  // where the actual brand (Good Good) comes after the product line name (Ace High)
   if (matchingBrands.length > 0) {
-    // Sort by position (descending) and pick the last-appearing brand
-    matchingBrands.sort((a, b) => b.position - a.position);
+    // Prefer: longer match first (more specific), then last position (actual brand often comes after product line)
+    matchingBrands.sort((a, b) => {
+      if (b.length !== a.length) return b.length - a.length;
+      return b.position - a.position;
+    });
     const bestMatch = matchingBrands[0];
-    console.log(`[detectBrandAndCategory] Found ${matchingBrands.length} brand(s): ${matchingBrands.map(m => m.brand).join(', ')}. Selected: "${bestMatch.brand}" (last in query)`);
-    return { brand: bestMatch.brand, category: bestMatch.category };
+    console.log(`[detectBrandAndCategory] Found ${matchingBrands.length} brand(s). Selected: "${bestMatch.displayName}" (longest match, last in query)`);
+    return { brand: bestMatch.displayName, category: bestMatch.category };
   }
 
-  // Category-only detection (subset of most common categories)
-  const categoryPatterns: Partial<Record<Category, string[]>> = {
-    golf: ['driver', 'iron', 'wedge', 'putter', 'fairway', 'hybrid', 'golf', 'shaft', 'ball', 'grip', 'bag'],
-    beauty: ['lipstick', 'eyeshadow', 'foundation', 'mascara', 'blush', 'concealer', 'beauty', 'makeup'],
-    skincare: ['serum', 'moisturizer', 'cleanser', 'toner', 'sunscreen', 'retinol'],
-    tech: ['phone', 'laptop', 'tablet', 'airpods', 'headphones', 'earbuds', 'speaker', 'computer'],
-    audio: ['headphones', 'earbuds', 'speaker', 'soundbar', 'amplifier', 'turntable'],
-    fashion: ['shirt', 'pants', 'jacket', 'dress', 'suit', 'blazer'],
-    footwear: ['shoes', 'sneakers', 'boots', 'sandals'],
-    outdoor: ['tent', 'sleeping bag', 'backpack', 'camping', 'hiking', 'cooler'],
-    photography: ['camera', 'lens', 'flash', 'tripod', 'drone'],
-    gaming: ['console', 'controller', 'playstation', 'xbox', 'nintendo'],
-    music: ['guitar', 'piano', 'drum', 'amp', 'instrument'],
-    fitness: ['dumbbell', 'kettlebell', 'treadmill', 'workout', 'weights'],
-    activewear: ['leggings', 'sports bra', 'jogger', 'athletic'],
-    travel: ['luggage', 'suitcase', 'carry-on'],
-    edc: ['knife', 'flashlight', 'wallet', 'pen', 'multitool'],
-    watches: ['watch', 'chronograph', 'automatic', 'mechanical'],
-    cycling: ['bike', 'bicycle', 'cycling', 'groupset'],
-    tennis: ['racket', 'racquet', 'tennis'],
-    coffee: ['coffee', 'espresso', 'grinder', 'pour over'],
-    kitchen: ['cookware', 'pan', 'pot', 'knife', 'blender'],
-    home: ['furniture', 'sofa', 'chair', 'table', 'desk'],
-    baby: ['stroller', 'car seat', 'crib', 'bassinet'],
-    pet: ['dog food', 'cat food', 'pet toy', 'leash'],
-  };
-
-  for (const [category, patterns] of Object.entries(categoryPatterns)) {
+  // Category-only detection using shared CATEGORY_PATTERNS
+  for (const [category, patterns] of Object.entries(CATEGORY_PATTERNS)) {
     if (patterns.some(p => queryLower.includes(p))) {
       return { brand: null, category: category as Category };
     }
@@ -393,10 +352,10 @@ async function searchWithAI(
     ? `User has answered:\n${JSON.stringify(existingAnswers, null, 2)}\n`
     : '';
 
-  // If we detected a specific brand, tell the AI to use it
+  // If we detected a specific brand, tell the AI to use it; otherwise flag the brand as unrecognized
   const brandHint = detectedBrand
     ? `\nIMPORTANT: The user is searching for a "${detectedBrand.toUpperCase()}" brand product. ALL suggestions should use this brand. Other words in their query (like product line names) should NOT be used as the brand.\n`
-    : '';
+    : `\nIMPORTANT: No known brand was detected in the user's query. The user may be searching for a niche, indie, or new brand that you haven't heard of. Do NOT substitute well-known brands in place of what the user typed. If the user's input contains what looks like a brand name, use it as-is even if you don't recognize it.\n`;
 
   // Build parsed context for the AI
   let parsedContext = '';
@@ -431,17 +390,22 @@ async function searchWithAI(
   const systemPrompt = `You are a product enrichment assistant for Teed, an app that helps users catalog their belongings.
 ${brandContext}${brandHint}${parsedContext}
 
-CRITICAL: The user is searching for a product. You MUST provide suggestions even if the product is:
+CRITICAL: The user is searching for a product. You MUST provide 3-5 suggestions. Products may be:
 - Very new (2024-2025 releases)
-- Uncommon or niche
+- From niche, indie, or small brands you haven't heard of
 - Potentially misspelled
 
-YOUR #1 PRIORITY: ALWAYS RETURN AT LEAST 3-5 SUGGESTIONS. NEVER return empty suggestions.
+YOUR #1 PRIORITY: ALWAYS RETURN 3-5 SUGGESTIONS by trying multiple interpretations of the user's input.
 
-If you're not 100% sure about the product:
-1. Make your best guess based on the brand and product type
-2. Include similar/related products from the same brand
-3. Include variations that might match what they meant
+BRAND INTERPRETATION STRATEGY — try these in order to fill your suggestions:
+1. Try the FULL input as a specific product (e.g. "Ripper Golf Club Headcover" = exact product)
+2. Try different brand splits (e.g. "Ripper Golf Club" as the brand + "Headcover" as the product, OR "Ripper" as the brand + "Golf Club Headcover" as the product)
+3. Try variations of the product type within the same brand (e.g. different headcover styles)
+
+CRITICAL RULE: ALL suggestions must use a brand name derived from the user's input.
+- Do NOT substitute well-known brands (TaylorMade, Callaway, etc.) when the user typed a brand you don't recognize.
+- If the user types "Ripper Golf Club Headcover", every suggestion should have brand "Ripper Golf Club" or "Ripper" — NEVER "TaylorMade" or "Callaway".
+- It's fine to have lower confidence — just be honest about it and use the user's brand.
 
 Product verticals and their spec formatting (ONLY if you know the actual specs):
 - Golf equipment: "Loft | Shaft | Flex" (e.g., "10.5° | Fujikura Ventus | Stiff")
@@ -465,14 +429,15 @@ Format enriched details as:
 - funFactOptions: 3 different fun fact variations
 
 Confidence scoring:
-- 0.9+: Very confident
-- 0.7-0.89: Moderately confident
-- <0.7: Low confidence but STILL PROVIDE SUGGESTIONS
+- 0.9+: You are confident this exact product exists
+- 0.7-0.89: You recognize the brand and are suggesting a plausible product
+- 0.5-0.69: You don't recognize the brand — trying your best interpretation of the user's input
 
 IMPORTANT FOR NEW/UNKNOWN PRODUCTS:
-- If you recognize the brand but not the exact model, return what you know about similar models
-- "Callaway Elyte" = 2025 Callaway driver line, if unknown use Paradym or Ai Smoke as similar suggestions
-- Always include at least one "exact match" attempt and several "similar products"
+- If you recognize the brand but not the exact model, suggest similar real models from THAT brand
+- If you don't recognize the brand, try multiple brand/product splits from the user's input
+- Example: "Ripper Golf Club Headcover" → try brand="Ripper Golf Club" product="Headcover", brand="Ripper" product="Golf Club Headcover", brand="Ripper Golf Club" product="Driver Headcover", etc.
+- NEVER substitute a well-known brand for an unrecognized one
 
 CLARIFICATION QUESTIONS:
 ${shouldAskClarification ? `The user's input is ambiguous or generic. You SHOULD generate 1-2 clarification questions to help narrow down results.` : `The user's input is specific enough. Only generate clarification questions if genuinely needed.`}
@@ -515,11 +480,11 @@ Return ONLY valid JSON in this exact format:
   ]
 }
 
-NEVER return empty suggestions. If unsure, make educated guesses based on brand and context.`;
+ALWAYS return 3-5 suggestions. If you're unsure, try multiple brand/product interpretations of the user's input rather than making up products from well-known brands.`;
 
   const userPrompt = `${contextPrompt}${answersPrompt}User input: "${userInput}"
 
-Generate product suggestions. Remember: ALWAYS return at least 3-5 suggestions, even if you have to guess.
+Generate 3-5 product suggestions. For unknown brands, try multiple interpretations of the user's input — never substitute well-known brands.
 ${shouldAskClarification ? 'The input seems generic - consider asking a clarification question.' : ''}`;
 
   try {
@@ -530,7 +495,7 @@ ${shouldAskClarification ? 'The input seems generic - consider asking a clarific
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
       ],
-      temperature: 0.7,
+      temperature: 0.3,
       response_format: { type: 'json_object' },
     });
 
@@ -561,8 +526,9 @@ ${shouldAskClarification ? 'The input seems generic - consider asking a clarific
     const productsBeingLearned: string[] = [];
 
     // Learn high-confidence AI suggestions for future library lookups
+    // Threshold 0.85+ to avoid learning hallucinated products
     for (const suggestion of result.suggestions) {
-      if (suggestion.confidence >= 0.75 && suggestion.brand && suggestion.custom_name) {
+      if (suggestion.confidence >= 0.85 && suggestion.brand && suggestion.custom_name) {
         const productName = `${suggestion.brand} ${suggestion.custom_name}`;
         productsBeingLearned.push(productName);
 
