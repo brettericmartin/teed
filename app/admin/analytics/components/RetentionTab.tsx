@@ -58,7 +58,10 @@ export default function RetentionTab({ dateRange }: RetentionTabProps) {
   useEffect(() => {
     setLoading(true);
     fetch(`/api/admin/analytics/retention?range=${dateRange}`)
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
       .then(setData)
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -76,11 +79,13 @@ export default function RetentionTab({ dateRange }: RetentionTabProps) {
     return <p className="text-gray-500 text-center py-8">No retention data available</p>;
   }
 
+  const cohortRetention = data.cohortRetention || [];
+
   // Build cohort grid: rows = cohort weeks, columns = week numbers
-  const cohortWeeks = [...new Set(data.cohortRetention.map(r => r.cohort_week))].sort();
-  const maxWeekNumber = Math.max(0, ...data.cohortRetention.map(r => r.week_number));
+  const cohortWeeks = [...new Set(cohortRetention.map(r => r.cohort_week))].sort();
+  const maxWeekNumber = Math.max(0, ...cohortRetention.map(r => r.week_number));
   const cohortGrid = cohortWeeks.map(week => {
-    const rows = data.cohortRetention.filter(r => r.cohort_week === week);
+    const rows = cohortRetention.filter(r => r.cohort_week === week);
     const size = rows[0]?.cohort_size || 0;
     const cells: (number | null)[] = [];
     for (let w = 0; w <= maxWeekNumber; w++) {

@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
+import { getAdminUser } from '@/lib/adminAuth';
 
 export async function GET(request: NextRequest) {
   try {
+    const admin = await getAdminUser();
+    if (!admin) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
     const supabase = await createServerSupabase();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    const { data: admin } = await supabase.from('admins').select('role').eq('user_id', user.id).single();
-    if (!admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
     const { searchParams } = new URL(request.url);
     const range = searchParams.get('range') || '30d';

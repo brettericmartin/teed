@@ -23,7 +23,10 @@ export default function ContentPerformanceTab({ dateRange }: ContentPerformanceT
   useEffect(() => {
     setLoading(true);
     fetch(`/api/admin/analytics/content?range=${dateRange}`)
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
       .then(setData)
       .catch(console.error)
       .finally(() => setLoading(false));

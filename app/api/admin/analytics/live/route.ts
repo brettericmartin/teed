@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
+import { getAdminUser } from '@/lib/adminAuth';
 
 export async function GET() {
   try {
+    const admin = await getAdminUser();
+    if (!admin) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
     const supabase = await createServerSupabase();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    const { data: admin } = await supabase.from('admins').select('role').eq('user_id', user.id).single();
-    if (!admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
     // Last 50 user activity events with user info
     const { data: events, error: eventsError } = await supabase
