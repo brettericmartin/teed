@@ -43,8 +43,7 @@ export async function GET(request: NextRequest) {
       reviewed_by,
       auto_approved,
       auto_approval_reason,
-      created_at,
-      updated_at
+      created_at
     `);
 
   // Filter by status

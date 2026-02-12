@@ -49,7 +49,6 @@ interface Application {
   auto_approved: boolean | null;
   auto_approval_reason: string | null;
   created_at: string;
-  updated_at: string;
   referrer?: { name: string; email: string } | null;
 }
 

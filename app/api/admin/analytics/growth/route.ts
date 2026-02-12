@@ -25,27 +25,31 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch activation funnel' }, { status: 500 });
     }
 
-    // Beta pipeline: applied -> approved -> signed_up -> active
+    // Beta pipeline: applied -> approved -> waitlisted -> rejected
+    // Also fetch ALL applications (no date filter) for full picture
     const { data: betaApplications, error: betaError } = await supabase
       .from('beta_applications')
-      .select('status, created_at')
-      .gte('created_at', startDateISO);
+      .select('status, created_at');
 
     if (betaError) {
       console.error('Error fetching beta applications:', betaError);
       return NextResponse.json({ error: 'Failed to fetch beta pipeline' }, { status: 500 });
     }
 
+    const allApps = betaApplications || [];
+    const recentApps = allApps.filter(a => a.created_at >= startDateISO);
+
     const betaPipeline = [
-      { stage: 'applied', count: betaApplications?.length || 0 },
-      { stage: 'approved', count: betaApplications?.filter(a => ['approved', 'signed_up', 'active'].includes(a.status)).length || 0 },
-      { stage: 'signed_up', count: betaApplications?.filter(a => ['signed_up', 'active'].includes(a.status)).length || 0 },
-      { stage: 'active', count: betaApplications?.filter(a => a.status === 'active').length || 0 },
+      { stage: 'total_applied', count: allApps.length },
+      { stage: 'pending', count: allApps.filter(a => a.status === 'pending').length },
+      { stage: 'approved', count: allApps.filter(a => a.status === 'approved').length },
+      { stage: 'waitlisted', count: allApps.filter(a => a.status === 'waitlisted').length },
+      { stage: 'rejected', count: allApps.filter(a => a.status === 'rejected').length },
     ];
 
-    // Daily signups aggregation
+    // Daily signups aggregation (date-filtered)
     const dailySignupsMap: Record<string, number> = {};
-    betaApplications?.forEach(app => {
+    recentApps.forEach(app => {
       const date = app.created_at?.split('T')[0];
       if (date) {
         dailySignupsMap[date] = (dailySignupsMap[date] || 0) + 1;

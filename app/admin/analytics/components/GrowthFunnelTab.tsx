@@ -112,13 +112,22 @@ export default function GrowthFunnelTab({ dateRange }: GrowthFunnelTabProps) {
       {data.betaPipeline && data.betaPipeline.length > 0 && (
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Beta Application Pipeline</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {data.betaPipeline.map((stage) => (
-              <div key={stage.stage} className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 text-center">
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{stage.count}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 capitalize">{stage.stage.replace('_', ' ')}</p>
-              </div>
-            ))}
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+            {data.betaPipeline.map((stage) => {
+              const colors: Record<string, string> = {
+                total_applied: 'text-blue-600',
+                pending: 'text-amber-600',
+                approved: 'text-green-600',
+                waitlisted: 'text-orange-500',
+                rejected: 'text-red-500',
+              };
+              return (
+                <div key={stage.stage} className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 text-center">
+                  <p className={`text-2xl font-bold ${colors[stage.stage] || 'text-gray-900 dark:text-white'}`}>{stage.count}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 capitalize">{stage.stage.replace(/_/g, ' ')}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
