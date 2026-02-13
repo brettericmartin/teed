@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { X, Check, Loader2, Link as LinkIcon, ChevronDown, ChevronUp, ExternalLink, AlertCircle, Image as ImageIcon } from 'lucide-react';
+import { X, Check, Loader2, Link as LinkIcon, ChevronDown, ChevronUp, ExternalLink, AlertCircle, Image as ImageIcon, Sparkles } from 'lucide-react';
 import { BulkLinkProcessingView } from './BulkLinkProcessingView';
 import type {
   ProcessingStage,
@@ -9,6 +9,7 @@ import type {
   StreamingItem,
   StreamedLinkResult,
 } from '@/lib/types/bulkLinkStream';
+import { STAGE_CONFIG } from '@/lib/types/bulkLinkStream';
 
 // ============================================================
 // TYPES
@@ -581,6 +582,36 @@ export default function BulkLinkImportModal({
   const selectedCount = results.filter(r => r.isSelected).length;
   const hasValidSelections = selectedCount > 0;
 
+  // Get the current processing stage label for single-link pill
+  const singleLinkStage = isSingleLinkMode ? currentStages.get(0) : undefined;
+  const singleLinkDomain = (() => {
+    if (!isSingleLinkMode || parsedUrls.length === 0) return '';
+    try { return new URL(parsedUrls[0]).hostname.replace('www.', ''); } catch { return parsedUrls[0]; }
+  })();
+
+  // Single-link processing: show a compact floating pill instead of full modal
+  if (isSingleLinkMode && step === 'processing') {
+    return (
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-slide-up">
+        <div className="flex items-center gap-3 px-4 py-3 bg-white rounded-full shadow-lg border border-[var(--sky-5)] max-w-sm">
+          <Loader2 className="w-4 h-4 animate-spin text-[var(--sky-11)] flex-shrink-0" />
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-[var(--text-primary)] truncate">
+              {singleLinkStage ? STAGE_CONFIG[singleLinkStage].label : 'Identifying product'}...
+            </p>
+            <p className="text-xs text-[var(--text-tertiary)] truncate">{singleLinkDomain}</p>
+          </div>
+          <button
+            onClick={handleClose}
+            className="p-1 text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] rounded-full hover:bg-gray-100 flex-shrink-0"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
       {/* Modal - Full-screen on mobile, centered card on desktop */}
@@ -597,12 +628,12 @@ export default function BulkLinkImportModal({
             <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
               <LinkIcon className="w-5 h-5" />
               {step === 'input' && (isSingleLinkMode ? 'Add from Link' : 'Import from Links')}
-              {step === 'processing' && (parsedUrls.length === 1 ? 'Analyzing link...' : 'Analyzing Links...')}
+              {step === 'processing' && `Analyzing ${parsedUrls.length} Links...`}
               {step === 'review' && 'Review Items'}
             </h2>
             <p className="text-sm text-gray-500 mt-1">
               {step === 'input' && (isSingleLinkMode ? 'Paste a product link' : 'Paste product links to import (up to 25)')}
-              {step === 'processing' && (parsedUrls.length === 1 ? 'Processing 1 link' : `Processing ${parsedUrls.length} links`)}
+              {step === 'processing' && `Processing ${parsedUrls.length} links`}
               {step === 'review' && summary && (
                 <>
                   {summary.successful} found, {summary.partial} partial, {summary.failed} failed

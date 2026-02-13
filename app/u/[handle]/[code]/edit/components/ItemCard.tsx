@@ -177,6 +177,16 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
           </div>
         </div>
       )}
+      {/* Enriching indicator */}
+      {isEnrichingItem && (
+        <div className="flex items-center gap-2 px-3 sm:px-4 pt-2.5 pb-0">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 bg-[var(--sky-3)] border border-[var(--sky-6)] rounded-full">
+            <Loader2 className="w-3 h-3 animate-spin text-[var(--sky-11)]" />
+            <span className="text-xs font-medium text-[var(--sky-11)]">Finding details...</span>
+          </div>
+        </div>
+      )}
+
       {/* Item Header */}
       <div className="p-3 sm:p-4">
         {/* Photo - full width on mobile */}
