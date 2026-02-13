@@ -10,7 +10,7 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
   const referralCode = params.ref;
 
   const baseMetadata: Metadata = {
-    title: 'Apply for Beta Access - Teed',
+    title: 'Apply for Beta Access - Teed.club',
     description: 'Join the Teed beta program and help shape the future of curation sharing',
   };
 

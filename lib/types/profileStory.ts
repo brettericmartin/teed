@@ -28,6 +28,10 @@ export type ProfileChangeType =
   | 'featured_bag_added'
   | 'featured_bag_removed'
   | 'featured_bags_reordered'
+  // Bag lifecycle
+  | 'bag_created'
+  | 'bag_updated'
+  | 'bag_deleted'
   // General
   | 'profile_created'
   | 'major_update';
@@ -38,7 +42,8 @@ export type ProfileEntityType =
   | 'block'
   | 'theme'
   | 'featured_bag'
-  | 'profile';
+  | 'profile'
+  | 'bag';
 
 // Single story entry from database
 export interface ProfileStoryEntry {
@@ -96,6 +101,10 @@ export const DEFAULT_STORY_SETTINGS: ProfileStorySettings = {
     featured_bag_added: true,
     featured_bag_removed: true,
     featured_bags_reordered: false,
+    // Bag lifecycle
+    bag_created: true,
+    bag_updated: true,
+    bag_deleted: true,
     // General
     profile_created: true,
     major_update: true,
@@ -185,6 +194,9 @@ export function getChangeTypeSummary(changeType: ProfileChangeType): string {
     featured_bag_added: 'Featured a bag',
     featured_bag_removed: 'Unfeatured a bag',
     featured_bags_reordered: 'Reorganized featured bags',
+    bag_created: 'Created a new bag',
+    bag_updated: 'Refined a bag',
+    bag_deleted: 'Retired a bag',
     profile_created: 'Created profile',
     major_update: 'Major profile update',
   };
@@ -214,6 +226,9 @@ export function getChangeTypeIcon(changeType: ProfileChangeType): string {
     featured_bag_added: 'star',
     featured_bag_removed: 'star-off',
     featured_bags_reordered: 'list-ordered',
+    bag_created: 'package',
+    bag_updated: 'edit',
+    bag_deleted: 'package',
     profile_created: 'user-plus',
     major_update: 'refresh-cw',
   };
@@ -239,6 +254,7 @@ export function getChangeTypeColors(changeType: ProfileChangeType): {
     case 'social_link_added':
     case 'block_added':
     case 'featured_bag_added':
+    case 'bag_created':
       return {
         bg: 'bg-[var(--teed-green-2)]',
         text: 'text-[var(--teed-green-10)]',
@@ -247,6 +263,7 @@ export function getChangeTypeColors(changeType: ProfileChangeType): {
     case 'social_link_removed':
     case 'block_removed':
     case 'featured_bag_removed':
+    case 'bag_deleted':
       // Neutral stone/sand for removals - NOT red
       return {
         bg: 'bg-[var(--stone-2)]',
@@ -255,6 +272,7 @@ export function getChangeTypeColors(changeType: ProfileChangeType): {
       };
     case 'social_link_updated':
     case 'block_updated':
+    case 'bag_updated':
     case 'bio_updated':
     case 'display_name_updated':
     case 'handle_updated':
@@ -385,10 +403,10 @@ export function groupEntriesByPeriod(entries: ProfileTimelineEntry[]): TimelineG
 export type StoryActionType = 'added' | 'retired' | 'refined' | 'reorganized';
 
 export function getActionTypeFromChangeType(changeType: ProfileChangeType): StoryActionType {
-  if (changeType.includes('_added') || changeType === 'profile_created') {
+  if (changeType.includes('_added') || changeType === 'profile_created' || changeType === 'bag_created') {
     return 'added';
   }
-  if (changeType.includes('_removed')) {
+  if (changeType.includes('_removed') || changeType === 'bag_deleted') {
     return 'retired';
   }
   if (changeType.includes('_reordered')) {

@@ -8,7 +8,7 @@
  * See GRID_LAYOUT.md for the full height chain requirements.
  */
 
-import { ReactNode, useState, useRef } from 'react';
+import { ReactNode, useState } from 'react';
 import { GripVertical, EyeOff, Pencil, Trash2 } from 'lucide-react';
 import { ProfileBlock } from '@/lib/blocks/types';
 import BlockToolbar from './BlockToolbar';
@@ -39,7 +39,6 @@ export default function BaseBlock({
   onOpenSettings,
 }: BaseBlockProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const editButtonRef = useRef<HTMLButtonElement>(null);
 
   // View mode - render content directly, no wrapper chrome
   if (!isEditMode) {
@@ -67,13 +66,8 @@ export default function BaseBlock({
 
   const handleEditClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // Get position for radial menu
-    if (editButtonRef.current) {
-      const rect = editButtonRef.current.getBoundingClientRect();
-      window.dispatchEvent(new CustomEvent('openRadialMenu', {
-        detail: { rect, blockId: block.id }
-      }));
-    }
+    onSelect?.(block.id);
+    onOpenSettings?.(block.id);
   };
 
   const handleDelete = () => {
@@ -133,9 +127,8 @@ export default function BaseBlock({
             <span className="text-xs font-medium">Drag</span>
           </div>
 
-          {/* Edit button - opens radial menu (hidden on mobile - tap panel instead) */}
+          {/* Edit button - opens settings panel (hidden on mobile - tap panel instead) */}
           <button
-            ref={editButtonRef}
             onClick={handleEditClick}
             className="edit-button hidden md:flex items-center gap-1.5 px-3 py-1.5
               bg-[var(--teed-green-9)] text-white

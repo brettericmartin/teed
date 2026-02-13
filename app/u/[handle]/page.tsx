@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!profile) {
     return {
-      title: 'Profile Not Found | Teed',
+      title: 'Profile Not Found | Teed.club',
     };
   }
 
@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: displayName,
       description,
       url,
-      siteName: 'Teed',
+      siteName: 'Teed.club',
       type: 'profile',
       images: [
         {
@@ -257,7 +257,7 @@ export default async function UserProfilePage({ params, searchParams }: PageProp
   );
 
   const breadcrumbJsonLd = generateBreadcrumbJsonLd([
-    { name: 'Teed', url: 'https://teed.club' },
+    { name: 'Teed.club', url: 'https://teed.club' },
     { name: profile.display_name || profile.handle, url: `https://teed.club/u/${profile.handle}` },
   ]);
 

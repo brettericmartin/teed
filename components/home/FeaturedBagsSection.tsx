@@ -1,6 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { staggerContainer, staggerItem, smoothTransition } from '@/lib/animations';
 import FeaturedBagCard, { FeaturedBag } from './FeaturedBagCard';
 import ExpandedBagItems from './ExpandedBagItems';
 
@@ -45,13 +49,13 @@ export default function FeaturedBagsSection({ initialBags }: FeaturedBagsSection
   if (isLoading) {
     return (
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-[var(--surface)]">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl sm:text-5xl font-bold text-[var(--text-primary)] mb-4">
-              Featured Collections
+            <h2 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] mb-4">
+              See what people are sharing
             </h2>
-            <p className="text-xl text-[var(--text-secondary)] max-w-3xl mx-auto">
-              Explore curated bags from creators and enthusiasts
+            <p className="text-lg text-[var(--text-secondary)] max-w-3xl mx-auto">
+              Real collections from real creators on Teed
             </p>
           </div>
           <div className="flex items-center justify-center py-12">
@@ -65,7 +69,7 @@ export default function FeaturedBagsSection({ initialBags }: FeaturedBagsSection
   if (error) {
     return (
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-[var(--surface)]">
-        <div className="max-w-7xl mx-auto text-center">
+        <div className="max-w-5xl mx-auto text-center">
           <p className="text-red-500">Error loading bags: {error}</p>
         </div>
       </section>
@@ -76,78 +80,74 @@ export default function FeaturedBagsSection({ initialBags }: FeaturedBagsSection
     return null;
   }
 
-  // Split bags into top row (3) and bottom row (2)
-  const topRowBags = bags.slice(0, 3);
-  const bottomRowBags = bags.slice(3, 5);
+  const displayBags = bags.slice(0, 4);
 
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8 bg-[var(--surface)]">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl sm:text-5xl font-bold text-[var(--text-primary)] mb-4">
-            Featured Collections
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={smoothTransition}
+          className="text-center mb-12"
+        >
+          <h2 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] mb-4">
+            See what people are sharing
           </h2>
-          <p className="text-xl text-[var(--text-secondary)] max-w-3xl mx-auto">
-            Explore curated bags from creators and enthusiasts
+          <p className="text-lg text-[var(--text-secondary)] max-w-3xl mx-auto">
+            Real collections from real creators on Teed
           </p>
-        </div>
+        </motion.div>
 
-        {/* Top Row: 3 bags */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-          {topRowBags.map((bag) => (
-            <div key={bag.id} className="flex flex-col">
+        {/* 2x2 Grid */}
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+        >
+          {displayBags.map((bag) => (
+            <motion.div key={bag.id} variants={staggerItem} className="flex flex-col">
               <FeaturedBagCard
                 bag={bag}
                 isExpanded={expandedBagId === bag.id}
                 onToggleExpand={() => handleToggleExpand(bag.id)}
               />
-              {/* Expansion area */}
+              {/* Expansion area - content always in DOM for CSS grid transition */}
               <div className={`bag-expansion ${expandedBagId === bag.id ? 'expanded' : ''}`}>
                 <div>
-                  {expandedBagId === bag.id && (
-                    <div className="mt-3 bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden">
-                      <ExpandedBagItems
-                        items={bag.items}
-                        bagCode={bag.code}
-                        owner={bag.owner}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Bottom Row: 2 bags centered */}
-        {bottomRowBags.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {bottomRowBags.map((bag) => (
-              <div key={bag.id} className="flex flex-col">
-                <FeaturedBagCard
-                  bag={bag}
-                  isExpanded={expandedBagId === bag.id}
-                  onToggleExpand={() => handleToggleExpand(bag.id)}
-                />
-                {/* Expansion area */}
-                <div className={`bag-expansion ${expandedBagId === bag.id ? 'expanded' : ''}`}>
-                  <div>
-                    {expandedBagId === bag.id && (
-                      <div className="mt-3 bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden">
-                        <ExpandedBagItems
-                          items={bag.items}
-                          bagCode={bag.code}
-                          owner={bag.owner}
-                        />
-                      </div>
-                    )}
+                  <div className="mt-3 bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden">
+                    <ExpandedBagItems
+                      items={bag.items}
+                      bagCode={bag.code}
+                      owner={bag.owner}
+                    />
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Mini CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ ...smoothTransition, delay: 0.3 }}
+          className="text-center mt-10"
+        >
+          <Link
+            href="/join"
+            className="inline-flex items-center gap-2 text-[var(--teed-green-9)] hover:text-[var(--teed-green-10)] font-semibold transition-colors"
+          >
+            Create yours
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

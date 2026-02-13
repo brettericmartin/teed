@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://teed.so/about',
-    siteName: 'Teed',
+    siteName: 'Teed.club',
     title: 'About Teed - The Gear Collection Platform',
     description: 'Learn about Teed, the platform for creating and sharing curated gear collections.',
   },
@@ -30,7 +30,7 @@ const jsonLd = {
   '@type': 'AboutPage',
   mainEntity: {
     '@type': 'Organization',
-    name: 'Teed',
+    name: 'Teed.club',
     url: 'https://teed.so',
     description: 'Platform for creating and sharing curated gear collections',
     foundingDate: '2024',

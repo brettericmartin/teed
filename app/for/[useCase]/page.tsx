@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!useCase) {
     return {
-      title: 'Not Found | Teed',
+      title: 'Not Found | Teed.club',
     };
   }
 
@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: 'website',
       locale: 'en_US',
       url: `https://teed.so/for/${useCase.slug}`,
-      siteName: 'Teed',
+      siteName: 'Teed.club',
       title: useCase.metaTitle,
       description: useCase.metaDescription,
       images: [
@@ -276,7 +276,7 @@ export default async function UseCasePage({ params }: PageProps) {
               Ready to get started?
             </h2>
             <p className="text-xl text-[var(--text-secondary)] mb-10">
-              Join thousands of {useCase.title.toLowerCase()} already using Teed to organize and share their gear.
+              Join thousands of {useCase.title.toLowerCase()} already using Teed.club to organize and share their gear.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link

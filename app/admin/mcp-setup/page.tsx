@@ -3,7 +3,7 @@ import { requireAdmin } from '@/lib/adminAuth';
 import MCPSetupGuide from './MCPSetupGuide';
 
 export const metadata: Metadata = {
-  title: 'MCP Server Setup - Admin - Teed',
+  title: 'MCP Server Setup - Admin - Teed.club',
   description: 'Setup guide for the Teed MCP Server - enabling AI assistants to manage gear bags',
 };
 

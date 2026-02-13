@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://teed.so/alternatives',
-    siteName: 'Teed',
+    siteName: 'Teed.club',
     title: 'Best Tools for Sharing Gear Collections',
     description: 'Compare tools for creating and sharing gear collections.',
   },
@@ -37,7 +37,7 @@ const jsonLd = {
     {
       '@type': 'ListItem',
       position: 1,
-      name: 'Teed',
+      name: 'Teed.club',
       url: 'https://teed.so',
       description: 'Purpose-built platform for creating and sharing curated gear collections',
     },

@@ -130,7 +130,7 @@ export function ShareButtonGroup({
       <ShareButton
         platform="linkedin"
         url={referralLink}
-        title="Join me on Teed"
+        title="Join me on Teed.club"
       />
       <ShareButton platform="copy" url={referralLink} />
     </div>

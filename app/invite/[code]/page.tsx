@@ -3,7 +3,7 @@ import { createServerSupabase } from '@/lib/serverSupabase';
 import InviteRedemption from './InviteRedemption';
 
 export const metadata: Metadata = {
-  title: 'Redeem Invite - Teed',
+  title: 'Redeem Invite - Teed.club',
   description: 'Redeem your exclusive Teed beta invite code',
 };
 

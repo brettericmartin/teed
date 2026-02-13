@@ -24,9 +24,9 @@ export async function GET() {
   const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Teed Blog</title>
+    <title>Teed.club Blog</title>
     <link>${BASE_URL}/blog</link>
-    <description>Guides, showcases, and build logs from Teed.</description>
+    <description>Guides, showcases, and build logs from Teed.club.</description>
     <language>en-us</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${BASE_URL}/blog/rss.xml" rel="self" type="application/rss+xml" />

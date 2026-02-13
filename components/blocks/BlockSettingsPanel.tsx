@@ -613,8 +613,30 @@ export default function BlockSettingsPanel({
     );
   };
 
+  // Calculate recommended gridH for featured_bags based on display count and card size
+  const getFeaturedBagsGridH = (size: string, maxDisplay: number) => {
+    const cols = size === 'thumbnail' ? 4 : size === 'showcase' ? 2 : 3;
+    const rows = Math.ceil(maxDisplay / cols);
+    const gridHPerRow = size === 'thumbnail' ? 2 : size === 'showcase' ? 4 : 3;
+    return Math.max(2, rows * gridHPerRow + 1);
+  };
+
   const renderFeaturedBagsSettings = () => {
     const bagsConfig = config as FeaturedBagsBlockConfig;
+
+    const updateFeaturedBagsConfig = (key: string, value: any) => {
+      if (!block) return;
+      const newConfig = { ...block.config, [key]: value };
+      const newSize = key === 'size' ? value : (bagsConfig.size || 'standard');
+      const newMaxDisplay = key === 'max_display' ? value : (bagsConfig.max_display || 6);
+      const recommendedH = getFeaturedBagsGridH(newSize, newMaxDisplay);
+
+      updateBlock(block.id, {
+        config: newConfig,
+        gridH: recommendedH,
+      });
+    };
+
     return (
       <>
         {/* Section Title Settings */}
@@ -641,18 +663,51 @@ export default function BlockSettingsPanel({
         </div>
 
         <div className="border-t border-[var(--border-subtle)] pt-4">
-          {renderSizeSelector()}
+          <label className="block text-sm font-medium text-[var(--text-secondary)] mb-3">
+            Card Size
+          </label>
+          <div className="grid gap-2">
+            {(BLOCK_SIZES['featured_bags'] || []).map((sizeOpt) => {
+              const currentSize = bagsConfig.size || 'standard';
+              return (
+                <button
+                  key={sizeOpt.value}
+                  onClick={() => updateFeaturedBagsConfig('size', sizeOpt.value)}
+                  className={`flex items-start gap-3 p-3 rounded-lg border-2 text-left transition-all ${
+                    currentSize === sizeOpt.value
+                      ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-1)]'
+                      : 'border-[var(--border-subtle)] hover:border-[var(--teed-green-7)] bg-[var(--surface)]'
+                  }`}
+                >
+                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                    currentSize === sizeOpt.value
+                      ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-9)]'
+                      : 'border-[var(--border-subtle)]'
+                  }`}>
+                    {currentSize === sizeOpt.value && (
+                      <div className="w-2 h-2 rounded-full bg-white" />
+                    )}
+                  </div>
+                  <div>
+                    <div className="font-medium text-[var(--text-primary)]">{sizeOpt.label}</div>
+                    <div className="text-xs text-[var(--text-tertiary)]">{sizeOpt.description}</div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
+
         <div className="border-t border-[var(--border-subtle)] pt-4">
           <label className="block text-sm font-medium text-[var(--text-secondary)] mb-3">
             Max Bags to Display
           </label>
           <select
             value={bagsConfig.max_display || 6}
-            onChange={(e) => updateConfig('max_display', parseInt(e.target.value))}
+            onChange={(e) => updateFeaturedBagsConfig('max_display', parseInt(e.target.value))}
             className="w-full px-3 py-2 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface)] text-[var(--text-primary)]"
           >
-            {[3, 6, 9, 12].map((n) => (
+            {[3, 6, 9].map((n) => (
               <option key={n} value={n}>{n} bags</option>
             ))}
           </select>

@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import HomeClient from '@/components/home/HomeClient';
 
 export const metadata: Metadata = {
-  title: 'Teed - Curate and Share Your Gear Collections',
-  description: 'Create beautiful, shareable collections of your gear, products, and recommendations. Perfect for golfers, photographers, creators, travelers, and anyone who wants to showcase what they use.',
+  title: 'Teed.club - Your Gear Deserves a Better Home',
+  description: 'Create beautiful, shareable collections of everything you use. One link for your golf bag, camera kit, travel setup, or desk gear. Join as a founding member.',
   keywords: [
     'gear collection',
     'product list',
@@ -18,29 +18,29 @@ export const metadata: Metadata = {
     'collection sharing',
     'gear list app',
   ],
-  authors: [{ name: 'Teed' }],
-  creator: 'Teed',
-  publisher: 'Teed',
+  authors: [{ name: 'Teed.club' }],
+  creator: 'Teed.club',
+  publisher: 'Teed.club',
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://teed.so',
-    siteName: 'Teed',
-    title: 'Teed - Curate and Share Your Gear Collections',
-    description: 'Create beautiful, shareable collections of your gear, products, and recommendations. AI-powered product identification, affiliate link support, and stunning sharing pages.',
+    siteName: 'Teed.club',
+    title: 'Teed.club - Your Gear Deserves a Better Home',
+    description: 'Create beautiful, shareable collections of everything you use. One link for your golf bag, camera kit, travel setup, or desk gear.',
     images: [
       {
         url: 'https://teed.so/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Teed - Curate and Share Your Gear',
+        alt: 'Teed.club - Curate and Share Your Gear',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Teed - Curate and Share Your Gear Collections',
-    description: 'Create beautiful, shareable collections of your gear, products, and recommendations.',
+    title: 'Teed.club - Your Gear Deserves a Better Home',
+    description: 'Create beautiful, shareable collections of everything you use. One link for your golf bag, camera kit, travel setup, or desk gear.',
     images: ['https://teed.so/og-image.png'],
   },
   alternates: {
@@ -66,7 +66,7 @@ const jsonLd = {
     {
       '@type': 'Organization',
       '@id': 'https://teed.so/#organization',
-      name: 'Teed',
+      name: 'Teed.club',
       url: 'https://teed.so',
       logo: {
         '@type': 'ImageObject',
@@ -80,17 +80,16 @@ const jsonLd = {
     {
       '@type': 'WebApplication',
       '@id': 'https://teed.so/#application',
-      name: 'Teed',
+      name: 'Teed.club',
       url: 'https://teed.so',
       applicationCategory: 'LifestyleApplication',
       operatingSystem: 'Web',
-      description: 'Create beautiful, shareable collections of your gear, products, and recommendations. AI-powered product identification from photos, affiliate link support, and stunning sharing pages.',
+      description: 'Create beautiful, shareable collections of your gear, products, and recommendations. Smart product organization, custom profile URLs, and stunning sharing pages.',
       featureList: [
-        'AI-powered product identification from photos',
         'Beautiful shareable collection pages',
+        'Smart product organization',
+        'Custom profile URLs and public sharing',
         'QR code generation for physical sharing',
-        'Affiliate link support for monetization',
-        'Custom profile URLs',
         'Drag-and-drop organization',
       ],
       offers: {
@@ -110,7 +109,7 @@ const jsonLd = {
       '@type': 'WebSite',
       '@id': 'https://teed.so/#website',
       url: 'https://teed.so',
-      name: 'Teed',
+      name: 'Teed.club',
       description: 'Curate and share your gear collections',
       publisher: {
         '@id': 'https://teed.so/#organization',

@@ -52,8 +52,8 @@ export async function GET(
   const feedUrl = `${profileUrl}/feed.xml`;
 
   const rss = generateRssFeed({
-    title: `${displayName}'s Teed`,
-    description: profile.bio || `${displayName}'s curated collections on Teed`,
+    title: `${displayName}'s Teed.club`,
+    description: profile.bio || `${displayName}'s curated collections on Teed.club`,
     link: profileUrl,
     feedUrl,
     imageUrl: profile.avatar_url,

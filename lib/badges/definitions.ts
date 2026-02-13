@@ -162,7 +162,7 @@ export const BADGE_DEFINITIONS: Record<BadgeId, BadgeDefinition> = {
   founder: {
     id: 'founder',
     name: 'Founder',
-    description: 'Founding member of Teed',
+    description: 'Founding member of Teed.club',
     category: 'special',
     icon: 'crown',
     color: 'purple',

@@ -4,7 +4,7 @@ import { createServerSupabase } from '@/lib/serverSupabase';
 import BetaHubContent from './BetaHubContent';
 
 export const metadata: Metadata = {
-  title: 'Beta Hub - Teed',
+  title: 'Beta Hub - Teed.club',
   description: 'Your beta tester headquarters',
 };
 

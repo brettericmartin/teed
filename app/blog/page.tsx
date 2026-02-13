@@ -8,7 +8,7 @@ import PostCard from '@/components/blog/PostCard';
 const BASE_URL = 'https://teed.so';
 
 export const metadata: Metadata = {
-  title: 'Blog — Teed',
+  title: 'Blog — Teed.club',
   description:
     'Guides, showcases, and build logs from Teed. Learn how to organize and share your gear, discover curated collections, and explore our product philosophy.',
   keywords: [
@@ -19,16 +19,16 @@ export const metadata: Metadata = {
     'teed blog',
   ],
   openGraph: {
-    title: 'Blog — Teed',
+    title: 'Blog — Teed.club',
     description:
       'Guides, showcases, and build logs from Teed.',
     url: `${BASE_URL}/blog`,
-    siteName: 'Teed',
+    siteName: 'Teed.club',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Blog — Teed',
+    title: 'Blog — Teed.club',
     description:
       'Guides, showcases, and build logs from Teed.',
   },
@@ -56,12 +56,12 @@ export default async function BlogPage({
   const collectionSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Teed Blog',
-    description: 'Guides, showcases, and build logs from Teed.',
+    name: 'Teed.club Blog',
+    description: 'Guides, showcases, and build logs from Teed.club.',
     url: `${BASE_URL}/blog`,
     publisher: {
       '@type': 'Organization',
-      name: 'Teed',
+      name: 'Teed.club',
       url: BASE_URL,
     },
   };

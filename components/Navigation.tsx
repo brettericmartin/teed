@@ -91,12 +91,12 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
             >
               <img
                 src="/teed-logo.svg"
-                alt="Teed logo"
-                className="w-8 h-12 object-contain"
+                alt="Teed.club logo"
+                className="w-9 h-9 object-contain"
               />
               <div className="flex flex-col">
                 <span className="text-2xl font-bold text-[var(--text-primary)] leading-none">
-                  Teed
+                  Teed.club
                 </span>
                 <span className="text-[11px] text-[var(--text-tertiary)] leading-none mt-1 hidden lg:block">
                   Curations, Made Shareable

@@ -4,8 +4,6 @@ import { useState, useCallback, useRef } from 'react';
 import { Camera, Sparkles, Info, Search, Link as LinkIcon, Type } from 'lucide-react';
 import AISuggestions from './AISuggestions';
 import ItemPreview from './ItemPreview';
-import { TapToIdentifyWizard } from '@/components/apis';
-import type { IdentifiedItem } from '@/components/apis/TapToIdentifyWizard';
 import {
   startIdentificationSession,
   recordIdentificationOutcome,
@@ -167,21 +165,6 @@ type QuickAddItemProps = {
 };
 
 
-// Helper to convert IdentifiedItem to ProductSuggestion
-function convertIdentifiedItemToSuggestion(
-  item: IdentifiedItem
-): ProductSuggestion {
-  return {
-    custom_name: item.name,
-    custom_description: item.visualDescription || '',
-    notes: '',
-    category: 'golf', // Default category
-    confidence: item.confidence / 100, // Convert 0-100 to 0-1
-    brand: item.brand,
-    uploadedImageBase64: item.croppedImageBase64
-  };
-}
-
 export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm, onAddFromLink }: QuickAddItemProps) {
   const [mode, setMode] = useState<'text' | 'link'>('text');
   const [linkUrl, setLinkUrl] = useState('');
@@ -238,22 +221,6 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm, onAddF
     };
     reader.readAsDataURL(file);
   }, []);
-
-  // Handle Tap-to-Identify Wizard completion
-  const handleTapToIdentifyComplete = useCallback(async (items: IdentifiedItem[]) => {
-    setShowSmartWizard(false);
-    setSmartWizardImage(null);
-
-    // Add all identified items
-    for (const item of items) {
-      const suggestion = convertIdentifiedItemToSuggestion(item);
-      await onAdd(suggestion);
-    }
-
-    // Reset form
-    setInput('');
-    setSuggestions([]);
-  }, [onAdd]);
 
   // Cancel Smart Wizard
   const handleSmartWizardCancel = useCallback(() => {
@@ -492,19 +459,6 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm, onAddF
 
   return (
     <>
-      {/* Tap-to-Identify Wizard Modal */}
-      {showSmartWizard && smartWizardImage && (
-        <div className="fixed inset-0 bg-black z-50">
-          <TapToIdentifyWizard
-            imageSource={smartWizardImage}
-            onComplete={handleTapToIdentifyComplete}
-            onCancel={handleSmartWizardCancel}
-            categoryHint="golf"
-            className="h-full"
-          />
-        </div>
-      )}
-
       {/* Preview Modal */}
       {previewingSuggestion && (
         <ItemPreview

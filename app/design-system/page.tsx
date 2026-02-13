@@ -6,7 +6,7 @@ import { TypographyShowcase } from './components/TypographyShowcase';
 import { SurfaceShowcase } from './components/SurfaceShowcase';
 
 export const metadata = {
-  title: 'Design System - Teed',
+  title: 'Design System - Teed.club',
   description: 'Comprehensive design system documentation for the Teed platform',
 };
 

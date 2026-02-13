@@ -392,7 +392,7 @@ Users must sign in with their Teed account. When authenticated, you can:
         title: 'Verify on teed.club',
         description: 'Go to teed.club and check your profile. You should see the new bag and item that the GPT created!',
         externalLink: 'https://teed.club',
-        linkLabel: 'Open Teed',
+        linkLabel: 'Open Teed.club',
       },
     ],
   },

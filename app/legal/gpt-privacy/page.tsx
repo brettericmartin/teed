@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowLeft, Shield, Eye, Pencil, Trash2, MessageSquare, Key, Mail } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'ChatGPT Integration Privacy Policy - Teed',
+  title: 'ChatGPT Integration Privacy Policy - Teed.club',
   description: 'Privacy policy for the Teed ChatGPT integration',
 };
 

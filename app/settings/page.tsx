@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 import SettingsClient from './SettingsClient';
 
 export const metadata: Metadata = {
-  title: 'Settings - Teed',
+  title: 'Settings - Teed.club',
   description: 'Manage your Teed profile settings',
 };
 

@@ -143,7 +143,7 @@ export async function sendRejectionEmail(
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1a1a1a; max-width: 600px; margin: 0 auto; padding: 20px;">
   <p>Hey ${data.name},</p>
 
-  <p>Thank you for your interest in joining Teed's founding cohort.</p>
+  <p>Thank you for your interest in joining Teed.club's founding cohort.</p>
 
   <p>After careful review, we've decided not to move forward with your application at this time. ${data.reason ? `Reason: ${data.reason}` : ''}</p>
 
@@ -214,7 +214,7 @@ export async function sendWelcomeEmail(
 
   <p>Hey ${data.name},</p>
 
-  <p>Thanks for applying to join Teed's founding cohort! We're excited you want to be part of what we're building.</p>
+  <p>Thanks for applying to join Teed.club's founding cohort! We're excited you want to be part of what we're building.</p>
 
   ${data.approvalOdds ? `
   <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: center;">

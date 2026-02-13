@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!profile) {
     return {
-      title: 'Bag Not Found | Teed',
+      title: 'Bag Not Found | Teed.club',
     };
   }
 
@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!bag) {
     return {
-      title: 'Bag Not Found | Teed',
+      title: 'Bag Not Found | Teed.club',
     };
   }
 
@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: bag.title,
       description,
       url,
-      siteName: 'Teed',
+      siteName: 'Teed.club',
       type: 'website',
       images: [
         {
@@ -266,7 +266,7 @@ export default async function UserBagPage({ params }: PageProps) {
   );
 
   const breadcrumbJsonLd = generateBreadcrumbJsonLd([
-    { name: 'Teed', url: 'https://teed.club' },
+    { name: 'Teed.club', url: 'https://teed.club' },
     { name: profile.display_name || profile.handle, url: `https://teed.club/u/${profile.handle}` },
     { name: bag.title, url: `https://teed.club/u/${profile.handle}/${code}` },
   ]);

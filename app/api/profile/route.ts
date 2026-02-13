@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
 /**
  * PATCH /api/profile
  * Update the current authenticated user's profile
- * Accepts: { display_name?, bio?, handle?, social_links? }
+ * Accepts: { display_name?, bio?, handle?, social_links?, avatar_url? }
  */
 export async function PATCH(request: NextRequest) {
   try {
@@ -72,7 +72,7 @@ export async function PATCH(request: NextRequest) {
 
     // Parse request body
     const body = await request.json();
-    const { display_name, bio, handle, social_links } = body;
+    const { display_name, bio, handle, social_links, avatar_url } = body;
 
     // Validate input
     const updates: any = {};
@@ -185,6 +185,16 @@ export async function PATCH(request: NextRequest) {
       }
 
       updates.handle = cleanHandle;
+    }
+
+    if (avatar_url !== undefined) {
+      if (avatar_url !== null && typeof avatar_url !== 'string') {
+        return NextResponse.json(
+          { error: 'Avatar URL must be a string' },
+          { status: 400 }
+        );
+      }
+      updates.avatar_url = avatar_url;
     }
 
     // If no updates provided

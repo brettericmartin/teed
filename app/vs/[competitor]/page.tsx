@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!comparison) {
     return {
-      title: 'Not Found | Teed',
+      title: 'Not Found | Teed.club',
     };
   }
 
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: 'website',
       locale: 'en_US',
       url: `https://teed.so/vs/${comparison.slug}`,
-      siteName: 'Teed',
+      siteName: 'Teed.club',
       title: comparison.metaTitle,
       description: comparison.metaDescription,
       images: [

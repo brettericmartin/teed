@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import SignupForm from './SignupForm';
 
 export const metadata = {
-  title: 'Sign Up - Teed',
+  title: 'Sign Up - Teed.club',
   description: 'Create your Teed account and start curating',
 };
 

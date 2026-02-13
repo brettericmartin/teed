@@ -23,8 +23,6 @@ import BagToolsMenu from '@/components/bag/BagToolsMenu';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
-import { TapToIdentifyWizard } from '@/components/apis';
-import type { IdentifiedItem } from '@/components/apis/TapToIdentifyWizard';
 import { CATEGORIES } from '@/lib/categories';
 import { useCelebration } from '@/lib/celebrations';
 import * as bagsApi from '@/lib/api/domains/bags';
@@ -188,8 +186,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [showBulkLinkImport, setShowBulkLinkImport] = useState(false);
   const [linkImportInitialUrl, setLinkImportInitialUrl] = useState<string | undefined>();
   const [showProductReview, setShowProductReview] = useState(false);
-  const [showTapToIdentify, setShowTapToIdentify] = useState(false);
-  const [tapToIdentifyImage, setTapToIdentifyImage] = useState<string | null>(null);
   const [showItemSelection, setShowItemSelection] = useState(false);
   const [showBatchPhotoSelector, setShowBatchPhotoSelector] = useState(false);
   const [selectedItemsForPhotos, setSelectedItemsForPhotos] = useState<typeof bag.items>([]);
@@ -200,7 +196,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   } | null>(null);
   const [capturedPhotoBase64, setCapturedPhotoBase64] = useState<string | null>(null);
   const [capturedPhotosArray, setCapturedPhotosArray] = useState<string[]>([]); // For bulk photo uploads
-  const [isIdentifying, setIsIdentifying] = useState(false);
   const [isFillingLinks, setIsFillingLinks] = useState(false);
   const [enrichmentSuggestions, setEnrichmentSuggestions] = useState<any[]>([]);
   const [showEnrichmentPreview, setShowEnrichmentPreview] = useState(false);
@@ -751,51 +746,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       console.error('Error deleting bag:', error);
       toast.showError('Failed to delete bag. Please try again.');
     }
-  };
-
-  // Tap-to-Identify: Handle image selection and launch wizard
-  const handleTapToIdentifyImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const base64 = event.target?.result as string;
-      setTapToIdentifyImage(base64);
-      setShowTapToIdentify(true);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  // Tap-to-Identify: Handle wizard completion
-  const handleTapToIdentifyComplete = async (items: IdentifiedItem[]) => {
-    setShowTapToIdentify(false);
-    setTapToIdentifyImage(null);
-
-    console.log('[TapToIdentify] Completed with', items.length, 'items');
-
-    // Add each identified item to the bag
-    for (const item of items) {
-      const suggestion = {
-        custom_name: item.name,
-        custom_description: item.visualDescription || '',
-        notes: '',
-        category: 'golf', // Default category
-        confidence: item.confidence / 100,
-        brand: item.brand,
-        uploadedImageBase64: item.croppedImageBase64,
-      };
-
-      await handleAddItem(suggestion);
-    }
-
-    toast.showSuccess(`Added ${items.length} item${items.length !== 1 ? 's' : ''} to bag`);
-  };
-
-  // Tap-to-Identify: Handle wizard cancel
-  const handleTapToIdentifyCancel = () => {
-    setShowTapToIdentify(false);
-    setTapToIdentifyImage(null);
   };
 
   // Step 29: Batch item creation from AI results
@@ -1460,10 +1410,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
               <AIAssistantHub
                 itemCount={bag.items.length}
                 itemsWithoutPhotos={bag.items.filter(item => !item.photo_url).length}
-                onAddFromPhoto={() => {
-                  onDismiss();
-                  document.getElementById('tap-to-identify-input')?.click();
-                }}
                 onAddFromLinks={() => {
                   onDismiss();
                   setShowBulkLinkImport(true);
@@ -1476,7 +1422,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                   onDismiss();
                   setShowEnrichmentItemSelection(true);
                 }}
-                isIdentifying={isIdentifying}
                 isFillingInfo={isFillingLinks}
               />
             )}
@@ -1609,27 +1554,6 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         onTogglePublic={() => setIsPublic(!isPublic)}
       />
 
-      {/* Hidden file input for Tap-to-Identify */}
-      <input
-        type="file"
-        id="tap-to-identify-input"
-        accept="image/*"
-        onChange={handleTapToIdentifyImageSelect}
-        className="hidden"
-      />
-
-      {/* Tap-to-Identify Wizard */}
-      {showTapToIdentify && tapToIdentifyImage && (
-        <div className="fixed inset-0 bg-black z-50">
-          <TapToIdentifyWizard
-            imageSource={tapToIdentifyImage}
-            onComplete={handleTapToIdentifyComplete}
-            onCancel={handleTapToIdentifyCancel}
-            categoryHint="golf"
-            className="h-full"
-          />
-        </div>
-      )}
 
       {/* Bulk Link Import Modal */}
       <BulkLinkImportModal

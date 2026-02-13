@@ -56,7 +56,7 @@ export default function PublicBagView({
       try {
         await navigator.share({
           title: bag.title,
-          text: bag.description || `Check out ${ownerName}'s ${bag.title} on Teed`,
+          text: bag.description || `Check out ${ownerName}'s ${bag.title} on Teed.club`,
           url: shareUrl,
         });
       } catch (err) {

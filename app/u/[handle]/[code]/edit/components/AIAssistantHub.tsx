@@ -1,6 +1,6 @@
 'use client';
 
-import { Camera, Images, Sparkles, ChevronRight, Bot, Link } from 'lucide-react';
+import { Images, Sparkles, ChevronRight, Bot, Link } from 'lucide-react';
 import { GolfLoader } from '@/components/ui/GolfLoader';
 
 type AIAction = {
@@ -24,11 +24,9 @@ type AIAction = {
 type AIAssistantHubProps = {
   itemCount: number;
   itemsWithoutPhotos: number;
-  onAddFromPhoto: () => void;
   onAddFromLinks: () => void;
   onFindPhotos: () => void;
   onFillProductInfo: () => void;
-  isIdentifying?: boolean;
   isFillingInfo?: boolean;
   isImportingLinks?: boolean;
 };
@@ -112,11 +110,9 @@ function AIActionRow({
 export default function AIAssistantHub({
   itemCount,
   itemsWithoutPhotos,
-  onAddFromPhoto,
   onAddFromLinks,
   onFindPhotos,
   onFillProductInfo,
-  isIdentifying = false,
   isFillingInfo = false,
   isImportingLinks = false,
 }: AIAssistantHubProps) {
@@ -133,17 +129,6 @@ export default function AIAssistantHub({
       disabled: isImportingLinks,
       delay: 100,
       badge: { label: 'Best', variant: 'recommended' },
-    },
-    {
-      id: 'tap-to-identify',
-      icon: <Camera className="w-5 h-5" />,
-      title: 'Tap to Identify',
-      description: 'Upload a photo, tap items to identify them',
-      onClick: onAddFromPhoto,
-      isLoading: isIdentifying,
-      loadingText: 'Identifying...',
-      disabled: isIdentifying,
-      delay: 150,
     },
   ];
 

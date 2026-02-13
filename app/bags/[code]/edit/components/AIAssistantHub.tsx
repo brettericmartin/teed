@@ -1,6 +1,6 @@
 'use client';
 
-import { Camera, Images, Sparkles, ChevronRight, Loader2, Bot } from 'lucide-react';
+import { Images, Sparkles, ChevronRight, Loader2, Bot } from 'lucide-react';
 
 type AIAction = {
   id: string;
@@ -23,10 +23,8 @@ type AIAction = {
 type AIAssistantHubProps = {
   itemCount: number;
   itemsWithoutPhotos: number;
-  onAddFromPhoto: () => void;
   onFindPhotos: () => void;
   onFillProductInfo: () => void;
-  isIdentifying?: boolean;
   isFillingInfo?: boolean;
 };
 
@@ -109,24 +107,11 @@ function AIActionRow({
 export default function AIAssistantHub({
   itemCount,
   itemsWithoutPhotos,
-  onAddFromPhoto,
   onFindPhotos,
   onFillProductInfo,
-  isIdentifying = false,
   isFillingInfo = false,
 }: AIAssistantHubProps) {
   const actions: (AIAction & { delay: number })[] = [
-    {
-      id: 'tap-to-identify',
-      icon: <Camera className="w-5 h-5" />,
-      title: 'Tap to Identify',
-      description: 'Upload a photo, tap items to identify them',
-      onClick: onAddFromPhoto,
-      isLoading: isIdentifying,
-      loadingText: 'Identifying...',
-      disabled: isIdentifying,
-      delay: 100,
-    },
     {
       id: 'find-photos',
       icon: <Images className="w-5 h-5" />,
@@ -136,7 +121,7 @@ export default function AIAssistantHub({
       countLabel: itemsWithoutPhotos > 0 ? 'need photos' : 'items',
       onClick: onFindPhotos,
       hidden: itemCount === 0,
-      delay: 200,
+      delay: 100,
       badge: { label: 'Experimental', variant: 'experimental' },
     },
     {
@@ -150,7 +135,7 @@ export default function AIAssistantHub({
       loadingText: 'Filling info...',
       disabled: isFillingInfo,
       hidden: itemCount === 0,
-      delay: 300,
+      delay: 200,
     },
   ];
 

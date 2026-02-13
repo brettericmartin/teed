@@ -6,7 +6,7 @@ import Providers from "@/components/Providers";
 import { createServerSupabase } from "@/lib/serverSupabase";
 
 export const metadata: Metadata = {
-  title: "Teed - Curations, Made Shareable",
+  title: "Teed.club - Curations, Made Shareable",
   description: "Create and share curated collections of your favorite gear, kits, and loadouts.",
 };
 

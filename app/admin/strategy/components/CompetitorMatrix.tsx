@@ -164,7 +164,7 @@ const competitors: Competitor[] = [
 ];
 
 const teed = {
-  name: 'Teed',
+  name: 'Teed.club',
   tagline: 'Canonical reference + springboard utility',
   pricing: 'TBD',
   strengths: [

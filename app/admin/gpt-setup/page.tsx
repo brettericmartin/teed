@@ -3,7 +3,7 @@ import { requireAdmin } from '@/lib/adminAuth';
 import GPTSetupWizard from './GPTSetupWizard';
 
 export const metadata: Metadata = {
-  title: 'ChatGPT GPT Setup - Admin - Teed',
+  title: 'ChatGPT GPT Setup - Admin - Teed.club',
   description: 'Step-by-step guide to set up the Teed custom GPT for ChatGPT',
 };
 

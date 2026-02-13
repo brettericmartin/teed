@@ -61,7 +61,7 @@ export const DEFAULT_BLOCK_GRID: Record<BlockType, { w: number; h: number; minH?
   social_links: { w: 6, h: 2, minH: 1, maxH: 3 },
   embed: { w: 12, h: 4, minH: 3, maxH: 8 },
   destinations: { w: 12, h: 3, minH: 2, maxH: 6 },
-  featured_bags: { w: 12, h: 4, minH: 2, maxH: 8 },
+  featured_bags: { w: 12, h: 4, minH: 2, maxH: 16 },
   custom_text: { w: 6, h: 1, minH: 1, maxH: 4 },
   spacer: { w: 12, h: 1, minH: 1, maxH: 3 },
   divider: { w: 12, h: 1, minH: 1, maxH: 1 },

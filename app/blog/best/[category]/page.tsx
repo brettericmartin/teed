@@ -33,7 +33,7 @@ export async function generateMetadata({
       title,
       description: cat.description,
       url,
-      siteName: 'Teed',
+      siteName: 'Teed.club',
       type: 'website',
     },
     twitter: {

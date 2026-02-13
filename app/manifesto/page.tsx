@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowLeft, Package, Layers, ExternalLink, User, Clock, Sparkles } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Manifesto - Teed',
+  title: 'Manifesto - Teed.club',
   description: 'What Teed is, what it is not, and why it exists. A calm, permanent home for your curations.',
 };
 

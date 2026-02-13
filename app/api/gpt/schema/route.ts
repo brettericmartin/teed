@@ -8,8 +8,8 @@ export async function GET() {
   const schema = {
     openapi: '3.1.0',
     info: {
-      title: 'Teed API for ChatGPT',
-      description: 'Manage your gear bags and items on Teed (teed.club). Requires user authentication via OAuth.',
+      title: 'Teed.club API for ChatGPT',
+      description: 'Manage your gear bags and items on Teed.club. Requires user authentication via OAuth.',
       version: '1.0.0',
     },
     servers: [

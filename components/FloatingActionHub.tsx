@@ -25,7 +25,7 @@ interface ActionItem {
  * Appears in the bottom-right corner (above the Edit button).
  * Expands to show contextual actions:
  * - Link: Open link adder or paste URL
- * - Photo: TapToIdentify (coming soon)
+ * - Photo: Add photo
  * - Bag: Create new bag
  * - Panel: Add profile panel
  */
@@ -81,7 +81,7 @@ export function FloatingActionHub({
       label: 'Add Photo',
       color: 'bg-blue-500 hover:bg-blue-600',
       onClick: () => {
-        // TapToIdentify - for now, redirect to bag creation
+        // Redirect to bag creation
         handleAction(() => router.push('/bags/new'));
       },
     },

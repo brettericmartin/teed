@@ -171,7 +171,7 @@ function BlockRenderer({
             title={config.title}
             showTitle={config.showTitle}
             isOwner={isOwner}
-            onEdit={handleOpenSettings}
+            onEdit={isEditMode ? handleOpenSettings : undefined}
           >
             <BioBlock bio={profile.bio} config={config} />
           </BlockContainer>
@@ -185,7 +185,7 @@ function BlockRenderer({
             title={config.title}
             showTitle={config.showTitle}
             isOwner={isOwner}
-            onEdit={handleOpenSettings}
+            onEdit={isEditMode ? handleOpenSettings : undefined}
           >
             <SocialLinksBlock
               socialLinks={profile.social_links}
@@ -221,7 +221,7 @@ function BlockRenderer({
             showTitle={config.showTitle}
             count={bags.length}
             isOwner={isOwner}
-            onEdit={handleOpenSettings}
+            onEdit={isEditMode ? handleOpenSettings : undefined}
             allowOverflow={true}
           >
             <FeaturedBagsBlock
@@ -257,7 +257,7 @@ function BlockRenderer({
             title={config.title}
             showTitle={config.showTitle}
             isOwner={isOwner}
-            onEdit={handleOpenSettings}
+            onEdit={isEditMode ? handleOpenSettings : undefined}
           >
             <EmbedBlock config={config} />
           </BlockContainer>
@@ -271,7 +271,7 @@ function BlockRenderer({
             title={config.title}
             showTitle={config.showTitle}
             isOwner={isOwner}
-            onEdit={handleOpenSettings}
+            onEdit={isEditMode ? handleOpenSettings : undefined}
           >
             <div className="px-4 py-4 text-center text-[var(--text-tertiary)]">
               Destinations block (coming soon)
@@ -287,7 +287,7 @@ function BlockRenderer({
             title={config.title || 'History'}
             showTitle={config.showTitle}
             isOwner={isOwner}
-            onEdit={handleOpenSettings}
+            onEdit={isEditMode ? handleOpenSettings : undefined}
           >
             <StoryBlock
               profileId={profile.id}

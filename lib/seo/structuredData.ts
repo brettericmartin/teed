@@ -160,7 +160,7 @@ export function generateWebPageJsonLd(
     url,
     publisher: {
       '@type': 'Organization',
-      name: 'Teed',
+      name: 'Teed.club',
       url: 'https://teed.club',
       logo: {
         '@type': 'ImageObject',
@@ -213,13 +213,13 @@ export function generateBlogPostJsonLd(post: {
     datePublished: post.publishedAt,
     dateModified: post.updatedAt || post.publishedAt,
     author: {
-      '@type': post.author === 'Teed' ? 'Organization' : 'Person',
+      '@type': post.author === 'Teed.club' ? 'Organization' : 'Person',
       name: post.author,
       url: baseUrl,
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Teed',
+      name: 'Teed.club',
       url: baseUrl,
       logo: {
         '@type': 'ImageObject',

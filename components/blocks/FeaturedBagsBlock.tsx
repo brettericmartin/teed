@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Package, ChevronDown } from 'lucide-react';
+import { Package, ChevronDown, Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FeaturedBagsBlockConfig } from '@/lib/blocks/types';
@@ -32,13 +32,17 @@ export default function FeaturedBagsBlock({
 }: FeaturedBagsBlockProps) {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showPrivate, setShowPrivate] = useState(true);
   const { bag_ids, max_display = 6, size = 'standard' } = config;
   const gridConfig = SIZE_GRID_CONFIG[size] || SIZE_GRID_CONFIG.standard;
 
   const isFeaturedOnProfile = (bagId: string) => bag_ids && bag_ids.includes(bagId);
 
+  const hasPrivateBags = isOwner && bags.some(b => !b.is_public);
+  const visibleBags = showPrivate ? bags : bags.filter(b => b.is_public);
+
   // Sort bags: featured first (by position in bag_ids), then others
-  const sortedBags = [...bags];
+  const sortedBags = [...visibleBags];
   if (bag_ids && bag_ids.length > 0) {
     sortedBags.sort((a, b) => {
       const aFeatured = bag_ids.includes(a.id);
@@ -53,12 +57,10 @@ export default function FeaturedBagsBlock({
   }
 
   const totalBags = sortedBags.length;
-  // Show expand button if there are more bags than can fit comfortably
-  const hasMoreBags = totalBags > max_display || totalBags > 3;
-
-  // Display bags for collapsed view (show max 3 to fit in grid cell)
-  const collapsedDisplay = Math.min(max_display, 3);
-  const displayBags = sortedBags.slice(0, hasMoreBags ? collapsedDisplay : totalBags);
+  // Cap inline display at 9 — show the rest via the modal
+  const effectiveDisplay = Math.min(max_display, 9);
+  const displayBags = sortedBags.slice(0, effectiveDisplay);
+  const hasMoreBags = totalBags > effectiveDisplay;
 
   const handleBagClick = (bag: Bag) => {
     if (isOwner) {
@@ -91,9 +93,27 @@ export default function FeaturedBagsBlock({
   return (
     <>
       {/* Collapsed view - fits within grid cell */}
-      <div className="px-4 py-4 h-full flex flex-col">
+      <div className="px-4 py-4 h-full flex flex-col relative">
+        {/* Visitor preview toggle — floated up into the header row */}
+        {hasPrivateBags && (
+          <button
+            onClick={() => setShowPrivate(!showPrivate)}
+            className={`
+              absolute -top-9 right-4 z-10
+              flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-all
+              ${showPrivate
+                ? 'bg-[var(--surface-elevated)] text-[var(--text-secondary)] border border-[var(--border-subtle)] hover:border-[var(--teed-green-6)]'
+                : 'bg-[var(--sky-2)] text-[var(--sky-11)] border border-[var(--sky-6)]'
+              }
+            `}
+          >
+            {showPrivate ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+            {showPrivate ? 'All' : 'Visitor view'}
+          </button>
+        )}
+
         {/* Grid of bags */}
-        <div className="flex-1 min-h-0 overflow-hidden">
+        <div className="flex-1 min-h-0">
           <div className={`grid ${gridConfig}`}>
             {displayBags.map((bag) => (
               <BagCard
