@@ -72,10 +72,13 @@ export const tiktok: PlatformDefinition = {
   id: 'tiktok',
   name: 'TikTok',
   type: 'embed',
-  domains: ['tiktok.com', 'vm.tiktok.com'],
+  domains: ['tiktok.com', 'vm.tiktok.com', 'm.tiktok.com'],
   urlPatterns: [
-    /tiktok\.com\/@[\w.-]+\/video\/(\d+)/,
-    /vm\.tiktok\.com\/([a-zA-Z0-9]+)/,
+    /tiktok\.com\/@[\w.-]+\/video\/(\d+)/,        // Full video URL
+    /tiktok\.com\/@[\w.-]+\/photo\/(\d+)/,         // Photo/slideshow posts
+    /tiktok\.com\/t\/([a-zA-Z0-9]+)/,              // App share short links (tiktok.com/t/ZTxxxxx)
+    /vm\.tiktok\.com\/([a-zA-Z0-9]+)/,             // Legacy short links (vm.tiktok.com/ZMxxxxx)
+    /m\.tiktok\.com\/v\/(\d+)/,                    // Mobile web links
   ],
   excludePatterns: [
     /tiktok\.com\/@[\w.-]+\/?$/,  // Profile pages (no /video/)
