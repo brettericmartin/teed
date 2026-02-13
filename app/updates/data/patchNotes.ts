@@ -43,11 +43,26 @@ export const CATEGORY_META: Record<CategoryType, {
 
 export const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.9.0',
+    releaseDate: '2026-02-12',
+    title: 'New Logo & Visual Identity',
+    summary: 'Teed has a brand new logo and visual identity, born from a Freelancer contest that attracted 2,635 entries in just 3 days. The rebrand also updates the display name to Teed.club across the entire platform.',
+    isLatest: true,
+    changes: [
+      { text: 'New logo designed through a Freelancer contest with 2,635 entries from designers worldwide', category: 'feature' },
+      { text: 'Two logo variants — circular icon for compact contexts (favicon, nav) and full horizontal lockup with wordmark', category: 'feature' },
+      { text: 'Brand identity updated from "Teed" to "Teed.club" across all pages, metadata, emails, RSS feeds, structured data, and social previews', category: 'improvement' },
+      { text: 'New SVG favicon and navigation icon with the updated circular logo mark', category: 'improvement' },
+      { text: 'SEO metadata, Open Graph tags, and JSON-LD structured data updated with new brand name', category: 'improvement' },
+      { text: 'Fixed avatar upload showing an error despite succeeding — profile PATCH endpoint now accepts avatar_url', category: 'bugfix' },
+    ]
+  },
+  {
     version: '2.8.0',
     releaseDate: '2026-02-11',
     title: 'Massive Brand Dictionary Expansion & Smarter AI Search',
     summary: 'Brand dictionary expanded from 680 to 1,467 brands across 48 categories. Fuzzy matching is tighter, AI search no longer hallucinates products from known brands, and video URLs are now handled natively.',
-    isLatest: true,
+    isLatest: false,
     changes: [
       { text: 'Brand dictionary expanded from 680 to 1,467 brands across 48 categories — golf, tech, audio, photography, automotive, motorcycle, coffee, EDC, fitness, baby, pet, kitchen, and dozens more', category: 'feature' },
       { text: 'Fuzzy matching tightened to prevent false positives — short brand names now require first-character match (e.g. "golf" no longer matches "Wolf")', category: 'improvement' },
