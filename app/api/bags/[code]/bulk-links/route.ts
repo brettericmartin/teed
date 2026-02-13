@@ -329,9 +329,10 @@ async function findProductImages(
     images.push({ url: scraped.image, source: 'og', isPrimary: true });
   }
 
-  // 2. ALWAYS do Google Image Search for additional options
-  // This gives users choices even when we scraped an image
-  if (analysis?.productName || scraped?.title) {
+  // 2. Only do Google Image Search if we don't already have a good image
+  // This saves 1-3s per link when scraping already found a photo
+  const needsGoogleImages = images.length === 0;
+  if (needsGoogleImages && (analysis?.productName || scraped?.title)) {
     const query = [analysis?.brand || scraped?.brand, analysis?.productName || scraped?.title]
       .filter(Boolean)
       .join(' ');
@@ -339,7 +340,6 @@ async function findProductImages(
     const googleImages = await searchGoogleImages(query);
     for (const imgUrl of googleImages) {
       if (!images.some(i => i.url === imgUrl)) {
-        // First Google result is primary if we didn't get a scraped image
         images.push({
           url: imgUrl,
           source: 'google',
@@ -425,17 +425,16 @@ async function processUrl(
   console.log(`[bulk-links] Processing ${index + 1}: ${url}`);
 
   try {
-    // Stage 1: Parse URL
+    // Stage 1: Parse URL + start identification
+    // Note: identifyProduct handles redirect resolution internally via lightweightFetch
+    // so we skip the separate resolveRedirects HEAD request (saves 0-3s)
     onProgress?.('parsing');
-
-    // Resolve redirects
     onProgress?.('fetching');
-    const resolvedUrl = await resolveRedirects(url);
 
     // Stage 2-4: Use the link identification pipeline
     // This handles bot-protected sites by using URL intelligence
     onProgress?.('detecting');
-    const identification = await identifyProduct(resolvedUrl, {
+    const identification = await identifyProduct(url, {
       fetchTimeout: 5000, // Reduced for faster failures
       earlyExitConfidence: 0.85,
     });
@@ -465,7 +464,7 @@ async function processUrl(
 
     // Stage 5: Find photos
     onProgress?.('imaging');
-    let photoOptions = await findProductImages(resolvedUrl, scraped, analysis);
+    let photoOptions = await findProductImages(url, scraped, analysis);
 
     // Check if identification image is a problematic Amazon widget URL
     // These return tracking pixels instead of actual images - skip them entirely
@@ -510,7 +509,7 @@ async function processUrl(
     return {
       index,
       originalUrl: url,
-      resolvedUrl,
+      resolvedUrl: identification.fetchResult?.finalUrl || url,
       status,
       scraped,
       analysis,
