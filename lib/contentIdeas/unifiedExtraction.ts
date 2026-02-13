@@ -900,5 +900,6 @@ export {
   extractProductsFromTranscript,
   extractProductsFromFrames,
   mergeProducts,
+  pairLinksWithProducts,
   detectEnhancedContentType,
 };

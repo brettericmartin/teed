@@ -291,8 +291,27 @@ export async function identifyProduct(
   // ========================================
   // STAGE 2.5: Amazon-Specific Lookup (HIGH PRIORITY)
   // ========================================
-  const isAmazon = parsedUrl.domain.includes('amazon');
-  const asin = parsedUrl.modelNumber;
+  // Detect Amazon including short URL domains (a.co, amzn.to, amzn.com)
+  const AMAZON_SHORT_DOMAINS = ['a.co', 'amzn.to', 'amzn.com'];
+  const isAmazonShortUrl = AMAZON_SHORT_DOMAINS.some(d => parsedUrl.domain === d || parsedUrl.domain.endsWith('.' + d));
+  let isAmazon = parsedUrl.domain.includes('amazon') || isAmazonShortUrl;
+  let asin = parsedUrl.modelNumber;
+
+  // If this was a short URL that redirected to Amazon, re-parse the final URL for ASIN
+  if (isAmazonShortUrl && fetchResult.finalUrl) {
+    const resolvedParsed = parseProductUrl(fetchResult.finalUrl);
+    if (resolvedParsed.domain.includes('amazon')) {
+      isAmazon = true;
+      asin = resolvedParsed.modelNumber || asin;
+      // Use the resolved URL's product info if better
+      if (resolvedParsed.humanizedName && !parsedUrl.humanizedName) {
+        parsedUrl.humanizedName = resolvedParsed.humanizedName;
+        parsedUrl.productSlug = resolvedParsed.productSlug;
+        parsedUrl.brand = resolvedParsed.brand || parsedUrl.brand;
+      }
+      console.log(`[linkIdentification] Resolved ${parsedUrl.domain} → ${resolvedParsed.domain}, ASIN: ${asin}`);
+    }
+  }
 
   if (isAmazon && asin) {
     sources.push('amazon_lookup');
@@ -336,18 +355,29 @@ export async function identifyProduct(
   // STAGE 2.6: Firecrawl Fallback (for blocked sites like Amazon)
   // ========================================
   // Note: Library was already checked in STAGE 0, so we go straight to Firecrawl
-  if (fetchResult.blocked || (!fetchResult.success && parsedUrl.isRetailer)) {
+  // Also trigger for Amazon when the direct lookup failed (Amazon blocks most scraping)
+  const needsFirecrawl = fetchResult.blocked ||
+    (!fetchResult.success && parsedUrl.isRetailer) ||
+    (isAmazon && !fetchResult.data?.jsonLd?.name);
+  if (needsFirecrawl) {
     sources.push('firecrawl');
 
-    const firecrawlResult = await scrapeWithFirecrawl(url);
+    // For short URLs, use the resolved URL so Firecrawl scrapes the real page
+    const firecrawlUrl = fetchResult.finalUrl || url;
+    const firecrawlResult = await scrapeWithFirecrawl(firecrawlUrl);
 
     if (firecrawlResult.success && firecrawlResult.title) {
       // Validate Firecrawl result - check if it's actually product content
       // If URL parsing found a brand but Firecrawl didn't, or the title looks like a homepage, skip it
-      const looksLikeHomepage = firecrawlResult.title.toLowerCase().includes('buy golf equipment') ||
-                                firecrawlResult.title.toLowerCase().includes('shop online') ||
-                                firecrawlResult.title.toLowerCase().includes('denied') ||
-                                firecrawlResult.title.toLowerCase().includes('access to this page');
+      const titleLower = firecrawlResult.title.toLowerCase();
+      const looksLikeHomepage = titleLower.includes('buy golf equipment') ||
+                                titleLower.includes('shop online') ||
+                                titleLower.includes('denied') ||
+                                titleLower.includes('access to this page') ||
+                                titleLower.includes('page not found') ||
+                                titleLower.includes('not found') ||
+                                titleLower === '404' ||
+                                titleLower.includes('error page');
 
       // If URL parsing found a specific product but Firecrawl returned generic content, skip Firecrawl
       const urlHasGoodData = parsedUrl.brand && parsedUrl.humanizedName;
@@ -402,7 +432,8 @@ export async function identifyProduct(
 
     // If Firecrawl also failed, try Jina Reader as last resort
     sources.push('jina_reader');
-    const jinaResult = await fetchViaJinaReader(url);
+    const jinaUrl = fetchResult.finalUrl || url;
+    const jinaResult = await fetchViaJinaReader(jinaUrl);
 
     if (jinaResult.success && jinaResult.title) {
       // For Amazon specifically, extract structured info

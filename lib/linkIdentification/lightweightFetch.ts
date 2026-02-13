@@ -60,6 +60,7 @@ export interface LightweightFetchResult {
   data: StructuredProductData | null;
   html: string | null;
   fetchTimeMs: number;
+  finalUrl?: string; // The URL after following redirects (e.g., a.co → amazon.com)
 }
 
 // Bot protection detection patterns
@@ -138,6 +139,9 @@ export async function lightweightFetch(
 
       clearTimeout(timeoutId);
 
+      // Capture the final URL after redirects (e.g., a.co → amazon.com)
+      const resolvedUrl = (response.redirected && response.url) ? response.url : undefined;
+
       // Check for redirect-based bot protection (e.g., /captchashow, /challenge)
       if (response.redirected && response.url) {
         const finalUrl = new URL(response.url);
@@ -161,6 +165,7 @@ export async function lightweightFetch(
             data: null,
             html: null,
             fetchTimeMs: Date.now() - startTime,
+            finalUrl: resolvedUrl,
           };
         }
       }
@@ -193,6 +198,7 @@ export async function lightweightFetch(
           data: null,
           html: html.slice(0, 5000), // Keep small sample for debugging
           fetchTimeMs: Date.now() - startTime,
+          finalUrl: resolvedUrl,
         };
       }
 
@@ -206,6 +212,7 @@ export async function lightweightFetch(
         data,
         html: html.slice(0, 100000), // Limit HTML size
         fetchTimeMs: Date.now() - startTime,
+        finalUrl: resolvedUrl,
       };
 
     } catch (error: any) {
@@ -254,11 +261,32 @@ export async function lightweightFetch(
 
 /**
  * Check if the response is a bot protection page
+ *
+ * Important: Large real product pages (e.g., Amazon ~2MB) can contain words like
+ * "robot" in scripts, footers, or help text. Only flag as bot protection if the
+ * page is small (likely a challenge page) or has multiple strong bot indicators.
  */
 function isBotProtectionPage(html: string): boolean {
   const htmlLower = html.toLowerCase();
 
-  // Check for protection patterns
+  // Large pages with real content are very unlikely to be bot pages
+  // Amazon product pages are often >500KB. Bot/CAPTCHA pages are typically <50KB.
+  const hasRealContent = html.length > 100000 ||
+    (html.includes('application/ld+json') && html.length > 10000);
+
+  if (hasRealContent) {
+    // For large pages, only flag if we see STRONG bot indicators (exact phrases)
+    const strongBotPatterns = [
+      'Pardon Our Interruption',
+      'Please verify you are a human',
+      'Please complete the security check',
+      'Attention Required',
+      'DDoS protection by',
+    ];
+    return strongBotPatterns.some(pattern => htmlLower.includes(pattern.toLowerCase()));
+  }
+
+  // For small/medium pages, check all protection patterns
   for (const pattern of BOT_PROTECTION_PATTERNS) {
     if (htmlLower.includes(pattern.toLowerCase())) {
       return true;

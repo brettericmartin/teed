@@ -3,6 +3,9 @@ import { createServerSupabase } from '@/lib/serverSupabase';
 import { inferItemType } from '@/lib/itemTypes/inference';
 import { classifyUrl } from '@/lib/links/classifyUrl';
 import { fetchOEmbed } from '@/lib/linkIntelligence';
+import { identifyProduct } from '@/lib/linkIdentification';
+
+export const maxDuration = 30;
 
 /**
  * POST /api/bags/[code]/items/from-url
@@ -110,27 +113,22 @@ export async function POST(
         };
       }
     } else {
-      // Product URL — call AI endpoint to analyze
-      const analyzeResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/ai/analyze-product-url`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url }),
-        }
-      );
+      // Product URL — use the link identification pipeline directly
+      try {
+        const identification = await identifyProduct(url, {
+          fetchTimeout: 8000,
+          earlyExitConfidence: 0.85,
+        });
 
-      if (analyzeResponse.ok) {
-        const result = await analyzeResponse.json();
         productInfo = {
-          name: result.productName || result.name,
-          description: result.description,
-          brand: result.brand,
-          imageUrl: result.imageUrl || result.image,
-          price: result.price,
+          name: identification.fullName || identification.productName,
+          brand: identification.brand || undefined,
+          imageUrl: identification.imageUrl || undefined,
+          price: identification.price || undefined,
         };
-      } else {
-        // If AI analysis fails, extract basic info from URL
+      } catch (error) {
+        console.error('[from-url] identifyProduct error:', error);
+        // Fallback to basic info from URL
         const domain = parsedUrl.hostname.replace('www.', '');
         productInfo = {
           name: `Product from ${domain}`,

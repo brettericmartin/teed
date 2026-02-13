@@ -425,6 +425,23 @@ function extractProductSlug(
   queryString: string,
   brandInfo?: DomainBrandInfo | null
 ): string | null {
+  // Strategy 0: Amazon-specific — slug BEFORE /dp/ is the product name
+  // URL format: amazon.com/Product-Name-Here/dp/ASIN/...
+  // The slug before /dp/ is human-readable; the ASIN after is captured as modelNumber
+  for (let i = 0; i < pathParts.length; i++) {
+    const part = pathParts[i].toLowerCase();
+    if (part === 'dp' || part === 'gp') {
+      // Look for a descriptive slug BEFORE this indicator
+      if (i > 0) {
+        const candidate = pathParts[i - 1];
+        // Must look like a product slug (has hyphens, reasonable length)
+        if (candidate.includes('-') && candidate.length > 5 && /[a-zA-Z]/.test(candidate)) {
+          return cleanSlug(candidate);
+        }
+      }
+    }
+  }
+
   // Strategy 1: If we have site-specific URL config, use it
   if (brandInfo?.urlConfig?.productSlugIndex !== undefined) {
     // Find the product indicator and get the slug at the specified index

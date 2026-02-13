@@ -548,6 +548,9 @@ export const DOMAIN_BRAND_MAP: Record<string, DomainBrandInfo> = {
   'amazon.co.uk': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
   'amazon.ca': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
   'amazon.de': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
+  'a.co': { brand: null, category: 'retail', tier: 'value', aliases: ['Amazon'], isRetailer: true },
+  'amzn.to': { brand: null, category: 'retail', tier: 'value', aliases: ['Amazon'], isRetailer: true },
+  'amzn.com': { brand: null, category: 'retail', tier: 'value', aliases: ['Amazon'], isRetailer: true },
   'ebay.com': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true },
   // Walmart URL pattern: /ip/{product-slug}/{id}
   'walmart.com': { brand: null, category: 'retail', tier: 'value', aliases: [], isRetailer: true, urlConfig: { productSlugIndex: 0 } },

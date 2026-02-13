@@ -106,7 +106,14 @@ async function tryAmazonMobile(asin: string): Promise<AmazonProductInfo> {
     const html = await response.text();
 
     // Check if we got blocked
-    if (html.includes('robot') || html.includes('captcha') || html.includes('automated access')) {
+    // Important: Large real Amazon pages (>100KB) can contain "robot" in scripts/footers.
+    // Only flag as blocked if page is small (likely a CAPTCHA page) or has strong indicators.
+    const isSmallPage = html.length < 50000;
+    const hasStrongBotIndicators = html.includes('automated access') ||
+      html.includes('captcha') ||
+      html.includes('Sorry, we just need to make sure') ||
+      html.includes('Enter the characters you see below');
+    if (isSmallPage && html.toLowerCase().includes('robot') || hasStrongBotIndicators) {
       return { success: false, title: null, brand: null, price: null, image: null };
     }
 

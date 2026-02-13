@@ -65,12 +65,20 @@ export async function fetchViaJinaReader(url: string, timeout = 20000): Promise<
     }
 
     // Check if we got a CAPTCHA/bot detection page
+    // Important: Large real pages (>50KB) can contain "robot" in scripts/footers.
+    // Only flag as blocked if page is small (likely a challenge page) or has strong indicators.
     const lowerContent = content.toLowerCase();
-    if (lowerContent.includes('robot') ||
+    const isSmallContent = content.length < 10000;
+    const hasStrongBotIndicators =
         lowerContent.includes('captcha') ||
-        lowerContent.includes('continue shopping') ||
         lowerContent.includes('automated access') ||
-        lowerContent.includes('unusual traffic')) {
+        lowerContent.includes('unusual traffic') ||
+        lowerContent.includes('enter the characters you see below');
+    const hasWeakBotIndicators =
+        lowerContent.includes('robot') ||
+        lowerContent.includes('continue shopping');
+
+    if (hasStrongBotIndicators || (isSmallContent && hasWeakBotIndicators)) {
       return {
         success: false,
         title: null,

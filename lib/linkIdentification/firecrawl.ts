@@ -249,18 +249,55 @@ function extractPriceFromMarkdown(markdown: string): string | null {
 }
 
 /**
- * Extract image URL from markdown
+ * URLs that are tracking pixels, beacons, or navigation sprites — not real product images
+ */
+const IMAGE_BLOCKLIST_PATTERNS = [
+  /amazon-adsystem\.com/i,
+  /fls-na\.amazon\.com/i,       // Amazon tracking beacons
+  /\/sprites?\//i,               // Navigation sprites
+  /\/pixel/i,                    // Tracking pixels
+  /\/beacon/i,                   // Beacons
+  /1x1/i,                        // 1x1 pixel images
+  /grey-pixel/i,                 // Amazon's grey placeholder pixel
+  /\/gno\/sprites/i,             // Amazon nav sprites
+  /nav-sprite/i,                 // Navigation sprites
+];
+
+/**
+ * Check if a URL looks like a real product image
+ */
+function isRealProductImage(url: string): boolean {
+  return !IMAGE_BLOCKLIST_PATTERNS.some(pattern => pattern.test(url));
+}
+
+/**
+ * Extract image URL from markdown, filtering out tracking pixels
  */
 function extractImageFromMarkdown(markdown: string): string | null {
-  // Look for image markdown syntax
-  const imgMatch = markdown.match(/!\[.*?\]\((https?:\/\/[^\s)]+)\)/);
-  if (imgMatch) {
-    return imgMatch[1];
+  // Collect all markdown image URLs
+  const imgRegex = /!\[.*?\]\((https?:\/\/[^\s)]+)\)/g;
+  let match;
+
+  while ((match = imgRegex.exec(markdown)) !== null) {
+    const url = match[1];
+    if (isRealProductImage(url)) {
+      // Prefer images that look like product photos (from CDN, reasonable file extension)
+      if (/\.(jpg|jpeg|png|webp)/i.test(url) || /images\/[A-Z0-9]/i.test(url)) {
+        return url;
+      }
+    }
   }
 
-  // Look for raw image URLs
-  const urlMatch = markdown.match(/(https?:\/\/[^\s]+\.(?:jpg|jpeg|png|webp|gif))/i);
-  return urlMatch ? urlMatch[1] : null;
+  // Fallback: look for raw image URLs that aren't tracking pixels
+  const urlRegex = /(https?:\/\/[^\s"')]+\.(?:jpg|jpeg|png|webp|gif))/gi;
+  let rawMatch;
+  while ((rawMatch = urlRegex.exec(markdown)) !== null) {
+    if (isRealProductImage(rawMatch[1])) {
+      return rawMatch[1];
+    }
+  }
+
+  return null;
 }
 
 /**
