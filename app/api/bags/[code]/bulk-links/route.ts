@@ -3,6 +3,8 @@ import { createServerSupabase } from '@/lib/serverSupabase';
 import * as cheerio from 'cheerio';
 import { openai } from '@/lib/openaiClient';
 import { identifyProduct, parseProductUrl } from '@/lib/linkIdentification';
+import { classifyUrl } from '@/lib/links/classifyUrl';
+import { fetchOEmbed } from '@/lib/linkIntelligence';
 import type { ProcessingStage, BulkLinkStreamEvent } from '@/lib/types/bulkLinkStream';
 
 export const maxDuration = 300; // Extended timeout for bulk processing (Vercel Pro: 300s max)
@@ -425,10 +427,54 @@ async function processUrl(
   console.log(`[bulk-links] Processing ${index + 1}: ${url}`);
 
   try {
-    // Stage 1: Parse URL + start identification
-    // Note: identifyProduct handles redirect resolution internally via lightweightFetch
-    // so we skip the separate resolveRedirects HEAD request (saves 0-3s)
+    // Stage 1: Parse URL and check if it's an embed (TikTok, YouTube, etc.)
     onProgress?.('parsing');
+
+    const classification = classifyUrl(url);
+
+    // Handle embed URLs (TikTok, YouTube, Instagram, etc.) via oEmbed
+    // These aren't product pages — use oEmbed to get title/thumbnail instead
+    if (classification.type === 'embed') {
+      onProgress?.('fetching');
+      const oembed = await fetchOEmbed(url);
+
+      const title = oembed?.title || `${classification.platform} video`;
+      const author = oembed?.authorName || classification.platform;
+      const thumbnail = oembed?.thumbnailUrl || null;
+
+      let domain = '';
+      try { domain = new URL(url).hostname.replace('www.', ''); } catch {}
+
+      return {
+        index,
+        originalUrl: url,
+        resolvedUrl: url,
+        status: 'success' as const,
+        scraped: {
+          title,
+          description: null,
+          brand: author,
+          price: null,
+          image: thumbnail,
+          domain,
+        },
+        analysis: {
+          brand: author,
+          productName: title,
+          category: 'video',
+          specs: [],
+          confidence: 0.95,
+        },
+        photoOptions: thumbnail ? [{ url: thumbnail, source: 'og' as const, isPrimary: true }] : [],
+        suggestedItem: {
+          custom_name: title,
+          brand: author,
+          custom_description: '',
+        },
+      };
+    }
+
+    // Product URL — use identification pipeline
     onProgress?.('fetching');
 
     // Stage 2-4: Use the link identification pipeline
