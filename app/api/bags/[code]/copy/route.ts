@@ -142,6 +142,36 @@ export async function POST(
       }
     }
 
+    // Copy cover photo if the source bag has one
+    let newCoverPhotoId: string | null = null;
+
+    if (sourceBag.cover_photo_id) {
+      const { data: sourceMedia } = await supabase
+        .from('media_assets')
+        .select('url, alt, width, height')
+        .eq('id', sourceBag.cover_photo_id)
+        .single();
+
+      if (sourceMedia) {
+        const { data: newMedia } = await supabase
+          .from('media_assets')
+          .insert({
+            owner_id: user.id,
+            url: sourceMedia.url,
+            source_type: 'user_upload',
+            alt: sourceMedia.alt,
+            width: sourceMedia.width,
+            height: sourceMedia.height,
+          })
+          .select('id')
+          .single();
+
+        if (newMedia) {
+          newCoverPhotoId = newMedia.id;
+        }
+      }
+    }
+
     // Create the new bag
     const { data: newBag, error: createError } = await supabase
       .from('bags')
@@ -153,7 +183,9 @@ export async function POST(
         code: newCode,
         tags: sourceBag.tags || [],
         category: sourceBag.category,
-        // Don't copy cover_photo_id or hero_item_id as those reference the original
+        cover_photo_id: newCoverPhotoId,
+        cover_photo_aspect: sourceBag.cover_photo_aspect,
+        // Don't copy hero_item_id as it references items in the original bag
       })
       .select()
       .single();
