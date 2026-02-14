@@ -51,6 +51,19 @@ function GridCard({
   const cardColor = getCardAccent(item.id);
   const primaryLink = item.links.find(l => l.kind === 'product') || item.links[0];
 
+  const getLinkCTA = (link: typeof primaryLink) => {
+    if (!link) return 'Shop Now';
+    const url = link.url.toLowerCase();
+    const videoPatterns = ['youtube.com', 'youtu.be', 'vimeo.com', 'twitch.tv', 'tiktok.com', 'vm.tiktok.com'];
+    if (link.kind === 'video' || link.kind === 'youtube' || videoPatterns.some(p => url.includes(p))) {
+      return 'Watch Now';
+    }
+    if (link.kind === 'article' || url.includes('medium.com') || url.includes('substack.com')) {
+      return 'Read Now';
+    }
+    return 'Shop Now';
+  };
+
   return (
     <article
       className="group relative"
@@ -107,7 +120,7 @@ function GridCard({
                 }}
                 className={`px-5 py-2.5 ${cardColor.button} text-white rounded-full text-sm font-semibold shadow-lg transition-transform hover:scale-105 flex items-center gap-2`}
               >
-                <span>Shop Now</span>
+                <span>{getLinkCTA(primaryLink)}</span>
                 <ExternalLink className="w-4 h-4" />
               </a>
             </div>

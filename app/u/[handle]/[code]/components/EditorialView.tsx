@@ -54,6 +54,19 @@ function EditorialCard({
   const hasNote = item.notes && item.notes.trim().length > 0;
   const primaryLink = item.links.find(l => l.kind === 'product') || item.links[0];
 
+  const getLinkCTA = (link: typeof primaryLink) => {
+    if (!link) return 'Shop Now';
+    const url = link.url.toLowerCase();
+    const videoPatterns = ['youtube.com', 'youtu.be', 'vimeo.com', 'twitch.tv', 'tiktok.com', 'vm.tiktok.com'];
+    if (link.kind === 'video' || link.kind === 'youtube' || videoPatterns.some(p => url.includes(p))) {
+      return 'Watch Now';
+    }
+    if (link.kind === 'article' || url.includes('medium.com') || url.includes('substack.com')) {
+      return 'Read Now';
+    }
+    return 'Shop Now';
+  };
+
   // Size-based styling
   const isHero = size === 'hero';
   const isMedium = size === 'medium';
@@ -168,7 +181,7 @@ function EditorialCard({
               isHero ? 'mt-6 px-5 py-2.5 text-sm' : 'mt-4 px-4 py-2 text-xs'
             }`}
           >
-            <span>Shop Now</span>
+            <span>{getLinkCTA(primaryLink)}</span>
             <ExternalLink className={isHero ? 'w-4 h-4' : 'w-3.5 h-3.5'} />
           </a>
         )}
