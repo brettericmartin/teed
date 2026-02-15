@@ -44,3 +44,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 packages/mcp-server/node_modules/
+
+# design source files (keep locally, not in repo)
+/logos/
