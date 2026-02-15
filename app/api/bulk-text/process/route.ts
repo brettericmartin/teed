@@ -4,10 +4,13 @@ import { parseText, buildSearchQuery } from '@/lib/textParsing';
 import { smartSearch } from '@/lib/productLibrary';
 import { generateBrandContext } from '@/lib/brandKnowledge';
 import { searchGoogleImages, buildProductSearchQuery } from '@/lib/linkIdentification/googleImageSearch';
+import { findBestProductLinks } from '@/lib/services/SmartLinkFinder';
 import type { SearchResult } from '@/lib/productLibrary/schema';
 import type {
   BulkTextStreamEvent,
   ProcessedTextItem,
+  StructuredTextInput,
+  ValidatedItemInput,
   TextBatchSummary,
   TextProcessingStage,
 } from '@/lib/types/bulkTextStream';
@@ -46,11 +49,12 @@ function createSSEStream() {
 // Text Processing Logic
 // ============================================================
 
-async function processTextItem(
+// ---- Identify-only pass: parse → search → enrich (no links/photos) ----
+async function identifyTextItem(
   text: string,
   index: number,
-  bagCode: string,
-  sendUpdate: (stage: TextProcessingStage) => void
+  sendUpdate: (stage: TextProcessingStage) => void,
+  structuredInput?: StructuredTextInput
 ): Promise<ProcessedTextItem> {
   const startTime = Date.now();
 
@@ -77,7 +81,6 @@ async function processTextItem(
     let searchTier = 'library';
 
     if (libraryResults.length > 0 && libraryResults[0].confidence > 80) {
-      // Use library results directly
       suggestions = libraryResults.map(r => ({
         brand: r.product.brand,
         productName: r.product.name,
@@ -96,7 +99,6 @@ async function processTextItem(
       confidence = libraryResults[0].confidence / 100;
       searchTier = 'library';
     } else {
-      // Use AI for enrichment
       const aiSuggestions = await enrichWithAI(text, parsed, libraryResults);
       suggestions = aiSuggestions.suggestions;
       bestMatch = aiSuggestions.bestMatch;
@@ -104,41 +106,23 @@ async function processTextItem(
       searchTier = aiSuggestions.searchTier;
     }
 
-    // Stage 4: Find images
-    sendUpdate('imaging');
-    let photoOptions: ProcessedTextItem['photoOptions'] = [];
+    // Anchor to structured input if provided
+    if (structuredInput) {
+      const anchoredName = structuredInput.productName;
+      const anchoredBrand = structuredInput.brand || bestMatch?.brand || '';
+      const colorSuffix = structuredInput.color ? ` (${structuredInput.color})` : '';
+      console.log(`[bulk-text] Item ${index}: Anchoring to structured input: "${anchoredBrand} ${anchoredName}"`);
 
-    // First, use images from suggestions
-    for (const suggestion of suggestions) {
-      if (suggestion.imageUrl && !photoOptions.some(p => p.url === suggestion.imageUrl)) {
-        photoOptions.push({
-          url: suggestion.imageUrl,
-          source: 'suggestion',
-          isPrimary: photoOptions.length === 0,
-        });
-      }
-    }
-
-    // If no images from suggestions, search Google Images
-    if (photoOptions.length === 0 && bestMatch) {
-      try {
-        const searchQuery = buildProductSearchQuery(
-          bestMatch.brand || '',
-          bestMatch.custom_name
-        );
-        const googleImages = await searchGoogleImages(searchQuery, 3);
-        photoOptions = googleImages.map((url, idx) => ({
-          url,
-          source: 'search' as const,
-          isPrimary: idx === 0,
-        }));
-      } catch (e) {
-        console.error(`[bulk-text] Item ${index}: Google Images error:`, e);
-      }
+      bestMatch = {
+        custom_name: anchoredName + colorSuffix,
+        brand: anchoredBrand,
+        custom_description: bestMatch?.custom_description || '',
+      };
+      confidence = Math.max(confidence, 0.85);
     }
 
     const processingTime = Date.now() - startTime;
-    console.log(`[bulk-text] Item ${index}: Completed in ${processingTime}ms with ${suggestions.length} suggestions, ${photoOptions.length} photos`);
+    console.log(`[bulk-text] Item ${index}: Identified in ${processingTime}ms with ${suggestions.length} suggestions`);
 
     return {
       index,
@@ -151,12 +135,12 @@ async function processTextItem(
         brand: parsed.brand?.value || '',
         custom_description: parsed.specifications.map(s => s.value).join(' | '),
       },
-      photoOptions,
+      photoOptions: [],
       searchTier,
       confidence,
     };
   } catch (error) {
-    console.error(`[bulk-text] Item ${index}: Error processing:`, error);
+    console.error(`[bulk-text] Item ${index}: Error identifying:`, error);
     return {
       index,
       originalText: text,
@@ -172,6 +156,95 @@ async function processTextItem(
       photoOptions: [],
       searchTier: 'error',
       confidence: 0,
+    };
+  }
+}
+
+// ---- Enhance pass: link finding → image search (uses confirmed identity) ----
+async function enhanceTextItem(
+  item: ValidatedItemInput,
+  index: number,
+  sendUpdate: (stage: TextProcessingStage) => void
+): Promise<ProcessedTextItem> {
+  const startTime = Date.now();
+  const displayName = item.brand ? `${item.brand} ${item.name}` : item.name;
+
+  try {
+    // Stage 1: Find purchase links
+    sendUpdate('linking');
+    let linkUrl: string | undefined;
+    let linkLabel: string | undefined;
+    let linkSource: string | undefined;
+
+    try {
+      const linkResult = await findBestProductLinks({
+        name: item.name,
+        brand: item.brand || undefined,
+        category: item.category || undefined,
+      });
+      if (linkResult.primaryLink) {
+        linkUrl = linkResult.primaryLink.url;
+        linkLabel = linkResult.primaryLink.label;
+        linkSource = linkResult.primaryLink.source;
+      }
+    } catch (e) {
+      console.error(`[bulk-text] Item ${index}: Link finding error:`, e);
+    }
+
+    // Stage 2: Find images
+    sendUpdate('imaging');
+    let photoOptions: ProcessedTextItem['photoOptions'] = [];
+
+    try {
+      const imgQuery = buildProductSearchQuery(item.brand || '', item.name);
+      const googleImages = await searchGoogleImages(imgQuery, 3);
+      photoOptions = googleImages.map((url, idx) => ({
+        url,
+        source: 'search' as const,
+        isPrimary: idx === 0,
+      }));
+    } catch (e) {
+      console.error(`[bulk-text] Item ${index}: Google Images error:`, e);
+    }
+
+    const processingTime = Date.now() - startTime;
+    console.log(`[bulk-text] Item ${index}: Enhanced in ${processingTime}ms with ${photoOptions.length} photos`);
+
+    return {
+      index,
+      originalText: displayName,
+      status: 'success',
+      parsed: parseText(displayName),
+      suggestions: [],
+      suggestedItem: {
+        custom_name: item.name,
+        brand: item.brand,
+        custom_description: item.description || '',
+      },
+      photoOptions,
+      linkUrl,
+      linkLabel,
+      linkSource,
+      searchTier: 'validated',
+      confidence: 1.0,
+    };
+  } catch (error) {
+    console.error(`[bulk-text] Item ${index}: Error enhancing:`, error);
+    return {
+      index,
+      originalText: displayName,
+      status: 'failed',
+      error: error instanceof Error ? error.message : 'Unknown error',
+      parsed: parseText(displayName),
+      suggestions: [],
+      suggestedItem: {
+        custom_name: item.name,
+        brand: item.brand,
+        custom_description: item.description || '',
+      },
+      photoOptions: [],
+      searchTier: 'error',
+      confidence: 1.0,
     };
   }
 }
@@ -343,10 +416,108 @@ Return 1-3 suggestions, ordered by confidence. If you recognize the product, con
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { items, bagCode } = body as { items: string[]; bagCode: string };
+    const mode: 'identify' | 'enhance' = body.mode || 'identify';
 
-    if (!items || !Array.isArray(items) || items.length === 0) {
-      return new Response(JSON.stringify({ error: 'items array is required' }), {
+    if (mode === 'enhance') {
+      // ---- Enhance mode: use confirmed items ----
+      const { confirmedItems, bagCode } = body as {
+        confirmedItems: ValidatedItemInput[];
+        bagCode: string;
+      };
+
+      if (!confirmedItems || !Array.isArray(confirmedItems) || confirmedItems.length === 0) {
+        return new Response(JSON.stringify({ error: 'confirmedItems array is required for enhance mode' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      if (confirmedItems.length > 25) {
+        return new Response(JSON.stringify({ error: 'Maximum 25 items allowed' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      console.log(`[bulk-text] Enhancing ${confirmedItems.length} confirmed items for bag ${bagCode}`);
+      const startTime = Date.now();
+
+      const { stream, send, close } = createSSEStream();
+
+      (async () => {
+        const results: ProcessedTextItem[] = [];
+        let successful = 0;
+        let partial = 0;
+        let failed = 0;
+
+        const concurrency = 3;
+        for (let i = 0; i < confirmedItems.length; i += concurrency) {
+          const batch = confirmedItems.slice(i, i + concurrency);
+          const batchPromises = batch.map(async (item, batchIndex) => {
+            const index = i + batchIndex;
+            const displayName = item.brand ? `${item.brand} ${item.name}` : item.name;
+
+            send({ type: 'item_started', index, rawText: displayName });
+
+            const result = await enhanceTextItem(
+              item,
+              index,
+              (stage) => send({ type: 'item_stage_update', index, stage })
+            );
+
+            if (result.status === 'success') successful++;
+            else if (result.status === 'partial') partial++;
+            else failed++;
+
+            send({ type: 'item_completed', index, result });
+            send({ type: 'batch_progress', completed: results.length + 1, total: confirmedItems.length });
+
+            results.push(result);
+            return result;
+          });
+
+          await Promise.all(batchPromises);
+        }
+
+        const summary: TextBatchSummary = {
+          total: confirmedItems.length,
+          successful,
+          partial,
+          failed,
+          processingTimeMs: Date.now() - startTime,
+        };
+
+        send({ type: 'complete', summary });
+        console.log(`[bulk-text] Enhanced: ${successful} success, ${partial} partial, ${failed} failed in ${summary.processingTimeMs}ms`);
+        close();
+      })();
+
+      return new Response(stream, {
+        headers: {
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache',
+          'Connection': 'keep-alive',
+        },
+      });
+    }
+
+    // ---- Identify mode (default): parse → search → enrich ----
+    const { items: rawItems, structuredItems, bagCode } = body as {
+      items?: string[];
+      structuredItems?: StructuredTextInput[];
+      bagCode: string;
+    };
+
+    // Build text items from either structured or raw input
+    let items: string[];
+    if (structuredItems && Array.isArray(structuredItems) && structuredItems.length > 0) {
+      items = structuredItems.map(si =>
+        [si.brand, si.productName, si.color].filter(Boolean).join(' ').trim()
+      );
+    } else if (rawItems && Array.isArray(rawItems) && rawItems.length > 0) {
+      items = rawItems;
+    } else {
+      return new Response(JSON.stringify({ error: 'items or structuredItems array is required' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });
@@ -359,50 +530,42 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    console.log(`[bulk-text] Processing ${items.length} items for bag ${bagCode}`);
+    console.log(`[bulk-text] Identifying ${items.length} items for bag ${bagCode}`);
     const startTime = Date.now();
 
     const { stream, send, close } = createSSEStream();
 
-    // Process items in the background
+    const resolvedStructuredItems = (structuredItems && Array.isArray(structuredItems) && structuredItems.length > 0)
+      ? structuredItems
+      : undefined;
+
     (async () => {
       const results: ProcessedTextItem[] = [];
       let successful = 0;
       let partial = 0;
       let failed = 0;
 
-      // Process items with concurrency limit
       const concurrency = 3;
       for (let i = 0; i < items.length; i += concurrency) {
         const batch = items.slice(i, i + concurrency);
         const batchPromises = batch.map(async (text, batchIndex) => {
           const index = i + batchIndex;
 
-          // Send started event
           send({ type: 'item_started', index, rawText: text });
 
-          // Process the item
-          const result = await processTextItem(
+          const result = await identifyTextItem(
             text,
             index,
-            bagCode,
-            (stage) => send({ type: 'item_stage_update', index, stage })
+            (stage) => send({ type: 'item_stage_update', index, stage }),
+            resolvedStructuredItems?.[index]
           );
 
-          // Track results
           if (result.status === 'success') successful++;
           else if (result.status === 'partial') partial++;
           else failed++;
 
-          // Send completed event
           send({ type: 'item_completed', index, result });
-
-          // Send progress
-          send({
-            type: 'batch_progress',
-            completed: results.length + 1,
-            total: items.length,
-          });
+          send({ type: 'batch_progress', completed: results.length + 1, total: items.length });
 
           results.push(result);
           return result;
@@ -411,7 +574,6 @@ export async function POST(request: NextRequest) {
         await Promise.all(batchPromises);
       }
 
-      // Send completion summary
       const summary: TextBatchSummary = {
         total: items.length,
         successful,
@@ -421,8 +583,7 @@ export async function POST(request: NextRequest) {
       };
 
       send({ type: 'complete', summary });
-      console.log(`[bulk-text] Completed: ${successful} success, ${partial} partial, ${failed} failed in ${summary.processingTimeMs}ms`);
-
+      console.log(`[bulk-text] Identified: ${successful} success, ${partial} partial, ${failed} failed in ${summary.processingTimeMs}ms`);
       close();
     })();
 

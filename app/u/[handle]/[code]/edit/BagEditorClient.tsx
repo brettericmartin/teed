@@ -12,11 +12,11 @@ import AddItemForm from './components/AddItemForm';
 import ShareModal from './components/ShareModal';
 import PhotoUploadModal from './components/PhotoUploadModal';
 import BulkLinkImportModal from './components/BulkLinkImportModal';
+import BulkTextAddModal from './components/BulkTextAddModal';
 import ProductReviewModal, { IdentifiedProduct } from './components/ProductReviewModal';
 import BatchPhotoSelector from './components/BatchPhotoSelector';
 import ItemSelectionModal from './components/ItemSelectionModal';
 import EnrichmentPreview from './components/EnrichmentPreview';
-import AIAssistantHub from './components/AIAssistantHub';
 import BagAnalytics from './components/BagAnalytics';
 import CoverPhotoCropper, { type AspectRatioId } from './components/CoverPhotoCropper';
 import BagToolsMenu from '@/components/bag/BagToolsMenu';
@@ -184,6 +184,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [showManualForm, setShowManualForm] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showBulkLinkImport, setShowBulkLinkImport] = useState(false);
+  const [showBulkTextAdd, setShowBulkTextAdd] = useState(false);
   const [linkImportInitialUrl, setLinkImportInitialUrl] = useState<string | undefined>();
   const [showProductReview, setShowProductReview] = useState(false);
   const [showItemSelection, setShowItemSelection] = useState(false);
@@ -1406,25 +1407,10 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                 )}
               </>
             )}
-            renderCurator={(onDismiss) => (
-              <AIAssistantHub
-                itemCount={bag.items.length}
-                itemsWithoutPhotos={bag.items.filter(item => !item.photo_url).length}
-                onAddFromLinks={() => {
-                  onDismiss();
-                  setShowBulkLinkImport(true);
-                }}
-                onFindPhotos={() => {
-                  onDismiss();
-                  setShowItemSelection(true);
-                }}
-                onFillProductInfo={() => {
-                  onDismiss();
-                  setShowEnrichmentItemSelection(true);
-                }}
-                isFillingInfo={isFillingLinks}
-              />
-            )}
+            onBulkAddFromLinks={() => setShowBulkLinkImport(true)}
+            onBulkAddFromText={() => setShowBulkTextAdd(true)}
+            onPhotoMatch={() => setShowItemSelection(true)}
+            onEnhanceDetails={() => setShowEnrichmentItemSelection(true)}
             renderCoverPhoto={(onDismiss) => (
               <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-[var(--border-subtle)] rounded-lg cursor-pointer hover:border-[var(--teed-green-8)] hover:bg-[var(--surface-hover)] transition-colors">
                 <div className="flex flex-col items-center justify-center py-6">
@@ -1568,6 +1554,26 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           // Refresh the bag data to get new items
           toast.showAI(`Added ${count} item${count !== 1 ? 's' : ''} from links!`);
           // Trigger a refresh by fetching updated bag data
+          bagsApi.get(bag.code)
+            .then(updatedBag => {
+              if (updatedBag && updatedBag.items) {
+                setBag(prev => ({
+                  ...prev,
+                  items: updatedBag.items as Item[],
+                }));
+              }
+            })
+            .catch(err => console.error('Error refreshing bag:', err));
+        }}
+      />
+
+      {/* Bulk Text Add Modal */}
+      <BulkTextAddModal
+        isOpen={showBulkTextAdd}
+        onClose={() => setShowBulkTextAdd(false)}
+        bagCode={bag.code}
+        onItemsAdded={(count) => {
+          toast.showAI(`Added ${count} item${count !== 1 ? 's' : ''} from text!`);
           bagsApi.get(bag.code)
             .then(updatedBag => {
               if (updatedBag && updatedBag.items) {

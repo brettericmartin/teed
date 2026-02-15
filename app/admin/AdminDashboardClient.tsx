@@ -22,6 +22,7 @@ import {
   Search,
   Link2,
   Lightbulb,
+  Target,
 } from 'lucide-react';
 import { ROLE_PERMISSIONS, getRoleDisplayName, type AdminRole } from '@/lib/types/admin';
 
@@ -50,6 +51,15 @@ export default function AdminDashboardClient({
   const permissions = ROLE_PERMISSIONS[adminRole];
 
   const adminCards: AdminCard[] = [
+    {
+      href: '/admin/market-strategy',
+      title: '30-Day Strategy',
+      description: 'Seed bags, distribution playbook, scripts, and calendar',
+      icon: <Target className="w-6 h-6 text-[var(--teed-green-11)]" />,
+      gradient: 'from-[var(--teed-green-4)] to-[var(--teed-green-6)]',
+      borderHover: 'hover:border-[var(--teed-green-6)]',
+      permission: 'canViewAnalytics',
+    },
     {
       href: '/admin/strategy',
       title: 'Strategic Roadmap',

@@ -8,7 +8,6 @@ import QuickAddItem from './components/QuickAddItem';
 import AddItemForm from './components/AddItemForm';
 import ShareModal from './components/ShareModal';
 import ProductReviewModal, { IdentifiedProduct } from './components/ProductReviewModal';
-import AIAssistantHub from './components/AIAssistantHub';
 import { Button } from '@/components/ui/Button';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
 import * as bags from '@/lib/api/domains/bags';
@@ -401,15 +400,6 @@ export default function BagEditorClient({ initialBag }: BagEditorClientProps) {
               onShowManualForm={() => setShowManualForm(true)}
             />
           )}
-
-          {/* AI Assistant Hub */}
-          <AIAssistantHub
-            itemCount={bag.items.length}
-            itemsWithoutPhotos={bag.items.filter(item => !item.photo_url).length}
-            onFindPhotos={() => {}} // Not implemented in this version
-            onFillProductInfo={() => {}} // Not implemented in this version
-            isFillingInfo={false}
-          />
 
           {/* Manual Form (Hidden by default) */}
           {showManualForm && (

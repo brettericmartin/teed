@@ -15,6 +15,8 @@ interface TextSelection {
     custom_description: string;
   };
   selectedPhotoUrl: string;
+  purchaseUrl?: string;
+  purchaseLabel?: string;
 }
 
 interface CreatedItem {
@@ -212,13 +214,33 @@ export async function POST(
           }
         }
 
+        // Step 3: Add purchase link if provided
+        let linkAdded = false;
+        if (selection.purchaseUrl) {
+          try {
+            await supabase
+              .from('links')
+              .insert({
+                bag_item_id: item.id,
+                url: selection.purchaseUrl,
+                kind: 'purchase',
+                label: selection.purchaseLabel || undefined,
+                is_auto_generated: true,
+              });
+            linkAdded = true;
+          } catch (linkError) {
+            console.error(`[bulk-text/save] Link insert failed for item ${item.id}:`, linkError);
+            // Continue without link - don't fail the entire item
+          }
+        }
+
         createdItems.push({
           index: i,
           itemId: item.id,
           photoUploaded,
         });
 
-        console.log(`[bulk-text/save] Created item ${item.id} (photo: ${photoUploaded})`);
+        console.log(`[bulk-text/save] Created item ${item.id} (photo: ${photoUploaded}, link: ${linkAdded})`);
       } catch (error) {
         console.error(`[bulk-text/save] Failed to save selection ${i}:`, error);
         failures.push({

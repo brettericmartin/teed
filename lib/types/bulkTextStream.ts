@@ -2,17 +2,26 @@
 
 import type { ParsedTextResult } from '@/lib/textParsing';
 
+// Structured input for the "From Text" workflow
+export interface StructuredTextInput {
+  brand?: string;
+  productName: string;
+  color?: string;
+}
+
 export type TextProcessingStage =
   | 'parsing'    // Text parsing (instant)
   | 'searching'  // Library search (~100ms)
   | 'enriching'  // AI enrichment (~2s)
+  | 'linking'    // Finding purchase links (~2s)
   | 'imaging';   // Image discovery (~1s)
 
 export const TEXT_STAGE_CONFIG: Record<TextProcessingStage, { label: string; icon: string; order: number }> = {
   parsing: { label: 'Parsing text', icon: '📝', order: 0 },
   searching: { label: 'Searching library', icon: '📚', order: 1 },
   enriching: { label: 'AI identifying', icon: '🧠', order: 2 },
-  imaging: { label: 'Finding photos', icon: '📷', order: 3 },
+  linking: { label: 'Finding links', icon: '🔗', order: 3 },
+  imaging: { label: 'Finding photos', icon: '📷', order: 4 },
 };
 
 export function getTextStageOrder(stage: TextProcessingStage): number {
@@ -98,6 +107,11 @@ export interface ProcessedTextItem {
     isPrimary: boolean;
   }>;
 
+  // Purchase link (from SmartLinkFinder)
+  linkUrl?: string;
+  linkLabel?: string;
+  linkSource?: string;
+
   // Metadata
   searchTier: string;
   confidence: number;
@@ -111,6 +125,19 @@ export interface TextBatchSummary {
   failed: number;
   processingTimeMs: number;
 }
+
+// Confirmed item sent back for enhancement pass
+export interface ValidatedItemInput {
+  index: number;
+  name: string;        // User-confirmed product name
+  brand: string;       // User-confirmed brand
+  description?: string;
+  category?: string;
+}
+
+// Stage subsets for each SSE pass
+export type IdentifyStage = 'parsing' | 'searching' | 'enriching';
+export type EnhanceStage = 'linking' | 'imaging';
 
 // Client-side streaming item state
 export interface TextStreamingItem {

@@ -2,12 +2,12 @@
 
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Bot, Image, TrendingUp, ChevronRight, ChevronDown } from 'lucide-react';
+import { Plus, Link, Images, Sparkles, Image, TrendingUp, ChevronRight, ChevronDown, Type, Layers } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { fadeUp } from '@/lib/animations';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 
-type ToolId = 'quickAdd' | 'curator' | 'coverPhoto' | 'analytics';
+type ToolId = 'quickAdd' | 'bulkAdd' | 'photoMatch' | 'enhanceDetails' | 'coverPhoto' | 'analytics';
 
 type ToolOption = {
   id: ToolId;
@@ -23,6 +23,8 @@ type ToolOption = {
   stripBg: string;
   stripText: string;
   visible: boolean;
+  /** If true, selecting this tool triggers a callback directly instead of opening a BottomSheet */
+  directAction?: boolean;
 };
 
 interface BagToolsMenuProps {
@@ -30,9 +32,12 @@ interface BagToolsMenuProps {
   hasCoverPhoto: boolean;
   itemCount: number;
   renderQuickAdd: (onDismiss: () => void) => React.ReactNode;
-  renderCurator: (onDismiss: () => void) => React.ReactNode;
   renderCoverPhoto: (onDismiss: () => void) => React.ReactNode;
   renderAnalytics?: (onDismiss: () => void) => React.ReactNode;
+  onBulkAddFromLinks: () => void;
+  onBulkAddFromText: () => void;
+  onPhotoMatch: () => void;
+  onEnhanceDetails: () => void;
 }
 
 export function BagToolsMenu({
@@ -40,9 +45,12 @@ export function BagToolsMenu({
   hasCoverPhoto,
   itemCount,
   renderQuickAdd,
-  renderCurator,
   renderCoverPhoto,
   renderAnalytics,
+  onBulkAddFromLinks,
+  onBulkAddFromText,
+  onPhotoMatch,
+  onEnhanceDetails,
 }: BagToolsMenuProps) {
   const [showPicker, setShowPicker] = useState(false);
   const [activeTool, setActiveTool] = useState<ToolId | null>(null);
@@ -62,17 +70,45 @@ export function BagToolsMenu({
       visible: true,
     },
     {
-      id: 'curator',
-      icon: <Bot className="w-5 h-5" />,
-      stripIcon: <Bot className="w-3.5 h-3.5" />,
-      label: 'Curator AI',
-      shortLabel: 'AI',
-      description: 'Bulk import, photos, enhance',
+      id: 'bulkAdd',
+      icon: <Layers className="w-5 h-5" />,
+      stripIcon: <Layers className="w-3.5 h-3.5" />,
+      label: 'Bulk Add',
+      shortLabel: 'Bulk',
+      description: 'Import from links or text',
       color: 'text-[var(--sky-10)]',
       bgColor: 'bg-[var(--sky-3)]',
       stripBg: 'bg-[var(--violet-4)]',
       stripText: 'text-[var(--violet-11)]',
       visible: true,
+    },
+    {
+      id: 'photoMatch',
+      icon: <Images className="w-5 h-5" />,
+      stripIcon: <Images className="w-3.5 h-3.5" />,
+      label: 'Smart Photo Match',
+      shortLabel: 'Photos',
+      description: 'Find better product photos',
+      color: 'text-[var(--amber-10)]',
+      bgColor: 'bg-[var(--amber-3)]',
+      stripBg: 'bg-[var(--amber-4)]',
+      stripText: 'text-[var(--amber-11)]',
+      visible: itemCount > 0,
+      directAction: true,
+    },
+    {
+      id: 'enhanceDetails',
+      icon: <Sparkles className="w-5 h-5" />,
+      stripIcon: <Sparkles className="w-3.5 h-3.5" />,
+      label: 'Enhance Details',
+      shortLabel: 'Enhance',
+      description: 'Complete missing product info',
+      color: 'text-[var(--sky-10)]',
+      bgColor: 'bg-[var(--sky-3)]',
+      stripBg: 'bg-[var(--sky-4)]',
+      stripText: 'text-[var(--sky-11)]',
+      visible: itemCount > 0,
+      directAction: true,
     },
     {
       id: 'coverPhoto',
@@ -104,21 +140,31 @@ export function BagToolsMenu({
 
   const visibleTools = tools.filter((t) => t.visible);
 
+  const directActionHandlers: Partial<Record<ToolId, () => void>> = {
+    photoMatch: onPhotoMatch,
+    enhanceDetails: onEnhanceDetails,
+  };
+
   const handleToolSelect = useCallback((toolId: ToolId) => {
     setShowPicker(false);
-    // Small delay to let picker close before opening tool sheet
-    setTimeout(() => {
-      setActiveTool(toolId);
-    }, 150);
-  }, []);
+
+    const handler = directActionHandlers[toolId];
+    if (handler) {
+      // Direct action tools: close picker then trigger callback
+      setTimeout(() => handler(), 150);
+    } else {
+      // BottomSheet tools: close picker then open sheet
+      setTimeout(() => setActiveTool(toolId), 150);
+    }
+  }, [onPhotoMatch, onEnhanceDetails]);
 
   const handleDismissTool = useCallback(() => {
     setActiveTool(null);
   }, []);
 
-  const toolTitles: Record<ToolId, string> = {
+  const toolTitles: Record<string, string> = {
     quickAdd: 'Quick Add Item',
-    curator: 'Curator AI',
+    bulkAdd: 'Bulk Add',
     coverPhoto: hasCoverPhoto ? 'Cover Photo' : 'Add Cover Photo',
     analytics: 'Analytics',
   };
@@ -219,7 +265,7 @@ export function BagToolsMenu({
         </div>
       </BottomSheet>
 
-      {/* Individual Tool BottomSheets */}
+      {/* Individual Tool BottomSheets (only for tools that render content) */}
       <BottomSheet
         isOpen={activeTool === 'quickAdd'}
         onClose={handleDismissTool}
@@ -229,13 +275,47 @@ export function BagToolsMenu({
         <div className="p-4">{renderQuickAdd(handleDismissTool)}</div>
       </BottomSheet>
 
+      {/* Bulk Add Chooser BottomSheet */}
       <BottomSheet
-        isOpen={activeTool === 'curator'}
+        isOpen={activeTool === 'bulkAdd'}
         onClose={handleDismissTool}
-        title={toolTitles.curator}
-        maxHeight={92}
+        title={toolTitles.bulkAdd}
       >
-        <div className="p-4">{renderCurator(handleDismissTool)}</div>
+        <div className="p-4 space-y-3">
+          <button
+            onClick={() => {
+              handleDismissTool();
+              setTimeout(() => onBulkAddFromLinks(), 150);
+            }}
+            className="w-full flex items-center gap-3 p-4 rounded-xl border border-gray-200 hover:border-[var(--sky-6)] hover:bg-[var(--sky-1)] transition-all group"
+          >
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[var(--sky-3)] text-[var(--sky-10)]">
+              <Link className="w-5 h-5" />
+            </div>
+            <div className="flex-1 text-left">
+              <div className="font-semibold text-sm text-gray-900">From Links</div>
+              <div className="text-xs text-gray-500">Paste product URLs to import</div>
+            </div>
+            <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-[var(--sky-10)] transition-colors" />
+          </button>
+
+          <button
+            onClick={() => {
+              handleDismissTool();
+              setTimeout(() => onBulkAddFromText(), 150);
+            }}
+            className="w-full flex items-center gap-3 p-4 rounded-xl border border-gray-200 hover:border-[var(--violet-6)] hover:bg-[var(--violet-1)] transition-all group"
+          >
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[var(--violet-3)] text-[var(--violet-10)]">
+              <Type className="w-5 h-5" />
+            </div>
+            <div className="flex-1 text-left">
+              <div className="font-semibold text-sm text-gray-900">From Text</div>
+              <div className="text-xs text-gray-500">Type brand &amp; product names</div>
+            </div>
+            <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-[var(--violet-10)] transition-colors" />
+          </button>
+        </div>
       </BottomSheet>
 
       <BottomSheet

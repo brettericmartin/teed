@@ -82,6 +82,28 @@ function extractDomain(url: string): string {
   }
 }
 
+// Known regional/localized subdomains (e.g. es.callawaygolf.com, uk.titleist.com)
+// These should be normalized to the base domain's US/English version
+const REGIONAL_SUBDOMAIN_PATTERN = /^(es|uk|de|fr|it|jp|kr|au|ca|eu|en|us)\./;
+
+/**
+ * Normalize a URL by replacing regional subdomains with www.
+ * e.g. https://es.callawaygolf.com/path → https://www.callawaygolf.com/path
+ */
+function normalizeRegionalUrl(url: string): string {
+  try {
+    const parsed = new URL(url);
+    if (REGIONAL_SUBDOMAIN_PATTERN.test(parsed.hostname)) {
+      parsed.hostname = parsed.hostname.replace(REGIONAL_SUBDOMAIN_PATTERN, 'www.');
+      console.log(`[SmartLinkFinder] Normalized regional URL: ${url} → ${parsed.toString()}`);
+      return parsed.toString();
+    }
+    return url;
+  } catch {
+    return url;
+  }
+}
+
 function detectSource(domain: string): string {
   const clean = domain.replace(/^www\./, '');
   for (const [pattern, source] of Object.entries(SOURCE_MAP)) {
@@ -113,6 +135,7 @@ interface GoogleWebResult {
 
 // Known brand → domain overrides for brands whose website isn't just {brand}.com
 const BRAND_DOMAIN_MAP: Record<string, string> = {
+  // Golf - clubs
   'taylormade': 'taylormadegolf.com',
   'callaway': 'callawaygolf.com',
   'titleist': 'titleist.com',
@@ -123,11 +146,41 @@ const BRAND_DOMAIN_MAP: Record<string, string> = {
   'srixon': 'srixon.com',
   'scotty cameron': 'scottycameron.com',
   'odyssey': 'odysseygolf.com',
+  'bettinardi': 'bettinardi.com',
+  'evnroll': 'evnroll.com',
+  'pxg': 'pxg.com',
+  'vokey': 'vokey.com',
+  'bridgestone': 'bridgestonegolf.com',
+  'wilson': 'wilson.com',
+  'xxio': 'xxio.com',
+  'tour edge': 'touredge.com',
+  // Golf - shafts
+  'mitsubishi': 'mca-golf.com',
+  'mitsubishi chemical': 'mca-golf.com',
+  'fujikura': 'fujikuragolf.com',
+  'project x': 'projectxgolf.com',
+  'true temper': 'truetemper.com',
+  'kbs': 'kbsgolfshafts.com',
+  'graphite design': 'graphitedesign.com',
+  'aldila': 'aldila.com',
+  'nippon': 'nipponshaft.com',
+  'ust mamiya': 'ustmamiya.com',
+  'aerotech': 'aerotechgolfshafts.com',
+  // Golf - apparel/accessories
+  'footjoy': 'footjoy.com',
+  'foot joy': 'footjoy.com',
+  'acushnet': 'acushnetcompany.com',
+  'vice': 'vicegolf.com',
+  'vice golf': 'vicegolf.com',
+  'kirkland': 'costco.com',
+  // Outdoor
   'the north face': 'thenorthface.com',
   'arc\'teryx': 'arcteryx.com',
   'under armour': 'underarmour.com',
-  'foot joy': 'footjoy.com',
-  'footjoy': 'footjoy.com',
+  'patagonia': 'patagonia.com',
+  // Tech
+  'garmin': 'garmin.com',
+  'bushnell': 'bushnellgolf.com',
 };
 
 function guessBrandDomain(brand: string): string | null {
@@ -256,7 +309,32 @@ async function searchGoogleWeb(product: ProductContext): Promise<GoogleWebResult
 const EXCLUDE_URL_PATTERNS = ['/search', '/sch/', '/blog/', '/review/', '/article/', '/news/'];
 const EXCLUDE_DOMAINS = ['reddit.com', 'facebook.com', 'twitter.com', 'x.com', 'instagram.com', 'tiktok.com', 'youtube.com', 'pinterest.com', 'quora.com'];
 
-function prefilterResults(results: GoogleWebResult[]): GoogleWebResult[] {
+// Domains that are brand-specific manufacturer sites — if the user's brand
+// doesn't match, these results are from the WRONG brand and should be deprioritized
+const BRAND_MANUFACTURER_DOMAINS: Record<string, string> = {
+  'taylormadegolf.com': 'taylormade',
+  'callawaygolf.com': 'callaway',
+  'titleist.com': 'titleist',
+  'ping.com': 'ping',
+  'cobragolf.com': 'cobra',
+  'clevelandgolf.com': 'cleveland',
+  'mizuno.com': 'mizuno',
+  'srixon.com': 'srixon',
+  'mca-golf.com': 'mitsubishi',
+  'fujikuragolf.com': 'fujikura',
+  'projectxgolf.com': 'project x',
+  'truetemper.com': 'true temper',
+  'vicegolf.com': 'vice',
+  'bettinardi.com': 'bettinardi',
+  'evnroll.com': 'evnroll',
+  'pxg.com': 'pxg',
+  'vokey.com': 'vokey',
+  'bridgestonegolf.com': 'bridgestone',
+};
+
+function prefilterResults(results: GoogleWebResult[], product?: ProductContext): GoogleWebResult[] {
+  const targetBrand = product?.brand?.toLowerCase().trim();
+
   return results.filter((r) => {
     const url = r.link.toLowerCase();
     const domain = extractDomain(r.link);
@@ -266,6 +344,16 @@ function prefilterResults(results: GoogleWebResult[]): GoogleWebResult[] {
 
     // Exclude search/blog/review pages
     if (EXCLUDE_URL_PATTERNS.some((p) => url.includes(p))) return false;
+
+    // If we know the target brand, exclude OTHER manufacturer brand sites
+    // (e.g. don't show vicegolf.com when searching for Mitsubishi shafts)
+    if (targetBrand) {
+      const domainBrand = BRAND_MANUFACTURER_DOMAINS[domain];
+      if (domainBrand && !targetBrand.includes(domainBrand) && !domainBrand.includes(targetBrand)) {
+        console.log(`[SmartLinkFinder] Prefilter: excluding ${domain} (brand "${domainBrand}" != target "${targetBrand}")`);
+        return false;
+      }
+    }
 
     return true;
   });
@@ -291,23 +379,22 @@ async function rankResultsWithAI(
 
   const systemPrompt = `You are a product link quality ranker. Given Google search results for a product, pick the best ACTUAL PRODUCT PAGES where someone can buy or view the product.
 
-RANKING CRITERIA (in order):
-1. Brand/manufacturer official website — ALWAYS prioritize product pages on the brand's own site${brandDomain ? ` (${brandDomain})` : ''}
-2. Is it a product detail page (not a search results page)?
-3. Does it match the exact product (brand + model)?
-4. Is it a reputable retailer?
-5. Is the product likely available/in stock?
+PRODUCT: "${productDescription}"
+${product.brand ? `BRAND: "${product.brand}"` : ''}
+${brandDomain ? `BRAND WEBSITE: ${brandDomain}` : ''}
 
-SOURCE DIVERSITY: Each pick MUST be from a different domain. Never return two URLs from the same website. For example: one from the brand site, one from a major retailer, one from a specialty store.
+RANKING CRITERIA (in strict priority order):
+1. **Brand/manufacturer official website** — ALWAYS pick this first if available${brandDomain ? ` (look for ${brandDomain})` : ''}. This is the #1 priority.
+2. **Exact product match** — The page must be for THIS specific product (brand + model name). REJECT pages that mention the product only as an accessory, component, or bundle with a DIFFERENT brand's product.
+3. **Product detail page** — Must be a page where you can view or buy the product, not a search/listing/blog page.
+4. **Reputable retailer** — Major retailers (Amazon, Dick's, PGA Tour Superstore, etc.) or authorized dealers.
 
-PREFER URLs containing: /product/, /dp/, /p/, /item/, /ip/
-These patterns indicate actual product detail pages.
+CRITICAL RULES:
+- REJECT any page from a DIFFERENT brand's website that merely includes this product as a component. For example, if looking for a "Mitsubishi Tensei shaft", REJECT a page on vicegolf.com or taylormadegolf.com that sells a club WITH that shaft — those are the wrong brand's site.
+- REJECT search result pages, blog posts, reviews, articles, social media, and forum pages.
+- Each pick MUST be from a different domain.
 
-REJECT URLs that are:
-- Search result pages (even on retail sites)
-- Blog posts, reviews, articles
-- Social media links
-- Forums or discussion pages
+PREFER URLs containing: /product/, /dp/, /p/, /item/, /ip/, /shaft/, /golf/
 
 Return ONLY valid JSON:
 {
@@ -362,9 +449,10 @@ ${resultsText}`;
     return deduped
       .slice(0, 3)
       .map((p: any, i: number) => {
-        const domain = extractDomain(p.url);
+        const normalizedUrl = normalizeRegionalUrl(p.url);
+        const domain = extractDomain(normalizedUrl);
         return {
-          url: p.url,
+          url: normalizedUrl,
           source: detectSource(domain),
           reason: p.reason || 'Product page found via search',
           label: p.label || `Buy on ${domain}`,
@@ -525,7 +613,7 @@ export async function findBestProductLinks(
     const googleResults = await searchGoogleWeb(product);
 
     if (googleResults.length > 0) {
-      const filtered = prefilterResults(googleResults);
+      const filtered = prefilterResults(googleResults, product);
       console.log(`[SmartLinkFinder] ${filtered.length}/${googleResults.length} results after prefilter`);
 
       if (filtered.length > 0) {
