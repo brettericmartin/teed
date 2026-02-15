@@ -63,11 +63,8 @@ export async function searchGoogleImages(query: string, limit: number = 5): Prom
         // Filter out problematic URLs
         if (url.includes('gstatic.com')) return false;
         if (url.includes('googleusercontent.com')) return false;
-        // Prefer actual product images
-        return url.match(/\.(jpg|jpeg|png|webp)$/i) !== null ||
-               url.includes('/images/') ||
-               url.includes('/product/') ||
-               url.includes('/media/');
+        // Accept any URL that looks like an image
+        return true;
       })
       .slice(0, limit);
   } catch (error) {

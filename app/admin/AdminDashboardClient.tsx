@@ -181,6 +181,15 @@ export default function AdminDashboardClient({
       permission: 'canViewAnalytics',
     },
     {
+      href: '/admin/tools',
+      title: 'Video to Bag',
+      description: 'Drop a YouTube or TikTok URL to extract products and create a bag',
+      icon: <Sparkles className="w-6 h-6 text-purple-600" />,
+      gradient: 'from-purple-100 to-indigo-200',
+      borderHover: 'hover:border-purple-400',
+      permission: 'canViewAnalytics',
+    },
+    {
       href: '/admin/discovery',
       title: 'Discovery Team',
       description: 'Automated content research and bag curation across categories',

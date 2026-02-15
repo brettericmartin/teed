@@ -1,4 +1,5 @@
 #!/usr/bin/env npx tsx
+export {};
 /**
  * Pre-deploy smoke test for Teed
  *

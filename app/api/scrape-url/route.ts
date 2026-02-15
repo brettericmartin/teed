@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import * as cheerio from 'cheerio';
 import { classifyUrl, parseEmbedUrlDetailed } from '@/lib/links/classifyUrl';
 import { fetchOEmbed } from '@/lib/linkIntelligence';
+import { validateExternalUrl } from '@/lib/urlValidation';
 
 interface ScrapedMetadata {
   title: string | null;
@@ -238,6 +239,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validate URL is not targeting internal/private resources (SSRF protection)
+    const urlError = validateExternalUrl(url);
+    if (urlError) {
+      return NextResponse.json(
+        { error: 'Invalid URL' },
+        { status: 400 }
+      );
+    }
+
     // Use Link Intelligence to classify the URL
     const classification = classifyUrl(url);
 
@@ -465,10 +475,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error scraping URL:', error);
     return NextResponse.json(
-      {
-        error: 'Failed to scrape URL',
-        details: error instanceof Error ? error.message : 'Unknown error'
-      },
+      { error: 'Failed to scrape URL' },
       { status: 500 }
     );
   }

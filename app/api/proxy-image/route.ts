@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { validateExternalUrl } from '@/lib/urlValidation';
 
 /**
  * Proxy images to avoid CORS issues
@@ -12,6 +13,15 @@ export async function GET(request: NextRequest) {
     if (!imageUrl) {
       return NextResponse.json(
         { error: 'URL parameter is required' },
+        { status: 400 }
+      );
+    }
+
+    // Validate URL is not targeting internal/private resources (SSRF protection)
+    const urlError = validateExternalUrl(imageUrl);
+    if (urlError) {
+      return NextResponse.json(
+        { error: 'Invalid image URL' },
         { status: 400 }
       );
     }

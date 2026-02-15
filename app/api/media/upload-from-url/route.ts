@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import { uploadItemPhoto, createMediaAsset, deleteMediaAsset } from '@/lib/supabaseStorage';
+import { validateExternalUrl } from '@/lib/urlValidation';
 
 /**
  * POST /api/media/upload-from-url
@@ -47,6 +48,15 @@ export async function POST(request: NextRequest) {
     if (!imageUrl || typeof imageUrl !== 'string') {
       return NextResponse.json(
         { error: 'imageUrl is required' },
+        { status: 400 }
+      );
+    }
+
+    // Validate URL is not targeting internal/private resources (SSRF protection)
+    const urlError = validateExternalUrl(imageUrl);
+    if (urlError) {
+      return NextResponse.json(
+        { error: 'Invalid image URL' },
         { status: 400 }
       );
     }

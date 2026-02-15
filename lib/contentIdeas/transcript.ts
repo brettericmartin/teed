@@ -4,6 +4,13 @@
  */
 
 import { YoutubeTranscript } from 'youtube-transcript';
+import { execFile } from 'child_process';
+import { promisify } from 'util';
+import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
+
+const execFileAsync = promisify(execFile);
 
 // ═══════════════════════════════════════════════════════════════════
 // Types
@@ -36,77 +43,119 @@ export interface ProductMention {
 // ═══════════════════════════════════════════════════════════════════
 
 /**
- * Fetch YouTube transcript for a video
+ * Fetch YouTube transcript for a video.
+ * Tries the npm package first, then falls back to Innertube API.
+ *
  * @param videoId - YouTube video ID (e.g., "dQw4w9WgXcQ")
  * @returns TranscriptResult with transcript text and segments
  */
 export async function fetchYouTubeTranscript(videoId: string): Promise<TranscriptResult> {
+  // ── Attempt 1: npm youtube-transcript package ──
   try {
-    // Fetch transcript using youtube-transcript package
     const transcriptItems = await YoutubeTranscript.fetchTranscript(videoId, {
-      lang: 'en', // Prefer English
+      lang: 'en',
     });
 
-    if (!transcriptItems || transcriptItems.length === 0) {
-      return {
-        success: false,
-        transcript: '',
-        segments: [],
-        language: null,
-        error: 'No transcript available for this video',
-      };
+    if (transcriptItems && transcriptItems.length > 0) {
+      const segments: TranscriptSegment[] = transcriptItems.map(item => ({
+        text: item.text,
+        offset: Math.round(item.offset * 1000),
+        duration: Math.round(item.duration * 1000),
+      }));
+      const transcript = segments.map(s => s.text).join(' ');
+
+      console.log(`[Transcript] npm package returned ${segments.length} segments`);
+      return { success: true, transcript, segments, language: 'en' };
     }
 
-    // Transform to our segment format
-    const segments: TranscriptSegment[] = transcriptItems.map(item => ({
-      text: item.text,
-      offset: Math.round(item.offset * 1000), // Convert to ms
-      duration: Math.round(item.duration * 1000),
-    }));
-
-    // Build full transcript text
-    const transcript = segments.map(s => s.text).join(' ');
-
-    return {
-      success: true,
-      transcript,
-      segments,
-      language: 'en',
-    };
+    console.log('[Transcript] npm package returned 0 segments, trying Innertube fallback...');
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-
-    // Check for common error patterns
-    if (errorMessage.includes('Transcript is disabled') ||
-        errorMessage.includes('No transcript')) {
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    // Hard failures — don't bother with fallback
+    if (msg.includes('Transcript is disabled') || msg.includes('No transcript')) {
       return {
-        success: false,
-        transcript: '',
-        segments: [],
-        language: null,
+        success: false, transcript: '', segments: [], language: null,
         error: 'Transcripts are disabled for this video',
       };
     }
+    console.log(`[Transcript] npm package failed (${msg}), trying Innertube fallback...`);
+  }
 
-    if (errorMessage.includes('not available') ||
-        errorMessage.includes('not found')) {
-      return {
-        success: false,
-        transcript: '',
-        segments: [],
-        language: null,
-        error: 'Video not found or transcript not available',
-      };
+  // ── Attempt 2: yt-dlp with iOS client (bypasses timedtext API issues) ──
+  try {
+    const segments = await fetchTranscriptWithYtDlp(videoId);
+
+    if (segments.length > 0) {
+      const transcript = segments.map(s => s.text).join(' ');
+      console.log(`[Transcript] yt-dlp fallback returned ${segments.length} segments`);
+      return { success: true, transcript, segments, language: 'en' };
     }
 
-    console.error('[Transcript] Error fetching transcript:', errorMessage);
     return {
-      success: false,
-      transcript: '',
-      segments: [],
-      language: null,
-      error: `Failed to fetch transcript: ${errorMessage}`,
+      success: false, transcript: '', segments: [], language: null,
+      error: 'No transcript available for this video (both methods failed)',
     };
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    console.error('[Transcript] yt-dlp fallback also failed:', msg);
+    return {
+      success: false, transcript: '', segments: [], language: null,
+      error: `Failed to fetch transcript: ${msg}`,
+    };
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// yt-dlp Transcript Fallback
+// ═══════════════════════════════════════════════════════════════════
+
+/**
+ * Fetch transcript using yt-dlp with iOS player client.
+ * YouTube's web timedtext API often returns empty responses for
+ * auto-generated captions, but the iOS client endpoint works reliably.
+ */
+async function fetchTranscriptWithYtDlp(videoId: string): Promise<TranscriptSegment[]> {
+  const tmpDir = os.tmpdir();
+  const outputPath = path.join(tmpDir, `yt-transcript-${videoId}`);
+  const subtitleFile = `${outputPath}.en.json3`;
+
+  try {
+    // Download auto-generated English subtitles in json3 format
+    await execFileAsync('yt-dlp', [
+      '--write-auto-sub',
+      '--sub-lang', 'en',
+      '--sub-format', 'json3',
+      '--skip-download',
+      '--extractor-args', 'youtube:player_client=ios',
+      '-o', outputPath,
+      `https://www.youtube.com/watch?v=${videoId}`,
+    ], { timeout: 20000 });
+
+    // Read the json3 subtitle file
+    if (!fs.existsSync(subtitleFile)) {
+      return [];
+    }
+
+    const raw = fs.readFileSync(subtitleFile, 'utf8');
+    const data = JSON.parse(raw);
+
+    // json3 format: { events: [{ tStartMs, dDurationMs, segs: [{ utf8 }] }] }
+    const events = (data.events || []).filter(
+      (e: { segs?: unknown[] }) => Array.isArray(e.segs) && e.segs.length > 0
+    );
+
+    const segments: TranscriptSegment[] = events.map(
+      (e: { tStartMs?: number; dDurationMs?: number; segs?: Array<{ utf8?: string }> }) => ({
+        text: (e.segs || []).map(s => s.utf8 || '').join('').replace(/\n/g, ' ').trim(),
+        offset: e.tStartMs || 0,
+        duration: e.dDurationMs || 0,
+      })
+    ).filter((s: TranscriptSegment) => s.text.length > 0);
+
+    return segments;
+  } finally {
+    // Clean up temp file
+    try { fs.unlinkSync(subtitleFile); } catch { /* ignore */ }
   }
 }
 

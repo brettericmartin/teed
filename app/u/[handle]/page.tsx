@@ -166,7 +166,9 @@ export default async function UserProfilePage({ params, searchParams }: PageProp
       ...bag,
       items: bag.items?.map((item: any) => ({
         ...item,
-        photo_url: item.custom_photo_id ? photoUrls[item.custom_photo_id] || null : null,
+        photo_url: item.custom_photo_id
+          ? photoUrls[item.custom_photo_id] || item.photo_url || null
+          : item.photo_url || null,
       })) || [],
     }));
   }

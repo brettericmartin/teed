@@ -116,7 +116,10 @@ export default async function BagEditorPage({ params }: PageProps) {
 
   // Organize links by item and add photo URLs
   const itemsWithLinks = (items || []).map((item) => {
-    const photoUrl = item.custom_photo_id ? photoUrls[item.custom_photo_id] || null : null;
+    // Priority: uploaded photo (custom_photo_id) > external URL (photo_url)
+    const photoUrl = item.custom_photo_id
+      ? photoUrls[item.custom_photo_id] || item.photo_url || null
+      : item.photo_url || null;
 
     return {
       ...item,

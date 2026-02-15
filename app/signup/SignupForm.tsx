@@ -87,8 +87,8 @@ export default function SignupForm() {
     setError(null);
   };
 
-  const passwordError = formData.password && formData.password.length < 6
-    ? 'Password must be at least 6 characters'
+  const passwordError = formData.password && formData.password.length < 8
+    ? 'Password must be at least 8 characters'
     : null;
 
   const confirmPasswordError = formData.confirmPassword && formData.password !== formData.confirmPassword
@@ -98,7 +98,7 @@ export default function SignupForm() {
   const canSubmit =
     formData.email &&
     formData.name &&
-    formData.password.length >= 6 &&
+    formData.password.length >= 8 &&
     formData.password === formData.confirmPassword &&
     formData.handle.length >= 3 &&
     handleAvailability.available === true;

@@ -93,8 +93,8 @@ export async function POST(request: NextRequest) {
     if (!bodyEmail || !password || !bodyName || !handle || !surveyResponses) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
-    if (password.length < 6) {
-      return NextResponse.json({ error: 'Password must be at least 6 characters' }, { status: 400 });
+    if (password.length < 8) {
+      return NextResponse.json({ error: 'Password must be at least 8 characters' }, { status: 400 });
     }
     if (!/^[a-z0-9_]{3,30}$/.test(handle)) {
       return NextResponse.json({ error: 'Invalid handle format' }, { status: 400 });

@@ -36,7 +36,9 @@ export default function LoginPage() {
 
       if (data.session) {
         analytics.userLoggedIn('email');
-        const destination = redirectTo || '/dashboard';
+        // Validate redirect is a safe relative path (prevents open redirect attacks)
+        const isSafeRedirect = redirectTo && redirectTo.startsWith('/') && !redirectTo.startsWith('//');
+        const destination = isSafeRedirect ? redirectTo : '/dashboard';
         window.location.href = destination;
       } else {
         setError('No session created. Please try again.');
