@@ -287,12 +287,18 @@ export default function BulkLinkImportModal({
 
   // Parse URLs from input text
   const parseInput = useCallback((text: string) => {
-    const lines = text.split(/[\n,\s]+/).filter(Boolean);
+    // First, split on http(s):// boundaries so pasted-together URLs get separated
+    // e.g. "https://a.comhttps://b.com" → ["https://a.com", "https://b.com"]
+    const tokens = text
+      .split(/(?=https?:\/\/)/)
+      .flatMap(chunk => chunk.split(/[\n,\s]+/))
+      .filter(Boolean);
+
     const validUrls: string[] = [];
     const seen = new Set<string>();
 
-    for (const line of lines) {
-      let url = line.trim();
+    for (const token of tokens) {
+      let url = token.trim();
       if (!url) continue;
 
       // Add https:// if missing
