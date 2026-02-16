@@ -34,6 +34,9 @@ export async function GET(request: NextRequest) {
 
     let daysBack: number;
     switch (range) {
+      case '24h':
+        daysBack = 1;
+        break;
       case '7d':
         daysBack = 7;
         break;
@@ -108,6 +111,18 @@ export async function GET(request: NextRequest) {
       0
     );
 
+    // ========== PREVIOUS PERIOD (for 24h comparison) ==========
+    let prevStartDateStr: string | null = null;
+    let prevEndDateStr: string | null = null;
+    if (range === '24h') {
+      const prevEnd = new Date();
+      prevEnd.setDate(prevEnd.getDate() - 1);
+      prevEndDateStr = prevEnd.toISOString();
+      const prevStart = new Date();
+      prevStart.setDate(prevStart.getDate() - 2);
+      prevStartDateStr = prevStart.toISOString();
+    }
+
     // ========== SITE ENGAGEMENT ANALYTICS ==========
 
     // Get total bag views
@@ -172,22 +187,25 @@ export async function GET(request: NextRequest) {
       .gte('created_at', startDateStr)
       .order('created_at', { ascending: true });
 
-    // Process daily engagement data
-    const dailyEngagement: Record<string, { views: number; clicks: number; visitors: Set<string> }> = {};
+    // Process engagement data — hourly buckets for 24h, daily otherwise
+    const isHourly = range === '24h';
+    const engagementBuckets: Record<string, { views: number; clicks: number }> = {};
 
     engagementTrend?.forEach((event: any) => {
-      const date = event.created_at.split('T')[0];
-      if (!dailyEngagement[date]) {
-        dailyEngagement[date] = { views: 0, clicks: 0, visitors: new Set() };
+      const key = isHourly
+        ? event.created_at.slice(0, 13) // "YYYY-MM-DDTHH"
+        : event.created_at.split('T')[0]; // "YYYY-MM-DD"
+      if (!engagementBuckets[key]) {
+        engagementBuckets[key] = { views: 0, clicks: 0 };
       }
       if (event.event_type === 'bag_viewed') {
-        dailyEngagement[date].views++;
+        engagementBuckets[key].views++;
       } else if (event.event_type === 'link_clicked') {
-        dailyEngagement[date].clicks++;
+        engagementBuckets[key].clicks++;
       }
     });
 
-    const engagementByDay = Object.entries(dailyEngagement).map(([date, data]) => ({
+    const engagementByDay = Object.entries(engagementBuckets).map(([date, data]) => ({
       date,
       views: data.views,
       clicks: data.clicks,
@@ -259,6 +277,65 @@ export async function GET(request: NextRequest) {
       .select('*', { count: 'exact', head: true })
       .eq('is_public', true);
 
+    // ========== TODAY'S INSIGHTS (24h only) ==========
+    let todaysInsights: {
+      current: { bagViews: number; linkClicks: number; discoveryVisits: number; uniqueVisitors: number };
+      previous: { bagViews: number; linkClicks: number; discoveryVisits: number; uniqueVisitors: number };
+    } | null = null;
+
+    if (range === '24h' && prevStartDateStr && prevEndDateStr) {
+      const [
+        { count: prevBagViews },
+        { count: prevLinkClicks },
+        { count: prevDiscoveryVisits },
+        { data: prevVisitorData },
+      ] = await Promise.all([
+        supabaseAdmin
+          .from('user_activity')
+          .select('*', { count: 'exact', head: true })
+          .eq('event_type', 'bag_viewed')
+          .gte('created_at', prevStartDateStr)
+          .lt('created_at', prevEndDateStr),
+        supabaseAdmin
+          .from('user_activity')
+          .select('*', { count: 'exact', head: true })
+          .eq('event_type', 'link_clicked')
+          .gte('created_at', prevStartDateStr)
+          .lt('created_at', prevEndDateStr),
+        supabaseAdmin
+          .from('user_activity')
+          .select('*', { count: 'exact', head: true })
+          .eq('event_type', 'page_viewed')
+          .filter('event_data->>page', 'eq', 'discover')
+          .gte('created_at', prevStartDateStr)
+          .lt('created_at', prevEndDateStr),
+        supabaseAdmin
+          .from('user_activity')
+          .select('user_id, ip_address')
+          .gte('created_at', prevStartDateStr)
+          .lt('created_at', prevEndDateStr),
+      ]);
+
+      const prevUniqueVisitors = new Set(
+        prevVisitorData?.map((v: any) => v.user_id || v.ip_address).filter(Boolean) || []
+      ).size;
+
+      todaysInsights = {
+        current: {
+          bagViews: totalBagViews || 0,
+          linkClicks: totalLinkClicks || 0,
+          discoveryVisits: discoveryVisits || 0,
+          uniqueVisitors,
+        },
+        previous: {
+          bagViews: prevBagViews || 0,
+          linkClicks: prevLinkClicks || 0,
+          discoveryVisits: prevDiscoveryVisits || 0,
+          uniqueVisitors: prevUniqueVisitors,
+        },
+      };
+    }
+
     return NextResponse.json({
       // AI Cost Analytics
       costSummary,
@@ -288,6 +365,8 @@ export async function GET(request: NextRequest) {
         totalItems: totalItems || 0,
         publicBags: publicBags || 0,
       },
+      // Today's Insights (24h comparison, null otherwise)
+      todaysInsights,
     });
   } catch (error) {
     console.error('Analytics API error:', error);

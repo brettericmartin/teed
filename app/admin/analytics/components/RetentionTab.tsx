@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import type { DateRange } from '../types';
 
 interface RetentionTabProps {
-  dateRange: '7d' | '30d' | '90d';
+  dateRange: DateRange;
 }
 
 interface ActiveUserMetric {

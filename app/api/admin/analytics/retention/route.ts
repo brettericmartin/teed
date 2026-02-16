@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const range = searchParams.get('range') || '30d';
-    const days = parseInt(range.replace('d', ''), 10) || 30;
+    const days = range === '24h' ? 1 : (parseInt(range.replace('d', ''), 10) || 30);
     const weeksBack = Math.ceil(days / 7);
 
     // DAU/WAU/MAU active user metrics — RPC takes days_back int

@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import type { DateRange } from '../types';
 
 interface FeatureAdoptionTabProps {
-  dateRange: '7d' | '30d' | '90d';
+  dateRange: DateRange;
 }
 
 interface FeatureStat {

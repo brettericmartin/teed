@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const range = searchParams.get('range') || '30d';
-    const days = parseInt(range.replace('d', ''), 10) || 30;
+    const days = range === '24h' ? 1 : (parseInt(range.replace('d', ''), 10) || 30);
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
     const startDateISO = startDate.toISOString();

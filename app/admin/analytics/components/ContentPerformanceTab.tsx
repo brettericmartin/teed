@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import type { DateRange } from '../types';
 
 interface ContentPerformanceTabProps {
-  dateRange: '7d' | '30d' | '90d';
+  dateRange: DateRange;
 }
 
 interface PageStat {

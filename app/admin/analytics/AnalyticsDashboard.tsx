@@ -18,12 +18,14 @@ import {
   Cell,
 } from 'recharts';
 import dynamic from 'next/dynamic';
+import type { DateRange } from './types';
 
 const GrowthFunnelTab = dynamic(() => import('./components/GrowthFunnelTab'), { ssr: false });
 const RetentionTab = dynamic(() => import('./components/RetentionTab'), { ssr: false });
 const ContentPerformanceTab = dynamic(() => import('./components/ContentPerformanceTab'), { ssr: false });
 const FeatureAdoptionTab = dynamic(() => import('./components/FeatureAdoptionTab'), { ssr: false });
 const LiveActivityTab = dynamic(() => import('./components/LiveActivityTab'), { ssr: false });
+const TodaysInsights = dynamic(() => import('./components/TodaysInsights'), { ssr: false });
 
 type AdminTab = 'overview' | 'growth' | 'retention' | 'content' | 'features' | 'live';
 
@@ -78,6 +80,11 @@ interface PlatformStats {
   publicBags: number;
 }
 
+interface TodaysInsightsData {
+  current: { bagViews: number; linkClicks: number; discoveryVisits: number; uniqueVisitors: number };
+  previous: { bagViews: number; linkClicks: number; discoveryVisits: number; uniqueVisitors: number };
+}
+
 interface AnalyticsData {
   costSummary: CostSummary[];
   topUsers: TopUser[];
@@ -87,6 +94,7 @@ interface AnalyticsData {
   totalErrors: number;
   engagement: EngagementData;
   platform: PlatformStats;
+  todaysInsights: TodaysInsightsData | null;
 }
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
@@ -122,7 +130,7 @@ export default function AnalyticsDashboard({ adminRole }: AnalyticsDashboardProp
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [dateRange, setDateRange] = useState<'7d' | '30d' | '90d'>('30d');
+  const [dateRange, setDateRange] = useState<DateRange>('30d');
 
   const fetchAnalytics = useCallback(async () => {
     setLoading(true);
@@ -207,7 +215,7 @@ export default function AnalyticsDashboard({ adminRole }: AnalyticsDashboardProp
       {activeTab !== 'live' && (
         <div className="flex justify-end">
           <div className="inline-flex rounded-md shadow-sm">
-            {(['7d', '30d', '90d'] as const).map((range) => (
+            {(['24h', '7d', '30d', '90d'] as const).map((range) => (
               <button
                 key={range}
                 onClick={() => setDateRange(range)}
@@ -216,12 +224,12 @@ export default function AnalyticsDashboard({ adminRole }: AnalyticsDashboardProp
                     ? 'bg-blue-600 text-white'
                     : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                 } ${
-                  range === '7d' ? 'rounded-l-md' : ''
+                  range === '24h' ? 'rounded-l-md' : ''
                 } ${
                   range === '90d' ? 'rounded-r-md' : ''
                 } border border-gray-300 dark:border-gray-600`}
               >
-                {range === '7d' ? '7 Days' : range === '30d' ? '30 Days' : '90 Days'}
+                {range === '24h' ? '24 Hours' : range === '7d' ? '7 Days' : range === '30d' ? '30 Days' : '90 Days'}
               </button>
             ))}
           </div>
@@ -237,6 +245,14 @@ export default function AnalyticsDashboard({ adminRole }: AnalyticsDashboardProp
 
       {/* Overview tab — original content */}
       {activeTab === 'overview' && <div className="space-y-8">
+
+      {/* Today's Insights — 24h only */}
+      {dateRange === '24h' && data.todaysInsights && (
+        <TodaysInsights
+          current={data.todaysInsights.current}
+          previous={data.todaysInsights.previous}
+        />
+      )}
 
       {/* Platform Overview */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
@@ -268,7 +284,7 @@ export default function AnalyticsDashboard({ adminRole }: AnalyticsDashboardProp
         <SummaryCard
           title="Bag Views"
           value={formatNumber(engagement.totalBagViews)}
-          subtitle={`${dateRange === '7d' ? 'Last 7 days' : dateRange === '30d' ? 'Last 30 days' : 'Last 90 days'}`}
+          subtitle={dateRange === '24h' ? 'Last 24 hours' : dateRange === '7d' ? 'Last 7 days' : dateRange === '30d' ? 'Last 30 days' : 'Last 90 days'}
           color="blue"
         />
         <SummaryCard
@@ -410,7 +426,7 @@ export default function AnalyticsDashboard({ adminRole }: AnalyticsDashboardProp
       {engagement.engagementByDay.length > 0 && (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Daily Engagement
+            {dateRange === '24h' ? 'Hourly Engagement' : 'Daily Engagement'}
           </h2>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={engagement.engagementByDay}>
@@ -418,7 +434,11 @@ export default function AnalyticsDashboard({ adminRole }: AnalyticsDashboardProp
               <XAxis
                 dataKey="date"
                 stroke="#9CA3AF"
-                tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                tickFormatter={(value) =>
+                  dateRange === '24h'
+                    ? `${value.slice(11, 13)}:00`
+                    : new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                }
               />
               <YAxis stroke="#9CA3AF" />
               <Tooltip
@@ -427,7 +447,11 @@ export default function AnalyticsDashboard({ adminRole }: AnalyticsDashboardProp
                   border: 'none',
                   borderRadius: '8px',
                 }}
-                labelFormatter={(value) => new Date(value).toLocaleDateString()}
+                labelFormatter={(value) =>
+                  dateRange === '24h'
+                    ? `${value.slice(0, 10)} ${value.slice(11, 13)}:00`
+                    : new Date(value).toLocaleDateString()
+                }
               />
               <Legend />
               <Line type="monotone" dataKey="views" name="Bag Views" stroke="#0088FE" strokeWidth={2} dot={false} />
@@ -490,7 +514,7 @@ export default function AnalyticsDashboard({ adminRole }: AnalyticsDashboardProp
         <SummaryCard
           title="Total Cost"
           value={formatCost(data.totalCost)}
-          subtitle={`${dateRange === '7d' ? 'Last 7 days' : dateRange === '30d' ? 'Last 30 days' : 'Last 90 days'}`}
+          subtitle={dateRange === '24h' ? 'Last 24 hours' : dateRange === '7d' ? 'Last 7 days' : dateRange === '30d' ? 'Last 30 days' : 'Last 90 days'}
           color="blue"
         />
         <SummaryCard
