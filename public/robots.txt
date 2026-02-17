@@ -1,4 +1,4 @@
-# https://teed.so robots.txt
+# https://teed.club robots.txt
 
 User-agent: *
 Allow: /
@@ -13,5 +13,49 @@ Disallow: /auth/
 # Allow specific API routes that generate public content
 Allow: /api/og/
 Allow: /api/oembed
+Allow: /api/v1/
 
-Sitemap: https://teed.so/sitemap.xml
+# AI Shopping Agents
+User-agent: GPTBot
+Allow: /
+Allow: /api/v1/
+Disallow: /api/gpt/
+Disallow: /api/admin/
+Disallow: /api/ai/
+
+User-agent: ChatGPT-User
+Allow: /
+Allow: /api/v1/
+Disallow: /api/gpt/
+Disallow: /api/admin/
+Disallow: /api/ai/
+
+User-agent: ClaudeBot
+Allow: /
+Allow: /api/v1/
+Disallow: /api/gpt/
+Disallow: /api/admin/
+Disallow: /api/ai/
+
+User-agent: PerplexityBot
+Allow: /
+Allow: /api/v1/
+Disallow: /api/gpt/
+Disallow: /api/admin/
+Disallow: /api/ai/
+
+User-agent: Google-Extended
+Allow: /
+Allow: /api/v1/
+Disallow: /api/gpt/
+Disallow: /api/admin/
+Disallow: /api/ai/
+
+User-agent: Googlebot
+Allow: /
+Allow: /api/v1/
+Disallow: /api/gpt/
+Disallow: /api/admin/
+Disallow: /api/ai/
+
+Sitemap: https://teed.club/sitemap.xml

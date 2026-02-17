@@ -9,12 +9,17 @@ export async function GET() {
     openapi: '3.1.0',
     info: {
       title: 'Teed.club API for ChatGPT',
-      description: 'Manage your gear bags and items on Teed.club. Requires user authentication via OAuth.',
-      version: '1.0.0',
+      description: 'Product context from real curators + manage your gear bags. Public context endpoints (product search, popular bags, brands) require no auth. Bag management endpoints require OAuth.',
+      version: '1.1.0',
     },
     servers: [
       {
         url: 'https://teed.club/api/gpt',
+        description: 'Authenticated bag management',
+      },
+      {
+        url: 'https://teed.club/api/v1',
+        description: 'Public product context (no auth)',
       },
     ],
     paths: {
@@ -428,6 +433,72 @@ export async function GET() {
           responses: {
             '200': {
               description: 'Search results',
+            },
+          },
+        },
+      },
+      // --- Public Context Endpoints (no auth required, served from /api/v1) ---
+      '/products/search': {
+        get: {
+          operationId: 'searchProductContext',
+          summary: 'Search for product context from real curators',
+          description: 'Search across all public bags to find products with curator context: why they chose it, what they compared against, alternatives considered, and what they pair it with. No auth required.',
+          parameters: [
+            {
+              name: 'q',
+              in: 'query',
+              required: true,
+              schema: { type: 'string' },
+              description: 'Product name, brand, or keyword',
+            },
+            {
+              name: 'limit',
+              in: 'query',
+              schema: { type: 'integer', default: 20 },
+              description: 'Max results (max 50)',
+            },
+          ],
+          responses: {
+            '200': {
+              description: 'Products with curator context (why_chosen, compared_to, alternatives)',
+            },
+          },
+        },
+      },
+      '/bags/popular': {
+        get: {
+          operationId: 'getPopularBags',
+          summary: 'Get popular bags ranked by context richness',
+          description: 'Returns public bags ranked by item count and context density. No auth required.',
+          parameters: [
+            {
+              name: 'category',
+              in: 'query',
+              schema: { type: 'string' },
+              description: 'Filter by category (golf, photography, tech, etc.)',
+            },
+            {
+              name: 'limit',
+              in: 'query',
+              schema: { type: 'integer', default: 10 },
+              description: 'Max bags (max 50)',
+            },
+          ],
+          responses: {
+            '200': {
+              description: 'Popular bags with context stats',
+            },
+          },
+        },
+      },
+      '/brands': {
+        get: {
+          operationId: 'listBrandsWithContext',
+          summary: 'List all brands Teed has context for',
+          description: 'Returns all brands from public bags with item counts and context counts. No auth required.',
+          responses: {
+            '200': {
+              description: 'Brand directory with item counts',
             },
           },
         },
