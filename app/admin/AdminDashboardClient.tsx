@@ -14,7 +14,6 @@ import {
   Sparkles,
   Palette,
   MessageSquare,
-  Video,
   Globe,
   UserPlus,
   Map,
@@ -23,6 +22,8 @@ import {
   Link2,
   Lightbulb,
   Target,
+  ShoppingCart,
+  LayoutGrid,
 } from 'lucide-react';
 import { ROLE_PERMISSIONS, getRoleDisplayName, type AdminRole } from '@/lib/types/admin';
 
@@ -75,6 +76,24 @@ export default function AdminDashboardClient({
       icon: <Lightbulb className="w-6 h-6 text-[var(--amber-11)]" />,
       gradient: 'from-[var(--amber-4)] to-[var(--amber-6)]',
       borderHover: 'hover:border-[var(--amber-6)]',
+      permission: 'canViewAnalytics',
+    },
+    {
+      href: '/admin/agentic-commerce',
+      title: 'Agentic Commerce',
+      description: 'AI shopping landscape, competitive moat, and user capture strategies',
+      icon: <ShoppingCart className="w-6 h-6 text-[var(--sky-11)]" />,
+      gradient: 'from-[var(--sky-4)] to-[var(--sky-6)]',
+      borderHover: 'hover:border-[var(--sky-6)]',
+      permission: 'canViewAnalytics',
+    },
+    {
+      href: '/admin/competitive-matrix',
+      title: 'Competitive Matrix',
+      description: 'Feature comparison across platforms with gap analysis and persona playbook',
+      icon: <LayoutGrid className="w-6 h-6 text-[var(--copper-11)]" />,
+      gradient: 'from-[var(--copper-4)] to-[var(--copper-6)]',
+      borderHover: 'hover:border-[var(--copper-6)]',
       permission: 'canViewAnalytics',
     },
     {
@@ -183,9 +202,9 @@ export default function AdminDashboardClient({
     },
     {
       href: '/admin/content-ideas',
-      title: 'Content Ideas',
-      description: 'Social media manager - discover and curate content from YouTube',
-      icon: <Video className="w-6 h-6 text-[var(--copper-11)]" />,
+      title: 'Rising Posts',
+      description: 'Real-time trending posts from Reddit, YouTube, and TikTok',
+      icon: <TrendingUp className="w-6 h-6 text-[var(--copper-11)]" />,
       gradient: 'from-[var(--copper-4)] to-[var(--copper-6)]',
       borderHover: 'hover:border-[var(--copper-6)]',
       permission: 'canViewAnalytics',

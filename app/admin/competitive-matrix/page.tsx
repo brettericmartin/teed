@@ -1,30 +1,24 @@
 import { redirect } from 'next/navigation';
 import { getAdminUser, logAdminAction } from '@/lib/adminAuth';
 import Navigation from '@/components/Navigation';
-import RisingPostsClient from './RisingPostsClient';
-import { ROLE_PERMISSIONS } from '@/lib/types/admin';
+import CompetitiveMatrixClient from './CompetitiveMatrixClient';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Rising Posts | Admin',
-  description: 'Real-time trending posts from Reddit, YouTube, and TikTok',
+  title: 'Competitive Matrix | Admin',
+  description: 'Feature comparison across creator platforms with actionable user capture strategies',
 };
 
-export default async function AdminRisingPostsPage() {
+export default async function CompetitiveMatrixPage() {
   const admin = await getAdminUser();
 
   if (!admin) {
     redirect('/dashboard');
   }
 
-  const permissions = ROLE_PERMISSIONS[admin.role];
-  if (!permissions.canViewAnalytics) {
-    redirect('/admin');
-  }
-
   await logAdminAction(admin, 'admin.login', null, null, {
-    page: 'rising-posts',
+    page: 'competitive-matrix',
   });
 
   return (
@@ -35,7 +29,7 @@ export default async function AdminRisingPostsPage() {
         isAuthenticated={true}
         isAdmin={true}
       />
-      <RisingPostsClient />
+      <CompetitiveMatrixClient />
     </>
   );
 }

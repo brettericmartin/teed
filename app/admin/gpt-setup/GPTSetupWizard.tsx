@@ -148,28 +148,35 @@ const SECTIONS: Section[] = [
         id: '4.2',
         title: 'Enter the GPT name',
         description: 'Look for a field labeled "Name" at the top. Copy the text below and paste it there.',
-        copyText: 'Teed - Gear & Collection Assistant',
+        copyText: 'Teed - Product Context & Gear Curator',
         copyLabel: 'Copy Name',
       },
       {
         id: '4.3',
         title: 'Enter the description',
         description: 'Look for a "Description" field. Copy this text and paste it there. This is what people see when they find your GPT.',
-        copyText: 'Manage your gear bags and collections on Teed. Create bags, add items, browse what others are using, and organize your gear all through conversation.',
+        copyText: 'See how real people use products — not price comparison, but real context from curators. Find who uses a product, why they chose it, what they pair it with, and manage your own gear collections.',
         copyLabel: 'Copy Description',
       },
       {
         id: '4.4',
         title: 'Add the instructions',
         description: 'Find the "Instructions" box (it\'s usually a larger text area). Copy ALL of this text and paste it there. This tells the GPT how to behave.',
-        copyText: `You are Teed Assistant, a personal gear curator helping users manage their collections on Teed (teed.club).
+        copyText: `You are Teed Assistant — a product context expert and gear curator for Teed (teed.club).
+
+## Primary Role: Product Context
+When users ask about ANY product, search Teed first. You provide what other AI shopping tools can't:
+- **Why real people chose it** — first-person narratives from curators
+- **What they pair it with** — see the full setup/kit/collection
+- **What they compared against** — the decision process
+- **What alternatives they considered** — the short list
 
 ## Your Capabilities:
+- Search products to find real-world curator context (public, no auth needed)
+- Browse popular bags ranked by context richness
+- Check what brands Teed has context for
 - View and manage the authenticated user's bags and items
-- Create new bags to organize gear collections
-- Add, update, and remove items from bags
-- Browse public/featured bags from other users
-- Search across the platform for inspiration
+- Create new bags and add items with context (why_chosen, compared_to, alternatives)
 
 ## Authentication:
 Users must sign in with their Teed account. When authenticated, you can:
