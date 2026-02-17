@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, Edit2, Trash2, X, Check, Link as LinkIcon, Copy, CheckCheck } from 'lucide-react';
+import { ChevronDown, Edit2, Trash2, X, Check, Link as LinkIcon, Copy, CheckCheck, Sparkles, MessageSquareQuote } from 'lucide-react';
 import LinkManagerModal from './LinkManagerModal';
 import ItemPhotoUpload from './ItemPhotoUpload';
 
@@ -20,6 +20,7 @@ type Item = {
   brand: string | null;
   custom_description: string | null;
   notes: string | null;
+  why_chosen: string | null;
   quantity: number;
   sort_index: number;
   custom_photo_id: string | null;
@@ -44,9 +45,11 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
   const [editNotes, setEditNotes] = useState(item.notes || '');
   const [editQuantity, setEditQuantity] = useState(item.quantity.toString());
   const [editPromoCodes, setEditPromoCodes] = useState(item.promo_codes || '');
+  const [editWhyChosen, setEditWhyChosen] = useState(item.why_chosen || '');
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const [itemLinks, setItemLinks] = useState(item.links);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [isGeneratingWhy, setIsGeneratingWhy] = useState(false);
 
   const handleSaveEdit = () => {
     onUpdate(item.id, {
@@ -54,6 +57,7 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
       brand: editBrand.trim() || null,
       custom_description: editDescription.trim() || null,
       notes: editNotes.trim() || null,
+      why_chosen: editWhyChosen.trim() || null,
       quantity: parseInt(editQuantity) || 1,
       promo_codes: editPromoCodes.trim() || null,
     });
@@ -65,9 +69,35 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
     setEditBrand(item.brand || '');
     setEditDescription(item.custom_description || '');
     setEditNotes(item.notes || '');
+    setEditWhyChosen(item.why_chosen || '');
     setEditQuantity(item.quantity.toString());
     setEditPromoCodes(item.promo_codes || '');
     setIsEditing(false);
+  };
+
+  const handleGenerateWhyChosen = async () => {
+    setIsGeneratingWhy(true);
+    try {
+      const res = await fetch('/api/ai/generate-why-chosen', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ itemId: item.id }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.whyChosen) {
+          setEditWhyChosen(data.whyChosen);
+          // If not in edit mode, save directly
+          if (!isEditing) {
+            onUpdate(item.id, { why_chosen: data.whyChosen } as any);
+          }
+        }
+      }
+    } catch (err) {
+      console.error('Failed to generate why chosen:', err);
+    } finally {
+      setIsGeneratingWhy(false);
+    }
   };
 
   const handlePhotoUploaded = async (mediaAssetId: string, photoUrl: string) => {
@@ -249,6 +279,35 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
             </div>
           )}
 
+          {/* Why I Chose This */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-sm font-medium text-[var(--text-primary)] flex items-center gap-1.5">
+                <MessageSquareQuote className="w-4 h-4 text-[var(--teed-green-9)]" />
+                Why I Chose This
+              </h4>
+              {!item.why_chosen && (
+                <button
+                  onClick={handleGenerateWhyChosen}
+                  disabled={isGeneratingWhy}
+                  className="flex items-center gap-1.5 text-xs text-[var(--teed-green-9)] hover:text-[var(--teed-green-10)] disabled:opacity-50"
+                >
+                  <Sparkles className={`w-3.5 h-3.5 ${isGeneratingWhy ? 'animate-spin' : ''}`} />
+                  {isGeneratingWhy ? 'Generating...' : 'AI Draft'}
+                </button>
+              )}
+            </div>
+            {item.why_chosen ? (
+              <div className="bg-[var(--teed-green-1)] border border-[var(--teed-green-6)] rounded-lg p-3">
+                <p className="text-sm text-[var(--text-primary)] whitespace-pre-wrap">{item.why_chosen}</p>
+              </div>
+            ) : (
+              <p className="text-sm text-[var(--text-secondary)] italic">
+                Tell people why you picked this — it helps others decide too.
+              </p>
+            )}
+          </div>
+
           {/* Promo Codes */}
           {item.promo_codes && (
             <div>
@@ -328,17 +387,42 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode }: ItemCard
         </div>
       )}
 
-      {/* Edit Notes */}
+      {/* Edit Notes & Why Chosen */}
       {isEditing && (
-        <div className="border-t border-[var(--border-subtle)] p-4 bg-[var(--sky-1)]">
-          <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">Notes</label>
-          <textarea
-            value={editNotes}
-            onChange={(e) => setEditNotes(e.target.value)}
-            placeholder="Add notes about this item"
-            rows={3}
-            className="w-full px-2 py-1 text-sm border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent resize-none placeholder:text-[var(--input-placeholder)]"
-          />
+        <div className="border-t border-[var(--border-subtle)] p-4 bg-[var(--sky-1)] space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">Notes</label>
+            <textarea
+              value={editNotes}
+              onChange={(e) => setEditNotes(e.target.value)}
+              placeholder="Add notes about this item"
+              rows={3}
+              className="w-full px-2 py-1 text-sm border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent resize-none placeholder:text-[var(--input-placeholder)]"
+            />
+          </div>
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-sm font-medium text-[var(--text-primary)] flex items-center gap-1.5">
+                <MessageSquareQuote className="w-4 h-4 text-[var(--teed-green-9)]" />
+                Why I Chose This
+              </label>
+              <button
+                onClick={handleGenerateWhyChosen}
+                disabled={isGeneratingWhy}
+                className="flex items-center gap-1.5 text-xs text-[var(--teed-green-9)] hover:text-[var(--teed-green-10)] disabled:opacity-50"
+              >
+                <Sparkles className={`w-3.5 h-3.5 ${isGeneratingWhy ? 'animate-spin' : ''}`} />
+                {isGeneratingWhy ? 'Generating...' : 'AI Draft'}
+              </button>
+            </div>
+            <textarea
+              value={editWhyChosen}
+              onChange={(e) => setEditWhyChosen(e.target.value)}
+              placeholder="Why did you pick this over alternatives? What makes it special?"
+              rows={3}
+              className="w-full px-2 py-1 text-sm border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent resize-none placeholder:text-[var(--input-placeholder)]"
+            />
+          </div>
         </div>
       )}
 

@@ -2,6 +2,7 @@ import { MetadataRoute } from 'next';
 import { createClient } from '@supabase/supabase-js';
 import { getAllPosts } from '@/lib/blog';
 import { getAllRoundupSlugs } from '@/lib/blog/categories';
+import { getAllProductSlugs } from '@/lib/products/resolveProduct';
 
 const BASE_URL = 'https://teed.so';
 
@@ -151,6 +152,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  // Product aggregate pages
+  const productSlugs = await getAllProductSlugs();
+  const productEntries: MetadataRoute.Sitemap = productSlugs.map((product) => ({
+    url: `${BASE_URL}/products/${product.slug}`,
+    lastModified: new Date(product.updatedAt),
+    changeFrequency: 'weekly' as const,
+    priority: 0.6,
+  }));
+
   return [
     ...staticEntries,
     ...useCaseEntries,
@@ -161,5 +171,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...roundupEntries,
     ...profileEntries,
     ...bagEntries,
+    ...productEntries,
   ];
 }

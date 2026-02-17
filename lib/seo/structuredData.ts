@@ -31,6 +31,9 @@ export interface ItemData {
   purchaseUrl: string | null;
   pricePaid: number | null;
   purchaseDate: string | null;
+  whyChosen?: string | null;
+  comparedTo?: string | null;
+  alternatives?: string[] | null;
 }
 
 /**
@@ -77,16 +80,19 @@ export function generateProfileJsonLd(
 export function generateBagJsonLd(
   bag: BagData,
   profile: ProfileData,
-  items: ItemData[]
+  items: ItemData[],
+  author?: { name: string; url: string }
 ): object {
   const baseUrl = 'https://teed.club';
   const bagUrl = `${baseUrl}/u/${profile.handle}/${bag.code}`;
   const profileUrl = `${baseUrl}/u/${profile.handle}`;
 
+  const authorInfo = author || { name: profile.displayName || profile.handle, url: profileUrl };
+
   const itemListElements = items.map((item, index) => ({
     '@type': 'ListItem',
     position: index + 1,
-    item: generateItemJsonLd(item, bagUrl),
+    item: generateItemJsonLd(item, bagUrl, authorInfo),
   }));
 
   return {
@@ -116,8 +122,13 @@ export function generateBagJsonLd(
 /**
  * Generate JSON-LD for an individual item.
  * Uses Product schema which provides rich details.
+ * Includes Review schema when why_chosen is available.
  */
-export function generateItemJsonLd(item: ItemData, bagUrl?: string): object {
+export function generateItemJsonLd(
+  item: ItemData,
+  bagUrl?: string,
+  author?: { name: string; url: string }
+): object {
   const result: Record<string, any> = {
     '@type': 'Product',
     name: item.name,
@@ -138,6 +149,21 @@ export function generateItemJsonLd(item: ItemData, bagUrl?: string): object {
       '@type': 'Offer',
       price: item.pricePaid,
       priceCurrency: 'USD',
+    };
+  }
+
+  // Add Review from why_chosen
+  if (item.whyChosen) {
+    result.review = {
+      '@type': 'Review',
+      reviewBody: item.whyChosen,
+      ...(author && {
+        author: {
+          '@type': 'Person',
+          name: author.name,
+          url: author.url,
+        },
+      }),
     };
   }
 

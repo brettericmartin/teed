@@ -236,6 +236,11 @@ export default async function UserBagPage({ params }: PageProps) {
   };
 
   // Generate structured data for SEO and AI discoverability
+  const authorInfo = {
+    name: profile.display_name || profile.handle,
+    url: `https://teed.club/u/${profile.handle}`,
+  };
+
   const bagJsonLd = generateBagJsonLd(
     {
       id: bag.id,
@@ -262,7 +267,11 @@ export default async function UserBagPage({ params }: PageProps) {
       purchaseUrl: item.links?.[0]?.url || null,
       pricePaid: item.price_paid,
       purchaseDate: item.purchase_date,
-    }))
+      whyChosen: item.why_chosen,
+      comparedTo: item.compared_to,
+      alternatives: item.alternatives,
+    })),
+    authorInfo
   );
 
   const breadcrumbJsonLd = generateBreadcrumbJsonLd([

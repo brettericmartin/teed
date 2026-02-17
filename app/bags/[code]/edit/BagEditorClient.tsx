@@ -29,6 +29,7 @@ type Item = {
   brand: string | null;
   custom_description: string | null;
   notes: string | null;
+  why_chosen: string | null;
   quantity: number;
   sort_index: number;
   custom_photo_id: string | null;
