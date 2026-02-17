@@ -11,6 +11,7 @@
  *   }
  */
 
+import { runVideoPipelineV2 } from './v2/index';
 import { extractVideoId, getVideoDetails, extractUrlsFromDescription } from '../contentIdeas/youtube';
 import { fetchYouTubeTranscript, formatTimestamp } from '../contentIdeas/transcript';
 import type { TranscriptSegment } from '../contentIdeas/transcript';
@@ -81,6 +82,18 @@ export async function* runVideoPipeline(
   videoUrl: string,
   options: PipelineOptions = {},
 ): AsyncGenerator<PipelineEvent> {
+  // Route to V2 pipeline unless explicitly requesting V1
+  if (options.pipelineVersion !== 'v1') {
+    try {
+      yield* runVideoPipelineV2(videoUrl, options);
+      return;
+    } catch (error) {
+      console.error('[VideoPipeline] V2 failed, falling back to V1:', error);
+      // Fall through to V1
+    }
+  }
+
+  // V1 pipeline below
   // Route TikTok URLs to the TikTok-specific pipeline
   if (isTikTokUrl(videoUrl)) {
     yield* runTikTokPipeline(videoUrl, options);

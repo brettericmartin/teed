@@ -186,6 +186,7 @@ export interface PipelineOptions {
   maxFrames?: number;                 // Default: 5
   maxDescriptionLinks?: number;       // Default: 15
   imageConcurrency?: number;          // Default: 5
+  pipelineVersion?: 'v1' | 'v2';     // Default: 'v2'
 }
 
 // ═══════════════════════════════════════════════════════════════════

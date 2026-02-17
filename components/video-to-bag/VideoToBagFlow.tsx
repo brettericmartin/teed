@@ -19,6 +19,7 @@ type FlowStep = 'input' | 'processing' | 'review' | 'done';
 export default function VideoToBagFlow() {
   const [step, setStep] = useState<FlowStep>('input');
   const [videoUrl, setVideoUrl] = useState('');
+  const [pipelineVersion, setPipelineVersion] = useState<'v1' | 'v2'>('v2');
   const [error, setError] = useState<string | null>(null);
   const [stages, setStages] = useState<Map<PipelineStage, StageProgress>>(new Map());
   const [currentStage, setCurrentStage] = useState<PipelineStage | undefined>();
@@ -48,7 +49,7 @@ export default function VideoToBagFlow() {
           'Content-Type': 'application/json',
           'Accept': 'text/event-stream',
         },
-        body: JSON.stringify({ videoUrl }),
+        body: JSON.stringify({ videoUrl, pipelineVersion }),
         signal: abort.signal,
       });
 
@@ -88,7 +89,7 @@ export default function VideoToBagFlow() {
       setError(message);
       setStep('input');
     }
-  }, [videoUrl]);
+  }, [videoUrl, pipelineVersion]);
 
   const handleEvent = useCallback((event: PipelineEvent) => {
     switch (event.type) {
@@ -238,9 +239,29 @@ export default function VideoToBagFlow() {
                 Process
               </Button>
             </div>
-            <p className="mt-1 text-xs text-gray-400">
-              Paste a YouTube or TikTok URL to extract products.
-            </p>
+            <div className="mt-2 flex items-center gap-2">
+              <span className="text-xs text-gray-400">Pipeline:</span>
+              <button
+                onClick={() => setPipelineVersion('v2')}
+                className={`text-xs px-2 py-0.5 rounded-full transition-colors ${
+                  pipelineVersion === 'v2'
+                    ? 'bg-[var(--color-deep-evergreen)] text-white'
+                    : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                }`}
+              >
+                V2 (Dense)
+              </button>
+              <button
+                onClick={() => setPipelineVersion('v1')}
+                className={`text-xs px-2 py-0.5 rounded-full transition-colors ${
+                  pipelineVersion === 'v1'
+                    ? 'bg-[var(--color-deep-evergreen)] text-white'
+                    : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                }`}
+              >
+                V1 (Legacy)
+              </button>
+            </div>
           </div>
         </div>
       )}

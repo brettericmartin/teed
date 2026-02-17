@@ -40,10 +40,16 @@ export async function POST(request: NextRequest) {
     await requireAdmin();
 
     const body = await request.json();
-    const { videoUrl, options = {} } = body as {
+    const { videoUrl, options = {}, pipelineVersion } = body as {
       videoUrl: string;
       options?: PipelineOptions;
+      pipelineVersion?: 'v1' | 'v2';
     };
+
+    // Allow explicit version override from request body
+    if (pipelineVersion) {
+      options.pipelineVersion = pipelineVersion;
+    }
 
     if (!videoUrl || typeof videoUrl !== 'string') {
       return new Response(JSON.stringify({ error: 'videoUrl is required' }), {
