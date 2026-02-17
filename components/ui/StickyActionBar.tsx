@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Share2, GitFork, Bookmark } from 'lucide-react';
+import { Share, GitFork, Bookmark } from 'lucide-react';
 import { MagneticButton } from './MagneticButton';
 import { cn } from '@/lib/utils';
 import { slideUp } from '@/lib/animations';
@@ -79,42 +79,39 @@ export function StickyActionBar({
 
             {/* Actions */}
             <div className="flex items-center gap-2">
-              {/* Save Button (if handler provided) */}
-              {onSave && (
-                <button
-                  onClick={onSave}
-                  className={cn(
-                    'p-2.5 rounded-lg transition-colors',
-                    'border border-[var(--border-subtle)]',
-                    isSaved
-                      ? 'bg-[var(--teed-green-2)] border-[var(--teed-green-6)] text-[var(--teed-green-10)]'
-                      : 'hover:bg-[var(--surface-hover)]'
-                  )}
-                  aria-label={isSaved ? 'Saved' : 'Save bag'}
-                >
-                  <Bookmark className={cn('w-5 h-5', isSaved && 'fill-current')} />
-                </button>
-              )}
+              {/* Clone Button - Secondary */}
+              <button
+                onClick={onClone}
+                className="p-2.5 border border-[var(--border-subtle)] rounded-lg hover:bg-[var(--surface-hover)] transition-colors"
+                aria-label="Clone bag"
+              >
+                <GitFork className="w-5 h-5" />
+              </button>
 
               {/* Share Button */}
               <button
                 onClick={onShare}
-                className="p-2.5 border border-[var(--border-subtle)] rounded-lg hover:bg-[var(--surface-hover)] transition-colors lg:px-4 lg:flex lg:items-center lg:gap-2"
+                className="p-2.5 border border-[var(--border-subtle)] rounded-lg hover:bg-[var(--surface-hover)] transition-colors"
                 aria-label="Share bag"
               >
-                <Share2 className="w-5 h-5" />
-                <span className="hidden lg:inline text-sm font-medium">Share</span>
+                <Share className="w-5 h-5" />
               </button>
 
-              {/* Clone Button - Primary */}
-              <MagneticButton
-                onClick={onClone}
-                className="px-5 py-2.5 bg-[var(--teed-green-8)] text-white rounded-lg font-semibold hover:bg-[var(--teed-green-9)] flex items-center gap-2 whitespace-nowrap shadow-md hover:shadow-lg transition-shadow"
-              >
-                <GitFork className="w-4 h-4" />
-                <span className="hidden sm:inline">Clone</span>
-                <span className="sm:hidden">Clone</span>
-              </MagneticButton>
+              {/* Save Button - Primary CTA */}
+              {onSave && (
+                <MagneticButton
+                  onClick={onSave}
+                  className={cn(
+                    'px-5 py-2.5 rounded-lg font-semibold flex items-center gap-2 whitespace-nowrap shadow-md hover:shadow-lg transition-shadow',
+                    isSaved
+                      ? 'bg-[var(--teed-green-2)] border border-[var(--teed-green-6)] text-[var(--teed-green-10)]'
+                      : 'bg-[var(--teed-green-8)] text-white hover:bg-[var(--teed-green-9)]'
+                  )}
+                >
+                  <Bookmark className={cn('w-4 h-4', isSaved && 'fill-current')} />
+                  <span>{isSaved ? 'Saved' : 'Save'}</span>
+                </MagneticButton>
+              )}
             </div>
           </div>
         </motion.div>

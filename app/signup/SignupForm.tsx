@@ -5,13 +5,14 @@ import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { supabase } from '@/lib/supabaseClient';
-import { Check, Loader2, X } from 'lucide-react';
+import { Check, Loader2, X, Bookmark, UserCircle, Copy, Eye, EyeOff } from 'lucide-react';
 import { analytics } from '@/lib/analytics';
 
 export default function SignupForm() {
   const searchParams = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     analytics.pageViewed('signup');
@@ -21,7 +22,6 @@ export default function SignupForm() {
     name: '',
     email: '',
     password: '',
-    confirmPassword: '',
     handle: '',
   });
 
@@ -91,15 +91,10 @@ export default function SignupForm() {
     ? 'Password must be at least 8 characters'
     : null;
 
-  const confirmPasswordError = formData.confirmPassword && formData.password !== formData.confirmPassword
-    ? 'Passwords do not match'
-    : null;
-
   const canSubmit =
     formData.email &&
     formData.name &&
     formData.password.length >= 8 &&
-    formData.password === formData.confirmPassword &&
     formData.handle.length >= 3 &&
     handleAvailability.available === true;
 
@@ -148,49 +143,82 @@ export default function SignupForm() {
     }
   };
 
+  const cleanHandle = formData.handle.trim().toLowerCase();
+
   return (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-      <div className="bg-gradient-to-r from-[var(--teed-green-9)] to-[var(--teed-green-8)] p-6 text-white">
-        <h2 className="text-2xl font-bold">Create your account</h2>
-        <p className="text-white/80 mt-1">Get started with Teed in seconds</p>
+      {/* Header */}
+      <div className="px-6 pt-8 pb-6">
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Start collecting</h2>
+        <p className="mt-1 text-[var(--text-secondary)]">
+          Curate and share the products you swear by.
+        </p>
+
+        {/* Compact value props */}
+        <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:gap-4">
+          <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
+            <Bookmark className="w-4 h-4 text-[var(--teed-green-9)] shrink-0" />
+            <span>Save &amp; follow bags</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
+            <UserCircle className="w-4 h-4 text-[var(--teed-green-9)] shrink-0" />
+            <span>Claim teed.co/@you</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
+            <Copy className="w-4 h-4 text-[var(--teed-green-9)] shrink-0" />
+            <span>Curate your own</span>
+          </div>
+        </div>
       </div>
 
-      <div className="p-6">
+      {/* Form */}
+      <div className="px-6 pb-8">
         <div className="space-y-4">
           <Input
-            label="Your Name"
+            label="Name"
             placeholder="Alex Johnson"
             value={formData.name}
             onChange={(e) => updateField('name', e.target.value)}
           />
           <Input
-            label="Email Address"
+            label="Email"
             type="email"
             placeholder="alex@example.com"
             value={formData.email}
             onChange={(e) => updateField('email', e.target.value)}
           />
-          <Input
-            label="Password"
-            type="password"
-            placeholder="At least 6 characters"
-            value={formData.password}
-            onChange={(e) => updateField('password', e.target.value)}
-            error={passwordError || undefined}
-          />
-          <Input
-            label="Confirm Password"
-            type="password"
-            placeholder="Confirm your password"
-            value={formData.confirmPassword}
-            onChange={(e) => updateField('confirmPassword', e.target.value)}
-            error={confirmPasswordError || undefined}
-          />
+
+          {/* Password with show/hide toggle */}
+          <div className="w-full">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Password
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={formData.password}
+                onChange={(e) => updateField('password', e.target.value)}
+                placeholder="At least 8 characters"
+                className="w-full px-3 py-2 pr-10 border rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 hover:border-gray-400 dark:hover:border-zinc-600 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+            {passwordError && (
+              <p className="mt-1 text-sm text-red-600 dark:text-red-400">{passwordError}</p>
+            )}
+          </div>
 
           {/* Handle */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Choose a Handle
+              Choose your handle
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
@@ -219,11 +247,15 @@ export default function SignupForm() {
               <p className="mt-1 text-xs text-red-500">{handleAvailability.error}</p>
             )}
             {handleAvailability.available && (
-              <p className="mt-1 text-xs text-[var(--teed-green-9)]">Handle is available!</p>
+              <p className="mt-1 text-xs text-[var(--teed-green-9)]">
+                teed.co/@{cleanHandle} is yours!
+              </p>
             )}
-            <p className="mt-1 text-xs text-gray-400">
-              Your unique URL: teed.co/@{formData.handle || 'you'}
-            </p>
+            {!handleAvailability.available && !handleAvailability.error && cleanHandle.length === 0 && (
+              <p className="mt-1 text-xs text-gray-400">
+                Your profile lives at teed.co/@you
+              </p>
+            )}
           </div>
         </div>
 
@@ -234,7 +266,7 @@ export default function SignupForm() {
           </div>
         )}
 
-        <div className="mt-8">
+        <div className="mt-6">
           <Button
             variant="create"
             onClick={handleSubmit}
@@ -244,13 +276,19 @@ export default function SignupForm() {
             {isSubmitting ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Creating account...
+                Creating @{cleanHandle}...
               </>
+            ) : cleanHandle.length >= 3 && handleAvailability.available ? (
+              `Claim @${cleanHandle}`
             ) : (
-              'Create Account'
+              'Claim your @handle'
             )}
           </Button>
         </div>
+
+        <p className="mt-4 text-center text-xs text-[var(--text-secondary)]">
+          Free forever. No credit card needed.
+        </p>
       </div>
     </div>
   );

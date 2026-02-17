@@ -11,17 +11,11 @@ export default function SignupPage() {
     <div className="min-h-screen bg-white">
       {/* Header */}
       <div className="pt-12 pb-8 px-4 text-center">
-        <a href="/" className="inline-block mb-6">
+        <a href="/" className="inline-block">
           <span className="text-[var(--font-size-8)] font-semibold text-[var(--text-primary)]">
             Teed
           </span>
         </a>
-        <h1 className="text-[var(--font-size-7)] font-bold text-[var(--text-primary)]">
-          Join Teed
-        </h1>
-        <p className="mt-2 text-[var(--text-secondary)] max-w-md mx-auto">
-          Create your account and start sharing curated collections.
-        </p>
       </div>
 
       {/* Form Container */}
