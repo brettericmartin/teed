@@ -1,0 +1,1547 @@
+{
+  "category": "travel",
+  "schemaVersion": "1.0.0",
+  "lastUpdated": "2026-02-16T00:00:00.000Z",
+  "brands": [
+    {
+      "name": "Away",
+      "aliases": ["Away Travel", "Away Luggage"],
+      "products": [
+        {
+          "id": "away-the-carry-on",
+          "name": "The Carry-On",
+          "brand": "Away",
+          "category": "travel",
+          "subcategory": "carry-on-luggage",
+          "releaseYear": 2015,
+          "msrp": 295,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["hardshell", "minimalist branding", "polycarbonate shell", "360-degree spinner wheels"],
+            "distinguishingFeatures": ["built-in USB charger", "interior compression system", "ejectable battery", "TSA-approved combination lock"],
+            "logoPlacement": "front center embossed"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "polycarbonate",
+            "dimensions": "21.7 x 13.7 x 9 in",
+            "weight": "7.6 lbs",
+            "capacity": "39.8L",
+            "wheels": "360-degree spinner",
+            "lock": "TSA-approved combination"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Green", "colorway": "Green", "availability": "current", "specifications": {} },
+            { "variantName": "Asphalt", "colorway": "Asphalt", "availability": "current", "specifications": {} },
+            { "variantName": "Fog", "colorway": "Fog", "availability": "current", "specifications": {} },
+            { "variantName": "Brick", "colorway": "Brick", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["carry-on", "luggage", "suitcase", "cabin bag", "hardshell", "spinner", "usb charger luggage", "away suitcase"],
+          "aliases": ["Away Carry On", "Away Carry-On Suitcase"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "away-the-medium",
+          "name": "The Medium",
+          "brand": "Away",
+          "category": "travel",
+          "subcategory": "checked-luggage",
+          "releaseYear": 2015,
+          "msrp": 345,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["hardshell", "minimalist branding", "polycarbonate shell", "360-degree spinner wheels"],
+            "distinguishingFeatures": ["interior compression system", "TSA-approved combination lock", "hidden laundry bag"],
+            "logoPlacement": "front center embossed"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "polycarbonate",
+            "dimensions": "25.7 x 17.7 x 10.5 in",
+            "weight": "9.1 lbs",
+            "capacity": "62.6L",
+            "wheels": "360-degree spinner",
+            "lock": "TSA-approved combination"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Green", "colorway": "Green", "availability": "current", "specifications": {} },
+            { "variantName": "Asphalt", "colorway": "Asphalt", "availability": "current", "specifications": {} },
+            { "variantName": "Fog", "colorway": "Fog", "availability": "current", "specifications": {} },
+            { "variantName": "Brick", "colorway": "Brick", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["checked luggage", "medium suitcase", "checked bag", "hardshell", "polycarbonate luggage", "away medium"],
+          "aliases": ["Away Medium Suitcase"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Rimowa",
+      "aliases": ["RIMOWA"],
+      "products": [
+        {
+          "id": "rimowa-original-cabin",
+          "name": "Original Cabin",
+          "brand": "Rimowa",
+          "category": "travel",
+          "subcategory": "carry-on-luggage",
+          "releaseYear": 2000,
+          "msrp": 1300,
+          "visualSignature": {
+            "primaryColors": ["silver"],
+            "secondaryColors": ["chrome"],
+            "patterns": ["grooved"],
+            "finish": "metallic",
+            "designCues": ["iconic grooved aluminum shell", "premium metal construction", "Multiwheel system", "lever lock"],
+            "distinguishingFeatures": ["aluminum-magnesium alloy body", "signature parallel grooves", "TSA-approved locks", "Flex-Divider system"],
+            "logoPlacement": "top front plate"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "aluminum-magnesium alloy",
+            "dimensions": "21.7 x 15.8 x 9.1 in",
+            "weight": "10.1 lbs",
+            "capacity": "35L",
+            "wheels": "Multiwheel (4-wheel)",
+            "lock": "TSA-approved combination"
+          },
+          "variants": [
+            { "variantName": "Silver", "colorway": "Silver", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Titanium", "colorway": "Titanium", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["rimowa", "aluminum luggage", "carry-on", "cabin luggage", "grooved suitcase", "luxury luggage", "metal suitcase"],
+          "aliases": ["Rimowa Original", "Rimowa Cabin", "Rimowa Aluminum Cabin"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        },
+        {
+          "id": "rimowa-essential-cabin",
+          "name": "Essential Cabin",
+          "brand": "Rimowa",
+          "category": "travel",
+          "subcategory": "carry-on-luggage",
+          "releaseYear": 2018,
+          "msrp": 790,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["grooved"],
+            "finish": "matte",
+            "designCues": ["signature grooved polycarbonate shell", "lightweight construction", "Multiwheel system"],
+            "distinguishingFeatures": ["polycarbonate body with grooved design", "Flex-Divider system", "TSA-approved locks", "stage system compatible"],
+            "logoPlacement": "top front plate"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "polycarbonate",
+            "dimensions": "21.7 x 15.8 x 9.1 in",
+            "weight": "7.1 lbs",
+            "capacity": "36L",
+            "wheels": "Multiwheel (4-wheel)",
+            "lock": "TSA-approved combination"
+          },
+          "variants": [
+            { "variantName": "Matte Black", "colorway": "Matte Black", "availability": "current", "specifications": {} },
+            { "variantName": "Desert Rose", "colorway": "Desert Rose", "availability": "current", "specifications": {} },
+            { "variantName": "Bamboo Green", "colorway": "Bamboo Green", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["rimowa", "polycarbonate luggage", "carry-on", "essential", "grooved suitcase", "lightweight cabin"],
+          "aliases": ["Rimowa Essential", "Rimowa Polycarbonate Cabin"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        }
+      ]
+    },
+    {
+      "name": "Samsonite",
+      "aliases": [],
+      "products": [
+        {
+          "id": "samsonite-freeform-spinner-21",
+          "name": "Freeform Spinner 21",
+          "brand": "Samsonite",
+          "category": "travel",
+          "subcategory": "carry-on-luggage",
+          "releaseYear": 2020,
+          "msrp": 219,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "glossy",
+            "designCues": ["sculpted polycarbonate shell", "double spinner wheels", "retractable handle"],
+            "distinguishingFeatures": ["lightweight polycarbonate construction", "double spinner wheels", "side-mounted TSA lock", "cross ribbons and divider"],
+            "logoPlacement": "front center badge"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "polycarbonate",
+            "dimensions": "21.3 x 15.4 x 10 in",
+            "weight": "6.8 lbs",
+            "capacity": "37L",
+            "wheels": "double spinner",
+            "lock": "side-mounted TSA"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} },
+            { "variantName": "Mint Green", "colorway": "Mint Green", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["samsonite", "carry-on", "spinner", "hardshell", "lightweight luggage", "freeform"],
+          "aliases": ["Samsonite Freeform 21", "Freeform 21"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "samsonite-proxis-spinner-55",
+          "name": "Proxis Spinner 55",
+          "brand": "Samsonite",
+          "category": "travel",
+          "subcategory": "carry-on-luggage",
+          "releaseYear": 2021,
+          "msrp": 380,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "patterns": ["angular"],
+            "finish": "matte",
+            "designCues": ["angular faceted shell", "Roxkin material", "bear-hug closure system"],
+            "distinguishingFeatures": ["Roxkin material (woven polypropylene)", "bear-hug closure", "recycled interior lining", "double wheels"],
+            "logoPlacement": "front center badge"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "Roxkin (woven polypropylene)",
+            "dimensions": "21.7 x 15.4 x 9.8 in",
+            "weight": "5.7 lbs",
+            "capacity": "37L",
+            "wheels": "double spinner",
+            "lock": "integrated TSA"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Silver", "colorway": "Silver", "availability": "current", "specifications": {} },
+            { "variantName": "Petrol Blue", "colorway": "Petrol Blue", "availability": "current", "specifications": {} },
+            { "variantName": "Honey Gold", "colorway": "Honey Gold", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["samsonite", "proxis", "carry-on", "spinner", "sustainable luggage", "roxkin", "recycled"],
+          "aliases": ["Samsonite Proxis 55", "Proxis Cabin"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Tumi",
+      "aliases": ["TUMI"],
+      "products": [
+        {
+          "id": "tumi-alpha-3-intl-carry-on",
+          "name": "Alpha 3 International Expandable Carry-On",
+          "brand": "Tumi",
+          "category": "travel",
+          "subcategory": "carry-on-luggage",
+          "releaseYear": 2019,
+          "msrp": 895,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["gunmetal"],
+            "patterns": ["ballistic weave"],
+            "finish": "matte",
+            "designCues": ["FXT ballistic nylon exterior", "leather accents", "premium hardware"],
+            "distinguishingFeatures": ["FXT ballistic nylon", "expansion capability", "U-zip access", "Tumi Tracer registration", "front pocket organizer"],
+            "logoPlacement": "front leather patch"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "FXT ballistic nylon",
+            "dimensions": "22 x 14 x 9 in (expandable)",
+            "weight": "10.4 lbs",
+            "capacity": "42L",
+            "wheels": "4-wheel spinner",
+            "lock": "integrated TSA"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["tumi", "alpha", "carry-on", "ballistic nylon", "expandable", "business luggage", "premium carry-on"],
+          "aliases": ["Tumi Alpha 3", "Alpha 3 Carry-On", "Tumi Alpha International"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Briggs & Riley",
+      "aliases": ["Briggs and Riley", "B&R"],
+      "products": [
+        {
+          "id": "briggs-riley-baseline-intl-spinner",
+          "name": "Baseline International Carry-On Expandable Spinner",
+          "brand": "Briggs & Riley",
+          "category": "travel",
+          "subcategory": "carry-on-luggage",
+          "releaseYear": 2020,
+          "msrp": 689,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["gunmetal"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["ballistic nylon exterior", "CX expansion compression", "spinner wheels"],
+            "distinguishingFeatures": ["CX compression-expansion technology", "lifetime guarantee", "outsider handle (more interior space)", "Speed Thru pocket"],
+            "logoPlacement": "front center tag"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "ballistic nylon",
+            "dimensions": "21 x 14 x 9 in",
+            "weight": "8.7 lbs",
+            "capacity": "37L (expandable to 41L)",
+            "wheels": "4-wheel spinner",
+            "lock": "TSA-approved combination"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Olive", "colorway": "Olive", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["briggs and riley", "baseline", "carry-on", "expandable", "spinner", "lifetime guarantee", "CX compression"],
+          "aliases": ["Baseline Carry-On", "B&R Baseline Spinner"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 91
+        }
+      ]
+    },
+    {
+      "name": "Peak Design",
+      "aliases": ["PD"],
+      "products": [
+        {
+          "id": "peak-design-travel-backpack-45l",
+          "name": "Travel Backpack 45L",
+          "brand": "Peak Design",
+          "category": "travel",
+          "subcategory": "travel-backpacks",
+          "releaseYear": 2019,
+          "msrp": 299,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["weatherproof shell", "clean minimalist exterior", "side-loading laptop access", "expandable roll-top"],
+            "distinguishingFeatures": ["45L expandable (35-45L)", "weatherproof 400D nylon canvas", "full rear panel laptop sleeve", "side-loading access", "passport and document pockets", "MagLatch buckle system"],
+            "logoPlacement": "front center small logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "400D nylon canvas (weatherproof)",
+            "dimensions": "22 x 13 x 9.5 in",
+            "weight": "4.6 lbs",
+            "capacity": "35-45L (expandable)",
+            "laptop": "up to 16 inch",
+            "access": "side-loading, full perimeter zip"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Sage", "colorway": "Sage", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["travel backpack", "one bag travel", "carry-on backpack", "peak design", "45L", "photography travel", "expandable backpack"],
+          "aliases": ["PD Travel Pack 45L", "Peak Design 45L", "BTR-45"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        },
+        {
+          "id": "peak-design-packing-cube-set",
+          "name": "Packing Cube (Set)",
+          "brand": "Peak Design",
+          "category": "travel",
+          "subcategory": "packing-organizers",
+          "releaseYear": 2019,
+          "msrp": 79,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["tear-resistant nylon", "dual-compartment design", "compression zipper"],
+            "distinguishingFeatures": ["dual-compartment (clean/dirty separation)", "tear-resistant recycled nylon", "expansion/compression zipper", "internal divider"],
+            "logoPlacement": "front tab logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "tear-resistant recycled nylon",
+            "sizes": "small and medium (set)",
+            "features": "dual-compartment, compression zipper"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Sage", "colorway": "Sage", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["packing cubes", "packing organizer", "travel organizer", "compression cube", "peak design packing"],
+          "aliases": ["PD Packing Cubes", "Peak Design Cube Set"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Aer",
+      "aliases": ["AER"],
+      "products": [
+        {
+          "id": "aer-travel-pack-3",
+          "name": "Travel Pack 3",
+          "brand": "Aer",
+          "category": "travel",
+          "subcategory": "travel-backpacks",
+          "releaseYear": 2023,
+          "msrp": 279,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["1680D Cordura nylon exterior", "clamshell opening", "clean urban design"],
+            "distinguishingFeatures": ["35L capacity", "1680D Cordura ballistic nylon", "full clamshell opening", "dedicated shoe pocket", "suspended laptop compartment", "luggage pass-through"],
+            "logoPlacement": "front center small logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "1680D Cordura ballistic nylon",
+            "dimensions": "21.5 x 13 x 8.5 in",
+            "weight": "4.1 lbs",
+            "capacity": "35L",
+            "laptop": "up to 16 inch",
+            "access": "clamshell, quick-access front"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Gray", "colorway": "Gray", "availability": "current", "specifications": {} },
+            { "variantName": "X-Pac", "colorway": "X-Pac", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["travel backpack", "one bag travel", "carry-on backpack", "aer", "cordura", "clamshell backpack", "urban travel"],
+          "aliases": ["Aer TP3", "Aer Travel Pack 3rd Gen"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 91
+        }
+      ]
+    },
+    {
+      "name": "Bellroy",
+      "aliases": [],
+      "products": [
+        {
+          "id": "bellroy-transit-backpack",
+          "name": "Transit Backpack",
+          "brand": "Bellroy",
+          "category": "travel",
+          "subcategory": "travel-backpacks",
+          "releaseYear": 2020,
+          "msrp": 249,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["recycled woven fabric", "clean minimalist exterior", "structured silhouette"],
+            "distinguishingFeatures": ["28L capacity", "recycled fabric exterior", "dedicated laptop compartment", "hidden passport pocket", "molded back panel", "key clip"],
+            "logoPlacement": "front small embossed logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "recycled woven fabric",
+            "dimensions": "19.7 x 12.2 x 7.5 in",
+            "weight": "3.1 lbs",
+            "capacity": "28L",
+            "laptop": "up to 15 inch",
+            "access": "top and side access"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Ranger Green", "colorway": "Ranger Green", "availability": "current", "specifications": {} },
+            { "variantName": "Lunar", "colorway": "Lunar", "availability": "current", "specifications": {} },
+            { "variantName": "Basalt", "colorway": "Basalt", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["travel backpack", "bellroy", "recycled backpack", "minimalist backpack", "transit", "commuter travel"],
+          "aliases": ["Bellroy Transit", "Transit Pack"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "bellroy-travel-wallet",
+          "name": "Travel Wallet",
+          "brand": "Bellroy",
+          "category": "travel",
+          "subcategory": "travel-accessories",
+          "releaseYear": 2011,
+          "msrp": 109,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["tan"],
+            "patterns": ["solid"],
+            "finish": "smooth leather",
+            "designCues": ["premium leather exterior", "slim profile", "bifold design"],
+            "distinguishingFeatures": ["full-grain leather", "passport holder slot", "RFID protection", "pull-tab card access", "micro pen slot", "SIM card storage"],
+            "logoPlacement": "interior embossed"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "premium leather (environmentally certified tannery)",
+            "dimensions": "5.7 x 3.9 x 0.5 in",
+            "features": "RFID protection, passport slot, boarding pass slot"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Caramel", "colorway": "Caramel", "availability": "current", "specifications": {} },
+            { "variantName": "Teal", "colorway": "Teal", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["travel wallet", "passport wallet", "RFID wallet", "leather wallet", "bellroy", "passport holder"],
+          "aliases": ["Bellroy Passport Wallet"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Nomatic",
+      "aliases": ["NOMATIC"],
+      "products": [
+        {
+          "id": "nomatic-travel-pack",
+          "name": "Travel Pack",
+          "brand": "Nomatic",
+          "category": "travel",
+          "subcategory": "travel-backpacks",
+          "releaseYear": 2017,
+          "msrp": 299,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["water-resistant tarpaulin exterior", "angular structured shape", "functional design"],
+            "distinguishingFeatures": ["20-30L expandable", "water-resistant tarpaulin material", "dedicated shoe compartment", "RFID-safe pocket", "full perimeter zip opening", "cord pass-through for charging"],
+            "logoPlacement": "front center logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "water-resistant tarpaulin and Kodra 500D nylon",
+            "dimensions": "21 x 14 x 8 in (expanded)",
+            "weight": "4.0 lbs",
+            "capacity": "20-30L (expandable)",
+            "laptop": "up to 15 inch",
+            "access": "full perimeter zip, quick-access top"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["travel backpack", "one bag travel", "expandable backpack", "nomatic", "shoe compartment", "RFID backpack", "kickstarter luggage"],
+          "aliases": ["Nomatic Travel Bag", "Nomatic 30L"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 89
+        }
+      ]
+    },
+    {
+      "name": "Osprey",
+      "aliases": ["Osprey Packs"],
+      "products": [
+        {
+          "id": "osprey-farpoint-40",
+          "name": "Farpoint 40",
+          "brand": "Osprey",
+          "category": "travel",
+          "subcategory": "travel-backpacks",
+          "releaseYear": 2018,
+          "msrp": 185,
+          "visualSignature": {
+            "primaryColors": ["grey"],
+            "secondaryColors": ["green"],
+            "patterns": ["two-tone"],
+            "finish": "matte",
+            "designCues": ["panel-loading design", "stowaway harness and hipbelt", "compression straps"],
+            "distinguishingFeatures": ["40L carry-on compliant size", "stowaway harness system", "lockable zippers", "padded laptop and tablet sleeve", "mesh front pocket"],
+            "logoPlacement": "front center logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "450D recycled twist dobby polyester",
+            "dimensions": "21.7 x 13.8 x 9.4 in",
+            "weight": "3.4 lbs",
+            "capacity": "40L",
+            "laptop": "up to 15 inch",
+            "access": "panel-loading, front zip"
+          },
+          "variants": [
+            { "variantName": "Tunnel Vision Grey", "colorway": "Tunnel Vision Grey", "availability": "current", "specifications": {} },
+            { "variantName": "Gopher Green", "colorway": "Gopher Green", "availability": "current", "specifications": {} },
+            { "variantName": "Muted Space Blue", "colorway": "Muted Space Blue", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["travel backpack", "carry-on backpack", "osprey", "farpoint", "40L", "backpacking", "panel loader", "stowaway harness"],
+          "aliases": ["Osprey Farpoint 40L", "Farpoint Travel Pack"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "osprey-daylite-sling-6l",
+          "name": "Daylite Sling 6L",
+          "brand": "Osprey",
+          "category": "travel",
+          "subcategory": "slings",
+          "releaseYear": 2019,
+          "msrp": 42,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["compact sling design", "crossbody strap", "stretch mesh front pocket"],
+            "distinguishingFeatures": ["6L capacity", "stretch mesh front pocket", "crossbody sling strap", "key clip attachment", "internal zippered pocket"],
+            "logoPlacement": "front center logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "recycled 200D bluesign-approved nylon",
+            "dimensions": "14.2 x 7.9 x 5.1 in",
+            "weight": "0.5 lbs",
+            "capacity": "6L"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Ash/Mamba Black", "colorway": "Ash/Mamba Black", "availability": "current", "specifications": {} },
+            { "variantName": "Wave Blue", "colorway": "Wave Blue", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["sling bag", "crossbody", "day pack", "osprey sling", "daylite", "travel sling", "small carry"],
+          "aliases": ["Daylite Sling", "Osprey Sling 6L"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 89
+        }
+      ]
+    },
+    {
+      "name": "Monos",
+      "aliases": ["Monos Travel"],
+      "products": [
+        {
+          "id": "monos-carry-on-pro",
+          "name": "Carry-On Pro",
+          "brand": "Monos",
+          "category": "travel",
+          "subcategory": "carry-on-luggage",
+          "releaseYear": 2019,
+          "msrp": 295,
+          "visualSignature": {
+            "primaryColors": ["blue"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["unibody polycarbonate shell", "aerospace-grade aluminum telescopic handle", "minimalist design"],
+            "distinguishingFeatures": ["aerospace-grade aluminum frame", "whisper-quiet Hinomoto wheels", "built-in USB-C charger", "vegan leather details", "antimicrobial interior lining"],
+            "logoPlacement": "front bottom embossed"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "German Makrolon polycarbonate",
+            "dimensions": "22 x 14 x 9 in",
+            "weight": "7.6 lbs",
+            "capacity": "37L",
+            "wheels": "Hinomoto Japanese spinner",
+            "lock": "TSA-approved combination"
+          },
+          "variants": [
+            { "variantName": "Pacific Blue", "colorway": "Pacific Blue", "availability": "current", "specifications": {} },
+            { "variantName": "Midnight", "colorway": "Midnight", "availability": "current", "specifications": {} },
+            { "variantName": "Storm Grey", "colorway": "Storm Grey", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["carry-on", "luggage", "monos", "hardshell", "USB-C luggage", "quiet wheels", "polycarbonate suitcase"],
+          "aliases": ["Monos Carry On", "Monos Pro"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Calpak",
+      "aliases": ["CALPAK"],
+      "products": [
+        {
+          "id": "calpak-ambeur-carry-on",
+          "name": "Ambeur Carry-On",
+          "brand": "Calpak",
+          "category": "travel",
+          "subcategory": "carry-on-luggage",
+          "releaseYear": 2019,
+          "msrp": 195,
+          "visualSignature": {
+            "primaryColors": ["gold"],
+            "secondaryColors": ["rose gold"],
+            "patterns": ["solid"],
+            "finish": "metallic",
+            "designCues": ["metallic polycarbonate shell", "fashion-forward aesthetic", "spinner wheels"],
+            "distinguishingFeatures": ["metallic hardshell finish", "TSA-approved lock", "8-wheel spinner system", "interior mesh divider"],
+            "logoPlacement": "front center badge"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "polycarbonate with ABS",
+            "dimensions": "22 x 14 x 9 in",
+            "weight": "7.2 lbs",
+            "capacity": "36L",
+            "wheels": "8-wheel spinner",
+            "lock": "TSA-approved combination"
+          },
+          "variants": [
+            { "variantName": "Gold", "colorway": "Gold", "availability": "current", "specifications": {} },
+            { "variantName": "Rose Gold", "colorway": "Rose Gold", "availability": "current", "specifications": {} },
+            { "variantName": "Silver", "colorway": "Silver", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Emerald", "colorway": "Emerald", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["carry-on", "luggage", "calpak", "metallic luggage", "gold suitcase", "rose gold luggage", "fashion luggage"],
+          "aliases": ["Calpak Ambeur", "Ambeur Suitcase"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Beis",
+      "aliases": ["BEIS", "Beis Travel"],
+      "products": [
+        {
+          "id": "beis-carry-on-roller",
+          "name": "The Carry-On Roller",
+          "brand": "Beis",
+          "category": "travel",
+          "subcategory": "carry-on-luggage",
+          "releaseYear": 2018,
+          "msrp": 228,
+          "visualSignature": {
+            "primaryColors": ["beige"],
+            "secondaryColors": ["gold"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["polycarbonate shell", "fashion-forward neutral palette", "cushion top handle"],
+            "distinguishingFeatures": ["built-in weight indicator", "front pocket for laptop/tablet", "cushion top handle", "TSA-approved lock", "interior compression"],
+            "logoPlacement": "front badge"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "polycarbonate",
+            "dimensions": "22 x 14 x 9 in",
+            "weight": "8.3 lbs",
+            "capacity": "38L",
+            "wheels": "360-degree spinner",
+            "lock": "TSA-approved combination"
+          },
+          "variants": [
+            { "variantName": "Beige", "colorway": "Beige", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Citron", "colorway": "Citron", "availability": "current", "specifications": {} },
+            { "variantName": "Olive", "colorway": "Olive", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["carry-on", "luggage", "beis", "weight indicator", "front pocket suitcase", "neutral luggage", "fashion travel"],
+          "aliases": ["Beis Carry-On", "Beis Roller"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 89
+        }
+      ]
+    },
+    {
+      "name": "Tom Bihn",
+      "aliases": ["TomBihn"],
+      "products": [
+        {
+          "id": "tom-bihn-aeronaut-45",
+          "name": "Aeronaut 45",
+          "brand": "Tom Bihn",
+          "category": "travel",
+          "subcategory": "travel-bags",
+          "releaseYear": 2005,
+          "msrp": 350,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["convertible bag design", "U-shape wide opening", "ballistic nylon exterior"],
+            "distinguishingFeatures": ["45L convertible carry/shoulder/backpack", "525d ballistic nylon", "U-shape wide opening", "internal O-ring attachment points", "YKK zippers", "made in USA"],
+            "logoPlacement": "front small tag"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "525d ballistic nylon (or 1050d option)",
+            "dimensions": "22 x 14 x 9 in",
+            "weight": "3.1 lbs",
+            "capacity": "45L",
+            "carry modes": "carry handles, shoulder strap, backpack straps (sold separately)"
+          },
+          "variants": [
+            { "variantName": "Black/Steel", "colorway": "Black/Steel", "availability": "current", "specifications": {} },
+            { "variantName": "Navy/Northwest Sky", "colorway": "Navy/Northwest Sky", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["travel bag", "convertible bag", "one bag travel", "tom bihn", "aeronaut", "45L duffel", "carry-on bag", "made in USA"],
+          "aliases": ["Aeronaut 45L", "TB Aeronaut"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Fjallraven",
+      "aliases": ["Fjallraven", "Fjall Raven"],
+      "products": [
+        {
+          "id": "fjallraven-kanken",
+          "name": "Kanken Backpack",
+          "brand": "Fjallraven",
+          "category": "travel",
+          "subcategory": "daypacks",
+          "releaseYear": 1978,
+          "msrp": 80,
+          "visualSignature": {
+            "primaryColors": ["red"],
+            "secondaryColors": ["orange"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["boxy rectangular shape", "dual top handles", "iconic Swedish design", "Vinylon F fabric"],
+            "distinguishingFeatures": ["Vinylon F water-resistant fabric", "dual top handles", "padded shoulder straps", "front zip pocket", "side pockets", "reflective logo", "sits upright"],
+            "logoPlacement": "front center reflective patch"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "Vinylon F",
+            "dimensions": "15 x 10.6 x 5.1 in",
+            "weight": "0.7 lbs",
+            "capacity": "16L"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Deep Red", "colorway": "Deep Red", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Ochre", "colorway": "Ochre", "availability": "current", "specifications": {} },
+            { "variantName": "Frost Green", "colorway": "Frost Green", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["kanken", "fjallraven", "daypack", "school backpack", "swedish backpack", "iconic backpack", "vinylon", "16L"],
+          "aliases": ["Kanken", "Kanken Classic", "Fjallraven Kanken Classic"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        }
+      ]
+    },
+    {
+      "name": "July",
+      "aliases": ["July Luggage", "July Travel"],
+      "products": [
+        {
+          "id": "july-carry-on-light",
+          "name": "Carry On Light",
+          "brand": "July",
+          "category": "travel",
+          "subcategory": "carry-on-luggage",
+          "releaseYear": 2020,
+          "msrp": 285,
+          "visualSignature": {
+            "primaryColors": ["charcoal"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["polycarbonate shell", "minimalist design", "Hinomoto wheels"],
+            "distinguishingFeatures": ["ultra-lightweight polycarbonate", "Hinomoto Japanese spinner wheels", "interior compression system", "TSA-approved lock", "ejectable battery option"],
+            "logoPlacement": "front bottom embossed"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "polycarbonate",
+            "dimensions": "21.7 x 13.8 x 9 in",
+            "weight": "5.5 lbs",
+            "capacity": "38L",
+            "wheels": "Hinomoto Japanese spinner",
+            "lock": "TSA-approved combination"
+          },
+          "variants": [
+            { "variantName": "Charcoal", "colorway": "Charcoal", "availability": "current", "specifications": {} },
+            { "variantName": "Forest", "colorway": "Forest", "availability": "current", "specifications": {} },
+            { "variantName": "Sand", "colorway": "Sand", "availability": "current", "specifications": {} },
+            { "variantName": "Moss", "colorway": "Moss", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["carry-on", "luggage", "july", "lightweight luggage", "hinomoto wheels", "polycarbonate carry-on"],
+          "aliases": ["July Carry On", "July Light"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Eagle Creek",
+      "aliases": ["EagleCreek"],
+      "products": [
+        {
+          "id": "eagle-creek-pack-it-reveal-cube-set",
+          "name": "Pack-It Reveal Cube Set",
+          "brand": "Eagle Creek",
+          "category": "travel",
+          "subcategory": "packing-organizers",
+          "releaseYear": 2020,
+          "msrp": 46,
+          "visualSignature": {
+            "primaryColors": ["yellow"],
+            "secondaryColors": ["blue"],
+            "patterns": ["solid"],
+            "finish": "translucent",
+            "designCues": ["translucent ripstop fabric", "bright travel-friendly colors", "ultralight construction"],
+            "distinguishingFeatures": ["translucent ripstop material", "Ultra-Lite construction", "see-through panels for easy identification", "durable zippers"],
+            "logoPlacement": "front tag"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "translucent ripstop silnylon",
+            "weight": "2.2 oz (set)",
+            "sizes": "extra-small, small, medium (set of 3)"
+          },
+          "variants": [
+            { "variantName": "Sahara Yellow", "colorway": "Sahara Yellow", "availability": "current", "specifications": {} },
+            { "variantName": "Aizome Blue", "colorway": "Aizome Blue", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["packing cubes", "packing organizer", "eagle creek", "pack-it", "translucent cubes", "ultralight packing", "reveal cubes"],
+          "aliases": ["Pack-It Reveal Set", "Eagle Creek Packing Cubes"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Pelican",
+      "aliases": ["Pelican Products", "Pelican Cases"],
+      "products": [
+        {
+          "id": "pelican-air-1535",
+          "name": "Air 1535",
+          "brand": "Pelican",
+          "category": "travel",
+          "subcategory": "hard-cases",
+          "releaseYear": 2017,
+          "msrp": 249,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["yellow"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["HPX2 resin shell", "industrial rugged design", "Press & Pull latches"],
+            "distinguishingFeatures": ["HPX2 high-performance resin", "watertight O-ring seal (IP67)", "Press & Pull latches", "pick-and-pluck foam interior", "automatic purge valve", "stainless steel hardware"],
+            "logoPlacement": "top lid center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "HPX2 high-performance resin",
+            "exterior_dimensions": "22 x 14 x 9 in",
+            "interior_dimensions": "20.4 x 11.2 x 7.2 in",
+            "weight": "9.1 lbs",
+            "waterproof_rating": "IP67",
+            "wheels": "4-wheel spinner"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Silver", "colorway": "Silver", "availability": "current", "specifications": {} },
+            { "variantName": "OD Green", "colorway": "OD Green", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["hard case", "pelican", "waterproof case", "protective case", "carry-on case", "equipment case", "watertight luggage", "foam case"],
+          "aliases": ["Pelican 1535", "1535 Air", "Pelican Air Carry-On"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        }
+      ]
+    },
+    {
+      "name": "Sea to Summit",
+      "aliases": ["Sea2Summit", "STS"],
+      "products": [
+        {
+          "id": "sea-to-summit-reactor-liner",
+          "name": "Reactor Liner",
+          "brand": "Sea to Summit",
+          "category": "travel",
+          "subcategory": "travel-accessories",
+          "releaseYear": 2010,
+          "msrp": 69,
+          "visualSignature": {
+            "primaryColors": ["grey"],
+            "secondaryColors": ["blue"],
+            "patterns": ["solid"],
+            "finish": "fabric",
+            "designCues": ["lightweight sleeping bag liner", "mummy shape", "compact stuff sack"],
+            "distinguishingFeatures": ["Thermolite Reactor fabric", "adds up to 14 degrees F warmth", "mummy shape with drawcord", "ultra-compact stuff sack", "machine washable"],
+            "logoPlacement": "top edge tag"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "Thermolite hollow-core fiber",
+            "dimensions": "83 x 33 in (fits inside sleeping bag)",
+            "weight": "8.8 oz",
+            "packed_size": "5.1 x 3.9 in",
+            "warmth_added": "up to 14°F / 8°C",
+            "shape": "mummy"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Grey", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["sleeping bag liner", "reactor", "sea to summit", "thermolite", "hostel liner", "travel liner", "sleep sheet", "warmth liner"],
+          "aliases": ["Reactor Sleeping Bag Liner", "STS Reactor", "Thermolite Liner"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "WANDRD",
+      "aliases": ["Wandrd"],
+      "products": [
+        {
+          "id": "wandrd-prvke-21l",
+          "name": "PRVKE 21L",
+          "brand": "WANDRD",
+          "category": "travel",
+          "subcategory": "travel-backpacks",
+          "releaseYear": 2019,
+          "msrp": 239,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["green"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["roll-top closure", "weatherproof exterior", "camera cube compatible"],
+            "distinguishingFeatures": ["roll-top design for variable capacity", "camera cube compatible", "weatherproof tarpaulin material", "side access for camera gear", "laptop sleeve"],
+            "logoPlacement": "front center logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "weatherproof tarpaulin",
+            "capacity": "21L",
+            "laptop": "up to 14 inch",
+            "access": "roll-top, side access",
+            "features": "camera cube compatible, weatherproof"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Wasatch Green", "colorway": "Wasatch Green", "availability": "current", "specifications": {} },
+            { "variantName": "Aegean Blue", "colorway": "Aegean Blue", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["travel backpack", "camera backpack", "roll-top backpack", "wandrd", "prvke", "21L", "photography backpack", "weatherproof backpack"],
+          "aliases": ["WANDRD PRVKE 21", "PRVKE 21", "WANDRD PRVKE Small"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 89
+        },
+        {
+          "id": "wandrd-prvke-31l",
+          "name": "PRVKE 31L",
+          "brand": "WANDRD",
+          "category": "travel",
+          "subcategory": "travel-backpacks",
+          "releaseYear": 2019,
+          "msrp": 269,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["roll-top closure", "expandable design", "weatherproof exterior"],
+            "distinguishingFeatures": ["roll-top expandable design", "laptop sleeve", "camera cube compatible", "side camera access", "weatherproof tarpaulin material"],
+            "logoPlacement": "front center logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "weatherproof tarpaulin",
+            "capacity": "31L",
+            "laptop": "up to 16 inch",
+            "access": "roll-top, side access",
+            "features": "expandable, camera cube compatible, weatherproof"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["travel backpack", "camera backpack", "roll-top backpack", "wandrd", "prvke", "31L", "expandable backpack", "photography travel"],
+          "aliases": ["WANDRD PRVKE 31", "PRVKE 31", "WANDRD PRVKE Large"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 89
+        }
+      ]
+    },
+    {
+      "name": "Pakt",
+      "aliases": ["PAKT", "Pakt Bags"],
+      "products": [
+        {
+          "id": "pakt-one-travel-backpack",
+          "name": "One Travel Backpack",
+          "brand": "Pakt",
+          "category": "travel",
+          "subcategory": "travel-backpacks",
+          "releaseYear": 2019,
+          "msrp": 295,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["green"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["clamshell opening", "recycled materials", "clean minimalist exterior"],
+            "distinguishingFeatures": ["35L capacity", "clamshell opening", "recycled materials construction", "dedicated shoe compartment", "laptop and tablet sleeve"],
+            "logoPlacement": "front center logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "recycled materials",
+            "capacity": "35L",
+            "access": "clamshell opening",
+            "features": "shoe compartment, laptop sleeve, recycled construction"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Green", "colorway": "Green", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["travel backpack", "one bag travel", "pakt", "recycled backpack", "clamshell backpack", "35L", "sustainable travel", "shoe compartment"],
+          "aliases": ["Pakt One", "Pakt Travel Backpack", "Pakt One Bag"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        },
+        {
+          "id": "pakt-travel-duffel",
+          "name": "Travel Duffel",
+          "brand": "Pakt",
+          "category": "travel",
+          "subcategory": "travel-bags",
+          "releaseYear": 2020,
+          "msrp": 245,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["duffel bag design", "multiple carry modes", "recycled materials"],
+            "distinguishingFeatures": ["45L carry-on compliant size", "multiple carry modes (hand, shoulder, backpack)", "recycled materials", "wide-mouth opening"],
+            "logoPlacement": "side logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "recycled materials",
+            "capacity": "45L",
+            "carry_modes": "hand carry, shoulder strap, backpack straps",
+            "features": "carry-on size, recycled construction"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["travel duffel", "duffel bag", "pakt", "carry-on duffel", "recycled duffel", "45L", "sustainable travel bag"],
+          "aliases": ["Pakt Duffel", "Pakt 45L Duffel"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 87
+        }
+      ]
+    },
+    {
+      "name": "Matador",
+      "aliases": ["Matador Travel"],
+      "products": [
+        {
+          "id": "matador-seg42-travel-pack",
+          "name": "SEG42 Travel Pack",
+          "brand": "Matador",
+          "category": "travel",
+          "subcategory": "travel-backpacks",
+          "releaseYear": 2022,
+          "msrp": 250,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["segmented packing system", "weatherproof exterior", "compressible design"],
+            "distinguishingFeatures": ["42L segmented packing system", "weatherproof construction", "compresses flat for storage", "built-in organization segments"],
+            "logoPlacement": "front center logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "weatherproof nylon",
+            "capacity": "42L",
+            "features": "segmented packing, compresses flat, weatherproof"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["travel backpack", "segmented backpack", "matador", "SEG42", "42L", "compressible backpack", "weatherproof travel pack"],
+          "aliases": ["Matador SEG42", "SEG42", "Matador SEG 42L"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        },
+        {
+          "id": "matador-flatpak-toiletry-bottle-set",
+          "name": "FlatPak Toiletry Bottle Set",
+          "brand": "Matador",
+          "category": "travel",
+          "subcategory": "packing-organizers",
+          "releaseYear": 2018,
+          "msrp": 25,
+          "visualSignature": {
+            "primaryColors": ["clear"],
+            "secondaryColors": ["black"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["flat lay design", "refillable bottles", "compact form factor"],
+            "distinguishingFeatures": ["refillable flat bottles", "TSA approved size", "lay flat design saves space", "leak-proof seal"],
+            "logoPlacement": "bottle label"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "flexible polymer",
+            "features": "refillable, TSA approved, lay flat design",
+            "tsa_approved": "yes"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Clear/Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["toiletry bottles", "travel bottles", "matador", "flatpak", "TSA bottles", "refillable bottles", "flat travel bottles"],
+          "aliases": ["Matador FlatPak", "FlatPak Bottles", "Matador Toiletry Bottles"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 86
+        }
+      ]
+    },
+    {
+      "name": "Tortuga",
+      "aliases": ["Tortuga Backpacks", "Tortuga Travel"],
+      "products": [
+        {
+          "id": "tortuga-outbreaker-45l",
+          "name": "Outbreaker 45L",
+          "brand": "Tortuga",
+          "category": "travel",
+          "subcategory": "travel-backpacks",
+          "releaseYear": 2019,
+          "msrp": 269,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["maximum carry-on size", "clamshell opening", "structured exterior"],
+            "distinguishingFeatures": ["45L maximum carry-on compliant size", "clamshell suitcase-style opening", "dedicated laptop and tablet sleeves", "padded hip belt", "lockable zippers"],
+            "logoPlacement": "front center logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "VX21 sailcloth",
+            "capacity": "45L",
+            "laptop": "up to 17 inch",
+            "tablet": "up to 10 inch",
+            "access": "clamshell opening",
+            "features": "max carry-on size, lockable zippers"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["travel backpack", "one bag travel", "tortuga", "outbreaker", "45L", "max carry-on backpack", "clamshell backpack", "digital nomad"],
+          "aliases": ["Tortuga Outbreaker", "Outbreaker 45", "Tortuga 45L"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 89
+        },
+        {
+          "id": "tortuga-travel-pouches-set-of-3",
+          "name": "Travel Pouches Set of 3",
+          "brand": "Tortuga",
+          "category": "travel",
+          "subcategory": "packing-organizers",
+          "releaseYear": 2020,
+          "msrp": 35,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["mesh and fabric construction", "zippered pouches", "various sizes"],
+            "distinguishingFeatures": ["set of 3 various sizes", "mesh and fabric construction", "zippered closures", "versatile organization"],
+            "logoPlacement": "front tag"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "mesh and fabric",
+            "sizes": "small, medium, large (set of 3)",
+            "features": "zippered, various sizes"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["travel pouches", "packing organizer", "tortuga", "zippered pouches", "travel organization", "pouch set"],
+          "aliases": ["Tortuga Pouches", "Tortuga Packing Pouches"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ]
+    },
+    {
+      "name": "Nite Ize",
+      "aliases": ["NiteIze", "Nite-Ize"],
+      "products": [
+        {
+          "id": "nite-ize-s-biner-dual-carabiner",
+          "name": "S-Biner Dual Carabiner",
+          "brand": "Nite Ize",
+          "category": "travel",
+          "subcategory": "travel-accessories",
+          "releaseYear": 2005,
+          "msrp": 3,
+          "visualSignature": {
+            "primaryColors": ["silver"],
+            "secondaryColors": ["black"],
+            "patterns": ["solid"],
+            "finish": "metallic",
+            "designCues": ["S-shaped dual-gate design", "stainless steel construction", "compact form"],
+            "distinguishingFeatures": ["dual-gate S-shaped carabiner", "stainless steel construction", "TSA-friendly (non-locking)", "lightweight and compact"],
+            "logoPlacement": "stamped on body"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "stainless steel",
+            "features": "dual-gate, TSA-friendly, non-locking"
+          },
+          "variants": [
+            { "variantName": "Stainless Steel", "colorway": "Silver", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["carabiner", "s-biner", "nite ize", "dual carabiner", "key clip", "travel clip", "TSA carabiner", "stainless steel carabiner"],
+          "aliases": ["S-Biner", "Nite Ize Carabiner", "S-Biner Dual"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        },
+        {
+          "id": "nite-ize-gear-tie-reusable-twist-ties",
+          "name": "Gear Tie Reusable Twist Ties",
+          "brand": "Nite Ize",
+          "category": "travel",
+          "subcategory": "travel-accessories",
+          "releaseYear": 2008,
+          "msrp": 5,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["orange"],
+            "patterns": ["solid"],
+            "finish": "rubber",
+            "designCues": ["bendable rubber-coated wire", "flexible form factor", "bright accent colors"],
+            "distinguishingFeatures": ["bendable rubber-coated wire", "reusable twist tie design", "cable management", "holds shape when bent"],
+            "logoPlacement": "packaging only"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "rubber-coated bendable wire",
+            "features": "reusable, bendable, cable management"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Assorted Colors", "colorway": "Assorted", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gear tie", "twist tie", "nite ize", "cable management", "reusable tie", "bendable tie", "travel organizer"],
+          "aliases": ["Gear Tie", "Nite Ize Twist Ties", "Reusable Gear Ties"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 87
+        }
+      ]
+    },
+    {
+      "name": "Loop",
+      "aliases": ["Loop Earplugs"],
+      "products": [
+        {
+          "id": "loop-quiet-earplugs",
+          "name": "Quiet Earplugs",
+          "brand": "Loop",
+          "category": "travel",
+          "subcategory": "travel-accessories",
+          "releaseYear": 2019,
+          "msrp": 34,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["white"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["circular loop design", "reusable silicone construction", "compact carrying case"],
+            "distinguishingFeatures": ["27dB noise reduction", "reusable silicone tips", "iconic loop-shaped design", "compact carry case", "multiple ear tip sizes"],
+            "logoPlacement": "outer loop surface"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "soft-touch silicone",
+            "noise_reduction": "27dB (NRR)",
+            "features": "reusable, multiple ear tip sizes, carry case included"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} },
+            { "variantName": "Equinox", "colorway": "Equinox", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["earplugs", "noise reduction", "loop", "quiet earplugs", "sleep earplugs", "travel earplugs", "reusable earplugs", "silicone earplugs"],
+          "aliases": ["Loop Quiet", "Loop Sleep Earplugs"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 89
+        },
+        {
+          "id": "loop-experience-plus-earplugs",
+          "name": "Experience Plus Earplugs",
+          "brand": "Loop",
+          "category": "travel",
+          "subcategory": "travel-accessories",
+          "releaseYear": 2021,
+          "msrp": 39,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["gold"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["circular loop design", "reusable construction", "premium finish"],
+            "distinguishingFeatures": ["18dB noise reduction", "designed for concerts and travel", "acoustic filter for clear sound", "reusable", "multiple ear tip sizes", "mute accessory for extra reduction"],
+            "logoPlacement": "outer loop surface"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "soft-touch silicone with acoustic filter",
+            "noise_reduction": "18dB (NRR)",
+            "features": "acoustic filter, mute accessory, multiple ear tip sizes, carry case"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Gold", "colorway": "Gold", "availability": "current", "specifications": {} },
+            { "variantName": "Silver", "colorway": "Silver", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["earplugs", "concert earplugs", "loop", "experience plus", "travel earplugs", "noise filter", "acoustic earplugs", "reusable earplugs"],
+          "aliases": ["Loop Experience+", "Loop Experience Plus", "Loop Concert Earplugs"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 89
+        }
+      ]
+    },
+    {
+      "name": "Ridge",
+      "aliases": ["The Ridge"],
+      "products": [
+        {
+          "id": "ridge-carry-on",
+          "name": "Carry-On",
+          "brand": "Ridge",
+          "category": "travel",
+          "subcategory": "carry-on-luggage",
+          "releaseYear": 2023,
+          "msrp": 495,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["polycarbonate shell", "aluminum frame closure", "premium spinner wheels"],
+            "distinguishingFeatures": ["polycarbonate shell", "aluminum frame (no zippers)", "premium Japanese spinner wheels", "TSA-approved lock", "interior compression system"],
+            "logoPlacement": "front center logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "polycarbonate with aluminum frame",
+            "wheels": "premium Japanese spinner",
+            "lock": "TSA-approved",
+            "closure": "aluminum frame (zipperless)"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Forest", "colorway": "Forest", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["carry-on", "luggage", "ridge", "aluminum frame", "polycarbonate", "zipperless luggage", "premium carry-on", "spinner luggage"],
+          "aliases": ["Ridge Carry On", "The Ridge Carry-On", "Ridge Luggage"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        },
+        {
+          "id": "ridge-commuter-backpack",
+          "name": "Commuter Backpack",
+          "brand": "Ridge",
+          "category": "travel",
+          "subcategory": "travel-backpacks",
+          "releaseYear": 2022,
+          "msrp": 199,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["weatherproof exterior", "clean structured design", "RFID pocket"],
+            "distinguishingFeatures": ["weatherproof construction", "dedicated laptop sleeve", "RFID-blocking pocket", "multiple organization pockets"],
+            "logoPlacement": "front center logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "weatherproof fabric",
+            "laptop": "up to 16 inch",
+            "features": "RFID pocket, weatherproof, laptop sleeve"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["commuter backpack", "ridge", "weatherproof backpack", "RFID backpack", "laptop backpack", "daily carry", "travel commuter"],
+          "aliases": ["Ridge Commuter", "The Ridge Commuter Backpack", "Ridge Backpack"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 87
+        }
+      ]
+    }
+  ]
+}

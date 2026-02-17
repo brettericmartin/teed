@@ -1,0 +1,1445 @@
+{
+  "category": "fitness",
+  "schemaVersion": "1.0.0",
+  "lastUpdated": "2026-02-16T00:00:00.000Z",
+  "brands": [
+    {
+      "name": "Garmin",
+      "aliases": [],
+      "products": [
+        {
+          "id": "garmin-forerunner-265",
+          "name": "Garmin Forerunner 265",
+          "brand": "Garmin",
+          "category": "fitness",
+          "subcategory": "wearables",
+          "releaseYear": 2023,
+          "msrp": 449,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["gray"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["round watch face", "silicone band", "two physical buttons on each side"],
+            "distinguishingFeatures": ["AMOLED touchscreen display", "training readiness score", "morning report"],
+            "logoPlacement": "watch face"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "display": "1.3\" AMOLED",
+            "battery": "up to 13 days smartwatch / 20 hours GPS",
+            "waterRating": "5 ATM",
+            "weight": "47g",
+            "gps": "multi-band GPS"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Whitestone", "colorway": "Whitestone", "availability": "current", "specifications": {} },
+            { "variantName": "Aqua", "colorway": "Aqua", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gps running watch", "running watch", "forerunner", "garmin running", "amoled watch", "training readiness", "marathon watch"],
+          "aliases": ["FR 265", "Forerunner 265"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "garmin-fenix-8",
+          "name": "Garmin Fenix 8",
+          "brand": "Garmin",
+          "category": "fitness",
+          "subcategory": "wearables",
+          "releaseYear": 2024,
+          "msrp": 999,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["slate gray"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["round watch face", "stainless steel bezel", "rugged build", "five-button layout"],
+            "distinguishingFeatures": ["AMOLED display", "solar charging lens", "dive-ready to 40m", "LED flashlight"],
+            "logoPlacement": "watch face"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "display": "1.4\" AMOLED",
+            "caseSize": "48mm",
+            "battery": "up to 29 days smartwatch",
+            "waterRating": "10 ATM / dive to 40m",
+            "weight": "85g (titanium)",
+            "gps": "multi-band GPS",
+            "solar": true
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Slate Gray", "colorway": "Slate Gray", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["multisport gps watch", "fenix", "adventure watch", "solar gps watch", "dive watch", "ultramarathon watch", "garmin flagship"],
+          "aliases": ["Fenix 8", "fnx8"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "garmin-venu-3",
+          "name": "Garmin Venu 3",
+          "brand": "Garmin",
+          "category": "fitness",
+          "subcategory": "wearables",
+          "releaseYear": 2023,
+          "msrp": 449,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["gray"],
+            "patterns": ["solid"],
+            "finish": "glossy",
+            "designCues": ["round watch face", "slim profile", "silicone band", "stainless steel bezel"],
+            "distinguishingFeatures": ["AMOLED touchscreen", "built-in speaker and microphone", "wheelchair mode", "nap detection"],
+            "logoPlacement": "watch face"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "display": "1.4\" AMOLED",
+            "battery": "up to 14 days smartwatch",
+            "waterRating": "5 ATM",
+            "weight": "45g",
+            "gps": "multi-band GPS"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black/Slate", "availability": "current", "specifications": {} },
+            { "variantName": "Ivory", "colorway": "Ivory/Cream Gold", "availability": "current", "specifications": {} },
+            { "variantName": "Sage Gray", "colorway": "Sage Gray/Silver", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gps smartwatch", "health smartwatch", "venu", "garmin smartwatch", "fitness smartwatch", "sleep tracking watch", "wheelchair fitness"],
+          "aliases": ["Venu 3"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 91
+        }
+      ]
+    },
+    {
+      "name": "Whoop",
+      "aliases": ["WHOOP"],
+      "products": [
+        {
+          "id": "whoop-4-0",
+          "name": "Whoop 4.0",
+          "brand": "Whoop",
+          "category": "fitness",
+          "subcategory": "wearables",
+          "releaseYear": 2021,
+          "msrp": 239,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["green sensor light"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["screenless band", "slim rectangular sensor pod", "interchangeable fabric bands"],
+            "distinguishingFeatures": ["no screen", "continuous heart rate monitoring", "strain coach", "recovery score"],
+            "logoPlacement": "sensor pod clasp"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "display": "none (screenless)",
+            "battery": "up to 5 days",
+            "waterRating": "IP68 / 10m",
+            "weight": "27g",
+            "sensors": "PPG heart rate, skin temperature, SpO2, accelerometer",
+            "subscription": "$239/year"
+          },
+          "variants": [
+            { "variantName": "Onyx", "colorway": "Onyx/Black", "availability": "current", "specifications": {} },
+            { "variantName": "Lunar", "colorway": "Lunar/White", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["whoop strap", "recovery tracker", "strain tracker", "sleep tracker", "fitness band", "no screen fitness tracker", "hrv monitor"],
+          "aliases": ["Whoop Band", "Whoop Strap 4.0"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Oura",
+      "aliases": ["OURA"],
+      "products": [
+        {
+          "id": "oura-ring-gen-3",
+          "name": "Oura Ring Gen 3",
+          "brand": "Oura",
+          "category": "fitness",
+          "subcategory": "wearables",
+          "releaseYear": 2021,
+          "msrp": 299,
+          "visualSignature": {
+            "primaryColors": ["silver"],
+            "secondaryColors": [],
+            "patterns": ["solid"],
+            "finish": "brushed",
+            "designCues": ["minimalist ring form factor", "titanium band", "inner sensor bumps", "flat top section"],
+            "distinguishingFeatures": ["titanium construction", "inner green/red LED sensors", "no external display", "Heritage and Horizon styles"],
+            "logoPlacement": "inner band"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "titanium",
+            "waterRating": "100m",
+            "battery": "up to 7 days",
+            "weight": "4-6g depending on size",
+            "sensors": "infrared PPG, NTC temperature, 3D accelerometer",
+            "subscription": "$5.99/month (optional)"
+          },
+          "variants": [
+            { "variantName": "Silver", "colorway": "Silver", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Gold", "colorway": "Gold", "availability": "current", "specifications": {} },
+            { "variantName": "Stealth", "colorway": "Stealth/Matte Black", "availability": "current", "specifications": {} },
+            { "variantName": "Rose Gold", "colorway": "Rose Gold", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["smart ring", "sleep ring", "oura ring", "readiness score", "activity ring", "health ring", "titanium ring tracker"],
+          "aliases": ["Oura Gen 3", "Oura Ring 3", "Oura Ring Generation 3"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Rogue Fitness",
+      "aliases": ["Rogue"],
+      "products": [
+        {
+          "id": "rogue-ohio-power-bar",
+          "name": "Rogue Ohio Power Bar",
+          "brand": "Rogue Fitness",
+          "category": "fitness",
+          "subcategory": "strength-equipment",
+          "releaseYear": 2015,
+          "msrp": 365,
+          "visualSignature": {
+            "primaryColors": ["silver"],
+            "secondaryColors": ["black"],
+            "patterns": ["knurled"],
+            "finish": "bare steel",
+            "designCues": ["aggressive knurling", "center knurl", "powerlifting markings", "snap ring sleeve design"],
+            "distinguishingFeatures": ["205K PSI tensile strength steel", "29mm shaft diameter", "center knurl for squats", "IPF power bar markings"],
+            "logoPlacement": "end cap"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "shaftDiameter": "29mm",
+            "length": "86.75\"",
+            "weight": "45 lbs / 20 kg",
+            "tensileStrength": "205,000 PSI",
+            "knurl": "aggressive with center knurl",
+            "finish": "bare steel, black zinc, stainless steel options",
+            "loadCapacity": "no stated limit"
+          },
+          "variants": [
+            { "variantName": "Bare Steel", "colorway": "Bare Steel", "availability": "current", "specifications": {} },
+            { "variantName": "Black Zinc", "colorway": "Black Zinc", "availability": "current", "specifications": {} },
+            { "variantName": "Stainless Steel", "colorway": "Stainless Steel", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["power bar", "powerlifting barbell", "ohio power bar", "squat bar", "bench press bar", "deadlift bar", "rogue barbell"],
+          "aliases": ["OPB", "Ohio Power Bar"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        },
+        {
+          "id": "rogue-echo-bike",
+          "name": "Rogue Echo Bike",
+          "brand": "Rogue Fitness",
+          "category": "fitness",
+          "subcategory": "cardio-equipment",
+          "releaseYear": 2018,
+          "msrp": 795,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "powder coat",
+            "designCues": ["large front fan blade", "dual-action arms", "heavy steel frame", "LCD console"],
+            "distinguishingFeatures": ["belt-driven steel fan blade", "air resistance system", "rubber leveling feet", "Rogue red logo"],
+            "logoPlacement": "fan guard"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "resistance": "air/fan",
+            "driveSystem": "belt-driven steel fan",
+            "frame": "heavy-duty steel",
+            "weight": "127 lbs",
+            "display": "LCD console with distance, calories, watts, heart rate",
+            "maxUserWeight": "350 lbs"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["air bike", "assault bike alternative", "fan bike", "echo bike", "crossfit bike", "hiit bike", "rogue bike"],
+          "aliases": ["Echo Bike", "Rogue Air Bike"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        },
+        {
+          "id": "rogue-monster-rack-2-0",
+          "name": "Rogue Monster Rack 2.0",
+          "brand": "Rogue Fitness",
+          "category": "fitness",
+          "subcategory": "strength-equipment",
+          "releaseYear": 2016,
+          "msrp": 695,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["red"],
+            "patterns": ["solid"],
+            "finish": "powder coat",
+            "designCues": ["3x3 inch steel uprights", "Westside hole spacing", "bolt-together design", "numbered holes"],
+            "distinguishingFeatures": ["3x3\" 11-gauge steel", "Westside spacing through bench/pull zone", "Monster compatible accessories", "laser-cut numbering"],
+            "logoPlacement": "crossmember"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "uprights": "3x3\" 11-gauge steel",
+            "holeSpacing": "Westside spacing (2\" through bench zone, 1\" through pull zone)",
+            "height": "90\" or 100\"",
+            "depth": "43\"",
+            "hardware": "5/8\" hardware",
+            "weightCapacity": "no stated limit"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["squat rack", "power rack", "monster rack", "rogue rack", "home gym rack", "crossfit rack", "garage gym rack"],
+          "aliases": ["RM-4", "Monster Rack", "Rogue RM-4"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "rogue-bumper-plates",
+          "name": "Rogue Color Echo Bumper Plates",
+          "brand": "Rogue Fitness",
+          "category": "fitness",
+          "subcategory": "strength-equipment",
+          "releaseYear": 2014,
+          "msrp": 175,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["blue", "yellow", "green", "red"],
+            "patterns": ["solid"],
+            "finish": "matte rubber",
+            "designCues": ["color-coded weight bands", "raised Rogue branding", "stainless steel insert"],
+            "distinguishingFeatures": ["IWF color coding", "dead bounce rubber", "stainless steel hub insert", "Olympic 2\" opening"],
+            "logoPlacement": "plate face"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "virgin rubber",
+            "diameter": "17.72\" (450mm) Olympic standard",
+            "opening": "2\" (50.4mm) stainless steel insert",
+            "tolerance": "+/- 15g of stated weight",
+            "durometer": "88-92 Shore A",
+            "priceNote": "$175/pair for 45lb"
+          },
+          "variants": [
+            { "variantName": "10 lb (Green)", "colorway": "Black/Green", "availability": "current", "specifications": { "weight": "10 lbs" } },
+            { "variantName": "25 lb (Green)", "colorway": "Black/Green", "availability": "current", "specifications": { "weight": "25 lbs" } },
+            { "variantName": "35 lb (Yellow)", "colorway": "Black/Yellow", "availability": "current", "specifications": { "weight": "35 lbs" } },
+            { "variantName": "45 lb (Blue)", "colorway": "Black/Blue", "availability": "current", "specifications": { "weight": "45 lbs" } },
+            { "variantName": "55 lb (Red)", "colorway": "Black/Red", "availability": "current", "specifications": { "weight": "55 lbs" } }
+          ],
+          "searchKeywords": ["bumper plates", "olympic plates", "rubber plates", "crossfit plates", "weight plates", "rogue plates", "color bumpers"],
+          "aliases": ["Rogue Bumpers", "Echo Bumpers", "Color Echo Bumpers"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 91
+        }
+      ]
+    },
+    {
+      "name": "REP Fitness",
+      "aliases": ["REP"],
+      "products": [
+        {
+          "id": "rep-pr-4000",
+          "name": "REP PR-4000 Power Rack",
+          "brand": "REP Fitness",
+          "category": "fitness",
+          "subcategory": "strength-equipment",
+          "releaseYear": 2020,
+          "msrp": 599,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["red", "blue"],
+            "patterns": ["solid"],
+            "finish": "powder coat",
+            "designCues": ["3x3 inch uprights", "numbered holes", "bolt-together design", "wide base"],
+            "distinguishingFeatures": ["3x3\" 11-gauge steel", "1000 lb weight capacity", "Westside spacing", "colorful crossmember options"],
+            "logoPlacement": "crossmember"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "uprights": "3x3\" 11-gauge steel",
+            "holeSpacing": "Westside spacing",
+            "height": "80\" or 93\"",
+            "depth": "47\"",
+            "weightCapacity": "1000 lbs",
+            "hardware": "5/8\" hardware"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Red", "colorway": "Black/Red", "availability": "current", "specifications": {} },
+            { "variantName": "Blue", "colorway": "Black/Blue", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["power rack", "squat rack", "pr-4000", "rep fitness rack", "home gym rack", "garage gym", "budget power rack"],
+          "aliases": ["PR-4000", "PR4000"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 91
+        }
+      ]
+    },
+    {
+      "name": "Peloton",
+      "aliases": [],
+      "products": [
+        {
+          "id": "peloton-bike-plus",
+          "name": "Peloton Bike+",
+          "brand": "Peloton",
+          "category": "fitness",
+          "subcategory": "cardio-equipment",
+          "releaseYear": 2020,
+          "msrp": 2495,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["red"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["large rotating touchscreen", "slim frame", "minimalist design", "delta-compatible pedals"],
+            "distinguishingFeatures": ["23.8\" rotating HD touchscreen", "auto-follow resistance", "Apple GymKit integration", "4-channel audio"],
+            "logoPlacement": "frame and screen"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "display": "23.8\" rotating HD touchscreen",
+            "resistance": "magnetic, auto-follow",
+            "speakers": "2x 10W woofers, 2x 5W tweeters",
+            "dimensions": "59\" L x 22\" W x 59\" H",
+            "weight": "140 lbs",
+            "maxUserWeight": "297 lbs",
+            "connectivity": "WiFi, Bluetooth 5.0, ANT+, Apple GymKit"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black/Red", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["peloton bike", "stationary bike", "spin bike", "indoor cycling", "connected bike", "streaming bike", "peloton plus"],
+          "aliases": ["Bike Plus", "Peloton+", "Peloton Bike Plus"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        }
+      ]
+    },
+    {
+      "name": "Bowflex",
+      "aliases": [],
+      "products": [
+        {
+          "id": "bowflex-selecttech-552",
+          "name": "Bowflex SelectTech 552",
+          "brand": "Bowflex",
+          "category": "fitness",
+          "subcategory": "strength-equipment",
+          "releaseYear": 2004,
+          "msrp": 429,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["red"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["stacked plate design", "dial selector on each end", "compact dumbbell shape", "weight markings on plates"],
+            "distinguishingFeatures": ["twist dial weight selection", "replaces 15 sets of dumbbells", "5 to 52.5 lbs range", "2.5 lb increments up to 25 lbs"],
+            "logoPlacement": "handle and weight plates"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "weightRange": "5-52.5 lbs per dumbbell",
+            "increments": "2.5 lb increments (5-25 lbs), 5 lb increments (25-52.5 lbs)",
+            "dimensions": "15.75\" L x 8\" W x 9\" H",
+            "weightPerDumbbell": "52.5 lbs max",
+            "material": "steel and ABS plastic plates",
+            "pricePer": "pair"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black/Red", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["adjustable dumbbells", "selecttech", "bowflex dumbbells", "home dumbbells", "space saving dumbbells", "dial dumbbells"],
+          "aliases": ["SelectTech 552", "ST552", "552 Dumbbells"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 94
+        }
+      ]
+    },
+    {
+      "name": "Theragun",
+      "aliases": ["Therabody"],
+      "products": [
+        {
+          "id": "theragun-pro-5th-gen",
+          "name": "Theragun Pro (5th Gen)",
+          "brand": "Theragun",
+          "category": "fitness",
+          "subcategory": "recovery",
+          "releaseYear": 2023,
+          "msrp": 399,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["red"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["triangular ergonomic handle", "multi-grip design", "OLED screen", "interchangeable attachment head"],
+            "distinguishingFeatures": ["QuietForce Technology", "OLED display", "6 attachments included", "Bluetooth app connectivity", "adjustable arm"],
+            "logoPlacement": "handle"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "percussionsPerMinute": "1750-2400",
+            "stallForce": "60 lbs",
+            "amplitude": "16mm",
+            "speeds": "5 built-in + custom",
+            "battery": "150 minutes (2 swappable batteries)",
+            "attachments": 6,
+            "connectivity": "Bluetooth",
+            "weight": "2.2 lbs"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["percussion massager", "massage gun", "theragun", "muscle recovery", "deep tissue massager", "therabody", "percussive therapy"],
+          "aliases": ["Theragun Pro 5", "Theragun Pro Gen 5", "TG Pro"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 91
+        }
+      ]
+    },
+    {
+      "name": "Hyperice",
+      "aliases": [],
+      "products": [
+        {
+          "id": "hyperice-hypervolt-2-pro",
+          "name": "Hyperice Hypervolt 2 Pro",
+          "brand": "Hyperice",
+          "category": "fitness",
+          "subcategory": "recovery",
+          "releaseYear": 2022,
+          "msrp": 329,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["white"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["T-shape handle", "LED speed indicator ring", "cylindrical body", "interchangeable head"],
+            "distinguishingFeatures": ["HyperSmart pressure sensor", "Bluetooth enabled", "LED pressure feedback", "Quiet Glide technology"],
+            "logoPlacement": "body"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "speeds": 5,
+            "stallForce": "40 lbs",
+            "percussionsPerMinute": "1800-2700",
+            "battery": "up to 2.5 hours",
+            "weight": "2.6 lbs",
+            "attachments": 5,
+            "connectivity": "Bluetooth"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["percussion massager", "massage gun", "hypervolt", "muscle recovery tool", "hyperice massager", "percussion device", "recovery gun"],
+          "aliases": ["Hypervolt 2 Pro", "HV2 Pro"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Hydro Flask",
+      "aliases": ["HydroFlask"],
+      "products": [
+        {
+          "id": "hydro-flask-wide-mouth-32oz",
+          "name": "Hydro Flask Wide Mouth 32oz",
+          "brand": "Hydro Flask",
+          "category": "fitness",
+          "subcategory": "hydration",
+          "releaseYear": 2013,
+          "msrp": 44,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "patterns": ["solid"],
+            "finish": "powder coat",
+            "designCues": ["wide mouth opening", "cylindrical body", "flex cap", "honeycomb insulation cap"],
+            "distinguishingFeatures": ["TempShield double-wall vacuum insulation", "18/8 stainless steel", "wide color range", "BPA-free"],
+            "logoPlacement": "body center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "capacity": "32 oz (946 mL)",
+            "material": "18/8 stainless steel",
+            "insulation": "TempShield double-wall vacuum",
+            "coldRetention": "24 hours",
+            "hotRetention": "12 hours",
+            "mouthDiameter": "2.2\"",
+            "weight": "13.6 oz"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} },
+            { "variantName": "Pacific", "colorway": "Pacific Blue", "availability": "current", "specifications": {} },
+            { "variantName": "Goji", "colorway": "Goji Red", "availability": "current", "specifications": {} },
+            { "variantName": "Dew", "colorway": "Dew Green", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["insulated water bottle", "hydro flask", "stainless steel bottle", "vacuum bottle", "gym bottle", "wide mouth bottle"],
+          "aliases": ["HF 32oz", "Hydro Flask 32"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        },
+        {
+          "id": "hydro-flask-wide-mouth-40oz",
+          "name": "Hydro Flask Wide Mouth 40oz",
+          "brand": "Hydro Flask",
+          "category": "fitness",
+          "subcategory": "hydration",
+          "releaseYear": 2013,
+          "msrp": 49,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "patterns": ["solid"],
+            "finish": "powder coat",
+            "designCues": ["wide mouth opening", "taller cylindrical body", "flex cap", "bold color options"],
+            "distinguishingFeatures": ["TempShield double-wall vacuum insulation", "18/8 stainless steel", "larger capacity", "compatible with flex cap, straw lid, and wide mouth lid"],
+            "logoPlacement": "body center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "capacity": "40 oz (1182 mL)",
+            "material": "18/8 stainless steel",
+            "insulation": "TempShield double-wall vacuum",
+            "coldRetention": "24 hours",
+            "hotRetention": "12 hours",
+            "mouthDiameter": "2.2\"",
+            "weight": "15.2 oz"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} },
+            { "variantName": "Snapper", "colorway": "Snapper Red", "availability": "current", "specifications": {} },
+            { "variantName": "Lupine", "colorway": "Lupine Purple", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["insulated water bottle", "large water bottle", "hydro flask 40", "gym water bottle", "stainless steel bottle", "40oz bottle"],
+          "aliases": ["HF 40oz", "Hydro Flask 40"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        }
+      ]
+    },
+    {
+      "name": "Yeti",
+      "aliases": ["YETI"],
+      "products": [
+        {
+          "id": "yeti-rambler-26oz",
+          "name": "Yeti Rambler 26oz Bottle",
+          "brand": "Yeti",
+          "category": "fitness",
+          "subcategory": "hydration",
+          "releaseYear": 2015,
+          "msrp": 40,
+          "visualSignature": {
+            "primaryColors": ["stainless steel"],
+            "secondaryColors": [],
+            "patterns": ["solid"],
+            "finish": "DuraCoat",
+            "designCues": ["wide body", "chug cap", "18/8 stainless steel", "tapered bottom"],
+            "distinguishingFeatures": ["DuraCoat color coating", "double-wall vacuum insulation", "No Sweat exterior", "dishwasher safe", "TripleHaul cap"],
+            "logoPlacement": "body center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "capacity": "26 oz (769 mL)",
+            "material": "18/8 stainless steel",
+            "insulation": "double-wall vacuum",
+            "finish": "DuraCoat",
+            "dishwasherSafe": true,
+            "weight": "15.7 oz"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Stainless Steel", "colorway": "Stainless Steel", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Chartreuse", "colorway": "Chartreuse", "availability": "seasonal", "specifications": {} },
+            { "variantName": "Power Pink", "colorway": "Power Pink", "availability": "seasonal", "specifications": {} }
+          ],
+          "searchKeywords": ["yeti bottle", "rambler bottle", "insulated bottle", "yeti water bottle", "stainless steel bottle", "duracoat bottle"],
+          "aliases": ["Rambler 26", "Yeti 26oz"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Nike",
+      "aliases": [],
+      "products": [
+        {
+          "id": "nike-metcon-9",
+          "name": "Nike Metcon 9",
+          "brand": "Nike",
+          "category": "fitness",
+          "subcategory": "training-shoes",
+          "releaseYear": 2023,
+          "msrp": 150,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["white"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["flat wide sole", "textured rubber rope wrap on midfoot", "mesh upper", "visible Swoosh"],
+            "distinguishingFeatures": ["rubber rope wrap for rope climbs", "flat stable heel", "Hyperlift insert for squats", "React foam forefoot"],
+            "logoPlacement": "lateral midfoot Swoosh"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "upperMaterial": "mesh with rubber overlay",
+            "midsole": "React foam forefoot, TPU heel plate",
+            "outsole": "rubber with rope wrap",
+            "drop": "4mm",
+            "weight": "11.7 oz (men's size 10)"
+          },
+          "variants": [
+            { "variantName": "Black/White", "colorway": "Black/White/Anthracite", "availability": "current", "specifications": {} },
+            { "variantName": "White/Black", "colorway": "White/Black", "availability": "current", "specifications": {} },
+            { "variantName": "Game Royal", "colorway": "Game Royal/Blue", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["crossfit shoes", "training shoes", "metcon", "nike training", "hiit shoes", "weightlifting shoes", "gym shoes", "cross training"],
+          "aliases": ["Metcon 9", "MC9"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "nike-pegasus-41",
+          "name": "Nike Pegasus 41",
+          "brand": "Nike",
+          "category": "fitness",
+          "subcategory": "running-shoes",
+          "releaseYear": 2024,
+          "msrp": 140,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["white"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["engineered mesh upper", "visible Zoom Air unit in forefoot", "waffle outsole", "padded collar"],
+            "distinguishingFeatures": ["ReactX foam midsole", "Zoom Air forefoot unit", "Flywire cables", "waffle-pattern outsole"],
+            "logoPlacement": "lateral midfoot Swoosh"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "upperMaterial": "engineered mesh",
+            "midsole": "ReactX foam with Zoom Air forefoot",
+            "outsole": "rubber waffle pattern",
+            "drop": "10mm",
+            "weight": "10.2 oz (men's size 10)"
+          },
+          "variants": [
+            { "variantName": "Black/White", "colorway": "Black/White/Anthracite", "availability": "current", "specifications": {} },
+            { "variantName": "White/Black", "colorway": "White/Black/Volt", "availability": "current", "specifications": {} },
+            { "variantName": "Midnight Navy", "colorway": "Midnight Navy/Blue", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["running shoes", "daily trainer", "pegasus", "nike running", "zoom air", "jogging shoes", "road running"],
+          "aliases": ["Peg 41", "Pegasus 41"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Nobull",
+      "aliases": ["NOBULL", "No Bull"],
+      "products": [
+        {
+          "id": "nobull-trainer-plus",
+          "name": "Nobull Trainer+",
+          "brand": "Nobull",
+          "category": "fitness",
+          "subcategory": "training-shoes",
+          "releaseYear": 2023,
+          "msrp": 149,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["white"],
+            "patterns": ["textured"],
+            "finish": "matte",
+            "designCues": ["SuperFabric armored upper", "flat outsole", "minimal branding", "lace guard"],
+            "distinguishingFeatures": ["SuperFabric guard plate upper", "high carbon lateral outsole", "lace guard system", "no-embellishment design"],
+            "logoPlacement": "heel tab and tongue"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "upperMaterial": "SuperFabric with guard plates",
+            "midsole": "EVA foam",
+            "outsole": "high carbon lateral outsole with lug pattern",
+            "drop": "4mm",
+            "weight": "12.5 oz (men's size 10)"
+          },
+          "variants": [
+            { "variantName": "Black/White", "colorway": "Black/White", "availability": "current", "specifications": {} },
+            { "variantName": "All Black", "colorway": "Black/Black", "availability": "current", "specifications": {} },
+            { "variantName": "Army", "colorway": "Army Green", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["crossfit shoes", "training shoes", "nobull trainer", "superfabric shoes", "functional fitness shoes", "workout shoes", "cross training"],
+          "aliases": ["Trainer Plus", "NOBULL Trainer+"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Lululemon",
+      "aliases": ["lulu"],
+      "products": [
+        {
+          "id": "lululemon-metal-vent-tech-polo",
+          "name": "Lululemon Metal Vent Tech Polo",
+          "brand": "Lululemon",
+          "category": "fitness",
+          "subcategory": "apparel",
+          "releaseYear": 2020,
+          "msrp": 88,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["polo collar", "slim athletic fit", "ventilated mesh panels", "seamless construction areas"],
+            "distinguishingFeatures": ["Silverescent anti-odor technology", "seamless shoulder construction", "mesh ventilation panels", "four-way stretch"],
+            "logoPlacement": "left chest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "proprietary fabric blend with Silverescent technology",
+            "features": "anti-odor, four-way stretch, sweat-wicking",
+            "fit": "slim",
+            "care": "machine wash cold"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "True Navy", "colorway": "True Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Heathered Grey", "colorway": "Heathered Core Medium Grey", "availability": "current", "specifications": {} },
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["workout polo", "athletic polo", "lululemon polo", "anti-stink shirt", "gym polo", "training polo", "metal vent tech"],
+          "aliases": ["MVT Polo", "Metal Vent Polo"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Gymshark",
+      "aliases": [],
+      "products": [
+        {
+          "id": "gymshark-arrival-5-shorts",
+          "name": "Gymshark Arrival 5\" Shorts",
+          "brand": "Gymshark",
+          "category": "fitness",
+          "subcategory": "apparel",
+          "releaseYear": 2022,
+          "msrp": 30,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["5-inch inseam", "slim fit", "side zip pocket", "elastic waistband with drawcord"],
+            "distinguishingFeatures": ["lightweight woven fabric", "zip pocket", "5\" inseam", "Gymshark logo on thigh"],
+            "logoPlacement": "left thigh"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "polyester blend",
+            "inseam": "5 inches",
+            "features": "zip pocket, drawcord waist, lightweight",
+            "fit": "regular"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Light Grey", "colorway": "Light Grey Marl", "availability": "current", "specifications": {} },
+            { "variantName": "Burgundy", "colorway": "Burgundy", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gym shorts", "training shorts", "gymshark shorts", "workout shorts", "5 inch shorts", "men's gym shorts"],
+          "aliases": ["Arrival Shorts", "GS Arrival 5\""],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 89
+        }
+      ]
+    },
+    {
+      "name": "NordicTrack",
+      "aliases": ["Nordic Track"],
+      "products": [
+        {
+          "id": "nordictrack-commercial-1750",
+          "name": "NordicTrack Commercial 1750 Treadmill",
+          "brand": "NordicTrack",
+          "category": "fitness",
+          "subcategory": "cardio-equipment",
+          "releaseYear": 2023,
+          "msrp": 1799,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["gray"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["large touchscreen console", "foldable deck", "wide running belt", "sturdy steel frame"],
+            "distinguishingFeatures": ["14\" HD touchscreen", "iFIT streaming", "-3% to 15% incline/decline", "3.5 CHP motor", "SpaceSaver fold-up design"],
+            "logoPlacement": "console and side rails"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "motor": "3.5 CHP",
+            "display": "14\" HD touchscreen",
+            "incline": "-3% to 15%",
+            "speed": "0-12 mph",
+            "beltSize": "22\" x 60\"",
+            "maxUserWeight": "300 lbs",
+            "foldable": true,
+            "dimensions": "78.5\" L x 35.6\" W x 65.2\" H",
+            "streaming": "iFIT membership required"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black/Gray", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["treadmill", "home treadmill", "nordictrack treadmill", "incline treadmill", "ifit treadmill", "commercial treadmill", "folding treadmill"],
+          "aliases": ["C1750", "Commercial 1750", "NT 1750"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 91
+        }
+      ]
+    },
+    {
+      "name": "Trigger Point",
+      "aliases": ["TriggerPoint"],
+      "products": [
+        {
+          "id": "trigger-point-grid-foam-roller",
+          "name": "Trigger Point GRID Foam Roller",
+          "brand": "Trigger Point",
+          "category": "fitness",
+          "subcategory": "recovery",
+          "releaseYear": 2009,
+          "msrp": 39,
+          "visualSignature": {
+            "primaryColors": ["orange"],
+            "secondaryColors": ["black"],
+            "patterns": ["textured grid"],
+            "finish": "matte",
+            "designCues": ["multi-density surface pattern", "hollow core", "channel grooves for blood flow", "distrodensity zones"],
+            "distinguishingFeatures": ["patented GRID surface", "three distinct texture zones", "EVA foam over hollow ABS core", "channels for blood and oxygen flow"],
+            "logoPlacement": "end cap"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "dimensions": "13\" long x 5.5\" diameter",
+            "material": "EVA foam over rigid ABS hollow core",
+            "maxUserWeight": "500 lbs",
+            "weight": "1.5 lbs",
+            "surfaceType": "3-zone multi-density GRID pattern"
+          },
+          "variants": [
+            { "variantName": "Orange", "colorway": "Orange/Black", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Pink", "colorway": "Pink/Black", "availability": "current", "specifications": {} },
+            { "variantName": "Lime", "colorway": "Lime Green/Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["foam roller", "grid roller", "myofascial release", "self massage", "muscle roller", "trigger point roller", "recovery roller"],
+          "aliases": ["GRID Roller", "GRID 1.0", "TP GRID"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        }
+      ]
+    },
+    {
+      "name": "Nalgene",
+      "aliases": [],
+      "products": [
+        {
+          "id": "nalgene-wide-mouth-32oz",
+          "name": "Nalgene Wide Mouth 32oz",
+          "brand": "Nalgene",
+          "category": "fitness",
+          "subcategory": "hydration",
+          "releaseYear": 1970,
+          "msrp": 14,
+          "visualSignature": {
+            "primaryColors": ["clear"],
+            "secondaryColors": ["green"],
+            "patterns": ["translucent"],
+            "finish": "glossy",
+            "designCues": ["wide mouth opening", "measurement markings", "loop-top cap", "cylindrical body"],
+            "distinguishingFeatures": ["Tritan copolyester (BPA-free)", "virtually indestructible", "graduated volume markings", "wide mouth with loop-top lid", "withstands boiling and freezing"],
+            "logoPlacement": "body center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "capacity": "32 oz (1 L)",
+            "material": "Tritan copolyester",
+            "bpaFree": true,
+            "weight": "6.2 oz",
+            "mouthDiameter": "2.7\"",
+            "dishwasherSafe": true,
+            "temperatureRange": "-40F to 212F"
+          },
+          "variants": [
+            { "variantName": "Clear", "colorway": "Clear/Green Lid", "availability": "current", "specifications": {} },
+            { "variantName": "Slate Blue", "colorway": "Slate Blue", "availability": "current", "specifications": {} },
+            { "variantName": "Aubergine", "colorway": "Aubergine Purple", "availability": "current", "specifications": {} },
+            { "variantName": "Clementine", "colorway": "Clementine Orange", "availability": "current", "specifications": {} },
+            { "variantName": "Retro Seafoam", "colorway": "Retro Seafoam", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["water bottle", "nalgene bottle", "tritan bottle", "bpa free bottle", "plastic water bottle", "hiking bottle", "lab bottle", "indestructible bottle"],
+          "aliases": ["Nalgene 32oz", "Nalgene WM 32"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 94
+        }
+      ]
+    },
+    {
+      "name": "Gymreapers",
+      "aliases": [],
+      "products": [
+        {
+          "id": "gymreapers-knee-sleeves",
+          "name": "Gymreapers Knee Sleeves (Pair)",
+          "brand": "Gymreapers",
+          "category": "fitness",
+          "subcategory": "strength-equipment",
+          "releaseYear": 2019,
+          "msrp": 39,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["red", "camo"],
+            "patterns": ["solid", "camo"],
+            "finish": "matte",
+            "designCues": ["7mm neoprene thickness", "contoured knee shape", "reinforced stitching", "pull-on sleeve design"],
+            "distinguishingFeatures": ["7mm neoprene construction", "IPF approved for competition", "contoured fit for knee joint", "double-reinforced seams"],
+            "logoPlacement": "front of sleeve"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "7mm neoprene",
+            "approval": "IPF approved",
+            "soldAs": "pair",
+            "usage": "squats, powerlifting, weightlifting"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Camo", "colorway": "Camo", "availability": "current", "specifications": {} },
+            { "variantName": "Red", "colorway": "Red", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["knee sleeves", "powerlifting knee sleeves", "neoprene sleeves", "squat sleeves", "ipf knee sleeves", "gymreapers sleeves", "7mm knee sleeves"],
+          "aliases": ["Gymreapers Knee Sleeves", "GR Knee Sleeves"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        },
+        {
+          "id": "gymreapers-lifting-straps",
+          "name": "Gymreapers Lifting Straps",
+          "brand": "Gymreapers",
+          "category": "fitness",
+          "subcategory": "strength-equipment",
+          "releaseYear": 2018,
+          "msrp": 14,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["cotton strap material", "padded wrist section", "loop design", "reinforced stitching"],
+            "distinguishingFeatures": ["cotton construction", "padded neoprene wrist cushion", "competition-grade durability", "long strap length for secure wrapping"],
+            "logoPlacement": "strap end"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "cotton",
+            "padding": "neoprene wrist pad",
+            "grade": "competition-grade",
+            "soldAs": "pair"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["lifting straps", "deadlift straps", "cotton lifting straps", "padded straps", "gym straps", "weightlifting straps", "gymreapers straps"],
+          "aliases": ["GR Lifting Straps"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 86
+        },
+        {
+          "id": "gymreapers-wrist-wraps-18",
+          "name": "Gymreapers Wrist Wraps 18\"",
+          "brand": "Gymreapers",
+          "category": "fitness",
+          "subcategory": "strength-equipment",
+          "releaseYear": 2018,
+          "msrp": 16,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["18-inch wrap length", "thumb loop", "velcro closure", "heavy-duty weave"],
+            "distinguishingFeatures": ["heavy-duty elastic weave", "thumb loop for secure placement", "18\" length for powerlifting support", "hook-and-loop closure"],
+            "logoPlacement": "wrap end"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "length": "18 inches",
+            "material": "heavy-duty elastic blend",
+            "closure": "hook-and-loop with thumb loop",
+            "usage": "powerlifting, bench press, overhead press"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["wrist wraps", "powerlifting wrist wraps", "bench press wraps", "wrist support", "gymreapers wraps", "18 inch wraps", "thumb loop wraps"],
+          "aliases": ["GR Wrist Wraps", "Gymreapers 18\" Wraps"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 86
+        }
+      ]
+    },
+    {
+      "name": "Fellow",
+      "aliases": [],
+      "products": [
+        {
+          "id": "fellow-stagg-xf-pour-over-set",
+          "name": "Fellow Stagg XF Pour Over Set",
+          "brand": "Fellow",
+          "category": "fitness",
+          "subcategory": "coffee-equipment",
+          "releaseYear": 2020,
+          "msrp": 99,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["clear"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["double-wall glass carafe", "ratio aid dripper", "minimalist design", "flat-bottom brew bed"],
+            "distinguishingFeatures": ["ratio-focused dripper design", "double-wall vacuum insulated carafe", "includes XF dripper and carafe", "flat-bottom brew bed for even extraction"],
+            "logoPlacement": "carafe base"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "includes": "XF dripper + double-wall carafe",
+            "drainStyle": "ratio-focused flat-bottom",
+            "insulation": "double-wall vacuum",
+            "material": "borosilicate glass and BPA-free plastic"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Matte Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["pour over coffee", "pour over set", "fellow pour over", "stagg dripper", "coffee dripper", "manual coffee brewer", "pour over kit"],
+          "aliases": ["Stagg XF", "Fellow XF Pour Over", "Stagg XF Set"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        },
+        {
+          "id": "fellow-ode-brew-grinder-gen-2",
+          "name": "Fellow Ode Brew Grinder Gen 2",
+          "brand": "Fellow",
+          "category": "fitness",
+          "subcategory": "coffee-equipment",
+          "releaseYear": 2023,
+          "msrp": 345,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["compact countertop form", "load bin on top", "grind catch on front", "single-dose design"],
+            "distinguishingFeatures": ["64mm SSP burrs", "single-dose hopper design", "anti-static technology", "31-step grind adjustment"],
+            "logoPlacement": "front face"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "burrs": "64mm SSP",
+            "grindType": "single-dose",
+            "grindSettings": "31 steps",
+            "formFactor": "countertop electric"
+          },
+          "variants": [
+            { "variantName": "Matte Black", "colorway": "Matte Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["coffee grinder", "electric grinder", "fellow ode", "single dose grinder", "ssp burrs grinder", "brew grinder", "countertop grinder"],
+          "aliases": ["Ode Gen 2", "Ode Brew Grinder", "Fellow Ode 2"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 89
+        }
+      ]
+    },
+    {
+      "name": "Quick Mill",
+      "aliases": ["Quickmill", "QuickMill"],
+      "products": [
+        {
+          "id": "quick-mill-pop-up-espresso-machine",
+          "name": "Quick Mill Pop-Up Espresso Machine",
+          "brand": "Quick Mill",
+          "category": "fitness",
+          "subcategory": "coffee-equipment",
+          "releaseYear": 2018,
+          "msrp": 1099,
+          "visualSignature": {
+            "primaryColors": ["silver"],
+            "secondaryColors": ["black"],
+            "patterns": ["solid"],
+            "finish": "brushed steel",
+            "designCues": ["compact Italian design", "commercial-style portafilter", "heat exchange boiler", "steam wand"],
+            "distinguishingFeatures": ["heat exchange boiler system", "compact footprint for home use", "Italian-made build quality", "commercial-size 58mm portafilter"],
+            "logoPlacement": "front panel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "boilerType": "heat exchange",
+            "portafilter": "58mm commercial",
+            "origin": "Italian-made",
+            "formFactor": "compact countertop"
+          },
+          "variants": [
+            { "variantName": "Stainless Steel", "colorway": "Stainless Steel", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["espresso machine", "heat exchange espresso", "italian espresso machine", "quick mill espresso", "home espresso", "commercial portafilter", "hx espresso machine"],
+          "aliases": ["QM Pop-Up", "Quick Mill Pippa"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ]
+    },
+    {
+      "name": "Timemore",
+      "aliases": ["TIMEMORE"],
+      "products": [
+        {
+          "id": "timemore-sculptor-064s",
+          "name": "Timemore Sculptor 064S Electric Coffee Grinder",
+          "brand": "Timemore",
+          "category": "fitness",
+          "subcategory": "coffee-equipment",
+          "releaseYear": 2023,
+          "msrp": 229,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["tall cylindrical body", "top-loading hopper", "digital display", "stepless adjustment dial"],
+            "distinguishingFeatures": ["64mm burr set", "variable speed 400-2200 RPM", "espresso to filter grind range", "digital RPM display"],
+            "logoPlacement": "front body"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "burrs": "64mm",
+            "speedRange": "400-2200 RPM",
+            "grindRange": "espresso to filter",
+            "adjustment": "stepless"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["electric coffee grinder", "timemore grinder", "sculptor grinder", "espresso grinder", "variable speed grinder", "64mm burr grinder", "all-purpose grinder"],
+          "aliases": ["Sculptor 064S", "Timemore 064S", "Sculptor S"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 87
+        },
+        {
+          "id": "timemore-chestnut-c2",
+          "name": "Timemore Chestnut C2 Hand Grinder",
+          "brand": "Timemore",
+          "category": "fitness",
+          "subcategory": "coffee-equipment",
+          "releaseYear": 2020,
+          "msrp": 65,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["cylindrical aluminum body", "folding crank handle", "stepped adjustment dial on bottom", "slim portable form"],
+            "distinguishingFeatures": ["stainless steel conical burrs", "portable and travel-friendly", "camping-ready durability", "internal stepped adjustment"],
+            "logoPlacement": "body"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "burrs": "stainless steel conical",
+            "capacity": "approximately 25g",
+            "adjustment": "internal stepped",
+            "portability": "camping and travel ready"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["hand grinder", "manual coffee grinder", "travel grinder", "camping grinder", "timemore hand grinder", "chestnut grinder", "portable grinder"],
+          "aliases": ["Chestnut C2", "C2 Grinder", "Timemore C2"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 89
+        }
+      ]
+    },
+    {
+      "name": "Chemex",
+      "aliases": ["CHEMEX"],
+      "products": [
+        {
+          "id": "chemex-classic-pour-over-8-cup",
+          "name": "Chemex Classic Pour-Over 8-Cup",
+          "brand": "Chemex",
+          "category": "fitness",
+          "subcategory": "coffee-equipment",
+          "releaseYear": 1941,
+          "msrp": 47,
+          "visualSignature": {
+            "primaryColors": ["clear"],
+            "secondaryColors": ["brown"],
+            "patterns": ["transparent"],
+            "finish": "glossy",
+            "designCues": ["hourglass silhouette", "wood collar with leather tie", "glass pour spout", "single-piece borosilicate glass"],
+            "distinguishingFeatures": ["borosilicate glass construction", "iconic wood collar and rawhide tie", "hourglass shape design since 1941", "part of MoMA permanent collection"],
+            "logoPlacement": "glass body etched"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "capacity": "8 cups (40 oz)",
+            "material": "borosilicate glass",
+            "collar": "wood with rawhide leather tie",
+            "design": "iconic hourglass, MoMA collection piece"
+          },
+          "variants": [
+            { "variantName": "Classic", "colorway": "Clear/Wood", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["chemex coffee maker", "pour over coffee", "glass coffee maker", "chemex 8 cup", "manual coffee brewer", "iconic coffee maker", "wood collar chemex"],
+          "aliases": ["Chemex 8-Cup", "Chemex Classic", "Chemex CM-8A"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        }
+      ]
+    },
+    {
+      "name": "Ember",
+      "aliases": [],
+      "products": [
+        {
+          "id": "ember-temperature-control-smart-mug-2",
+          "name": "Ember Temperature Control Smart Mug 2",
+          "brand": "Ember",
+          "category": "fitness",
+          "subcategory": "coffee-equipment",
+          "releaseYear": 2019,
+          "msrp": 149,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["white", "copper"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["ceramic-coated stainless steel", "LED ring on base", "minimalist cylindrical form", "charging coaster"],
+            "distinguishingFeatures": ["app-controlled temperature setting", "maintains precise drinking temperature", "1.5-hour battery life off charger", "14oz capacity"],
+            "logoPlacement": "bottom of mug"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "capacity": "14 oz",
+            "temperatureControl": "app-controlled via Bluetooth",
+            "battery": "1.5 hours off charger",
+            "material": "ceramic-coated stainless steel",
+            "connectivity": "Bluetooth, Ember app"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} },
+            { "variantName": "Copper", "colorway": "Copper", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["smart mug", "heated mug", "temperature control mug", "ember mug", "bluetooth mug", "self-heating mug", "app controlled mug"],
+          "aliases": ["Ember Mug 2", "Ember Smart Mug", "Ember 14oz"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 91
+        },
+        {
+          "id": "ember-travel-mug-2-plus",
+          "name": "Ember Travel Mug 2+",
+          "brand": "Ember",
+          "category": "fitness",
+          "subcategory": "coffee-equipment",
+          "releaseYear": 2022,
+          "msrp": 229,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["tall travel mug form", "360-degree drinking lid", "touch-sensitive LED display", "slim profile"],
+            "distinguishingFeatures": ["3-hour battery life", "360-degree drinking lid", "12oz capacity", "built-in temperature display"],
+            "logoPlacement": "body"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "capacity": "12 oz",
+            "battery": "3 hours",
+            "lid": "360-degree drinking lid",
+            "temperatureControl": "app-controlled via Bluetooth",
+            "material": "stainless steel"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["smart travel mug", "heated travel mug", "ember travel mug", "temperature control travel mug", "bluetooth travel mug", "self-heating travel mug"],
+          "aliases": ["Ember Travel Mug 2 Plus", "Travel Mug 2+", "Ember TM2+"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 89
+        }
+      ]
+    }
+  ]
+}

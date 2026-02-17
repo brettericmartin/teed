@@ -1,0 +1,1869 @@
+{
+  "category": "fashion",
+  "schemaVersion": "1.0.0",
+  "lastUpdated": "2026-02-16T00:00:00.000Z",
+  "brands": [
+    {
+      "name": "Nike",
+      "aliases": ["Nike Inc", "Nike Inc."],
+      "products": [
+        {
+          "id": "nike-air-force-1-07",
+          "name": "Air Force 1 '07",
+          "brand": "Nike",
+          "category": "fashion",
+          "subcategory": "sneakers",
+          "releaseYear": 1982,
+          "msrp": 115,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["black"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["swoosh logo", "perforated toe box", "chunky sole", "padded ankle collar", "pivot point circle on outsole"],
+            "distinguishingFeatures": ["Air sole unit", "full-grain leather upper", "non-marking rubber outsole", "metal eyelets"],
+            "logoPlacement": "side panel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "full-grain leather",
+            "sole": "Air sole unit",
+            "closure": "lace-up",
+            "origin": "originally 1982, '07 reissue"
+          },
+          "variants": [
+            { "variantName": "White/White", "colorway": "White/White", "availability": "current", "specifications": {} },
+            { "variantName": "White/Black", "colorway": "White/Black", "availability": "current", "specifications": {} },
+            { "variantName": "Triple Black", "colorway": "Black/Black", "availability": "current", "specifications": {} },
+            { "variantName": "University Red", "colorway": "White/University Red", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["air force 1", "af1", "white sneakers", "nike sneakers", "casual shoes", "leather sneakers", "classic sneakers", "forces"],
+          "aliases": ["AF1", "Air Force One", "Forces", "Uptowns", "AF1 07"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        },
+        {
+          "id": "nike-dunk-low",
+          "name": "Dunk Low",
+          "brand": "Nike",
+          "category": "fashion",
+          "subcategory": "sneakers",
+          "releaseYear": 2020,
+          "msrp": 115,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["black"],
+            "patterns": ["two-tone"],
+            "finish": "matte",
+            "designCues": ["swoosh logo", "low-cut silhouette", "padded tongue", "two-tone color blocking", "flat rubber outsole"],
+            "distinguishingFeatures": ["no visible Air unit", "flat cupsole", "perforated toe box", "classic basketball heritage design"],
+            "logoPlacement": "side panel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "leather upper",
+            "sole": "flat rubber cupsole",
+            "closure": "lace-up",
+            "origin": "originally 1985, 2020 retro reissue"
+          },
+          "variants": [
+            { "variantName": "Panda", "colorway": "White/Black", "availability": "current", "specifications": {} },
+            { "variantName": "Grey Fog", "colorway": "White/Grey Fog", "availability": "current", "specifications": {} },
+            { "variantName": "University Blue", "colorway": "White/University Blue", "availability": "current", "specifications": {} },
+            { "variantName": "Green Glow", "colorway": "White/Green Glow", "availability": "current", "specifications": {} },
+            { "variantName": "Rose Whisper", "colorway": "White/Rose Whisper", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["dunk low", "dunks", "nike dunks", "panda dunks", "casual sneakers", "retro sneakers", "low top sneakers", "skateboard shoes"],
+          "aliases": ["Dunks", "Dunk Lows", "Nike Dunk", "SB Dunk Low"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        },
+        {
+          "id": "nike-air-max-90",
+          "name": "Air Max 90",
+          "brand": "Nike",
+          "category": "fashion",
+          "subcategory": "sneakers",
+          "releaseYear": 1990,
+          "msrp": 130,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["infrared", "black", "grey"],
+            "patterns": ["multi-panel"],
+            "finish": "mixed matte and mesh",
+            "designCues": ["visible Air unit in heel", "layered upper panels", "mudguard wrapping toe", "pull tab on heel", "TPU heel clip"],
+            "distinguishingFeatures": ["visible Max Air heel unit", "mesh and leather combination upper", "waffle outsole", "iconic infrared accent"],
+            "logoPlacement": "tongue and heel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "mesh and leather upper",
+            "sole": "visible Max Air heel unit",
+            "closure": "lace-up",
+            "origin": "originally 1990, ongoing reissues"
+          },
+          "variants": [
+            { "variantName": "Infrared", "colorway": "White/Black/Infrared", "availability": "current", "specifications": {} },
+            { "variantName": "Triple White", "colorway": "White/White/White", "availability": "current", "specifications": {} },
+            { "variantName": "Triple Black", "colorway": "Black/Black/Black", "availability": "current", "specifications": {} },
+            { "variantName": "Bred", "colorway": "Black/White/University Red", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["air max 90", "am90", "nike air max", "visible air", "retro runners", "infrared", "casual sneakers", "dad shoes"],
+          "aliases": ["AM90", "Air Max 90s", "Air Max III"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        }
+      ]
+    },
+    {
+      "name": "Adidas",
+      "aliases": ["adidas", "Adidas Originals"],
+      "products": [
+        {
+          "id": "adidas-samba-og",
+          "name": "Samba OG",
+          "brand": "Adidas",
+          "category": "fashion",
+          "subcategory": "sneakers",
+          "releaseYear": 1950,
+          "msrp": 100,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["black", "green"],
+            "patterns": ["solid"],
+            "finish": "smooth leather",
+            "designCues": ["three stripes", "T-toe overlay", "gum rubber sole", "gold Samba branding on tongue", "slim low-profile silhouette"],
+            "distinguishingFeatures": ["T-toe reinforcement", "gum sole", "suede heel tab", "three signature stripes on side"],
+            "logoPlacement": "side stripes and tongue"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "full-grain leather upper",
+            "sole": "gum rubber outsole",
+            "closure": "lace-up",
+            "origin": "originally 1950, OG reissue 2023 resurgence"
+          },
+          "variants": [
+            { "variantName": "White/Black/Gum", "colorway": "White/Black/Gum", "availability": "current", "specifications": {} },
+            { "variantName": "White/Green/Gum", "colorway": "White/Green/Gum", "availability": "current", "specifications": {} },
+            { "variantName": "Core Black/White/Gum", "colorway": "Black/White/Gum", "availability": "current", "specifications": {} },
+            { "variantName": "Wonder White/Clay", "colorway": "Wonder White/Clay", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["adidas samba", "samba og", "gum sole sneakers", "retro sneakers", "indoor soccer shoes", "terrace style", "casual leather sneakers"],
+          "aliases": ["Sambas", "Samba Classic", "Adidas Samba"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        },
+        {
+          "id": "adidas-ultraboost-light",
+          "name": "Ultraboost Light",
+          "brand": "Adidas",
+          "category": "fashion",
+          "subcategory": "running-shoes",
+          "releaseYear": 2023,
+          "msrp": 190,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["white"],
+            "patterns": ["knit texture"],
+            "finish": "matte knit",
+            "designCues": ["Primeknit upper", "sock-like fit", "full-length Boost midsole", "three stripes cage", "Continental rubber outsole"],
+            "distinguishingFeatures": ["Light Boost midsole with visible pellets", "Primeknit+ engineered mesh", "heel counter cage", "30% lighter Boost foam"],
+            "logoPlacement": "heel counter and tongue"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "Primeknit+ upper",
+            "sole": "Light Boost midsole, Continental rubber outsole",
+            "closure": "lace-up",
+            "drop": "10mm",
+            "weight": "280g approx"
+          },
+          "variants": [
+            { "variantName": "Core Black/Core Black", "colorway": "Core Black/Core Black", "availability": "current", "specifications": {} },
+            { "variantName": "Cloud White/Cloud White", "colorway": "Cloud White/Cloud White", "availability": "current", "specifications": {} },
+            { "variantName": "Core Black/Cloud White", "colorway": "Core Black/Cloud White", "availability": "current", "specifications": {} },
+            { "variantName": "Blue Dawn", "colorway": "Blue Dawn/Blue Dawn", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["ultraboost", "ultra boost light", "adidas running shoes", "boost shoes", "primeknit sneakers", "running trainers", "energy return shoes"],
+          "aliases": ["UBL", "Ultraboost 23", "UB Light"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "New Balance",
+      "aliases": ["NB", "New Balance Athletics"],
+      "products": [
+        {
+          "id": "new-balance-990v6",
+          "name": "990v6",
+          "brand": "New Balance",
+          "category": "fashion",
+          "subcategory": "sneakers",
+          "releaseYear": 2023,
+          "msrp": 199,
+          "visualSignature": {
+            "primaryColors": ["grey"],
+            "secondaryColors": ["white", "navy"],
+            "patterns": ["multi-panel"],
+            "finish": "suede and mesh",
+            "designCues": ["N logo on side", "chunky midsole", "suede overlays", "mesh panels", "reflective accents", "pigskin suede"],
+            "distinguishingFeatures": ["ENCAP midsole", "FuelCell cushioning", "Made in USA", "premium suede and mesh upper", "classic dad shoe silhouette"],
+            "logoPlacement": "side N logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "pigskin suede and mesh upper",
+            "sole": "ENCAP midsole with FuelCell",
+            "closure": "lace-up",
+            "origin": "Made in USA"
+          },
+          "variants": [
+            { "variantName": "Grey", "colorway": "Grey/Silver", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy/White", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black/Silver", "availability": "current", "specifications": {} },
+            { "variantName": "Workwear", "colorway": "True Camo/Mindful Grey", "availability": "limited", "specifications": {} }
+          ],
+          "searchKeywords": ["new balance 990", "990v6", "grey sneakers", "dad shoes", "made in usa sneakers", "nb 990", "premium sneakers", "heritage running"],
+          "aliases": ["990", "NB 990v6", "990 v6"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "new-balance-550",
+          "name": "550",
+          "brand": "New Balance",
+          "category": "fashion",
+          "subcategory": "sneakers",
+          "releaseYear": 2020,
+          "msrp": 110,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["green", "navy"],
+            "patterns": ["two-tone"],
+            "finish": "smooth leather",
+            "designCues": ["N logo on side", "chunky cupsole", "perforated toe", "padded collar", "retro basketball design"],
+            "distinguishingFeatures": ["leather upper", "thick rubber cupsole", "basketball heritage silhouette", "vintage tongue branding"],
+            "logoPlacement": "side N logo and tongue"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "leather and synthetic upper",
+            "sole": "rubber cupsole",
+            "closure": "lace-up",
+            "origin": "originally 1989, 2020 retro reissue with Aime Leon Dore"
+          },
+          "variants": [
+            { "variantName": "White/Green", "colorway": "White/Green", "availability": "current", "specifications": {} },
+            { "variantName": "White/Navy", "colorway": "White/Navy", "availability": "current", "specifications": {} },
+            { "variantName": "White/Grey", "colorway": "White/Grey", "availability": "current", "specifications": {} },
+            { "variantName": "White/Burgundy", "colorway": "White/Burgundy", "availability": "current", "specifications": {} },
+            { "variantName": "Sea Salt/Green", "colorway": "Sea Salt/Green", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["new balance 550", "nb 550", "white leather sneakers", "retro basketball shoes", "casual sneakers", "nb550", "aime leon dore"],
+          "aliases": ["NB 550", "BB550", "NB550"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        }
+      ]
+    },
+    {
+      "name": "Hoka",
+      "aliases": ["HOKA", "Hoka One One", "HOKA ONE ONE"],
+      "products": [
+        {
+          "id": "hoka-clifton-9",
+          "name": "Clifton 9",
+          "brand": "Hoka",
+          "category": "fashion",
+          "subcategory": "running-shoes",
+          "releaseYear": 2023,
+          "msrp": 145,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["white"],
+            "patterns": ["solid"],
+            "finish": "engineered mesh",
+            "designCues": ["thick oversized midsole", "rocker geometry", "HOKA branding on side", "breathable mesh upper", "pull tab on heel"],
+            "distinguishingFeatures": ["compression-molded EVA midsole", "early-stage Meta-Rocker", "extremely lightweight for cushion level", "extended heel crash pad"],
+            "logoPlacement": "side panel and heel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "engineered mesh upper",
+            "sole": "compression-molded EVA midsole, rubber outsole",
+            "closure": "lace-up",
+            "drop": "5mm",
+            "weight": "248g (men's 9)"
+          },
+          "variants": [
+            { "variantName": "Black/White", "colorway": "Black/White", "availability": "current", "specifications": {} },
+            { "variantName": "Nimbus Cloud/Ice Water", "colorway": "Nimbus Cloud/Ice Water", "availability": "current", "specifications": {} },
+            { "variantName": "Airy Blue/Ice Water", "colorway": "Airy Blue/Ice Water", "availability": "current", "specifications": {} },
+            { "variantName": "Shifting Sand/Eggnog", "colorway": "Shifting Sand/Eggnog", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["hoka clifton", "clifton 9", "cushioned running shoes", "lightweight running shoes", "daily trainer", "hoka running", "max cushion"],
+          "aliases": ["Clifton", "HOKA Clifton 9", "Clifton9"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "hoka-bondi-8",
+          "name": "Bondi 8",
+          "brand": "Hoka",
+          "category": "fashion",
+          "subcategory": "running-shoes",
+          "releaseYear": 2022,
+          "msrp": 165,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["white"],
+            "patterns": ["solid"],
+            "finish": "engineered mesh",
+            "designCues": ["maximum-height midsole", "rocker geometry", "HOKA branding on side", "plush padded collar", "wide base"],
+            "distinguishingFeatures": ["full compression-molded EVA midsole", "maximum cushion Hoka model", "Meta-Rocker geometry", "ultra-padded tongue and collar"],
+            "logoPlacement": "side panel and heel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "engineered mesh upper",
+            "sole": "full EVA compression-molded midsole, durabrasion rubber outsole",
+            "closure": "lace-up",
+            "drop": "4mm",
+            "weight": "307g (men's 9)"
+          },
+          "variants": [
+            { "variantName": "Black/Black", "colorway": "Black/Black", "availability": "current", "specifications": {} },
+            { "variantName": "Blanc de Blanc", "colorway": "Blanc de Blanc/Blanc de Blanc", "availability": "current", "specifications": {} },
+            { "variantName": "Outer Space/All Aboard", "colorway": "Outer Space/All Aboard", "availability": "current", "specifications": {} },
+            { "variantName": "Goblin Blue/Mountain Spring", "colorway": "Goblin Blue/Mountain Spring", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["hoka bondi", "bondi 8", "max cushion running shoes", "comfortable running shoes", "standing shoes", "walking shoes", "hoka flagship"],
+          "aliases": ["Bondi", "HOKA Bondi 8", "Bondi8"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "On Running",
+      "aliases": ["On", "On Cloud", "On AG"],
+      "products": [
+        {
+          "id": "on-cloud-5",
+          "name": "Cloud 5",
+          "brand": "On Running",
+          "category": "fashion",
+          "subcategory": "sneakers",
+          "releaseYear": 2023,
+          "msrp": 149,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["white"],
+            "patterns": ["solid"],
+            "finish": "engineered mesh",
+            "designCues": ["CloudTec hollow pods on sole", "speed lacing system", "Swiss flag on heel", "minimalist upper", "zero-gravity foam"],
+            "distinguishingFeatures": ["CloudTec sole with individual cloud pods", "speed-lace toggle system", "channel in sole for landing", "lightweight Swiss engineering"],
+            "logoPlacement": "heel tab and side"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "engineered mesh upper",
+            "sole": "CloudTec in Helion foam",
+            "closure": "speed lacing",
+            "drop": "6mm",
+            "weight": "255g (men's 8.5)"
+          },
+          "variants": [
+            { "variantName": "All Black", "colorway": "All Black", "availability": "current", "specifications": {} },
+            { "variantName": "White/Pearl", "colorway": "White/Pearl", "availability": "current", "specifications": {} },
+            { "variantName": "Midnight/White", "colorway": "Midnight/White", "availability": "current", "specifications": {} },
+            { "variantName": "Olive/Black", "colorway": "Olive/Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["on cloud", "cloud 5", "on running shoes", "swiss running shoes", "cloudtec", "travel shoes", "all day shoes", "on sneakers"],
+          "aliases": ["Cloud5", "On Cloud 5", "OC5"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "on-cloudmonster",
+          "name": "Cloudmonster",
+          "brand": "On Running",
+          "category": "fashion",
+          "subcategory": "running-shoes",
+          "releaseYear": 2022,
+          "msrp": 169,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["magnet"],
+            "patterns": ["multi-color accent"],
+            "finish": "engineered mesh",
+            "designCues": ["oversized CloudTec pods", "thick exaggerated midsole", "bold color accents", "Swiss flag heel tab", "aggressive rocker geometry"],
+            "distinguishingFeatures": ["largest CloudTec pods in On lineup", "Helion superfoam midsole", "Speedboard energy plate", "monster-sized cushion with maximum energy return"],
+            "logoPlacement": "side panel and heel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "engineered mesh upper",
+            "sole": "CloudTec in Helion superfoam with Speedboard",
+            "closure": "lace-up",
+            "drop": "6mm",
+            "weight": "285g (men's 8.5)"
+          },
+          "variants": [
+            { "variantName": "Black/Magnet", "colorway": "Black/Magnet", "availability": "current", "specifications": {} },
+            { "variantName": "Frost/Surf", "colorway": "Frost/Surf", "availability": "current", "specifications": {} },
+            { "variantName": "Monster Green/Acai", "colorway": "Monster Green/Acai", "availability": "current", "specifications": {} },
+            { "variantName": "Fawn/Magnet", "colorway": "Fawn/Magnet", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["cloudmonster", "on cloudmonster", "max cushion on shoes", "on running max", "bold running shoes", "cloud monster", "on running flagship"],
+          "aliases": ["Cloud Monster", "Monster", "On Monster"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Allbirds",
+      "aliases": [],
+      "products": [
+        {
+          "id": "allbirds-tree-runner",
+          "name": "Tree Runner",
+          "brand": "Allbirds",
+          "category": "fashion",
+          "subcategory": "sneakers",
+          "releaseYear": 2018,
+          "msrp": 98,
+          "visualSignature": {
+            "primaryColors": ["natural grey"],
+            "secondaryColors": ["white"],
+            "patterns": ["solid"],
+            "finish": "knit textile",
+            "designCues": ["minimalist design", "knit eucalyptus upper", "simple silhouette", "no visible branding", "SweetFoam sole"],
+            "distinguishingFeatures": ["eucalyptus tree fiber upper", "SweetFoam sugarcane midsole", "machine washable", "no visible logos", "carbon-neutral"],
+            "logoPlacement": "small heel tab"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "eucalyptus tree fiber (TENCEL Lyocell)",
+            "sole": "SweetFoam sugarcane EVA midsole",
+            "closure": "lace-up",
+            "sustainability": "carbon neutral, FSC-certified eucalyptus, machine washable"
+          },
+          "variants": [
+            { "variantName": "Natural Grey", "colorway": "Natural Grey/Blizzard Sole", "availability": "current", "specifications": {} },
+            { "variantName": "Natural Black", "colorway": "Natural Black/Blizzard Sole", "availability": "current", "specifications": {} },
+            { "variantName": "Kauri Chalk", "colorway": "Kauri/Chalk Sole", "availability": "current", "specifications": {} },
+            { "variantName": "Bough Green", "colorway": "Bough Green/Blizzard Sole", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["allbirds tree runner", "sustainable sneakers", "eco-friendly shoes", "washable sneakers", "eucalyptus shoes", "minimalist sneakers", "allbirds"],
+          "aliases": ["Tree Runners", "Allbirds Trees"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Levi's",
+      "aliases": ["Levis", "Levi Strauss", "Levi's"],
+      "products": [
+        {
+          "id": "levis-501-original-fit",
+          "name": "501 Original Fit",
+          "brand": "Levi's",
+          "category": "fashion",
+          "subcategory": "jeans",
+          "releaseYear": 1873,
+          "msrp": 69,
+          "visualSignature": {
+            "primaryColors": ["indigo"],
+            "secondaryColors": ["stonewash", "black"],
+            "patterns": ["solid denim"],
+            "finish": "denim",
+            "designCues": ["button fly", "straight leg", "five-pocket design", "red tab on back pocket", "leather patch on waistband"],
+            "distinguishingFeatures": ["button fly closure", "straight leg through hip and thigh", "original shrink-to-fit option", "iconic two-horse leather patch", "arcuate stitching on back pockets"],
+            "logoPlacement": "red tab on back pocket and leather waistband patch"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "100% cotton denim (12.5 oz)",
+            "fit": "original straight fit",
+            "rise": "mid-rise",
+            "closure": "button fly",
+            "leg": "straight"
+          },
+          "variants": [
+            { "variantName": "Medium Stonewash", "colorway": "Medium Stonewash", "availability": "current", "specifications": {} },
+            { "variantName": "Dark Stonewash", "colorway": "Dark Stonewash", "availability": "current", "specifications": {} },
+            { "variantName": "Rigid STF", "colorway": "Rigid (Shrink-to-Fit)", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Light Stonewash", "colorway": "Light Stonewash", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["levis 501", "501 jeans", "original fit jeans", "straight leg jeans", "button fly jeans", "levi jeans", "classic jeans", "denim"],
+          "aliases": ["501s", "Levi 501", "501 Originals", "501 STF"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        },
+        {
+          "id": "levis-511-slim-fit",
+          "name": "511 Slim Fit",
+          "brand": "Levi's",
+          "category": "fashion",
+          "subcategory": "jeans",
+          "releaseYear": 2006,
+          "msrp": 69,
+          "visualSignature": {
+            "primaryColors": ["indigo"],
+            "secondaryColors": ["dark wash", "black"],
+            "patterns": ["solid denim"],
+            "finish": "stretch denim",
+            "designCues": ["slim through thigh", "zip fly", "five-pocket design", "red tab on back pocket", "tapered leg"],
+            "distinguishingFeatures": ["slim fit through hip and thigh", "slight taper at ankle", "stretch denim for comfort", "zip fly", "modern slim silhouette"],
+            "logoPlacement": "red tab on back pocket and leather waistband patch"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "stretch denim (98% cotton, 2% elastane)",
+            "fit": "slim fit",
+            "rise": "mid-rise, sits below waist",
+            "closure": "zip fly with button",
+            "leg": "slim through thigh, slight taper"
+          },
+          "variants": [
+            { "variantName": "Dark Hollow", "colorway": "Dark Hollow", "availability": "current", "specifications": {} },
+            { "variantName": "Native Cali", "colorway": "Native Cali (Medium Wash)", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Rajah", "colorway": "Rajah (Light Wash)", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["levis 511", "511 jeans", "slim fit jeans", "stretch jeans", "slim jeans", "levi slim", "tapered jeans", "modern jeans"],
+          "aliases": ["511s", "Levi 511", "511 Slim"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        }
+      ]
+    },
+    {
+      "name": "Patagonia",
+      "aliases": ["Patagucci"],
+      "products": [
+        {
+          "id": "patagonia-better-sweater-fleece-jacket",
+          "name": "Better Sweater Fleece Jacket",
+          "brand": "Patagonia",
+          "category": "fashion",
+          "subcategory": "jackets",
+          "releaseYear": 2009,
+          "msrp": 149,
+          "visualSignature": {
+            "primaryColors": ["new navy"],
+            "secondaryColors": ["black", "stonewash"],
+            "patterns": ["solid"],
+            "finish": "knit fleece",
+            "designCues": ["full-zip front", "stand-up collar", "zippered chest pocket", "jersey trim on cuffs and hem", "sweater-knit face"],
+            "distinguishingFeatures": ["100% recycled polyester fleece", "sweater-knit exterior with fleece interior", "raglan sleeves", "flat-seam construction", "Fair Trade Certified sewn"],
+            "logoPlacement": "left chest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "100% recycled polyester fleece (sweater-knit face)",
+            "weight": "680g (24 oz)",
+            "closure": "full zip",
+            "pockets": "2 handwarmer, 1 zippered chest",
+            "sustainability": "Fair Trade Certified, 100% recycled polyester"
+          },
+          "variants": [
+            { "variantName": "New Navy", "colorway": "New Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Stonewash", "colorway": "Stonewash", "availability": "current", "specifications": {} },
+            { "variantName": "Industrial Green", "colorway": "Industrial Green", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["patagonia fleece", "better sweater", "fleece jacket", "recycled fleece", "zip fleece", "patagonia jacket", "sustainable fleece"],
+          "aliases": ["Better Sweater", "Patagonia Fleece"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        },
+        {
+          "id": "patagonia-nano-puff-jacket",
+          "name": "Nano Puff Jacket",
+          "brand": "Patagonia",
+          "category": "fashion",
+          "subcategory": "jackets",
+          "releaseYear": 2005,
+          "msrp": 249,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["navy", "forge grey"],
+            "patterns": ["quilted horizontal baffles"],
+            "finish": "matte ripstop",
+            "designCues": ["horizontal quilted baffles", "full-zip front", "internal chest pocket doubles as stuffsack", "windflap behind zipper", "adjustable hem"],
+            "distinguishingFeatures": ["60g PrimaLoft Gold Eco insulation", "100% recycled ripstop shell", "packable into internal chest pocket", "DWR finish"],
+            "logoPlacement": "left chest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "100% recycled ripstop nylon shell, 60g PrimaLoft Gold Eco insulation",
+            "weight": "337g (11.9 oz)",
+            "closure": "full zip with internal windflap",
+            "pockets": "2 handwarmer, 1 internal chest (stuffsack)",
+            "sustainability": "recycled shell and insulation, Fair Trade Certified"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "New Navy", "colorway": "New Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Forge Grey", "colorway": "Forge Grey", "availability": "current", "specifications": {} },
+            { "variantName": "Nouveau Green", "colorway": "Nouveau Green", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["patagonia nano puff", "synthetic insulated jacket", "packable jacket", "primaloft jacket", "patagonia puffer", "lightweight insulated jacket"],
+          "aliases": ["Nano Puff", "Patagonia Puff", "Nano Puff Jacket"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        }
+      ]
+    },
+    {
+      "name": "Carhartt",
+      "aliases": ["Carhartt WIP", "Carhartt Inc"],
+      "products": [
+        {
+          "id": "carhartt-detroit-jacket",
+          "name": "Detroit Jacket",
+          "brand": "Carhartt",
+          "category": "fashion",
+          "subcategory": "jackets",
+          "releaseYear": 1989,
+          "msrp": 124,
+          "visualSignature": {
+            "primaryColors": ["carhartt brown"],
+            "secondaryColors": ["black"],
+            "patterns": ["solid"],
+            "finish": "duck canvas",
+            "designCues": ["blanket-lined interior", "corduroy collar", "two chest pockets", "snap-front closure", "pleated elbows"],
+            "distinguishingFeatures": ["firm hand duck canvas shell", "blanket lining for warmth", "corduroy-trimmed collar", "triple-stitched main seams", "Carhartt logo on pocket"],
+            "logoPlacement": "left chest pocket"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "12 oz firm hand duck canvas, blanket lining",
+            "closure": "snap front",
+            "pockets": "2 chest pockets, 2 lower pockets",
+            "collar": "corduroy-trimmed spread collar",
+            "construction": "triple-stitched main seams"
+          },
+          "variants": [
+            { "variantName": "Carhartt Brown", "colorway": "Carhartt Brown", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Moss", "colorway": "Moss", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["carhartt detroit jacket", "duck canvas jacket", "work jacket", "blanket lined jacket", "detroit jacket", "carhartt chore coat", "workwear jacket"],
+          "aliases": ["Detroit", "Carhartt Detroit", "Detroit Blanket-Lined"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Canada Goose",
+      "aliases": ["CG"],
+      "products": [
+        {
+          "id": "canada-goose-expedition-parka",
+          "name": "Expedition Parka",
+          "brand": "Canada Goose",
+          "category": "fashion",
+          "subcategory": "parkas",
+          "releaseYear": 2000,
+          "msrp": 1395,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["navy", "red"],
+            "patterns": ["solid"],
+            "finish": "Arctic Tech shell",
+            "designCues": ["fur-trimmed hood", "mid-thigh length", "large Canada Goose disc patch on arm", "fleece-lined chin guard", "multiple exterior pockets"],
+            "distinguishingFeatures": ["625-fill white duck down", "coyote fur ruff (removable)", "rated to -30°C", "developed for scientists in McMurdo Station Antarctica", "TEI 5 (Extreme Warmth)"],
+            "logoPlacement": "left arm disc patch"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "Arctic Tech shell (85% polyester, 15% cotton), 625-fill white duck down",
+            "insulation": "625-fill power white duck down",
+            "temperatureRating": "-30°C / -22°F",
+            "hood": "removable coyote fur ruff, adjustable tunnel hood",
+            "length": "mid-thigh",
+            "tei": "5 (Extreme Warmth)"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Red", "colorway": "Red", "availability": "current", "specifications": {} },
+            { "variantName": "Military Green", "colorway": "Military Green", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["canada goose expedition", "expedition parka", "extreme cold parka", "arctic parka", "down parka", "canada goose jacket", "winter parka", "luxury parka"],
+          "aliases": ["Expedition", "CG Expedition", "Goose Expedition"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        }
+      ]
+    },
+    {
+      "name": "Arc'teryx",
+      "aliases": ["Arcteryx", "Arc'teryx"],
+      "products": [
+        {
+          "id": "arcteryx-atom-lt-hoody",
+          "name": "Atom LT Hoody",
+          "brand": "Arc'teryx",
+          "category": "fashion",
+          "subcategory": "jackets",
+          "releaseYear": 2008,
+          "msrp": 300,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark grey"],
+            "patterns": ["solid with panel contrast"],
+            "finish": "matte nylon face",
+            "designCues": ["insulated torso with fleece side panels", "fitted athletic silhouette", "scuba-style hood", "cuff thumbholes", "minimal branding"],
+            "distinguishingFeatures": ["Coreloft synthetic insulation in core", "Polartec Power Stretch fleece side panels", "breathable for active use", "no-lift gusseted underarms", "arc'teryx dead bird logo on chest"],
+            "logoPlacement": "left chest (small embroidered logo)"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "Tyono 20 face fabric, Coreloft 60g insulation (torso), Polartec Power Stretch fleece (side panels)",
+            "weight": "355g (12.5 oz)",
+            "closure": "full front zip",
+            "hood": "insulated StormHood",
+            "pockets": "2 hand pockets, 1 internal chest pocket"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Kingfisher", "colorway": "Kingfisher (Teal)", "availability": "current", "specifications": {} },
+            { "variantName": "Forage", "colorway": "Forage (Green)", "availability": "current", "specifications": {} },
+            { "variantName": "Solitude", "colorway": "Solitude (Blue)", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["arcteryx atom", "atom lt", "synthetic insulated jacket", "active insulation", "midlayer jacket", "arcteryx hoodie", "arc'teryx jacket", "technical jacket"],
+          "aliases": ["Atom LT", "Atom Hoody", "Atom Lightweight"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Uniqlo",
+      "aliases": ["UNIQLO"],
+      "products": [
+        {
+          "id": "uniqlo-ultra-light-down-jacket",
+          "name": "Ultra Light Down Jacket",
+          "brand": "Uniqlo",
+          "category": "fashion",
+          "subcategory": "jackets",
+          "releaseYear": 2009,
+          "msrp": 79,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["navy", "wine"],
+            "patterns": ["quilted"],
+            "finish": "nylon ripstop",
+            "designCues": ["horizontal quilted baffles", "stand-up collar", "slim fit", "packable into included pouch", "snap-closure pockets"],
+            "distinguishingFeatures": ["640-fill premium down", "ultra-lightweight nylon shell", "packs into included stuff sack", "water-repellent DWR finish", "extremely lightweight (~230g)"],
+            "logoPlacement": "inside label only"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "nylon ripstop shell, 640-fill premium duck down",
+            "weight": "~230g",
+            "closure": "full zip",
+            "pockets": "2 side pockets with snap closure",
+            "sustainability": "water-repellent DWR finish, packable"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Wine", "colorway": "Wine", "availability": "current", "specifications": {} },
+            { "variantName": "Olive", "colorway": "Olive", "availability": "current", "specifications": {} },
+            { "variantName": "Dark Brown", "colorway": "Dark Brown", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["uniqlo down jacket", "ultra light down", "packable down jacket", "lightweight puffer", "travel jacket", "affordable down jacket", "uniqlo puffer"],
+          "aliases": ["ULD", "Uniqlo Down", "Ultra Light Down"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Cole Haan",
+      "aliases": ["Cole-Haan"],
+      "products": [
+        {
+          "id": "cole-haan-grandpro-rally-canvas-sneaker",
+          "name": "GrandPro Rally Canvas Sneaker",
+          "brand": "Cole Haan",
+          "category": "fashion",
+          "subcategory": "sneakers",
+          "releaseYear": 2020,
+          "msrp": 120,
+          "visualSignature": {
+            "primaryColors": ["ivory"],
+            "secondaryColors": ["navy"],
+            "patterns": ["solid"],
+            "finish": "canvas",
+            "designCues": ["canvas upper", "minimalist court shoe silhouette", "rubber cupsole", "Cole Haan branding on tongue", "perforated detail at toe"],
+            "distinguishingFeatures": ["Grand.OS comfort technology", "lightweight canvas upper", "comfort footbed", "versatile dress-casual crossover"],
+            "logoPlacement": "tongue and heel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "canvas upper",
+            "sole": "rubber cupsole with Grand.OS technology",
+            "closure": "lace-up",
+            "comfort": "Grand.OS cushioned footbed"
+          },
+          "variants": [
+            { "variantName": "Ivory", "colorway": "Ivory", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "British Tan", "colorway": "British Tan", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["cole haan sneaker", "grandpro rally", "canvas sneaker", "dress sneaker", "smart casual shoes", "comfortable sneakers", "cole haan casual"],
+          "aliases": ["GrandPro Rally", "GrandPro Canvas", "Rally Canvas"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Everlane",
+      "aliases": [],
+      "products": [
+        {
+          "id": "everlane-organic-cotton-crew",
+          "name": "The Organic Cotton Crew",
+          "brand": "Everlane",
+          "category": "fashion",
+          "subcategory": "t-shirts",
+          "releaseYear": 2019,
+          "msrp": 30,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["black", "heather grey"],
+            "patterns": ["solid"],
+            "finish": "jersey knit",
+            "designCues": ["classic crew neckline", "relaxed fit", "straight hem", "no visible branding", "midweight fabric"],
+            "distinguishingFeatures": ["100% organic cotton", "no logo visible", "ethical factory production", "transparent pricing", "garment-dyed options"],
+            "logoPlacement": "inside neck label only"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "100% organic cotton (6.5 oz)",
+            "fit": "relaxed",
+            "neckline": "crew neck",
+            "sustainability": "organic cotton, ethical factories, transparent pricing"
+          },
+          "variants": [
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Heather Grey", "colorway": "Heather Grey", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Bone", "colorway": "Bone", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["everlane t-shirt", "organic cotton tee", "basic crew neck", "ethical t-shirt", "sustainable tee", "plain t-shirt", "everyday tee"],
+          "aliases": ["Organic Crew", "Everlane Tee", "Cotton Crew"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "J.Crew",
+      "aliases": ["JCrew", "J Crew"],
+      "products": [
+        {
+          "id": "jcrew-ludlow-slim-fit-suit-jacket",
+          "name": "Ludlow Slim-Fit Suit Jacket",
+          "brand": "J.Crew",
+          "category": "fashion",
+          "subcategory": "blazers",
+          "releaseYear": 2010,
+          "msrp": 398,
+          "visualSignature": {
+            "primaryColors": ["navy"],
+            "secondaryColors": ["charcoal"],
+            "patterns": ["solid"],
+            "finish": "worsted wool",
+            "designCues": ["notch lapel", "center vent", "two-button closure", "flap pockets", "pick stitching on lapels", "slim-fit silhouette"],
+            "distinguishingFeatures": ["Italian Vitale Barberis Canonico wool", "half-canvas construction", "natural shoulder", "functioning sleeve buttons", "Bemberg lining"],
+            "logoPlacement": "inside label"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "Italian wool (Vitale Barberis Canonico mill)",
+            "construction": "half-canvas",
+            "fit": "slim fit",
+            "closure": "two-button",
+            "vent": "center vent",
+            "lining": "Bemberg cupro"
+          },
+          "variants": [
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Charcoal", "colorway": "Charcoal", "availability": "current", "specifications": {} },
+            { "variantName": "Light Grey", "colorway": "Light Grey", "availability": "current", "specifications": {} },
+            { "variantName": "British Khaki", "colorway": "British Khaki", "availability": "seasonal", "specifications": {} }
+          ],
+          "searchKeywords": ["j crew suit jacket", "ludlow blazer", "slim fit blazer", "italian wool blazer", "business casual blazer", "sport coat", "jcrew suit"],
+          "aliases": ["Ludlow", "Ludlow Jacket", "J.Crew Ludlow"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Bonobos",
+      "aliases": [],
+      "products": [
+        {
+          "id": "bonobos-stretch-washed-chinos",
+          "name": "Stretch Washed Chinos",
+          "brand": "Bonobos",
+          "category": "fashion",
+          "subcategory": "pants",
+          "releaseYear": 2011,
+          "msrp": 98,
+          "visualSignature": {
+            "primaryColors": ["khaki"],
+            "secondaryColors": ["navy", "olive"],
+            "patterns": ["solid"],
+            "finish": "washed cotton twill",
+            "designCues": ["tailored through seat and thigh", "flat front", "no break or slight break", "split back waistband"],
+            "distinguishingFeatures": ["proprietary curved waistband for better fit", "stretch cotton fabric", "40+ color options", "available in Athletic, Slim, and Tailored fits"],
+            "logoPlacement": "inside waistband"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "98% cotton, 2% elastane (stretch washed twill)",
+            "fit": "Tailored (also available in Slim and Athletic)",
+            "rise": "mid-rise",
+            "closure": "zip fly with button",
+            "waistband": "proprietary curved waistband"
+          },
+          "variants": [
+            { "variantName": "Khaki", "colorway": "Khaki", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Olive", "colorway": "Olive", "availability": "current", "specifications": {} },
+            { "variantName": "Jet Blue", "colorway": "Jet Blue", "availability": "current", "specifications": {} },
+            { "variantName": "Congos", "colorway": "Congos (Green)", "availability": "current", "specifications": {} },
+            { "variantName": "Graham Slacker", "colorway": "Graham Slacker (Grey)", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["bonobos chinos", "stretch chinos", "tailored chinos", "mens chinos", "dress pants", "business casual pants", "colored chinos", "bonobos pants"],
+          "aliases": ["Washed Chinos", "Bonobos Chinos", "Stretch Chinos"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Allen Edmonds",
+      "aliases": ["AE"],
+      "products": [
+        {
+          "id": "allen-edmonds-park-avenue-cap-toe-oxford",
+          "name": "Park Avenue Cap-Toe Oxford",
+          "brand": "Allen Edmonds",
+          "category": "fashion",
+          "subcategory": "dress-shoes",
+          "releaseYear": 1945,
+          "msrp": 395,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["walnut", "dark chili"],
+            "patterns": ["solid"],
+            "finish": "polished calfskin leather",
+            "designCues": ["cap toe with clean stitch line", "closed lacing (balmoral)", "five-eyelet facing", "single leather sole", "combination heel"],
+            "distinguishingFeatures": ["360-degree Goodyear welt construction", "premium calfskin leather upper", "recraftable", "made in USA", "leather sole with combination heel", "benchmark classic American dress shoe"],
+            "logoPlacement": "inside sole stamp"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "premium calfskin leather upper",
+            "sole": "single oak leather sole with combination heel",
+            "construction": "360-degree Goodyear welt",
+            "closure": "five-eyelet closed lacing",
+            "last": "65 last",
+            "origin": "Made in USA (Port Washington, WI)",
+            "recraftable": "yes, fully recraftable"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Walnut", "colorway": "Walnut", "availability": "current", "specifications": {} },
+            { "variantName": "Dark Chili", "colorway": "Dark Chili", "availability": "current", "specifications": {} },
+            { "variantName": "Oxblood", "colorway": "Oxblood", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["allen edmonds park avenue", "cap toe oxford", "dress shoes", "formal shoes", "oxford shoes", "goodyear welt shoes", "made in usa shoes", "business shoes"],
+          "aliases": ["Park Avenue", "AE Park Avenue", "Park Ave"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        }
+      ]
+    },
+    {
+      "name": "Vuori",
+      "aliases": [],
+      "products": [
+        {
+          "id": "vuori-ponto-performance-jogger",
+          "name": "Ponto Performance Jogger",
+          "brand": "Vuori",
+          "category": "fashion",
+          "subcategory": "joggers",
+          "releaseYear": 2019,
+          "msrp": 98,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["charcoal", "navy"],
+            "patterns": ["solid"],
+            "finish": "DreamKnit fabric",
+            "designCues": ["tapered leg", "elastic waistband with drawcord", "zippered pockets", "ribbed cuffs", "clean minimal branding"],
+            "distinguishingFeatures": ["DreamKnit fabric", "moisture-wicking", "tapered fit", "four-way stretch feel", "athleisure crossover"],
+            "logoPlacement": "small logo on hip"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "DreamKnit fabric (polyester/elastane blend)",
+            "fit": "tapered jogger",
+            "closure": "elastic waistband with drawcord",
+            "features": "moisture-wicking, tapered leg, zippered pockets"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Charcoal Heather", "colorway": "Charcoal Heather", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["vuori joggers", "ponto jogger", "performance jogger", "dreamknit jogger", "athleisure pants", "vuori pants", "comfortable joggers"],
+          "aliases": ["Ponto Jogger", "Vuori Ponto", "Ponto Performance"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "vuori-strato-tech-tee",
+          "name": "Strato Tech Tee",
+          "brand": "Vuori",
+          "category": "fashion",
+          "subcategory": "t-shirts",
+          "releaseYear": 2020,
+          "msrp": 68,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey", "navy"],
+            "patterns": ["solid"],
+            "finish": "technical knit",
+            "designCues": ["crew neckline", "athletic fit", "minimal branding", "lightweight construction"],
+            "distinguishingFeatures": ["4-way stretch", "anti-odor treatment", "quick-dry fabric", "versatile gym-to-street design"],
+            "logoPlacement": "small logo on chest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "technical fabric blend",
+            "fit": "athletic",
+            "neckline": "crew neck",
+            "features": "4-way stretch, anti-odor, quick-dry"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Heather Grey", "colorway": "Heather Grey", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["vuori tee", "strato tech tee", "performance t-shirt", "workout tee", "quick dry tee", "vuori shirt", "athletic t-shirt"],
+          "aliases": ["Strato Tee", "Vuori Strato", "Tech Tee"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Ten Thousand",
+      "aliases": ["10000", "10K"],
+      "products": [
+        {
+          "id": "ten-thousand-interval-short-7",
+          "name": "Interval Short 7\"",
+          "brand": "Ten Thousand",
+          "category": "fashion",
+          "subcategory": "shorts",
+          "releaseYear": 2019,
+          "msrp": 68,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["navy", "charcoal"],
+            "patterns": ["solid"],
+            "finish": "Durable Stretch woven",
+            "designCues": ["7-inch inseam", "built-in liner", "zip pocket on back", "clean minimal design", "split hem"],
+            "distinguishingFeatures": ["Durable Stretch fabric", "built-in liner", "zip pocket", "lightweight training short", "abrasion-resistant"],
+            "logoPlacement": "small logo on front hem"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "Durable Stretch fabric (nylon/elastane)",
+            "inseam": "7 inches",
+            "liner": "built-in brief liner",
+            "features": "zip pocket, Durable Stretch fabric, lightweight"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Charcoal", "colorway": "Charcoal", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["ten thousand shorts", "interval short", "training shorts", "lined shorts", "gym shorts", "7 inch shorts", "workout shorts"],
+          "aliases": ["Interval Short", "Interval 7", "Ten Thousand Interval"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        },
+        {
+          "id": "ten-thousand-versatile-pant",
+          "name": "Versatile Pant",
+          "brand": "Ten Thousand",
+          "category": "fashion",
+          "subcategory": "pants",
+          "releaseYear": 2021,
+          "msrp": 128,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["navy", "charcoal"],
+            "patterns": ["solid"],
+            "finish": "technical woven",
+            "designCues": ["tapered leg", "elastic waistband", "clean front", "zip pockets", "minimal branding"],
+            "distinguishingFeatures": ["4-way stretch", "DWR coating", "travel-ready", "gym-to-office versatility", "lightweight performance fabric"],
+            "logoPlacement": "small logo on hip"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "4-way stretch fabric with DWR coating",
+            "fit": "tapered",
+            "closure": "elastic waistband with drawcord",
+            "features": "4-way stretch, DWR coating, travel-ready"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Charcoal", "colorway": "Charcoal", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["ten thousand pants", "versatile pant", "performance pants", "travel pants", "stretch pants", "DWR pants", "technical pants"],
+          "aliases": ["Versatile Pant", "Ten Thousand Versatile"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 87
+        }
+      ]
+    },
+    {
+      "name": "Western Rise",
+      "aliases": [],
+      "products": [
+        {
+          "id": "western-rise-evolution-pant",
+          "name": "Evolution Pant",
+          "brand": "Western Rise",
+          "category": "fashion",
+          "subcategory": "pants",
+          "releaseYear": 2017,
+          "msrp": 128,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["charcoal", "navy", "sand"],
+            "patterns": ["solid"],
+            "finish": "matte technical woven",
+            "designCues": ["slim-straight leg", "flat front", "five-pocket design", "clean minimal look", "no visible branding"],
+            "distinguishingFeatures": ["nylon/spandex blend", "DWR water-repellent coating", "travel-ready", "wrinkle-free", "jean-style five-pocket design in technical fabric"],
+            "logoPlacement": "inside waistband label"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "nylon/spandex blend",
+            "fit": "slim-straight",
+            "closure": "zip fly with button",
+            "features": "DWR coating, wrinkle-free, travel-ready, 4-way stretch"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Charcoal", "colorway": "Charcoal", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Sand", "colorway": "Sand", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["western rise pants", "evolution pant", "travel pants", "technical pants", "wrinkle free pants", "DWR pants", "performance chinos"],
+          "aliases": ["Evolution", "WR Evolution Pant"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        },
+        {
+          "id": "western-rise-diversion-pant",
+          "name": "Diversion Pant",
+          "brand": "Western Rise",
+          "category": "fashion",
+          "subcategory": "pants",
+          "releaseYear": 2019,
+          "msrp": 128,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["charcoal", "navy"],
+            "patterns": ["solid"],
+            "finish": "matte technical woven",
+            "designCues": ["slim-straight leg", "flat front", "belt loops", "clean casual styling", "office-appropriate"],
+            "distinguishingFeatures": ["4-way stretch fabric", "casual/office crossover design", "wrinkle-resistant", "tailored technical pant"],
+            "logoPlacement": "inside waistband label"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "4-way stretch nylon blend",
+            "fit": "slim-straight",
+            "closure": "zip fly with button",
+            "features": "4-way stretch, casual/office crossover, wrinkle-resistant"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Charcoal", "colorway": "Charcoal", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["western rise diversion", "diversion pant", "office pants", "stretch pants", "casual dress pants", "technical chinos"],
+          "aliases": ["Diversion", "WR Diversion Pant"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 87
+        },
+        {
+          "id": "western-rise-airloft-hooded-jacket",
+          "name": "AirLoft Hooded Jacket",
+          "brand": "Western Rise",
+          "category": "fashion",
+          "subcategory": "jackets",
+          "releaseYear": 2020,
+          "msrp": 248,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["charcoal", "navy"],
+            "patterns": ["quilted"],
+            "finish": "matte ripstop nylon",
+            "designCues": ["hooded design", "quilted baffles", "full-zip front", "packable construction", "minimal branding"],
+            "distinguishingFeatures": ["synthetic insulation", "packable design", "DWR water-repellent finish", "lightweight warmth", "travel-ready jacket"],
+            "logoPlacement": "inside label"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "ripstop nylon shell, synthetic insulation fill",
+            "closure": "full zip",
+            "hood": "integrated hood",
+            "features": "synthetic insulation, packable, DWR coating, lightweight"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Charcoal", "colorway": "Charcoal", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["western rise jacket", "airloft jacket", "packable jacket", "synthetic insulated jacket", "travel jacket", "DWR jacket", "hooded jacket"],
+          "aliases": ["AirLoft", "WR AirLoft", "AirLoft Hoody"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 86
+        }
+      ]
+    },
+    {
+      "name": "Unbound Merino",
+      "aliases": [],
+      "products": [
+        {
+          "id": "unbound-merino-crew-neck-t-shirt",
+          "name": "Merino Crew Neck T-Shirt",
+          "brand": "Unbound Merino",
+          "category": "fashion",
+          "subcategory": "t-shirts",
+          "releaseYear": 2016,
+          "msrp": 75,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["white", "navy", "grey"],
+            "patterns": ["solid"],
+            "finish": "fine merino knit",
+            "designCues": ["crew neckline", "classic fit", "no visible branding", "smooth merino finish", "lightweight construction"],
+            "distinguishingFeatures": ["100% merino wool", "natural anti-odor properties", "travel staple for multi-day wear", "temperature regulating", "machine washable merino"],
+            "logoPlacement": "inside neck label only"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "100% merino wool (17.5 micron)",
+            "fit": "classic",
+            "neckline": "crew neck",
+            "features": "anti-odor, temperature regulating, travel-friendly, machine washable"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Grey", "colorway": "Grey", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["unbound merino t-shirt", "merino wool tee", "travel t-shirt", "anti-odor tee", "merino crew neck", "wool t-shirt", "travel clothing"],
+          "aliases": ["Merino Tee", "Unbound Tee", "Merino Crew Neck"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Bluffworks",
+      "aliases": [],
+      "products": [
+        {
+          "id": "bluffworks-threshold-performance-t-shirt",
+          "name": "Threshold Performance T-Shirt",
+          "brand": "Bluffworks",
+          "category": "fashion",
+          "subcategory": "t-shirts",
+          "releaseYear": 2021,
+          "msrp": 58,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["navy", "white"],
+            "patterns": ["solid"],
+            "finish": "smooth technical knit",
+            "designCues": ["crew neckline", "classic fit", "no visible branding", "clean minimal design"],
+            "distinguishingFeatures": ["nylon/spandex fabric", "wrinkle-free", "quick-dry", "travel-optimized performance tee"],
+            "logoPlacement": "inside label only"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "nylon/spandex blend",
+            "fit": "classic",
+            "neckline": "crew neck",
+            "features": "wrinkle-free, quick-dry, stretch, travel-ready"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["bluffworks t-shirt", "threshold tee", "performance t-shirt", "travel tee", "wrinkle free tee", "quick dry shirt", "nylon t-shirt"],
+          "aliases": ["Threshold Tee", "Bluffworks Tee", "Performance T-Shirt"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ]
+    },
+    {
+      "name": "ExOfficio",
+      "aliases": ["Ex Officio"],
+      "products": [
+        {
+          "id": "exofficio-give-n-go-boxer-brief",
+          "name": "Give-N-Go Boxer Brief",
+          "brand": "ExOfficio",
+          "category": "fashion",
+          "subcategory": "underwear",
+          "releaseYear": 2005,
+          "msrp": 32,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["charcoal", "navy"],
+            "patterns": ["solid"],
+            "finish": "lightweight mesh knit",
+            "designCues": ["boxer brief length", "tagless waistband", "flatlock seams", "breathable mesh fabric"],
+            "distinguishingFeatures": ["quick-dry fabric", "anti-odor treatment", "travel classic underwear", "breathable mesh construction", "Aegis antimicrobial"],
+            "logoPlacement": "waistband"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "94% nylon, 6% elastane (Give-N-Go mesh)",
+            "fit": "boxer brief",
+            "features": "quick-dry, anti-odor, Aegis antimicrobial, breathable mesh, travel classic"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Charcoal", "colorway": "Charcoal", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["exofficio underwear", "give-n-go", "travel underwear", "quick dry underwear", "anti-odor boxer briefs", "mens underwear", "travel boxer briefs"],
+          "aliases": ["Give-N-Go", "Give N Go", "ExOfficio Boxer Brief"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Birddogs",
+      "aliases": [],
+      "products": [
+        {
+          "id": "birddogs-gym-shorts",
+          "name": "Gym Shorts",
+          "brand": "Birddogs",
+          "category": "fashion",
+          "subcategory": "shorts",
+          "releaseYear": 2015,
+          "msrp": 55,
+          "visualSignature": {
+            "primaryColors": ["navy"],
+            "secondaryColors": ["black", "grey"],
+            "patterns": ["solid", "fun patterns"],
+            "finish": "stretch woven",
+            "designCues": ["built-in liner", "elastic waistband", "fun pattern options", "casual gym styling"],
+            "distinguishingFeatures": ["built-in liner", "stretch fabric", "fun colorful patterns and names", "gym-to-casual versatility"],
+            "logoPlacement": "small logo on hem"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "stretch polyester/spandex blend",
+            "fit": "athletic",
+            "liner": "built-in brief liner",
+            "features": "stretch, built-in liner, fun patterns"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Various Patterns", "colorway": "Assorted", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["birddogs shorts", "gym shorts", "liner shorts", "built-in liner shorts", "athletic shorts", "fun shorts", "stretch shorts"],
+          "aliases": ["Birddogs Gym Shorts", "Birddogs"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ]
+    },
+    {
+      "name": "SAXX",
+      "aliases": ["Saxx", "Saxx Underwear"],
+      "products": [
+        {
+          "id": "saxx-ultra-boxer-brief",
+          "name": "Ultra Boxer Brief",
+          "brand": "SAXX",
+          "category": "fashion",
+          "subcategory": "underwear",
+          "releaseYear": 2006,
+          "msrp": 34,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["navy", "grey"],
+            "patterns": ["solid", "printed"],
+            "finish": "modal blend knit",
+            "designCues": ["boxer brief length", "BallPark Pouch visible in front panel", "Three-D Fit", "flat out seams", "branded waistband"],
+            "distinguishingFeatures": ["BallPark Pouch technology", "modal fabric for softness", "moisture-wicking", "anti-chafe flat out seams", "wide variety of prints"],
+            "logoPlacement": "waistband"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "95% viscose (modal), 5% elastane",
+            "fit": "boxer brief with BallPark Pouch",
+            "features": "BallPark Pouch, modal fabric, moisture-wicking, flat out seams"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Various Prints", "colorway": "Assorted", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["saxx underwear", "ultra boxer brief", "ballpark pouch", "modal underwear", "mens boxer briefs", "comfortable underwear", "saxx ultra"],
+          "aliases": ["Ultra", "SAXX Ultra", "Ultra Boxer"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Bombas",
+      "aliases": [],
+      "products": [
+        {
+          "id": "bombas-mens-ankle-socks-6-pack",
+          "name": "Men's Ankle Socks 6-Pack",
+          "brand": "Bombas",
+          "category": "fashion",
+          "subcategory": "socks",
+          "releaseYear": 2013,
+          "msrp": 76,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["black", "grey"],
+            "patterns": ["solid", "striped"],
+            "finish": "cotton blend knit",
+            "designCues": ["honeycomb arch support band", "blister tab on heel", "seamless toe", "stay-up cuff technology", "bee logo"],
+            "distinguishingFeatures": ["honeycomb arch support", "blister tab on heel", "seamless toe", "stay-up technology", "one-for-one donation model"],
+            "logoPlacement": "sole of foot (bee logo)"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "cotton blend with reinforced heel and toe",
+            "fit": "ankle length",
+            "pack": "6-pack",
+            "features": "honeycomb arch support, blister tab, seamless toe, stay-up cuff"
+          },
+          "variants": [
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Mixed", "colorway": "Assorted", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["bombas socks", "ankle socks", "performance socks", "comfortable socks", "arch support socks", "mens socks", "bombas 6-pack"],
+          "aliases": ["Bombas Ankle Socks", "Bombas 6-Pack"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Hey Dude",
+      "aliases": ["HEYDUDE", "Hey Dude Shoes"],
+      "products": [
+        {
+          "id": "hey-dude-wally-stretch-canvas",
+          "name": "Wally Stretch Canvas",
+          "brand": "Hey Dude",
+          "category": "fashion",
+          "subcategory": "sneakers",
+          "releaseYear": 2018,
+          "msrp": 59,
+          "visualSignature": {
+            "primaryColors": ["grey"],
+            "secondaryColors": ["navy", "black"],
+            "patterns": ["solid", "heathered"],
+            "finish": "stretch canvas",
+            "designCues": ["slip-on style with laces", "ultra-lightweight construction", "rounded toe", "Flex & Fold sole", "memory foam insole"],
+            "distinguishingFeatures": ["ultra-light weight", "Flex & Fold flexible sole", "machine washable", "memory foam insole", "elastic lace system"],
+            "logoPlacement": "heel tab and insole"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "stretch canvas upper",
+            "sole": "Flex & Fold EVA outsole",
+            "closure": "elastic lace",
+            "features": "ultra-light, machine washable, memory foam insole, Flex & Fold sole"
+          },
+          "variants": [
+            { "variantName": "Smoke", "colorway": "Smoke", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Various Colors", "colorway": "Assorted", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["hey dude shoes", "wally stretch", "lightweight shoes", "casual slip-on", "machine washable shoes", "hey dude wally", "comfort shoes"],
+          "aliases": ["Wally", "Hey Dude Wally", "Wally Canvas"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Darn Tough",
+      "aliases": ["Darn Tough Vermont"],
+      "products": [
+        {
+          "id": "darn-tough-hiker-micro-crew-cushion",
+          "name": "Hiker Micro Crew Cushion Socks",
+          "brand": "Darn Tough",
+          "category": "fashion",
+          "subcategory": "socks",
+          "releaseYear": 2004,
+          "msrp": 25,
+          "visualSignature": {
+            "primaryColors": ["charcoal"],
+            "secondaryColors": ["olive", "navy"],
+            "patterns": ["solid", "subtle stripe"],
+            "finish": "merino wool knit",
+            "designCues": ["micro crew height", "cushioned sole", "fine gauge knit", "reinforced heel and toe", "seamless construction"],
+            "distinguishingFeatures": ["merino wool blend", "lifetime guarantee", "Made in USA (Vermont)", "cushioned underfoot", "seamless toe"],
+            "logoPlacement": "top of foot"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "merino wool blend",
+            "height": "micro crew",
+            "cushion": "cushion sole",
+            "features": "merino wool, lifetime guarantee, Made in USA, seamless toe",
+            "origin": "Made in USA (Northfield, Vermont)"
+          },
+          "variants": [
+            { "variantName": "Charcoal", "colorway": "Charcoal", "availability": "current", "specifications": {} },
+            { "variantName": "Olive", "colorway": "Olive", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Various Colors", "colorway": "Assorted", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["darn tough socks", "hiking socks", "merino wool socks", "lifetime guarantee socks", "made in usa socks", "cushion socks", "hiker socks"],
+          "aliases": ["Hiker Micro Crew", "Darn Tough Hikers", "DT Hiker Socks"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Greyson",
+      "aliases": ["Greyson Clothiers"],
+      "products": [
+        {
+          "id": "greyson-cayuse-polo",
+          "name": "Cayuse Polo",
+          "brand": "Greyson",
+          "category": "fashion",
+          "subcategory": "polos",
+          "releaseYear": 2018,
+          "msrp": 118,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["navy", "grey"],
+            "patterns": ["solid"],
+            "finish": "technical knit",
+            "designCues": ["polo collar", "four-button placket", "modern fit", "wolf logo on chest", "UPF 50 fabric"],
+            "distinguishingFeatures": ["technical performance fabric", "UPF 50 sun protection", "modern tailored fit", "golf and lifestyle crossover", "wolf head logo"],
+            "logoPlacement": "left chest (wolf logo)"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "technical polyester/spandex blend",
+            "fit": "modern fit",
+            "collar": "polo collar",
+            "features": "UPF 50, technical fabric, moisture-wicking, four-way stretch"
+          },
+          "variants": [
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Various Colors", "colorway": "Assorted", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["greyson polo", "cayuse polo", "golf polo", "performance polo", "UPF polo", "luxury golf apparel", "greyson clothiers"],
+          "aliases": ["Cayuse", "Greyson Cayuse", "Greyson Golf Polo"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ]
+    },
+    {
+      "name": "Sunday Red",
+      "aliases": ["Sunday Red by Tiger Woods", "Tiger Woods Sunday Red"],
+      "products": [
+        {
+          "id": "sunday-red-performance-polo",
+          "name": "Performance Polo",
+          "brand": "Sunday Red",
+          "category": "fashion",
+          "subcategory": "polos",
+          "releaseYear": 2024,
+          "msrp": 120,
+          "visualSignature": {
+            "primaryColors": ["red"],
+            "secondaryColors": ["black", "white"],
+            "patterns": ["solid"],
+            "finish": "technical knit",
+            "designCues": ["polo collar", "modern fit", "premium construction", "Tiger's brand logo on chest", "athletic silhouette"],
+            "distinguishingFeatures": ["Tiger Woods' personal brand", "premium athletic polo", "modern fit", "performance fabric", "launched 2024 after Nike split"],
+            "logoPlacement": "left chest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "premium technical fabric",
+            "fit": "modern fit",
+            "collar": "polo collar",
+            "features": "premium athletic polo, performance fabric, Tiger Woods brand"
+          },
+          "variants": [
+            { "variantName": "Red", "colorway": "Red", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Various Colors", "colorway": "Assorted", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["sunday red polo", "tiger woods polo", "performance polo", "golf polo", "sunday red", "tiger woods brand", "premium golf polo"],
+          "aliases": ["Sunday Red Polo", "Tiger Woods Polo", "TW Performance Polo"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 82
+        }
+      ]
+    },
+    {
+      "name": "melin",
+      "aliases": ["Melin", "MELIN"],
+      "products": [
+        {
+          "id": "melin-hydro-a-game-snapback",
+          "name": "Hydro A-Game Snapback",
+          "brand": "melin",
+          "category": "fashion",
+          "subcategory": "hats",
+          "releaseYear": 2015,
+          "msrp": 69,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["navy", "white"],
+            "patterns": ["solid"],
+            "finish": "performance fabric",
+            "designCues": ["snapback closure", "flat brim", "melin shield logo", "structured crown", "waterproof construction"],
+            "distinguishingFeatures": ["Hydro waterproof technology", "floats in water", "performance snapback", "premium materials", "moisture-wicking sweatband"],
+            "logoPlacement": "front center (shield logo)"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "performance fabric with Hydro waterproof treatment",
+            "closure": "snapback",
+            "brim": "flat brim",
+            "features": "waterproof, floats, moisture-wicking sweatband, structured crown"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Various Colors", "colorway": "Assorted", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["melin hat", "hydro a-game", "waterproof hat", "performance snapback", "floating hat", "premium snapback", "melin snapback"],
+          "aliases": ["A-Game", "Hydro A-Game", "melin A-Game"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 87
+        },
+        {
+          "id": "melin-odyssey-stacked-hydro",
+          "name": "Odyssey Stacked Hydro",
+          "brand": "melin",
+          "category": "fashion",
+          "subcategory": "hats",
+          "releaseYear": 2019,
+          "msrp": 69,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["navy", "khaki"],
+            "patterns": ["solid"],
+            "finish": "performance fabric",
+            "designCues": ["rope hat style", "curved brim", "melin branding", "snapback closure", "retro rope detail"],
+            "distinguishingFeatures": ["Hydro waterproof technology", "rope hat styling", "floats in water", "retro-inspired design with modern performance"],
+            "logoPlacement": "front center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "performance fabric with Hydro waterproof treatment",
+            "closure": "snapback",
+            "brim": "curved brim with rope detail",
+            "features": "waterproof, rope hat style, floats, moisture-wicking"
+          },
+          "variants": [
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Various Colors", "colorway": "Assorted", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["melin odyssey", "rope hat", "hydro hat", "waterproof rope hat", "melin rope hat", "odyssey stacked", "performance hat"],
+          "aliases": ["Odyssey Stacked", "melin Odyssey", "Odyssey Hydro"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ]
+    },
+    {
+      "name": "ROAV Eyewear",
+      "aliases": ["ROAV", "Roav"],
+      "products": [
+        {
+          "id": "roav-atlas-folding-sunglasses",
+          "name": "Atlas Folding Sunglasses",
+          "brand": "ROAV Eyewear",
+          "category": "fashion",
+          "subcategory": "sunglasses",
+          "releaseYear": 2018,
+          "msrp": 125,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["tortoise", "gold"],
+            "patterns": ["solid"],
+            "finish": "polished frame",
+            "designCues": ["classic aviator-inspired shape", "patented folding mechanism", "slim profile when folded", "polarized lenses", "stainless steel frame"],
+            "distinguishingFeatures": ["patented folding design", "pocketable when folded", "polarized lenses", "ultra-thin stainless steel construction", "fits in pocket or wallet-sized case"],
+            "logoPlacement": "temple arm"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "stainless steel frame",
+            "lenses": "polarized",
+            "closure": "patented folding mechanism",
+            "features": "pocketable, patented folding, polarized, ultra-thin stainless steel"
+          },
+          "variants": [
+            { "variantName": "Black/Grey", "colorway": "Black frame/Grey lens", "availability": "current", "specifications": {} },
+            { "variantName": "Tortoise/Brown", "colorway": "Tortoise frame/Brown lens", "availability": "current", "specifications": {} },
+            { "variantName": "Various Colors", "colorway": "Assorted", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["roav sunglasses", "folding sunglasses", "pocketable sunglasses", "atlas sunglasses", "portable sunglasses", "polarized folding", "compact sunglasses"],
+          "aliases": ["Atlas", "ROAV Atlas", "Folding Sunglasses"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ]
+    },
+    {
+      "name": "Arcade",
+      "aliases": ["Arcade Belts"],
+      "products": [
+        {
+          "id": "arcade-adventure-belt",
+          "name": "Adventure Belt",
+          "brand": "Arcade",
+          "category": "fashion",
+          "subcategory": "belts",
+          "releaseYear": 2012,
+          "msrp": 34,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["navy", "green"],
+            "patterns": ["solid", "striped"],
+            "finish": "woven elastic",
+            "designCues": ["stretch elastic webbing", "low-profile buckle", "no metal prong", "one-size-fits-most", "colorful pattern options"],
+            "distinguishingFeatures": ["stretch elastic construction", "no metal buckle (non-metallic micro-adjust buckle)", "one-size design", "won't set off metal detectors", "machine washable"],
+            "logoPlacement": "buckle face"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "stretch elastic webbing (recycled materials)",
+            "closure": "micro-adjust non-metal buckle",
+            "size": "one-size-fits-most",
+            "features": "stretch elastic, no metal buckle, one-size, machine washable"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Various Colors", "colorway": "Assorted", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["arcade belt", "adventure belt", "stretch belt", "elastic belt", "travel belt", "no metal belt", "one-size belt", "hiking belt"],
+          "aliases": ["Adventure", "Arcade Adventure", "Stretch Belt"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    }
+  ]
+}

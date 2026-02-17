@@ -1,0 +1,1021 @@
+{
+  "category": "music",
+  "schemaVersion": "1.0.0",
+  "lastUpdated": "2026-02-16T00:00:00.000Z",
+  "brands": [
+    {
+      "name": "Fender",
+      "aliases": ["Fender Musical Instruments"],
+      "products": [
+        {
+          "id": "fender-am-pro-ii-stratocaster",
+          "name": "American Professional II Stratocaster",
+          "brand": "Fender",
+          "category": "music",
+          "subcategory": "electric-guitars",
+          "releaseYear": 2020,
+          "msrp": 1799,
+          "visualSignature": {
+            "primaryColors": ["sunburst", "white", "blue"],
+            "secondaryColors": ["maple", "rosewood"],
+            "patterns": ["solid"],
+            "finish": "glossy",
+            "designCues": ["double cutaway", "3 single-coil pickups", "tremolo bridge", "bolt-on neck"],
+            "distinguishingFeatures": ["spaghetti logo", "V-Mod II pickups", "cold-rolled steel block saddles", "sculpted neck heel"],
+            "logoPlacement": "headstock"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "pickups": "V-Mod II Single-Coil Stratocaster",
+            "neckProfile": "Deep C",
+            "frets": 22,
+            "scaleLength": "25.5\"",
+            "body": "Alder",
+            "fingerboard": "Rosewood or Maple",
+            "bridge": "2-Point Synchronized Tremolo with Cold-Rolled Steel Block Saddles"
+          },
+          "variants": [
+            { "variantName": "3-Color Sunburst", "colorway": "3-Color Sunburst", "availability": "current", "specifications": {} },
+            { "variantName": "Olympic White", "colorway": "Olympic White", "availability": "current", "specifications": {} },
+            { "variantName": "Dark Night", "colorway": "Dark Night", "availability": "current", "specifications": {} },
+            { "variantName": "Miami Blue", "colorway": "Miami Blue", "availability": "current", "specifications": {} },
+            { "variantName": "Mercury", "colorway": "Mercury", "availability": "current", "specifications": {} },
+            { "variantName": "Mystic Surf Green", "colorway": "Mystic Surf Green", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["electric guitar", "strat", "stratocaster", "american professional", "am pro", "single coil", "fender usa"],
+          "aliases": ["Am Pro II Strat", "American Pro II Strat", "AP2 Stratocaster"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "fender-am-pro-ii-telecaster",
+          "name": "American Professional II Telecaster",
+          "brand": "Fender",
+          "category": "music",
+          "subcategory": "electric-guitars",
+          "releaseYear": 2020,
+          "msrp": 1799,
+          "visualSignature": {
+            "primaryColors": ["sunburst", "blonde", "white"],
+            "secondaryColors": ["maple", "rosewood"],
+            "patterns": ["solid"],
+            "finish": "glossy",
+            "designCues": ["single cutaway", "2 single-coil pickups", "fixed bridge", "bolt-on neck", "ashtray bridge plate"],
+            "distinguishingFeatures": ["spaghetti logo", "V-Mod II pickups", "top-loaded bridge", "sculpted neck heel"],
+            "logoPlacement": "headstock"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "pickups": "V-Mod II Single-Coil Telecaster",
+            "neckProfile": "Deep C",
+            "frets": 22,
+            "scaleLength": "25.5\"",
+            "body": "Alder (Pine for Butterscotch Blonde)",
+            "fingerboard": "Rosewood or Maple",
+            "bridge": "3-Saddle Top-Load/String-Through Tele Bridge"
+          },
+          "variants": [
+            { "variantName": "3-Color Sunburst", "colorway": "3-Color Sunburst", "availability": "current", "specifications": {} },
+            { "variantName": "Butterscotch Blonde", "colorway": "Butterscotch Blonde", "availability": "current", "specifications": {} },
+            { "variantName": "Dark Night", "colorway": "Dark Night", "availability": "current", "specifications": {} },
+            { "variantName": "Olympic White", "colorway": "Olympic White", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["electric guitar", "tele", "telecaster", "american professional", "am pro", "single coil", "fender usa", "twang"],
+          "aliases": ["Am Pro II Tele", "American Pro II Tele", "AP2 Telecaster"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "fender-player-ii-stratocaster",
+          "name": "Player II Stratocaster",
+          "brand": "Fender",
+          "category": "music",
+          "subcategory": "electric-guitars",
+          "releaseYear": 2024,
+          "msrp": 899,
+          "visualSignature": {
+            "primaryColors": ["sunburst", "black", "white", "blue"],
+            "secondaryColors": ["maple", "pau ferro"],
+            "patterns": ["solid"],
+            "finish": "glossy",
+            "designCues": ["double cutaway", "3 single-coil pickups", "tremolo bridge", "bolt-on neck"],
+            "distinguishingFeatures": ["Player Alnico 5 pickups", "modern C neck", "2-point tremolo"],
+            "logoPlacement": "headstock"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "pickups": "Player Alnico 5 Strat Single-Coil",
+            "neckProfile": "Modern C",
+            "frets": 22,
+            "scaleLength": "25.5\"",
+            "body": "Alder",
+            "fingerboard": "Maple or Pau Ferro",
+            "bridge": "2-Point Synchronized Tremolo"
+          },
+          "variants": [
+            { "variantName": "3-Color Sunburst", "colorway": "3-Color Sunburst", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Polar White", "colorway": "Polar White", "availability": "current", "specifications": {} },
+            { "variantName": "Aquatone Blue", "colorway": "Aquatone Blue", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["electric guitar", "strat", "stratocaster", "player", "beginner", "intermediate", "fender mexico", "MIM"],
+          "aliases": ["Player II Strat", "Player 2 Stratocaster", "Player 2 Strat"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Gibson",
+      "aliases": ["Gibson Guitar Corporation"],
+      "products": [
+        {
+          "id": "gibson-les-paul-standard-60s",
+          "name": "Les Paul Standard '60s",
+          "brand": "Gibson",
+          "category": "music",
+          "subcategory": "electric-guitars",
+          "releaseYear": 2019,
+          "msrp": 2499,
+          "visualSignature": {
+            "primaryColors": ["burst", "cherry"],
+            "secondaryColors": ["gold", "cream"],
+            "patterns": ["figured maple"],
+            "finish": "glossy nitrocellulose lacquer",
+            "designCues": ["single cutaway", "2 humbuckers", "tune-o-matic bridge", "set neck", "carved maple top"],
+            "distinguishingFeatures": ["Burstbucker 61 pickups", "slim taper neck profile", "trapezoid inlays", "split-seam headstock", "figured maple top"],
+            "logoPlacement": "headstock"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "pickups": "Burstbucker 61R (neck) / Burstbucker 61T (bridge)",
+            "neckProfile": "SlimTaper",
+            "frets": 22,
+            "scaleLength": "24.75\"",
+            "body": "Mahogany with Figured Maple top",
+            "fingerboard": "Rosewood",
+            "bridge": "ABR-1 Tune-O-Matic with Stopbar Tailpiece"
+          },
+          "variants": [
+            { "variantName": "Bourbon Burst", "colorway": "Bourbon Burst", "availability": "current", "specifications": {} },
+            { "variantName": "Iced Tea", "colorway": "Iced Tea", "availability": "current", "specifications": {} },
+            { "variantName": "Unburst", "colorway": "Unburst", "availability": "current", "specifications": {} },
+            { "variantName": "Heritage Cherry Sunburst", "colorway": "Heritage Cherry Sunburst", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["electric guitar", "les paul", "LP", "humbucker", "gibson usa", "standard", "1960s", "60s"],
+          "aliases": ["LP Standard 60s", "Les Paul Standard Sixties", "LP Std 60s"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "gibson-sg-standard",
+          "name": "SG Standard",
+          "brand": "Gibson",
+          "category": "music",
+          "subcategory": "electric-guitars",
+          "releaseYear": 2019,
+          "msrp": 1799,
+          "visualSignature": {
+            "primaryColors": ["cherry", "black"],
+            "secondaryColors": ["chrome", "cream"],
+            "patterns": ["solid"],
+            "finish": "glossy nitrocellulose lacquer",
+            "designCues": ["double cutaway", "devil horns shape", "2 humbuckers", "set neck", "beveled edge"],
+            "distinguishingFeatures": ["490R/490T pickups", "slim taper neck", "full access to upper frets", "lightweight body", "small pickguard"],
+            "logoPlacement": "headstock"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "pickups": "490R (neck) / 490T (bridge)",
+            "neckProfile": "SlimTaper",
+            "frets": 22,
+            "scaleLength": "24.75\"",
+            "body": "Mahogany",
+            "fingerboard": "Rosewood",
+            "bridge": "ABR-1 Tune-O-Matic with Stopbar Tailpiece"
+          },
+          "variants": [
+            { "variantName": "Heritage Cherry", "colorway": "Heritage Cherry", "availability": "current", "specifications": {} },
+            { "variantName": "Ebony", "colorway": "Ebony", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["electric guitar", "SG", "humbucker", "gibson usa", "standard", "lightweight", "rock"],
+          "aliases": ["SG Std", "Gibson SG"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "gibson-j-45-standard",
+          "name": "J-45 Standard",
+          "brand": "Gibson",
+          "category": "music",
+          "subcategory": "acoustic-guitars",
+          "releaseYear": 2019,
+          "msrp": 2499,
+          "visualSignature": {
+            "primaryColors": ["sunburst"],
+            "secondaryColors": ["natural", "mahogany"],
+            "patterns": ["gradient"],
+            "finish": "glossy nitrocellulose lacquer",
+            "designCues": ["round shoulder dreadnought", "teardrop pickguard", "belly bridge", "set neck"],
+            "distinguishingFeatures": ["round shoulder body shape", "Sitka spruce top", "mahogany back and sides", "LR Baggs VTC pickup"],
+            "logoPlacement": "headstock"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "top": "Sitka Spruce",
+            "backAndSides": "Mahogany",
+            "neckProfile": "Advanced Response",
+            "frets": 20,
+            "scaleLength": "24.75\"",
+            "bracing": "Hand-scalloped X-bracing",
+            "electronics": "LR Baggs VTC",
+            "bodyShape": "Round Shoulder Dreadnought"
+          },
+          "variants": [
+            { "variantName": "Vintage Sunburst", "colorway": "Vintage Sunburst", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["acoustic guitar", "J45", "J-45", "dreadnought", "round shoulder", "singer-songwriter", "workhorse acoustic"],
+          "aliases": ["J45", "Gibson J45", "J-45 Std"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "PRS",
+      "aliases": ["Paul Reed Smith", "PRS Guitars"],
+      "products": [
+        {
+          "id": "prs-silver-sky-se",
+          "name": "Silver Sky SE",
+          "brand": "PRS",
+          "category": "music",
+          "subcategory": "electric-guitars",
+          "releaseYear": 2022,
+          "msrp": 899,
+          "visualSignature": {
+            "primaryColors": ["blue", "pink", "green", "white"],
+            "secondaryColors": ["rosewood", "chrome"],
+            "patterns": ["solid"],
+            "finish": "glossy",
+            "designCues": ["double cutaway", "3 single-coil pickups", "tremolo bridge", "bolt-on neck", "PRS bird inlays"],
+            "distinguishingFeatures": ["635JM S pickups", "John Mayer signature", "reversed headstock shape", "PRS molded tremolo arm"],
+            "logoPlacement": "headstock"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "pickups": "635JM S Single-Coil",
+            "neckProfile": "635JM C",
+            "frets": 22,
+            "scaleLength": "25.5\"",
+            "body": "Poplar",
+            "fingerboard": "Rosewood",
+            "bridge": "PRS-designed Tremolo"
+          },
+          "variants": [
+            { "variantName": "Stone Blue", "colorway": "Stone Blue", "availability": "current", "specifications": {} },
+            { "variantName": "Dragon Fruit", "colorway": "Dragon Fruit", "availability": "current", "specifications": {} },
+            { "variantName": "Ever Green", "colorway": "Ever Green", "availability": "current", "specifications": {} },
+            { "variantName": "Moon White", "colorway": "Moon White", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["electric guitar", "silver sky", "john mayer", "PRS SE", "single coil", "strat style"],
+          "aliases": ["SE Silver Sky", "PRS Silver Sky SE", "Mayer SE"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "prs-custom-24",
+          "name": "Custom 24",
+          "brand": "PRS",
+          "category": "music",
+          "subcategory": "electric-guitars",
+          "releaseYear": 2020,
+          "msrp": 3999,
+          "visualSignature": {
+            "primaryColors": ["various burst finishes"],
+            "secondaryColors": ["gold", "nickel"],
+            "patterns": ["figured maple", "flame", "quilt"],
+            "finish": "glossy",
+            "designCues": ["double cutaway", "2 humbuckers", "tremolo bridge", "set neck", "carved maple top", "bird inlays"],
+            "distinguishingFeatures": ["85/15 pickups", "PRS Gen III tremolo", "figured maple top", "24 frets", "5-way blade switch"],
+            "logoPlacement": "headstock"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "pickups": "85/15 Humbuckers",
+            "neckProfile": "Pattern",
+            "frets": 24,
+            "scaleLength": "25\"",
+            "body": "Mahogany with Figured Maple Top",
+            "fingerboard": "Rosewood",
+            "bridge": "PRS Gen III Tremolo"
+          },
+          "variants": [
+            { "variantName": "McCarty Sunburst", "colorway": "McCarty Sunburst", "availability": "current", "specifications": {} },
+            { "variantName": "Violet", "colorway": "Violet", "availability": "current", "specifications": {} },
+            { "variantName": "Emerald", "colorway": "Emerald", "availability": "current", "specifications": {} },
+            { "variantName": "Charcoal Burst", "colorway": "Charcoal Burst", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["electric guitar", "PRS", "custom 24", "humbucker", "tremolo", "figured maple", "core", "USA"],
+          "aliases": ["PRS CU24", "Custom 24-08", "PRS Core Custom 24"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Taylor",
+      "aliases": ["Taylor Guitars"],
+      "products": [
+        {
+          "id": "taylor-814ce-v-class",
+          "name": "814ce V-Class",
+          "brand": "Taylor",
+          "category": "music",
+          "subcategory": "acoustic-guitars",
+          "releaseYear": 2018,
+          "msrp": 3499,
+          "visualSignature": {
+            "primaryColors": ["natural"],
+            "secondaryColors": ["rosewood", "ebony"],
+            "patterns": ["wood grain"],
+            "finish": "glossy",
+            "designCues": ["grand auditorium body", "venetian cutaway", "element fretboard inlays", "beveled armrest"],
+            "distinguishingFeatures": ["V-Class bracing", "Sitka spruce top", "Indian Rosewood back and sides", "ES2 electronics", "ebony fretboard"],
+            "logoPlacement": "headstock"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "top": "Sitka Spruce",
+            "backAndSides": "Indian Rosewood",
+            "bracing": "V-Class",
+            "electronics": "Expression System 2 (ES2)",
+            "bodyShape": "Grand Auditorium",
+            "scaleLength": "25.5\"",
+            "frets": 20,
+            "fingerboard": "Ebony",
+            "nut": "Tusq"
+          },
+          "variants": [
+            { "variantName": "Natural", "colorway": "Natural", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["acoustic guitar", "Taylor", "814ce", "grand auditorium", "V-Class", "rosewood", "cutaway", "acoustic-electric"],
+          "aliases": ["Taylor 814ce", "814ce", "Taylor 800 Series"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "taylor-214ce-dlx",
+          "name": "214ce DLX",
+          "brand": "Taylor",
+          "category": "music",
+          "subcategory": "acoustic-guitars",
+          "releaseYear": 2020,
+          "msrp": 1299,
+          "visualSignature": {
+            "primaryColors": ["natural"],
+            "secondaryColors": ["rosewood", "black"],
+            "patterns": ["wood grain"],
+            "finish": "glossy",
+            "designCues": ["grand auditorium body", "venetian cutaway", "white binding", "dot inlays"],
+            "distinguishingFeatures": ["layered rosewood back and sides", "Sitka spruce top", "ES2 electronics", "deluxe hardshell case included"],
+            "logoPlacement": "headstock"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "top": "Sitka Spruce",
+            "backAndSides": "Layered Rosewood",
+            "bracing": "Forward-Shifted Bracing",
+            "electronics": "Expression System 2 (ES2)",
+            "bodyShape": "Grand Auditorium",
+            "scaleLength": "25.5\"",
+            "frets": 20,
+            "fingerboard": "Ebony"
+          },
+          "variants": [
+            { "variantName": "Natural", "colorway": "Natural", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["acoustic guitar", "Taylor", "214ce", "grand auditorium", "cutaway", "acoustic-electric", "layered rosewood", "200 series"],
+          "aliases": ["Taylor 214ce", "214ce", "Taylor 200 Series DLX"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Martin",
+      "aliases": ["C.F. Martin & Company", "Martin Guitar"],
+      "products": [
+        {
+          "id": "martin-d-28",
+          "name": "D-28",
+          "brand": "Martin",
+          "category": "music",
+          "subcategory": "acoustic-guitars",
+          "releaseYear": 2017,
+          "msrp": 3299,
+          "visualSignature": {
+            "primaryColors": ["natural"],
+            "secondaryColors": ["rosewood", "dark brown"],
+            "patterns": ["wood grain"],
+            "finish": "glossy",
+            "designCues": ["dreadnought body", "herringbone rosette", "bold stripe back", "open-gear tuners"],
+            "distinguishingFeatures": ["forward-shifted bracing", "Sitka spruce top", "East Indian Rosewood back and sides", "herringbone trim", "aging toner"],
+            "logoPlacement": "headstock"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "top": "Sitka Spruce",
+            "backAndSides": "East Indian Rosewood",
+            "bracing": "Forward-Shifted X Brace",
+            "bodyShape": "Dreadnought",
+            "scaleLength": "25.4\"",
+            "frets": 20,
+            "fingerboard": "Ebony",
+            "nut": "Bone"
+          },
+          "variants": [
+            { "variantName": "Natural", "colorway": "Natural", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["acoustic guitar", "Martin", "D28", "D-28", "dreadnought", "rosewood", "bluegrass", "flatpicking", "strumming"],
+          "aliases": ["D28", "Martin D28", "Martin Dreadnought 28"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "martin-d-18",
+          "name": "D-18",
+          "brand": "Martin",
+          "category": "music",
+          "subcategory": "acoustic-guitars",
+          "releaseYear": 2017,
+          "msrp": 2999,
+          "visualSignature": {
+            "primaryColors": ["natural"],
+            "secondaryColors": ["mahogany", "amber"],
+            "patterns": ["wood grain"],
+            "finish": "glossy",
+            "designCues": ["dreadnought body", "tortoise pickguard", "simple rosette", "open-gear tuners"],
+            "distinguishingFeatures": ["Sitka spruce top", "mahogany back and sides", "warm balanced tone", "simple binding"],
+            "logoPlacement": "headstock"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "top": "Sitka Spruce",
+            "backAndSides": "Mahogany",
+            "bracing": "Forward-Shifted X Brace",
+            "bodyShape": "Dreadnought",
+            "scaleLength": "25.4\"",
+            "frets": 20,
+            "fingerboard": "Ebony",
+            "nut": "Bone"
+          },
+          "variants": [
+            { "variantName": "Natural", "colorway": "Natural", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["acoustic guitar", "Martin", "D18", "D-18", "dreadnought", "mahogany", "singer-songwriter", "fingerpicking"],
+          "aliases": ["D18", "Martin D18", "Martin Dreadnought 18"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Shure",
+      "aliases": ["Shure Incorporated"],
+      "products": [
+        {
+          "id": "shure-sm7db",
+          "name": "SM7dB",
+          "brand": "Shure",
+          "category": "music",
+          "subcategory": "microphones",
+          "releaseYear": 2023,
+          "msrp": 499,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["large diaphragm", "flat rectangular body", "yoke mount", "windscreen"],
+            "distinguishingFeatures": ["built-in preamp with selectable gain", "same SM7 capsule", "LED gain indicator", "XLR output"],
+            "logoPlacement": "side"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Dynamic",
+            "polarPattern": "Cardioid",
+            "frequencyResponse": "50-16000 Hz",
+            "output": "XLR",
+            "builtInPreamp": "Yes, +18dB / +28dB selectable",
+            "impedance": "150 ohms"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["microphone", "dynamic mic", "podcast mic", "broadcast mic", "streaming mic", "SM7", "XLR", "built-in preamp", "vocal mic"],
+          "aliases": ["SM7 dB", "SM7dB", "Shure SM7dB"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "shure-sm58",
+          "name": "SM58",
+          "brand": "Shure",
+          "category": "music",
+          "subcategory": "microphones",
+          "releaseYear": 1966,
+          "msrp": 99,
+          "visualSignature": {
+            "primaryColors": ["dark grey"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["ball grille", "cylindrical body", "tapered handle"],
+            "distinguishingFeatures": ["iconic ball grille", "pneumatic shock mount", "built-in pop filter", "extremely durable"],
+            "logoPlacement": "body"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Dynamic",
+            "polarPattern": "Cardioid",
+            "frequencyResponse": "50-15000 Hz",
+            "output": "XLR",
+            "impedance": "150 ohms"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Dark Grey", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["microphone", "dynamic mic", "vocal mic", "live mic", "stage mic", "handheld mic", "legendary", "industry standard"],
+          "aliases": ["SM-58", "Shure 58", "Fifty-Eight"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        },
+        {
+          "id": "shure-sm57",
+          "name": "SM57",
+          "brand": "Shure",
+          "category": "music",
+          "subcategory": "microphones",
+          "releaseYear": 1965,
+          "msrp": 99,
+          "visualSignature": {
+            "primaryColors": ["dark grey"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["tapered grille", "cylindrical body", "compact head"],
+            "distinguishingFeatures": ["tapered grille (not ball)", "extremely versatile", "snare drum standard", "guitar amp standard"],
+            "logoPlacement": "body"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Dynamic",
+            "polarPattern": "Cardioid",
+            "frequencyResponse": "40-15000 Hz",
+            "output": "XLR",
+            "impedance": "150 ohms"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Dark Grey", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["microphone", "dynamic mic", "instrument mic", "snare mic", "guitar cab mic", "amp mic", "live recording"],
+          "aliases": ["SM-57", "Shure 57", "Fifty-Seven"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        }
+      ]
+    },
+    {
+      "name": "Focusrite",
+      "aliases": ["Focusrite Audio Engineering"],
+      "products": [
+        {
+          "id": "focusrite-scarlett-2i2-4th-gen",
+          "name": "Scarlett 2i2 4th Gen",
+          "brand": "Focusrite",
+          "category": "music",
+          "subcategory": "audio-interfaces",
+          "releaseYear": 2023,
+          "msrp": 189,
+          "visualSignature": {
+            "primaryColors": ["red"],
+            "secondaryColors": ["black"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["compact desktop form", "red chassis", "oval gain halos", "front-panel inputs"],
+            "distinguishingFeatures": ["signature Scarlett red color", "illuminated gain halos", "Air mode button", "USB-C connection", "direct monitor switch"],
+            "logoPlacement": "front panel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "inputs": "2 (combo XLR/TRS)",
+            "outputs": "2 (TRS)",
+            "sampleRate": "Up to 192kHz",
+            "bitDepth": "24-bit",
+            "connection": "USB-C",
+            "preamps": "4th Gen Scarlett preamps with Air mode",
+            "headphoneOutput": "1 (6.3mm TRS)"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Scarlett Red", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["audio interface", "USB audio", "recording interface", "home studio", "Scarlett", "2i2", "USB-C", "podcast", "beginner interface"],
+          "aliases": ["Scarlett 2i2", "2i2 Gen 4", "Focusrite 2i2", "Scarlett 4th Gen"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Universal Audio",
+      "aliases": ["UA", "UAD"],
+      "products": [
+        {
+          "id": "ua-apollo-twin-x",
+          "name": "Apollo Twin X",
+          "brand": "Universal Audio",
+          "category": "music",
+          "subcategory": "audio-interfaces",
+          "releaseYear": 2019,
+          "msrp": 999,
+          "visualSignature": {
+            "primaryColors": ["silver"],
+            "secondaryColors": ["black"],
+            "patterns": ["solid"],
+            "finish": "brushed metal",
+            "designCues": ["desktop form factor", "large central knob", "front-panel instrument input", "angular design"],
+            "distinguishingFeatures": ["large center-mounted control knob", "UAD-2 DUO or QUAD DSP", "Unison preamps", "Thunderbolt connection"],
+            "logoPlacement": "front panel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "inputs": "2 (Unison mic preamps) + 1 Hi-Z",
+            "outputs": "6 (2 monitor + 4 line)",
+            "sampleRate": "Up to 192kHz",
+            "bitDepth": "24-bit",
+            "connection": "Thunderbolt 3",
+            "dsp": "UAD-2 DUO or QUAD",
+            "headphoneOutput": "1 (6.3mm TRS)"
+          },
+          "variants": [
+            { "variantName": "DUO Heritage Edition", "colorway": "Silver", "availability": "current", "specifications": { "dsp": "UAD-2 DUO" } },
+            { "variantName": "QUAD Heritage Edition", "colorway": "Silver", "availability": "current", "specifications": { "dsp": "UAD-2 QUAD" } }
+          ],
+          "searchKeywords": ["audio interface", "Thunderbolt interface", "UAD", "Apollo", "Twin", "DSP", "Unison preamp", "professional recording", "plugin processing"],
+          "aliases": ["Apollo Twin", "UA Twin X", "Apollo Twin X DUO", "Apollo Twin X QUAD"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Boss",
+      "aliases": ["Boss Corporation", "Roland Boss"],
+      "products": [
+        {
+          "id": "boss-katana-100-mkii",
+          "name": "Katana-100 MkII",
+          "brand": "Boss",
+          "category": "music",
+          "subcategory": "amplifiers",
+          "releaseYear": 2019,
+          "msrp": 399,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver", "grey"],
+            "patterns": ["solid"],
+            "finish": "tolex",
+            "designCues": ["1x12 combo", "front-panel controls", "Boss logo on grille", "compact cabinet"],
+            "distinguishingFeatures": ["5 amp types", "Boss Tone Studio compatible", "power control (0.5W/25W/50W/100W)", "built-in effects"],
+            "logoPlacement": "grille cloth"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "wattage": "100W",
+            "speaker": "1x12\" custom",
+            "channels": "5 (Acoustic, Clean, Crunch, Lead, Brown)",
+            "effects": "60+ Boss effects via Tone Studio",
+            "powerControl": "0.5W / 25W / 50W / 100W",
+            "connection": "USB for recording and Tone Studio"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["guitar amp", "modeling amp", "combo amp", "practice amp", "gigging amp", "Katana", "Boss effects", "solid state"],
+          "aliases": ["Katana 100 MkII", "Katana MK2", "KTN-100/212 MkII", "Boss Katana"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "boss-gt-1000-core",
+          "name": "GT-1000CORE",
+          "brand": "Boss",
+          "category": "music",
+          "subcategory": "effects",
+          "releaseYear": 2021,
+          "msrp": 799,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["blue", "silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["compact desktop unit", "large color display", "multiple knobs", "metal chassis"],
+            "distinguishingFeatures": ["AIRD technology", "color touch display", "compact floor/desktop format", "Bluetooth for editing"],
+            "logoPlacement": "top panel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "technology": "AIRD (Augmented Impulse Response Dynamics)",
+            "processing": "Custom 32-bit/96kHz",
+            "ampModels": "Multiple via AIRD",
+            "effects": "150+ types",
+            "connection": "USB, MIDI, Bluetooth",
+            "io": "Stereo I/O, Send/Return, MIDI In/Out"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["multi-effects", "effects processor", "guitar processor", "amp modeler", "AIRD", "pedalboard replacement", "floor processor"],
+          "aliases": ["GT1000 Core", "GT-1000 Core", "Boss GT1000CORE"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Yamaha",
+      "aliases": ["Yamaha Corporation", "Yamaha Music"],
+      "products": [
+        {
+          "id": "yamaha-fg800",
+          "name": "FG800",
+          "brand": "Yamaha",
+          "category": "music",
+          "subcategory": "acoustic-guitars",
+          "releaseYear": 2016,
+          "msrp": 219,
+          "visualSignature": {
+            "primaryColors": ["natural"],
+            "secondaryColors": ["black", "dark brown"],
+            "patterns": ["wood grain"],
+            "finish": "glossy",
+            "designCues": ["traditional dreadnought body", "black pickguard", "dot inlays", "die-cast tuners"],
+            "distinguishingFeatures": ["solid Sitka spruce top", "scalloped bracing", "nato/okume back and sides", "exceptional value"],
+            "logoPlacement": "headstock"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "top": "Solid Sitka Spruce",
+            "backAndSides": "Nato/Okume",
+            "bracing": "Scalloped",
+            "bodyShape": "Traditional Western (Dreadnought)",
+            "scaleLength": "25.6\"",
+            "frets": 20,
+            "fingerboard": "Walnut"
+          },
+          "variants": [
+            { "variantName": "Natural", "colorway": "Natural", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["acoustic guitar", "beginner guitar", "starter guitar", "budget acoustic", "dreadnought", "solid top", "best beginner acoustic"],
+          "aliases": ["Yamaha FG 800", "FG-800"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Roland",
+      "aliases": ["Roland Corporation"],
+      "products": [
+        {
+          "id": "roland-td-17kvx",
+          "name": "TD-17KVX",
+          "brand": "Roland",
+          "category": "music",
+          "subcategory": "drums",
+          "releaseYear": 2018,
+          "msrp": 1699,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver", "chrome"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["electronic drum rack", "mesh head pads", "digital hi-hat", "TD-17 module"],
+            "distinguishingFeatures": ["mesh head snare and toms", "VH-10 digital hi-hat", "TD-17 module with Prismatic Sound Modeling", "Bluetooth audio"],
+            "logoPlacement": "module"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "module": "TD-17",
+            "snare": "PDX-12 (12\" mesh)",
+            "toms": "PDX-8 (8\" mesh) x3",
+            "hiHat": "VH-10",
+            "crashCymbal": "CY-12C",
+            "rideCymbal": "CY-13R",
+            "kickPad": "KD-10",
+            "presetKits": 50,
+            "bluetooth": "Yes"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["electronic drums", "V-Drums", "e-drums", "mesh head drums", "practice drums", "digital drums", "silent drums"],
+          "aliases": ["TD17KVX", "TD-17 KVX", "V-Drums TD-17KVX"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Native Instruments",
+      "aliases": ["NI"],
+      "products": [
+        {
+          "id": "ni-komplete-kontrol-s61-mk3",
+          "name": "Komplete Kontrol S61 MK3",
+          "brand": "Native Instruments",
+          "category": "music",
+          "subcategory": "controllers",
+          "releaseYear": 2024,
+          "msrp": 699,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["white", "RGB"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["61-key keyboard", "color OLED displays", "light guide LEDs above keys", "touch strips"],
+            "distinguishingFeatures": ["polyphonic aftertouch", "two high-resolution OLED displays", "light guide key LEDs", "deep NKS integration", "Komplete software bundle"],
+            "logoPlacement": "top panel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "keys": 61,
+            "keybed": "Fatar semi-weighted with polyphonic aftertouch",
+            "displays": "2 high-resolution color OLED",
+            "connection": "USB-C",
+            "compatibility": "NKS, VST, AU",
+            "controls": "8 touch-sensitive knobs, touch strips, transport controls"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["MIDI controller", "keyboard controller", "NKS", "music production", "DAW controller", "61 key", "polyphonic aftertouch", "Komplete"],
+          "aliases": ["S61 MK3", "Komplete Kontrol S61", "KK S61 MK3", "NI S61"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Ibanez",
+      "aliases": ["Ibanez Guitars", "Hoshino Gakki"],
+      "products": [
+        {
+          "id": "ibanez-rg550-genesis",
+          "name": "RG550 Genesis",
+          "brand": "Ibanez",
+          "category": "music",
+          "subcategory": "electric-guitars",
+          "releaseYear": 2018,
+          "msrp": 999,
+          "visualSignature": {
+            "primaryColors": ["red", "yellow", "purple"],
+            "secondaryColors": ["black", "chrome"],
+            "patterns": ["solid"],
+            "finish": "glossy",
+            "designCues": ["sharp double cutaway", "Edge tremolo", "pointed headstock", "HSH pickup layout", "dot inlays"],
+            "distinguishingFeatures": ["Super Wizard neck profile", "original Edge tremolo", "Quantum pickups HSH", "basswood body", "made in Japan"],
+            "logoPlacement": "headstock"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "pickups": "Quantum (HSH configuration)",
+            "neckProfile": "Super Wizard",
+            "frets": 24,
+            "scaleLength": "25.5\"",
+            "body": "Basswood",
+            "fingerboard": "Maple",
+            "bridge": "Original Edge Tremolo"
+          },
+          "variants": [
+            { "variantName": "Road Flare Red", "colorway": "Road Flare Red", "availability": "current", "specifications": {} },
+            { "variantName": "Desert Sun Yellow", "colorway": "Desert Sun Yellow", "availability": "current", "specifications": {} },
+            { "variantName": "Purple Neon", "colorway": "Purple Neon", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["electric guitar", "shred guitar", "metal guitar", "Floyd Rose", "tremolo", "superstrat", "80s guitar", "made in Japan", "Ibanez RG"],
+          "aliases": ["RG550", "RG 550 Genesis", "Ibanez Genesis"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Sennheiser",
+      "aliases": ["Sennheiser Electronic"],
+      "products": [
+        {
+          "id": "sennheiser-hd-650",
+          "name": "HD 650",
+          "brand": "Sennheiser",
+          "category": "music",
+          "subcategory": "headphones",
+          "releaseYear": 2003,
+          "msrp": 499,
+          "visualSignature": {
+            "primaryColors": ["dark grey"],
+            "secondaryColors": ["silver", "black"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["over-ear circumaural", "open-back grille", "padded headband", "velour ear pads"],
+            "distinguishingFeatures": ["open-back design", "velour ear cushions", "detachable cable", "300 ohm impedance", "lightweight titanium/silver color scheme"],
+            "logoPlacement": "headband and ear cups"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Open-back, Over-ear",
+            "driver": "Dynamic",
+            "impedance": "300 ohms",
+            "frequencyResponse": "10-41000 Hz",
+            "sensitivity": "103 dB",
+            "weight": "260g (without cable)",
+            "cable": "Detachable, 3m with 6.35mm plug"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Titan/Silver", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["headphones", "open-back headphones", "audiophile headphones", "reference headphones", "mixing headphones", "high impedance", "studio headphones"],
+          "aliases": ["HD650", "HD-650", "Sennheiser 650"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Audio-Technica",
+      "aliases": ["Audio Technica", "AT"],
+      "products": [
+        {
+          "id": "audio-technica-at2020",
+          "name": "AT2020",
+          "brand": "Audio-Technica",
+          "category": "music",
+          "subcategory": "microphones",
+          "releaseYear": 2004,
+          "msrp": 99,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["side-address condenser", "cylindrical body", "fixed cardioid capsule", "threaded stand mount"],
+            "distinguishingFeatures": ["low-mass diaphragm", "cardioid polar pattern", "side-address design", "high SPL handling", "pivoting stand mount"],
+            "logoPlacement": "body"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Condenser",
+            "polarPattern": "Cardioid",
+            "frequencyResponse": "20-20000 Hz",
+            "output": "XLR",
+            "phantomPower": "48V required",
+            "maxSPL": "144 dB",
+            "sensitivity": "-37 dB"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["condenser microphone", "studio mic", "recording mic", "vocal mic", "XLR mic", "budget condenser", "home studio", "podcast mic"],
+          "aliases": ["AT-2020", "Audio Technica 2020", "AT2020XLR"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    }
+  ]
+}

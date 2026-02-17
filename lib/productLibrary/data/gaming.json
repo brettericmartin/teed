@@ -1,0 +1,993 @@
+{
+  "category": "gaming",
+  "schemaVersion": "1.0.0",
+  "lastUpdated": "2026-02-16T00:00:00.000Z",
+  "brands": [
+    {
+      "name": "Logitech G",
+      "aliases": ["Logitech", "Logi"],
+      "products": [
+        {
+          "id": "logitech-g-pro-x-superlight-2",
+          "name": "G Pro X Superlight 2",
+          "brand": "Logitech G",
+          "category": "gaming",
+          "subcategory": "mice",
+          "releaseYear": 2023,
+          "msrp": 159,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["symmetrical shape", "minimal branding", "smooth shell"],
+            "distinguishingFeatures": ["60g ultralight", "no visible RGB", "PTFE feet"],
+            "logoPlacement": "palm rest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "weight": "60g",
+            "sensor": "HERO 2",
+            "dpi": "32000",
+            "connectivity": "LIGHTSPEED wireless",
+            "battery": "95 hours",
+            "switches": "LIGHTFORCE hybrid"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} },
+            { "variantName": "Pink", "colorway": "Pink", "availability": "current", "specifications": {} },
+            { "variantName": "Red", "colorway": "Red", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gaming mouse", "wireless mouse", "superlight", "esports mouse", "lightweight mouse", "fps mouse", "gpx2", "gpx superlight"],
+          "aliases": ["GPX2", "Superlight 2", "GPX Superlight 2", "G Pro X SL2"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        },
+        {
+          "id": "logitech-g502-x-plus",
+          "name": "G502 X Plus",
+          "brand": "Logitech G",
+          "category": "gaming",
+          "subcategory": "mice",
+          "releaseYear": 2022,
+          "msrp": 159,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["angular shape", "thumb rest", "RGB light strip", "scroll wheel with infinite scroll"],
+            "distinguishingFeatures": ["LIGHTFORCE hybrid switches", "dual-mode scroll wheel", "RGB underglow"],
+            "logoPlacement": "palm rest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "weight": "106g",
+            "sensor": "HERO 25K",
+            "dpi": "25600",
+            "connectivity": "LIGHTSPEED wireless",
+            "battery": "130 hours (no RGB)",
+            "switches": "LIGHTFORCE hybrid optical-mechanical",
+            "buttons": "13 programmable"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gaming mouse", "wireless mouse", "g502", "mmo mouse", "ergonomic mouse", "logitech flagship"],
+          "aliases": ["G502X Plus", "G502 X+", "G502X+"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        },
+        {
+          "id": "logitech-g-pro-x-tkl-rapid",
+          "name": "G Pro X TKL Rapid",
+          "brand": "Logitech G",
+          "category": "gaming",
+          "subcategory": "keyboards",
+          "releaseYear": 2024,
+          "msrp": 199,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["tenkeyless layout", "floating key design", "RGB per-key", "compact form factor"],
+            "distinguishingFeatures": ["rapid trigger", "analog hall effect switches", "LIGHTSPEED wireless"],
+            "logoPlacement": "top bezel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "layout": "TKL (tenkeyless)",
+            "switches": "Analog hall effect",
+            "features": "Rapid trigger, adjustable actuation",
+            "connectivity": "LIGHTSPEED wireless / Bluetooth / USB-C",
+            "battery": "Up to 300 hours",
+            "keycaps": "Double-shot PBT"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gaming keyboard", "rapid trigger keyboard", "tkl keyboard", "wireless keyboard", "analog keyboard", "hall effect keyboard", "esports keyboard"],
+          "aliases": ["GPX TKL Rapid", "Pro X TKL Rapid"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "logitech-astro-a50-x",
+          "name": "Astro A50 X",
+          "brand": "Logitech G",
+          "category": "gaming",
+          "subcategory": "headsets",
+          "releaseYear": 2024,
+          "msrp": 379,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["over-ear", "plush ear cushions", "base station dock", "premium build"],
+            "distinguishingFeatures": ["cross-platform base station (PC/PS/Xbox)", "PLAYSYNC audio", "mag-charge dock"],
+            "logoPlacement": "ear cup exterior"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Over-ear wireless",
+            "driver": "Custom 40mm",
+            "connectivity": "LIGHTSPEED wireless / Bluetooth",
+            "battery": "24 hours",
+            "features": "Cross-platform, PLAYSYNC, mag-charge base station",
+            "compatibility": "PC, PlayStation, Xbox"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gaming headset", "wireless headset", "astro", "cross-platform headset", "ps5 headset", "xbox headset", "pc headset", "premium headset"],
+          "aliases": ["A50 X", "Astro A50X"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Razer",
+      "aliases": [],
+      "products": [
+        {
+          "id": "razer-viper-v3-pro",
+          "name": "Viper V3 Pro",
+          "brand": "Razer",
+          "category": "gaming",
+          "subcategory": "mice",
+          "releaseYear": 2024,
+          "msrp": 159,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["ambidextrous shape", "low profile", "minimal design", "sleek contour"],
+            "distinguishingFeatures": ["54g ultralight", "Focus Pro 36K sensor", "no visible RGB on mouse"],
+            "logoPlacement": "palm rest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "weight": "54g",
+            "sensor": "Focus Pro 36K",
+            "dpi": "36000",
+            "connectivity": "HyperSpeed wireless / USB-C",
+            "battery": "95 hours",
+            "switches": "Optical Gen-3",
+            "polling": "4000Hz with dongle"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gaming mouse", "wireless mouse", "viper", "esports mouse", "lightweight mouse", "fps mouse", "razer viper", "ultralight mouse"],
+          "aliases": ["Viper V3", "RVP V3"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        },
+        {
+          "id": "razer-deathadder-v3-pro",
+          "name": "DeathAdder V3 Pro",
+          "brand": "Razer",
+          "category": "gaming",
+          "subcategory": "mice",
+          "releaseYear": 2023,
+          "msrp": 149,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["ergonomic right-handed shape", "pronounced hump", "flared sides"],
+            "distinguishingFeatures": ["63g lightweight ergonomic", "classic DeathAdder silhouette", "no RGB"],
+            "logoPlacement": "palm rest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "weight": "63g",
+            "sensor": "Focus Pro 30K",
+            "dpi": "30000",
+            "connectivity": "HyperSpeed wireless / USB-C",
+            "battery": "90 hours",
+            "switches": "Optical Gen-3"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gaming mouse", "wireless mouse", "deathadder", "ergonomic mouse", "fps mouse", "razer deathadder", "palm grip mouse"],
+          "aliases": ["DA V3 Pro", "DeathAdder V3", "DAv3"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        },
+        {
+          "id": "razer-blackwidow-v4",
+          "name": "BlackWidow V4",
+          "brand": "Razer",
+          "category": "gaming",
+          "subcategory": "keyboards",
+          "releaseYear": 2023,
+          "msrp": 169,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["green"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["full-size layout", "dedicated media keys", "command dial", "Chroma RGB underglow"],
+            "distinguishingFeatures": ["Razer Green mechanical switches", "Chroma RGB", "magnetic wrist rest"],
+            "logoPlacement": "top bezel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "layout": "Full-size",
+            "switches": "Razer Green mechanical",
+            "features": "Chroma RGB, macro keys, command dial",
+            "connectivity": "USB-C wired",
+            "keycaps": "Doubleshot ABS",
+            "wristRest": "Magnetic plush leatherette"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gaming keyboard", "mechanical keyboard", "razer keyboard", "blackwidow", "full size keyboard", "clicky keyboard", "rgb keyboard"],
+          "aliases": ["BW V4", "BlackWidow 4"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        },
+        {
+          "id": "razer-kraken-v4-pro",
+          "name": "Kraken V4 Pro",
+          "brand": "Razer",
+          "category": "gaming",
+          "subcategory": "headsets",
+          "releaseYear": 2024,
+          "msrp": 399,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["green"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["over-ear", "thick cushions", "Chroma RGB ear cups", "retractable mic"],
+            "distinguishingFeatures": ["haptic feedback drivers", "ANC", "Razer Sensa HD haptics"],
+            "logoPlacement": "ear cup exterior"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Over-ear wireless",
+            "driver": "Razer TriForce Titanium 50mm",
+            "connectivity": "HyperSpeed wireless / Bluetooth / USB-C",
+            "battery": "Up to 70 hours",
+            "features": "Sensa HD haptics, ANC, THX Spatial Audio",
+            "microphone": "Retractable HyperClear Super Wideband"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gaming headset", "wireless headset", "kraken", "haptic headset", "anc gaming headset", "razer headset", "premium headset"],
+          "aliases": ["Kraken V4P", "Kraken 4 Pro"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Corsair",
+      "aliases": [],
+      "products": [
+        {
+          "id": "corsair-k100-rgb",
+          "name": "K100 RGB",
+          "brand": "Corsair",
+          "category": "gaming",
+          "subcategory": "keyboards",
+          "releaseYear": 2020,
+          "msrp": 229,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "brushed aluminum",
+            "designCues": ["full-size layout", "iCUE control wheel", "per-key RGB", "aluminum frame"],
+            "distinguishingFeatures": ["iCUE dial", "optical-mechanical switches", "4000Hz polling"],
+            "logoPlacement": "top bezel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "layout": "Full-size",
+            "switches": "Corsair OPX optical-mechanical",
+            "features": "iCUE control wheel, per-key RGB, 4000Hz polling",
+            "connectivity": "USB-C wired",
+            "keycaps": "PBT double-shot",
+            "wristRest": "Magnetic detachable"
+          },
+          "variants": [
+            { "variantName": "OPX Switches", "colorway": "Black", "availability": "current", "specifications": { "switches": "Corsair OPX" } },
+            { "variantName": "Cherry MX Speed", "colorway": "Black", "availability": "current", "specifications": { "switches": "Cherry MX Speed Silver" } }
+          ],
+          "searchKeywords": ["gaming keyboard", "mechanical keyboard", "corsair keyboard", "optical keyboard", "full size keyboard", "flagship keyboard", "rgb keyboard", "k100"],
+          "aliases": ["K100", "Corsair K100"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        },
+        {
+          "id": "corsair-scimitar-rgb-elite",
+          "name": "Scimitar RGB Elite",
+          "brand": "Corsair",
+          "category": "gaming",
+          "subcategory": "mice",
+          "releaseYear": 2020,
+          "msrp": 79,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["yellow"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["side button array", "sliding side panel", "contoured grip", "RGB scroll wheel"],
+            "distinguishingFeatures": ["12 programmable side buttons", "sliding Key Slider button panel"],
+            "logoPlacement": "palm rest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "weight": "122g",
+            "sensor": "PixArt PMW3391",
+            "dpi": "18000",
+            "connectivity": "USB wired",
+            "buttons": "17 programmable (12 side)",
+            "sideButtons": "12 mechanical side buttons with Key Slider"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["mmo mouse", "moba mouse", "side button mouse", "corsair mouse", "scimitar", "12 button mouse", "mmorpg mouse"],
+          "aliases": ["Scimitar Elite", "Scimitar"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "corsair-void-rgb-elite-wireless",
+          "name": "Void RGB Elite Wireless",
+          "brand": "Corsair",
+          "category": "gaming",
+          "subcategory": "headsets",
+          "releaseYear": 2019,
+          "msrp": 99,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["yellow"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["over-ear", "mesh fabric ear pads", "RGB logo", "flip-up mic"],
+            "distinguishingFeatures": ["distinctive angular ear cup shape", "RGB Corsair logo", "flip-up mic mute"],
+            "logoPlacement": "ear cup exterior"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Over-ear wireless",
+            "driver": "Custom 50mm neodymium",
+            "connectivity": "2.4GHz wireless USB dongle",
+            "battery": "16 hours",
+            "features": "7.1 surround sound, flip-up mic mute, iCUE RGB",
+            "microphone": "Omnidirectional, flip-up to mute"
+          },
+          "variants": [
+            { "variantName": "Carbon", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gaming headset", "wireless headset", "corsair headset", "7.1 headset", "surround sound headset", "void", "budget wireless headset"],
+          "aliases": ["Void Elite Wireless", "Void RGB Wireless"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "SteelSeries",
+      "aliases": [],
+      "products": [
+        {
+          "id": "steelseries-arctis-nova-pro-wireless",
+          "name": "Arctis Nova Pro Wireless",
+          "brand": "SteelSeries",
+          "category": "gaming",
+          "subcategory": "headsets",
+          "releaseYear": 2022,
+          "msrp": 349,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["over-ear", "ski goggle headband", "retractable mic", "base station DAC"],
+            "distinguishingFeatures": ["hot-swap battery system", "base station with OLED screen", "multi-system connect"],
+            "logoPlacement": "ear cup exterior"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Over-ear wireless",
+            "driver": "Premium Hi-Fi 40mm",
+            "connectivity": "2.4GHz wireless + Bluetooth simultaneous",
+            "battery": "22 hours per battery (hot-swap dual battery)",
+            "features": "ANC, hot-swap battery, GameDAC Gen 2 base station, multi-system",
+            "microphone": "ClearCast Gen 2, fully retractable"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gaming headset", "wireless headset", "steelseries headset", "anc headset", "arctis", "premium headset", "hot swap battery headset", "nova pro"],
+          "aliases": ["Nova Pro Wireless", "Arctis Nova Pro", "ANPW"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        },
+        {
+          "id": "steelseries-aerox-5-wireless",
+          "name": "Aerox 5 Wireless",
+          "brand": "SteelSeries",
+          "category": "gaming",
+          "subcategory": "mice",
+          "releaseYear": 2022,
+          "msrp": 139,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "patterns": ["perforated"],
+            "finish": "matte",
+            "designCues": ["honeycomb shell", "ergonomic right-handed", "side buttons array", "RGB underglow"],
+            "distinguishingFeatures": ["74g with honeycomb design", "AquaBarrier water resistance", "5 side buttons"],
+            "logoPlacement": "palm rest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "weight": "74g",
+            "sensor": "TrueMove Air",
+            "dpi": "18000",
+            "connectivity": "Quantum 2.0 wireless / Bluetooth / USB-C",
+            "battery": "180 hours",
+            "switches": "Next-gen Golden Micro IP54",
+            "buttons": "9 programmable"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gaming mouse", "wireless mouse", "steelseries mouse", "lightweight mouse", "honeycomb mouse", "aerox", "water resistant mouse"],
+          "aliases": ["Aerox 5", "Aerox 5W"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Secretlab",
+      "aliases": [],
+      "products": [
+        {
+          "id": "secretlab-titan-evo-2022",
+          "name": "Titan Evo 2022",
+          "brand": "Secretlab",
+          "category": "gaming",
+          "subcategory": "chairs",
+          "releaseYear": 2022,
+          "msrp": 519,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "patterns": ["solid"],
+            "finish": "leatherette",
+            "designCues": ["high back", "integrated lumbar support", "magnetic headrest", "metal base"],
+            "distinguishingFeatures": ["4D armrests", "pebble seat base", "L-ADAPT lumbar support system"],
+            "logoPlacement": "headrest embroidered"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "NEO Hybrid Leatherette / SoftWeave Plus Fabric",
+            "sizes": "Small (4'11\"-5'6\"), Regular (5'7\"-6'2\"), XL (5'11\"-6'9\")",
+            "armrests": "4D full-metal",
+            "lumbar": "4-way L-ADAPT system",
+            "recline": "Up to 165 degrees",
+            "base": "ADC12 aluminum, class 4 gas lift"
+          },
+          "variants": [
+            { "variantName": "Black (Regular)", "colorway": "Black", "availability": "current", "specifications": { "size": "Regular" } },
+            { "variantName": "Charcoal Blue (Regular)", "colorway": "Charcoal Blue", "availability": "current", "specifications": { "size": "Regular" } },
+            { "variantName": "Cookies & Cream (Regular)", "colorway": "Cookies & Cream", "availability": "current", "specifications": { "size": "Regular" } },
+            { "variantName": "Black (Small)", "colorway": "Black", "availability": "current", "specifications": { "size": "Small" } },
+            { "variantName": "Black (XL)", "colorway": "Black", "availability": "current", "specifications": { "size": "XL" } }
+          ],
+          "searchKeywords": ["gaming chair", "office chair", "ergonomic chair", "secretlab", "titan", "desk chair", "streaming chair"],
+          "aliases": ["Titan 2022", "Titan Evo", "TITAN Evo 2022 Series"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        }
+      ]
+    },
+    {
+      "name": "Keychron",
+      "aliases": [],
+      "products": [
+        {
+          "id": "keychron-q1-pro",
+          "name": "Q1 Pro",
+          "brand": "Keychron",
+          "category": "gaming",
+          "subcategory": "keyboards",
+          "releaseYear": 2023,
+          "msrp": 199,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "anodized aluminum",
+            "designCues": ["75% layout", "knob", "gasket mount", "CNC aluminum case", "south-facing RGB"],
+            "distinguishingFeatures": ["full aluminum construction", "gasket mount for typing feel", "rotary knob"],
+            "logoPlacement": "back of case"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "layout": "75% (82 keys)",
+            "switches": "Gateron Jupiter (hot-swappable)",
+            "connectivity": "Bluetooth 5.1 / USB-C wired",
+            "battery": "4000mAh",
+            "keycaps": "Double-shot PBT OSA profile",
+            "case": "CNC machined 6063 aluminum, gasket mount"
+          },
+          "variants": [
+            { "variantName": "Carbon Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Shell White", "colorway": "Silver", "availability": "current", "specifications": {} },
+            { "variantName": "Navy Blue", "colorway": "Blue", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["mechanical keyboard", "75% keyboard", "wireless keyboard", "aluminum keyboard", "keychron", "gasket mount keyboard", "custom keyboard", "hot swap keyboard"],
+          "aliases": ["Q1Pro", "Keychron Q1 Pro"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "keychron-k2-pro",
+          "name": "K2 Pro",
+          "brand": "Keychron",
+          "category": "gaming",
+          "subcategory": "keyboards",
+          "releaseYear": 2023,
+          "msrp": 109,
+          "visualSignature": {
+            "primaryColors": ["grey"],
+            "secondaryColors": ["orange"],
+            "patterns": ["two-tone keycaps"],
+            "finish": "plastic with aluminum frame",
+            "designCues": ["75% layout", "retro two-tone keycaps", "compact", "south-facing RGB"],
+            "distinguishingFeatures": ["hot-swappable switches", "Mac/Windows compatible", "retro color scheme"],
+            "logoPlacement": "back of case"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "layout": "75% (84 keys)",
+            "switches": "Gateron G Pro (hot-swappable)",
+            "connectivity": "Bluetooth 5.1 / USB-C wired",
+            "battery": "4000mAh",
+            "keycaps": "Double-shot PBT OSA profile",
+            "case": "ABS with aluminum top frame"
+          },
+          "variants": [
+            { "variantName": "Brown Switches", "colorway": "Black", "availability": "current", "specifications": { "switches": "Gateron G Pro Brown" } },
+            { "variantName": "Red Switches", "colorway": "Black", "availability": "current", "specifications": { "switches": "Gateron G Pro Red" } },
+            { "variantName": "Blue Switches", "colorway": "Black", "availability": "current", "specifications": { "switches": "Gateron G Pro Blue" } }
+          ],
+          "searchKeywords": ["mechanical keyboard", "75% keyboard", "wireless keyboard", "budget keyboard", "keychron", "hot swap keyboard", "mac keyboard", "bluetooth keyboard"],
+          "aliases": ["K2Pro", "Keychron K2 Pro"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Elgato",
+      "aliases": [],
+      "products": [
+        {
+          "id": "elgato-stream-deck-mk2",
+          "name": "Stream Deck MK.2",
+          "brand": "Elgato",
+          "category": "gaming",
+          "subcategory": "streaming",
+          "releaseYear": 2021,
+          "msrp": 149,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["3x5 LCD key grid", "detachable stand", "compact desktop footprint"],
+            "distinguishingFeatures": ["15 customizable LCD keys", "detachable USB-C faceplate", "removable stand"],
+            "logoPlacement": "bottom bezel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "keys": "15 customizable LCD keys",
+            "connectivity": "USB-C (detachable)",
+            "compatibility": "Windows 10+ / macOS 10.15+",
+            "dimensions": "118 x 84 x 25mm (without stand)",
+            "features": "Multi-action macros, folder organization, plugin ecosystem"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["stream deck", "streaming controller", "macro pad", "elgato", "streamer gear", "obs controller", "content creator", "twitch"],
+          "aliases": ["Stream Deck MK2", "Stream Deck 2", "SD MK.2"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 95
+        },
+        {
+          "id": "elgato-wave-3",
+          "name": "Wave:3",
+          "brand": "Elgato",
+          "category": "gaming",
+          "subcategory": "microphones",
+          "releaseYear": 2020,
+          "msrp": 149,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["cylindrical body", "capacitive mute button", "gain dial", "desktop stand"],
+            "distinguishingFeatures": ["LED touch-mute indicator", "proprietary Clipguard technology", "clean cylindrical form"],
+            "logoPlacement": "front body"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Condenser",
+            "pattern": "Cardioid",
+            "sampleRate": "96 kHz / 24-bit",
+            "connectivity": "USB-C",
+            "features": "Clipguard technology, digital mixing via Wave Link, capacitive mute",
+            "frequency": "70 Hz - 20 kHz"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["usb microphone", "streaming mic", "condenser mic", "elgato", "podcast mic", "content creator mic", "wave 3", "desktop mic"],
+          "aliases": ["Wave 3", "Wave:3", "Elgato Wave 3"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        }
+      ]
+    },
+    {
+      "name": "Finalmouse",
+      "aliases": [],
+      "products": [
+        {
+          "id": "finalmouse-ultralightx",
+          "name": "UltralightX",
+          "brand": "Finalmouse",
+          "category": "gaming",
+          "subcategory": "mice",
+          "releaseYear": 2024,
+          "msrp": 189,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["blue"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["ultralight shell", "symmetrical shape", "minimal design", "smooth top shell"],
+            "distinguishingFeatures": ["sub-40g weight class", "8000Hz polling rate", "no visible holes in shell"],
+            "logoPlacement": "bottom"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "weight": "~40g (size dependent)",
+            "sensor": "Custom",
+            "connectivity": "Wireless",
+            "polling": "8000Hz",
+            "battery": "~100 hours",
+            "sizes": "Small, Medium, Large"
+          },
+          "variants": [
+            { "variantName": "Phantom (Black)", "colorway": "Black", "availability": "limited", "specifications": {} },
+            { "variantName": "Lion (Blue/Cyan)", "colorway": "Blue", "availability": "limited", "specifications": {} }
+          ],
+          "searchKeywords": ["gaming mouse", "ultralight mouse", "wireless mouse", "finalmouse", "esports mouse", "lightest mouse", "fps mouse", "8000hz mouse"],
+          "aliases": ["ULX", "Finalmouse ULX", "Ultralight X"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Pulsar",
+      "aliases": ["Pulsar Gaming Gears"],
+      "products": [
+        {
+          "id": "pulsar-x2v2",
+          "name": "X2V2",
+          "brand": "Pulsar",
+          "category": "gaming",
+          "subcategory": "mice",
+          "releaseYear": 2024,
+          "msrp": 109,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": [],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["symmetrical shape", "low profile", "clean minimal design", "smooth shell"],
+            "distinguishingFeatures": ["lightweight symmetrical design", "no RGB", "competition-focused"],
+            "logoPlacement": "palm rest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "weight": "~52g",
+            "sensor": "PixArt PAW3395",
+            "dpi": "26000",
+            "connectivity": "2.4GHz wireless / USB-C",
+            "battery": "~80 hours",
+            "switches": "Kailh GM 8.0",
+            "polling": "Up to 4000Hz (with dongle)"
+          },
+          "variants": [
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Red", "colorway": "Red", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gaming mouse", "wireless mouse", "pulsar mouse", "symmetrical mouse", "esports mouse", "lightweight mouse", "fps mouse", "x2v2"],
+          "aliases": ["X2 V2", "Pulsar X2 V2", "X2V2 Wireless"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "HyperX",
+      "aliases": ["HP HyperX"],
+      "products": [
+        {
+          "id": "hyperx-cloud-iii-wireless",
+          "name": "Cloud III Wireless",
+          "brand": "HyperX",
+          "category": "gaming",
+          "subcategory": "headsets",
+          "releaseYear": 2023,
+          "msrp": 149,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["red"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["over-ear", "memory foam ear cushions", "detachable mic", "HyperX branding"],
+            "distinguishingFeatures": ["120-hour battery life", "DTS:X spatial audio", "signature HyperX comfort"],
+            "logoPlacement": "ear cup exterior"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Over-ear wireless",
+            "driver": "53mm with neodymium magnets",
+            "connectivity": "2.4GHz wireless USB-C dongle",
+            "battery": "120 hours",
+            "features": "DTS Headphone:X spatial audio, detachable mic, memory foam",
+            "microphone": "Detachable, noise-cancelling, LED mute indicator"
+          },
+          "variants": [
+            { "variantName": "Black/Red", "colorway": "Black/Red", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gaming headset", "wireless headset", "hyperx headset", "cloud", "long battery headset", "dts headset", "budget headset"],
+          "aliases": ["Cloud 3 Wireless", "Cloud III W"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        }
+      ]
+    },
+    {
+      "name": "ASUS ROG",
+      "aliases": ["ROG", "Republic of Gamers", "ASUS"],
+      "products": [
+        {
+          "id": "asus-rog-harpe-ace-aim-lab",
+          "name": "Harpe Ace Aim Lab Edition",
+          "brand": "ASUS ROG",
+          "category": "gaming",
+          "subcategory": "mice",
+          "releaseYear": 2023,
+          "msrp": 149,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": [],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["symmetrical shape", "ultra-minimal design", "Aim Lab branding", "low profile"],
+            "distinguishingFeatures": ["54g ultralight", "Aim Lab co-designed", "ROG AimPoint Pro sensor"],
+            "logoPlacement": "palm rest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "weight": "54g",
+            "sensor": "ROG AimPoint Pro (36000 DPI)",
+            "dpi": "36000",
+            "connectivity": "ROG SpeedNova wireless / Bluetooth / USB-C",
+            "battery": "90 hours (2.4GHz)",
+            "switches": "ROG micro switches (70M click rated)"
+          },
+          "variants": [
+            { "variantName": "White (Aim Lab Edition)", "colorway": "White", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gaming mouse", "wireless mouse", "rog mouse", "asus mouse", "ultralight mouse", "esports mouse", "aim lab", "fps mouse"],
+          "aliases": ["Harpe Ace", "ROG Harpe Ace", "Harpe Ace Aim Lab"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Ducky",
+      "aliases": [],
+      "products": [
+        {
+          "id": "ducky-one-3-tkl",
+          "name": "One 3 TKL",
+          "brand": "Ducky",
+          "category": "gaming",
+          "subcategory": "keyboards",
+          "releaseYear": 2022,
+          "msrp": 129,
+          "visualSignature": {
+            "primaryColors": ["blue"],
+            "secondaryColors": ["pink", "yellow"],
+            "patterns": ["colorful two-tone"],
+            "finish": "matte plastic",
+            "designCues": ["tenkeyless layout", "colorful keycaps", "compact design", "RGB per-key"],
+            "distinguishingFeatures": ["distinctive colorful colorways", "hot-swap PCB", "QUACK Mechanic"],
+            "logoPlacement": "spacebar"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "layout": "TKL (tenkeyless, 87 keys)",
+            "switches": "Cherry MX (hot-swappable)",
+            "connectivity": "USB-C wired",
+            "keycaps": "PBT double-shot",
+            "features": "Hot-swap, RGB, QUACK Mechanic customization, 3-layer firmware",
+            "plate": "Steel plate mount"
+          },
+          "variants": [
+            { "variantName": "Daybreak", "colorway": "Blue/Pink", "availability": "current", "specifications": {} },
+            { "variantName": "Fuji", "colorway": "Purple/White", "availability": "current", "specifications": {} },
+            { "variantName": "Matcha", "colorway": "Green/White", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["mechanical keyboard", "tkl keyboard", "ducky keyboard", "hot swap keyboard", "cherry mx keyboard", "pbt keycaps", "colorful keyboard", "one 3"],
+          "aliases": ["One3 TKL", "Ducky One3", "One 3"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Nintendo",
+      "aliases": [],
+      "products": [
+        {
+          "id": "nintendo-switch-oled",
+          "name": "Switch OLED",
+          "brand": "Nintendo",
+          "category": "gaming",
+          "subcategory": "consoles",
+          "releaseYear": 2021,
+          "msrp": 349,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["white"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["handheld/docked hybrid", "detachable Joy-Con", "kickstand", "7-inch OLED screen"],
+            "distinguishingFeatures": ["7-inch OLED screen", "wide adjustable stand", "dock with wired LAN port"],
+            "logoPlacement": "back of console"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "display": "7-inch OLED, 1280x720",
+            "storage": "64GB internal",
+            "processor": "NVIDIA Custom Tegra",
+            "connectivity": "WiFi, Bluetooth 4.1, USB-C, LAN (via dock)",
+            "battery": "4.5-9 hours",
+            "outputResolution": "Up to 1080p (docked), 720p (handheld)"
+          },
+          "variants": [
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": { "joyConColor": "White" } },
+            { "variantName": "Neon Blue/Neon Red", "colorway": "Neon", "availability": "current", "specifications": { "joyConColor": "Neon Blue (L) / Neon Red (R)" } }
+          ],
+          "searchKeywords": ["nintendo switch", "switch oled", "handheld console", "gaming console", "portable gaming", "nintendo", "hybrid console"],
+          "aliases": ["Switch OLED Model", "NSW OLED", "Nintendo Switch OLED Model"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 98
+        }
+      ]
+    },
+    {
+      "name": "Zowie",
+      "aliases": ["BenQ Zowie"],
+      "products": [
+        {
+          "id": "zowie-ec2-cw",
+          "name": "EC2-CW",
+          "brand": "Zowie",
+          "category": "gaming",
+          "subcategory": "mice",
+          "releaseYear": 2023,
+          "msrp": 109,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["ergonomic right-handed", "classic EC shape", "no-frills design", "no RGB"],
+            "distinguishingFeatures": ["legendary EC ergonomic shape", "no software required", "plug and play esports focus"],
+            "logoPlacement": "palm rest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "weight": "77g",
+            "sensor": "PixArt 3370",
+            "dpi": "3200 (adjustable steps: 400/800/1600/3200)",
+            "connectivity": "2.4GHz wireless USB-C dongle",
+            "battery": "Up to 70 hours",
+            "switches": "Huano switches",
+            "polling": "1000Hz"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gaming mouse", "wireless mouse", "zowie mouse", "ergonomic mouse", "esports mouse", "fps mouse", "ec2", "benq zowie", "csgo mouse"],
+          "aliases": ["EC2CW", "EC2 CW", "Zowie EC2 CW"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    }
+  ]
+}

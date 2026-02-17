@@ -1,0 +1,1497 @@
+{
+  "category": "outdoor",
+  "schemaVersion": "1.0.0",
+  "lastUpdated": "2026-02-16T00:00:00.000Z",
+  "brands": [
+    {
+      "name": "Osprey",
+      "aliases": ["Osprey Packs"],
+      "products": [
+        {
+          "id": "osprey-atmos-ag-65-2023",
+          "name": "Atmos AG 65",
+          "brand": "Osprey",
+          "category": "outdoor",
+          "subcategory": "backpacks",
+          "releaseYear": 2023,
+          "msrp": 310,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["top-loading", "hip belt", "mesh back panel", "front shove-it pocket"],
+            "distinguishingFeatures": ["Anti-Gravity suspension system", "continuous peripheral frame", "ventilated mesh backpanel"],
+            "logoPlacement": "front panel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "volume": "65L",
+            "weight": "4lbs 10oz",
+            "suspensionSystem": "Anti-Gravity",
+            "frameMaterial": "LightWire peripheral frame",
+            "fabricMain": "210D nylon",
+            "hipBelt": "integrated",
+            "rainCover": "included"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Mythical Green", "colorway": "Mythical Green", "availability": "current", "specifications": {} },
+            { "variantName": "Venturi Blue", "colorway": "Venturi Blue", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["hiking backpack", "backpacking pack", "65 liter pack", "anti-gravity pack", "osprey atmos", "multi-day backpack", "thru-hiking pack"],
+          "aliases": ["Atmos 65", "Atmos AG", "AG 65"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "osprey-exos-58-2022",
+          "name": "Exos 58",
+          "brand": "Osprey",
+          "category": "outdoor",
+          "subcategory": "backpacks",
+          "releaseYear": 2022,
+          "msrp": 250,
+          "visualSignature": {
+            "primaryColors": ["grey"],
+            "secondaryColors": ["black"],
+            "colorwayName": "Tungsten Grey",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["top-loading", "ultralight construction", "tensioned mesh backpanel"],
+            "distinguishingFeatures": ["AirSpeed suspension", "ExoForm harness", "ultralight design"],
+            "logoPlacement": "front panel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "volume": "58L",
+            "weight": "2lbs 7oz",
+            "suspensionSystem": "AirSpeed",
+            "frameMaterial": "peripheral frame",
+            "fabricMain": "100D x 630D nylon",
+            "hipBelt": "removable"
+          },
+          "variants": [
+            { "variantName": "Tungsten Grey", "colorway": "Tungsten Grey", "availability": "current", "specifications": {} },
+            { "variantName": "Kestrel Blue", "colorway": "Kestrel Blue", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["ultralight backpack", "ultralight backpacking pack", "58 liter pack", "lightweight hiking pack", "osprey exos", "thru-hiking pack"],
+          "aliases": ["Exos58", "Osprey Exos"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "osprey-daylite-plus-2019",
+          "name": "Daylite Plus",
+          "brand": "Osprey",
+          "category": "outdoor",
+          "subcategory": "daypacks",
+          "releaseYear": 2019,
+          "msrp": 75,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["panel-loading", "front mesh pocket", "side water bottle pockets"],
+            "distinguishingFeatures": ["laptop sleeve", "lightweight construction", "attachment loops for Osprey packs"],
+            "logoPlacement": "front panel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "volume": "20L",
+            "weight": "1lb 4oz",
+            "fabricMain": "210D nylon",
+            "laptopSleeve": "fits up to 15 inch",
+            "hydrationCompatible": true
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Cosmic Red", "colorway": "Cosmic Red", "availability": "current", "specifications": {} },
+            { "variantName": "Green Canopy", "colorway": "Green Canopy", "availability": "current", "specifications": {} },
+            { "variantName": "Everyday Blue", "colorway": "Everyday Blue", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["daypack", "day pack", "everyday backpack", "20 liter daypack", "osprey daylite", "commuter backpack", "hiking daypack"],
+          "aliases": ["Daylite+", "Daylite Plus 20"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Arc'teryx",
+      "aliases": ["Arcteryx", "Arc teryx"],
+      "products": [
+        {
+          "id": "arcteryx-alpha-sv-jacket-2019",
+          "name": "Alpha SV Jacket",
+          "brand": "Arc'teryx",
+          "category": "outdoor",
+          "subcategory": "hardshell-jackets",
+          "releaseYear": 2019,
+          "msrp": 799,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["helmet-compatible StormHood", "WaterTight pit zippers", "trim alpine fit"],
+            "distinguishingFeatures": ["GORE-TEX Pro membrane", "N100p-X 3L Most Rugged fabric", "taped seams", "Cohaesive front zipper"],
+            "logoPlacement": "left chest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "membrane": "GORE-TEX Pro",
+            "fabric": "N100p-X 3L Most Rugged",
+            "waterproof": "fully waterproof",
+            "breathability": "high",
+            "weight": "16.2oz",
+            "fit": "Regular",
+            "use": "Alpine climbing, severe weather"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Dynasty", "colorway": "Dynasty", "availability": "current", "specifications": {} },
+            { "variantName": "Ether", "colorway": "Ether", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["hardshell jacket", "gore-tex pro jacket", "alpine jacket", "waterproof jacket", "arcteryx alpha", "mountaineering jacket", "rain jacket"],
+          "aliases": ["Alpha SV", "Arc'teryx Alpha"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        },
+        {
+          "id": "arcteryx-beta-lt-jacket-2020",
+          "name": "Beta LT Jacket",
+          "brand": "Arc'teryx",
+          "category": "outdoor",
+          "subcategory": "hardshell-jackets",
+          "releaseYear": 2020,
+          "msrp": 499,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["DropHood", "two hand pockets", "clean minimalist design"],
+            "distinguishingFeatures": ["GORE-TEX membrane", "lightweight 3L construction", "microgravity trim"],
+            "logoPlacement": "left chest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "membrane": "GORE-TEX",
+            "fabric": "N40p-X 3L GORE-TEX",
+            "waterproof": "fully waterproof",
+            "breathability": "high",
+            "weight": "12.7oz",
+            "fit": "Regular",
+            "use": "All-round, hiking, trekking"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Lampyre", "colorway": "Lampyre", "availability": "current", "specifications": {} },
+            { "variantName": "Solitude", "colorway": "Solitude", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["hardshell jacket", "gore-tex jacket", "lightweight rain jacket", "waterproof jacket", "arcteryx beta", "hiking shell", "all-round shell"],
+          "aliases": ["Beta LT", "Arc'teryx Beta"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Patagonia",
+      "aliases": ["Patagucci"],
+      "products": [
+        {
+          "id": "patagonia-nano-puff-hoody-2005",
+          "name": "Nano Puff Hoody",
+          "brand": "Patagonia",
+          "category": "outdoor",
+          "subcategory": "insulated-jackets",
+          "releaseYear": 2005,
+          "msrp": 279,
+          "visualSignature": {
+            "primaryColors": ["blue"],
+            "secondaryColors": [],
+            "colorwayName": "Classic Navy",
+            "patterns": ["quilted"],
+            "finish": "matte",
+            "designCues": ["horizontal quilted baffles", "scuba-style hood", "zippered hand pockets"],
+            "distinguishingFeatures": ["PrimaLoft Gold Eco insulation 60g", "windproof ripstop shell", "packs into internal chest pocket"],
+            "logoPlacement": "left chest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "insulation": "60g PrimaLoft Gold Eco",
+            "shell": "20D ripstop polyester",
+            "weight": "12.8oz",
+            "DWR": "DWR finish",
+            "packable": "stuffs into chest pocket",
+            "fairTradeSewn": true
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Classic Navy", "colorway": "Classic Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Nouveau Green", "colorway": "Nouveau Green", "availability": "current", "specifications": {} },
+            { "variantName": "Smolder Blue", "colorway": "Smolder Blue", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["synthetic insulated jacket", "packable jacket", "primaloft jacket", "puffy jacket", "nano puff", "patagonia puffer", "lightweight insulation"],
+          "aliases": ["Nano Puff", "Nano Puff Hoodie"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        },
+        {
+          "id": "patagonia-r1-air-full-zip-hoody-2021",
+          "name": "R1 Air Full-Zip Hoody",
+          "brand": "Patagonia",
+          "category": "outdoor",
+          "subcategory": "fleece",
+          "releaseYear": 2021,
+          "msrp": 169,
+          "visualSignature": {
+            "primaryColors": ["grey"],
+            "secondaryColors": [],
+            "colorwayName": "Forge Grey",
+            "patterns": ["textured knit"],
+            "finish": "matte",
+            "designCues": ["full-zip front", "slim athletic fit", "raglan sleeves"],
+            "distinguishingFeatures": ["Regulator fleece construction", "open-knit grid pattern for breathability", "Fair Trade Certified sewn"],
+            "logoPlacement": "left chest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "fabric": "Regulator fleece (93% recycled polyester, 7% spandex)",
+            "weight": "10.8oz",
+            "fit": "Slim",
+            "breathability": "very high",
+            "fairTradeSewn": true
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Forge Grey", "colorway": "Forge Grey", "availability": "current", "specifications": {} },
+            { "variantName": "New Navy", "colorway": "New Navy", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["fleece jacket", "midlayer fleece", "technical fleece", "r1 fleece", "regulator fleece", "patagonia fleece", "breathable fleece"],
+          "aliases": ["R1 Air", "R1 Air Hoody", "R1 Air Full-Zip"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Yeti",
+      "aliases": ["YETI"],
+      "products": [
+        {
+          "id": "yeti-tundra-45-2009",
+          "name": "Tundra 45",
+          "brand": "Yeti",
+          "category": "outdoor",
+          "subcategory": "coolers",
+          "releaseYear": 2009,
+          "msrp": 325,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["grey"],
+            "colorwayName": "White",
+            "patterns": ["solid"],
+            "finish": "matte textured",
+            "designCues": ["rotomolded construction", "rubber T-Rex lid latches", "rope side handles"],
+            "distinguishingFeatures": ["rotomolded one-piece construction", "PermaFrost insulation", "bear-proof certified (IGBC)"],
+            "logoPlacement": "front panel and lid"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "capacity": "28 cans with 2:1 ice-to-can ratio",
+            "insulation": "PermaFrost pressure-injected polyurethane",
+            "construction": "rotomolded polyethylene",
+            "bearProof": "IGBC certified",
+            "exteriorDimensions": "25.75 x 16.125 x 15.375 in",
+            "weight": "23 lbs empty"
+          },
+          "variants": [
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} },
+            { "variantName": "Tan", "colorway": "Tan", "availability": "current", "specifications": {} },
+            { "variantName": "Charcoal", "colorway": "Charcoal", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["hard cooler", "rotomolded cooler", "bear proof cooler", "camping cooler", "yeti cooler", "premium cooler", "ice chest"],
+          "aliases": ["YT45", "Tundra45", "YETI Tundra 45"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        },
+        {
+          "id": "yeti-hopper-flip-12-2016",
+          "name": "Hopper Flip 12",
+          "brand": "Yeti",
+          "category": "outdoor",
+          "subcategory": "coolers",
+          "releaseYear": 2016,
+          "msrp": 250,
+          "visualSignature": {
+            "primaryColors": ["charcoal"],
+            "secondaryColors": ["grey"],
+            "colorwayName": "Charcoal",
+            "patterns": ["solid"],
+            "finish": "matte textured",
+            "designCues": ["wide-mouth opening", "magnetic HydroShield closure", "compact box shape"],
+            "distinguishingFeatures": ["DryHide shell fabric", "ColdCell closed-cell insulation", "HydroLok zipper-free closure"],
+            "logoPlacement": "front panel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "capacity": "13 cans with 2:1 ice-to-can ratio",
+            "insulation": "ColdCell closed-cell foam",
+            "shell": "DryHide high-density fabric",
+            "closure": "HydroShield magnetic",
+            "weight": "5 lbs empty"
+          },
+          "variants": [
+            { "variantName": "Charcoal", "colorway": "Charcoal", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Alpine Yellow", "colorway": "Alpine Yellow", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["soft cooler", "portable cooler", "personal cooler", "lunch cooler", "yeti soft cooler", "hopper cooler", "magnetic closure cooler"],
+          "aliases": ["Hopper Flip", "Hopper 12", "YETI Hopper Flip 12"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 91
+        },
+        {
+          "id": "yeti-rambler-20oz-tumbler-2014",
+          "name": "Rambler 20oz Tumbler",
+          "brand": "Yeti",
+          "category": "outdoor",
+          "subcategory": "drinkware",
+          "releaseYear": 2014,
+          "msrp": 35,
+          "visualSignature": {
+            "primaryColors": ["stainless steel"],
+            "secondaryColors": [],
+            "colorwayName": "Stainless Steel",
+            "patterns": ["solid"],
+            "finish": "DuraCoat",
+            "designCues": ["tapered body", "MagSlider lid", "double-wall vacuum insulation"],
+            "distinguishingFeatures": ["18/8 stainless steel", "DuraCoat color coating", "MagSlider lid", "BPA-free"],
+            "logoPlacement": "bottom front"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "capacity": "20 oz",
+            "material": "18/8 stainless steel",
+            "insulation": "double-wall vacuum",
+            "lid": "MagSlider",
+            "dishwasherSafe": true,
+            "BPAfree": true
+          },
+          "variants": [
+            { "variantName": "Stainless Steel", "colorway": "Stainless Steel", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Seafoam", "colorway": "Seafoam", "availability": "current", "specifications": {} },
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["insulated tumbler", "travel tumbler", "stainless steel tumbler", "yeti tumbler", "yeti rambler", "coffee tumbler", "20oz tumbler"],
+          "aliases": ["Rambler 20", "YETI Rambler", "Rambler Tumbler"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        }
+      ]
+    },
+    {
+      "name": "MSR",
+      "aliases": ["Mountain Safety Research"],
+      "products": [
+        {
+          "id": "msr-pocketrocket-2-2017",
+          "name": "PocketRocket 2",
+          "brand": "MSR",
+          "category": "outdoor",
+          "subcategory": "stoves",
+          "releaseYear": 2017,
+          "msrp": 49,
+          "visualSignature": {
+            "primaryColors": ["silver"],
+            "secondaryColors": ["red"],
+            "colorwayName": "Silver/Red",
+            "patterns": ["solid"],
+            "finish": "brushed metal",
+            "designCues": ["folding pot supports", "compact canister mount", "minimalist design"],
+            "distinguishingFeatures": ["ultralight at 2.6oz", "WindClip windscreen", "micro-adjustable flame control"],
+            "logoPlacement": "burner housing"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "weight": "2.6oz (73g)",
+            "boilTime": "3.5 minutes for 1L",
+            "fuelType": "isobutane/propane canister",
+            "BTU": "8200 BTU/h",
+            "packSize": "fits inside MSR cooksets"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Silver/Red", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["backpacking stove", "ultralight stove", "canister stove", "camping stove", "msr stove", "pocket rocket", "lightweight camp stove"],
+          "aliases": ["PocketRocket", "Pocket Rocket 2", "PR2"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "msr-hubba-hubba-2-2022",
+          "name": "Hubba Hubba 2",
+          "brand": "MSR",
+          "category": "outdoor",
+          "subcategory": "tents",
+          "releaseYear": 2022,
+          "msrp": 499,
+          "visualSignature": {
+            "primaryColors": ["green"],
+            "secondaryColors": ["grey"],
+            "colorwayName": "Green",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["two-door two-vestibule", "hubbed pole design", "low-profile silhouette"],
+            "distinguishingFeatures": ["Easton Syclone poles", "unified hub-and-pole system", "cross-ventilation design"],
+            "logoPlacement": "rainfly"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "capacity": "2-person",
+            "trailWeight": "3lbs 8oz",
+            "packedWeight": "3lbs 14oz",
+            "floorArea": "29 sq ft",
+            "vestibuleArea": "8.75 sq ft x 2",
+            "peakHeight": "40 in",
+            "structure": "freestanding",
+            "seasonRating": "3-season",
+            "fabric": "20D ripstop nylon"
+          },
+          "variants": [
+            { "variantName": "Green", "colorway": "Green", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["backpacking tent", "2-person tent", "lightweight tent", "three-season tent", "msr tent", "hubba hubba", "freestanding tent"],
+          "aliases": ["Hubba Hubba", "Hubba Hubba 2P", "HH2"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Black Diamond",
+      "aliases": ["BD", "Black Diamond Equipment"],
+      "products": [
+        {
+          "id": "black-diamond-spot-400-headlamp-2022",
+          "name": "Spot 400 Headlamp",
+          "brand": "Black Diamond",
+          "category": "outdoor",
+          "subcategory": "headlamps",
+          "releaseYear": 2022,
+          "msrp": 49,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "colorwayName": "Graphite",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["compact front housing", "adjustable elastic headband", "top-mounted power button"],
+            "distinguishingFeatures": ["400 lumens max output", "IPX8 waterproof rating", "red/green/blue night vision modes"],
+            "logoPlacement": "front housing"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "maxLumens": 400,
+            "beamDistance": "100m",
+            "waterproofRating": "IPX8",
+            "batteries": "3 AAA (included)",
+            "weight": "2.8oz with batteries",
+            "burnTime": "200 hours (low)",
+            "modes": "spot, flood, red, green, blue, strobe"
+          },
+          "variants": [
+            { "variantName": "Graphite", "colorway": "Graphite", "availability": "current", "specifications": {} },
+            { "variantName": "Octane", "colorway": "Octane", "availability": "current", "specifications": {} },
+            { "variantName": "Azul", "colorway": "Azul", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["headlamp", "head lamp", "camping headlamp", "hiking headlamp", "black diamond headlamp", "400 lumen headlamp", "waterproof headlamp"],
+          "aliases": ["Spot 400", "BD Spot 400", "Spot Headlamp"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 91
+        },
+        {
+          "id": "black-diamond-trail-pro-trekking-poles-2020",
+          "name": "Trail Pro Trekking Poles",
+          "brand": "Black Diamond",
+          "category": "outdoor",
+          "subcategory": "trekking-poles",
+          "releaseYear": 2020,
+          "msrp": 169,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "colorwayName": "Carbon",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["dual FlickLock Pro adjusters", "foam grip with cork top", "padded wrist strap"],
+            "distinguishingFeatures": ["100% carbon fiber shaft", "FlickLock Pro adjustment", "dual-density grip", "interchangeable tips"],
+            "logoPlacement": "upper shaft"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "100% carbon fiber",
+            "collapsedLength": "24 in",
+            "extendedLength": "51-55 in (adjustable)",
+            "weight": "9.6oz per pole",
+            "lockingMechanism": "FlickLock Pro",
+            "grip": "dual-density foam with cork",
+            "basketIncluded": "trekking basket"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Carbon/Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["trekking poles", "hiking poles", "carbon fiber poles", "collapsible poles", "black diamond poles", "trail pro poles", "walking poles"],
+          "aliases": ["Trail Pro", "BD Trail Pro", "Trail Pro Carbon"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Big Agnes",
+      "aliases": ["BA"],
+      "products": [
+        {
+          "id": "big-agnes-copper-spur-hv-ul2-2020",
+          "name": "Copper Spur HV UL2",
+          "brand": "Big Agnes",
+          "category": "outdoor",
+          "subcategory": "tents",
+          "releaseYear": 2020,
+          "msrp": 499,
+          "visualSignature": {
+            "primaryColors": ["orange"],
+            "secondaryColors": ["grey"],
+            "colorwayName": "Orange/Grey",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["two-door two-vestibule", "high-volume hubbed poles", "near-vertical side walls"],
+            "distinguishingFeatures": ["ultralight at 2lbs 11oz", "hubbed DAC Featherlite poles", "high-volume architecture", "media pockets"],
+            "logoPlacement": "rainfly"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "capacity": "2-person",
+            "trailWeight": "2lbs 11oz",
+            "packedWeight": "3lbs 2oz",
+            "floorArea": "29 sq ft",
+            "vestibuleArea": "9 sq ft x 2",
+            "peakHeight": "42 in",
+            "structure": "freestanding",
+            "seasonRating": "3-season",
+            "fabric": "silicone-treated ripstop nylon",
+            "poles": "DAC Featherlite NFL"
+          },
+          "variants": [
+            { "variantName": "Orange/Grey", "colorway": "Orange/Grey", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["ultralight tent", "2-person ultralight tent", "backpacking tent", "big agnes tent", "copper spur", "freestanding ultralight tent", "lightweight 2p tent"],
+          "aliases": ["Copper Spur", "CSHV UL2", "Copper Spur UL2", "CS HV UL2"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Jetboil",
+      "aliases": [],
+      "products": [
+        {
+          "id": "jetboil-flash-cooking-system-2004",
+          "name": "Flash Cooking System",
+          "brand": "Jetboil",
+          "category": "outdoor",
+          "subcategory": "stoves",
+          "releaseYear": 2004,
+          "msrp": 119,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["orange"],
+            "colorwayName": "Carbon",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["integrated cup and burner", "color-change heat indicator", "neoprene cozy"],
+            "distinguishingFeatures": ["FluxRing heat exchanger", "push-button igniter", "boils 2 cups in 100 seconds", "all-in-one integrated system"],
+            "logoPlacement": "cup side"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "boilTime": "100 seconds for 2 cups (0.5L)",
+            "capacity": "1L FluxRing cooking cup",
+            "weight": "13.1oz",
+            "fuelType": "isobutane/propane canister",
+            "ignition": "push-button piezo",
+            "packSize": "self-contained (burner nests in cup)"
+          },
+          "variants": [
+            { "variantName": "Carbon", "colorway": "Carbon/Black", "availability": "current", "specifications": {} },
+            { "variantName": "Fractured Lines", "colorway": "Fractured Lines", "availability": "current", "specifications": {} },
+            { "variantName": "Wilderness", "colorway": "Wilderness Green", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["integrated stove system", "jetboil stove", "fast boil stove", "camping stove", "backpacking cooking", "jetboil flash", "camp kitchen"],
+          "aliases": ["Jetboil Flash", "Flash Stove"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Stanley",
+      "aliases": ["Stanley 1913", "PMI Stanley"],
+      "products": [
+        {
+          "id": "stanley-adventure-quencher-h20-flowstate-40oz-2023",
+          "name": "Adventure Quencher H2.0 FlowState 40oz",
+          "brand": "Stanley",
+          "category": "outdoor",
+          "subcategory": "drinkware",
+          "releaseYear": 2023,
+          "msrp": 45,
+          "visualSignature": {
+            "primaryColors": ["cream"],
+            "secondaryColors": [],
+            "colorwayName": "Cream",
+            "patterns": ["solid"],
+            "finish": "powder coat",
+            "designCues": ["tapered base fits cup holders", "rotating FlowState lid with 3 positions", "ergonomic handle", "built-in straw"],
+            "distinguishingFeatures": ["double-wall vacuum insulation", "FlowState 3-position lid", "cup-holder compatible base", "recycled stainless steel"],
+            "logoPlacement": "front center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "capacity": "40 oz",
+            "material": "90% recycled 18/8 stainless steel",
+            "insulation": "double-wall vacuum",
+            "lid": "FlowState 3-position (straw, sip, full cover)",
+            "dishwasherSafe": true,
+            "BPAfree": true,
+            "cupHolderCompatible": true
+          },
+          "variants": [
+            { "variantName": "Cream", "colorway": "Cream", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Rose Quartz", "colorway": "Rose Quartz", "availability": "current", "specifications": {} },
+            { "variantName": "Fog", "colorway": "Fog", "availability": "current", "specifications": {} },
+            { "variantName": "Charcoal", "colorway": "Charcoal", "availability": "current", "specifications": {} },
+            { "variantName": "Citron", "colorway": "Citron", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["stanley tumbler", "stanley cup", "quencher tumbler", "40oz tumbler", "insulated tumbler with straw", "stanley h2.0", "flowstate tumbler", "cup holder tumbler"],
+          "aliases": ["Stanley Quencher", "Stanley 40oz", "Quencher H2.0", "Stanley Cup", "Adventure Quencher"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 93
+        }
+      ]
+    },
+    {
+      "name": "Salomon",
+      "aliases": ["Salomon Outdoor"],
+      "products": [
+        {
+          "id": "salomon-x-ultra-4-gtx-2021",
+          "name": "X Ultra 4 GTX",
+          "brand": "Salomon",
+          "category": "outdoor",
+          "subcategory": "hiking-shoes",
+          "releaseYear": 2021,
+          "msrp": 165,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "colorwayName": "Black/Magnet/Pearl Blue",
+            "patterns": ["multi-tonal"],
+            "finish": "matte",
+            "designCues": ["low-cut profile", "SensiFit cradle", "Quicklace system"],
+            "distinguishingFeatures": ["GORE-TEX waterproof membrane", "Advanced Chassis stability", "Contagrip MA sole", "OrthoLite sockliner"],
+            "logoPlacement": "lateral side"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "waterproofing": "GORE-TEX",
+            "sole": "Contagrip MA",
+            "midsole": "EnergyCell EVA",
+            "chassis": "Advanced Chassis",
+            "weight": "13.9oz per shoe",
+            "drop": "10mm",
+            "lacingSystem": "Quicklace"
+          },
+          "variants": [
+            { "variantName": "Black/Magnet/Pearl Blue", "colorway": "Black/Magnet/Pearl Blue", "availability": "current", "specifications": {} },
+            { "variantName": "Quiet Shade/Black/Mallard Blue", "colorway": "Quiet Shade/Black/Mallard Blue", "availability": "current", "specifications": {} },
+            { "variantName": "Kelp/Black/Vanilla Ice", "colorway": "Kelp/Black/Vanilla Ice", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["hiking shoes", "waterproof hiking shoes", "gore-tex shoes", "salomon hiking", "x ultra", "low cut hiking shoes", "trail shoes"],
+          "aliases": ["X Ultra 4", "XU4 GTX", "Salomon X Ultra"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 91
+        }
+      ]
+    },
+    {
+      "name": "Merrell",
+      "aliases": [],
+      "products": [
+        {
+          "id": "merrell-moab-3-mid-waterproof-2022",
+          "name": "Moab 3 Mid Waterproof",
+          "brand": "Merrell",
+          "category": "outdoor",
+          "subcategory": "hiking-boots",
+          "releaseYear": 2022,
+          "msrp": 145,
+          "visualSignature": {
+            "primaryColors": ["brown"],
+            "secondaryColors": ["olive"],
+            "colorwayName": "Earth",
+            "patterns": ["multi-tonal"],
+            "finish": "matte",
+            "designCues": ["mid-cut ankle support", "bellows tongue", "protective toe cap"],
+            "distinguishingFeatures": ["Vibram TC5+ rubber outsole", "bellows tongue keeps debris out", "Merrell waterproof membrane", "Merrell Air Cushion heel"],
+            "logoPlacement": "tongue and heel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "waterproofing": "Merrell waterproof membrane",
+            "outsole": "Vibram TC5+",
+            "midsole": "Merrell Air Cushion EVA",
+            "weight": "1lb 14oz per pair",
+            "cut": "mid",
+            "tongue": "bellows tongue",
+            "toeCap": "protective rubber"
+          },
+          "variants": [
+            { "variantName": "Earth", "colorway": "Earth/Brown", "availability": "current", "specifications": {} },
+            { "variantName": "Olive", "colorway": "Olive", "availability": "current", "specifications": {} },
+            { "variantName": "Black Night", "colorway": "Black Night", "availability": "current", "specifications": {} },
+            { "variantName": "Walnut", "colorway": "Walnut", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["hiking boots", "waterproof hiking boots", "mid cut hiking boots", "merrell moab", "moab 3", "trail boots", "vibram hiking boots"],
+          "aliases": ["Moab 3 Mid", "Moab 3 WP", "MOAB 3", "Merrell Moab"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Sea to Summit",
+      "aliases": ["STS", "Sea-to-Summit"],
+      "products": [
+        {
+          "id": "sea-to-summit-aeros-premium-pillow-2015",
+          "name": "Aeros Premium Pillow",
+          "brand": "Sea to Summit",
+          "category": "outdoor",
+          "subcategory": "sleeping-gear",
+          "releaseYear": 2015,
+          "msrp": 49,
+          "visualSignature": {
+            "primaryColors": ["grey"],
+            "secondaryColors": ["navy"],
+            "colorwayName": "Grey",
+            "patterns": ["solid"],
+            "finish": "brushed fabric",
+            "designCues": ["curved ergonomic shape", "multi-valve inflation", "compact stuff sack"],
+            "distinguishingFeatures": ["50D brushed polyester knit fabric", "TPU bladder", "multi-function valve", "packs to fist-size"],
+            "logoPlacement": "front center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "weight": "2.8oz (regular)",
+            "dimensions": "13.4 x 9.4 in (regular)",
+            "packedSize": "2.5 x 3.5 in",
+            "fabric": "50D brushed polyester knit",
+            "bladder": "TPU",
+            "inflation": "multi-function valve"
+          },
+          "variants": [
+            { "variantName": "Grey", "colorway": "Grey", "availability": "current", "specifications": {} },
+            { "variantName": "Navy Blue", "colorway": "Navy Blue", "availability": "current", "specifications": {} },
+            { "variantName": "Lime", "colorway": "Lime", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["camp pillow", "backpacking pillow", "inflatable pillow", "ultralight pillow", "camping pillow", "travel pillow", "sea to summit pillow"],
+          "aliases": ["Aeros Pillow", "Aeros Premium", "STS Pillow"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Nemo Equipment",
+      "aliases": ["NEMO", "Nemo"],
+      "products": [
+        {
+          "id": "nemo-tensor-insulated-sleeping-pad-2020",
+          "name": "Tensor Insulated Sleeping Pad",
+          "brand": "Nemo Equipment",
+          "category": "outdoor",
+          "subcategory": "sleeping-gear",
+          "releaseYear": 2020,
+          "msrp": 199,
+          "visualSignature": {
+            "primaryColors": ["green"],
+            "secondaryColors": ["grey"],
+            "colorwayName": "Blade/Mango",
+            "patterns": ["baffle pattern"],
+            "finish": "matte",
+            "designCues": ["Spaceframe elevated baffles", "mummy taper shape", "low-profile valve"],
+            "distinguishingFeatures": ["Spaceframe baffle construction", "R-value 4.2 insulation", "Thermal Mirror reflective layer", "ultralight at 15oz"],
+            "logoPlacement": "valve area"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "rValue": 4.2,
+            "weight": "15oz (regular)",
+            "dimensions": "72 x 20 x 3 in (regular)",
+            "packedSize": "8 x 3 in",
+            "shape": "mummy",
+            "insulation": "Thermal Mirror reflective layer",
+            "baffleDesign": "Spaceframe",
+            "fabric": "20D PU polyester"
+          },
+          "variants": [
+            { "variantName": "Regular Mummy", "colorway": "Blade/Mango", "availability": "current", "specifications": { "length": "72 in", "width": "20 in" } },
+            { "variantName": "Long Wide", "colorway": "Blade/Mango", "availability": "current", "specifications": { "length": "78 in", "width": "25 in" } }
+          ],
+          "searchKeywords": ["sleeping pad", "insulated sleeping pad", "backpacking pad", "camping pad", "nemo pad", "tensor pad", "ultralight sleeping pad", "4-season pad"],
+          "aliases": ["Tensor Insulated", "Tensor Pad", "NEMO Tensor"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 91
+        }
+      ]
+    },
+    {
+      "name": "Snow Peak",
+      "aliases": ["snowpeak"],
+      "products": [
+        {
+          "id": "snow-peak-gigapower-20-stove-2005",
+          "name": "GigaPower 2.0 Stove",
+          "brand": "Snow Peak",
+          "category": "outdoor",
+          "subcategory": "stoves",
+          "releaseYear": 2005,
+          "msrp": 54,
+          "visualSignature": {
+            "primaryColors": ["silver"],
+            "secondaryColors": [],
+            "colorwayName": "Silver",
+            "patterns": ["solid"],
+            "finish": "brushed metal",
+            "designCues": ["four foldable pot supports", "compact cylindrical body", "piezo ignition button"],
+            "distinguishingFeatures": ["auto-ignition piezo", "foldable compact design", "stainless steel and aluminum construction"],
+            "logoPlacement": "canister mount"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "weight": "3.2oz (90g)",
+            "output": "10,660 BTU/h",
+            "fuelType": "isobutane/propane canister",
+            "ignition": "piezo auto-ignition",
+            "material": "stainless steel and aluminum alloy",
+            "packSize": "folds flat"
+          },
+          "variants": [
+            { "variantName": "Auto Ignition", "colorway": "Silver", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["canister stove", "lightweight stove", "backpacking stove", "snow peak stove", "gigapower stove", "camping stove", "auto ignition stove"],
+          "aliases": ["GigaPower", "GigaPower 2.0", "GS-200"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "REI Co-op",
+      "aliases": ["REI", "Recreational Equipment Inc"],
+      "products": [
+        {
+          "id": "rei-coop-flash-55-pack-2022",
+          "name": "Flash 55 Pack",
+          "brand": "REI Co-op",
+          "category": "outdoor",
+          "subcategory": "backpacks",
+          "releaseYear": 2022,
+          "msrp": 199,
+          "visualSignature": {
+            "primaryColors": ["blue"],
+            "secondaryColors": ["grey"],
+            "colorwayName": "Strait Blue",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["top-loading", "roll-top closure", "removable framesheet"],
+            "distinguishingFeatures": ["ultralight at 2lbs 5oz", "100% recycled body fabric", "removable framesheet for fast-and-light", "co-op house brand"],
+            "logoPlacement": "front panel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "volume": "55L",
+            "weight": "2lbs 5oz",
+            "fabric": "100% recycled ripstop nylon",
+            "frameMaterial": "removable HDPE framesheet",
+            "hipBelt": "padded, removable",
+            "hydrationCompatible": true
+          },
+          "variants": [
+            { "variantName": "Strait Blue", "colorway": "Strait Blue", "availability": "current", "specifications": {} },
+            { "variantName": "Tawny Orange", "colorway": "Tawny Orange", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["ultralight backpack", "55 liter pack", "budget backpacking pack", "rei backpack", "flash pack", "lightweight hiking pack", "thru-hiking pack"],
+          "aliases": ["Flash 55", "REI Flash 55", "REI Flash Pack"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Petzl",
+      "aliases": [],
+      "products": [
+        {
+          "id": "petzl-actik-core-headlamp-2022",
+          "name": "Actik Core Headlamp",
+          "brand": "Petzl",
+          "category": "outdoor",
+          "subcategory": "headlamps",
+          "releaseYear": 2022,
+          "msrp": 79,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["orange"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["multi-beam front housing", "reflective headband", "top strap for stability"],
+            "distinguishingFeatures": ["600 lumens max output", "rechargeable CORE battery (included)", "AAA compatible", "red lighting mode", "reflective headband"],
+            "logoPlacement": "front housing"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "maxLumens": 600,
+            "beamDistance": "115m",
+            "battery": "CORE rechargeable (included) or 3 AAA",
+            "weight": "3.0oz with CORE battery",
+            "burnTime": "130 hours (low)",
+            "waterproofRating": "IPX4",
+            "charging": "USB",
+            "modes": "proximity, movement, distance, red light"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Red", "colorway": "Red", "availability": "current", "specifications": {} },
+            { "variantName": "Blue", "colorway": "Blue", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["rechargeable headlamp", "headlamp", "petzl headlamp", "actik core", "600 lumen headlamp", "usb headlamp", "running headlamp", "hiking headlamp"],
+          "aliases": ["Actik Core", "Actik CORE", "Petzl Actik"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 91
+        }
+      ]
+    },
+    {
+      "name": "La Sportiva",
+      "aliases": ["Sportiva"],
+      "products": [
+        {
+          "id": "la-sportiva-tx4-approach-shoe-2018",
+          "name": "TX4 Approach Shoe",
+          "brand": "La Sportiva",
+          "category": "outdoor",
+          "subcategory": "approach-shoes",
+          "releaseYear": 2018,
+          "msrp": 169,
+          "visualSignature": {
+            "primaryColors": ["grey"],
+            "secondaryColors": ["green"],
+            "colorwayName": "Carbon/Kiwi",
+            "patterns": ["multi-tonal"],
+            "finish": "matte",
+            "designCues": ["climbing zone toe rand", "dotted lacing system", "low-profile scrambling design"],
+            "distinguishingFeatures": ["Vibram Mega-Grip sole", "climbing zone toe for edging", "dotted lacing for precise fit", "Impact Brake System heel"],
+            "logoPlacement": "lateral side and tongue"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "sole": "Vibram Mega-Grip",
+            "midsole": "MEMlex EVA",
+            "upper": "1.6mm Idro-Perwanger leather with TPU reinforcement",
+            "weight": "14.4oz per shoe",
+            "lacingSystem": "dotted lacing",
+            "toeRand": "climbing zone",
+            "heel": "Impact Brake System"
+          },
+          "variants": [
+            { "variantName": "Carbon/Kiwi", "colorway": "Carbon/Kiwi", "availability": "current", "specifications": {} },
+            { "variantName": "Carbon/Flame", "colorway": "Carbon/Flame", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["approach shoes", "scrambling shoes", "climbing approach", "la sportiva shoes", "tx4", "technical hiking shoes", "via ferrata shoes"],
+          "aliases": ["TX4", "La Sportiva TX4", "TX4 Approach"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "The North Face",
+      "aliases": ["TNF", "North Face"],
+      "products": [
+        {
+          "id": "tnf-stormbreak-2-tent-2020",
+          "name": "Stormbreak 2 Tent",
+          "brand": "The North Face",
+          "category": "outdoor",
+          "subcategory": "tents",
+          "releaseYear": 2020,
+          "msrp": 140,
+          "visualSignature": {
+            "primaryColors": ["green"],
+            "secondaryColors": ["grey"],
+            "colorwayName": "Agave Green",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["dome shape", "single-door design", "easy clip setup"],
+            "distinguishingFeatures": ["2-person capacity", "3-season rating", "easy clip-to-pole setup", "lightweight at 5lb 8oz"],
+            "logoPlacement": "rainfly"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "capacity": "2-person",
+            "seasonRating": "3-season",
+            "weight": "5lb 8oz",
+            "setup": "clip-to-pole",
+            "structure": "freestanding dome",
+            "fabric": "75D polyester taffeta"
+          },
+          "variants": [
+            { "variantName": "Agave Green", "colorway": "Agave Green", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["camping tent", "2-person tent", "budget tent", "3-season tent", "north face tent", "stormbreak tent", "easy setup tent", "backpacking tent"],
+          "aliases": ["Stormbreak 2", "Stormbreak II", "TNF Stormbreak 2"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        },
+        {
+          "id": "tnf-thermoball-eco-jacket-2019",
+          "name": "ThermoBall Eco Jacket",
+          "brand": "The North Face",
+          "category": "outdoor",
+          "subcategory": "insulated-jackets",
+          "releaseYear": 2019,
+          "msrp": 230,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "colorwayName": "Black",
+            "patterns": ["quilted"],
+            "finish": "matte",
+            "designCues": ["round quilted baffles", "snap-off hood option", "zippered hand pockets"],
+            "distinguishingFeatures": ["ThermoBall Eco synthetic insulation", "packable into own pocket", "recycled materials", "mimics down warmth when wet"],
+            "logoPlacement": "left chest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "insulation": "ThermoBall Eco (recycled synthetic)",
+            "shell": "recycled polyester with DWR",
+            "packable": "stuffs into hand pocket",
+            "warmthRating": "mimics 600-fill down",
+            "DWR": "DWR finish"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "New Taupe Green", "colorway": "New Taupe Green", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["synthetic insulated jacket", "packable jacket", "thermoball jacket", "puffy jacket", "north face jacket", "eco jacket", "lightweight insulation", "winter jacket"],
+          "aliases": ["ThermoBall", "ThermoBall Eco", "TNF ThermoBall"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "tnf-1996-retro-nuptse-jacket-1996",
+          "name": "1996 Retro Nuptse Jacket",
+          "brand": "The North Face",
+          "category": "outdoor",
+          "subcategory": "insulated-jackets",
+          "releaseYear": 1996,
+          "msrp": 330,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "colorwayName": "Black",
+            "patterns": ["quilted"],
+            "finish": "matte",
+            "designCues": ["horizontal quilted baffles", "boxy retro fit", "stand-up collar"],
+            "distinguishingFeatures": ["700-fill goose down insulation", "iconic 1996 reissue silhouette", "DWR finish", "stowable in own pocket"],
+            "logoPlacement": "left chest and back shoulder"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "insulation": "700-fill goose down",
+            "shell": "recycled ripstop nylon with DWR",
+            "fit": "standard/boxy retro",
+            "packable": "stowable in own pocket",
+            "DWR": "DWR finish"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Red", "colorway": "TNF Red", "availability": "current", "specifications": {} },
+            { "variantName": "Blue", "colorway": "Summit Navy", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["down jacket", "puffer jacket", "retro nuptse", "nuptse jacket", "700 fill down", "north face puffer", "iconic jacket", "winter jacket", "streetwear puffer"],
+          "aliases": ["Nuptse", "Retro Nuptse", "1996 Nuptse", "TNF Nuptse"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Darn Tough",
+      "aliases": ["Darn Tough Vermont"],
+      "products": [
+        {
+          "id": "darn-tough-hiker-micro-crew-cushion-2004",
+          "name": "Hiker Micro Crew Cushion",
+          "brand": "Darn Tough",
+          "category": "outdoor",
+          "subcategory": "socks",
+          "releaseYear": 2004,
+          "msrp": 25,
+          "visualSignature": {
+            "primaryColors": ["olive"],
+            "secondaryColors": ["grey"],
+            "colorwayName": "Olive",
+            "patterns": ["solid"],
+            "finish": "knit",
+            "designCues": ["micro crew height", "cushioned sole", "seamless toe"],
+            "distinguishingFeatures": ["merino wool blend", "unconditional lifetime guarantee", "Made in USA (Vermont)", "cushioned underfoot"],
+            "logoPlacement": "calf area"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "merino wool blend",
+            "height": "micro crew",
+            "cushioning": "cushion",
+            "guarantee": "unconditional lifetime guarantee",
+            "madeIn": "USA (Vermont)"
+          },
+          "variants": [
+            { "variantName": "Olive", "colorway": "Olive", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Denim", "colorway": "Denim", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["hiking socks", "merino wool socks", "cushioned socks", "darn tough socks", "lifetime guarantee socks", "micro crew socks", "wool hiking socks", "made in usa socks"],
+          "aliases": ["Hiker Micro Crew", "DT Hiker Cushion", "1466"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 91
+        },
+        {
+          "id": "darn-tough-no-show-light-hiker-2010",
+          "name": "No Show Light Hiker",
+          "brand": "Darn Tough",
+          "category": "outdoor",
+          "subcategory": "socks",
+          "releaseYear": 2010,
+          "msrp": 19,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["grey"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "knit",
+            "designCues": ["no-show height", "low profile", "seamless toe"],
+            "distinguishingFeatures": ["merino wool blend", "low-profile no-show cut", "unconditional lifetime guarantee", "lightweight cushioning"],
+            "logoPlacement": "sole"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "merino wool blend",
+            "height": "no show",
+            "cushioning": "light",
+            "guarantee": "unconditional lifetime guarantee",
+            "madeIn": "USA (Vermont)"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Grey", "colorway": "Grey", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["no show socks", "low cut hiking socks", "merino wool no show", "darn tough no show", "light hiker socks", "ankle socks", "trail running socks"],
+          "aliases": ["No Show Hiker", "DT No Show Light", "Light Hiker No Show"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 89
+        }
+      ]
+    },
+    {
+      "name": "BUFF",
+      "aliases": ["Buff Headwear", "Original Buff"],
+      "products": [
+        {
+          "id": "buff-original-multifunctional-headwear-2000",
+          "name": "Original Multifunctional Headwear",
+          "brand": "BUFF",
+          "category": "outdoor",
+          "subcategory": "accessories",
+          "releaseYear": 2000,
+          "msrp": 20,
+          "visualSignature": {
+            "primaryColors": ["various"],
+            "secondaryColors": [],
+            "colorwayName": "Various",
+            "patterns": ["solid", "printed"],
+            "finish": "matte",
+            "designCues": ["seamless tubular construction", "lightweight stretch fabric", "versatile form factor"],
+            "distinguishingFeatures": ["seamless microfiber tube", "12+ ways to wear (neck gaiter, headband, balaclava, etc.)", "UPF 50 sun protection", "4-way stretch"],
+            "logoPlacement": "bottom edge"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "seamless microfiber",
+            "UPF": "50",
+            "waysToWear": "12+",
+            "construction": "seamless tubular",
+            "stretch": "4-way"
+          },
+          "variants": [
+            { "variantName": "Solid Black", "colorway": "Solid Black", "availability": "current", "specifications": {} },
+            { "variantName": "Solid Blue", "colorway": "Solid Blue", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["neck gaiter", "headband", "buff headwear", "multifunctional headwear", "face covering", "balaclava", "sun protection headwear", "tube scarf", "outdoor headwear"],
+          "aliases": ["Original Buff", "Buff Neckwear", "BUFF Original"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "buff-thermonet-neck-warmer-2018",
+          "name": "ThermoNet Neck Warmer",
+          "brand": "BUFF",
+          "category": "outdoor",
+          "subcategory": "accessories",
+          "releaseYear": 2018,
+          "msrp": 35,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "colorwayName": "Solid Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["tubular construction", "insulated fabric", "fitted profile"],
+            "distinguishingFeatures": ["Primaloft insulation layer", "4-way stretch fabric", "cold-weather thermal regulation", "lightweight warmth"],
+            "logoPlacement": "bottom edge"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "insulation": "Primaloft",
+            "stretch": "4-way",
+            "use": "cold weather",
+            "construction": "seamless tubular",
+            "thermalRating": "high warmth-to-weight ratio"
+          },
+          "variants": [
+            { "variantName": "Solid Black", "colorway": "Solid Black", "availability": "current", "specifications": {} },
+            { "variantName": "Solid Grey", "colorway": "Solid Grey", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["neck warmer", "winter neck gaiter", "insulated neck warmer", "buff thermonet", "cold weather gaiter", "primaloft neck warmer", "winter headwear"],
+          "aliases": ["ThermoNet", "Buff ThermoNet", "ThermoNet Gaiter"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Matador",
+      "aliases": ["Matador Travel"],
+      "products": [
+        {
+          "id": "matador-nanodry-trek-towel-2019",
+          "name": "NanoDry Trek Towel",
+          "brand": "Matador",
+          "category": "outdoor",
+          "subcategory": "accessories",
+          "releaseYear": 2019,
+          "msrp": 39,
+          "visualSignature": {
+            "primaryColors": ["grey"],
+            "secondaryColors": [],
+            "colorwayName": "Charcoal",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["ultracompact folded size", "snap-closure silicone case", "thin nanofiber fabric"],
+            "distinguishingFeatures": ["nanofiber material", "packs to fist size", "quick-dry technology", "antimicrobial treatment"],
+            "logoPlacement": "corner tag"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "nanofiber",
+            "packedSize": "fist size",
+            "dryingSpeed": "quick-dry",
+            "antimicrobial": true,
+            "use": "backpacking, travel, gym"
+          },
+          "variants": [
+            { "variantName": "Charcoal", "colorway": "Charcoal", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["travel towel", "packable towel", "quick dry towel", "nanofiber towel", "matador towel", "backpacking towel", "camping towel", "ultralight towel"],
+          "aliases": ["NanoDry Towel", "NanoDry Trek", "Matador Towel"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        },
+        {
+          "id": "matador-freerain32-packable-backpack-2021",
+          "name": "FreeRain32 Packable Backpack",
+          "brand": "Matador",
+          "category": "outdoor",
+          "subcategory": "daypacks",
+          "releaseYear": 2021,
+          "msrp": 79,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["roll-top closure", "ultracompact packed size", "minimalist design"],
+            "distinguishingFeatures": ["waterproof construction", "packable to palm size", "32L capacity", "ultralight at 11oz"],
+            "logoPlacement": "front panel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "volume": "32L",
+            "weight": "11oz",
+            "waterproof": "waterproof",
+            "packedSize": "palm size",
+            "closure": "roll-top",
+            "fabric": "waterproof ripstop nylon"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["packable backpack", "waterproof daypack", "ultralight backpack", "matador backpack", "freerain", "travel backpack", "collapsible backpack", "32 liter pack"],
+          "aliases": ["FreeRain32", "FreeRain 32", "Matador FreeRain"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 89
+        }
+      ]
+    },
+    {
+      "name": "KETL Mtn. Apparel",
+      "aliases": ["KETL", "KETL Mtn", "Kettle Mountain"],
+      "products": [
+        {
+          "id": "ketl-mtn-nofry-sun-hoodie-2021",
+          "name": "Nofry Sun Hoodie",
+          "brand": "KETL Mtn. Apparel",
+          "category": "outdoor",
+          "subcategory": "apparel",
+          "releaseYear": 2021,
+          "msrp": 89,
+          "visualSignature": {
+            "primaryColors": ["various"],
+            "secondaryColors": [],
+            "colorwayName": "Various",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["hood with brim", "thumb loops", "ventilated back panel"],
+            "distinguishingFeatures": ["UPF 50+ sun protection", "lightweight breathable fabric", "ventilated design", "hiking and fishing versatile use"],
+            "logoPlacement": "left chest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "UPF": "50+",
+            "weight": "lightweight",
+            "ventilation": "ventilated back panel",
+            "use": "hiking, fishing, trail running",
+            "fit": "athletic"
+          },
+          "variants": [
+            { "variantName": "Slate", "colorway": "Slate", "availability": "current", "specifications": {} },
+            { "variantName": "Sand", "colorway": "Sand", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["sun hoodie", "UPF hoodie", "fishing hoodie", "hiking sun shirt", "sun protection hoodie", "ketl hoodie", "nofry hoodie", "lightweight hoodie", "outdoor hoodie"],
+          "aliases": ["Nofry Hoodie", "KETL Sun Hoodie", "Nofry Sun Hood"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "ketl-mtn-bodbrella-rain-jacket-2022",
+          "name": "BodBrella Rain Jacket",
+          "brand": "KETL Mtn. Apparel",
+          "category": "outdoor",
+          "subcategory": "hardshell-jackets",
+          "releaseYear": 2022,
+          "msrp": 169,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": [],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["minimalist design", "packable silhouette", "full-zip front"],
+            "distinguishingFeatures": ["waterproof breathable membrane", "ultralight construction", "packable into own pocket", "seam-sealed"],
+            "logoPlacement": "left chest"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "waterproof": "waterproof",
+            "breathability": "high",
+            "weight": "ultralight",
+            "packable": "stuffs into own pocket",
+            "seams": "fully seam-sealed"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["rain jacket", "waterproof jacket", "ultralight rain jacket", "packable rain jacket", "ketl jacket", "bodbrella", "lightweight shell", "hiking rain jacket"],
+          "aliases": ["BodBrella", "KETL Rain Jacket", "BodBrella Jacket"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ]
+    }
+  ]
+}

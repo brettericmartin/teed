@@ -1,0 +1,1934 @@
+{
+  "category": "tech",
+  "schemaVersion": "1.0.0",
+  "lastUpdated": "2026-02-16T00:00:00.000Z",
+  "brands": [
+    {
+      "name": "Apple",
+      "aliases": ["AAPL"],
+      "products": [
+        {
+          "id": "apple-iphone-16-pro-max",
+          "name": "iPhone 16 Pro Max",
+          "brand": "Apple",
+          "category": "tech",
+          "subcategory": "phones",
+          "releaseYear": 2024,
+          "msrp": 1199,
+          "visualSignature": {
+            "primaryColors": ["natural-titanium"],
+            "secondaryColors": ["black"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["camera island", "titanium frame", "action button", "camera control button"],
+            "distinguishingFeatures": ["triple camera system", "camera control button", "largest iPhone display"],
+            "logoPlacement": "back center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "phone",
+            "screenSize": "6.9\"",
+            "storage": "256GB/512GB/1TB",
+            "processor": "A18 Pro",
+            "os": "iOS 18",
+            "battery": "4685 mAh",
+            "connectivity": ["5G", "Wi-Fi 7", "Bluetooth 5.3", "USB-C 3"]
+          },
+          "variants": [
+            { "variantName": "Natural Titanium", "colorway": "Natural Titanium", "availability": "current", "specifications": {} },
+            { "variantName": "Black Titanium", "colorway": "Black Titanium", "availability": "current", "specifications": {} },
+            { "variantName": "White Titanium", "colorway": "White Titanium", "availability": "current", "specifications": {} },
+            { "variantName": "Desert Titanium", "colorway": "Desert Titanium", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["iphone", "smartphone", "apple phone", "pro max", "iphone 16"],
+          "aliases": ["iPhone 16 Pro Max", "IP16PM"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "apple-iphone-16-pro",
+          "name": "iPhone 16 Pro",
+          "brand": "Apple",
+          "category": "tech",
+          "subcategory": "phones",
+          "releaseYear": 2024,
+          "msrp": 999,
+          "visualSignature": {
+            "primaryColors": ["natural-titanium"],
+            "secondaryColors": ["black"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["camera island", "titanium frame", "action button", "camera control button"],
+            "distinguishingFeatures": ["triple camera system", "camera control button"],
+            "logoPlacement": "back center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "phone",
+            "screenSize": "6.3\"",
+            "storage": "128GB/256GB/512GB/1TB",
+            "processor": "A18 Pro",
+            "os": "iOS 18",
+            "battery": "3582 mAh",
+            "connectivity": ["5G", "Wi-Fi 7", "Bluetooth 5.3", "USB-C 3"]
+          },
+          "variants": [
+            { "variantName": "Natural Titanium", "colorway": "Natural Titanium", "availability": "current", "specifications": {} },
+            { "variantName": "Black Titanium", "colorway": "Black Titanium", "availability": "current", "specifications": {} },
+            { "variantName": "White Titanium", "colorway": "White Titanium", "availability": "current", "specifications": {} },
+            { "variantName": "Desert Titanium", "colorway": "Desert Titanium", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["iphone", "smartphone", "apple phone", "pro phone", "iphone 16"],
+          "aliases": ["iPhone 16 Pro", "IP16P"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "apple-macbook-pro-14-m4-pro",
+          "name": "MacBook Pro 14\" M4 Pro",
+          "brand": "Apple",
+          "category": "tech",
+          "subcategory": "laptops",
+          "releaseYear": 2024,
+          "msrp": 1999,
+          "visualSignature": {
+            "primaryColors": ["space-black"],
+            "secondaryColors": ["dark-gray"],
+            "patterns": ["solid"],
+            "finish": "metallic",
+            "designCues": ["unibody aluminum", "notch display", "MagSafe port", "flat edges"],
+            "distinguishingFeatures": ["Liquid Retina XDR display", "notch camera cutout", "MagSafe charging"],
+            "logoPlacement": "lid center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "laptop",
+            "screenSize": "14.2\"",
+            "storage": "512GB/1TB/2TB/4TB",
+            "ram": "24GB/48GB",
+            "processor": "M4 Pro",
+            "os": "macOS Sequoia",
+            "resolution": "3024x1964",
+            "battery": "72.4 Wh"
+          },
+          "variants": [
+            { "variantName": "Space Black", "colorway": "Space Black", "availability": "current", "specifications": {} },
+            { "variantName": "Silver", "colorway": "Silver", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["macbook", "macbook pro", "apple laptop", "m4 pro", "mac laptop"],
+          "aliases": ["MBP 14 M4 Pro", "MacBook Pro M4 Pro"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "apple-macbook-air-15-m4",
+          "name": "MacBook Air 15\" M4",
+          "brand": "Apple",
+          "category": "tech",
+          "subcategory": "laptops",
+          "releaseYear": 2025,
+          "msrp": 1299,
+          "visualSignature": {
+            "primaryColors": ["midnight"],
+            "secondaryColors": ["dark-blue"],
+            "patterns": ["solid"],
+            "finish": "metallic",
+            "designCues": ["ultra-thin wedge", "unibody aluminum", "MagSafe port", "fanless design"],
+            "distinguishingFeatures": ["thinnest 15-inch laptop", "no fan", "MagSafe charging", "Liquid Retina display"],
+            "logoPlacement": "lid center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "laptop",
+            "screenSize": "15.3\"",
+            "storage": "256GB/512GB/1TB/2TB",
+            "ram": "16GB/24GB/32GB",
+            "processor": "M4",
+            "os": "macOS Sequoia",
+            "resolution": "2880x1864",
+            "battery": "66.5 Wh"
+          },
+          "variants": [
+            { "variantName": "Midnight", "colorway": "Midnight", "availability": "current", "specifications": {} },
+            { "variantName": "Starlight", "colorway": "Starlight", "availability": "current", "specifications": {} },
+            { "variantName": "Space Gray", "colorway": "Space Gray", "availability": "current", "specifications": {} },
+            { "variantName": "Silver", "colorway": "Silver", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["macbook air", "apple laptop", "m4", "thin laptop", "macbook air 15"],
+          "aliases": ["MBA 15 M4", "MacBook Air M4 15"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "apple-ipad-pro-13-m4",
+          "name": "iPad Pro 13\" M4",
+          "brand": "Apple",
+          "category": "tech",
+          "subcategory": "tablets",
+          "releaseYear": 2024,
+          "msrp": 1299,
+          "visualSignature": {
+            "primaryColors": ["space-black"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "metallic",
+            "designCues": ["flat edges", "squared corners", "thin profile", "camera bump"],
+            "distinguishingFeatures": ["Ultra Retina XDR OLED display", "thinnest Apple device ever", "Apple Pencil Pro support"],
+            "logoPlacement": "back center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "tablet",
+            "screenSize": "13\"",
+            "storage": "256GB/512GB/1TB/2TB",
+            "ram": "16GB",
+            "processor": "M4",
+            "os": "iPadOS 18",
+            "resolution": "2752x2064"
+          },
+          "variants": [
+            { "variantName": "Space Black", "colorway": "Space Black", "availability": "current", "specifications": {} },
+            { "variantName": "Silver", "colorway": "Silver", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["ipad pro", "apple tablet", "m4 ipad", "ipad 13", "drawing tablet"],
+          "aliases": ["iPad Pro M4", "iPad Pro 13-inch"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "apple-airpods-pro-2-usb-c",
+          "name": "AirPods Pro 2 (USB-C)",
+          "brand": "Apple",
+          "category": "tech",
+          "subcategory": "earbuds",
+          "releaseYear": 2024,
+          "msrp": 249,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "glossy",
+            "designCues": ["stem design", "rounded case", "force sensor on stem", "speaker grille on case"],
+            "distinguishingFeatures": ["H2 chip", "adaptive audio", "USB-C charging case", "lanyard loop on case"],
+            "logoPlacement": "case front"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "earbuds",
+            "connectivity": ["Bluetooth 5.3"],
+            "battery": "6 hours (30 hours with case)",
+            "anc": "Active Noise Cancellation",
+            "driver": "Custom Apple driver",
+            "waterResistance": "IP54"
+          },
+          "variants": [
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["airpods", "airpods pro", "apple earbuds", "wireless earbuds", "noise cancelling earbuds"],
+          "aliases": ["AirPods Pro 2", "APP2", "AirPods Pro USB-C"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "apple-airpods-max-usb-c",
+          "name": "AirPods Max (USB-C)",
+          "brand": "Apple",
+          "category": "tech",
+          "subcategory": "headphones",
+          "releaseYear": 2024,
+          "msrp": 549,
+          "visualSignature": {
+            "primaryColors": ["midnight"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["mesh canopy headband", "telescoping arms", "digital crown", "aluminum ear cups"],
+            "distinguishingFeatures": ["stainless steel mesh canopy", "digital crown", "premium aluminum ear cups"],
+            "logoPlacement": "ear cup exterior"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "headphones",
+            "connectivity": ["Bluetooth 5.3"],
+            "battery": "20 hours",
+            "anc": "Active Noise Cancellation",
+            "driver": "40mm Apple driver",
+            "chargingPort": "USB-C"
+          },
+          "variants": [
+            { "variantName": "Midnight", "colorway": "Midnight", "availability": "current", "specifications": {} },
+            { "variantName": "Starlight", "colorway": "Starlight", "availability": "current", "specifications": {} },
+            { "variantName": "Blue", "colorway": "Blue", "availability": "current", "specifications": {} },
+            { "variantName": "Orange", "colorway": "Orange", "availability": "current", "specifications": {} },
+            { "variantName": "Purple", "colorway": "Purple", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["airpods max", "apple headphones", "over ear headphones", "noise cancelling headphones"],
+          "aliases": ["AirPods Max USB-C", "AirPods Max 2024"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "apple-watch-ultra-2",
+          "name": "Apple Watch Ultra 2",
+          "brand": "Apple",
+          "category": "tech",
+          "subcategory": "smartwatches",
+          "releaseYear": 2024,
+          "msrp": 799,
+          "visualSignature": {
+            "primaryColors": ["natural-titanium"],
+            "secondaryColors": ["orange", "black"],
+            "patterns": ["solid"],
+            "finish": "brushed",
+            "designCues": ["flat sapphire crystal", "action button", "digital crown guard", "oversized case"],
+            "distinguishingFeatures": ["49mm titanium case", "orange action button", "depth gauge", "siren"],
+            "logoPlacement": "back sensor area"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "smartwatch",
+            "screenSize": "49mm",
+            "processor": "S9 SiP",
+            "os": "watchOS 11",
+            "battery": "36 hours (72 hours low power)",
+            "waterResistance": "WR100 / EN13319",
+            "connectivity": ["Bluetooth 5.3", "Wi-Fi", "LTE", "L1/L5 GPS"]
+          },
+          "variants": [
+            { "variantName": "Natural Titanium / Orange Alpine Loop", "colorway": "Natural Titanium", "availability": "current", "specifications": {} },
+            { "variantName": "Black Titanium / Black Alpine Loop", "colorway": "Black Titanium", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["apple watch", "apple watch ultra", "smartwatch", "fitness watch", "dive watch"],
+          "aliases": ["Watch Ultra 2", "AWU2"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Samsung",
+      "aliases": [],
+      "products": [
+        {
+          "id": "samsung-galaxy-s25-ultra",
+          "name": "Galaxy S25 Ultra",
+          "brand": "Samsung",
+          "category": "tech",
+          "subcategory": "phones",
+          "releaseYear": 2025,
+          "msrp": 1299,
+          "visualSignature": {
+            "primaryColors": ["titanium-silverblue"],
+            "secondaryColors": ["black"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["flat display", "titanium frame", "rounded corners", "quad camera array"],
+            "distinguishingFeatures": ["embedded S Pen", "quad camera system", "flat titanium frame", "7-year OS updates"],
+            "logoPlacement": "back bottom center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "phone",
+            "screenSize": "6.9\"",
+            "storage": "256GB/512GB/1TB",
+            "ram": "12GB",
+            "processor": "Snapdragon 8 Elite for Galaxy",
+            "os": "One UI 7 / Android 15",
+            "battery": "5000 mAh",
+            "connectivity": ["5G", "Wi-Fi 7", "Bluetooth 5.4", "USB-C 3.2"]
+          },
+          "variants": [
+            { "variantName": "Titanium Silverblue", "colorway": "Titanium Silverblue", "availability": "current", "specifications": {} },
+            { "variantName": "Titanium Black", "colorway": "Titanium Black", "availability": "current", "specifications": {} },
+            { "variantName": "Titanium Gray", "colorway": "Titanium Gray", "availability": "current", "specifications": {} },
+            { "variantName": "Titanium Whitesilver", "colorway": "Titanium Whitesilver", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["galaxy", "samsung phone", "s25 ultra", "galaxy ultra", "android phone", "s pen phone"],
+          "aliases": ["S25 Ultra", "Galaxy S25U", "SM-S938"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "samsung-galaxy-s25",
+          "name": "Galaxy S25",
+          "brand": "Samsung",
+          "category": "tech",
+          "subcategory": "phones",
+          "releaseYear": 2025,
+          "msrp": 799,
+          "visualSignature": {
+            "primaryColors": ["icy-blue"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "glossy",
+            "designCues": ["flat display", "armor aluminum frame", "dual camera array", "compact form factor"],
+            "distinguishingFeatures": ["flat edge design", "armor aluminum frame", "50MP main camera"],
+            "logoPlacement": "back bottom center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "phone",
+            "screenSize": "6.2\"",
+            "storage": "128GB/256GB",
+            "ram": "12GB",
+            "processor": "Snapdragon 8 Elite for Galaxy",
+            "os": "One UI 7 / Android 15",
+            "battery": "4000 mAh",
+            "connectivity": ["5G", "Wi-Fi 7", "Bluetooth 5.4", "USB-C 3.2"]
+          },
+          "variants": [
+            { "variantName": "Icy Blue", "colorway": "Icy Blue", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Mint", "colorway": "Mint", "availability": "current", "specifications": {} },
+            { "variantName": "Silver Shadow", "colorway": "Silver Shadow", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["galaxy", "samsung phone", "s25", "galaxy s25", "android phone"],
+          "aliases": ["S25", "Galaxy S25", "SM-S931"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "samsung-galaxy-z-fold-6",
+          "name": "Galaxy Z Fold 6",
+          "brand": "Samsung",
+          "category": "tech",
+          "subcategory": "phones",
+          "releaseYear": 2024,
+          "msrp": 1899,
+          "visualSignature": {
+            "primaryColors": ["silver-shadow"],
+            "secondaryColors": ["black"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["book-style fold", "dual screen", "hinge mechanism", "armor aluminum frame"],
+            "distinguishingFeatures": ["foldable inner display", "cover display", "flex mode", "slimmer hinge"],
+            "logoPlacement": "cover display bottom"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "phone",
+            "screenSize": "7.6\" inner / 6.3\" cover",
+            "storage": "256GB/512GB/1TB",
+            "ram": "12GB",
+            "processor": "Snapdragon 8 Gen 3 for Galaxy",
+            "os": "One UI 6.1 / Android 14",
+            "battery": "4400 mAh",
+            "connectivity": ["5G", "Wi-Fi 6E", "Bluetooth 5.3", "USB-C 3.2"]
+          },
+          "variants": [
+            { "variantName": "Silver Shadow", "colorway": "Silver Shadow", "availability": "current", "specifications": {} },
+            { "variantName": "Navy", "colorway": "Navy", "availability": "current", "specifications": {} },
+            { "variantName": "Pink", "colorway": "Pink", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["galaxy fold", "foldable phone", "samsung fold", "z fold", "book phone"],
+          "aliases": ["Z Fold 6", "Fold 6", "SM-F956"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "samsung-galaxy-buds-3-pro",
+          "name": "Galaxy Buds 3 Pro",
+          "brand": "Samsung",
+          "category": "tech",
+          "subcategory": "earbuds",
+          "releaseYear": 2024,
+          "msrp": 249,
+          "visualSignature": {
+            "primaryColors": ["silver"],
+            "secondaryColors": ["white"],
+            "patterns": ["solid"],
+            "finish": "glossy",
+            "designCues": ["blade design stem", "LED strip on case", "transparent case lid", "angular ear tips"],
+            "distinguishingFeatures": ["blade-style stem", "LED strip on charging case", "2-way speaker"],
+            "logoPlacement": "stem exterior"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "earbuds",
+            "connectivity": ["Bluetooth 5.4"],
+            "battery": "7 hours (30 hours with case)",
+            "anc": "Active Noise Cancellation",
+            "driver": "Two-way speaker (10.5mm + 6.1mm planar)",
+            "waterResistance": "IP57"
+          },
+          "variants": [
+            { "variantName": "Silver", "colorway": "Silver", "availability": "current", "specifications": {} },
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["galaxy buds", "samsung earbuds", "wireless earbuds", "noise cancelling earbuds", "buds 3 pro"],
+          "aliases": ["Buds 3 Pro", "Galaxy Buds3 Pro"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Sony",
+      "aliases": [],
+      "products": [
+        {
+          "id": "sony-wh-1000xm5",
+          "name": "WH-1000XM5",
+          "brand": "Sony",
+          "category": "tech",
+          "subcategory": "headphones",
+          "releaseYear": 2022,
+          "msrp": 399,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark-gray"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["smooth rounded ear cups", "seamless headband", "minimal branding", "soft-touch material"],
+            "distinguishingFeatures": ["stepless slider headband", "synthetic leather ear pads", "touch sensor controls"],
+            "logoPlacement": "ear cup exterior"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "headphones",
+            "connectivity": ["Bluetooth 5.2", "3.5mm aux"],
+            "battery": "30 hours",
+            "anc": "Active Noise Cancellation",
+            "driver": "30mm",
+            "weight": "250g",
+            "codecs": "LDAC, AAC, SBC"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Silver", "colorway": "Silver", "availability": "current", "specifications": {} },
+            { "variantName": "Midnight Blue", "colorway": "Midnight Blue", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["sony headphones", "xm5", "noise cancelling headphones", "wireless headphones", "1000xm5"],
+          "aliases": ["XM5", "1000XM5", "Sony XM5"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "sony-wf-1000xm5",
+          "name": "WF-1000XM5",
+          "brand": "Sony",
+          "category": "tech",
+          "subcategory": "earbuds",
+          "releaseYear": 2023,
+          "msrp": 299,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["copper"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["compact rounded shape", "foam ear tips", "textured case", "no stem design"],
+            "distinguishingFeatures": ["smallest Sony earbuds", "bone conduction sensor", "textured charging case"],
+            "logoPlacement": "earbud exterior"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "earbuds",
+            "connectivity": ["Bluetooth 5.3"],
+            "battery": "8 hours (24 hours with case)",
+            "anc": "Active Noise Cancellation",
+            "driver": "8.4mm",
+            "waterResistance": "IPX4",
+            "codecs": "LDAC, AAC, SBC, LC3"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Silver", "colorway": "Silver", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["sony earbuds", "wf xm5", "noise cancelling earbuds", "wireless earbuds", "1000xm5 earbuds"],
+          "aliases": ["WF XM5", "Sony XM5 Earbuds", "WF-1000XM5"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "sony-playstation-5-pro",
+          "name": "PlayStation 5 Pro",
+          "brand": "Sony",
+          "category": "tech",
+          "subcategory": "gaming-consoles",
+          "releaseYear": 2024,
+          "msrp": 699,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["black"],
+            "patterns": ["solid"],
+            "finish": "glossy",
+            "designCues": ["vertical standing design", "three-stripe panel", "curved side panels", "disc-less base unit"],
+            "distinguishingFeatures": ["triple-stripe black accent band", "larger than PS5 Slim", "no disc drive included"],
+            "logoPlacement": "front center panel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "console",
+            "processor": "AMD Zen 2 (enhanced)",
+            "gpu": "16.7 TFLOPS RDNA-based",
+            "storage": "2TB SSD",
+            "ram": "16GB GDDR6",
+            "resolution": "up to 8K",
+            "connectivity": ["Wi-Fi 7", "Bluetooth 5.1", "USB-C", "HDMI 2.1"]
+          },
+          "variants": [
+            { "variantName": "Standard (Digital)", "colorway": "White/Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["ps5 pro", "playstation 5 pro", "sony console", "gaming console", "playstation pro"],
+          "aliases": ["PS5 Pro", "PlayStation 5 Pro"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Google",
+      "aliases": [],
+      "products": [
+        {
+          "id": "google-pixel-9-pro",
+          "name": "Pixel 9 Pro",
+          "brand": "Google",
+          "category": "tech",
+          "subcategory": "phones",
+          "releaseYear": 2024,
+          "msrp": 999,
+          "visualSignature": {
+            "primaryColors": ["obsidian"],
+            "secondaryColors": ["black"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["flat sides", "camera bar", "rounded corners", "polished metal rails"],
+            "distinguishingFeatures": ["horizontal camera bar", "Tensor chip AI features", "flat display", "soft-touch back glass"],
+            "logoPlacement": "back center G logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "phone",
+            "screenSize": "6.3\"",
+            "storage": "128GB/256GB/512GB/1TB",
+            "ram": "16GB",
+            "processor": "Tensor G4",
+            "os": "Android 14",
+            "battery": "4700 mAh",
+            "connectivity": ["5G", "Wi-Fi 7", "Bluetooth 5.3", "USB-C 3.2"]
+          },
+          "variants": [
+            { "variantName": "Obsidian", "colorway": "Obsidian", "availability": "current", "specifications": {} },
+            { "variantName": "Porcelain", "colorway": "Porcelain", "availability": "current", "specifications": {} },
+            { "variantName": "Hazel", "colorway": "Hazel", "availability": "current", "specifications": {} },
+            { "variantName": "Rose Quartz", "colorway": "Rose Quartz", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["pixel", "google phone", "pixel 9", "pixel pro", "android phone", "tensor phone"],
+          "aliases": ["Pixel 9 Pro", "P9P"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "google-pixel-buds-pro-2",
+          "name": "Pixel Buds Pro 2",
+          "brand": "Google",
+          "category": "tech",
+          "subcategory": "earbuds",
+          "releaseYear": 2024,
+          "msrp": 229,
+          "visualSignature": {
+            "primaryColors": ["porcelain"],
+            "secondaryColors": ["white"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["wingtip stabilizer", "compact round case", "twist-to-lock fit", "minimal branding"],
+            "distinguishingFeatures": ["rotating stabilizer arc", "Tensor A1 chip", "smallest Google earbuds"],
+            "logoPlacement": "case exterior G logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "earbuds",
+            "connectivity": ["Bluetooth 5.4"],
+            "battery": "8 hours (30 hours with case)",
+            "anc": "Active Noise Cancellation",
+            "driver": "11mm",
+            "waterResistance": "IP54",
+            "processor": "Tensor A1"
+          },
+          "variants": [
+            { "variantName": "Porcelain", "colorway": "Porcelain", "availability": "current", "specifications": {} },
+            { "variantName": "Hazel", "colorway": "Hazel", "availability": "current", "specifications": {} },
+            { "variantName": "Wintergreen", "colorway": "Wintergreen", "availability": "current", "specifications": {} },
+            { "variantName": "Peony", "colorway": "Peony", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["pixel buds", "google earbuds", "wireless earbuds", "pixel buds pro", "google buds"],
+          "aliases": ["Pixel Buds Pro 2", "PBP2"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Bose",
+      "aliases": [],
+      "products": [
+        {
+          "id": "bose-quietcomfort-ultra-headphones",
+          "name": "QuietComfort Ultra Headphones",
+          "brand": "Bose",
+          "category": "tech",
+          "subcategory": "headphones",
+          "releaseYear": 2023,
+          "msrp": 429,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark-gray"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["plush ear cushions", "adjustable metal headband", "fold-flat design", "physical buttons"],
+            "distinguishingFeatures": ["Bose Immersive Audio", "adjustable EQ", "fold-flat design", "CustomTune technology"],
+            "logoPlacement": "ear cup exterior"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "headphones",
+            "connectivity": ["Bluetooth 5.3", "3.5mm aux"],
+            "battery": "24 hours",
+            "anc": "Active Noise Cancellation",
+            "driver": "35mm Bose driver",
+            "weight": "250g",
+            "spatialAudio": "Bose Immersive Audio"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "White Smoke", "colorway": "White Smoke", "availability": "current", "specifications": {} },
+            { "variantName": "Sandstone", "colorway": "Sandstone", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["bose headphones", "quietcomfort", "qc ultra", "noise cancelling headphones", "bose over ear"],
+          "aliases": ["QC Ultra Headphones", "QCUH", "Bose QC Ultra"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "bose-quietcomfort-ultra-earbuds",
+          "name": "QuietComfort Ultra Earbuds",
+          "brand": "Bose",
+          "category": "tech",
+          "subcategory": "earbuds",
+          "releaseYear": 2023,
+          "msrp": 299,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark-gray"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["wing-tip stabilizer", "oval charging case", "touch controls", "short stem"],
+            "distinguishingFeatures": ["Bose Immersive Audio", "umbrella-shaped ear tips", "CustomTune sound calibration"],
+            "logoPlacement": "earbud exterior"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "earbuds",
+            "connectivity": ["Bluetooth 5.3"],
+            "battery": "6 hours (24 hours with case)",
+            "anc": "Active Noise Cancellation",
+            "driver": "9.3mm Bose driver",
+            "waterResistance": "IPX4",
+            "spatialAudio": "Bose Immersive Audio"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "White Smoke", "colorway": "White Smoke", "availability": "current", "specifications": {} },
+            { "variantName": "Moonstone Blue", "colorway": "Moonstone Blue", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["bose earbuds", "quietcomfort earbuds", "qc ultra earbuds", "noise cancelling earbuds", "bose wireless"],
+          "aliases": ["QC Ultra Earbuds", "QCUE", "Bose QC Ultra Earbuds"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Microsoft",
+      "aliases": ["MSFT"],
+      "products": [
+        {
+          "id": "microsoft-surface-pro-11",
+          "name": "Surface Pro 11",
+          "brand": "Microsoft",
+          "category": "tech",
+          "subcategory": "tablets",
+          "releaseYear": 2024,
+          "msrp": 1199,
+          "visualSignature": {
+            "primaryColors": ["platinum"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "metallic",
+            "designCues": ["integrated kickstand", "detachable keyboard", "thin bezels", "rounded corners"],
+            "distinguishingFeatures": ["integrated kickstand", "Copilot+ PC", "OLED display option", "Flex Keyboard with Slim Pen storage"],
+            "logoPlacement": "back center Windows logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "tablet",
+            "screenSize": "13\"",
+            "storage": "256GB/512GB/1TB",
+            "ram": "16GB/32GB",
+            "processor": "Snapdragon X Elite / Snapdragon X Plus",
+            "os": "Windows 11",
+            "resolution": "2880x1920",
+            "battery": "up to 14 hours"
+          },
+          "variants": [
+            { "variantName": "Platinum", "colorway": "Platinum", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Sapphire", "colorway": "Sapphire", "availability": "current", "specifications": {} },
+            { "variantName": "Dune", "colorway": "Dune", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["surface pro", "microsoft tablet", "windows tablet", "2-in-1 laptop", "surface", "copilot pc"],
+          "aliases": ["Surface Pro 11", "Surface Pro (11th Edition)"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Dell",
+      "aliases": [],
+      "products": [
+        {
+          "id": "dell-xps-14",
+          "name": "XPS 14",
+          "brand": "Dell",
+          "category": "tech",
+          "subcategory": "laptops",
+          "releaseYear": 2024,
+          "msrp": 1599,
+          "visualSignature": {
+            "primaryColors": ["platinum"],
+            "secondaryColors": ["graphite"],
+            "patterns": ["solid"],
+            "finish": "metallic",
+            "designCues": ["edge-to-edge keyboard", "seamless touchpad", "zero-lattice keyboard", "thin bezels"],
+            "distinguishingFeatures": ["capacitive function row", "edge-to-edge glass touchpad", "tandem OLED display option"],
+            "logoPlacement": "lid center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "laptop",
+            "screenSize": "14.5\"",
+            "storage": "512GB/1TB/2TB",
+            "ram": "16GB/32GB/64GB",
+            "processor": "Intel Core Ultra 7 155H / Core Ultra 9 185H",
+            "os": "Windows 11",
+            "resolution": "1920x1200 / 3200x2000 OLED",
+            "battery": "69.5 Wh"
+          },
+          "variants": [
+            { "variantName": "Platinum", "colorway": "Platinum", "availability": "current", "specifications": {} },
+            { "variantName": "Graphite", "colorway": "Graphite", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["dell xps", "xps laptop", "dell laptop", "ultrabook", "xps 14", "premium laptop"],
+          "aliases": ["XPS 14 9440", "Dell XPS 14"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Valve",
+      "aliases": [],
+      "products": [
+        {
+          "id": "valve-steam-deck-oled",
+          "name": "Steam Deck OLED",
+          "brand": "Valve",
+          "category": "tech",
+          "subcategory": "handheld-consoles",
+          "releaseYear": 2023,
+          "msrp": 549,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark-gray"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["wide grip handles", "dual trackpads", "dual thumbsticks", "center display"],
+            "distinguishingFeatures": ["7.4\" OLED display", "dual trackpads", "gyroscope controls", "Steam button"],
+            "logoPlacement": "center top Steam logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "handheld console",
+            "screenSize": "7.4\"",
+            "storage": "512GB/1TB",
+            "ram": "16GB LPDDR5",
+            "processor": "AMD custom APU (Zen 2 + RDNA 2)",
+            "os": "SteamOS 3.0",
+            "resolution": "1280x800 OLED HDR",
+            "battery": "50 Wh"
+          },
+          "variants": [
+            { "variantName": "512GB", "colorway": "Black", "availability": "current", "specifications": { "storage": "512GB" } },
+            { "variantName": "1TB", "colorway": "Black", "availability": "current", "specifications": { "storage": "1TB" } },
+            { "variantName": "1TB Limited Edition", "colorway": "Translucent", "availability": "limited", "specifications": { "storage": "1TB" } }
+          ],
+          "searchKeywords": ["steam deck", "valve handheld", "portable gaming", "handheld pc", "steam deck oled", "pc gaming handheld"],
+          "aliases": ["Steam Deck OLED", "SD OLED"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Meta",
+      "aliases": ["Facebook", "Oculus"],
+      "products": [
+        {
+          "id": "meta-quest-3",
+          "name": "Quest 3",
+          "brand": "Meta",
+          "category": "tech",
+          "subcategory": "vr-headsets",
+          "releaseYear": 2023,
+          "msrp": 499,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["light-gray"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["pancake lens bulge", "front cameras", "fabric strap", "side power button"],
+            "distinguishingFeatures": ["full-color passthrough cameras", "pancake lenses", "mixed reality capable", "slim profile"],
+            "logoPlacement": "front center Meta logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "vr-headset",
+            "screenSize": "dual LCD",
+            "storage": "128GB/512GB",
+            "ram": "8GB",
+            "processor": "Snapdragon XR2 Gen 2",
+            "resolution": "2064x2208 per eye",
+            "refreshRate": "72/80/90/120 Hz",
+            "tracking": "inside-out 6DoF"
+          },
+          "variants": [
+            { "variantName": "128GB", "colorway": "White", "availability": "current", "specifications": { "storage": "128GB" } },
+            { "variantName": "512GB", "colorway": "White", "availability": "current", "specifications": { "storage": "512GB" } }
+          ],
+          "searchKeywords": ["meta quest", "quest 3", "vr headset", "virtual reality", "mixed reality", "oculus"],
+          "aliases": ["Quest 3", "Meta Quest 3", "Oculus Quest 3"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Anker",
+      "aliases": ["Anker Innovations"],
+      "products": [
+        {
+          "id": "anker-maggo-qi2-3-in-1-charging-station",
+          "name": "MagGo Qi2 3-in-1 Charging Station",
+          "brand": "Anker",
+          "category": "tech",
+          "subcategory": "chargers",
+          "releaseYear": 2024,
+          "msrp": 95,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["foldable design", "magnetic phone pad", "watch charger puck", "earbud charging spot"],
+            "distinguishingFeatures": ["3-in-1 foldable design", "Qi2 certified", "15W MagSafe-compatible", "travel-friendly fold"],
+            "logoPlacement": "base front"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "charger",
+            "chargingSpeed": "15W Qi2 (phone), 5W (watch), 5W (earbuds)",
+            "compatibility": "MagSafe, Qi2, Apple Watch, AirPods",
+            "inputPort": "USB-C",
+            "foldable": "yes"
+          },
+          "variants": [
+            { "variantName": "White", "colorway": "White", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["anker charger", "wireless charger", "magsafe charger", "3 in 1 charger", "qi2 charger", "maggo"],
+          "aliases": ["MagGo 3-in-1", "Anker MagGo Qi2", "A2557"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ]
+    },
+    {
+      "name": "ASUS",
+      "aliases": ["ASUSTeK"],
+      "products": [
+        {
+          "id": "asus-rog-ally-x",
+          "name": "ROG Ally X",
+          "brand": "ASUS",
+          "category": "tech",
+          "subcategory": "handheld-consoles",
+          "releaseYear": 2024,
+          "msrp": 799,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark-gray"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["ergonomic grips", "dual thumbsticks", "d-pad", "ROG logo on back"],
+            "distinguishingFeatures": ["7\" FHD 120Hz display", "XG Mobile connector", "larger 80Wh battery", "improved ergonomic grips"],
+            "logoPlacement": "back center ROG logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "handheld console",
+            "screenSize": "7\"",
+            "storage": "1TB SSD",
+            "ram": "24GB LPDDR5X",
+            "processor": "AMD Ryzen Z1 Extreme",
+            "os": "Windows 11",
+            "resolution": "1920x1080 120Hz",
+            "battery": "80 Wh"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["rog ally", "asus handheld", "portable gaming", "handheld pc", "rog ally x", "windows handheld"],
+          "aliases": ["ROG Ally X", "ASUS ROG Ally X"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "LG",
+      "aliases": ["LG Electronics"],
+      "products": [
+        {
+          "id": "lg-ultragear-27gs95qe",
+          "name": "UltraGear 27\" 4K OLED Gaming Monitor (27GS95QE)",
+          "brand": "LG",
+          "category": "tech",
+          "subcategory": "monitors",
+          "releaseYear": 2024,
+          "msrp": 899,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["red"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["thin bezel", "L-shaped stand", "cable management", "red accent ring on back"],
+            "distinguishingFeatures": ["4K OLED panel", "240Hz refresh rate", "0.03ms response time", "anti-glare low reflection coating"],
+            "logoPlacement": "front bottom center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "monitor",
+            "screenSize": "27\"",
+            "resolution": "3840x2160",
+            "panelType": "OLED",
+            "refreshRate": "240Hz",
+            "responseTime": "0.03ms GtG",
+            "hdr": "HDR",
+            "connectivity": ["HDMI 2.1", "DisplayPort 1.4", "USB-C"]
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["lg monitor", "ultragear", "4k oled monitor", "gaming monitor", "240hz monitor", "27gs95qe", "oled gaming"],
+          "aliases": ["27GS95QE", "LG UltraGear OLED", "UltraGear 27 OLED"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "lg-dualup-28mq780",
+          "name": "DualUp 28\" Monitor (28MQ780)",
+          "brand": "LG",
+          "category": "tech",
+          "subcategory": "monitors",
+          "releaseYear": 2022,
+          "msrp": 699,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["tall portrait orientation", "Ergo stand with clamp", "slim bezels", "unique 16:18 aspect ratio"],
+            "distinguishingFeatures": ["16:18 aspect ratio", "nearly square shape", "Ergo stand with height/tilt/swivel", "Nano IPS panel"],
+            "logoPlacement": "front bottom center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "monitor",
+            "screenSize": "28\"",
+            "resolution": "2560x2880",
+            "panelType": "Nano IPS",
+            "refreshRate": "60Hz",
+            "responseTime": "5ms GtG",
+            "aspectRatio": "16:18",
+            "connectivity": ["HDMI 2.0", "DisplayPort 1.4", "USB-C 96W"]
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "White/Silver", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["lg dualup", "28mq780", "16:18 monitor", "square monitor", "tall monitor", "nano ips", "productivity monitor"],
+          "aliases": ["28MQ780", "LG DualUp", "DualUp Monitor"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "BenQ",
+      "aliases": [],
+      "products": [
+        {
+          "id": "benq-screenbar-monitor-light",
+          "name": "ScreenBar Monitor Light",
+          "brand": "BenQ",
+          "category": "tech",
+          "subcategory": "desk-accessories",
+          "releaseYear": 2020,
+          "msrp": 109,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["slim cylindrical bar", "gravity pivot clamp", "touch controls on top", "asymmetric light distribution"],
+            "distinguishingFeatures": ["clips onto monitor top", "auto-dimming ambient sensor", "no screen glare design", "USB powered"],
+            "logoPlacement": "top center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "desk light",
+            "lightType": "LED",
+            "colorTemperature": "2700K-6500K",
+            "brightness": "auto-dimming",
+            "power": "USB-A powered (5V 1A)",
+            "mountType": "gravity pivot clamp"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black/Silver", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["benq screenbar", "monitor light", "desk lamp", "monitor lamp", "screenbar", "led light bar", "desk light"],
+          "aliases": ["ScreenBar", "BenQ ScreenBar", "Monitor Light Bar"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "benq-mobiuz-ex2710q",
+          "name": "MOBIUZ EX2710Q",
+          "brand": "BenQ",
+          "category": "tech",
+          "subcategory": "monitors",
+          "releaseYear": 2022,
+          "msrp": 449,
+          "visualSignature": {
+            "primaryColors": ["dark-gray"],
+            "secondaryColors": ["orange"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["slim bezels", "V-shaped stand", "rear RGB light", "textured back panel"],
+            "distinguishingFeatures": ["HDRi technology", "treVolo speakers", "height adjustable stand", "light tuner"],
+            "logoPlacement": "front bottom center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "monitor",
+            "screenSize": "27\"",
+            "resolution": "2560x1440",
+            "panelType": "IPS",
+            "refreshRate": "165Hz",
+            "responseTime": "2ms GtG",
+            "hdr": "HDRi",
+            "connectivity": ["HDMI 2.0", "DisplayPort 1.4", "USB-C"]
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Dark Gray", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["benq mobiuz", "ex2710q", "gaming monitor", "1440p monitor", "165hz monitor", "hdri monitor"],
+          "aliases": ["EX2710Q", "MOBIUZ EX2710Q", "BenQ MOBIUZ"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Herman Miller",
+      "aliases": ["HermanMiller", "MillerKnoll"],
+      "products": [
+        {
+          "id": "herman-miller-aeron-chair",
+          "name": "Aeron Chair",
+          "brand": "Herman Miller",
+          "category": "tech",
+          "subcategory": "chairs",
+          "releaseYear": 2016,
+          "msrp": 1395,
+          "visualSignature": {
+            "primaryColors": ["graphite"],
+            "secondaryColors": ["black"],
+            "patterns": ["mesh"],
+            "finish": "matte",
+            "designCues": ["8Z Pellicle mesh seat and back", "waterfall edge", "PostureFit SL lumbar", "die-cast aluminum frame"],
+            "distinguishingFeatures": ["iconic mesh design", "PostureFit SL spinal support", "8 zones of tension mesh", "12-year warranty"],
+            "logoPlacement": "back top center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "office chair",
+            "material": "8Z Pellicle mesh",
+            "lumbarSupport": "PostureFit SL",
+            "adjustments": "height, tilt, arms, seat depth, lumbar",
+            "sizes": "A (small), B (medium), C (large)",
+            "warranty": "12 years",
+            "weightCapacity": "350 lbs"
+          },
+          "variants": [
+            { "variantName": "Graphite / Size B", "colorway": "Graphite", "availability": "current", "specifications": { "size": "B" } },
+            { "variantName": "Mineral / Size B", "colorway": "Mineral", "availability": "current", "specifications": { "size": "B" } },
+            { "variantName": "Carbon / Size B", "colorway": "Carbon", "availability": "current", "specifications": { "size": "B" } }
+          ],
+          "searchKeywords": ["aeron", "herman miller chair", "office chair", "ergonomic chair", "mesh chair", "aeron chair", "desk chair"],
+          "aliases": ["Aeron", "HM Aeron", "Aeron Remastered"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "herman-miller-embody-chair",
+          "name": "Embody Chair",
+          "brand": "Herman Miller",
+          "category": "tech",
+          "subcategory": "chairs",
+          "releaseYear": 2008,
+          "msrp": 1795,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["graphite"],
+            "patterns": ["pixelated-support"],
+            "finish": "matte",
+            "designCues": ["exposed spine-like backrest", "pixelated support matrix", "narrow profile", "die-cast aluminum base"],
+            "distinguishingFeatures": ["visible exoskeleton spine", "pixelated support pixels", "BackFit adjustment", "narrow seat back"],
+            "logoPlacement": "back top center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "office chair",
+            "material": "Medley fabric / Balance fabric",
+            "lumbarSupport": "BackFit adjustment",
+            "adjustments": "height, tilt, arms, seat depth, BackFit",
+            "backSupport": "pixelated support matrix",
+            "warranty": "12 years",
+            "weightCapacity": "300 lbs"
+          },
+          "variants": [
+            { "variantName": "Black / Graphite", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "White / Titanium", "colorway": "White", "availability": "current", "specifications": {} },
+            { "variantName": "Logitech G Edition", "colorway": "Cyan/Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["embody", "herman miller embody", "office chair", "ergonomic chair", "gaming chair", "embody chair", "desk chair"],
+          "aliases": ["Embody", "HM Embody", "Embody Gaming"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "JBL",
+      "aliases": ["JBL Professional", "Harman JBL"],
+      "products": [
+        {
+          "id": "jbl-flip-6",
+          "name": "Flip 6",
+          "brand": "JBL",
+          "category": "tech",
+          "subcategory": "speakers",
+          "releaseYear": 2022,
+          "msrp": 129,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["gray"],
+            "patterns": ["solid"],
+            "finish": "textured",
+            "designCues": ["cylindrical shape", "fabric grille wrap", "rubberized end caps", "exposed passive radiators"],
+            "distinguishingFeatures": ["IP67 waterproof/dustproof", "racetrack woofer", "PartyBoost pairing", "bold JBL logo"],
+            "logoPlacement": "side center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "portable speaker",
+            "connectivity": ["Bluetooth 5.1"],
+            "battery": "12 hours",
+            "waterResistance": "IP67",
+            "driver": "racetrack woofer + tweeter",
+            "features": "PartyBoost, USB-C charging",
+            "weight": "550g"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Blue", "colorway": "Blue", "availability": "current", "specifications": {} },
+            { "variantName": "Red", "colorway": "Red", "availability": "current", "specifications": {} },
+            { "variantName": "Teal", "colorway": "Teal", "availability": "current", "specifications": {} },
+            { "variantName": "Pink", "colorway": "Pink", "availability": "current", "specifications": {} },
+            { "variantName": "Gray", "colorway": "Gray", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["jbl flip", "portable speaker", "bluetooth speaker", "waterproof speaker", "jbl flip 6", "party speaker"],
+          "aliases": ["Flip 6", "JBL Flip 6", "JBLFLIP6"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "jbl-charge-5",
+          "name": "Charge 5",
+          "brand": "JBL",
+          "category": "tech",
+          "subcategory": "speakers",
+          "releaseYear": 2021,
+          "msrp": 179,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["gray"],
+            "patterns": ["solid"],
+            "finish": "textured",
+            "designCues": ["larger cylindrical shape", "fabric grille wrap", "rubberized feet", "exposed dual passive radiators"],
+            "distinguishingFeatures": ["IP67 waterproof/dustproof", "built-in powerbank USB-A out", "20hr battery life", "PartyBoost"],
+            "logoPlacement": "side center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "portable speaker",
+            "connectivity": ["Bluetooth 5.1"],
+            "battery": "20 hours",
+            "waterResistance": "IP67",
+            "driver": "woofer + tweeter",
+            "features": "PartyBoost, USB-C charging, USB-A powerbank output",
+            "weight": "960g"
+          },
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Blue", "colorway": "Blue", "availability": "current", "specifications": {} },
+            { "variantName": "Red", "colorway": "Red", "availability": "current", "specifications": {} },
+            { "variantName": "Teal", "colorway": "Teal", "availability": "current", "specifications": {} },
+            { "variantName": "Gray", "colorway": "Gray", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["jbl charge", "portable speaker", "bluetooth speaker", "waterproof speaker", "jbl charge 5", "powerbank speaker"],
+          "aliases": ["Charge 5", "JBL Charge 5", "JBLCHARGE5"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Beyerdynamic",
+      "aliases": ["beyerdynamic"],
+      "products": [
+        {
+          "id": "beyerdynamic-dt-770-pro",
+          "name": "DT 770 PRO",
+          "brand": "Beyerdynamic",
+          "category": "tech",
+          "subcategory": "headphones",
+          "releaseYear": 2001,
+          "msrp": 159,
+          "visualSignature": {
+            "primaryColors": ["gray"],
+            "secondaryColors": ["black"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["padded headband", "velour ear pads", "coiled cable", "single-sided cable entry"],
+            "distinguishingFeatures": ["closed-back circumaural design", "soft velour ear pads", "rugged spring steel headband", "studio reference sound"],
+            "logoPlacement": "ear cup exterior"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "headphones",
+            "type": "closed-back over-ear",
+            "impedance": "80 ohm / 250 ohm",
+            "driver": "dynamic",
+            "frequencyResponse": "5-35,000 Hz",
+            "connectivity": ["3.5mm (with 6.35mm adapter)"],
+            "cableType": "coiled (80 ohm) / straight (250 ohm)"
+          },
+          "variants": [
+            { "variantName": "80 Ohm", "colorway": "Gray/Black", "availability": "current", "specifications": { "impedance": "80 ohm" } },
+            { "variantName": "250 Ohm", "colorway": "Gray/Black", "availability": "current", "specifications": { "impedance": "250 ohm" } }
+          ],
+          "searchKeywords": ["beyerdynamic dt770", "studio headphones", "closed back headphones", "reference headphones", "monitoring headphones", "dt 770"],
+          "aliases": ["DT770 PRO", "DT-770 PRO", "DT 770"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "beyerdynamic-dt-990-pro",
+          "name": "DT 990 PRO",
+          "brand": "Beyerdynamic",
+          "category": "tech",
+          "subcategory": "headphones",
+          "releaseYear": 2001,
+          "msrp": 179,
+          "visualSignature": {
+            "primaryColors": ["gray"],
+            "secondaryColors": ["black"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["open grille ear cups", "padded headband", "velour ear pads", "coiled cable"],
+            "distinguishingFeatures": ["open-back circumaural design", "visible driver grille", "velour ear pads", "studio reference sound"],
+            "logoPlacement": "ear cup exterior"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "headphones",
+            "type": "open-back over-ear",
+            "impedance": "250 ohm",
+            "driver": "dynamic",
+            "frequencyResponse": "5-35,000 Hz",
+            "connectivity": ["3.5mm (with 6.35mm adapter)"],
+            "cableType": "coiled"
+          },
+          "variants": [
+            { "variantName": "250 Ohm", "colorway": "Gray/Black", "availability": "current", "specifications": { "impedance": "250 ohm" } }
+          ],
+          "searchKeywords": ["beyerdynamic dt990", "studio headphones", "open back headphones", "reference headphones", "monitoring headphones", "dt 990"],
+          "aliases": ["DT990 PRO", "DT-990 PRO", "DT 990"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Blue",
+      "aliases": ["Blue Microphones", "Logitech Blue", "Logitech G Blue"],
+      "products": [
+        {
+          "id": "blue-yeti-usb-microphone",
+          "name": "Yeti USB Microphone",
+          "brand": "Blue",
+          "category": "tech",
+          "subcategory": "microphones",
+          "releaseYear": 2012,
+          "msrp": 129,
+          "visualSignature": {
+            "primaryColors": ["blackout"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "metallic",
+            "designCues": ["retro-style body", "desktop stand legs", "gain knob on front", "pattern selector on back"],
+            "distinguishingFeatures": ["4 pickup patterns (cardioid/bidirectional/omnidirectional/stereo)", "front gain control", "headphone monitoring jack", "plug-and-play USB"],
+            "logoPlacement": "front center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "USB condenser microphone",
+            "type": "condenser",
+            "pickupPatterns": "cardioid, bidirectional, omnidirectional, stereo",
+            "sampleRate": "48 kHz / 16-bit",
+            "frequencyResponse": "20 Hz - 20 kHz",
+            "connectivity": ["USB"],
+            "headphoneOutput": "3.5mm",
+            "gainControl": "front-mounted knob"
+          },
+          "variants": [
+            { "variantName": "Blackout", "colorway": "Blackout", "availability": "current", "specifications": {} },
+            { "variantName": "Silver", "colorway": "Silver", "availability": "current", "specifications": {} },
+            { "variantName": "Midnight Blue", "colorway": "Midnight Blue", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["blue yeti", "usb microphone", "condenser mic", "streaming mic", "podcast microphone", "yeti mic", "desk microphone"],
+          "aliases": ["Yeti", "Blue Yeti", "Yeti USB", "Logitech Yeti"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Amazon",
+      "aliases": ["Amazon Devices", "Amazon Echo"],
+      "products": [
+        {
+          "id": "amazon-echo-dot-5th-gen",
+          "name": "Echo Dot 5th Gen",
+          "brand": "Amazon",
+          "category": "tech",
+          "subcategory": "smart-speakers",
+          "releaseYear": 2022,
+          "msrp": 49,
+          "visualSignature": {
+            "primaryColors": ["charcoal"],
+            "secondaryColors": ["blue"],
+            "patterns": ["solid"],
+            "finish": "fabric",
+            "designCues": ["spherical shape", "fabric mesh exterior", "LED light ring on bottom", "flat base"],
+            "distinguishingFeatures": ["sphere design", "bottom-facing LED ring", "improved audio over 4th gen", "built-in temperature sensor"],
+            "logoPlacement": "no visible logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "smart speaker",
+            "assistant": "Amazon Alexa",
+            "driver": "1.73\" front-firing speaker",
+            "connectivity": ["Wi-Fi", "Bluetooth 5.0"],
+            "sensors": "temperature sensor",
+            "power": "15W power adapter",
+            "features": "Alexa, music streaming, smart home control, temperature sensor"
+          },
+          "variants": [
+            { "variantName": "Charcoal", "colorway": "Charcoal", "availability": "current", "specifications": {} },
+            { "variantName": "Deep Sea Blue", "colorway": "Deep Sea Blue", "availability": "current", "specifications": {} },
+            { "variantName": "Glacier White", "colorway": "Glacier White", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["echo dot", "alexa speaker", "smart speaker", "amazon echo", "echo dot 5", "voice assistant speaker"],
+          "aliases": ["Echo Dot", "Echo Dot 5", "Alexa Dot"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Nanoleaf",
+      "aliases": [],
+      "products": [
+        {
+          "id": "nanoleaf-shapes-hexagons-starter-kit",
+          "name": "Shapes Hexagons Starter Kit",
+          "brand": "Nanoleaf",
+          "category": "tech",
+          "subcategory": "smart-lighting",
+          "releaseYear": 2020,
+          "msrp": 199,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["multicolor"],
+            "patterns": ["hexagonal-modular"],
+            "finish": "matte",
+            "designCues": ["hexagonal panel shape", "modular snap-together design", "edge-lit LED diffusion", "wall-mounted layout"],
+            "distinguishingFeatures": ["modular hex panels", "16 million colors", "touch reactive", "Thread border router", "snap-together connectors"],
+            "logoPlacement": "controller module"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "modular LED light panels",
+            "panelShape": "hexagon",
+            "colors": "16 million+ RGBW",
+            "connectivity": ["Wi-Fi", "Thread"],
+            "compatibility": "Apple HomeKit, Google Home, Amazon Alexa, Samsung SmartThings",
+            "touchReactive": "yes",
+            "panelsIncluded": "7 (starter kit)",
+            "power": "42W PSU included"
+          },
+          "variants": [
+            { "variantName": "Starter Kit (7 panels)", "colorway": "White (customizable RGB)", "availability": "current", "specifications": { "panels": 7 } }
+          ],
+          "searchKeywords": ["nanoleaf", "hexagons", "smart lights", "led panels", "wall lights", "modular lights", "rgb panels", "nanoleaf shapes"],
+          "aliases": ["Nanoleaf Hexagons", "Shapes Hexagons", "Nanoleaf Shapes"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Philips",
+      "aliases": ["Philips Electronics"],
+      "products": [
+        {
+          "id": "philips-speechmike-premium-air",
+          "name": "SpeechMike Premium Air",
+          "brand": "Philips",
+          "category": "tech",
+          "subcategory": "peripherals",
+          "releaseYear": 2020,
+          "msrp": 399,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["handheld form factor", "slide switch", "programmable buttons", "docking cradle"],
+            "distinguishingFeatures": ["wireless dictation microphone", "noise cancellation", "slide switch or push button operation", "professional-grade recording"],
+            "logoPlacement": "top front"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "dictation microphone",
+            "type": "wireless condenser",
+            "connectivity": ["wireless (docking station)", "USB"],
+            "noiseCancellation": "yes",
+            "frequencyResponse": "200 Hz - 12 kHz",
+            "controls": "slide switch, programmable buttons",
+            "compatibility": "Philips SpeechExec, Dragon NaturallySpeaking"
+          },
+          "variants": [
+            { "variantName": "Slide Switch (SMP4010)", "colorway": "Black/Silver", "availability": "current", "specifications": {} },
+            { "variantName": "Push Button (SMP4000)", "colorway": "Black/Silver", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["philips speechmike", "dictation microphone", "wireless dictation", "professional microphone", "speechmike premium air"],
+          "aliases": ["SpeechMike Premium Air", "SMP4010", "SMP4000"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "philips-hue-gradient-lightstrip",
+          "name": "Hue Gradient Lightstrip",
+          "brand": "Philips",
+          "category": "tech",
+          "subcategory": "smart-lighting",
+          "releaseYear": 2021,
+          "msrp": 169,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["multicolor"],
+            "patterns": ["gradient-strip"],
+            "finish": "diffused",
+            "designCues": ["flexible light strip", "adhesive backing", "multicolor gradient zones", "connector plug end"],
+            "distinguishingFeatures": ["multiple color zones on single strip", "gradient effect", "Bluetooth and Zigbee", "Hue Bridge compatible"],
+            "logoPlacement": "packaging only"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "smart light strip",
+            "colors": "16 million+",
+            "connectivity": ["Bluetooth", "Zigbee"],
+            "compatibility": "Philips Hue Bridge, Apple HomeKit, Google Home, Amazon Alexa",
+            "gradient": "yes, multiple simultaneous colors",
+            "lengths": "2m base, extendable",
+            "brightness": "1600 lumens"
+          },
+          "variants": [
+            { "variantName": "2m Base Kit", "colorway": "White (customizable RGB)", "availability": "current", "specifications": { "length": "2m" } }
+          ],
+          "searchKeywords": ["philips hue", "gradient lightstrip", "hue lightstrip", "smart light strip", "led strip", "ambient lighting", "hue gradient"],
+          "aliases": ["Hue Gradient Lightstrip", "Philips Hue Gradient", "Hue Light Strip"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "MSI",
+      "aliases": ["Micro-Star International"],
+      "products": [
+        {
+          "id": "msi-mag-coreliquid-240-aio",
+          "name": "MAG CORELIQUID 240 AIO",
+          "brand": "MSI",
+          "category": "tech",
+          "subcategory": "pc-components",
+          "releaseYear": 2022,
+          "msrp": 119,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["rgb"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["circular pump head", "ARGB fan lighting", "braided tubing", "240mm radiator"],
+            "distinguishingFeatures": ["240mm radiator", "ARGB pump head and fans", "rotatable pump head cap", "split pathway pump design"],
+            "logoPlacement": "pump head center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "AIO liquid cooler",
+            "radiatorSize": "240mm",
+            "fans": "2x 120mm ARGB",
+            "pumpType": "split pathway",
+            "socketSupport": "Intel LGA 1700/1200/115x, AMD AM5/AM4",
+            "lighting": "ARGB",
+            "tubeLength": "400mm"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black/ARGB", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["msi aio", "liquid cooler", "240mm aio", "cpu cooler", "coreliquid", "msi cooler", "argb cooler"],
+          "aliases": ["CORELIQUID 240", "MAG CORELIQUID 240", "MSI 240 AIO"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "msi-mpg-z790-edge-wifi",
+          "name": "MPG Z790 EDGE WIFI",
+          "brand": "MSI",
+          "category": "tech",
+          "subcategory": "pc-components",
+          "releaseYear": 2022,
+          "msrp": 329,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["extended heatsink covers", "M.2 Shield Frozr", "brushed aluminum accents", "integrated I/O shield"],
+            "distinguishingFeatures": ["DDR5 support", "WiFi 6E", "extended VRM heatsink", "M.2 Shield Frozr thermal solution"],
+            "logoPlacement": "chipset heatsink"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "motherboard",
+            "chipset": "Intel Z790",
+            "socket": "LGA 1700",
+            "formFactor": "ATX",
+            "memoryType": "DDR5",
+            "memorySlots": 4,
+            "maxMemory": "128GB",
+            "connectivity": ["WiFi 6E", "Bluetooth 5.3", "2.5G LAN"],
+            "m2Slots": 4,
+            "pciSlots": "PCIe 5.0 x16"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black/Silver", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["msi motherboard", "z790", "intel motherboard", "ddr5 motherboard", "wifi motherboard", "mpg z790", "gaming motherboard"],
+          "aliases": ["Z790 EDGE WIFI", "MPG Z790 EDGE", "MSI Z790 EDGE"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "XFX",
+      "aliases": [],
+      "products": [
+        {
+          "id": "xfx-speedster-merc-310-rx-7900-xtx",
+          "name": "Speedster MERC 310 RX 7900 XTX",
+          "brand": "XFX",
+          "category": "tech",
+          "subcategory": "pc-components",
+          "releaseYear": 2023,
+          "msrp": 949,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["triple fan design", "large heatsink", "metal backplate", "angular shroud lines"],
+            "distinguishingFeatures": ["triple fan cooler", "massive 2.5-slot design", "metal backplate", "MERC 310 branding"],
+            "logoPlacement": "shroud side"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "graphics card",
+            "gpu": "AMD Radeon RX 7900 XTX",
+            "vram": "24GB GDDR6",
+            "memoryBus": "384-bit",
+            "boostClock": "up to 2615 MHz",
+            "fans": "3x 100mm",
+            "tdp": "355W",
+            "connectivity": ["HDMI 2.1", "DisplayPort 2.1 x3"],
+            "powerConnector": "2x 8-pin"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black/Silver", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["xfx gpu", "rx 7900 xtx", "amd gpu", "graphics card", "merc 310", "radeon 7900", "xfx speedster"],
+          "aliases": ["MERC 310 7900 XTX", "XFX 7900 XTX", "RX 7900 XTX MERC"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Grovemade",
+      "aliases": [],
+      "products": [
+        {
+          "id": "grovemade-desk-shelf-system",
+          "name": "Desk Shelf System",
+          "brand": "Grovemade",
+          "category": "tech",
+          "subcategory": "desk-accessories",
+          "releaseYear": 2019,
+          "msrp": 260,
+          "visualSignature": {
+            "primaryColors": ["walnut"],
+            "secondaryColors": ["black"],
+            "patterns": ["wood-grain"],
+            "finish": "natural-oiled",
+            "designCues": ["solid wood construction", "leather desk mat", "elevated shelf for monitor", "minimalist design"],
+            "distinguishingFeatures": ["handcrafted walnut wood", "integrated leather mat", "monitor riser shelf", "Portland-made artisan quality"],
+            "logoPlacement": "underside"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "desk organizer / monitor riser",
+            "material": "solid walnut wood",
+            "matMaterial": "vegetable-tanned leather",
+            "dimensions": "varies by configuration",
+            "weightCapacity": "supports monitors up to 30 lbs",
+            "origin": "handmade in Portland, OR"
+          },
+          "variants": [
+            { "variantName": "Walnut / Black Leather", "colorway": "Walnut/Black", "availability": "current", "specifications": {} },
+            { "variantName": "Maple / Natural Leather", "colorway": "Maple/Natural", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["grovemade desk", "desk shelf", "monitor riser", "wood desk organizer", "desk setup", "walnut desk shelf", "premium desk accessories"],
+          "aliases": ["Desk Shelf", "Grovemade Shelf System", "Grovemade Desk Setup"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "grovemade-wood-mouse-pad",
+          "name": "Wood Mouse Pad",
+          "brand": "Grovemade",
+          "category": "tech",
+          "subcategory": "desk-accessories",
+          "releaseYear": 2018,
+          "msrp": 80,
+          "visualSignature": {
+            "primaryColors": ["walnut"],
+            "secondaryColors": ["brown"],
+            "patterns": ["wood-grain"],
+            "finish": "natural-oiled",
+            "designCues": ["solid wood slab", "beveled edges", "cork bottom", "compact rectangular shape"],
+            "distinguishingFeatures": ["solid hardwood surface", "cork non-slip bottom", "beveled edge detail", "premium artisan quality"],
+            "logoPlacement": "underside"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "mouse pad",
+            "material": "solid walnut or maple wood",
+            "bottomMaterial": "cork",
+            "dimensions": "approximately 9\" x 7\"",
+            "finish": "natural oil finish",
+            "origin": "handmade in Portland, OR"
+          },
+          "variants": [
+            { "variantName": "Walnut", "colorway": "Walnut", "availability": "current", "specifications": {} },
+            { "variantName": "Maple", "colorway": "Maple", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["grovemade mouse pad", "wood mouse pad", "walnut mouse pad", "premium mouse pad", "desk accessories", "wood mousepad"],
+          "aliases": ["Wood Mousepad", "Grovemade Mousepad", "Grovemade Wood Pad"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ]
+    },
+    {
+      "name": "Uplift",
+      "aliases": ["UPLIFT Desk"],
+      "products": [
+        {
+          "id": "uplift-v2-standing-desk",
+          "name": "V2 Standing Desk",
+          "brand": "Uplift",
+          "category": "tech",
+          "subcategory": "desks",
+          "releaseYear": 2019,
+          "msrp": 599,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["gray"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["rectangular desktop", "dual motor legs", "keypad controller", "cable management grommets"],
+            "distinguishingFeatures": ["3-stage electric frame", "wide height range 25.3\"–50.9\"", "keypad with memory presets", "many top sizes and materials"],
+            "logoPlacement": "frame crossbar"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "electric sit-stand desk",
+            "frameType": "3-stage dual motor",
+            "heightRange": "25.3\" - 50.9\"",
+            "liftCapacity": "355 lbs",
+            "speed": "1.5\"/sec",
+            "topSizes": "42\"x30\" to 80\"x30\"",
+            "topMaterials": "laminate, bamboo, solid wood, rubberwood, reclaimed",
+            "controller": "advanced keypad with 4 memory presets"
+          },
+          "variants": [
+            { "variantName": "White Laminate / White Frame", "colorway": "White", "availability": "current", "specifications": {} },
+            { "variantName": "Walnut Laminate / Black Frame", "colorway": "Walnut/Black", "availability": "current", "specifications": {} },
+            { "variantName": "Bamboo / Gray Frame", "colorway": "Bamboo/Gray", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["uplift desk", "standing desk", "sit stand desk", "electric desk", "adjustable desk", "v2 desk", "uplift v2"],
+          "aliases": ["UPLIFT V2", "V2 Desk", "Uplift Standing Desk"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "RED",
+      "aliases": ["RED Digital Cinema", "RED.com"],
+      "products": [
+        {
+          "id": "red-v-raptor-8k-vv",
+          "name": "V-RAPTOR 8K VV",
+          "brand": "RED",
+          "category": "tech",
+          "subcategory": "cameras",
+          "releaseYear": 2022,
+          "msrp": 24500,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["red"],
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["modular body", "built-in fan", "DSMC3 form factor", "top handle mount", "red accent details"],
+            "distinguishingFeatures": ["8K resolution", "Vista Vision (VV) full-frame sensor", "DSMC3 modular system", "R3D RAW recording"],
+            "logoPlacement": "side panel RED logo"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "productType": "cinema camera",
+            "sensor": "Vista Vision (VV) 40.96 x 21.60mm",
+            "resolution": "8192 x 4320 (8K)",
+            "codec": "REDCODE RAW (R3D)",
+            "dynamicRange": "17+ stops",
+            "frameRates": "up to 120fps at 8K, 600fps at 2K",
+            "mount": "RF mount (Canon)",
+            "recordingMedia": "CFexpress Type B, RED Mini-Mag",
+            "modular": "DSMC3 system"
+          },
+          "variants": [
+            { "variantName": "V-RAPTOR 8K VV (Body Only)", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["red camera", "v-raptor", "8k camera", "cinema camera", "red digital cinema", "professional camera", "r3d raw"],
+          "aliases": ["V-RAPTOR", "V-RAPTOR 8K", "RED RAPTOR", "DSMC3 V-RAPTOR"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    }
+  ]
+}

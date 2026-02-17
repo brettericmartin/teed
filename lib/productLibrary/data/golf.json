@@ -1,7 +1,7 @@
 {
   "category": "golf",
   "schemaVersion": "1.0.0",
-  "lastUpdated": "2025-12-11T21:47:34.015Z",
+  "lastUpdated": "2026-02-16T00:00:00.000Z",
   "brands": [
     {
       "name": "TaylorMade",
@@ -71982,7 +71982,10 @@
     },
     {
       "name": "Greyson",
-      "aliases": [],
+      "aliases": [
+        "Greyson Clothiers",
+        "Greyson Golf"
+      ],
       "products": [
         {
           "id": "greyson-wolf-shirt",
@@ -72259,6 +72262,140 @@
           "source": "ai",
           "dataConfidence": 86,
           "lastUpdated": "2025-11-30T03:34:33.636Z"
+        },
+        {
+          "id": "greyson-cayuse-polo",
+          "name": "Cayuse Polo",
+          "brand": "Greyson",
+          "category": "golf",
+          "subcategory": "apparel",
+          "releaseYear": 2018,
+          "msrp": 118,
+          "visualSignature": {
+            "primaryColors": [
+              "navy",
+              "white",
+              "grey"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "technical fabric",
+              "UPF 50 sun protection",
+              "modern fit",
+              "Greyson wolf logo"
+            ],
+            "distinguishingFeatures": [
+              "Technical performance fabric",
+              "UPF 50 sun protection",
+              "Modern athletic fit",
+              "Greyson wolf logo embroidery"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "type": "polo shirt",
+            "material": "technical fabric",
+            "upf": "50",
+            "fit": "modern",
+            "colors": "many"
+          },
+          "variants": [
+            {
+              "sku": "greyson-cayuse-polo",
+              "variantName": "Standard",
+              "colorway": "Multiple",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "greyson polo",
+            "cayuse polo",
+            "greyson clothiers",
+            "greyson golf polo",
+            "upf 50 golf polo",
+            "greyson cayuse",
+            "premium golf polo"
+          ],
+          "aliases": [
+            "Greyson Cayuse",
+            "Cayuse Performance Polo"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "greyson-montauk-jogger",
+          "name": "Montauk Jogger",
+          "brand": "Greyson",
+          "category": "golf",
+          "subcategory": "apparel",
+          "releaseYear": 2020,
+          "msrp": 148,
+          "visualSignature": {
+            "primaryColors": [
+              "grey",
+              "navy",
+              "black"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "performance jogger cut",
+              "travel/golf crossover",
+              "Greyson wolf logo",
+              "tapered fit"
+            ],
+            "distinguishingFeatures": [
+              "Performance jogger pants",
+              "Travel/golf versatility",
+              "Greyson wolf logo",
+              "Tapered modern fit"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "type": "jogger pants",
+            "material": "performance fabric",
+            "style": "travel/golf crossover",
+            "fit": "tapered",
+            "colors": "many"
+          },
+          "variants": [
+            {
+              "sku": "greyson-montauk-jogger",
+              "variantName": "Standard",
+              "colorway": "Multiple",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "greyson jogger",
+            "montauk jogger",
+            "greyson clothiers jogger",
+            "golf jogger",
+            "performance jogger",
+            "greyson montauk",
+            "golf travel pants"
+          ],
+          "aliases": [
+            "Greyson Montauk",
+            "Montauk Performance Jogger"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
         }
       ],
       "lastUpdated": "2025-11-30T03:34:33.636Z"
@@ -77492,7 +77629,9 @@
     },
     {
       "name": "Takomo",
-      "aliases": [],
+      "aliases": [
+        "Takomo Golf"
+      ],
       "products": [
         {
           "id": "takomo-101t-irons",
@@ -77804,6 +77943,78 @@
           ],
           "source": "inthegolfbag",
           "dataConfidence": 70
+        },
+        {
+          "id": "takomo-301-forged-irons",
+          "name": "301 Forged Irons",
+          "brand": "Takomo",
+          "category": "golf",
+          "subcategory": "irons",
+          "releaseYear": 2021,
+          "msrp": 599,
+          "visualSignature": {
+            "primaryColors": [
+              "silver",
+              "black"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "satin",
+            "designCues": [
+              "soft forged 1025 carbon steel",
+              "players iron compact shape",
+              "thin topline",
+              "minimal offset"
+            ],
+            "distinguishingFeatures": [
+              "Forged 1025 carbon steel",
+              "Players iron profile",
+              "Direct-to-consumer value",
+              "Takomo branding on cavity",
+              "Compact blade-like shape"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "clubType": "irons",
+            "material": "1025 carbon steel forged",
+            "style": "players iron",
+            "distribution": "direct-to-consumer",
+            "setComposition": "4-PW or custom",
+            "priceNote": "$599 for set"
+          },
+          "variants": [
+            {
+              "sku": "takomo-301-forged-irons-set",
+              "variantName": "Standard Set",
+              "colorway": "Silver",
+              "availability": "current",
+              "specifications": {
+                "setComposition": "4-PW"
+              }
+            }
+          ],
+          "searchKeywords": [
+            "takomo irons",
+            "takomo 301",
+            "301 forged",
+            "takomo golf irons",
+            "forged irons dtc",
+            "direct to consumer irons",
+            "budget forged irons",
+            "takomo 301 forged"
+          ],
+          "aliases": [
+            "Takomo 301",
+            "301 Irons",
+            "Takomo Forged Irons"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
         }
       ],
       "lastUpdated": "2025-12-01T01:18:24.971Z"
@@ -81962,8 +82173,1537 @@
         }
       ],
       "lastUpdated": "2025-12-11T21:47:33.834Z"
+    },
+    {
+      "name": "LAB Golf",
+      "aliases": [
+        "L.A.B. Golf",
+        "LAB",
+        "Lie Angle Balance"
+      ],
+      "signatureColors": [
+        "black",
+        "silver"
+      ],
+      "country": "USA",
+      "website": "https://www.labgolf.com",
+      "products": [
+        {
+          "id": "lab-golf-df3-putter",
+          "name": "DF3 Putter",
+          "brand": "LAB Golf",
+          "category": "golf",
+          "subcategory": "putters",
+          "releaseYear": 2023,
+          "msrp": 450,
+          "visualSignature": {
+            "primaryColors": [
+              "black",
+              "silver"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "Lie Angle Balance technology",
+              "face-balanced at any loft",
+              "one-length design",
+              "angular mallet head shape"
+            ],
+            "distinguishingFeatures": [
+              "Face-balanced at any loft angle",
+              "One-length fitting system",
+              "Distinctive angular mallet shape",
+              "LAB branding on cavity"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "clubType": "putter",
+            "technology": [
+              "Lie Angle Balance",
+              "Face-balanced at any loft",
+              "One-length system"
+            ],
+            "headShape": "mallet",
+            "material": "multi-material"
+          },
+          "variants": [
+            {
+              "sku": "lab-golf-df3-putter",
+              "variantName": "Standard",
+              "colorway": "Black/Silver",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "lab golf",
+            "df3",
+            "lab golf df3",
+            "lie angle balance",
+            "lab putter",
+            "face balanced putter",
+            "one length putter"
+          ],
+          "aliases": [
+            "DF 3",
+            "Directed Force 3"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "lab-golf-directed-force-2-1-putter",
+          "name": "Directed Force 2.1 Putter",
+          "brand": "LAB Golf",
+          "category": "golf",
+          "subcategory": "putters",
+          "releaseYear": 2021,
+          "msrp": 400,
+          "visualSignature": {
+            "primaryColors": [
+              "silver",
+              "black"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "satin",
+            "designCues": [
+              "Lie Angle Balance technology",
+              "aluminum construction",
+              "distinctive mallet shape"
+            ],
+            "distinguishingFeatures": [
+              "Aluminum head construction",
+              "Lie Angle Balance face balancing",
+              "LAB Golf branding"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "clubType": "putter",
+            "technology": [
+              "Lie Angle Balance"
+            ],
+            "headShape": "mallet",
+            "material": "aluminum"
+          },
+          "variants": [
+            {
+              "sku": "lab-golf-directed-force-2-1-putter",
+              "variantName": "Standard",
+              "colorway": "Silver/Black",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "lab golf",
+            "directed force",
+            "df 2.1",
+            "lab golf df2.1",
+            "lie angle balance putter",
+            "aluminum putter"
+          ],
+          "aliases": [
+            "DF 2.1",
+            "DF2.1",
+            "Directed Force 2.1"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ],
+      "lastUpdated": "2026-02-16T00:00:00.000Z"
+    },
+    {
+      "name": "Ghost Golf",
+      "aliases": [
+        "Ghost"
+      ],
+      "signatureColors": [
+        "black",
+        "white"
+      ],
+      "country": "USA",
+      "website": "https://www.ghostgolf.com",
+      "products": [
+        {
+          "id": "ghost-golf-anyday-stand-bag",
+          "name": "Anyday Stand Bag",
+          "brand": "Ghost Golf",
+          "category": "golf",
+          "subcategory": "bags",
+          "releaseYear": 2022,
+          "msrp": 280,
+          "visualSignature": {
+            "primaryColors": [
+              "black",
+              "white"
+            ],
+            "patterns": [
+              "solid",
+              "contrast"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "14-way top divider",
+              "lightweight construction",
+              "magnetic pockets",
+              "Ghost logo"
+            ],
+            "distinguishingFeatures": [
+              "14-way top",
+              "Magnetic closure pockets",
+              "Lightweight stand bag",
+              "Ghost branding"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "bagType": "stand bag",
+            "dividers": "14-way",
+            "weight": "lightweight",
+            "pockets": "magnetic closure",
+            "colors": "Black, White, Oreo"
+          },
+          "variants": [
+            {
+              "sku": "ghost-golf-anyday-stand-bag-black",
+              "variantName": "Black",
+              "colorway": "Black",
+              "availability": "current",
+              "specifications": {}
+            },
+            {
+              "sku": "ghost-golf-anyday-stand-bag-white",
+              "variantName": "White",
+              "colorway": "White",
+              "availability": "current",
+              "specifications": {}
+            },
+            {
+              "sku": "ghost-golf-anyday-stand-bag-oreo",
+              "variantName": "Oreo",
+              "colorway": "Oreo",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "ghost golf",
+            "anyday",
+            "ghost stand bag",
+            "ghost golf bag",
+            "magnetic pockets golf bag",
+            "14 way stand bag"
+          ],
+          "aliases": [
+            "Anyday Bag",
+            "Ghost Anyday"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "ghost-golf-premium-magnetic-towel",
+          "name": "Premium Magnetic Towel",
+          "brand": "Ghost Golf",
+          "category": "golf",
+          "subcategory": "accessories",
+          "releaseYear": 2021,
+          "msrp": 30,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "patterns": [
+              "waffle weave"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "waffle weave texture",
+              "strong magnetic attachment",
+              "Ghost logo"
+            ],
+            "distinguishingFeatures": [
+              "Waffle weave fabric",
+              "Strong magnet for bag attachment",
+              "Ghost Golf branding"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "type": "golf towel",
+            "material": "waffle weave",
+            "attachment": "magnetic",
+            "colors": "many"
+          },
+          "variants": [
+            {
+              "sku": "ghost-golf-premium-magnetic-towel",
+              "variantName": "Standard",
+              "colorway": "Black",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "ghost golf towel",
+            "magnetic golf towel",
+            "ghost towel",
+            "waffle weave golf towel",
+            "magnetic towel"
+          ],
+          "aliases": [
+            "Ghost Towel",
+            "Ghost Magnetic Towel"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ],
+      "lastUpdated": "2026-02-16T00:00:00.000Z"
+    },
+    {
+      "name": "Sunday Golf",
+      "aliases": [
+        "Sunday"
+      ],
+      "signatureColors": [
+        "black",
+        "green",
+        "tan"
+      ],
+      "country": "USA",
+      "website": "https://www.sundaygolf.com",
+      "products": [
+        {
+          "id": "sunday-golf-ranger-premium-stand-bag",
+          "name": "Ranger Premium Stand Bag",
+          "brand": "Sunday Golf",
+          "category": "golf",
+          "subcategory": "bags",
+          "releaseYear": 2021,
+          "msrp": 249,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "lightweight design",
+              "4-way top divider",
+              "dual strap system",
+              "Sunday Golf logo"
+            ],
+            "distinguishingFeatures": [
+              "Lightweight stand bag",
+              "4-way top divider",
+              "Dual strap carry system",
+              "Sunday Golf branding"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "bagType": "stand bag",
+            "dividers": "4-way",
+            "strapType": "dual strap",
+            "weight": "lightweight",
+            "colors": "Black, Mossy Oak, many"
+          },
+          "variants": [
+            {
+              "sku": "sunday-golf-ranger-premium-stand-bag-black",
+              "variantName": "Black",
+              "colorway": "Black",
+              "availability": "current",
+              "specifications": {}
+            },
+            {
+              "sku": "sunday-golf-ranger-premium-stand-bag-mossy-oak",
+              "variantName": "Mossy Oak",
+              "colorway": "Mossy Oak",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "sunday golf",
+            "ranger",
+            "sunday golf ranger",
+            "sunday stand bag",
+            "lightweight stand bag",
+            "sunday golf bag"
+          ],
+          "aliases": [
+            "Ranger Bag",
+            "Sunday Ranger"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "sunday-golf-loma-par-3-bag",
+          "name": "Loma Par 3 Bag",
+          "brand": "Sunday Golf",
+          "category": "golf",
+          "subcategory": "bags",
+          "releaseYear": 2020,
+          "msrp": 149,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "ultralight design",
+              "Sunday/par-3 bag format",
+              "3-club capacity",
+              "minimalist design"
+            ],
+            "distinguishingFeatures": [
+              "Ultralight Sunday bag",
+              "3-club capacity",
+              "Minimalist form factor",
+              "Sunday Golf branding"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "bagType": "Sunday bag",
+            "clubCapacity": "3 clubs",
+            "weight": "ultralight",
+            "colors": "many"
+          },
+          "variants": [
+            {
+              "sku": "sunday-golf-loma-par-3-bag",
+              "variantName": "Standard",
+              "colorway": "Default",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "sunday golf loma",
+            "par 3 bag",
+            "sunday bag",
+            "loma bag",
+            "ultralight golf bag",
+            "3 club bag",
+            "walking bag"
+          ],
+          "aliases": [
+            "Loma",
+            "Loma Bag",
+            "Sunday Loma"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ],
+      "lastUpdated": "2026-02-16T00:00:00.000Z"
+    },
+    {
+      "name": "Malbon Golf",
+      "aliases": [
+        "Malbon"
+      ],
+      "signatureColors": [
+        "black",
+        "white",
+        "green"
+      ],
+      "country": "USA",
+      "website": "https://www.malbongolf.com",
+      "products": [
+        {
+          "id": "malbon-golf-buckets-performance-polo",
+          "name": "Buckets Performance Polo",
+          "brand": "Malbon Golf",
+          "category": "golf",
+          "subcategory": "apparel",
+          "releaseYear": 2022,
+          "msrp": 98,
+          "visualSignature": {
+            "primaryColors": [
+              "white",
+              "navy",
+              "green"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "bucket logo embroidery",
+              "moisture-wicking fabric",
+              "modern golf fit"
+            ],
+            "distinguishingFeatures": [
+              "Iconic Malbon bucket logo",
+              "Moisture-wicking performance fabric",
+              "Streetwear-meets-golf aesthetic"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "type": "polo shirt",
+            "material": "moisture-wicking",
+            "logo": "Malbon bucket",
+            "colors": "many"
+          },
+          "variants": [
+            {
+              "sku": "malbon-golf-buckets-performance-polo",
+              "variantName": "Standard",
+              "colorway": "Multiple",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "malbon golf",
+            "buckets polo",
+            "malbon polo",
+            "malbon performance polo",
+            "bucket logo polo",
+            "malbon golf apparel"
+          ],
+          "aliases": [
+            "Buckets Polo",
+            "Malbon Polo"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "malbon-golf-stand-bag-santa-cruz-collab",
+          "name": "Stand Bag (Santa Cruz Collab)",
+          "brand": "Malbon Golf",
+          "category": "golf",
+          "subcategory": "bags",
+          "releaseYear": 2023,
+          "msrp": 380,
+          "visualSignature": {
+            "primaryColors": [
+              "black",
+              "red",
+              "yellow"
+            ],
+            "patterns": [
+              "graphic",
+              "collab"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "14-way top divider",
+              "Santa Cruz collaboration graphics",
+              "premium materials",
+              "limited edition"
+            ],
+            "distinguishingFeatures": [
+              "Santa Cruz x Malbon collaboration",
+              "14-way top",
+              "Limited edition release",
+              "Premium construction"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "bagType": "stand bag",
+            "dividers": "14-way",
+            "edition": "limited",
+            "collaboration": "Santa Cruz"
+          },
+          "variants": [
+            {
+              "sku": "malbon-golf-stand-bag-santa-cruz-collab",
+              "variantName": "Santa Cruz Collab",
+              "colorway": "Santa Cruz",
+              "availability": "limited",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "malbon golf bag",
+            "malbon stand bag",
+            "santa cruz golf bag",
+            "malbon santa cruz",
+            "malbon collab bag",
+            "limited edition golf bag"
+          ],
+          "aliases": [
+            "Malbon Santa Cruz Bag",
+            "Malbon x Santa Cruz Stand Bag"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 80
+        }
+      ],
+      "lastUpdated": "2026-02-16T00:00:00.000Z"
+    },
+    {
+      "name": "Breezy Golf",
+      "aliases": [
+        "Breezy"
+      ],
+      "signatureColors": [
+        "blue",
+        "white",
+        "green"
+      ],
+      "country": "USA",
+      "website": "https://www.breezygolf.com",
+      "products": [
+        {
+          "id": "breezy-golf-have-a-day-rope-hat",
+          "name": "Have a Day Rope Hat",
+          "brand": "Breezy Golf",
+          "category": "golf",
+          "subcategory": "accessories",
+          "releaseYear": 2022,
+          "msrp": 38,
+          "visualSignature": {
+            "primaryColors": [
+              "white",
+              "blue",
+              "green"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "rope accent across brim",
+              "snapback closure",
+              "performance fabric",
+              "Breezy logo"
+            ],
+            "distinguishingFeatures": [
+              "Rope detail on front panel",
+              "Performance snapback hat",
+              "Breezy Golf branding",
+              "\"Have a Day\" tagline"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "type": "hat",
+            "style": "rope hat",
+            "closure": "snapback",
+            "colors": "many"
+          },
+          "variants": [
+            {
+              "sku": "breezy-golf-have-a-day-rope-hat",
+              "variantName": "Standard",
+              "colorway": "Multiple",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "breezy golf",
+            "have a day",
+            "breezy rope hat",
+            "breezy golf hat",
+            "rope hat golf",
+            "breezy snapback"
+          ],
+          "aliases": [
+            "Have a Day Hat",
+            "Breezy Rope Hat"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "breezy-golf-performance-golf-polo",
+          "name": "Performance Golf Polo",
+          "brand": "Breezy Golf",
+          "category": "golf",
+          "subcategory": "apparel",
+          "releaseYear": 2022,
+          "msrp": 72,
+          "visualSignature": {
+            "primaryColors": [
+              "blue",
+              "white",
+              "green"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "moisture-wicking fabric",
+              "casual/golf crossover fit",
+              "Breezy branding"
+            ],
+            "distinguishingFeatures": [
+              "Casual-meets-golf design",
+              "Moisture-wicking performance fabric",
+              "Breezy Golf logo"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "type": "polo shirt",
+            "material": "moisture-wicking",
+            "style": "casual/golf crossover",
+            "colors": "many"
+          },
+          "variants": [
+            {
+              "sku": "breezy-golf-performance-golf-polo",
+              "variantName": "Standard",
+              "colorway": "Multiple",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "breezy golf polo",
+            "breezy performance polo",
+            "breezy golf apparel",
+            "casual golf polo",
+            "breezy polo"
+          ],
+          "aliases": [
+            "Breezy Polo",
+            "Breezy Performance Polo"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ],
+      "lastUpdated": "2026-02-16T00:00:00.000Z"
+    },
+    {
+      "name": "Sunday Red",
+      "aliases": [
+        "Sunday Red by Tiger Woods",
+        "TW Sunday Red"
+      ],
+      "signatureColors": [
+        "red",
+        "black",
+        "white"
+      ],
+      "country": "USA",
+      "website": "https://www.sundayred.com",
+      "products": [
+        {
+          "id": "sunday-red-performance-polo",
+          "name": "Performance Polo",
+          "brand": "Sunday Red",
+          "category": "golf",
+          "subcategory": "apparel",
+          "releaseYear": 2024,
+          "msrp": 120,
+          "visualSignature": {
+            "primaryColors": [
+              "red",
+              "black",
+              "white"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "Tiger Woods brand",
+              "premium athletic fit",
+              "modern polo design",
+              "Sunday Red logo"
+            ],
+            "distinguishingFeatures": [
+              "Tiger Woods personal brand",
+              "Premium athletic polo",
+              "Modern fit",
+              "Sunday Red TW branding"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "type": "polo shirt",
+            "material": "premium athletic fabric",
+            "fit": "modern",
+            "brand": "Tiger Woods",
+            "colors": "many"
+          },
+          "variants": [
+            {
+              "sku": "sunday-red-performance-polo",
+              "variantName": "Standard",
+              "colorway": "Multiple",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "sunday red",
+            "tiger woods polo",
+            "sunday red polo",
+            "tw polo",
+            "tiger woods apparel",
+            "sunday red performance polo"
+          ],
+          "aliases": [
+            "TW Performance Polo",
+            "Tiger Woods Polo"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "sunday-red-pioneer-rope-snapback-hat",
+          "name": "Pioneer Rope Snapback Hat",
+          "brand": "Sunday Red",
+          "category": "golf",
+          "subcategory": "accessories",
+          "releaseYear": 2024,
+          "msrp": 42,
+          "visualSignature": {
+            "primaryColors": [
+              "black",
+              "red",
+              "white"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "rope accent",
+              "snapback closure",
+              "TW Sunday Red branding",
+              "performance fabric"
+            ],
+            "distinguishingFeatures": [
+              "Tiger Woods brand hat",
+              "Rope snapback style",
+              "Sunday Red logo",
+              "Performance construction"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "type": "hat",
+            "style": "rope snapback",
+            "brand": "Tiger Woods",
+            "colors": "many"
+          },
+          "variants": [
+            {
+              "sku": "sunday-red-pioneer-rope-snapback-hat",
+              "variantName": "Standard",
+              "colorway": "Multiple",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "sunday red hat",
+            "tiger woods hat",
+            "pioneer rope hat",
+            "tw hat",
+            "sunday red snapback",
+            "tiger woods rope hat"
+          ],
+          "aliases": [
+            "Pioneer Hat",
+            "TW Rope Hat",
+            "Sunday Red Hat"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ],
+      "lastUpdated": "2026-02-16T00:00:00.000Z"
+    },
+    {
+      "name": "melin",
+      "aliases": [
+        "Melin"
+      ],
+      "signatureColors": [
+        "black",
+        "navy",
+        "grey"
+      ],
+      "country": "USA",
+      "website": "https://www.melin.com",
+      "products": [
+        {
+          "id": "melin-a-game-hydro-snapback",
+          "name": "A-Game Hydro Snapback",
+          "brand": "melin",
+          "category": "golf",
+          "subcategory": "accessories",
+          "releaseYear": 2015,
+          "msrp": 69,
+          "visualSignature": {
+            "primaryColors": [
+              "black",
+              "navy",
+              "grey"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "waterproof construction",
+              "float technology",
+              "snapback closure",
+              "melin shield logo"
+            ],
+            "distinguishingFeatures": [
+              "Hydro waterproof technology",
+              "Float technology - hat floats in water",
+              "Premium snapback construction",
+              "melin shield logo"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "type": "hat",
+            "style": "snapback",
+            "technology": "Hydro waterproof",
+            "feature": "float technology",
+            "colors": "many"
+          },
+          "variants": [
+            {
+              "sku": "melin-a-game-hydro-snapback",
+              "variantName": "Standard",
+              "colorway": "Multiple",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "melin",
+            "a-game",
+            "melin a-game",
+            "hydro snapback",
+            "melin hat",
+            "waterproof hat",
+            "float hat",
+            "melin hydro"
+          ],
+          "aliases": [
+            "A-Game",
+            "A-Game Hydro",
+            "melin A-Game"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "melin-odyssey-stacked-hydro",
+          "name": "Odyssey Stacked Hydro",
+          "brand": "melin",
+          "category": "golf",
+          "subcategory": "accessories",
+          "releaseYear": 2019,
+          "msrp": 69,
+          "visualSignature": {
+            "primaryColors": [
+              "black",
+              "white",
+              "navy"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "rope style accent",
+              "waterproof construction",
+              "stacked melin logo",
+              "Hydro technology"
+            ],
+            "distinguishingFeatures": [
+              "Rope style hat",
+              "Hydro waterproof",
+              "Stacked logo design",
+              "melin branding"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "type": "hat",
+            "style": "rope hat",
+            "technology": "Hydro waterproof",
+            "colors": "many"
+          },
+          "variants": [
+            {
+              "sku": "melin-odyssey-stacked-hydro",
+              "variantName": "Standard",
+              "colorway": "Multiple",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "melin odyssey",
+            "odyssey stacked",
+            "melin rope hat",
+            "melin hydro",
+            "waterproof rope hat",
+            "melin odyssey stacked"
+          ],
+          "aliases": [
+            "Odyssey Stacked",
+            "melin Odyssey"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "melin-coronado-brick-hydro",
+          "name": "Coronado Brick Hydro",
+          "brand": "melin",
+          "category": "golf",
+          "subcategory": "accessories",
+          "releaseYear": 2020,
+          "msrp": 69,
+          "visualSignature": {
+            "primaryColors": [
+              "black",
+              "grey",
+              "navy"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "performance snapback",
+              "waterproof construction",
+              "Hydro technology",
+              "melin shield logo"
+            ],
+            "distinguishingFeatures": [
+              "Brick Hydro waterproof line",
+              "Performance snapback",
+              "Coronado model",
+              "melin branding"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "type": "hat",
+            "style": "snapback",
+            "technology": "Hydro waterproof",
+            "colors": "many"
+          },
+          "variants": [
+            {
+              "sku": "melin-coronado-brick-hydro",
+              "variantName": "Standard",
+              "colorway": "Multiple",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "melin coronado",
+            "coronado brick",
+            "melin brick hydro",
+            "melin snapback",
+            "waterproof snapback",
+            "melin coronado brick"
+          ],
+          "aliases": [
+            "Coronado Brick",
+            "melin Coronado"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ],
+      "lastUpdated": "2026-02-16T00:00:00.000Z"
+    },
+    {
+      "name": "Imperial",
+      "aliases": [
+        "Imperial Headwear",
+        "Imperial Golf"
+      ],
+      "signatureColors": [
+        "white",
+        "navy",
+        "black"
+      ],
+      "country": "USA",
+      "website": "https://www.imperialsports.com",
+      "products": [
+        {
+          "id": "imperial-tour-visor",
+          "name": "Tour Visor",
+          "brand": "Imperial",
+          "category": "golf",
+          "subcategory": "accessories",
+          "releaseYear": 2010,
+          "msrp": 28,
+          "visualSignature": {
+            "primaryColors": [
+              "white",
+              "navy",
+              "black"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "performance visor",
+              "moisture-wicking sweatband",
+              "classic visor shape"
+            ],
+            "distinguishingFeatures": [
+              "Performance golf visor",
+              "Moisture-wicking construction",
+              "Imperial branding",
+              "Tour-level quality"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "type": "visor",
+            "material": "moisture-wicking",
+            "colors": "many"
+          },
+          "variants": [
+            {
+              "sku": "imperial-tour-visor",
+              "variantName": "Standard",
+              "colorway": "Multiple",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "imperial visor",
+            "tour visor",
+            "imperial golf visor",
+            "performance visor",
+            "golf visor",
+            "imperial headwear"
+          ],
+          "aliases": [
+            "Imperial Visor"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "imperial-rope-hat",
+          "name": "Rope Hat",
+          "brand": "Imperial",
+          "category": "golf",
+          "subcategory": "accessories",
+          "releaseYear": 2018,
+          "msrp": 32,
+          "visualSignature": {
+            "primaryColors": [
+              "white",
+              "navy",
+              "green"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "5-panel construction",
+              "rope accent across brim",
+              "structured fit",
+              "Imperial logo"
+            ],
+            "distinguishingFeatures": [
+              "5-panel rope hat",
+              "Structured fit",
+              "Rope detail",
+              "Imperial branding"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "type": "hat",
+            "style": "5-panel rope hat",
+            "fit": "structured",
+            "colors": "many"
+          },
+          "variants": [
+            {
+              "sku": "imperial-rope-hat",
+              "variantName": "Standard",
+              "colorway": "Multiple",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "imperial rope hat",
+            "imperial 5 panel",
+            "imperial golf hat",
+            "rope hat",
+            "imperial headwear rope",
+            "golf rope hat"
+          ],
+          "aliases": [
+            "Imperial 5-Panel Rope"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ],
+      "lastUpdated": "2026-02-16T00:00:00.000Z"
+    },
+    {
+      "name": "Rewind Golf",
+      "aliases": [
+        "Rewind"
+      ],
+      "signatureColors": [
+        "multicolor"
+      ],
+      "country": "USA",
+      "website": "https://www.rewindgolf.com",
+      "products": [
+        {
+          "id": "rewind-golf-ferris-bueller-driver-headcover",
+          "name": "Ferris Bueller Driver Headcover",
+          "brand": "Rewind Golf",
+          "category": "golf",
+          "subcategory": "accessories",
+          "releaseYear": 2022,
+          "msrp": 45,
+          "visualSignature": {
+            "primaryColors": [
+              "multicolor"
+            ],
+            "patterns": [
+              "graphic",
+              "character"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "pop culture themed",
+              "Ferris Bueller character design",
+              "novelty headcover",
+              "premium materials"
+            ],
+            "distinguishingFeatures": [
+              "Ferris Bueller movie themed",
+              "Pop culture headcover",
+              "Driver-sized",
+              "Rewind Golf branding"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "type": "headcover",
+            "clubFit": "driver",
+            "theme": "Ferris Bueller",
+            "style": "pop culture/novelty"
+          },
+          "variants": [
+            {
+              "sku": "rewind-golf-ferris-bueller-driver-headcover",
+              "variantName": "Ferris Bueller",
+              "colorway": "Ferris Bueller",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "rewind golf",
+            "ferris bueller headcover",
+            "movie headcover",
+            "pop culture headcover",
+            "novelty driver headcover",
+            "rewind headcover"
+          ],
+          "aliases": [
+            "Ferris Bueller Headcover"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "rewind-golf-movie-character-headcovers",
+          "name": "Movie Character Headcovers",
+          "brand": "Rewind Golf",
+          "category": "golf",
+          "subcategory": "accessories",
+          "releaseYear": 2021,
+          "msrp": 45,
+          "visualSignature": {
+            "primaryColors": [
+              "multicolor"
+            ],
+            "patterns": [
+              "graphic",
+              "character"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "movie character designs",
+              "fun/novelty style",
+              "premium headcover materials"
+            ],
+            "distinguishingFeatures": [
+              "Movie and pop culture character themes",
+              "Fun/novelty headcovers",
+              "Various character options",
+              "Rewind Golf branding"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "type": "headcover",
+            "style": "fun/novelty",
+            "theme": "movie characters"
+          },
+          "variants": [
+            {
+              "sku": "rewind-golf-movie-character-headcovers",
+              "variantName": "Assorted Characters",
+              "colorway": "Multiple",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "rewind golf headcover",
+            "movie character headcover",
+            "novelty headcover",
+            "fun golf headcover",
+            "pop culture golf",
+            "rewind golf character"
+          ],
+          "aliases": [
+            "Rewind Character Headcovers",
+            "Movie Headcovers"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ],
+      "lastUpdated": "2026-02-16T00:00:00.000Z"
+    },
+    {
+      "name": "Acuity",
+      "aliases": [
+        "Acuity Golf"
+      ],
+      "signatureColors": [
+        "black",
+        "silver"
+      ],
+      "country": "USA",
+      "website": "",
+      "products": [
+        {
+          "id": "acuity-voltage-putter",
+          "name": "Voltage Putter",
+          "brand": "Acuity",
+          "category": "golf",
+          "subcategory": "putters",
+          "releaseYear": 2018,
+          "msrp": 39,
+          "visualSignature": {
+            "primaryColors": [
+              "silver",
+              "black"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "satin",
+            "designCues": [
+              "mallet head shape",
+              "beginner-friendly design",
+              "value construction"
+            ],
+            "distinguishingFeatures": [
+              "Mallet style putter head",
+              "Beginner/value category",
+              "Acuity branding",
+              "Silver finish"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "clubType": "putter",
+            "headShape": "mallet",
+            "level": "beginner/value",
+            "material": "steel"
+          },
+          "variants": [
+            {
+              "sku": "acuity-voltage-putter",
+              "variantName": "Standard",
+              "colorway": "Silver/Black",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "acuity putter",
+            "voltage putter",
+            "acuity voltage",
+            "beginner putter",
+            "value putter",
+            "cheap putter",
+            "acuity golf"
+          ],
+          "aliases": [
+            "Acuity Voltage",
+            "Voltage Mallet Putter"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "acuity-golf-headcovers",
+          "name": "Golf Headcovers",
+          "brand": "Acuity",
+          "category": "golf",
+          "subcategory": "accessories",
+          "releaseYear": 2018,
+          "msrp": 15,
+          "visualSignature": {
+            "primaryColors": [
+              "black"
+            ],
+            "patterns": [
+              "solid"
+            ],
+            "finish": "matte",
+            "designCues": [
+              "basic headcover design",
+              "value line",
+              "Acuity branding"
+            ],
+            "distinguishingFeatures": [
+              "Basic/value headcovers",
+              "Acuity branding",
+              "Budget-friendly"
+            ]
+          },
+          "referenceImages": {
+            "primary": ""
+          },
+          "specifications": {
+            "type": "headcovers",
+            "level": "value/basic"
+          },
+          "variants": [
+            {
+              "sku": "acuity-golf-headcovers",
+              "variantName": "Standard",
+              "colorway": "Black",
+              "availability": "current",
+              "specifications": {}
+            }
+          ],
+          "searchKeywords": [
+            "acuity headcovers",
+            "acuity golf headcovers",
+            "basic headcovers",
+            "value headcovers",
+            "cheap headcovers",
+            "acuity accessories"
+          ],
+          "aliases": [
+            "Acuity Headcovers"
+          ],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 80
+        }
+      ],
+      "lastUpdated": "2026-02-16T00:00:00.000Z"
     }
   ],
-  "productCount": 1644,
-  "variantCount": 2151
+  "productCount": 1668,
+  "variantCount": 2178
 }

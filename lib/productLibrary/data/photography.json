@@ -1,0 +1,2031 @@
+{
+  "category": "photography",
+  "schemaVersion": "1.0.0",
+  "lastUpdated": "2026-02-16T00:00:00.000Z",
+  "brands": [
+    {
+      "name": "Sony",
+      "aliases": [],
+      "products": [
+        {
+          "id": "sony-a7r-v-2022",
+          "name": "Sony A7R V",
+          "brand": "Sony",
+          "category": "photography",
+          "subcategory": "cameras",
+          "releaseYear": 2022,
+          "msrp": 3899,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["pro body", "viewfinder hump", "large grip", "dual card slot"],
+            "distinguishingFeatures": ["articulating LCD", "orange Alpha logo", "dedicated AF-ON button"],
+            "logoPlacement": "front top"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "sensor": "61MP full-frame Exmor R CMOS",
+            "autofocus": "AI-based AF with real-time recognition",
+            "video": "8K 24p, 4K 60p",
+            "stabilization": "5-axis in-body, 8 stops",
+            "mount": "Sony E-mount",
+            "weight": "723g"
+          },
+          "modelNumber": "ILCE-7RM5",
+          "variants": [
+            { "variantName": "Body Only", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Kit with FE 28-70mm f/3.5-5.6", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["mirrorless camera", "full frame", "high resolution", "61 megapixel", "landscape camera", "studio camera", "sony alpha"],
+          "aliases": ["A7RV", "A7R5", "a7R V", "Alpha 7R V", "ILCE-7RM5", "A7R Mark V"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "sony-a7c-ii-2023",
+          "name": "Sony A7C II",
+          "brand": "Sony",
+          "category": "photography",
+          "subcategory": "cameras",
+          "releaseYear": 2023,
+          "msrp": 2199,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["compact rangefinder style", "flat top plate", "small grip", "side-hinge LCD"],
+            "distinguishingFeatures": ["compact full-frame body", "flat viewfinder", "two-tone silver/black option"],
+            "logoPlacement": "front top"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "sensor": "33MP full-frame Exmor R CMOS",
+            "autofocus": "AI-based AF with real-time recognition",
+            "video": "4K 60p, S-Log3",
+            "stabilization": "5-axis in-body, 7 stops",
+            "mount": "Sony E-mount",
+            "weight": "514g"
+          },
+          "modelNumber": "ILCE-7CM2",
+          "variants": [
+            { "variantName": "Body Only - Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Body Only - Silver", "colorway": "Silver/Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["mirrorless camera", "full frame", "compact", "travel camera", "vlogging", "content creator", "sony alpha"],
+          "aliases": ["A7CII", "A7C2", "a7C II", "Alpha 7C II", "ILCE-7CM2", "A7C Mark II"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "sony-a7-iv-2021",
+          "name": "Sony A7 IV",
+          "brand": "Sony",
+          "category": "photography",
+          "subcategory": "cameras",
+          "releaseYear": 2021,
+          "msrp": 2499,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["pro body", "viewfinder hump", "deep grip", "weather sealed"],
+            "distinguishingFeatures": ["fully articulating LCD", "larger body than A7 III", "dedicated record button on top"],
+            "logoPlacement": "front top"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "sensor": "33MP full-frame Exmor R CMOS",
+            "autofocus": "759-point phase-detect AF, real-time eye AF",
+            "video": "4K 60p 10-bit, S-Cinetone",
+            "stabilization": "5-axis in-body, 5.5 stops",
+            "mount": "Sony E-mount",
+            "weight": "658g"
+          },
+          "modelNumber": "ILCE-7M4",
+          "variants": [
+            { "variantName": "Body Only", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Kit with FE 28-70mm f/3.5-5.6", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["mirrorless camera", "full frame", "hybrid", "photo video", "all-rounder", "sony alpha", "basic kit"],
+          "aliases": ["A7IV", "A74", "a7 IV", "Alpha 7 IV", "ILCE-7M4", "A7 Mark IV"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "sony-fe-24-70mm-f28-gm-ii-2022",
+          "name": "Sony FE 24-70mm f/2.8 GM II",
+          "brand": "Sony",
+          "category": "photography",
+          "subcategory": "lenses",
+          "releaseYear": 2022,
+          "msrp": 2299,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["white"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["cylindrical barrel", "focus hold button", "aperture ring", "G Master orange badge"],
+            "distinguishingFeatures": ["orange G Master ring", "linear response MF ring", "focus hold button", "compact for f/2.8 zoom"],
+            "logoPlacement": "barrel side"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "focalLength": "24-70mm",
+            "aperture": "f/2.8",
+            "mount": "Sony E-mount",
+            "format": "Full-frame",
+            "elements": "20 elements in 15 groups",
+            "weight": "695g",
+            "filterSize": "82mm",
+            "stabilization": "None (relies on IBIS)"
+          },
+          "modelNumber": "SEL2470GM2",
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["zoom lens", "standard zoom", "f/2.8", "G Master", "GM", "wedding lens", "event lens", "versatile zoom", "full frame lens"],
+          "aliases": ["24-70 GM II", "24-70 GM2", "SEL2470GM2", "24-70 f/2.8 GM II", "GM II 24-70"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "sony-fe-70-200mm-f28-gm-ii-2021",
+          "name": "Sony FE 70-200mm f/2.8 GM II",
+          "brand": "Sony",
+          "category": "photography",
+          "subcategory": "lenses",
+          "releaseYear": 2021,
+          "msrp": 2799,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["black"],
+            "colorwayName": "White/Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["white telephoto barrel", "extending zoom barrel", "tripod collar", "focus hold buttons"],
+            "distinguishingFeatures": ["white barrel finish", "orange G Master ring", "multiple focus hold buttons", "remarkably compact for 70-200 f/2.8"],
+            "logoPlacement": "barrel side"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "focalLength": "70-200mm",
+            "aperture": "f/2.8",
+            "mount": "Sony E-mount",
+            "format": "Full-frame",
+            "elements": "17 elements in 14 groups",
+            "weight": "1045g",
+            "filterSize": "77mm",
+            "stabilization": "Optical SteadyShot"
+          },
+          "modelNumber": "SEL70200GM2",
+          "variants": [
+            { "variantName": "Standard", "colorway": "White/Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["telephoto zoom", "70-200", "f/2.8", "G Master", "GM", "portrait lens", "sports lens", "wedding lens", "full frame telephoto"],
+          "aliases": ["70-200 GM II", "70-200 GM2", "SEL70200GM2", "70-200 f/2.8 GM II", "GM II 70-200"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Canon",
+      "aliases": [],
+      "products": [
+        {
+          "id": "canon-eos-r5-mark-ii-2024",
+          "name": "Canon EOS R5 Mark II",
+          "brand": "Canon",
+          "category": "photography",
+          "subcategory": "cameras",
+          "releaseYear": 2024,
+          "msrp": 4299,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["pro body", "integrated vertical grip option", "large viewfinder hump", "deep grip"],
+            "distinguishingFeatures": ["multi-function shoe", "red Canon line accent", "status LCD on top", "vari-angle LCD"],
+            "logoPlacement": "front top right"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "sensor": "45MP full-frame back-illuminated stacked CMOS",
+            "autofocus": "Dual Pixel Intelligent AF, eye/body/vehicle detection",
+            "video": "8K 60p RAW, 4K 120p",
+            "stabilization": "In-body, up to 8.5 stops",
+            "mount": "Canon RF mount",
+            "weight": "746g"
+          },
+          "modelNumber": "EOS R5 II",
+          "variants": [
+            { "variantName": "Body Only", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Kit with RF 24-105mm f/4L IS USM", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["mirrorless camera", "full frame", "8K video", "high resolution", "pro camera", "Canon R5", "flagship", "stacked sensor"],
+          "aliases": ["R5 II", "R5 Mark II", "R5II", "R5M2", "R5 Mk II", "EOS R5 II"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "canon-eos-r6-mark-iii-2024",
+          "name": "Canon EOS R6 Mark III",
+          "brand": "Canon",
+          "category": "photography",
+          "subcategory": "cameras",
+          "releaseYear": 2024,
+          "msrp": 2499,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["mid-size body", "viewfinder hump", "comfortable grip", "weather sealed"],
+            "distinguishingFeatures": ["vari-angle LCD", "red Canon line accent", "dual SD card slots", "mode dial on top"],
+            "logoPlacement": "front top right"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "sensor": "24.2MP full-frame back-illuminated stacked CMOS",
+            "autofocus": "Dual Pixel Intelligent AF II, subject detection",
+            "video": "6K 60p RAW, 4K 120p",
+            "stabilization": "In-body, up to 8 stops",
+            "mount": "Canon RF mount",
+            "weight": "670g"
+          },
+          "modelNumber": "EOS R6 III",
+          "variants": [
+            { "variantName": "Body Only", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Kit with RF 24-105mm f/4-7.1 IS STM", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["mirrorless camera", "full frame", "fast autofocus", "low light", "hybrid camera", "wedding camera", "action camera"],
+          "aliases": ["R6 III", "R6 Mark III", "R6III", "R6M3", "R6 Mk III", "EOS R6 III"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        },
+        {
+          "id": "canon-eos-r7-2022",
+          "name": "Canon EOS R7",
+          "brand": "Canon",
+          "category": "photography",
+          "subcategory": "cameras",
+          "releaseYear": 2022,
+          "msrp": 1499,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["compact body", "viewfinder hump", "deep grip for size", "weather sealed"],
+            "distinguishingFeatures": ["multi-controller joystick", "vari-angle LCD", "top info display", "dual dial controls"],
+            "logoPlacement": "front top right"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "sensor": "32.5MP APS-C CMOS",
+            "autofocus": "Dual Pixel CMOS AF II, subject detection",
+            "video": "4K 60p uncropped, 7K oversampled",
+            "stabilization": "In-body, up to 8 stops",
+            "mount": "Canon RF mount",
+            "weight": "612g",
+            "cropFactor": "1.6x"
+          },
+          "modelNumber": "EOS R7",
+          "variants": [
+            { "variantName": "Body Only", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Kit with RF-S 18-150mm f/3.5-6.3 IS STM", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["mirrorless camera", "APS-C", "crop sensor", "wildlife", "sports", "bird photography", "affordable mirrorless"],
+          "aliases": ["R7", "EOS R7", "Canon R7"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "canon-rf-24-70mm-f28l-is-usm-2019",
+          "name": "Canon RF 24-70mm f/2.8L IS USM",
+          "brand": "Canon",
+          "category": "photography",
+          "subcategory": "lenses",
+          "releaseYear": 2019,
+          "msrp": 2399,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["red"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["cylindrical barrel", "red L-series ring", "control ring", "zoom and focus rings"],
+            "distinguishingFeatures": ["red L-series ring near mount", "customizable control ring", "IS switch on barrel", "Canon RF mount markings"],
+            "logoPlacement": "barrel side"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "focalLength": "24-70mm",
+            "aperture": "f/2.8",
+            "mount": "Canon RF mount",
+            "format": "Full-frame",
+            "elements": "21 elements in 15 groups",
+            "weight": "900g",
+            "filterSize": "82mm",
+            "stabilization": "Optical IS, 5 stops"
+          },
+          "modelNumber": "RF 24-70mm f/2.8L IS USM",
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["zoom lens", "standard zoom", "f/2.8", "L lens", "L-series", "wedding lens", "event lens", "professional zoom", "RF mount lens"],
+          "aliases": ["RF 24-70 2.8", "RF 24-70 f/2.8L", "24-70L RF", "Canon 24-70 RF"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "canon-rf-70-200mm-f28l-is-usm-2019",
+          "name": "Canon RF 70-200mm f/2.8L IS USM",
+          "brand": "Canon",
+          "category": "photography",
+          "subcategory": "lenses",
+          "releaseYear": 2019,
+          "msrp": 2699,
+          "visualSignature": {
+            "primaryColors": ["white"],
+            "secondaryColors": ["black", "red"],
+            "colorwayName": "White/Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["white telephoto barrel", "extending inner barrel", "tripod collar", "red L-series ring"],
+            "distinguishingFeatures": ["signature Canon white finish", "red L-series ring", "remarkably compact internal zoom design", "control ring near mount"],
+            "logoPlacement": "barrel side"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "focalLength": "70-200mm",
+            "aperture": "f/2.8",
+            "mount": "Canon RF mount",
+            "format": "Full-frame",
+            "elements": "17 elements in 13 groups",
+            "weight": "1070g",
+            "filterSize": "77mm",
+            "stabilization": "Optical IS, 5 stops"
+          },
+          "modelNumber": "RF 70-200mm f/2.8L IS USM",
+          "variants": [
+            { "variantName": "Standard", "colorway": "White/Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["telephoto zoom", "70-200", "f/2.8", "L lens", "L-series", "portrait lens", "sports lens", "wedding telephoto", "RF mount lens"],
+          "aliases": ["RF 70-200 2.8", "RF 70-200 f/2.8L", "70-200L RF", "Canon 70-200 RF"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Nikon",
+      "aliases": [],
+      "products": [
+        {
+          "id": "nikon-z8-2023",
+          "name": "Nikon Z8",
+          "brand": "Nikon",
+          "category": "photography",
+          "subcategory": "cameras",
+          "releaseYear": 2023,
+          "msrp": 3999,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["pro body", "angular viewfinder hump", "large deep grip", "weather sealed magnesium alloy"],
+            "distinguishingFeatures": ["top info LCD panel", "tilting vertical LCD", "dedicated ISO button", "Z9 sensor in smaller body"],
+            "logoPlacement": "front top center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "sensor": "45.7MP full-frame stacked CMOS",
+            "autofocus": "493-point hybrid AF, 3D tracking, subject detection",
+            "video": "8K 30p, 4K 120p",
+            "stabilization": "5-axis in-body, 6 stops",
+            "mount": "Nikon Z mount",
+            "weight": "910g"
+          },
+          "modelNumber": "Z8",
+          "variants": [
+            { "variantName": "Body Only", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Kit with NIKKOR Z 24-120mm f/4 S", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["mirrorless camera", "full frame", "8K video", "high resolution", "pro camera", "stacked sensor", "Nikon flagship", "Z mount"],
+          "aliases": ["Z8", "Nikon Z 8"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "nikon-z6-iii-2024",
+          "name": "Nikon Z6 III",
+          "brand": "Nikon",
+          "category": "photography",
+          "subcategory": "cameras",
+          "releaseYear": 2024,
+          "msrp": 2499,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["mid-size body", "refined viewfinder hump", "comfortable grip", "weather sealed"],
+            "distinguishingFeatures": ["partially stacked sensor", "vari-angle LCD", "top info LCD panel", "EXPEED 7 processor"],
+            "logoPlacement": "front top center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "sensor": "24.5MP full-frame partially stacked CMOS",
+            "autofocus": "299-point hybrid AF, subject detection",
+            "video": "6K 60p, 4K 120p",
+            "stabilization": "5-axis in-body, 8 stops",
+            "mount": "Nikon Z mount",
+            "weight": "760g"
+          },
+          "modelNumber": "Z6 III",
+          "variants": [
+            { "variantName": "Body Only", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Kit with NIKKOR Z 24-70mm f/4 S", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["mirrorless camera", "full frame", "hybrid camera", "low light", "all-rounder", "video camera", "partially stacked", "Z mount"],
+          "aliases": ["Z6III", "Z6 Mark III", "Z6M3", "Z6 Mk III", "Nikon Z 6III"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        },
+        {
+          "id": "nikon-nikkor-z-24-70mm-f28-s-2019",
+          "name": "NIKKOR Z 24-70mm f/2.8 S",
+          "brand": "Nikon",
+          "category": "photography",
+          "subcategory": "lenses",
+          "releaseYear": 2019,
+          "msrp": 2299,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["gold"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["cylindrical barrel", "S-line gold ring", "control ring", "zoom and focus rings"],
+            "distinguishingFeatures": ["gold S-line ring at front", "customizable control ring", "OLED display panel on barrel", "fn button on barrel"],
+            "logoPlacement": "barrel side"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "focalLength": "24-70mm",
+            "aperture": "f/2.8",
+            "mount": "Nikon Z mount",
+            "format": "Full-frame",
+            "elements": "17 elements in 15 groups",
+            "weight": "805g",
+            "filterSize": "82mm",
+            "stabilization": "None (relies on IBIS)"
+          },
+          "modelNumber": "NIKKOR Z 24-70mm f/2.8 S",
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["zoom lens", "standard zoom", "f/2.8", "S-line", "Nikon Z lens", "wedding lens", "event lens", "professional zoom", "Z mount lens"],
+          "aliases": ["Z 24-70 2.8", "Nikkor Z 24-70", "Nikon 24-70 Z", "Z 24-70 f/2.8 S"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        }
+      ]
+    },
+    {
+      "name": "Fujifilm",
+      "aliases": ["Fuji"],
+      "products": [
+        {
+          "id": "fujifilm-x-t5-2022",
+          "name": "Fujifilm X-T5",
+          "brand": "Fujifilm",
+          "category": "photography",
+          "subcategory": "cameras",
+          "releaseYear": 2022,
+          "msrp": 1699,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["retro rangefinder style", "analog dials on top plate", "compact body", "prominent viewfinder"],
+            "distinguishingFeatures": ["shutter speed dial", "ISO dial", "exposure compensation dial", "three-way tilting LCD", "film simulation dial"],
+            "logoPlacement": "front top center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "sensor": "40.2MP APS-C X-Trans CMOS 5 HR",
+            "autofocus": "Hybrid AF with subject detection",
+            "video": "6.2K 30p, 4K 60p",
+            "stabilization": "5-axis in-body, 7 stops",
+            "mount": "Fujifilm X mount",
+            "weight": "557g",
+            "cropFactor": "1.5x"
+          },
+          "modelNumber": "X-T5",
+          "variants": [
+            { "variantName": "Body Only - Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Body Only - Silver", "colorway": "Silver", "availability": "current", "specifications": {} },
+            { "variantName": "Kit with XF 18-55mm f/2.8-4 - Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Kit with XF 18-55mm f/2.8-4 - Silver", "colorway": "Silver", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["mirrorless camera", "APS-C", "retro camera", "film simulation", "street photography", "Fuji", "X-Trans", "analog dials"],
+          "aliases": ["XT5", "X-T5", "Fuji XT5", "Fuji X-T5"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "fujifilm-x100vi-2024",
+          "name": "Fujifilm X100VI",
+          "brand": "Fujifilm",
+          "category": "photography",
+          "subcategory": "cameras",
+          "releaseYear": 2024,
+          "msrp": 1599,
+          "visualSignature": {
+            "primaryColors": ["silver"],
+            "secondaryColors": ["black"],
+            "colorwayName": "Silver",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["classic rangefinder style", "fixed lens barrel", "analog dials on top plate", "hybrid viewfinder window"],
+            "distinguishingFeatures": ["fixed 23mm f/2 lens", "hybrid optical/electronic viewfinder", "shutter speed dial", "exposure compensation dial", "vintage aesthetic"],
+            "logoPlacement": "front top center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "sensor": "40.2MP APS-C X-Trans CMOS 5 HR",
+            "autofocus": "Hybrid AF with subject detection",
+            "video": "6.2K 30p, 4K 60p",
+            "stabilization": "5-axis in-body, 6 stops",
+            "lens": "Fujinon 23mm f/2 (35mm equivalent)",
+            "weight": "521g",
+            "cropFactor": "1.5x"
+          },
+          "modelNumber": "X100VI",
+          "variants": [
+            { "variantName": "Silver", "colorway": "Silver/Black", "availability": "current", "specifications": {} },
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["compact camera", "fixed lens", "street photography", "point and shoot", "retro camera", "film simulation", "Fuji X100", "travel camera", "rangefinder"],
+          "aliases": ["X100VI", "X100 VI", "Fuji X100VI", "X100 Mark VI", "X100 6"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "fujifilm-xf-56mm-f12-r-wr-2022",
+          "name": "Fujifilm XF 56mm f/1.2 R WR",
+          "brand": "Fujifilm",
+          "category": "photography",
+          "subcategory": "lenses",
+          "releaseYear": 2022,
+          "msrp": 999,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["medium prime barrel", "aperture ring", "focus ring", "weather-resistant design"],
+            "distinguishingFeatures": ["aperture ring with click stops", "XF red badge", "compact for f/1.2", "weather sealed"],
+            "logoPlacement": "barrel side"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "focalLength": "56mm (85mm equivalent)",
+            "aperture": "f/1.2",
+            "mount": "Fujifilm X mount",
+            "format": "APS-C",
+            "elements": "13 elements in 8 groups",
+            "weight": "445g",
+            "filterSize": "67mm",
+            "weatherSealed": true
+          },
+          "modelNumber": "XF 56mm f/1.2 R WR",
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["prime lens", "portrait lens", "f/1.2", "fast prime", "bokeh", "85mm equivalent", "Fuji portrait", "X mount lens"],
+          "aliases": ["XF 56mm 1.2", "Fuji 56 1.2", "XF56 f/1.2 WR", "56mm f/1.2 R WR"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "DJI",
+      "aliases": [],
+      "products": [
+        {
+          "id": "dji-mavic-3-pro-2023",
+          "name": "DJI Mavic 3 Pro",
+          "brand": "DJI",
+          "category": "photography",
+          "subcategory": "drones",
+          "releaseYear": 2023,
+          "msrp": 2199,
+          "visualSignature": {
+            "primaryColors": ["gray"],
+            "secondaryColors": ["dark gray", "black"],
+            "colorwayName": "Gray",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["foldable arms", "front obstacle sensors", "triple camera module", "aerodynamic body"],
+            "distinguishingFeatures": ["triple camera array", "Hasselblad branding on camera", "foldable propeller arms", "omnidirectional obstacle sensing"],
+            "logoPlacement": "top center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "camera": "Hasselblad 4/3 CMOS main + 1/1.3\" medium tele + 1/2\" tele",
+            "sensor": "20MP (main), 48MP (medium tele), 12MP (tele)",
+            "video": "5.1K 50fps, 4K 120fps (main), Apple ProRes",
+            "flightTime": "43 minutes",
+            "range": "15km (O3+)",
+            "focalLengths": "24mm, 70mm, 166mm equivalent",
+            "weight": "958g"
+          },
+          "modelNumber": "Mavic 3 Pro",
+          "variants": [
+            { "variantName": "Standard", "colorway": "Gray", "availability": "current", "specifications": {} },
+            { "variantName": "Fly More Combo", "colorway": "Gray", "availability": "current", "specifications": {} },
+            { "variantName": "Cine (Apple ProRes)", "colorway": "Gray", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["drone", "Hasselblad drone", "aerial photography", "4/3 sensor drone", "triple camera drone", "professional drone", "foldable drone", "Mavic"],
+          "aliases": ["Mavic 3 Pro", "M3 Pro", "DJI M3P"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "dji-air-3-2023",
+          "name": "DJI Air 3",
+          "brand": "DJI",
+          "category": "photography",
+          "subcategory": "drones",
+          "releaseYear": 2023,
+          "msrp": 1099,
+          "visualSignature": {
+            "primaryColors": ["gray"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Gray",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["foldable arms", "dual camera module", "compact body", "front sensors"],
+            "distinguishingFeatures": ["dual camera system", "foldable arms", "forward-facing sensors", "compact folded size"],
+            "logoPlacement": "top center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "camera": "Dual 1/1.3\" CMOS sensors",
+            "sensor": "48MP (wide), 48MP (medium tele)",
+            "video": "4K 100fps, 4K HDR",
+            "flightTime": "46 minutes",
+            "range": "20km (O4)",
+            "focalLengths": "24mm, 70mm equivalent",
+            "weight": "720g"
+          },
+          "modelNumber": "Air 3",
+          "variants": [
+            { "variantName": "Standard (RC-N2)", "colorway": "Gray", "availability": "current", "specifications": {} },
+            { "variantName": "Fly More Combo (DJI RC 2)", "colorway": "Gray", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["drone", "dual camera drone", "aerial photography", "travel drone", "portable drone", "foldable drone", "48MP drone", "beginner drone"],
+          "aliases": ["Air 3", "DJI Air3", "Air3"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "dji-osmo-pocket-3-2023",
+          "name": "DJI Osmo Pocket 3",
+          "brand": "DJI",
+          "category": "photography",
+          "subcategory": "gimbals",
+          "releaseYear": 2023,
+          "msrp": 519,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["pocket-sized body", "rotating touchscreen", "3-axis gimbal head", "minimalist design"],
+            "distinguishingFeatures": ["2-inch rotatable OLED screen", "3-axis mechanical gimbal", "1-inch CMOS sensor camera head", "pocketable form factor"],
+            "logoPlacement": "body side"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "sensor": "1\" CMOS",
+            "resolution": "4K 120fps",
+            "aperture": "f/2.0",
+            "stabilization": "3-axis mechanical gimbal",
+            "screen": "2\" rotatable OLED touchscreen",
+            "battery": "Up to 166 minutes",
+            "weight": "179g"
+          },
+          "modelNumber": "Osmo Pocket 3",
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Creator Combo", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["gimbal camera", "pocket camera", "vlogging camera", "stabilized camera", "handheld gimbal", "content creator", "1 inch sensor", "pocket gimbal"],
+          "aliases": ["Pocket 3", "OP3", "Osmo Pocket 3", "DJI Pocket 3"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Peak Design",
+      "aliases": ["PD"],
+      "products": [
+        {
+          "id": "peak-design-everyday-backpack-v2-30l-2019",
+          "name": "Peak Design Everyday Backpack V2 30L",
+          "brand": "Peak Design",
+          "category": "photography",
+          "subcategory": "bags",
+          "releaseYear": 2019,
+          "msrp": 289,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["clean modern silhouette", "external zip access points", "padded back panel", "magnetic latches"],
+            "distinguishingFeatures": ["MagLatch closure system", "dual side zip access", "FlexFold dividers visible when open", "weatherproof 400D nylon shell"],
+            "logoPlacement": "front center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "capacity": "30L",
+            "material": "400D nylon canvas, weatherproof DWR coating",
+            "laptopFit": "Up to 16\"",
+            "dividers": "FlexFold dividers (3 included)",
+            "closure": "MagLatch",
+            "weight": "1.48kg",
+            "dimensions": "52 x 30 x 20 cm"
+          },
+          "modelNumber": "BEDB-30",
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Charcoal", "colorway": "Charcoal", "availability": "current", "specifications": {} },
+            { "variantName": "Ash", "colorway": "Ash (Light Gray)", "availability": "current", "specifications": {} },
+            { "variantName": "Midnight", "colorway": "Midnight (Navy)", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["camera backpack", "photography backpack", "everyday carry", "laptop backpack", "camera bag", "weatherproof backpack", "FlexFold", "travel backpack"],
+          "aliases": ["Everyday Backpack 30L", "EDB 30L", "PD Backpack V2", "Everyday Backpack V2"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 92
+        },
+        {
+          "id": "peak-design-capture-camera-clip-v3-2018",
+          "name": "Peak Design Capture Camera Clip V3",
+          "brand": "Peak Design",
+          "category": "photography",
+          "subcategory": "accessories",
+          "releaseYear": 2018,
+          "msrp": 79,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["minimal plate design", "machined aluminum", "quick-release mechanism", "belt/strap mounting"],
+            "distinguishingFeatures": ["Arca-Swiss compatible plate", "4-way directional loading", "locking mechanism", "slim profile"],
+            "logoPlacement": "plate top"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "Anodized aluminum, stainless steel",
+            "compatibility": "Arca-Swiss tripod heads",
+            "mounting": "Backpack strap, belt, or any strap up to 70mm",
+            "loadCapacity": "Tested with pro DSLR + 70-200mm lens",
+            "weight": "84g (clip + plate)"
+          },
+          "modelNumber": "CC-BK-3",
+          "variants": [
+            { "variantName": "Black", "colorway": "Black", "availability": "current", "specifications": {} },
+            { "variantName": "Silver", "colorway": "Silver", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["camera clip", "camera carry", "Arca-Swiss", "quick release", "backpack clip", "hiking camera", "camera holster", "camera mount"],
+          "aliases": ["Capture V3", "Capture Clip", "PD Capture", "Camera Clip V3"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Godox",
+      "aliases": ["Flashpoint"],
+      "products": [
+        {
+          "id": "godox-ad200-pro-2019",
+          "name": "Godox AD200 Pro",
+          "brand": "Godox",
+          "category": "photography",
+          "subcategory": "lighting",
+          "releaseYear": 2019,
+          "msrp": 349,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["orange"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["compact rectangular body", "interchangeable flash head", "LCD control panel", "portable strobe form"],
+            "distinguishingFeatures": ["interchangeable flash heads (speedlight + bare bulb)", "orange accent stripe", "rear LCD panel", "compact pocket flash size"],
+            "logoPlacement": "body side"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "power": "200W",
+            "guideNumber": "52 (speedlight head)",
+            "recycleTime": "0.01-1.8s",
+            "flashDuration": "1/220 to 1/13000s",
+            "colorTemp": "5600K +/- 100K",
+            "hss": "Up to 1/8000s",
+            "ttl": "Yes (multi-system)",
+            "battery": "2900mAh lithium, 500 full-power flashes",
+            "weight": "560g"
+          },
+          "modelNumber": "AD200Pro",
+          "variants": [
+            { "variantName": "Standard Kit", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["portable flash", "strobe", "TTL flash", "HSS flash", "off-camera flash", "pocket flash", "200W flash", "wedding flash", "location lighting"],
+          "aliases": ["AD200Pro", "AD200 Pro", "Flashpoint eVOLV 200 Pro"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "godox-v1-round-head-flash-2019",
+          "name": "Godox V1 Round Head Flash",
+          "brand": "Godox",
+          "category": "photography",
+          "subcategory": "lighting",
+          "releaseYear": 2019,
+          "msrp": 259,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["round flash head", "speedlight form factor", "magnetic modifier mount", "rear LCD display"],
+            "distinguishingFeatures": ["unique round flash head", "magnetic accessory mount ring", "built-in LED modeling light", "rechargeable lithium battery"],
+            "logoPlacement": "flash head front"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "power": "76W",
+            "guideNumber": "60 (at 200mm)",
+            "recycleTime": "1.5s",
+            "flashDuration": "1/300 to 1/20000s",
+            "colorTemp": "5600K +/- 200K",
+            "hss": "Up to 1/8000s",
+            "ttl": "Yes (system-specific mounts)",
+            "battery": "2600mAh lithium, 480 full-power flashes",
+            "weight": "530g (with battery)",
+            "modelingLight": "LED, 10 steps"
+          },
+          "modelNumber": "V1",
+          "variants": [
+            { "variantName": "Canon mount (V1-C)", "colorway": "Black", "availability": "current", "specifications": { "hotshoeMount": "Canon" } },
+            { "variantName": "Nikon mount (V1-N)", "colorway": "Black", "availability": "current", "specifications": { "hotshoeMount": "Nikon" } },
+            { "variantName": "Sony mount (V1-S)", "colorway": "Black", "availability": "current", "specifications": { "hotshoeMount": "Sony" } },
+            { "variantName": "Fujifilm mount (V1-F)", "colorway": "Black", "availability": "current", "specifications": { "hotshoeMount": "Fujifilm" } }
+          ],
+          "searchKeywords": ["speedlight", "round head flash", "on-camera flash", "TTL flash", "magnetic flash", "rechargeable flash", "portrait flash", "event flash"],
+          "aliases": ["V1", "V1 Flash", "Godox V1", "Flashpoint Zoom Li-On X R2"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Manfrotto",
+      "aliases": [],
+      "products": [
+        {
+          "id": "manfrotto-befree-advanced-2018",
+          "name": "Manfrotto Befree Advanced",
+          "brand": "Manfrotto",
+          "category": "photography",
+          "subcategory": "tripods",
+          "releaseYear": 2018,
+          "msrp": 219,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver", "red"],
+            "colorwayName": "Black/Carbon",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["carbon fiber legs", "folding travel design", "ball head", "twist lock legs"],
+            "distinguishingFeatures": ["carbon fiber weave visible on legs", "Manfrotto red accents", "folding reverse-fold mechanism", "494 Center Ball Head included"],
+            "logoPlacement": "center column"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "material": "Carbon fiber legs, aluminum center column",
+            "maxHeight": "150cm",
+            "foldedLength": "41cm",
+            "maxLoad": "8kg",
+            "head": "494 Center Ball Head",
+            "legSections": "4",
+            "legLock": "Twist lock",
+            "weight": "1.25kg"
+          },
+          "modelNumber": "MKBFRTC4-BH",
+          "variants": [
+            { "variantName": "Carbon Fiber with Ball Head", "colorway": "Black/Carbon", "availability": "current", "specifications": {} },
+            { "variantName": "Aluminum with Ball Head", "colorway": "Black", "availability": "current", "specifications": { "material": "Aluminum", "weight": "1.49kg" } }
+          ],
+          "searchKeywords": ["travel tripod", "carbon fiber tripod", "lightweight tripod", "portable tripod", "ball head tripod", "compact tripod", "photography tripod"],
+          "aliases": ["Befree Advanced", "Befree CF", "Befree Carbon", "MKBFRTC4"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Rode",
+      "aliases": ["RODE", "Rode Microphones"],
+      "products": [
+        {
+          "id": "rode-videomic-pro-plus-2017",
+          "name": "Rode VideoMic Pro+",
+          "brand": "Rode",
+          "category": "photography",
+          "subcategory": "microphones",
+          "releaseYear": 2017,
+          "msrp": 299,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["gold", "red"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["shotgun capsule", "Rycote Lyre shock mount", "on-camera form factor", "foam windshield"],
+            "distinguishingFeatures": ["Rycote Lyre suspension mount", "gold connector ring", "two-stage high-pass filter switch", "auto power on/off via camera"],
+            "logoPlacement": "body side"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Supercardioid condenser shotgun",
+            "frequency": "20Hz - 20kHz",
+            "sensitivity": "-33.6 dB re 1V/Pa",
+            "output": "3.5mm TRS",
+            "battery": "Rechargeable lithium-ion, up to 100 hours",
+            "highPassFilter": "Two-stage (75Hz, 150Hz)",
+            "pad": "-10dB, -20dB",
+            "weight": "122g",
+            "mounting": "Rycote Lyre shock mount, cold shoe"
+          },
+          "modelNumber": "VideoMic Pro+",
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["shotgun microphone", "on-camera mic", "video microphone", "DSLR mic", "camera mic", "directional microphone", "vlogging mic", "filmmaking mic"],
+          "aliases": ["VMP+", "VideoMic Pro Plus", "VideoMicPro+", "Rode VMP+"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "GoPro",
+      "aliases": [],
+      "products": [
+        {
+          "id": "gopro-hero13-black-2024",
+          "name": "GoPro Hero13 Black",
+          "brand": "GoPro",
+          "category": "photography",
+          "subcategory": "action-cameras",
+          "releaseYear": 2024,
+          "msrp": 399,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["compact rectangular body", "front-facing screen", "rear touchscreen", "rugged rubberized housing"],
+            "distinguishingFeatures": ["blue GoPro logo", "front color display", "folding mounting fingers", "lens cover system"],
+            "logoPlacement": "front bottom"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "sensor": "27MP",
+            "video": "5.3K60",
+            "stabilization": "HyperSmooth 6.0",
+            "gps": "Built-in GPS",
+            "waterproof": "33ft (10m) without housing",
+            "weight": "154g"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["action camera", "waterproof camera", "adventure camera", "GoPro", "5.3K video", "HyperSmooth", "helmet camera", "sports camera", "vlog camera"],
+          "aliases": ["Hero 13 Black", "Hero13", "GoPro 13", "HERO13 Black", "GoPro Hero 13"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "gopro-hero12-black-2023",
+          "name": "GoPro Hero12 Black",
+          "brand": "GoPro",
+          "category": "photography",
+          "subcategory": "action-cameras",
+          "releaseYear": 2023,
+          "msrp": 299,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["compact rectangular body", "front-facing screen", "rear touchscreen", "rugged rubberized housing"],
+            "distinguishingFeatures": ["blue GoPro logo", "front color display", "folding mounting fingers", "lens cover system"],
+            "logoPlacement": "front bottom"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "sensor": "27MP",
+            "video": "5.3K60",
+            "stabilization": "HyperSmooth 6.0",
+            "waterproof": "33ft (10m) without housing",
+            "weight": "154g"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["action camera", "waterproof camera", "adventure camera", "GoPro", "5.3K video", "HyperSmooth", "helmet camera", "sports camera"],
+          "aliases": ["Hero 12 Black", "Hero12", "GoPro 12", "HERO12 Black", "GoPro Hero 12"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Insta360",
+      "aliases": [],
+      "products": [
+        {
+          "id": "insta360-x4-2024",
+          "name": "Insta360 X4",
+          "brand": "Insta360",
+          "category": "photography",
+          "subcategory": "action-cameras",
+          "releaseYear": 2024,
+          "msrp": 499,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["elongated body", "dual fisheye lenses", "center touchscreen", "rounded edges"],
+            "distinguishingFeatures": ["dual 360-degree lenses on each end", "center-mounted touchscreen", "invisible selfie stick effect", "compact 360 form factor"],
+            "logoPlacement": "body center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "video": "8K 360°",
+            "stabilization": "FlowState stabilization",
+            "features": "Invisible selfie stick, waterproof",
+            "weight": "203g"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["360 camera", "action camera", "8K 360", "FlowState", "invisible selfie stick", "waterproof camera", "immersive video", "VR camera"],
+          "aliases": ["X4", "Insta360 X 4", "ONE X4"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        },
+        {
+          "id": "insta360-ace-pro-2-2024",
+          "name": "Insta360 Ace Pro 2",
+          "brand": "Insta360",
+          "category": "photography",
+          "subcategory": "action-cameras",
+          "releaseYear": 2024,
+          "msrp": 379,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["compact rectangular body", "flip-up touchscreen", "large lens element", "rugged build"],
+            "distinguishingFeatures": ["Leica branded lens", "flip-up rear screen for vlogging", "AI-powered features", "large sensor for action camera"],
+            "logoPlacement": "front face"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "video": "8K",
+            "lens": "Leica lens",
+            "features": "AI features, flip screen",
+            "weight": "177g"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["action camera", "8K action camera", "Leica lens", "AI camera", "vlog action camera", "flip screen camera", "GoPro alternative"],
+          "aliases": ["Ace Pro 2", "AcePro2", "Ace Pro II"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 86
+        },
+        {
+          "id": "insta360-one-rs-1-inch-360-2022",
+          "name": "Insta360 ONE RS 1-Inch 360",
+          "brand": "Insta360",
+          "category": "photography",
+          "subcategory": "action-cameras",
+          "releaseYear": 2022,
+          "msrp": 799,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["modular design", "dual large lenses", "center core unit", "chunky form factor"],
+            "distinguishingFeatures": ["dual 1-inch sensors", "modular interchangeable lens system", "larger than standard 360 cameras", "co-engineered with Leica"],
+            "logoPlacement": "body center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "sensor": "Dual 1-inch sensors",
+            "video": "6K 360°",
+            "stabilization": "FlowState stabilization",
+            "features": "Modular design, invisible selfie stick",
+            "weight": "239g"
+          },
+          "variants": [
+            { "variantName": "1-Inch 360 Edition", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["360 camera", "1-inch sensor 360", "6K 360", "modular action camera", "Leica 360 camera", "professional 360", "VR camera"],
+          "aliases": ["ONE RS 1-Inch 360", "ONE RS 1\" 360", "1-Inch 360 Edition"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Aputure",
+      "aliases": [],
+      "products": [
+        {
+          "id": "aputure-600c-pro-2022",
+          "name": "Aputure 600c Pro",
+          "brand": "Aputure",
+          "category": "photography",
+          "subcategory": "lighting",
+          "releaseYear": 2022,
+          "msrp": 1899,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["large COB light head", "Bowens mount", "yoke bracket", "heavy-duty build"],
+            "distinguishingFeatures": ["Bowens mount compatibility", "RGBWW color mixing", "large LED panel head", "Sidus Link app control"],
+            "logoPlacement": "light head front"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "power": "600W RGBWW",
+            "mount": "Bowens mount",
+            "control": "Sidus Link app",
+            "colorMode": "RGBWW full-color mixing",
+            "colorTemp": "2300K-10000K",
+            "features": "DMX, Bluetooth, Sidus Link"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["LED light", "studio light", "RGBWW light", "600W LED", "Bowens mount light", "cinema light", "Aputure", "color LED", "film lighting"],
+          "aliases": ["600c Pro", "LS 600c Pro", "Aputure LS 600c Pro"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        },
+        {
+          "id": "aputure-ls-60x-2022",
+          "name": "Aputure LS 60x",
+          "brand": "Aputure",
+          "category": "photography",
+          "subcategory": "lighting",
+          "releaseYear": 2022,
+          "msrp": 549,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["tube form factor", "elongated cylindrical body", "mounting bracket", "weatherproof design"],
+            "distinguishingFeatures": ["LED tube design", "IP65 weatherproof rating", "bi-color temperature control", "compact tube form factor"],
+            "logoPlacement": "tube body"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Bi-Color LED tube",
+            "weatherproofing": "IP65 weatherproof",
+            "colorTemp": "Bi-color adjustable",
+            "features": "Sidus Link app, battery-powered option"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["LED tube", "tube light", "bi-color LED", "weatherproof light", "IP65 light", "portable LED", "location lighting", "Aputure tube"],
+          "aliases": ["LS 60x", "60x", "Aputure 60x", "Light Storm 60x"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 86
+        },
+        {
+          "id": "aputure-mc-pro-2023",
+          "name": "Aputure MC Pro",
+          "brand": "Aputure",
+          "category": "photography",
+          "subcategory": "lighting",
+          "releaseYear": 2023,
+          "msrp": 169,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["ultra-compact panel", "pocket-sized", "built-in diffuser", "magnetic mount"],
+            "distinguishingFeatures": ["pocket-sized RGB panel", "built-in magnetic mount", "wireless Sidus Link control", "USB-C rechargeable"],
+            "logoPlacement": "panel front"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Pocket RGB panel",
+            "control": "Wireless control, Sidus Link",
+            "colorMode": "RGB full color",
+            "battery": "Built-in rechargeable",
+            "features": "Magnetic mount, USB-C charging"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["pocket light", "RGB panel", "mini LED", "wireless light", "magnetic light", "accent light", "portable RGB", "Aputure MC"],
+          "aliases": ["MC Pro", "Aputure MC Pro"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 86
+        }
+      ]
+    },
+    {
+      "name": "PolarPro",
+      "aliases": ["Polar Pro"],
+      "products": [
+        {
+          "id": "polarpro-helix-maglock-filter-system-2023",
+          "name": "PolarPro Helix MagLock Filter System",
+          "brand": "PolarPro",
+          "category": "photography",
+          "subcategory": "filters",
+          "releaseYear": 2023,
+          "msrp": 149,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["circular filter form", "magnetic attachment ring", "slim profile", "premium machining"],
+            "distinguishingFeatures": ["magnetic quick-attach system", "VND/PL combo filter", "one-hand filter swaps", "precision-machined ring"],
+            "logoPlacement": "filter ring edge"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Magnetic VND/PL combo",
+            "attachment": "Magnetic quick-lock",
+            "filterType": "Variable ND + Circular Polarizer combo",
+            "features": "One-hand swaps, stackable"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["lens filter", "magnetic filter", "VND filter", "polarizer", "ND filter", "variable ND", "MagLock", "quick-swap filter"],
+          "aliases": ["Helix MagLock", "Helix Filter", "PolarPro Helix"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "polarpro-recon-vnd-pl-matte-box-2023",
+          "name": "PolarPro Recon VND/PL Matte Box",
+          "brand": "PolarPro",
+          "category": "photography",
+          "subcategory": "filters",
+          "releaseYear": 2023,
+          "msrp": 349,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["cinema matte box form", "modular filter stages", "flag-style top shade", "rail-mount compatible"],
+            "distinguishingFeatures": ["cinema-style matte box design", "integrated VND/PL filter", "modular stage system", "flag for flare control"],
+            "logoPlacement": "matte box front"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Cinema matte box with VND/PL",
+            "design": "Modular filter stages",
+            "filterType": "VND + Circular Polarizer",
+            "features": "Cinema matte box, modular, flag system"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["matte box", "cinema filter", "VND matte box", "modular filter", "video filter system", "filmmaking filter", "PolarPro Recon"],
+          "aliases": ["Recon Matte Box", "Recon VND/PL", "PolarPro Recon"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ]
+    },
+    {
+      "name": "SanDisk",
+      "aliases": ["Western Digital"],
+      "products": [
+        {
+          "id": "sandisk-extreme-pro-sdxc-1tb-2023",
+          "name": "SanDisk Extreme PRO SDXC 1TB",
+          "brand": "SanDisk",
+          "category": "photography",
+          "subcategory": "memory-cards",
+          "releaseYear": 2023,
+          "msrp": 129,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["gold", "red"],
+            "colorwayName": "Black/Gold",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["standard SD card form", "gold accent stripe", "prominent capacity label", "speed class markings"],
+            "distinguishingFeatures": ["gold and red color scheme", "SanDisk logo in red", "V30 and UHS-I speed class markings", "1TB capacity label"],
+            "logoPlacement": "card front center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "SDXC UHS-I",
+            "capacity": "1TB",
+            "speedClass": "V30, U3, Class 10",
+            "readSpeed": "200MB/s",
+            "writeSpeed": "140MB/s"
+          },
+          "variants": [
+            { "variantName": "1TB", "colorway": "Black/Gold", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["SD card", "SDXC", "memory card", "1TB card", "V30", "UHS-I", "camera card", "high capacity SD", "SanDisk Extreme PRO"],
+          "aliases": ["Extreme PRO SD 1TB", "SDXC 1TB Extreme PRO", "SanDisk 1TB V30"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "sandisk-extreme-pro-cfexpress-type-b-256gb-2022",
+          "name": "SanDisk Extreme PRO CFexpress Type B 256GB",
+          "brand": "SanDisk",
+          "category": "photography",
+          "subcategory": "memory-cards",
+          "releaseYear": 2022,
+          "msrp": 229,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["gold", "red"],
+            "colorwayName": "Black/Gold",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["CFexpress Type B form factor", "gold accent design", "compact thick card", "speed markings"],
+            "distinguishingFeatures": ["CFexpress Type B connector", "gold and red branding", "thicker than SD card", "professional-grade design"],
+            "logoPlacement": "card front center"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "CFexpress Type B",
+            "capacity": "256GB",
+            "readSpeed": "1700MB/s",
+            "writeSpeed": "1200MB/s",
+            "interface": "PCIe Gen 3, NVMe"
+          },
+          "variants": [
+            { "variantName": "256GB", "colorway": "Black/Gold", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["CFexpress", "Type B card", "cinema card", "fast memory card", "1700MB/s", "professional card", "Nikon Z8 card", "Canon R5 card"],
+          "aliases": ["CFexpress Type B 256GB", "Extreme PRO CFexpress", "SanDisk CFexpress 256GB"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        }
+      ]
+    },
+    {
+      "name": "Think Tank",
+      "aliases": ["Think Tank Photo", "TTP"],
+      "products": [
+        {
+          "id": "think-tank-airport-roller-derby-2018",
+          "name": "Think Tank Airport Roller Derby",
+          "brand": "Think Tank",
+          "category": "photography",
+          "subcategory": "bags",
+          "releaseYear": 2018,
+          "msrp": 349,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "ballistic nylon",
+            "designCues": ["rolling suitcase form", "retractable handle", "top and side carry handles", "padded interior dividers"],
+            "distinguishingFeatures": ["rolling camera bag design", "fits airline carry-on", "interior divider system", "Think Tank logo patch"],
+            "logoPlacement": "front panel"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Rolling camera bag",
+            "capacity": "Fits 2 bodies + 7 lenses",
+            "material": "Ballistic nylon",
+            "compliance": "Airline carry-on size",
+            "features": "Retractable handle, interior dividers, padded compartments"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["rolling camera bag", "camera roller", "airline camera bag", "carry-on camera bag", "professional camera bag", "travel camera bag", "Think Tank roller"],
+          "aliases": ["Airport Roller Derby", "Roller Derby", "TTP Roller Derby"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        },
+        {
+          "id": "think-tank-mindshift-filter-nest-mini-2020",
+          "name": "Think Tank MindShift Filter Nest Mini",
+          "brand": "Think Tank",
+          "category": "photography",
+          "subcategory": "accessories",
+          "releaseYear": 2020,
+          "msrp": 29,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "nylon",
+            "designCues": ["small zippered pouch", "padded interior slots", "compact flat form", "belt loop attachment"],
+            "distinguishingFeatures": ["individual padded filter slots", "compact zippered pouch", "MindShift branding", "attaches to belts or bags"],
+            "logoPlacement": "pouch front"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Filter storage pouch",
+            "capacity": "Holds up to 4 filters",
+            "material": "Nylon with padded dividers",
+            "features": "Belt loop, individual filter slots"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["filter pouch", "filter case", "filter storage", "lens filter holder", "MindShift", "photography accessory", "filter organizer"],
+          "aliases": ["Filter Nest Mini", "MindShift Filter Nest", "Filter Nest"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 82
+        }
+      ]
+    },
+    {
+      "name": "JOBY",
+      "aliases": ["Joby"],
+      "products": [
+        {
+          "id": "joby-gorillapod-5k-kit-2017",
+          "name": "JOBY GorillaPod 5K Kit",
+          "brand": "JOBY",
+          "category": "photography",
+          "subcategory": "tripods",
+          "releaseYear": 2017,
+          "msrp": 129,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black/Charcoal",
+            "patterns": ["segmented"],
+            "finish": "matte",
+            "designCues": ["flexible segmented legs", "ball head", "wrappable legs", "compact form"],
+            "distinguishingFeatures": ["iconic flexible wrappable legs", "rubberized grip joints", "ball head with quick-release plate", "can grip poles and branches"],
+            "logoPlacement": "leg joint"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Flexible tripod with ball head",
+            "maxLoad": "5kg",
+            "head": "Ball head with quick-release plate",
+            "legType": "Flexible wrappable legs",
+            "material": "ABS plastic, stainless steel, TPE rubber",
+            "compatibility": "Arca-Swiss compatible plate"
+          },
+          "variants": [
+            { "variantName": "5K Kit (with ball head)", "colorway": "Black/Charcoal", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["flexible tripod", "GorillaPod", "wrappable tripod", "travel tripod", "compact tripod", "5kg tripod", "creative tripod", "vlog tripod"],
+          "aliases": ["GorillaPod 5K", "Gorilla Pod 5K Kit", "JOBY 5K", "GorillaPod 5K Kit"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        },
+        {
+          "id": "joby-gorillapod-rig-2020",
+          "name": "JOBY GorillaPod Rig",
+          "brand": "JOBY",
+          "category": "photography",
+          "subcategory": "tripods",
+          "releaseYear": 2020,
+          "msrp": 69,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["red"],
+            "colorwayName": "Black/Red",
+            "patterns": ["segmented"],
+            "finish": "matte",
+            "designCues": ["flexible segmented legs", "modular arm attachments", "smartphone clamp", "multi-mount design"],
+            "distinguishingFeatures": ["modular accessory arms", "dual cold shoe mounts", "smartphone and action cam compatible", "flexible wrappable base"],
+            "logoPlacement": "center hub"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Modular flexible tripod",
+            "compatibility": "Smartphones, action cams, lights, mics",
+            "features": "Modular arms, dual cold shoes, flexible legs",
+            "material": "ABS plastic, TPE rubber"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black/Red", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["modular tripod", "GorillaPod", "smartphone tripod", "action cam tripod", "vlogging rig", "content creator rig", "flexible mount"],
+          "aliases": ["GorillaPod Rig", "Gorilla Pod Rig", "JOBY Rig"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 85
+        }
+      ]
+    },
+    {
+      "name": "NEEWER",
+      "aliases": ["Neewer"],
+      "products": [
+        {
+          "id": "neewer-37mm-hd-variable-nd-filter-2020",
+          "name": "NEEWER 37mm HD Variable ND Filter",
+          "brand": "NEEWER",
+          "category": "photography",
+          "subcategory": "filters",
+          "releaseYear": 2020,
+          "msrp": 16,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["circular screw-on filter", "rotating adjustment ring", "slim profile", "marked ND stops"],
+            "distinguishingFeatures": ["variable ND rotation ring", "ND2-ND32 range markings", "slim aluminum frame", "multi-coated glass"],
+            "logoPlacement": "filter ring"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Variable ND filter",
+            "size": "37mm",
+            "range": "ND2-ND32",
+            "coating": "Multi-coated HD glass"
+          },
+          "variants": [
+            { "variantName": "37mm", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["ND filter", "variable ND", "neutral density", "video filter", "budget filter", "37mm filter", "NEEWER filter"],
+          "aliases": ["Neewer Variable ND", "Neewer VND", "37mm VND"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 80
+        },
+        {
+          "id": "neewer-480-led-panel-light-2019",
+          "name": "NEEWER 480 LED Panel Light",
+          "brand": "NEEWER",
+          "category": "photography",
+          "subcategory": "lighting",
+          "releaseYear": 2019,
+          "msrp": 59,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["white"],
+            "colorwayName": "Black",
+            "patterns": ["grid"],
+            "finish": "matte",
+            "designCues": ["rectangular LED panel", "grid of LED bulbs", "mounting bracket", "rear control knobs"],
+            "distinguishingFeatures": ["480 LED bead array", "bi-color temperature adjustment knobs", "U-bracket mount", "battery plate on rear"],
+            "logoPlacement": "panel frame"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Bi-color LED panel",
+            "leds": "480 LEDs",
+            "colorTemp": "Bi-color adjustable (3200K-5600K)",
+            "dimming": "Dimmable 10-100%",
+            "power": "Battery-powered or AC adapter",
+            "features": "U-bracket mount, barn doors optional"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["LED panel", "video light", "bi-color LED", "budget LED light", "photography light", "battery LED panel", "interview light", "YouTube light"],
+          "aliases": ["480 LED", "Neewer 480 LED", "Neewer LED Panel"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 80
+        }
+      ]
+    },
+    {
+      "name": "Panasonic",
+      "aliases": ["Lumix"],
+      "products": [
+        {
+          "id": "panasonic-lumix-gh7-2024",
+          "name": "Panasonic Lumix GH7",
+          "brand": "Panasonic",
+          "category": "photography",
+          "subcategory": "cameras",
+          "releaseYear": 2024,
+          "msrp": 2199,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["mid-size body", "viewfinder hump", "deep grip", "weather sealed"],
+            "distinguishingFeatures": ["vari-angle LCD", "LUMIX branding on grip", "red record button accent", "dual SD card slots"],
+            "logoPlacement": "front top"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "sensor": "25.2MP Micro Four Thirds",
+            "autofocus": "Phase-detect AF",
+            "video": "Internal Apple ProRes, 5.7K 30p, 4K 120p",
+            "stabilization": "5-axis in-body",
+            "mount": "Micro Four Thirds mount",
+            "features": "Internal ProRes recording, open gate"
+          },
+          "variants": [
+            { "variantName": "Body Only", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["mirrorless camera", "Micro Four Thirds", "video camera", "ProRes camera", "filmmaking camera", "Lumix", "GH series", "phase detect AF"],
+          "aliases": ["GH7", "Lumix GH7", "DC-GH7", "Panasonic GH7"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        },
+        {
+          "id": "panasonic-lumix-s5-iix-2023",
+          "name": "Panasonic Lumix S5 IIX",
+          "brand": "Panasonic",
+          "category": "photography",
+          "subcategory": "cameras",
+          "releaseYear": 2023,
+          "msrp": 2199,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["mid-size body", "viewfinder hump", "comfortable grip", "weather sealed"],
+            "distinguishingFeatures": ["vari-angle LCD", "LUMIX S branding", "red video record accent", "dual card slots"],
+            "logoPlacement": "front top"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "sensor": "24.2MP full-frame CMOS",
+            "autofocus": "Phase-detect AF",
+            "video": "Open gate 6K, 5.9K 30p, 4K 120p",
+            "stabilization": "5-axis in-body",
+            "mount": "Leica L-mount",
+            "features": "Open gate recording, phase-detect AF, V-Log/V-Gamut"
+          },
+          "variants": [
+            { "variantName": "Body Only", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["mirrorless camera", "full-frame", "video camera", "open gate", "6K camera", "L-mount", "Lumix", "filmmaking camera", "phase detect AF"],
+          "aliases": ["S5 IIX", "S5IIX", "Lumix S5 IIX", "DC-S5M2X", "S5 Mark IIX", "Panasonic S5IIX"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Sigma",
+      "aliases": [],
+      "products": [
+        {
+          "id": "sigma-35mm-f14-dg-dn-art-2023",
+          "name": "Sigma 35mm f/1.4 DG DN Art",
+          "brand": "Sigma",
+          "category": "photography",
+          "subcategory": "lenses",
+          "releaseYear": 2023,
+          "msrp": 899,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["cylindrical barrel", "wide focus ring", "Art line badge", "metal construction"],
+            "distinguishingFeatures": ["Sigma Art 'A' badge on barrel", "wide ribbed focus ring", "AFL button", "aperture ring on some mounts"],
+            "logoPlacement": "barrel side"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "focalLength": "35mm",
+            "aperture": "f/1.4",
+            "mount": "Sony E-mount / L-mount",
+            "format": "Full-frame mirrorless",
+            "type": "Prime lens",
+            "series": "Art"
+          },
+          "variants": [
+            { "variantName": "Sony E-mount", "colorway": "Black", "availability": "current", "specifications": { "mount": "Sony E-mount" } },
+            { "variantName": "L-mount", "colorway": "Black", "availability": "current", "specifications": { "mount": "L-mount" } }
+          ],
+          "searchKeywords": ["prime lens", "35mm", "f/1.4", "Art lens", "Sigma Art", "wide prime", "street photography lens", "full frame prime", "mirrorless lens"],
+          "aliases": ["35mm Art", "Sigma 35 Art", "35mm f/1.4 Art", "Sigma 35mm 1.4 DG DN"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 90
+        },
+        {
+          "id": "sigma-24-70mm-f28-dg-dn-ii-art-2024",
+          "name": "Sigma 24-70mm f/2.8 DG DN II Art",
+          "brand": "Sigma",
+          "category": "photography",
+          "subcategory": "lenses",
+          "releaseYear": 2024,
+          "msrp": 1199,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["dark gray"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["cylindrical barrel", "zoom and focus rings", "Art line badge", "metal construction"],
+            "distinguishingFeatures": ["Sigma Art 'A' badge", "zoom lock switch", "AFL button", "compact for f/2.8 zoom"],
+            "logoPlacement": "barrel side"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "focalLength": "24-70mm",
+            "aperture": "f/2.8",
+            "mount": "Sony E-mount / L-mount",
+            "format": "Full-frame mirrorless",
+            "type": "Zoom lens",
+            "series": "Art"
+          },
+          "variants": [
+            { "variantName": "Sony E-mount", "colorway": "Black", "availability": "current", "specifications": { "mount": "Sony E-mount" } },
+            { "variantName": "L-mount", "colorway": "Black", "availability": "current", "specifications": { "mount": "L-mount" } }
+          ],
+          "searchKeywords": ["zoom lens", "standard zoom", "24-70mm", "f/2.8", "Art lens", "Sigma Art", "wedding lens", "event lens", "mirrorless zoom"],
+          "aliases": ["24-70 Art II", "Sigma 24-70 Art II", "24-70 f/2.8 Art II", "Sigma 24-70mm 2.8 DG DN II"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Zeiss",
+      "aliases": ["Carl Zeiss", "ZEISS"],
+      "products": [
+        {
+          "id": "zeiss-otus-55mm-f14-2013",
+          "name": "Zeiss Otus 55mm f/1.4",
+          "brand": "Zeiss",
+          "category": "photography",
+          "subcategory": "lenses",
+          "releaseYear": 2013,
+          "msrp": 3990,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["silver", "blue"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["large barrel", "all-metal construction", "wide manual focus ring", "engraved distance scale"],
+            "distinguishingFeatures": ["massive manual-focus-only barrel", "ZEISS blue logo badge", "engraved depth-of-field and distance scales", "premium all-metal construction"],
+            "logoPlacement": "barrel front ring"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "focalLength": "55mm",
+            "aperture": "f/1.4",
+            "focus": "Manual focus only",
+            "format": "Full-frame",
+            "mount": "Nikon F / Canon EF (with adapters for mirrorless)",
+            "features": "Legendary sharpness, reference-grade optics"
+          },
+          "variants": [
+            { "variantName": "Nikon F mount", "colorway": "Black", "availability": "current", "specifications": { "mount": "Nikon F" } },
+            { "variantName": "Canon EF mount", "colorway": "Black", "availability": "current", "specifications": { "mount": "Canon EF" } }
+          ],
+          "searchKeywords": ["manual focus lens", "reference lens", "55mm", "f/1.4", "Otus", "Zeiss Otus", "sharpest lens", "portrait lens", "full frame prime"],
+          "aliases": ["Otus 1.4/55", "Otus 55", "Zeiss Otus 1.4/55", "Otus 55mm"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        },
+        {
+          "id": "zeiss-batis-25mm-f2-2015",
+          "name": "Zeiss Batis 25mm f/2",
+          "brand": "Zeiss",
+          "category": "photography",
+          "subcategory": "lenses",
+          "releaseYear": 2015,
+          "msrp": 1299,
+          "visualSignature": {
+            "primaryColors": ["black"],
+            "secondaryColors": ["blue"],
+            "colorwayName": "Black",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["compact barrel", "smooth focus ring", "OLED display window", "modern minimal design"],
+            "distinguishingFeatures": ["OLED display showing focus distance and depth of field", "ZEISS blue logo badge", "smooth de-clicked focus ring", "weather sealed"],
+            "logoPlacement": "barrel front ring"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "focalLength": "25mm",
+            "aperture": "f/2",
+            "mount": "Sony E-mount",
+            "format": "Full-frame",
+            "focus": "Autofocus",
+            "features": "OLED display, weather sealed"
+          },
+          "variants": [
+            { "variantName": "Sony E-mount", "colorway": "Black", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["wide angle lens", "25mm", "f/2", "Batis", "Zeiss Batis", "autofocus Zeiss", "Sony E-mount", "landscape lens", "street lens", "OLED lens"],
+          "aliases": ["Batis 2/25", "Batis 25", "Zeiss Batis 2/25", "Batis 25mm"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 88
+        }
+      ]
+    },
+    {
+      "name": "Tentacle Sync",
+      "aliases": ["Tentacle"],
+      "products": [
+        {
+          "id": "tentacle-sync-e-mkii-2023",
+          "name": "Tentacle Sync E MKII",
+          "brand": "Tentacle Sync",
+          "category": "photography",
+          "subcategory": "audio-accessories",
+          "releaseYear": 2023,
+          "msrp": 299,
+          "visualSignature": {
+            "primaryColors": ["green"],
+            "secondaryColors": ["black"],
+            "colorwayName": "Green",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["ultra-compact body", "single LED indicator", "3.5mm jack", "clip-on design"],
+            "distinguishingFeatures": ["signature green color", "ultra-compact size", "Bluetooth connectivity", "single status LED"],
+            "logoPlacement": "body top"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Timecode generator",
+            "connectivity": "Bluetooth",
+            "output": "3.5mm mini-jack",
+            "accuracy": "Sub-frame timecode accuracy",
+            "battery": "Rechargeable, up to 40 hours",
+            "features": "Ultra-compact, Bluetooth sync, Tentacle Setup app"
+          },
+          "variants": [
+            { "variantName": "Single Unit", "colorway": "Green", "availability": "current", "specifications": {} },
+            { "variantName": "Dual Set", "colorway": "Green", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["timecode generator", "timecode sync", "audio sync", "multi-camera sync", "Bluetooth timecode", "film production", "Tentacle Sync"],
+          "aliases": ["Sync E MKII", "Sync E MK2", "Tentacle E MKII", "Sync E Mark II"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 86
+        },
+        {
+          "id": "tentacle-track-e-2021",
+          "name": "Tentacle Track E",
+          "brand": "Tentacle Sync",
+          "category": "photography",
+          "subcategory": "audio-accessories",
+          "releaseYear": 2021,
+          "msrp": 399,
+          "visualSignature": {
+            "primaryColors": ["green"],
+            "secondaryColors": ["black"],
+            "colorwayName": "Green",
+            "patterns": ["solid"],
+            "finish": "matte",
+            "designCues": ["compact rectangular body", "built-in microphone", "3.5mm input jack", "clip-on design"],
+            "distinguishingFeatures": ["signature green color", "built-in microphone capsule", "integrated timecode generator", "pocket-sized audio recorder"],
+            "logoPlacement": "body top"
+          },
+          "referenceImages": { "primary": "" },
+          "specifications": {
+            "type": "Pocket audio recorder with timecode",
+            "recording": "32-bit float WAV",
+            "microphone": "Built-in omni microphone",
+            "input": "3.5mm mic/line input",
+            "timecode": "Integrated timecode generator",
+            "battery": "Rechargeable, up to 8 hours recording",
+            "features": "32-bit float, timecode sync, Bluetooth"
+          },
+          "variants": [
+            { "variantName": "Standard", "colorway": "Green", "availability": "current", "specifications": {} }
+          ],
+          "searchKeywords": ["audio recorder", "pocket recorder", "timecode recorder", "32-bit float recorder", "field recorder", "backup audio", "Tentacle Track"],
+          "aliases": ["Track E", "Tentacle Track E", "Tentacle Tracker"],
+          "lastUpdated": "2026-02-16T00:00:00.000Z",
+          "source": "ai",
+          "dataConfidence": 86
+        }
+      ]
+    }
+  ]
+}
