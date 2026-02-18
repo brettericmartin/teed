@@ -825,7 +825,7 @@ function TimelineItem({
             </button>
           )}
 
-          {/* Owner visibility toggle - appears on hover */}
+          {/* Owner visibility toggle */}
           {isOwner && (
             <button
               onClick={(e) => {
@@ -833,17 +833,22 @@ function TimelineItem({
                 onToggleVisibility();
               }}
               className={`
-                opacity-0 group-hover:opacity-100 transition-opacity
-                ${isExpanded ? '!opacity-100' : ''}
-                p-1.5 rounded-md hover:bg-[var(--surface-alt)]
-                ${isHidden ? 'text-[var(--text-tertiary)]' : 'text-[var(--text-secondary)]'}
+                inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs transition-colors
+                ${isHidden
+                  ? 'bg-[var(--surface-alt)] text-[var(--text-tertiary)]'
+                  : 'text-[var(--text-tertiary)] hover:bg-[var(--surface-alt)] hover:text-[var(--text-secondary)]'}
               `}
-              title={isHidden ? 'Show event' : 'Hide event'}
             >
               {isHidden ? (
-                <EyeOff className="w-3.5 h-3.5" />
+                <>
+                  <EyeOff className="w-3.5 h-3.5" />
+                  <span>Hidden</span>
+                </>
               ) : (
-                <Eye className="w-3.5 h-3.5" />
+                <>
+                  <Eye className="w-3.5 h-3.5" />
+                  <span>Hide</span>
+                </>
               )}
             </button>
           )}
