@@ -251,7 +251,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         title,
         description: description || null,
         is_public: isPublic,
-        category: category || undefined,
+        category: category || null,
       });
 
       setBag((prev) => ({ ...prev, ...updatedBag }));
@@ -1196,6 +1196,11 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
                   </option>
                 ))}
               </select>
+              {isPublic && !category && (
+                <span className="text-xs text-amber-500">
+                  Pick a category so your bag appears in discover filters
+                </span>
+              )}
             </div>
 
           </div>

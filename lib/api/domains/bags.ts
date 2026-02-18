@@ -27,7 +27,7 @@ export interface Bag {
   owner_id: string;
   created_at: string;
   updated_at?: string;
-  category?: string;
+  category?: string | null;
   tags?: string[];
   items?: any[];
 }
