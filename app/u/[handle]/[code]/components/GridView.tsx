@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Tag } from 'lucide-react';
 import type { BagViewItem } from '@/lib/types/bagViewTypes';
 
 interface GridViewProps {
@@ -143,6 +143,14 @@ function GridCard({
           >
             {item.custom_name || 'Untitled'}
           </h3>
+
+          {/* Promo code */}
+          {item.promo_codes && (
+            <p className="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold text-amber-700 bg-amber-50 border border-dashed border-amber-300 rounded-full leading-tight">
+              <Tag className="w-2.5 h-2.5 flex-shrink-0" />
+              <span className="truncate">{item.promo_codes}</span>
+            </p>
+          )}
         </div>
       </div>
     </article>

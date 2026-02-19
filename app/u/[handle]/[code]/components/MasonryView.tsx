@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
+import { ExternalLink, ChevronDown, ChevronUp, Tag } from 'lucide-react';
 import type { BagViewItem } from '@/lib/types/bagViewTypes';
 
 interface MasonryViewProps {
@@ -102,6 +102,14 @@ function MasonryCard({
           >
             {item.custom_name || 'Untitled'}
           </h3>
+
+          {/* Promo code */}
+          {item.promo_codes && (
+            <p className="mt-2 inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-semibold text-amber-700 bg-amber-50 border border-dashed border-amber-300 rounded-full">
+              <Tag className="w-3 h-3 flex-shrink-0" />
+              {item.promo_codes}
+            </p>
+          )}
 
           {/* Curator Note - highlighted */}
           {hasNote && (

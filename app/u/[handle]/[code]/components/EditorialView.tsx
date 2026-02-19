@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
+import { ExternalLink, ChevronDown, ChevronUp, Tag } from 'lucide-react';
 import type { BagViewItem } from '@/lib/types/bagViewTypes';
 
 interface EditorialViewProps {
@@ -127,6 +127,16 @@ function EditorialCard({
         >
           {item.custom_name || 'Untitled'}
         </h3>
+
+        {/* Promo code */}
+        {item.promo_codes && (
+          <p className={`mt-2 inline-flex items-center gap-1 px-2 py-0.5 font-semibold text-amber-700 bg-amber-50 border border-dashed border-amber-300 rounded-full ${
+            isHero ? 'text-xs' : 'text-[11px]'
+          }`}>
+            <Tag className={isHero ? 'w-3.5 h-3.5 flex-shrink-0' : 'w-3 h-3 flex-shrink-0'} />
+            {item.promo_codes}
+          </p>
+        )}
 
         {/* Description - 2 lines for curated feel */}
         {item.custom_description && (

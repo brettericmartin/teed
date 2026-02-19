@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
+import { ExternalLink, ChevronDown, ChevronUp, Tag } from 'lucide-react';
 
 interface ItemLink {
   id: string;
@@ -172,6 +172,14 @@ function MuseumCard({
         >
           {truncateName(item.custom_name || 'Untitled')}
         </h3>
+
+        {/* Promo code */}
+        {item.promo_codes && (
+          <p className="mt-2 inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-medium text-amber-400 bg-amber-400/10 border border-dashed border-amber-400/30 rounded-full">
+            <Tag className="w-2.5 h-2.5 flex-shrink-0" />
+            {item.promo_codes}
+          </p>
+        )}
 
         {/* Curator Note - 60% opacity (medium emphasis), serif italic */}
         {hasNote && (

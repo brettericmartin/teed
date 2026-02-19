@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { ChevronLeft, ChevronRight, Play, Pause, Maximize, Minimize } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, Pause, Maximize, Minimize, Tag } from 'lucide-react';
 
 // Helper to calculate image dimensions within container
 function getContainedImageBounds(
@@ -498,6 +498,19 @@ export function CarouselView({
                           <span className="text-[0.4em] ml-2 opacity-70">×{item.quantity}</span>
                         )}
                       </h2>
+
+                      {/* Promo code */}
+                      {item.promo_codes && (
+                        <p
+                          className={`inline-flex items-center gap-1.5 px-3 py-1 text-amber-300 bg-amber-400/15 border border-dashed border-amber-400/40 rounded-full ${
+                            isFullscreen && isMobile ? 'text-sm' : 'text-base md:text-lg'
+                          }`}
+                          style={{ textShadow: colorScheme.shadowSmall }}
+                        >
+                          <Tag className="w-4 h-4 flex-shrink-0" />
+                          {item.promo_codes}
+                        </p>
+                      )}
 
                       {/* Description - hidden in mobile fullscreen for curiosity gap */}
                       {item.custom_description && !(isFullscreen && isMobile) && (
