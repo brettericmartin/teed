@@ -5,6 +5,7 @@
 
 export type CategoryValue =
   | 'golf'
+  | 'edc'
   | 'travel'
   | 'photography'
   | 'tech'
@@ -31,6 +32,7 @@ export interface Category {
  */
 export const CATEGORIES: Category[] = [
   { value: 'golf', label: 'Golf', icon: '⛳' },
+  { value: 'edc', label: 'EDC', icon: '🔪' },
   { value: 'travel', label: 'Travel', icon: '✈️' },
   { value: 'photography', label: 'Photography', icon: '📷' },
   { value: 'tech', label: 'Tech', icon: '💻' },
@@ -74,6 +76,7 @@ export function getCategoryLabel(value: string | null): string {
  */
 export const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
   golf: { bg: 'bg-[var(--teed-green-8)]', text: 'text-white', border: 'var(--teed-green-6)' },
+  edc: { bg: 'bg-[var(--sand-9)]', text: 'text-white', border: 'var(--sand-6)' },
   outdoor: { bg: 'bg-[var(--evergreen-9)]', text: 'text-white', border: 'var(--evergreen-6)' },
   camping: { bg: 'bg-[var(--evergreen-8)]', text: 'text-white', border: 'var(--evergreen-6)' },
   travel: { bg: 'bg-[var(--sky-6)]', text: 'text-white', border: 'var(--sky-6)' },
