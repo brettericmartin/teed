@@ -24,14 +24,16 @@ import {
   Terminal,
   Globe,
   Package,
+  Mail,
+  MessageCircle,
 } from 'lucide-react';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type NicheId = 'tech' | 'running' | 'beauty' | 'home' | 'lifestyle';
-type TabId = 'playbook' | 'scripts' | 'calendar' | 'metrics' | 'workflow';
+type NicheId = 'edc' | 'running' | 'beauty' | 'reviews' | 'productivity';
+type TabId = 'playbook' | 'outreach' | 'calendar' | 'metrics' | 'workflow';
 type BagStatus = 'pending' | 'created' | 'distributed';
-type Platform = 'reddit' | 'youtube' | 'tiktok' | 'x';
+type OutreachChannel = 'email' | 'instagram' | 'x' | 'youtube';
 
 interface SeedBag {
   id: string;
@@ -39,7 +41,8 @@ interface SeedBag {
   source: string;
   whyHot: string;
   links: { label: string; url: string }[];
-  commentTemplates: { platform: Platform; template: string }[];
+  outreachTemplates: { channel: OutreachChannel; template: string }[];
+  reachHow: string;
   priority?: 'urgent' | 'high' | 'normal';
 }
 
@@ -58,7 +61,7 @@ interface Niche {
   shareTargets: string[];
 }
 
-interface TikTokScript {
+interface OutreachScript {
   nicheId: NicheId;
   title: string;
   segments: { timing: string; text: string }[];
@@ -73,7 +76,7 @@ interface CalendarWeek {
 
 interface StrategyState {
   bagStatuses: Record<string, BagStatus>;
-  distributionChecks: Record<string, Record<Platform, boolean>>;
+  distributionChecks: Record<string, Record<OutreachChannel, boolean>>;
   calendarChecks: Record<string, boolean>;
 }
 
@@ -81,440 +84,467 @@ interface StrategyState {
 
 const NICHES: Niche[] = [
   {
-    id: 'tech',
-    label: 'Tech & Desk Setups',
-    emoji: '\ud83d\udda5\ufe0f',
-    color: 'var(--sky-4)',
-    colorAccent: 'var(--sky-11)',
-    bagCreationMethod: 'Watch their latest roundup/setup video, extract every product mentioned',
-    cadence: 'Refresh weekly \u2014 these creators post 2-4x/week with product-heavy content',
-    hook: 'I turned your video into a Teed curation \u2014 every product, one link',
-    message: "Hey! I made a Teed bag from your [VIDEO TITLE] \u2014 every product linked in one clean page. Your audience would love this instead of hunting through descriptions.",
-    cta: 'Check it out and share it \u2014 or build your own on Teed',
+    id: 'edc',
+    label: 'EDC & Gear Dumps',
+    emoji: '\ud83d\udd26',
+    color: 'var(--grey-4)',
+    colorAccent: 'var(--grey-11)',
+    bagCreationMethod: 'Watch their pocket dump / EDC video, extract every item with brand + model',
+    cadence: 'Weekly \u2014 EDC creators post pocket dumps constantly, r/EDC has daily posts',
+    hook: 'Your entire carry, one shareable page',
+    message: "Hey! I built a Teed page from your latest carry \u2014 every item linked with buy pages. Way cleaner than a description dump.",
+    cta: 'Share it with your audience or build your own on Teed',
     shareTargets: [
-      'DM the creator on X/Twitter or Instagram with the finished bag link',
-      'Comment on their video: "Put every product from this video in one page \u2192 [LINK]"',
-      'Tag them on X with the bag: "@creator I turned your setup into a Teed curation"',
-      'Email if available (many tech creators list business emails)',
+      'Email (check YouTube About page \u2192 "Business inquiries" \u2192 View Email)',
+      'Instagram DM (most EDC creators are responsive)',
+      'X/Twitter DM (if DMs are open)',
+      'YouTube comment on the video with the finished bag link',
     ],
     bags: [
       {
-        id: 'tech-1',
-        title: 'Linus Tech Tips \u2014 "I Tried All the Best Webcams"',
-        source: '16.5M subs \u00b7 715.8K views \u00b7 Published Feb 12, 2026',
-        whyHot: 'Direct product comparison with 5-10 webcams tested. Perfect for a Teed bag \u2014 each webcam is a listable item with buy links. Massive engaged audience.',
+        id: 'edc-1',
+        title: 'EXCESSORIZE ME \u2014 Tech & EDC Accessories',
+        source: '1.6M subs \u00b7 Toronto, Canada \u00b7 Vincent Tse \u00b7 excessorize.me',
+        whyHot: 'Largest non-firearm EDC channel on YouTube. Reviews tech accessories, bags, cases, and gear. Every video is a curated product showcase. Has his own storefront. Perfect Teed power user.',
         priority: 'urgent',
+        reachHow: 'Email: hello@excessorize.me (verified). Also on Instagram @excessorize.me and X @excessorizeme.',
         links: [
-          { label: 'YouTube Channel', url: 'https://youtube.com/@LinusTechTips' },
-          { label: 'X/Twitter', url: 'https://twitter.com/LinusTech' },
-          { label: 'LTT Forum Thread', url: 'https://linustechtips.com/topic/1632050-i-tried-all-the-best-webcams/' },
+          { label: 'YouTube', url: 'https://youtube.com/@EXCESSORIZEME' },
+          { label: 'Website', url: 'https://excessorize.me/' },
+          { label: 'Instagram', url: 'https://instagram.com/excessorize.me' },
+          { label: 'X/Twitter', url: 'https://x.com/excessorizeme' },
         ],
-        commentTemplates: [
-          { platform: 'x', template: "Hey @LinusTech \u2014 I turned your webcam roundup into a Teed curation. Every webcam from the video, linked in one clean page. Your audience keeps asking \"which one?\" in the comments \u2014 this answers it \u2192 [LINK]" },
-          { platform: 'youtube', template: "Put every webcam from this video in one page with buy links \u2192 [LINK]. Easier than scrolling the description." },
+        outreachTemplates: [
+          { channel: 'email', template: "Subject: Your latest carry as a shareable product page\n\nHey Vincent \u2014 I\u2019m Brett, building Teed. I turned your latest EDC video into a single page where every item is linked with buy pages. Your audience always asks for links in the comments \u2014 this answers it in one click.\n\nHere\u2019s the page: [LINK]\n\nYou can claim it and customize it, or I can show you how to make your own in 2 minutes. No strings attached.\n\nEither way, love the channel. Just thought this might save your audience some time.\n\n\u2014 Brett" },
+          { channel: 'instagram', template: "Hey Vincent! Built a Teed page from your latest carry \u2014 every item linked in one clean page. Thought your audience would dig it instead of hunting through descriptions \u2192 [LINK]" },
         ],
       },
       {
-        id: 'tech-2',
-        title: 'MKBHD \u2014 "What\'s on my Phone 2026"',
-        source: '19M+ subs \u00b7 App curation video \u00b7 Evergreen format',
-        whyHot: 'The biggest tech creator on YouTube. His "What\'s on my Phone" series gets millions of views. App list = perfect Teed curation. Uses TickTick, Spotify, Pocketcast, Arc Search, Notion, raindrop.io, Gemini.',
+        id: 'edc-2',
+        title: 'Best Damn EDC \u2014 EDC Weekly & Pocket Dumps',
+        source: '419K subs \u00b7 Taylor Martin \u00b7 bestdamnedc.com',
+        whyHot: 'Home of EDC Weekly \u2014 viewers submit pocket dumps to be featured. Community-driven format is perfect for Teed. Taylor is approachable and engages with the community.',
         priority: 'high',
+        reachHow: 'Website contact form at bestdamnedc.com. Also active on Instagram @bestdamnedc.',
         links: [
-          { label: 'YouTube Channel', url: 'https://youtube.com/@mkbhd' },
-          { label: 'X/Twitter', url: 'https://twitter.com/MKBHD' },
-          { label: 'Website', url: 'https://mkbhd.com/' },
+          { label: 'YouTube', url: 'https://youtube.com/@BestDamnEDC' },
+          { label: 'Website', url: 'https://bestdamnedc.com/' },
         ],
-        commentTemplates: [
-          { platform: 'x', template: "Hey @MKBHD \u2014 turned your phone setup into a Teed curation. Every app linked in one page. Your comments are always full of people asking for the app list \u2192 [LINK]" },
-          { platform: 'youtube', template: "Every app from MKBHD's phone in one place \u2192 [LINK]. No pausing the video." },
+        outreachTemplates: [
+          { channel: 'email', template: "Subject: EDC Weekly as shareable product pages\n\nHey Taylor \u2014 I\u2019m Brett, building Teed. Love EDC Weekly. I turned a recent episode into a shareable page where every item from the carry is linked.\n\nInstead of your viewers asking \"what\u2019s that knife?\" in the comments, they get one link with everything: [LINK]\n\nImagine if every EDC Weekly submission came with a Teed page \u2014 viewer submits carry + a Teed link, you feature both. Happy to show you how it works.\n\n\u2014 Brett" },
+          { channel: 'youtube', template: "Every item from this carry in one page with buy links \u2192 [LINK]. No pausing to read descriptions." },
         ],
       },
       {
-        id: 'tech-3',
-        title: 'Sara Dietschy \u2014 Desk Setup / Studio Tours',
-        source: '1M+ subs \u00b7 Tech + creative focus \u00b7 NYC-based',
-        whyHot: 'Known for cinematic desk/studio setup tours. Partnered with Moment on magnetic stands. Her audience is creative professionals who buy gear. Perfect Teed match.',
+        id: 'edc-3',
+        title: 'Maurice Moves \u2014 Cinematic EDC',
+        source: '359K subs \u00b7 Cinematic pocket dump videos \u00b7 Growing fast',
+        whyHot: 'Rapidly growing EDC channel with cinematic production. Known for finding the most efficient EDC possible. His audience is gear-obsessed and wants every link.',
+        reachHow: 'Check YouTube About page for business email. Active on Instagram.',
         links: [
-          { label: 'YouTube Channel', url: 'https://youtube.com/@saradietschy' },
-          { label: 'Instagram', url: 'https://instagram.com/saradietschy' },
+          { label: 'YouTube', url: 'https://youtube.com/@MauriceMoves' },
         ],
-        commentTemplates: [
-          { platform: 'x', template: "Hey @saradietschy \u2014 made a Teed curation from your studio tour. Every item linked in one place so your audience doesn't have to hunt through timestamps \u2192 [LINK]" },
-          { platform: 'youtube', template: "Full studio setup with every item linked \u2192 [LINK]. Clean page instead of a 50-line description." },
+        outreachTemplates: [
+          { channel: 'email', template: "Subject: Your EDC as a shareable product page\n\nHey \u2014 I\u2019m Brett, building Teed. I turned your latest pocket dump into a single page where every item is linked. Your videos are gorgeous but the product info is locked in timestamps \u2014 this gives your audience a reference they can save.\n\nHere\u2019s the page: [LINK]\n\nHappy to hand it over. No catch.\n\n\u2014 Brett" },
+          { channel: 'youtube', template: "Full pocket dump with every item linked \u2192 [LINK]. One page your audience can bookmark." },
         ],
       },
       {
-        id: 'tech-4',
-        title: 'Austin Evans \u2014 Tech Reviews & Comparisons',
-        source: '5.4M subs \u00b7 Broad tech coverage',
-        whyHot: 'Does "Best [category] of 2026" roundup videos constantly. His audience actively searches for product lists. High purchase intent viewers.',
+        id: 'edc-4',
+        title: 'Maxlvledc \u2014 Compact & Modular EDC',
+        source: '251K subs \u00b7 "No compromises" mantra \u00b7 DIY mods',
+        whyHot: 'Niche within the niche \u2014 focuses on compact, modular setups with custom modifications. Highly engaged audience that wants exact product details. The modular philosophy aligns perfectly with Teed bags.',
+        reachHow: 'Check YouTube About page for business email. Active on Instagram.',
         links: [
-          { label: 'YouTube Channel', url: 'https://youtube.com/@austinevans' },
-          { label: 'X/Twitter', url: 'https://twitter.com/austinnotduncan' },
+          { label: 'YouTube', url: 'https://youtube.com/@Maxlvledc' },
         ],
-        commentTemplates: [
-          { platform: 'x', template: "Hey @austinnotduncan \u2014 turned your latest roundup into a Teed curation. Every product, one link. Beats the affiliate dump in your description \u2192 [LINK]" },
-          { platform: 'youtube', template: "Every product from this video in one clean page \u2192 [LINK]." },
+        outreachTemplates: [
+          { channel: 'email', template: "Subject: Your modular carry as a shareable page\n\nHey \u2014 I\u2019m Brett. I turned your latest modular EDC video into a Teed page \u2014 every item linked, clean layout. Your audience is always asking for specs and links. This gives them one URL.\n\n[LINK]\n\nFree tool, no catch. Let me know what you think.\n\n\u2014 Brett" },
         ],
       },
       {
-        id: 'tech-5',
-        title: 'Justin Tse \u2014 Desk Setup King',
-        source: '500K+ subs \u00b7 Setup tours since 2013',
-        whyHot: 'THE desk setup creator on YouTube. "Ultimate Office & Desk Setup Tour" (Jan 2, 2026). Every video is literally a product list. His audience asks for links on every item.',
+        id: 'edc-5',
+        title: 'r/EDC Community \u2014 Pocket Dump Posts',
+        source: '230K+ members \u00b7 Daily pocket dump posts \u00b7 Reddit',
+        whyHot: 'The largest EDC community. Users already post photo + item lists. A Teed bag is literally the interactive version of every r/EDC post. Post example bags as a helpful tool, not promotion.',
+        reachHow: 'Post directly to r/EDC with a Teed bag of your own carry. Contribute value first, explain the tool second.',
         links: [
-          { label: 'YouTube Channel', url: 'https://youtube.com/@JustinTse' },
-          { label: 'Website', url: 'https://justintse.com' },
+          { label: 'r/EDC', url: 'https://reddit.com/r/EDC' },
+          { label: 'r/knifeclub', url: 'https://reddit.com/r/knifeclub' },
+          { label: 'EverydayCarry.com', url: 'https://everydaycarry.com/' },
         ],
-        commentTemplates: [
-          { platform: 'x', template: "Hey @justintse \u2014 made a Teed curation from your latest setup tour. Every product linked in one page. Way cleaner than a link tree \u2192 [LINK]" },
-          { platform: 'youtube', template: "Full setup with every item from this video linked in one page \u2192 [LINK]." },
+        outreachTemplates: [
+          { channel: 'youtube', template: "Just put my full EDC in a shareable page with buy links for everything \u2192 [LINK]. Made it with Teed \u2014 free tool for creating gear lists. Figured r/EDC would appreciate it." },
         ],
       },
     ],
   },
   {
     id: 'running',
-    label: 'Running & Fitness',
+    label: 'Running Shoes',
     emoji: '\ud83c\udfc3',
     color: 'var(--evergreen-4)',
     colorAccent: 'var(--evergreen-11)',
-    bagCreationMethod: 'Watch their shoe roundup, extract every shoe with model name, price, and use case',
-    cadence: 'Refresh bi-weekly \u2014 new shoe releases drive content calendar',
-    hook: 'Every shoe from the video, linked and rated, one page',
-    message: "Hey! I built a Teed curation from your [VIDEO TITLE] \u2014 every shoe linked with buy pages. Cleaner than a description dump.",
+    bagCreationMethod: 'Watch their shoe roundup, extract every shoe with model name and use case',
+    cadence: 'Bi-weekly \u2014 new shoe releases drive content, seasonal best-of lists',
+    hook: 'Every shoe from the roundup, linked and organized, one page',
+    message: "Hey! I built a Teed page from your latest shoe roundup \u2014 every shoe linked. Cleaner than a timestamp hunt.",
     cta: 'Share it with your audience or build your own on Teed',
     shareTargets: [
-      'DM on Instagram or email (running creators are responsive)',
-      'Comment on their YouTube video with the bag link',
-      'Tag on X: "@creator turned your shoe roundup into a clean product page"',
-      'r/RunningShoeGeeks \u2014 share the bag in relevant threads',
+      'Email (running journalists often list business emails)',
+      'Website contact form (theruntesters.com, believeintherun.com, doctorsofrunning.com)',
+      'Instagram DM',
+      'r/RunningShoeGeeks \u2014 share bags in relevant threads',
     ],
     bags: [
       {
         id: 'run-1',
-        title: 'The Run Testers \u2014 "Best Running Shoes 2026"',
-        source: '300K+ subs \u00b7 Running shoe specialists \u00b7 Feb 2026 updated',
-        whyHot: 'Dedicated running shoe review channel. Their "Best Running Shoes" series is THE reference for runners. 8-12 shoes per video. Brooks Glycerin Flex, Structure Plus, Skechers Aero Razor featured.',
+        title: 'The Run Testers \u2014 Best Running Shoes Guides',
+        source: 'Nick Harris-Fry & team \u00b7 theruntesters.com \u00b7 Running journalists',
+        whyHot: 'THE running shoe review destination. Active Feb 2026 with guides for best overall, marathon, cushioned, carbon plate, beginner, Nike, Adidas, and Asics shoes. Each guide is literally a ranked product list. Nike Vomero Plus, Hoka Arahi 8, Asics Novablast 5 featured.',
         priority: 'urgent',
+        reachHow: 'Contact page at theruntesters.com. Nick Harris-Fry also on Muck Rack (journalist profile). Team members write for Tom\'s Guide, Coach, Fit&Well, Expert Reviews.',
         links: [
-          { label: 'YouTube Channel', url: 'https://youtube.com/@TheRunTesters' },
           { label: 'Website', url: 'https://theruntesters.com/' },
+          { label: 'Best Shoes Guide', url: 'https://theruntesters.com/running-shoes/the-best-running-shoes-to-buy/' },
+          { label: 'Best Marathon Shoes', url: 'https://theruntesters.com/the-best-marathon-running-shoes/' },
         ],
-        commentTemplates: [
-          { platform: 'youtube', template: "Put every shoe from this roundup in one page with buy links \u2192 [LINK]. Easier than pausing at each timestamp." },
-          { platform: 'x', template: "Hey @TheRunTesters \u2014 turned your best shoes roundup into a Teed curation. One page, every shoe linked. Your viewers keep asking for links in comments \u2192 [LINK]" },
+        outreachTemplates: [
+          { channel: 'email', template: "Subject: Your shoe guides as interactive product pages\n\nHey Nick \u2014 I\u2019m Brett, building Teed. I turned your Best Running Shoes 2026 guide into a shareable page where every shoe is linked with buy pages. Your readers and viewers can save it and come back when they\u2019re ready to buy.\n\nHere\u2019s the page: [LINK]\n\nYou could embed these on theruntesters.com alongside your written guides. Each shoe gets its own card. Happy to show you how \u2014 takes 2 minutes per guide.\n\n\u2014 Brett" },
+          { channel: 'youtube', template: "Every shoe from this roundup in one page with buy links \u2192 [LINK]. Save it for when you\u2019re ready to buy." },
         ],
       },
       {
         id: 'run-2',
-        title: 'Believe in the Run \u2014 Road Running Shoe Previews 2026',
-        source: '200K+ subs \u00b7 40+ preview videos from The Running Event',
-        whyHot: 'Published ~40 preview videos from The Running Event 2025 covering 2026 releases. Comprehensive, trusted, no sponsorships. Their "Best Running Shoes" video is a product list goldmine.',
+        title: 'Believe in the Run \u2014 Road Running Shoes',
+        source: '200K+ subs \u00b7 believeintherun.com \u00b7 No sponsorships',
+        whyHot: 'Trusted running shoe reviews. Published ~40 preview videos from The Running Event covering 2026 releases. No sponsorships means the audience trusts every recommendation. Their best-of videos are product list goldmines.',
         priority: 'high',
+        reachHow: 'Website contact form at believeintherun.com. Also host a podcast (good for warm intro).',
         links: [
-          { label: 'YouTube Channel', url: 'https://youtube.com/@BelieveintheRun' },
+          { label: 'YouTube', url: 'https://youtube.com/@BelieveintheRun' },
           { label: 'Website', url: 'https://believeintherun.com/' },
         ],
-        commentTemplates: [
-          { platform: 'youtube', template: "Every shoe from this video in one clean page \u2192 [LINK]. No hunting through timestamps or description links." },
-          { platform: 'x', template: "Hey @believeintherun \u2014 made a Teed curation of your 2026 shoe previews. Every shoe linked, one page. Thought your audience would dig it \u2192 [LINK]" },
+        outreachTemplates: [
+          { channel: 'email', template: "Subject: Your shoe previews as shareable product pages\n\nHey \u2014 I\u2019m Brett, building Teed. You published 40+ shoe previews from The Running Event \u2014 that\u2019s incredible coverage. I turned a selection into Teed pages where each shoe is linked with buy pages.\n\nHere\u2019s one: [LINK]\n\nImagine one Teed page per video \u2014 your audience saves the page, comes back when shoes drop. Happy to set them up for you.\n\n\u2014 Brett" },
+          { channel: 'youtube', template: "Every shoe from this video in one clean page \u2192 [LINK]. No hunting through descriptions." },
         ],
       },
       {
         id: 'run-3',
-        title: 'Best Damn EDC \u2014 Gear Reviews & EDC Content',
-        source: 'Growing channel \u00b7 EDC + fitness crossover',
-        whyHot: 'Bridges the EDC and fitness gear worlds. Pocket dumps, gym bag dumps, gear reviews. Highly engaged niche audience that loves product lists.',
+        title: 'Doctors of Running \u2014 Scientific Shoe Reviews',
+        source: 'Dr. Klein (DPT) \u00b7 doctorsofrunning.com \u00b7 Science-backed reviews',
+        whyHot: 'Most scientific running shoe reviews on YouTube. Active Feb 2026 with Salomon Aero Glide 4 review. Also previewing Mizuno Hyperwarp Pure/Pro/Elite, Brooks 2026 lineup, and Topo Athletics redesigns. Their podcast interviews shoe scientists directly.',
+        priority: 'high',
+        reachHow: 'Website: doctorsofrunning.com. Blog has contact info. Professional background (DPT) means they respond to well-crafted emails.',
         links: [
-          { label: 'YouTube Channel', url: 'https://youtube.com/@BestDamnEDC' },
-          { label: 'Website', url: 'https://bestdamnedc.com/' },
+          { label: 'Website', url: 'https://www.doctorsofrunning.com/' },
+          { label: 'Feb 2026 Review', url: 'https://www.doctorsofrunning.com/2026/02/salomon-aero-glide-4-review-2026.html' },
+          { label: 'Reviews Page', url: 'https://www.doctorsofrunning.com/p/reviews.html' },
         ],
-        commentTemplates: [
-          { platform: 'youtube', template: "Full gear list from this dump in one page \u2192 [LINK]. Every item linked." },
-          { platform: 'x', template: "Built a Teed curation from your latest carry. Every item linked \u2014 no description hunting \u2192 [LINK]" },
+        outreachTemplates: [
+          { channel: 'email', template: "Subject: Your shoe reviews as saveable product pages\n\nDr. Klein \u2014 I\u2019m Brett, building Teed. Your reviews are the most thorough in the running space. I turned your latest roundup into a page where each shoe links to your review AND the buy page.\n\nHere\u2019s the page: [LINK]\n\nYour audience could save these pages and reference them when shopping. Works great alongside your blog content. Happy to help set it up.\n\n\u2014 Brett" },
         ],
       },
     ],
   },
   {
     id: 'beauty',
-    label: 'Beauty & Lifestyle',
+    label: 'Beauty & GRWM',
     emoji: '\u2728',
     color: 'var(--copper-4)',
     colorAccent: 'var(--copper-11)',
-    bagCreationMethod: 'Watch GRWM/routine video, extract every product with brand + shade/variant',
-    cadence: 'Refresh weekly \u2014 beauty content is high-velocity, seasonal',
+    bagCreationMethod: 'Watch GRWM / routine / haul video, extract every product with brand + shade/variant',
+    cadence: 'Weekly \u2014 beauty content is high-velocity, seasonal, product-heavy',
     hook: 'Every product from the routine, one page, every link',
-    message: "Hey! I made a Teed page with every product from your [VIDEO TITLE]. Your audience won't have to screenshot anymore.",
+    message: "Hey! I made a Teed page from your routine \u2014 every product linked. Your audience won\u2019t have to screenshot anymore.",
     cta: 'Share the link or build your own on Teed',
     shareTargets: [
-      'DM on Instagram (primary for beauty creators)',
-      'Comment on TikTok/YouTube with the bag link',
-      'Tag on X or Threads',
+      'Instagram DM (primary for beauty creators \u2014 they live on Instagram)',
+      'Email via YouTube About page or website',
+      'TikTok comment or DM',
       'r/Sephora, r/SkincareAddiction, r/MakeupAddiction threads',
     ],
     bags: [
       {
         id: 'beauty-1',
         title: 'Shea Whitney \u2014 Amazon Hauls & Favorites',
-        source: '1.7M subs \u00b7 Amazon Influencer Program \u00b7 Frequent haul videos',
-        whyHot: 'THE Amazon haul queen. Her videos ARE product lists. She already has an Amazon storefront \u2014 Teed would be a much cleaner presentation layer. Polished, accessible fashion + beauty content.',
+        source: '1.7M subs \u00b7 Amazon Influencer Program \u00b7 amazon.com/shop/sheawhitney',
+        whyHot: 'Her videos ARE product lists \u2014 Amazon hauls, favorites, daily deals. Already has an Amazon Storefront with Fashion, Beauty, Organization, and Daily Deals lists. Teed would be a much cleaner, shareable presentation layer. Her Fashion list was updated in the last week.',
         priority: 'urgent',
+        reachHow: 'Instagram @shea.whitney (verified from search results). Also check YouTube About page for business email.',
         links: [
-          { label: 'YouTube Channel', url: 'https://youtube.com/@SheaWhitney' },
+          { label: 'YouTube', url: 'https://youtube.com/@SheaWhitney' },
           { label: 'Amazon Storefront', url: 'https://www.amazon.com/shop/sheawhitney' },
           { label: 'Instagram', url: 'https://instagram.com/shea.whitney' },
         ],
-        commentTemplates: [
-          { platform: 'x', template: "Hey @sheaborawhitney \u2014 I turned your latest Amazon haul into a Teed curation. Every product, one clean page. Way more polished than a link tree or Amazon list \u2192 [LINK]" },
-          { platform: 'youtube', template: "Every product from this haul in one page \u2192 [LINK]. Easier than scrolling through description links." },
+        outreachTemplates: [
+          { channel: 'instagram', template: "Hey Shea! I turned your latest Amazon haul into a Teed page \u2014 every product linked in one clean, shareable page. Way more polished than an Amazon list. Thought you\u2019d love it \u2192 [LINK]" },
+          { channel: 'email', template: "Subject: Your Amazon hauls as beautiful shareable pages\n\nHey Shea \u2014 I\u2019m Brett, building Teed. Your Amazon hauls are essentially curated product lists, and I think Teed could be the perfect presentation layer for them.\n\nI turned your latest haul into a Teed page: [LINK]\n\nEvery product gets its own card with image and buy link. Your audience can save it and share it \u2014 way cleaner than scrolling an Amazon list or description links. And you can update it anytime.\n\nHappy to show you how to make your own. Takes about 2 minutes per haul.\n\n\u2014 Brett" },
         ],
       },
       {
         id: 'beauty-2',
-        title: 'NikkieTutorials \u2014 Beauty Routines & Favorites',
-        source: '24M+ subs \u00b7 Top beauty creator globally',
-        whyHot: 'Massive reach. Uses YouTube Shorts to stay visible, long-form for product launches. Her routine videos feature 10-15+ products. Getting a Teed bag in her hands = instant credibility for the platform.',
+        title: 'Alix Earle \u2014 GRWM & Drugstore Routine',
+        source: 'Multi-platform \u00b7 TikTok @alixearle \u00b7 YouTube \u00b7 Gen Z icon',
+        whyHot: 'The "Alix Earle effect" drives instant sellouts. Active 2026: Updated drugstore routine (L\u2019Or\u00e9al Lumi Glotion, NYX Mechanical Eyeliner, NYX liners), Pantene partnership, and entering her "founder era." Her GRWM videos list 8-15 products each. Massive viral potential.',
         priority: 'high',
+        reachHow: 'This is a reach play \u2014 she has management. Best approach: Instagram DM @alix_earle or through her management team. Don\u2019t expect a reply, but the bag itself generates value as shareable content.',
         links: [
-          { label: 'YouTube Channel', url: 'https://youtube.com/@NikkieTutorials' },
-          { label: 'Instagram', url: 'https://instagram.com/nikkietutorials' },
+          { label: 'TikTok', url: 'https://www.tiktok.com/@alixearle' },
+          { label: 'YouTube', url: 'https://youtube.com/@AlixEarle' },
+          { label: 'Instagram', url: 'https://instagram.com/alix_earle' },
         ],
-        commentTemplates: [
-          { platform: 'x', template: "Hey @NikkieTutorials \u2014 made a Teed curation of every product from your latest routine. One clean page your audience can save \u2192 [LINK]" },
-          { platform: 'youtube', template: "Every product from this video in one shareable page \u2192 [LINK]. No pausing to write them down." },
+        outreachTemplates: [
+          { channel: 'instagram', template: "Turned your GRWM routine into a Teed page \u2014 every product linked in one place. Your audience always asks for the full list \u2192 [LINK]" },
+          { channel: 'youtube', template: "Every product from this GRWM in one shareable page \u2192 [LINK]. Save it instead of screenshotting." },
         ],
       },
       {
         id: 'beauty-3',
-        title: 'Hyram \u2014 Skincare Routines & Product Reviews',
-        source: '4.5M+ subs \u00b7 Skincare specialist',
-        whyHot: 'Skincare routines are perfect curations \u2014 ordered step-by-step, specific products, highly researched audience. His followers want exact product lists.',
+        title: 'NikkieTutorials \u2014 Makeup Tutorials & Routines',
+        source: '14.1M subs \u00b7 4th largest beauty channel \u00b7 Nimya brand founder',
+        whyHot: 'Massive reach. Her routine videos feature 10-15+ products. Launched Nimya (own beauty brand) and has OFRA collab. Her Coachella GRWM and routine content is product-list gold. Even a YouTube comment with a Teed bag link gets visibility from her audience size.',
+        reachHow: 'Management team via nikkietutorials.com. This is a reach play \u2014 focus on making the bag perfect and sharing it via YouTube comments and X. The bag itself becomes content.',
         links: [
-          { label: 'YouTube Channel', url: 'https://youtube.com/@Hyram' },
-          { label: 'Instagram', url: 'https://instagram.com/hyram' },
+          { label: 'YouTube', url: 'https://youtube.com/@NikkieTutorials' },
+          { label: 'Website', url: 'https://www.nikkietutorials.com/' },
+          { label: 'Instagram', url: 'https://instagram.com/nikkietutorials' },
         ],
-        commentTemplates: [
-          { platform: 'x', template: "Hey @skinaboratory \u2014 turned your routine into a Teed curation. Every product in order, all linked. Your audience is always asking for the full list \u2192 [LINK]" },
-          { platform: 'youtube', template: "Full routine with every product linked in one page \u2192 [LINK]. No more comment section Q&A about which products." },
+        outreachTemplates: [
+          { channel: 'youtube', template: "Every product from this tutorial in one shareable page \u2192 [LINK]. No pausing to write them down." },
+          { channel: 'instagram', template: "Made a Teed page with every product from your latest routine \u2014 one clean page your audience can save \u2192 [LINK]" },
         ],
       },
       {
         id: 'beauty-4',
-        title: 'Alix Earle \u2014 GRWM & "That Girl" Lifestyle',
-        source: 'Multi-platform \u00b7 TikTok + YouTube crossover \u00b7 Gen Z icon',
-        whyHot: 'The "Alix Earle effect" drives instant sellouts. Her GRWM videos are product lists that move inventory. The "Alix Earle light" (clip-on phone light) became a meme product. Huge viral potential.',
+        title: 'Kaeli Mae \u2014 Aesthetic Routines & Amazon Finds',
+        source: '2.3M subs \u00b7 Lifestyle creator \u00b7 Aesthetic routines + Amazon finds',
+        whyHot: 'Her content is visually perfect and product-heavy \u2014 aesthetic routines, organizing content, Amazon finds. The audience demographic buys everything she features. More accessible than Alix Earle for outreach.',
+        priority: 'high',
+        reachHow: 'Check YouTube About page for business email. Active on Instagram.',
         links: [
-          { label: 'TikTok', url: 'https://www.tiktok.com/@alixearle' },
-          { label: 'YouTube Channel', url: 'https://youtube.com/@AlixEarle' },
-          { label: 'Instagram', url: 'https://instagram.com/alix_earle' },
+          { label: 'YouTube', url: 'https://youtube.com/@KaeliMae' },
         ],
-        commentTemplates: [
-          { platform: 'tiktok', template: '[Stitch first 3s of GRWM]\n"She used 8 products. I found all of them."\n[Show Teed bag on phone, scroll through items]\n"Every product. Every link. One page. Bio."' },
-          { platform: 'x', template: "Turned @aaborneale's latest GRWM into a Teed curation. Every product, one page. No screenshotting needed \u2192 [LINK]" },
+        outreachTemplates: [
+          { channel: 'email', template: "Subject: Your aesthetic routines as shareable product pages\n\nHey Kaeli \u2014 I\u2019m Brett, building Teed. Your routines and Amazon finds videos are essentially curated product lists, and they\u2019re beautiful. I turned one into a Teed page: [LINK]\n\nYour audience can save it and share it instead of screenshotting. And the aesthetic matches your brand perfectly.\n\nHappy to show you how. Takes 2 minutes per video.\n\n\u2014 Brett" },
+          { channel: 'instagram', template: "Hey! Built a Teed page from your latest routine \u2014 every product linked in one clean page. Thought it\u2019d match your aesthetic perfectly \u2192 [LINK]" },
         ],
       },
     ],
   },
   {
-    id: 'home',
+    id: 'reviews',
     label: 'Product Reviews & Roundups',
     emoji: '\ud83c\udfc6',
     color: 'var(--amber-4)',
     colorAccent: 'var(--amber-11)',
-    bagCreationMethod: 'Watch their comparison/roundup, extract every product tested with verdict',
-    cadence: 'Refresh bi-weekly \u2014 roundup creators have regular posting schedules',
+    bagCreationMethod: 'Watch their comparison / roundup, extract every product tested with verdict',
+    cadence: 'Bi-weekly \u2014 roundup creators have regular posting schedules and seasonal best-of lists',
     hook: 'Every product tested in the video, ranked, one page',
-    message: "Hey! Built a Teed curation from your [VIDEO TITLE] \u2014 every product ranked with buy links. Your viewers can save it.",
+    message: "Hey! Built a Teed page from your roundup \u2014 every product ranked with buy links. Your viewers can save and share it.",
     cta: 'Share it or build your own curations on Teed',
     shareTargets: [
       'Email (product review channels often list business emails)',
-      'Comment on their video with the finished bag link',
-      'DM on X with the bag',
-      'r/BuyItForLife, r/battlestations, r/homeautomation threads',
+      'Website contact form (project-farm.com, vacuumwars.com, hardwarecanucks.com)',
+      'X/Twitter DM (tech reviewers are active on X)',
+      'YouTube comment on the video with the finished bag link',
     ],
     bags: [
       {
-        id: 'home-1',
-        title: 'Vacuum Wars \u2014 Robot Vacuum Rankings Feb 2026',
-        source: 'Growing channel \u00b7 8+ years testing \u00b7 Strict no-sponsorship policy',
-        whyHot: 'Multiple tier videos (under $600, $600-$1K, $1K-$1.6K, $1.6K+). Each video IS a ranked product list. No sponsorships = trusted. Christopher White is highly responsive to community.',
-        priority: 'high',
+        id: 'rev-1',
+        title: 'Project Farm \u2014 Head-to-Head Product Testing',
+        source: '3.75M subs \u00b7 project-farm.com \u00b7 No sponsorships, purchases all products',
+        whyHot: 'Tests 5-12 products head-to-head with measurable data. Zero sponsorships \u2014 buys everything at retail. His audience WANTS the ranked product list. "Favorites Tested" page on his website already lists top picks. A Teed bag is the interactive version of every video.',
+        priority: 'urgent',
+        reachHow: 'Website: project-farm.com (has contact form and merchandise store). Very community-focused \u2014 funded by viewer donations. A value-first pitch will resonate.',
         links: [
-          { label: 'YouTube Channel', url: 'https://youtube.com/@VacuumWars' },
+          { label: 'YouTube', url: 'https://youtube.com/@ProjectFarm' },
+          { label: 'Website', url: 'https://project-farm.com/' },
+          { label: 'Favorites Tested', url: 'https://project-farm.com/pages/project-farm-favorites' },
+        ],
+        outreachTemplates: [
+          { channel: 'email', template: "Subject: Your product rankings as shareable pages\n\nHey Todd \u2014 I\u2019m Brett, building Teed. Your head-to-head tests are gold \u2014 but the rankings are locked in a video. I turned one of your tests into a Teed page where every product is ranked and linked.\n\nHere\u2019s the page: [LINK]\n\nYour audience can save it and come back when they\u2019re ready to buy. Think of it as an interactive version of your Favorites Tested page. Free tool, no catch.\n\n\u2014 Brett" },
+          { channel: 'youtube', template: "Every product tested in this video, ranked with buy links \u2192 [LINK]. Your audience can save the list." },
+        ],
+      },
+      {
+        id: 'rev-2',
+        title: 'Vacuum Wars \u2014 Robot Vacuum Rankings',
+        source: 'vacuumwars.com \u00b7 8+ years testing \u00b7 No sponsorships \u00b7 150+ models benchmarked',
+        whyHot: 'THE robot vacuum authority. Active Feb 2026 with tiered guides: under $300, $300-600, $600-1K, $1K-1.3K, $1.3K-1.6K, and $1.6K+. Each guide IS a ranked product list. No free samples, no sponsorships. Roborock Qrevo CurvX and Eufy E25 Omni featured in latest rankings.',
+        priority: 'high',
+        reachHow: 'Website: vacuumwars.com (has contact info). Christopher White is responsive to community. Email via website or YouTube About page.',
+        links: [
+          { label: 'YouTube', url: 'https://youtube.com/@VacuumWars' },
           { label: 'Website', url: 'https://vacuumwars.com/' },
+          { label: 'Top 20 Robots', url: 'https://vacuumwars.com/vacuum-wars-best-robot-vacuums/' },
+          { label: 'Under $300', url: 'https://vacuumwars.com/best-budget-robot-vacuum/' },
         ],
-        commentTemplates: [
-          { platform: 'youtube', template: "Put every vacuum from this ranking in one page with buy links \u2192 [LINK]. Easier than screenshotting the tier list." },
-          { platform: 'x', template: "Hey @VacuumWars \u2014 turned your latest rankings into a Teed curation. Every vacuum linked, sorted by tier. Your viewers would love this \u2192 [LINK]" },
-        ],
-      },
-      {
-        id: 'home-2',
-        title: 'Cool Story Bru! \u2014 "SA Products Popular Worldwide"',
-        source: '@coolstorybru_ \u00b7 166K views, 13K likes \u00b7 Published Feb 14, 2026',
-        whyHot: 'Viral YouTube Short curating South African products the world loves: Biltong, Ceres juice, Rooibos tea, Nando\'s sauces, Amarula, SA wines. Clean product list format = instant Teed bag.',
-        priority: 'high',
-        links: [
-          { label: 'TikTok', url: 'https://www.tiktok.com/@coolstorybru_' },
-          { label: 'Instagram', url: 'https://instagram.com/coolstorybru_za' },
-        ],
-        commentTemplates: [
-          { platform: 'x', template: "Hey @coolstorybru_ \u2014 turned your SA products video into a Teed curation. Every product linked with buy pages. Your 166K viewers would love a save-able version \u2192 [LINK]" },
-          { platform: 'tiktok', template: "Put every SA product from this video in one page \u2192 [LINK]. Biltong to Amarula, all linked." },
+        outreachTemplates: [
+          { channel: 'email', template: "Subject: Your vacuum rankings as interactive product pages\n\nHey Christopher \u2014 I\u2019m Brett, building Teed. Your tiered robot vacuum rankings are the most trusted resource online. I turned your Top 20 into a Teed page where each vacuum links to its buy page.\n\nHere\u2019s the page: [LINK]\n\nYou could embed one per price tier on vacuumwars.com. Your readers save the page and come back when ready to buy. Free tool \u2014 thought it\u2019d be a natural fit.\n\n\u2014 Brett" },
+          { channel: 'youtube', template: "Every vacuum from this ranking in one page with buy links \u2192 [LINK]. Save it for when you\u2019re ready to buy." },
         ],
       },
       {
-        id: 'home-3',
-        title: 'Project Farm \u2014 Product Testing Comparisons',
-        source: '5M+ subs \u00b7 Rigorous head-to-head product testing',
-        whyHot: 'Tests 5-12 products head-to-head with measurable results. His audience WANTS the ranked product list. Videos like "Which WD-40 is Best?" or "Best Flashlight?" = perfect curation format.',
+        id: 'rev-3',
+        title: 'Hardware Canucks \u2014 Tech Reviews & Desk Setups',
+        source: 'hardwarecanucks.com \u00b7 Dmitry Novoselov \u00b7 PC hardware + desk setups',
+        whyHot: 'Canadian tech channel known for ultra-clean desk setups and hardware reviews. Every setup tour is a product list. Gaming mice, keyboards, monitors, cases. Website has its own content platform. Active on X and Instagram.',
+        reachHow: 'Website: hardwarecanucks.com. X: @hardwarecanucks. Instagram: @hardwarecanucks. Check YouTube About page for business email.',
         links: [
-          { label: 'YouTube Channel', url: 'https://youtube.com/@ProjectFarm' },
+          { label: 'YouTube', url: 'https://youtube.com/@HardwareCanucks' },
+          { label: 'Website', url: 'https://hardwarecanucks.com/' },
+          { label: 'X/Twitter', url: 'https://x.com/hardwarecanucks' },
+          { label: 'Instagram', url: 'https://instagram.com/hardwarecanucks' },
         ],
-        commentTemplates: [
-          { platform: 'youtube', template: "Every product tested in this video, ranked with buy links \u2192 [LINK]. Your audience can save the list." },
-          { platform: 'x', template: "Hey @ProjectFarm \u2014 built a Teed curation from your latest comparison. Every product ranked and linked. Thought your audience would find this useful \u2192 [LINK]" },
+        outreachTemplates: [
+          { channel: 'email', template: "Subject: Your desk setups as shareable product pages\n\nHey Dmitry \u2014 I\u2019m Brett, building Teed. Your setup tours are the cleanest on YouTube \u2014 and every one is a product list. I turned your latest into a page where every item is linked.\n\nHere\u2019s the page: [LINK]\n\nYour audience can save it instead of pausing the video. Works great embedded on hardwarecanucks.com too. Free tool, happy to show you.\n\n\u2014 Brett" },
+          { channel: 'x', template: "Hey @hardwarecanucks \u2014 turned your latest setup into a Teed page. Every product linked in one clean page. Thought your audience would save this \u2192 [LINK]" },
         ],
       },
       {
-        id: 'home-4',
-        title: 'Guitar World \u2014 Weekly New Gear Roundups',
-        source: 'Major publication \u00b7 Weekly gear drops \u00b7 Feb 14, 2026 roundup',
-        whyHot: 'Publishes weekly gear roundups covering new releases from Gibson, Kiesel, Martin, Taylor, Behringer, D\'Addario. Each roundup is 8-15 products. Guitar gear community is intensely product-focused.',
+        id: 'rev-4',
+        title: 'Justice Buys \u2014 Amazon Product Reviews',
+        source: '1.9M subs \u00b7 Amazon Finds & Product Reviews',
+        whyHot: 'One of the biggest Amazon product review channels. His content is literally "here are products, here are links." The Teed bag format is the clean, shareable version of his video descriptions.',
+        reachHow: 'Check YouTube About page for business email. Large channel = likely has management.',
         links: [
-          { label: 'YouTube Channel', url: 'https://youtube.com/@GuitarWorld' },
-          { label: 'Gear Roundup', url: 'https://www.guitarworld.com/gear/guitar-gear-round-up-2026-wc-feb-9' },
+          { label: 'YouTube', url: 'https://youtube.com/@JusticeBuys' },
         ],
-        commentTemplates: [
-          { platform: 'youtube', template: "Every new piece of gear from this week's roundup in one page \u2192 [LINK]. All linked with buy pages." },
-          { platform: 'x', template: "Turned @GuitarWorld's latest gear roundup into a Teed curation. Every product linked \u2192 [LINK]" },
+        outreachTemplates: [
+          { channel: 'email', template: "Subject: Your Amazon finds as shareable product pages\n\nHey \u2014 I\u2019m Brett, building Teed. Your Amazon review videos are product lists that people want to save. I turned one into a Teed page where every item is linked.\n\n[LINK]\n\nCleaner than affiliate dumps in descriptions. Your audience can share the whole list with one link. Happy to set more up.\n\n\u2014 Brett" },
         ],
       },
     ],
   },
   {
-    id: 'lifestyle',
-    label: 'Lifestyle & Productivity',
+    id: 'productivity',
+    label: 'Productivity & Tools',
     emoji: '\ud83d\udcdd',
     color: 'var(--sky-4)',
     colorAccent: 'var(--sky-11)',
-    bagCreationMethod: 'Watch their "favorites" or "tools I use" video, extract every product/tool',
-    cadence: 'Refresh monthly \u2014 these creators post tool lists less frequently but with high engagement',
-    hook: 'Every tool and product from the video, one shareable page',
-    message: "Hey! Built a Teed curation from your [VIDEO TITLE]. Every tool linked in one clean page your audience can save.",
+    bagCreationMethod: 'Watch their "tools I use" or "best tools" video, extract every tool/app with use case',
+    cadence: 'Monthly \u2014 these creators post tool lists less frequently but with very high engagement',
+    hook: 'Every tool from the video, one shareable page',
+    message: "Hey! Built a Teed page from your tool recommendations. Every tool linked. Your audience can save it instead of rewatching.",
     cta: 'Share it or build curations for your own recommendations',
     shareTargets: [
-      'Email (productivity creators are business-minded, responsive to tools)',
-      'DM on X/Twitter',
-      'Comment on their YouTube video',
-      'r/productivity, r/Notion, r/minimalism threads',
+      'Email (productivity creators are business-minded and responsive to tools)',
+      'X/Twitter DM (productivity creators are very active on X)',
+      'Website contact form (aliabdaal.com, thomasjfrank.com, keepproductive.com)',
+      'r/productivity, r/Notion, r/SideProject threads',
     ],
     bags: [
       {
-        id: 'life-1',
-        title: 'Ali Abdaal \u2014 Productivity Tools & Favorites',
-        source: '5M+ subs \u00b7 Doctor-turned-creator \u00b7 "I Tried 137 Productivity Tools"',
-        whyHot: 'His "tools I use" and "137 productivity tools" videos are LISTS. Massive audience of tool-buyers. Already monetizes through affiliate links \u2014 Teed is a better presentation layer than Notion pages.',
+        id: 'prod-1',
+        title: 'Keep Productive \u2014 Tool Finder & App Reviews',
+        source: 'Francesco D\u2019Alessio \u00b7 330K+ subs \u00b7 keepproductive.com \u00b7 Tool Finder co-founder',
+        whyHot: 'His ENTIRE channel is dedicated to finding productivity tools. Co-founded Tool Finder (750+ reviewed apps). Publishes on Substack at keepproductive.substack.com. His audience exists to find tools \u2014 Teed bags are the shareable version of his recommendations.',
         priority: 'urgent',
+        reachHow: 'Website: keepproductive.com. Substack: keepproductive.substack.com. Also co-founder of Tool Finder and Bento. Business-minded \u2014 will understand the value prop immediately.',
         links: [
-          { label: 'YouTube Channel', url: 'https://youtube.com/@aliabdaal' },
-          { label: 'X/Twitter', url: 'https://twitter.com/aliabdaal' },
+          { label: 'YouTube', url: 'https://youtube.com/@keepproductive' },
+          { label: 'Website', url: 'https://keepproductive.com/' },
+          { label: 'Substack', url: 'https://keepproductive.substack.com/' },
+        ],
+        outreachTemplates: [
+          { channel: 'email', template: "Subject: Tool Finder as Teed pages \u2014 shareable tool lists\n\nHey Francesco \u2014 I\u2019m Brett, building Teed. I think there\u2019s a natural overlap between what you\u2019re doing with Tool Finder/Keep Productive and what Teed does. We help people create shareable product/tool pages.\n\nI turned one of your tool roundup videos into a Teed page: [LINK]\n\nEvery tool gets a card with your description and link. Your audience can save and share the whole list. Imagine one per video, or embedded on keepproductive.com.\n\nWould love to chat about this. I think it could be a great fit.\n\n\u2014 Brett" },
+          { channel: 'x', template: "Hey Francesco \u2014 made a Teed page from your latest tool roundup. Every app linked in one page. Like Tool Finder but shareable and public \u2192 [LINK]" },
+        ],
+      },
+      {
+        id: 'prod-2',
+        title: 'Ali Abdaal \u2014 Productivity Tools & Systems',
+        source: '5M+ subs \u00b7 aliabdaal.com \u00b7 Spark 2026 summit \u00b7 Todoist + Notion user',
+        whyHot: 'His "tools I use" and "I tried X productivity tools" videos get millions of views. Hosted Spark 2026 (productivity summit). Uses Todoist, Notion, Loom. Already monetizes through affiliates and Skillshare \u2014 Teed is a better presentation layer than his current link pages.',
+        priority: 'high',
+        reachHow: 'Website: aliabdaal.com (has Tools & Tech page and contact info). X: @aliabdaal. Large team \u2014 email the business address from YouTube About page.',
+        links: [
+          { label: 'YouTube', url: 'https://youtube.com/@aliabdaal' },
           { label: 'Website', url: 'https://aliabdaal.com/' },
+          { label: 'Tools & Tech', url: 'https://aliabdaal.com/tech/' },
+          { label: 'X/Twitter', url: 'https://x.com/aliabdaal' },
         ],
-        commentTemplates: [
-          { platform: 'x', template: "Hey @aliabdaal \u2014 turned your productivity tools video into a Teed curation. Every tool linked in one page. Way cleaner than a Notion doc for sharing with your audience \u2192 [LINK]" },
-          { platform: 'youtube', template: "Every tool from this video in one shareable page \u2192 [LINK]. Save it instead of bookmarking the video." },
-        ],
-      },
-      {
-        id: 'life-2',
-        title: 'Matt D\'Avella \u2014 Minimalism & Intentional Living',
-        source: '3.5M+ subs \u00b7 Filmmaker + minimalist',
-        whyHot: 'His minimalism content naturally leads to curated "essentials" lists. When Matt recommends something, his audience buys it. Clean aesthetic aligns perfectly with Teed\'s design.',
-        links: [
-          { label: 'YouTube Channel', url: 'https://youtube.com/@MattDAvella' },
-          { label: 'X/Twitter', url: 'https://twitter.com/mattdavella' },
-        ],
-        commentTemplates: [
-          { platform: 'x', template: "Hey @mattdavella \u2014 built a Teed curation from your essentials. Minimalist tool for a minimalist creator \u2014 every item, one clean page \u2192 [LINK]" },
-          { platform: 'youtube', template: "Every item from this video in one minimalist page \u2192 [LINK]." },
+        outreachTemplates: [
+          { channel: 'email', template: "Subject: Your tool recommendations as shareable pages\n\nHey Ali \u2014 I\u2019m Brett, building Teed. I turned your productivity tools recommendations into a shareable page where every tool is linked. Way cleaner than a Notion doc or affiliate page for sharing with your audience.\n\n[LINK]\n\nYou could use Teed pages alongside your videos \u2014 one page per video, every tool linked. Your audience saves the page instead of rewatching.\n\nWould love to show you. Takes 2 minutes per video.\n\n\u2014 Brett" },
+          { channel: 'x', template: "Hey @aliabdaal \u2014 turned your productivity tools into a Teed page. Every tool linked in one shareable page. Cleaner than a Notion doc for your audience \u2192 [LINK]" },
         ],
       },
       {
-        id: 'life-3',
+        id: 'prod-3',
         title: 'Thomas Frank \u2014 Notion Templates & Productivity',
-        source: '3M+ subs \u00b7 Notion expert \u00b7 Tool recommendations',
-        whyHot: 'His audience literally buys tools and templates he recommends. His Notion coverage means he understands product curation. Would immediately see the value of Teed bags for his tool recommendations.',
+        source: '2.9M subs \u00b7 thomasjfrank.com \u00b7 Notion expert \u00b7 $100K/mo templates',
+        whyHot: 'His audience buys tools and templates. World\u2019s largest Notion education channel (Thomas Frank Explains, 230K+ subs). Makes $100K/month selling Notion templates. Would immediately understand the value of Teed bags for tool recommendations.',
+        reachHow: 'Website: thomasjfrank.com. X: @TomFrankly. Business-minded \u2014 approach as a tool partnership, not a favor.',
         links: [
-          { label: 'YouTube Channel', url: 'https://youtube.com/@ThomasFrankExplains' },
-          { label: 'X/Twitter', url: 'https://twitter.com/TomFrankly' },
+          { label: 'YouTube', url: 'https://youtube.com/@ThomasFrankExplains' },
+          { label: 'Website', url: 'https://thomasjfrank.com/' },
+          { label: 'X/Twitter', url: 'https://x.com/TomFrankly' },
         ],
-        commentTemplates: [
-          { platform: 'x', template: "Hey @TomFrankly \u2014 made a Teed curation of your recommended tools. One page, every tool linked. Like a Notion database but shareable and public \u2192 [LINK]" },
-          { platform: 'youtube', template: "Full tool list from this video in one page \u2192 [LINK]. Shareable link instead of a Notion doc." },
+        outreachTemplates: [
+          { channel: 'email', template: "Subject: Notion meets shareable product pages\n\nHey Thomas \u2014 I\u2019m Brett, building Teed. You know Notion better than anyone. Teed is like a public, shareable Notion database purpose-built for product/tool lists. Each item gets a card with your notes, a link, and an image.\n\nI turned your tool recommendations into a Teed page: [LINK]\n\nYou could embed these on thomasjfrank.com or link from video descriptions. One page per video, always up to date.\n\nWould love your take on it.\n\n\u2014 Brett" },
+          { channel: 'x', template: "Hey @TomFrankly \u2014 made a Teed page of your recommended tools. Like a public Notion database but purpose-built for product lists \u2192 [LINK]" },
         ],
       },
     ],
   },
 ];
 
-const TIKTOK_SCRIPTS: TikTokScript[] = [
+const OUTREACH_SCRIPTS: OutreachScript[] = [
   {
-    nicheId: 'tech',
-    title: 'Outreach DM: Tech Creator',
+    nicheId: 'edc',
+    title: 'Email: EDC / Gear Creator',
     segments: [
-      { timing: 'SUBJECT', text: 'I turned your [video title] into a shareable product page' },
-      { timing: 'OPEN', text: 'Hey [name]! I\'m building Teed \u2014 a tool that turns product lists into clean, shareable pages. I watched your [video title] and put every product into a single page your audience can save and share.' },
-      { timing: 'VALUE', text: 'Instead of your viewers hunting through timestamps or the description, they get one link with every product. You can embed it anywhere, and update it when you swap gear.' },
-      { timing: 'ASK', text: 'Here\'s the page I made: [LINK]\n\nIf you dig it, you can claim it and customize it. Or I can show you how to make your own in 2 minutes. No strings attached.' },
-      { timing: 'CLOSE', text: 'Either way, keep making great content. Just thought this might save your audience (and your DMs) some time.\n\n\u2014 Brett' },
+      { timing: 'SUBJECT', text: 'Your [latest carry / pocket dump] as a shareable product page' },
+      { timing: 'OPEN', text: "Hey [name]! I'm Brett, building Teed \u2014 a free tool that turns product lists into clean, shareable pages. I watched your [video title] and put every item into a single page your audience can save and share." },
+      { timing: 'VALUE', text: "Instead of your viewers hunting through timestamps or the description, they get one link with every item. You can embed it anywhere, and update it when you swap gear." },
+      { timing: 'ASK', text: "Here's the page I made: [LINK]\n\nIf you dig it, you can claim it and customize it. Or I can show you how to make your own in 2 minutes. No strings attached." },
+      { timing: 'CLOSE', text: "Either way, keep making great content. Just thought this might save your audience (and your DMs) some time.\n\n\u2014 Brett" },
     ],
   },
   {
     nicheId: 'running',
-    title: 'Outreach DM: Running / Fitness Creator',
+    title: 'Email: Running Shoe Reviewer',
     segments: [
       { timing: 'SUBJECT', text: 'Your shoe roundup as a saveable product page' },
-      { timing: 'OPEN', text: 'Hey [name]! I\'m Brett, building Teed. I turned your [video title] into a single page where every shoe is linked with buy pages. Your viewers always ask "which ones?" in the comments \u2014 this answers it.' },
-      { timing: 'VALUE', text: 'Each shoe gets its own card with the image, your verdict, and a buy link. Way cleaner than a description full of affiliate links. And when new shoes drop, you update one place.' },
-      { timing: 'ASK', text: 'Here\'s what I made: [LINK]\n\nHappy to hand it over to you to own. Or show you how to make your own for every video. Free tool, no catch.' },
-      { timing: 'CLOSE', text: 'Love your content \u2014 just thought this could save your audience some time.\n\n\u2014 Brett' },
+      { timing: 'OPEN', text: "Hey [name]! I'm Brett, building Teed. I turned your [video/article title] into a single page where every shoe is linked with buy pages. Your viewers always ask \"which ones?\" in the comments \u2014 this answers it." },
+      { timing: 'VALUE', text: "Each shoe gets its own card with the image, your verdict, and a buy link. Way cleaner than a description full of affiliate links. And when new shoes drop, you update one place." },
+      { timing: 'ASK', text: "Here's what I made: [LINK]\n\nHappy to hand it over to you to own. Or show you how to make your own for every video. Free tool, no catch." },
+      { timing: 'CLOSE', text: "Love your reviews \u2014 just thought this could save your audience some time.\n\n\u2014 Brett" },
     ],
   },
   {
     nicheId: 'beauty',
-    title: 'Outreach DM: Beauty / GRWM Creator',
+    title: 'Email: Beauty / GRWM Creator',
     segments: [
       { timing: 'SUBJECT', text: 'Every product from your GRWM \u2014 one page, zero screenshots' },
-      { timing: 'OPEN', text: 'Hey [name]! I\'m Brett. I watch your content and noticed your audience always asks for the full product list. So I built one \u2014 every product from your [video title] in one shareable page.' },
-      { timing: 'VALUE', text: 'Your followers can save it instead of screenshotting. Each product has the brand, shade, and buy link. You can add notes like "my holy grail" or "only for oily skin." It\'s like a permanent version of your video description.' },
-      { timing: 'ASK', text: 'Here it is: [LINK]\n\nYou can claim it and make it yours, or I can walk you through making your own. Takes about 2 minutes per routine.' },
-      { timing: 'CLOSE', text: 'No pressure at all. Just thought it\'d help your audience find everything without DMing you.\n\n\u2014 Brett' },
+      { timing: 'OPEN', text: "Hey [name]! I'm Brett. I watch your content and noticed your audience always asks for the full product list. So I built one \u2014 every product from your [video title] in one shareable page." },
+      { timing: 'VALUE', text: "Your followers can save it instead of screenshotting. Each product has the brand, shade, and buy link. You can add notes like \"my holy grail\" or \"only for oily skin.\" It's like a permanent version of your video description." },
+      { timing: 'ASK', text: "Here it is: [LINK]\n\nYou can claim it and make it yours, or I can walk you through making your own. Takes about 2 minutes per routine." },
+      { timing: 'CLOSE', text: "No pressure at all. Just thought it'd help your audience find everything without DMing you.\n\n\u2014 Brett" },
     ],
   },
   {
-    nicheId: 'home',
-    title: 'Outreach DM: Product Review / Roundup Creator',
+    nicheId: 'reviews',
+    title: 'Email: Product Reviewer / Roundup Creator',
     segments: [
       { timing: 'SUBJECT', text: 'Your product rankings as a shareable page' },
-      { timing: 'OPEN', text: 'Hey [name]! I\'m Brett, building a tool called Teed. I turned your [video title] into a ranked product page where every item is linked. Your viewers can save and share it.' },
-      { timing: 'VALUE', text: 'Your rankings are gold \u2014 but they\'re locked in a video. This gives your audience a reference they can bookmark, share, and come back to. You can update it when you retest products.' },
-      { timing: 'ASK', text: 'Here\'s the page: [LINK]\n\nHappy to hand it over. Or show you how to make one for every video. Free tool, built for exactly this use case.' },
-      { timing: 'CLOSE', text: 'Appreciate the thorough testing you do. Just thought this could extend the shelf life of your reviews.\n\n\u2014 Brett' },
+      { timing: 'OPEN', text: "Hey [name]! I'm Brett, building Teed. I turned your [video title] into a ranked product page where every item is linked. Your viewers can save and share it." },
+      { timing: 'VALUE', text: "Your rankings are gold \u2014 but they're locked in a video. This gives your audience a reference they can bookmark, share, and come back to. You can update it when you retest products." },
+      { timing: 'ASK', text: "Here's the page: [LINK]\n\nHappy to hand it over. Or show you how to make one for every video. Free tool, built for exactly this use case." },
+      { timing: 'CLOSE', text: "Appreciate the thorough testing you do. Just thought this could extend the shelf life of your reviews.\n\n\u2014 Brett" },
     ],
   },
   {
-    nicheId: 'lifestyle',
-    title: 'Outreach DM: Productivity / Lifestyle Creator',
+    nicheId: 'productivity',
+    title: 'Email: Productivity / Tools Creator',
     segments: [
       { timing: 'SUBJECT', text: 'Your tool recommendations as a shareable page' },
-      { timing: 'OPEN', text: 'Hey [name]! I\'m Brett. Watched your [video title] and turned every tool you recommended into a single shareable page. Your audience can save it instead of rewatching the video.' },
-      { timing: 'VALUE', text: 'Think of it like a public Notion page but purpose-built for product/tool lists. Each item gets a card with your notes, a link, and an image. You update one place and it\'s current everywhere.' },
-      { timing: 'ASK', text: 'Here\'s what I made: [LINK]\n\nYou can claim it, customize it, embed it on your site. Or I can show you how to make your own in a few minutes.' },
-      { timing: 'CLOSE', text: 'Big fan of your work. Just thought this tool would click with how you share recommendations.\n\n\u2014 Brett' },
+      { timing: 'OPEN', text: "Hey [name]! I'm Brett. Watched your [video title] and turned every tool you recommended into a single shareable page. Your audience can save it instead of rewatching the video." },
+      { timing: 'VALUE', text: "Think of it like a public Notion page but purpose-built for product/tool lists. Each item gets a card with your notes, a link, and an image. You update one place and it's current everywhere." },
+      { timing: 'ASK', text: "Here's what I made: [LINK]\n\nYou can claim it, customize it, embed it on your site. Or I can show you how to make your own in a few minutes." },
+      { timing: 'CLOSE', text: "Big fan of your work. Just thought this tool would click with how you share recommendations.\n\n\u2014 Brett" },
     ],
   },
 ];
@@ -522,34 +552,35 @@ const TIKTOK_SCRIPTS: TikTokScript[] = [
 const CALENDAR: CalendarWeek[] = [
   {
     week: 1,
-    title: 'Build Curations',
+    title: 'Build Bags',
     phase: 'Create Teed bags from creator videos before reaching out',
     tasks: [
-      { day: 'Mon', category: 'tech', action: 'Create Teed bag from LTT webcam roundup', platform: 'Teed', priority: 'urgent' },
-      { day: 'Mon', category: 'tech', action: 'Create Teed bag from MKBHD phone setup', platform: 'Teed', priority: 'high' },
-      { day: 'Tue', category: 'running', action: 'Create Teed bag from The Run Testers shoe roundup', platform: 'Teed', priority: 'urgent' },
-      { day: 'Tue', category: 'beauty', action: 'Create Teed bag from Shea Whitney Amazon haul', platform: 'Teed', priority: 'high' },
-      { day: 'Wed', category: 'home', action: 'Create Teed bag from Vacuum Wars rankings', platform: 'Teed', priority: 'high' },
-      { day: 'Wed', category: 'home', action: 'Create Teed bag from Cool Story Bru SA products', platform: 'Teed' },
-      { day: 'Thu', category: 'lifestyle', action: 'Create Teed bag from Ali Abdaal productivity tools', platform: 'Teed', priority: 'urgent' },
-      { day: 'Thu', category: 'tech', action: 'Create Teed bag from Sara Dietschy studio tour', platform: 'Teed' },
-      { day: 'Fri', category: 'all', action: 'QA all bags \u2014 every link works, images load, descriptions are clean', platform: 'Teed' },
+      { day: 'Mon', category: 'edc', action: 'Build bag from EXCESSORIZE ME latest EDC video', platform: 'Teed', priority: 'urgent' },
+      { day: 'Mon', category: 'edc', action: 'Build bag from Best Damn EDC latest EDC Weekly', platform: 'Teed', priority: 'high' },
+      { day: 'Tue', category: 'running', action: 'Build bag from The Run Testers "Best Running Shoes 2026" guide', platform: 'Teed', priority: 'urgent' },
+      { day: 'Tue', category: 'running', action: 'Build bag from Doctors of Running latest review', platform: 'Teed', priority: 'high' },
+      { day: 'Wed', category: 'beauty', action: 'Build bag from Shea Whitney latest Amazon haul', platform: 'Teed', priority: 'urgent' },
+      { day: 'Wed', category: 'beauty', action: 'Build bag from Kaeli Mae latest routine video', platform: 'Teed', priority: 'high' },
+      { day: 'Thu', category: 'reviews', action: 'Build bag from Project Farm latest head-to-head test', platform: 'Teed', priority: 'urgent' },
+      { day: 'Thu', category: 'reviews', action: 'Build bag from Vacuum Wars Feb 2026 Top 20 rankings', platform: 'Teed', priority: 'high' },
+      { day: 'Fri', category: 'productivity', action: 'Build bag from Keep Productive latest tool roundup', platform: 'Teed', priority: 'urgent' },
+      { day: 'Fri', category: 'all', action: 'QA all bags \u2014 every link works, images load, descriptions clean', platform: 'Teed' },
     ],
   },
   {
     week: 2,
-    title: 'Outreach Wave 1',
-    phase: 'DM top-priority creators with finished bags',
+    title: 'Outreach Wave 1 \u2014 High Priority',
+    phase: 'Email/DM top-priority creators with finished bags',
     tasks: [
-      { day: 'Mon', category: 'tech', action: 'DM Linus Tech Tips with webcam bag (X or email)', platform: 'X/Email', priority: 'urgent' },
-      { day: 'Mon', category: 'lifestyle', action: 'DM Ali Abdaal with tools bag (X or email)', platform: 'X/Email', priority: 'urgent' },
-      { day: 'Tue', category: 'running', action: 'DM The Run Testers with shoe bag', platform: 'X/Email', priority: 'high' },
-      { day: 'Tue', category: 'beauty', action: 'DM Shea Whitney with haul bag (Instagram)', platform: 'Instagram', priority: 'high' },
-      { day: 'Wed', category: 'home', action: 'DM Vacuum Wars with rankings bag', platform: 'X/Email' },
-      { day: 'Wed', category: 'home', action: 'DM Cool Story Bru with SA products bag', platform: 'Instagram' },
-      { day: 'Thu', category: 'tech', action: 'DM MKBHD with phone setup bag', platform: 'X/Email' },
-      { day: 'Thu', category: 'tech', action: 'Comment on target creator videos with bag links', platform: 'YouTube' },
-      { day: 'Fri', category: 'all', action: 'Track responses \u2014 note who opened, replied, ignored', platform: 'All' },
+      { day: 'Mon', category: 'edc', action: 'Email EXCESSORIZE ME (hello@excessorize.me) with bag link', platform: 'Email', priority: 'urgent' },
+      { day: 'Mon', category: 'productivity', action: 'Email Keep Productive (via keepproductive.com) with bag link', platform: 'Email', priority: 'urgent' },
+      { day: 'Tue', category: 'running', action: 'Email The Run Testers (via theruntesters.com) with bag link', platform: 'Email', priority: 'urgent' },
+      { day: 'Tue', category: 'beauty', action: 'Instagram DM Shea Whitney (@shea.whitney) with bag link', platform: 'Instagram', priority: 'urgent' },
+      { day: 'Wed', category: 'reviews', action: 'Email Project Farm (via project-farm.com) with bag link', platform: 'Email', priority: 'urgent' },
+      { day: 'Wed', category: 'reviews', action: 'Email Vacuum Wars (via vacuumwars.com) with bag link', platform: 'Email', priority: 'high' },
+      { day: 'Thu', category: 'edc', action: 'Post own EDC bag to r/EDC as value-first content', platform: 'Reddit' },
+      { day: 'Thu', category: 'all', action: 'Comment on target creator videos with bag links (YouTube)', platform: 'YouTube' },
+      { day: 'Fri', category: 'all', action: 'Track responses \u2014 who opened, replied, viewed the bag', platform: 'Analytics' },
     ],
   },
   {
@@ -557,38 +588,39 @@ const CALENDAR: CalendarWeek[] = [
     title: 'Outreach Wave 2 + Follow-ups',
     phase: 'Follow up on Wave 1, DM remaining creators',
     tasks: [
-      { day: 'Mon', category: 'all', action: 'Follow up with Wave 1 non-responders (gentle nudge)', platform: 'X/Email' },
-      { day: 'Mon', category: 'beauty', action: 'DM NikkieTutorials and Hyram with routine bags', platform: 'Instagram' },
-      { day: 'Tue', category: 'tech', action: 'DM Justin Tse and Austin Evans with setup bags', platform: 'X/Email' },
-      { day: 'Tue', category: 'running', action: 'DM Believe in the Run with shoe bag', platform: 'X/Email' },
-      { day: 'Wed', category: 'lifestyle', action: 'DM Matt D\'Avella and Thomas Frank with tools bags', platform: 'X/Email' },
-      { day: 'Wed', category: 'home', action: 'DM Project Farm and Guitar World with roundup bags', platform: 'X/Email' },
-      { day: 'Thu', category: 'beauty', action: 'DM Alix Earle with GRWM bag (TikTok or Instagram)', platform: 'TikTok' },
-      { day: 'Fri', category: 'all', action: 'Run /last30days refresh to find new creators (see Workflow tab)', platform: 'Claude Code' },
+      { day: 'Mon', category: 'all', action: 'Follow up with Wave 1 non-responders (gentle nudge, once only)', platform: 'Email' },
+      { day: 'Mon', category: 'productivity', action: 'Email Ali Abdaal (via aliabdaal.com) with bag link', platform: 'Email', priority: 'high' },
+      { day: 'Tue', category: 'running', action: 'Email Believe in the Run and Doctors of Running with bags', platform: 'Email', priority: 'high' },
+      { day: 'Tue', category: 'reviews', action: 'DM Hardware Canucks on X (@hardwarecanucks) with bag link', platform: 'X' },
+      { day: 'Wed', category: 'beauty', action: 'Instagram DM Kaeli Mae with bag link', platform: 'Instagram', priority: 'high' },
+      { day: 'Wed', category: 'productivity', action: 'DM Thomas Frank on X (@TomFrankly) with bag link', platform: 'X' },
+      { day: 'Thu', category: 'edc', action: 'Email Maurice Moves and Maxlvledc with bags', platform: 'Email' },
+      { day: 'Thu', category: 'beauty', action: 'Comment on Alix Earle + NikkieTutorials videos with bag links', platform: 'YouTube' },
+      { day: 'Fri', category: 'all', action: 'Research next batch of creators using web search', platform: 'Research' },
     ],
   },
   {
     week: 4,
     title: 'Analyze + Refresh Pipeline',
-    phase: 'Measure results, replenish creator pipeline with /last30days',
+    phase: 'Measure results, find new creators, plan Month 2',
     tasks: [
-      { day: 'Mon', category: 'all', action: 'Tally results: replies, bag views, signups, any creator adoptions', platform: 'Analytics' },
+      { day: 'Mon', category: 'all', action: 'Tally results: replies, bag views, signups, creator adoptions', platform: 'Analytics' },
       { day: 'Mon', category: 'all', action: 'Identify which vertical had best response rate', platform: 'Analytics' },
-      { day: 'Tue', category: 'all', action: 'Run /last30days for each vertical to find fresh creators', platform: 'Claude Code' },
-      { day: 'Wed', category: 'all', action: 'Update this strategy page with new creator targets from research', platform: 'Teed' },
-      { day: 'Thu', category: 'all', action: 'Build next batch of bags from new creator videos', platform: 'Teed' },
-      { day: 'Fri', category: 'all', action: 'Plan next month \u2014 double down on best-performing vertical', platform: 'Internal' },
+      { day: 'Tue', category: 'all', action: 'Search for new creators in best-performing vertical', platform: 'Research' },
+      { day: 'Wed', category: 'all', action: 'Build bags from new creator videos', platform: 'Teed' },
+      { day: 'Thu', category: 'all', action: 'Update this strategy page with new targets', platform: 'Admin' },
+      { day: 'Fri', category: 'all', action: 'Plan Month 2 \u2014 double down on best vertical, drop worst', platform: 'Internal' },
     ],
   },
 ];
 
 const METRICS_TARGETS = [
-  { metric: 'Creator bags built', target: '19', why: 'One per creator target in the list' },
-  { metric: 'DMs sent', target: '19', why: 'Every creator gets a personalized outreach' },
-  { metric: 'Response rate', target: '25%+', why: '~5 replies from 19 DMs is strong for cold outreach' },
+  { metric: 'Creator bags built', target: '18', why: 'One per creator target in the list' },
+  { metric: 'Outreach emails/DMs sent', target: '18', why: 'Every creator gets a personalized message' },
+  { metric: 'Response rate', target: '25%+', why: '~5 replies from 18 messages is strong for cold outreach' },
   { metric: 'Creators who view their bag', target: '10+', why: 'Proves the value prop resonates' },
-  { metric: 'Creator signups', target: '3-5', why: 'Even one adoption is a massive win for credibility' },
-  { metric: 'Best-performing vertical', target: 'Identify winner', why: 'Focus next month on what works' },
+  { metric: 'Creator signups', target: '2-3', why: 'Even one adoption is a massive win for credibility' },
+  { metric: 'Best-performing vertical', target: 'Identify winner', why: 'Double down next month on what works' },
 ];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -609,19 +641,19 @@ function saveState(state: StrategyState) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
-const PLATFORM_LABELS: Record<Platform, string> = {
-  reddit: 'Reddit',
-  youtube: 'YouTube',
-  tiktok: 'TikTok',
+const CHANNEL_LABELS: Record<OutreachChannel, string> = {
+  email: 'Email',
+  instagram: 'Instagram',
   x: 'X / Twitter',
+  youtube: 'YT Comment',
 };
 
 const NICHE_COLORS: Record<NicheId, { bg: string; text: string; border: string }> = {
-  tech: { bg: 'bg-sky-50 dark:bg-sky-950/30', text: 'text-sky-700 dark:text-sky-400', border: 'border-sky-200 dark:border-sky-800' },
+  edc: { bg: 'bg-slate-50 dark:bg-slate-950/30', text: 'text-slate-700 dark:text-slate-400', border: 'border-slate-200 dark:border-slate-800' },
   running: { bg: 'bg-emerald-50 dark:bg-emerald-950/30', text: 'text-emerald-700 dark:text-emerald-400', border: 'border-emerald-200 dark:border-emerald-800' },
   beauty: { bg: 'bg-orange-50 dark:bg-orange-950/30', text: 'text-orange-700 dark:text-orange-400', border: 'border-orange-200 dark:border-orange-800' },
-  home: { bg: 'bg-amber-50 dark:bg-amber-950/30', text: 'text-amber-700 dark:text-amber-400', border: 'border-amber-200 dark:border-amber-800' },
-  lifestyle: { bg: 'bg-violet-50 dark:bg-violet-950/30', text: 'text-violet-700 dark:text-violet-400', border: 'border-violet-200 dark:border-violet-800' },
+  reviews: { bg: 'bg-amber-50 dark:bg-amber-950/30', text: 'text-amber-700 dark:text-amber-400', border: 'border-amber-200 dark:border-amber-800' },
+  productivity: { bg: 'bg-violet-50 dark:bg-violet-950/30', text: 'text-violet-700 dark:text-violet-400', border: 'border-violet-200 dark:border-violet-800' },
 };
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -648,13 +680,13 @@ export default function MarketStrategyClient() {
     persistState({ ...state, bagStatuses: { ...state.bagStatuses, [bagId]: nextMap[current] } });
   };
 
-  const toggleDistribution = (bagId: string, platform: Platform) => {
-    const bagChecks = state.distributionChecks[bagId] || { reddit: false, youtube: false, tiktok: false, x: false };
+  const toggleDistribution = (bagId: string, channel: OutreachChannel) => {
+    const bagChecks = state.distributionChecks[bagId] || { email: false, instagram: false, x: false, youtube: false };
     persistState({
       ...state,
       distributionChecks: {
         ...state.distributionChecks,
-        [bagId]: { ...bagChecks, [platform]: !bagChecks[platform] },
+        [bagId]: { ...bagChecks, [channel]: !bagChecks[channel] },
       },
     });
   };
@@ -680,7 +712,7 @@ export default function MarketStrategyClient() {
 
   const tabs: { id: TabId; label: string; icon: React.ReactNode }[] = [
     { id: 'playbook', label: 'Playbook', icon: <BookOpen className="w-4 h-4" /> },
-    { id: 'scripts', label: 'Scripts', icon: <FileText className="w-4 h-4" /> },
+    { id: 'outreach', label: 'Outreach', icon: <Mail className="w-4 h-4" /> },
     { id: 'calendar', label: 'Calendar', icon: <Calendar className="w-4 h-4" /> },
     { id: 'metrics', label: 'Metrics', icon: <BarChart3 className="w-4 h-4" /> },
     { id: 'workflow', label: 'Workflow', icon: <Wrench className="w-4 h-4" /> },
@@ -760,9 +792,9 @@ export default function MarketStrategyClient() {
             </div>
           </div>
 
-          {/* Where to share */}
+          {/* How to reach creators */}
           <div className="mb-4 p-3 rounded-lg bg-[var(--surface)] border border-[var(--border-subtle)]">
-            <p className="text-xs font-medium text-[var(--text-secondary)] mb-2">Where to share</p>
+            <p className="text-xs font-medium text-[var(--text-secondary)] mb-2">How to reach creators</p>
             <ul className="space-y-1">
               {niche.shareTargets.map((t, i) => (
                 <li key={i} className="text-sm text-[var(--text-primary)]">&bull; {t}</li>
@@ -770,11 +802,11 @@ export default function MarketStrategyClient() {
             </ul>
           </div>
 
-          {/* Seed bags */}
+          {/* Creator bags */}
           <div className="space-y-3">
             {niche.bags.map((bag) => {
               const isExpanded = expandedBags.has(bag.id);
-              const bagDistro = state.distributionChecks[bag.id] || { reddit: false, youtube: false, tiktok: false, x: false };
+              const bagDistro = state.distributionChecks[bag.id] || { email: false, instagram: false, x: false, youtube: false };
 
               return (
                 <div key={bag.id} className={`rounded-[var(--radius-xl)] border ${NICHE_COLORS[niche.id].border} overflow-hidden`}>
@@ -800,13 +832,22 @@ export default function MarketStrategyClient() {
                     <div className="p-4 bg-[var(--surface)] space-y-4">
                       {/* Why it's hot */}
                       <div>
-                        <p className="text-xs font-medium text-[var(--text-secondary)] mb-1">Why it&apos;s hot</p>
+                        <p className="text-xs font-medium text-[var(--text-secondary)] mb-1">Why they&apos;re a great target</p>
                         <p className="text-sm text-[var(--text-primary)]">{bag.whyHot}</p>
                       </div>
 
-                      {/* Links to comment on */}
+                      {/* How to reach them */}
                       <div>
-                        <p className="text-xs font-medium text-[var(--text-secondary)] mb-2">Links to comment on</p>
+                        <p className="text-xs font-medium text-[var(--text-secondary)] mb-1">
+                          <MessageCircle className="w-3 h-3 inline mr-1" />
+                          How to reach them
+                        </p>
+                        <p className="text-sm text-[var(--text-primary)]">{bag.reachHow}</p>
+                      </div>
+
+                      {/* Links */}
+                      <div>
+                        <p className="text-xs font-medium text-[var(--text-secondary)] mb-2">Creator links</p>
                         <div className="flex flex-wrap gap-2">
                           {bag.links.map((link, i) => (
                             <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm bg-[var(--surface-elevated)] border border-[var(--border-subtle)] hover:border-[var(--text-secondary)] transition-colors">
@@ -817,37 +858,37 @@ export default function MarketStrategyClient() {
                         </div>
                       </div>
 
-                      {/* Distribution checklist */}
+                      {/* Outreach checklist */}
                       <div>
-                        <p className="text-xs font-medium text-[var(--text-secondary)] mb-2">Distribution</p>
+                        <p className="text-xs font-medium text-[var(--text-secondary)] mb-2">Outreach status</p>
                         <div className="flex flex-wrap gap-2">
-                          {(Object.keys(PLATFORM_LABELS) as Platform[]).map((p) => (
+                          {(Object.keys(CHANNEL_LABELS) as OutreachChannel[]).map((ch) => (
                             <button
-                              key={p}
-                              onClick={() => toggleDistribution(bag.id, p)}
+                              key={ch}
+                              onClick={() => toggleDistribution(bag.id, ch)}
                               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm border transition-colors ${
-                                bagDistro[p]
+                                bagDistro[ch]
                                   ? 'bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-900/30 dark:border-emerald-700 dark:text-emerald-400'
                                   : 'bg-[var(--surface-elevated)] border-[var(--border-subtle)] text-[var(--text-secondary)]'
                               }`}
                             >
-                              {bagDistro[p] ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Circle className="w-3.5 h-3.5" />}
-                              {PLATFORM_LABELS[p]}
+                              {bagDistro[ch] ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Circle className="w-3.5 h-3.5" />}
+                              {CHANNEL_LABELS[ch]}
                             </button>
                           ))}
                         </div>
                       </div>
 
-                      {/* Comment templates */}
-                      {bag.commentTemplates.length > 0 && (
+                      {/* Outreach templates */}
+                      {bag.outreachTemplates.length > 0 && (
                         <div>
-                          <p className="text-xs font-medium text-[var(--text-secondary)] mb-2">Comment templates</p>
+                          <p className="text-xs font-medium text-[var(--text-secondary)] mb-2">Outreach templates</p>
                           <div className="space-y-2">
-                            {bag.commentTemplates.map((ct, i) => (
+                            {bag.outreachTemplates.map((ct, i) => (
                               <div key={i} className="flex items-start gap-2 p-3 rounded-lg bg-[var(--surface-elevated)] border border-[var(--border-subtle)]">
-                                <span className="shrink-0 px-1.5 py-0.5 rounded text-xs font-medium bg-[var(--grey-4)] text-[var(--grey-11)] uppercase">{ct.platform}</span>
+                                <span className="shrink-0 px-1.5 py-0.5 rounded text-xs font-medium bg-[var(--grey-4)] text-[var(--grey-11)] uppercase">{ct.channel}</span>
                                 <p className="text-sm text-[var(--text-primary)] flex-1 whitespace-pre-wrap">{ct.template}</p>
-                                <CopyButton text={ct.template} id={`${bag.id}-${ct.platform}-${i}`} />
+                                <CopyButton text={ct.template} id={`${bag.id}-${ct.channel}-${i}`} />
                               </div>
                             ))}
                           </div>
@@ -875,14 +916,14 @@ export default function MarketStrategyClient() {
     </div>
   );
 
-  // ─── Tab: Scripts ──────────────────────────────────────────────────────────
+  // ─── Tab: Outreach ──────────────────────────────────────────────────────────
 
-  const renderScripts = () => (
+  const renderOutreach = () => (
     <div className="space-y-4">
       <p className="text-sm text-[var(--text-secondary)]">
-        TikTok scripts for &quot;Best 3 curations in [category] for February 2026&quot; format. ~20 seconds each.
+        Email and DM templates per vertical. Customize with the creator&apos;s name, video title, and your Teed bag link. Always build the bag FIRST, then reach out.
       </p>
-      {TIKTOK_SCRIPTS.map((script) => {
+      {OUTREACH_SCRIPTS.map((script) => {
         const niche = NICHES.find((n) => n.id === script.nicheId)!;
         const isExpanded = expandedScripts.has(script.nicheId);
         const fullScript = script.segments.map((s) => `[${s.timing}]\n${s.text}`).join('\n\n');
@@ -897,7 +938,7 @@ export default function MarketStrategyClient() {
                 <span className="text-xl">{niche.emoji}</span>
                 <div>
                   <h3 className={`font-semibold ${NICHE_COLORS[script.nicheId].text}`}>{script.title}</h3>
-                  <p className="text-xs text-[var(--text-secondary)]">{niche.label} &middot; ~22s</p>
+                  <p className="text-xs text-[var(--text-secondary)]">{niche.label}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -910,7 +951,7 @@ export default function MarketStrategyClient() {
               <div className="p-4 bg-[var(--surface)] space-y-3">
                 {script.segments.map((seg, i) => (
                   <div key={i} className="flex gap-3">
-                    <span className="shrink-0 w-28 text-xs font-mono font-medium text-[var(--text-secondary)] pt-0.5">{seg.timing}</span>
+                    <span className="shrink-0 w-20 text-xs font-mono font-medium text-[var(--text-secondary)] pt-0.5">{seg.timing}</span>
                     <p className="text-sm text-[var(--text-primary)] whitespace-pre-wrap">{seg.text}</p>
                   </div>
                 ))}
@@ -920,21 +961,18 @@ export default function MarketStrategyClient() {
         );
       })}
 
-      {/* Stitch template */}
+      {/* General outreach tips */}
       <div className="rounded-[var(--radius-xl)] border border-[var(--border-subtle)] overflow-hidden">
         <div className="p-4 bg-[var(--surface)]">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-[var(--text-primary)]">Generic Stitch Template (any GRWM/haul)</h3>
-            <CopyButton
-              text={`[Stitch first 3s of viral video]\n"She used [X] products. I found all of them."\n[Show Teed bag on phone, scroll through items]\n"Every product. Every link. One page. Bio."`}
-              id="stitch-template"
-            />
-          </div>
-          <div className="p-3 rounded-lg bg-[var(--surface-elevated)] border border-[var(--border-subtle)]">
-            <p className="text-sm text-[var(--text-primary)] whitespace-pre-wrap font-mono">
-              {`[Stitch first 3s of viral video]\n"She used [X] products. I found all of them."\n[Show Teed bag on phone, scroll through items]\n"Every product. Every link. One page. Bio."`}
-            </p>
-          </div>
+          <h3 className="font-semibold text-[var(--text-primary)] mb-3">Outreach Rules</h3>
+          <ul className="space-y-2 text-sm text-[var(--text-primary)]">
+            <li>&bull; <strong>Always build the bag FIRST.</strong> You&apos;re giving, not asking. Lead with the finished product.</li>
+            <li>&bull; <strong>YouTube has no DMs.</strong> Use email (YouTube About &rarr; Business Inquiries &rarr; View Email), Instagram DM, or X DM.</li>
+            <li>&bull; <strong>Keep it short.</strong> Creators get hundreds of messages. 4-5 sentences max for DMs, 6-8 for email.</li>
+            <li>&bull; <strong>One follow-up max.</strong> If they don&apos;t reply after one gentle nudge, move on. The bag still has value as content.</li>
+            <li>&bull; <strong>Personalize every message.</strong> Reference their specific video/content. Generic outreach gets ignored.</li>
+            <li>&bull; <strong>The bag IS the pitch.</strong> Don&apos;t explain Teed in abstract. Show them their content as a Teed page.</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -1010,7 +1048,7 @@ export default function MarketStrategyClient() {
             <p className="text-3xl font-bold text-emerald-700 dark:text-emerald-400">{created}</p>
           </div>
           <div className="p-4 rounded-[var(--radius-xl)] border border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-sky-950/30">
-            <p className="text-xs text-sky-600 dark:text-sky-400 mb-1">Distributed</p>
+            <p className="text-xs text-sky-600 dark:text-sky-400 mb-1">Outreach Sent</p>
             <p className="text-3xl font-bold text-sky-700 dark:text-sky-400">{distributed}</p>
           </div>
           <div className="p-4 rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--surface)]">
@@ -1046,15 +1084,15 @@ export default function MarketStrategyClient() {
 
         {/* The big idea */}
         <div className="p-6 rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--surface)]">
-          <h3 className="font-bold text-[var(--text-primary)] mb-3">The Big Idea</h3>
+          <h3 className="font-bold text-[var(--text-primary)] mb-3">The Strategy</h3>
           <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
-            Every viral product video, every Reddit flatlay, every GRWM, every desk tour has the same problem:
+            Every product video, every Reddit pocket dump, every GRWM, every desk tour has the same problem:
             <strong className="text-[var(--text-primary)]"> the audience wants the product list, and it&apos;s scattered across timestamps, comments, and affiliate link dumps.</strong>
           </p>
           <p className="text-sm text-[var(--text-secondary)] leading-relaxed mt-3">
-            Teed bags are the clean, shareable, forkable answer to &quot;what are all those products?&quot; The strategy isn&apos;t to create demand &mdash;
-            the demand already exists in every comment section asking &quot;link?&quot; The strategy is to <strong className="text-[var(--text-primary)]">be there with the answer</strong>,
-            consistently, across every product-focused community, until Teed becomes the default way people share and discover curated product collections.
+            The play: <strong className="text-[var(--text-primary)]">build the bag first, then show it to the creator.</strong> You&apos;re not asking for anything &mdash;
+            you&apos;re giving them a finished product their audience already wants. The bag is the pitch.
+            If even one creator with 100K+ subs adopts Teed, their audience discovers the tool organically.
           </p>
         </div>
       </div>
@@ -1066,94 +1104,79 @@ export default function MarketStrategyClient() {
   const WORKFLOW_STEPS = [
     {
       step: 1,
-      title: 'Research the Topic',
+      title: 'Find the Video',
       icon: <Globe className="w-5 h-5" />,
-      description: 'Find source material with exact product details.',
+      description: 'Identify a recent video from the target creator that IS a product list.',
       details: [
-        'Use /last30days or web search to find source articles, Reddit posts, TikTok product lists',
-        'Identify every product: brand, model name, key specs (loft, shaft flex, weight, etc.)',
-        'Golf WITBs: GolfWRX is the best source — they list exact specs',
-        'EDC: r/EDC flatlay posts list items in comments',
-        'GRWM: TikTok creator bios and "products used" in captions',
-        'Desk setups: r/battlestations posts and YouTube descriptions',
+        'Look for: setup tours, shoe roundups, GRWM, haul videos, "tools I use," pocket dumps, product rankings',
+        'Prioritize videos from the last 2-4 weeks (fresh content = more engagement)',
+        'Check the comments for "what is that?" and "link?" \u2014 those confirm demand',
+        'The more items in the video, the better the Teed bag will be (aim for 5-15 products)',
       ],
     },
     {
       step: 2,
-      title: 'Create the Bag Script',
-      icon: <Terminal className="w-5 h-5" />,
-      description: 'Write a TypeScript script to insert the bag and items into Supabase.',
+      title: 'Build the Bag',
+      icon: <Package className="w-5 h-5" />,
+      description: 'Create the Teed bag with every product from the video.',
       details: [
-        'Script location: scripts/create-[topic]-bags.ts',
-        'Uses Supabase service role client (bypasses RLS)',
-        '@teed user ID: 2c3e503a-78ce-4a8d-ae37-60b4a16d916e',
-        'Shafts/accessories as SEPARATE items — enables independent links and images',
-        'Naming pattern: "Driver Shaft — Fujikura Ventus Black 60g X-Stiff"',
-        'custom_name drives image search — make it descriptive for good Google results',
-        'Bag code is the URL slug: kebab-case like "anthony-kim-s-liv-adelaide-witb-feb-2026"',
-        'Include bag-level source links (article URLs)',
+        'Watch the video and list every product: brand, model, variant/color',
+        'Use the bag creation workflow: scripts/create-[topic]-bags.ts',
+        'Each item needs: custom_name (descriptive), brand, why_chosen (optional)',
+        'Add buy links for each product (Amazon, manufacturer site, retailer)',
+        'QA: every link works, images load, descriptions are accurate',
       ],
     },
     {
       step: 3,
-      title: 'List Items to Get UUIDs',
-      icon: <Package className="w-5 h-5" />,
-      description: 'Run a list script to get all item IDs for linking.',
+      title: 'Find the Creator\'s Contact',
+      icon: <Mail className="w-5 h-5" />,
+      description: 'YouTube doesn\'t have DMs. Use these channels instead.',
       details: [
-        'Script location: scripts/list-[topic]-items.ts',
-        'Output format: sort_index | uuid | brand | custom_name',
-        'Copy UUIDs for the next step',
+        'EMAIL (best): YouTube \u2192 channel page \u2192 About tab \u2192 "For business inquiries" \u2192 View Email',
+        'EMAIL alt: Check their website \u2014 most have a contact page or form',
+        'INSTAGRAM DM: Best for beauty/lifestyle creators. Send a short DM with the bag link.',
+        'X/TWITTER DM: Best for tech/productivity creators. Only works if their DMs are open.',
+        'YOUTUBE COMMENT: Last resort. Comment on the video with the bag link. Low signal but visible.',
+        'TIP: Check video descriptions for business emails and social links',
       ],
     },
     {
       step: 4,
-      title: 'Find VERIFIED Product URLs',
-      icon: <Globe className="w-5 h-5" />,
-      description: 'Web search each product to find the real manufacturer page URL.',
+      title: 'Send the Outreach',
+      icon: <MessageCircle className="w-5 h-5" />,
+      description: 'Lead with the bag, not with an explanation of Teed.',
       details: [
-        'NEVER fabricate/guess manufacturer URLs — they WILL be wrong',
-        'Always search: "[product name] site:[manufacturer].com"',
-        'TaylorMade product codes are unpredictable (DW-TC###, DW-AL###) — always verify',
-        'Callaway URL paths change by year (drivers-2026-quantum-triple-diamond.html)',
-        'Group items sharing the same product URL (e.g., all MG5 wedges → one URL)',
-        'Test every unique URL before inserting',
+        'Copy the template from the Outreach tab and personalize it',
+        'Replace [LINK] with the actual Teed bag URL',
+        'Replace [name] and [video title] with real values',
+        'Keep DMs to 3-4 sentences max. Emails can be 5-7 sentences.',
+        'Always include the bag link in the first 2 sentences \u2014 don\'t bury it',
+        'Send during weekday mornings (creator prime time for reading messages)',
       ],
     },
     {
       step: 5,
-      title: 'Add Links Script',
-      icon: <Terminal className="w-5 h-5" />,
-      description: 'Insert verified product links for all items.',
+      title: 'Follow Up (Once)',
+      icon: <Clock className="w-5 h-5" />,
+      description: 'If no reply after 5-7 days, send ONE gentle follow-up. Then move on.',
       details: [
-        'Script location: scripts/add-[topic]-links.ts',
-        'Maps item UUIDs → verified product URLs',
-        'Link kinds: "product" (buy/view page), "source" (article, player profile)',
-        'If fixing bad links: delete old first with .delete().in("bag_item_id", allItemIds)',
-        'Validate by checking items on localhost after insertion',
+        'Follow-up template: "Hey [name] \u2014 just bumping this in case it got buried. Here\'s the page I made from your [video]: [LINK]. No pressure!"',
+        'If still no reply, move on. The bag itself has value as shareable content.',
+        'Post the bag on relevant subreddits (r/EDC, r/RunningShoeGeeks, etc.) for organic discovery.',
+        'Comment on the creator\'s next video with the bag link \u2014 the audience finds it even if the creator doesn\'t reply.',
       ],
     },
   ];
 
-  const URL_PATTERNS = [
-    { brand: 'TaylorMade', domain: 'taylormadegolf.com', pattern: '/[Product-Name]/[ProductCode].html', example: '/MG5-Wedge/DW-TC647.html', warning: 'Product codes are NOT guessable' },
-    { brand: 'Callaway', domain: 'callawaygolf.com', pattern: '/golf-clubs/[cat]/[slug].html', example: '/golf-clubs/drivers/drivers-2026-quantum-triple-diamond.html', warning: 'URLs change by model year' },
-    { brand: 'Ping', domain: 'ping.com', pattern: '/en-us/clubs/[cat]/[model]', example: '/en-us/clubs/drivers/g440-lst', warning: null },
-    { brand: 'Titleist', domain: 'titleist.com', pattern: '/golf-clubs/[category]', example: '/golf-clubs/putters', warning: null },
-    { brand: 'Scotty Cameron', domain: 'scottycameron.com', pattern: '/putters/', example: '/putters/', warning: null },
-    { brand: 'Bridgestone (clubs)', domain: 'bridgestonegolf.com', pattern: '/en-us/clubs/[cat]/[model]', example: '/en-us/clubs/irons/220-mb', warning: null },
-    { brand: 'Bridgestone (balls)', domain: 'bridgestonegolf.com', pattern: '/en-us/balls/tour-series/[model]', example: '/en-us/balls/tour-series/tour-bx', warning: 'Not /balls/tour-b-x' },
-    { brand: 'Fujikura', domain: 'fujikuragolf.com', pattern: '/woods/[line]/', example: '/woods/ventus/', warning: 'Old /product/ paths are dead' },
-    { brand: 'Mitsubishi', domain: 'mitsubishigolf.com', pattern: '/products/[slug]', example: '/products/diamana-d-limited-1', warning: 'Not /shafts/' },
-    { brand: 'True Temper', domain: 'truetemper.com', pattern: '/products/[slug]/', example: '/products/iron-shafts-dynamic-gold/', warning: '/products/ not /product/' },
-  ];
-
-  const GOTCHAS = [
-    { title: 'Never Fabricate URLs', description: 'Manufacturer URLs use internal product codes that cannot be guessed. Always web search "[product name] site:[domain]" to find the real page. Wrong codes redirect to random products (e.g., wedge page → ball page).', severity: 'critical' as const },
-    { title: 'Shafts as Separate Items', description: 'Always create shaft/accessory items independently. This gives each one its own image search result and product link. Name them: "Driver Shaft — [Brand] [Model] [Spec]".', severity: 'important' as const },
-    { title: 'Image Search Quality', description: 'Google Custom Search uses "brand + custom_name" as the query. Newer or niche products may return wrong images. Making custom_name more descriptive helps. Known issue: very new products (e.g., Qi4D at launch) have poor Google index coverage.', severity: 'info' as const },
-    { title: 'Validate After Inserting', description: 'Always check the bag on localhost after adding links. Click every link. Wedge links going to ball pages, 404s, and redirects are common when URLs are guessed.', severity: 'important' as const },
-    { title: 'Run Script Command', description: 'Scripts need env vars loaded first. Always use: set -a && source .env.local && set +a && npx tsx scripts/[name].ts', severity: 'info' as const },
-    { title: 'Bag-Level Source Links', description: 'Add source links (WITB article URLs, Reddit posts) at the bag level too, not just item-level product links. These help users find the original content.', severity: 'info' as const },
+  const OUTREACH_GOTCHAS = [
+    { title: 'YouTube Has No DMs', description: 'You cannot message creators on YouTube. Use email (from their About page), Instagram DM, X/Twitter DM, or their website contact form. YouTube comments are a last resort \u2014 visible but easily buried.', severity: 'critical' as const },
+    { title: 'Build the Bag FIRST', description: 'Never reach out empty-handed. The finished Teed bag IS the pitch. The creator should be able to click one link and see exactly what you made for them.', severity: 'critical' as const },
+    { title: 'Lead with Value, Not an Ask', description: 'Don\'t explain what Teed is. Show them their content as a Teed page. "I made this for you" beats "We\'re a startup that..." every time.', severity: 'important' as const },
+    { title: 'One Follow-Up Maximum', description: 'Creators get hundreds of messages. If they don\'t reply after one gentle nudge, respect their time and move on. The bag still generates value as shareable content.', severity: 'important' as const },
+    { title: 'Finding Business Emails', description: 'YouTube: Go to the creator\'s channel \u2192 About tab \u2192 look for "For business inquiries" \u2192 View Email. Many also list emails on their website or in video descriptions.', severity: 'info' as const },
+    { title: 'Instagram DM Tips', description: 'Keep it to 3-4 sentences. Include the bag link immediately. Don\'t use a generic pitch. Beauty and lifestyle creators are most responsive on Instagram.', severity: 'info' as const },
+    { title: 'X/Twitter DM Tips', description: 'Only works if their DMs are open. Keep it short \u2014 2-3 sentences max. Tag them in a quote tweet of the bag link as an alternative if DMs are closed.', severity: 'info' as const },
   ];
 
   const renderWorkflow = () => (
@@ -1168,7 +1191,7 @@ export default function MarketStrategyClient() {
               id="workflow-prompt"
             />
           </div>
-          <p className="text-sm text-[var(--text-secondary)] mb-3">Copy this prompt template and fill in the brackets to trigger the full workflow in Claude Code.</p>
+          <p className="text-sm text-[var(--text-secondary)] mb-3">Copy this prompt template and fill in the brackets to trigger the full bag creation workflow in Claude Code.</p>
           <div className="p-3 rounded-lg bg-[var(--surface)] border border-[var(--border-subtle)] font-mono text-sm text-[var(--text-primary)]">
             Create a [TOPIC] bag under @teed using the bag creation workflow. The topic is: [DESCRIPTION]. Source material: [URLS]. Use the bag-creation-workflow memory file for the full process.
           </div>
@@ -1206,11 +1229,11 @@ export default function MarketStrategyClient() {
         </div>
       </div>
 
-      {/* Gotchas / Lessons Learned */}
+      {/* Outreach gotchas */}
       <div>
-        <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Lessons Learned</h2>
+        <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Outreach Playbook</h2>
         <div className="space-y-3">
-          {GOTCHAS.map((g, i) => {
+          {OUTREACH_GOTCHAS.map((g, i) => {
             const severityStyles = {
               critical: 'border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-950/20',
               important: 'border-amber-300 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/20',
@@ -1231,42 +1254,6 @@ export default function MarketStrategyClient() {
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/* Manufacturer URL patterns */}
-      <div>
-        <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Manufacturer URL Patterns</h2>
-        <p className="text-sm text-[var(--text-secondary)] mb-3">Verified February 2026. Always re-verify via web search before using.</p>
-        <div className="rounded-[var(--radius-xl)] border border-[var(--border-subtle)] overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-[var(--border-subtle)] bg-[var(--surface-elevated)]">
-                <th className="text-left p-3 font-medium text-[var(--text-secondary)]">Brand</th>
-                <th className="text-left p-3 font-medium text-[var(--text-secondary)]">Domain</th>
-                <th className="text-left p-3 font-medium text-[var(--text-secondary)]">Pattern</th>
-                <th className="text-left p-3 font-medium text-[var(--text-secondary)]">Example</th>
-                <th className="text-left p-3 font-medium text-[var(--text-secondary)]">Warning</th>
-              </tr>
-            </thead>
-            <tbody>
-              {URL_PATTERNS.map((p, i) => (
-                <tr key={i} className="border-b border-[var(--border-subtle)] last:border-0">
-                  <td className="p-3 font-medium text-[var(--text-primary)] whitespace-nowrap">{p.brand}</td>
-                  <td className="p-3 font-mono text-xs text-[var(--text-secondary)] whitespace-nowrap">{p.domain}</td>
-                  <td className="p-3 font-mono text-xs text-[var(--text-primary)]">{p.pattern}</td>
-                  <td className="p-3 font-mono text-xs text-[var(--text-secondary)]">{p.example}</td>
-                  <td className="p-3 text-xs">
-                    {p.warning ? (
-                      <span className="text-amber-600 dark:text-amber-400">{p.warning}</span>
-                    ) : (
-                      <span className="text-[var(--text-secondary)]">&mdash;</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
       </div>
 
@@ -1322,7 +1309,7 @@ export default function MarketStrategyClient() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold text-[var(--text-primary)]">30-Day Market Strategy</h1>
-              <p className="text-sm text-[var(--text-secondary)]">February 2026 &mdash; Seed bags, distribution playbook, scripts, and calendar</p>
+              <p className="text-sm text-[var(--text-secondary)]">Creator outreach playbook &mdash; Build bags, reach out, measure results</p>
             </div>
           </div>
         </div>
@@ -1353,7 +1340,7 @@ export default function MarketStrategyClient() {
       {/* Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'playbook' && renderPlaybook()}
-        {activeTab === 'scripts' && renderScripts()}
+        {activeTab === 'outreach' && renderOutreach()}
         {activeTab === 'calendar' && renderCalendar()}
         {activeTab === 'metrics' && renderMetrics()}
         {activeTab === 'workflow' && renderWorkflow()}
