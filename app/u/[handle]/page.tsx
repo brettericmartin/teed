@@ -150,15 +150,27 @@ export default async function UserProfilePage({ params, searchParams }: PageProp
 
     let photoUrls: Record<string, string> = {};
     if (allPhotoIds.length > 0) {
-      const { data: mediaAssets } = await supabase
-        .from('media_assets')
-        .select('id, url')
-        .in('id', allPhotoIds);
+      // Batch in chunks of 100 to avoid URL length limits on .in() queries
+      const BATCH_SIZE = 100;
+      const chunks: string[][] = [];
+      for (let i = 0; i < allPhotoIds.length; i += BATCH_SIZE) {
+        chunks.push(allPhotoIds.slice(i, i + BATCH_SIZE));
+      }
 
-      photoUrls = (mediaAssets || []).reduce((acc: Record<string, string>, asset: any) => {
-        acc[asset.id] = asset.url;
-        return acc;
-      }, {});
+      const results = await Promise.all(
+        chunks.map(chunk =>
+          supabase
+            .from('media_assets')
+            .select('id, url')
+            .in('id', chunk)
+        )
+      );
+
+      for (const { data: mediaAssets } of results) {
+        for (const asset of mediaAssets || []) {
+          photoUrls[asset.id] = asset.url;
+        }
+      }
     }
 
     // Map photo URLs to items (always map, even if no photos)

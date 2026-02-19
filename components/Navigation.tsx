@@ -359,19 +359,19 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
                 )}
               </Link>
 
-              {/* Sign Up - primary CTA */}
-              <Link
-                href="/signup"
-                className="px-3 sm:px-4 py-2.5 min-h-[44px] flex items-center text-sm font-medium text-white bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] rounded-lg transition-colors"
-              >
-                Sign Up
-              </Link>
               {/* Sign In */}
               <Link
                 href="/login"
-                className="flex px-3 sm:px-4 py-2.5 min-h-[44px] items-center text-sm font-medium text-[var(--text-primary)] hover:text-[var(--teed-green-9)] transition-colors"
+                className="px-3 sm:px-4 py-2.5 min-h-[44px] flex items-center justify-center text-sm font-medium text-[var(--text-primary)] hover:text-[var(--teed-green-9)] transition-colors"
               >
                 Sign In
+              </Link>
+              {/* Sign Up - primary CTA */}
+              <Link
+                href="/signup"
+                className="px-3 sm:px-4 py-2.5 min-h-[44px] flex items-center justify-center text-sm font-medium text-white bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] rounded-lg transition-colors"
+              >
+                Sign Up
               </Link>
             </div>
           )}

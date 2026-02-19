@@ -32,6 +32,10 @@ import type { BagViewItem, BagViewBag, ItemLink } from '@/lib/types/bagViewTypes
 import { ItemTypeBadge } from '@/components/item/ItemTypeSelector';
 import { SupplementTimingBadges } from '@/components/item/SupplementTimingBadges';
 import { PricingBadge } from '@/components/item/PricingBadge';
+import { SaveTooltip } from '@/components/prompts/SaveTooltip';
+import { SignUpModal } from '@/components/prompts/SignUpModal';
+
+type PendingAction = 'save' | 'clone' | 'follow' | 'add-to-bag';
 
 // Re-export types for component props
 type Item = BagViewItem;
@@ -110,6 +114,10 @@ export default function PublicBagView({
   // Clone success modal state
   const [isCloneSuccessOpen, setIsCloneSuccessOpen] = useState(false);
   const [clonedBagData, setClonedBagData] = useState<{ code: string; handle: string } | null>(null);
+
+  // Sign-up modal + deferred action state
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+  const [pendingAction, setPendingAction] = useState<PendingAction>('save');
 
   // Helper to copy promo code
   const handleCopyPromo = async (itemId: string, code: string) => {
@@ -224,7 +232,8 @@ export default function PublicBagView({
   // Handle copy bag
   const handleCopyBag = async () => {
     if (!isAuthenticated) {
-      router.push('/login');
+      setPendingAction('clone');
+      setIsSignUpModalOpen(true);
       return;
     }
 
@@ -259,7 +268,8 @@ export default function PublicBagView({
   // Handle save/unsave
   const handleSaveToggle = async () => {
     if (!isAuthenticated) {
-      router.push('/login');
+      setPendingAction('save');
+      setIsSignUpModalOpen(true);
       return;
     }
 
@@ -297,7 +307,8 @@ export default function PublicBagView({
   // Handle follow/unfollow
   const handleFollowToggle = async () => {
     if (!isAuthenticated) {
-      router.push('/login');
+      setPendingAction('follow');
+      setIsSignUpModalOpen(true);
       return;
     }
 
@@ -334,10 +345,70 @@ export default function PublicBagView({
   // Handle add to bag
   const handleAddToBag = () => {
     if (!isAuthenticated) {
-      router.push('/login');
+      setPendingAction('add-to-bag');
+      setIsSignUpModalOpen(true);
       return;
     }
     setIsAddToBagModalOpen(true);
+  };
+
+  // Handle sign-up success — execute deferred action
+  const handleSignUpSuccess = async (userId: string) => {
+    setIsSignUpModalOpen(false);
+    setIsAuthenticated(true);
+    setCurrentUserId(userId);
+
+    try {
+      switch (pendingAction) {
+        case 'save': {
+          const response = await fetch(`/api/bags/${bag.code}/save`, {
+            method: 'POST',
+          });
+          if (response.ok) {
+            setIsSaved(true);
+            analytics.bagSaved(bag.id, bag.code, ownerHandle);
+            celebrateSave();
+            showSuccess('Account created & bag saved!');
+          }
+          break;
+        }
+        case 'clone': {
+          const response = await fetch(`/api/bags/${bag.code}/copy`, {
+            method: 'POST',
+          });
+          if (response.ok) {
+            const data = await response.json();
+            analytics.bagCloned(bag.id, bag.code, data.id, data.code);
+            celebrateClone();
+            setClonedBagData({ code: data.code, handle: data.ownerHandle });
+            setIsCloneSuccessOpen(true);
+            showSuccess('Account created & bag cloned!');
+          }
+          break;
+        }
+        case 'follow': {
+          const response = await fetch('/api/follows', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ following_id: ownerId }),
+          });
+          if (response.ok) {
+            setIsFollowing(true);
+            analytics.userFollowed(ownerId, ownerHandle);
+            showSuccess(`Account created & now following @${ownerHandle}!`);
+          }
+          break;
+        }
+        case 'add-to-bag': {
+          showSuccess('Account created! You can now add items to your bags.');
+          setIsAddToBagModalOpen(true);
+          break;
+        }
+      }
+    } catch (error) {
+      console.error('Error executing deferred action:', error);
+      showSuccess('Account created! Welcome to Teed.');
+    }
   };
 
   // Track link click
@@ -386,24 +457,38 @@ export default function PublicBagView({
                 <h1 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] leading-tight">
                   {bag.title}
                 </h1>
-                {/* Save Button */}
-                <button
-                  onClick={handleSaveToggle}
-                  disabled={isSaveLoading}
-                  className={`p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-[var(--radius-md)] transition-all ${
-                    isSaved
-                      ? 'text-[var(--amber-9)] hover:text-[var(--amber-10)]'
-                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                  } hover:bg-[var(--surface-hover)]`}
-                  title={isSaved ? 'Unsave' : 'Save'}
-                  aria-label={isSaved ? 'Unsave this bag' : 'Save this bag'}
-                >
-                  {isSaveLoading ? (
-                    <GolfLoader size="md" />
-                  ) : (
-                    <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`} />
+                {/* Save Button with tooltip anchor */}
+                <div className="relative">
+                  <button
+                    onClick={handleSaveToggle}
+                    disabled={isSaveLoading}
+                    className={`p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-[var(--radius-md)] transition-all ${
+                      isSaved
+                        ? 'text-[var(--amber-9)] hover:text-[var(--amber-10)]'
+                        : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                    } hover:bg-[var(--surface-hover)]`}
+                    title={isSaved ? 'Unsave' : 'Save'}
+                    aria-label={isSaved ? 'Unsave this bag' : 'Save this bag'}
+                  >
+                    {isSaveLoading ? (
+                      <GolfLoader size="md" />
+                    ) : (
+                      <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`} />
+                    )}
+                  </button>
+                  {/* Desktop Save Tooltip */}
+                  {!isAuthenticated && !isOwnBag && !isMobile && (
+                    <SaveTooltip
+                      onSignUpClick={() => {
+                        setPendingAction('save');
+                        setIsSignUpModalOpen(true);
+                      }}
+                      isMobile={false}
+                      bagId={bag.id}
+                      bagCode={bag.code}
+                    />
                   )}
-                </button>
+                </div>
                 {/* Share Button */}
                 <button
                   onClick={handleShare}
@@ -1067,6 +1152,30 @@ export default function PublicBagView({
           itemCount: items.length,
           handle: clonedBagData.handle
         } : null}
+      />
+
+      {/* Mobile Save Tooltip */}
+      {!isAuthenticated && !isOwnBag && isMobile && (
+        <SaveTooltip
+          onSignUpClick={() => {
+            setPendingAction('save');
+            setIsSignUpModalOpen(true);
+          }}
+          isMobile={true}
+          bagId={bag.id}
+          bagCode={bag.code}
+        />
+      )}
+
+      {/* Sign Up Modal */}
+      <SignUpModal
+        isOpen={isSignUpModalOpen}
+        onClose={() => setIsSignUpModalOpen(false)}
+        onSuccess={handleSignUpSuccess}
+        context={{
+          bagTitle: bag.title,
+          action: pendingAction,
+        }}
       />
 
       {/* Sticky Action Bar for Mobile - shows on scroll */}

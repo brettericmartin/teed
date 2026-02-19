@@ -207,6 +207,42 @@ export const analytics = {
    */
   pasteDetected: (url: string, classification: string, actionTaken: string) =>
     trackEvent('paste_detected', { url, classification, action_taken: actionTaken }),
+
+  /**
+   * Track save tooltip shown
+   */
+  saveTooltipShown: (bagId: string, bagCode: string) =>
+    trackEvent('save_tooltip_shown', { bag_id: bagId, bag_code: bagCode }),
+
+  /**
+   * Track save tooltip dismissed
+   */
+  saveTooltipDismissed: (bagId: string, bagCode: string) =>
+    trackEvent('save_tooltip_dismissed', { bag_id: bagId, bag_code: bagCode }),
+
+  /**
+   * Track save tooltip CTA clicked
+   */
+  saveTooltipClicked: (bagId: string, bagCode: string) =>
+    trackEvent('save_tooltip_clicked', { bag_id: bagId, bag_code: bagCode }),
+
+  /**
+   * Track signup modal opened
+   */
+  signupModalOpened: (action: string) =>
+    trackEvent('signup_modal_opened', { action }),
+
+  /**
+   * Track signup modal completed
+   */
+  signupModalCompleted: (action: string) =>
+    trackEvent('signup_modal_completed', { action }),
+
+  /**
+   * Track signup modal abandoned
+   */
+  signupModalAbandoned: (action: string) =>
+    trackEvent('signup_modal_abandoned', { action }),
 };
 
 export default analytics;

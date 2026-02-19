@@ -146,16 +146,26 @@ export async function GET(request: NextRequest) {
     // Fetch media assets for all photos
     let photoUrls: Record<string, string> = {};
     if (allPhotoIds.length > 0) {
-      const { data: mediaAssets } = await supabase
-        .from('media_assets')
-        .select('id, url')
-        .in('id', allPhotoIds);
+      // Batch in chunks of 100 to avoid URL length limits on .in() queries
+      const BATCH_SIZE = 100;
+      const chunks: string[][] = [];
+      for (let i = 0; i < allPhotoIds.length; i += BATCH_SIZE) {
+        chunks.push(allPhotoIds.slice(i, i + BATCH_SIZE));
+      }
 
-      if (mediaAssets) {
-        photoUrls = mediaAssets.reduce((acc, asset) => {
-          acc[asset.id] = asset.url;
-          return acc;
-        }, {} as Record<string, string>);
+      const results = await Promise.all(
+        chunks.map(chunk =>
+          supabase
+            .from('media_assets')
+            .select('id, url')
+            .in('id', chunk)
+        )
+      );
+
+      for (const { data: mediaAssets } of results) {
+        for (const asset of mediaAssets || []) {
+          photoUrls[asset.id] = asset.url;
+        }
       }
     }
 
