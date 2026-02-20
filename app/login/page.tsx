@@ -4,6 +4,7 @@ import { useState, useEffect, FormEvent } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import { analytics } from '@/lib/analytics';
+import OAuthButtons from '@/components/auth/OAuthButtons';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -59,6 +60,17 @@ export default function LoginPage() {
           <h2 className="mt-6 text-[var(--font-size-6)] font-semibold text-[var(--text-primary)]">
             Sign in to continue
           </h2>
+        </div>
+
+        <OAuthButtons />
+
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-[var(--border-subtle)]" />
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="bg-[var(--surface)] px-3 text-[var(--text-secondary)]">or</span>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

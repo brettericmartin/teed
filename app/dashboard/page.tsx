@@ -28,8 +28,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     .eq('id', user.id)
     .single();
 
-  if (!profile?.handle) {
-    redirect('/settings');
+  if (!profile?.handle || /^user_[a-f0-9]{8}$/.test(profile.handle)) {
+    redirect('/complete-profile');
   }
 
   // Check if user has any bags

@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/Input';
 import { supabase } from '@/lib/supabaseClient';
 import { Check, Loader2, X, Bookmark, UserCircle, Copy, Eye, EyeOff } from 'lucide-react';
 import { analytics } from '@/lib/analytics';
+import OAuthButtons from '@/components/auth/OAuthButtons';
 
 export default function SignupForm() {
   const searchParams = useSearchParams();
@@ -173,6 +174,17 @@ export default function SignupForm() {
 
       {/* Form */}
       <div className="px-6 pb-8">
+        <OAuthButtons />
+
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-200 dark:border-zinc-700" />
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="bg-white dark:bg-zinc-900 px-3 text-gray-400">or</span>
+          </div>
+        </div>
+
         <div className="space-y-4">
           <Input
             label="Name"
