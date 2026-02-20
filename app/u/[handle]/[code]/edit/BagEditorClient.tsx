@@ -10,7 +10,7 @@ import ItemList from './components/ItemList';
 import QuickAddItem from './components/QuickAddItem';
 import AddItemForm from './components/AddItemForm';
 import ShareModal from './components/ShareModal';
-import PhotoUploadModal from './components/PhotoUploadModal';
+import PhotoUploadModal, { type PhotoPipelineResult } from './components/PhotoUploadModal';
 import BulkLinkImportModal from './components/BulkLinkImportModal';
 import BulkTextAddModal from './components/BulkTextAddModal';
 import ProductReviewModal, { IdentifiedProduct } from './components/ProductReviewModal';
@@ -197,6 +197,12 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   } | null>(null);
   const [capturedPhotoBase64, setCapturedPhotoBase64] = useState<string | null>(null);
   const [capturedPhotosArray, setCapturedPhotosArray] = useState<string[]>([]); // For bulk photo uploads
+  const [showPhotoUpload, setShowPhotoUpload] = useState(false);
+  const [pipelineStats, setPipelineStats] = useState<{
+    totalDetected: number;
+    totalIdentified: number;
+    totalVerified: number;
+  } | null>(null);
   const [isFillingLinks, setIsFillingLinks] = useState(false);
   const [enrichmentSuggestions, setEnrichmentSuggestions] = useState<any[]>([]);
   const [showEnrichmentPreview, setShowEnrichmentPreview] = useState(false);
@@ -748,6 +754,23 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       toast.showError('Failed to delete bag. Please try again.');
     }
   };
+
+  // Handle photo pipeline completion
+  const handlePipelineComplete = useCallback((result: PhotoPipelineResult) => {
+    setCapturedPhotoBase64(result.sourceImageBase64);
+    setPipelineStats(result.pipeline ? {
+      totalDetected: result.pipeline.totalDetected,
+      totalIdentified: result.pipeline.totalIdentified,
+      totalVerified: result.pipeline.totalVerified,
+    } : null);
+    setIdentifiedProducts({
+      products: result.products as IdentifiedProduct[],
+      totalConfidence: result.totalConfidence,
+      processingTime: result.processingTime,
+    });
+    setShowPhotoUpload(false);
+    setShowProductReview(true);
+  }, []);
 
   // Step 29: Batch item creation from AI results
   const handleAddSelectedProducts = async (selectedProducts: IdentifiedProduct[], uploadedPhotoFile?: File) => {
@@ -1414,6 +1437,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             )}
             onBulkAddFromLinks={() => setShowBulkLinkImport(true)}
             onBulkAddFromText={() => setShowBulkTextAdd(true)}
+            onScanPhoto={() => setShowPhotoUpload(true)}
             onPhotoMatch={() => setShowItemSelection(true)}
             onEnhanceDetails={() => setShowEnrichmentItemSelection(true)}
             renderCoverPhoto={(onDismiss) => (
@@ -1592,6 +1616,18 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         }}
       />
 
+      {/* Photo Upload + Pipeline Modal */}
+      <PhotoUploadModal
+        isOpen={showPhotoUpload}
+        onClose={() => setShowPhotoUpload(false)}
+        onPhotoCapture={(base64) => {
+          setCapturedPhotoBase64(base64);
+          setShowPhotoUpload(false);
+        }}
+        onPipelineComplete={handlePipelineComplete}
+        bagType={bag.category || undefined}
+      />
+
       {/* Product Review Modal */}
       {identifiedProducts && (
         <ProductReviewModal
@@ -1599,11 +1635,13 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           onClose={() => {
             setShowProductReview(false);
             setIdentifiedProducts(null);
+            setPipelineStats(null);
           }}
           products={identifiedProducts.products}
           totalConfidence={identifiedProducts.totalConfidence}
           processingTime={identifiedProducts.processingTime}
           onAddSelected={handleAddSelectedProducts}
+          pipelineStats={pipelineStats ?? undefined}
         />
       )}
 

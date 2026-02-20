@@ -47,3 +47,6 @@ packages/mcp-server/node_modules/
 
 # design source files (keep locally, not in repo)
 /logos/
+
+# vision pipeline debug crops
+.pipeline-crops/

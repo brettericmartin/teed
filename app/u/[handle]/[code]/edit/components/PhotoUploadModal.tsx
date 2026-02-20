@@ -1,16 +1,40 @@
 'use client';
 
-import { useState, useRef, ChangeEvent } from 'react';
+import { useState, useRef, useCallback, ChangeEvent } from 'react';
+
+type PipelineStage = 'idle' | 'scanning' | 'identifying' | 'validating' | 'complete' | 'error';
+
+type PipelineProgress = {
+  stage: PipelineStage;
+  itemsFound?: number;
+  itemsIdentified?: number;
+  itemsVerified?: number;
+  error?: string;
+};
+
+export type PhotoPipelineResult = {
+  products: any[];
+  pipeline: {
+    totalDetected: number;
+    totalIdentified: number;
+    totalVerified: number;
+    stageTimings: Record<string, number>;
+    partial: boolean;
+  };
+  totalConfidence: number;
+  processingTime: number;
+  sourceImageBase64: string;
+};
 
 type PhotoUploadModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onPhotoCapture: (base64Image: string) => void;
+  onPipelineComplete?: (result: PhotoPipelineResult) => void;
   bagType?: string;
 };
 
 // Compress image to target size while maintaining quality
-// Handles iPhone HEIC, various mobile browser quirks, etc.
 async function compressImage(base64: string, maxSizeKB: number = 5000): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -20,13 +44,11 @@ async function compressImage(base64: string, maxSizeKB: number = 5000): Promise<
         const canvas = document.createElement('canvas');
         let { width, height } = img;
 
-        // Validate dimensions
         if (width === 0 || height === 0) {
           reject(new Error('Image has invalid dimensions'));
           return;
         }
 
-        // Max dimension - higher for better slideshow quality
         const MAX_DIMENSION = 2400;
         if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
           const ratio = Math.min(MAX_DIMENSION / width, MAX_DIMENSION / height);
@@ -45,17 +67,14 @@ async function compressImage(base64: string, maxSizeKB: number = 5000): Promise<
 
         ctx.drawImage(img, 0, 0, width, height);
 
-        // Try different quality levels to get under target size
         let quality = 0.92;
         let result = canvas.toDataURL('image/jpeg', quality);
 
-        // Reduce quality until we're under the target size (but keep quality reasonable)
         while (result.length > maxSizeKB * 1024 * 1.37 && quality > 0.5) {
           quality -= 0.05;
           result = canvas.toDataURL('image/jpeg', quality);
         }
 
-        // Validate the result
         if (!result.startsWith('data:image/')) {
           reject(new Error('Image compression failed'));
           return;
@@ -78,18 +97,84 @@ async function compressImage(base64: string, maxSizeKB: number = 5000): Promise<
   });
 }
 
+function StageIndicator({ stage, progress }: { stage: PipelineStage; progress: PipelineProgress }) {
+  const stages = [
+    {
+      key: 'scanning' as const,
+      label: 'Scanning photo for items...',
+      doneLabel: (p: PipelineProgress) => `Found ${p.itemsFound ?? 0} items`,
+    },
+    {
+      key: 'identifying' as const,
+      label: 'Identifying each product...',
+      doneLabel: (p: PipelineProgress) => `${p.itemsIdentified ?? 0}/${p.itemsFound ?? 0} identified`,
+    },
+    {
+      key: 'validating' as const,
+      label: 'Validating identifications...',
+      doneLabel: (p: PipelineProgress) => `${p.itemsVerified ?? 0}/${p.itemsIdentified ?? 0} verified`,
+    },
+  ];
+
+  const stageOrder: PipelineStage[] = ['scanning', 'identifying', 'validating', 'complete'];
+  const currentIdx = stageOrder.indexOf(stage);
+
+  return (
+    <div className="space-y-3 py-2">
+      {stages.map((s, idx) => {
+        const stageIdx = idx; // scanning=0, identifying=1, validating=2
+        const isActive = stageIdx === currentIdx;
+        const isDone = currentIdx > stageIdx || stage === 'complete';
+        const isPending = stageIdx > currentIdx;
+
+        return (
+          <div key={s.key} className="flex items-center gap-3">
+            {/* Status icon */}
+            <div className="flex-shrink-0 w-6 h-6 flex items-center justify-center">
+              {isDone ? (
+                <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              ) : isActive ? (
+                <svg className="w-5 h-5 text-[var(--sky-9)] animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+              ) : (
+                <div className="w-3 h-3 rounded-full bg-gray-200" />
+              )}
+            </div>
+
+            {/* Label */}
+            <span className={`text-sm ${
+              isDone ? 'text-green-700 font-medium' :
+              isActive ? 'text-[var(--text-primary)] font-medium' :
+              'text-[var(--text-tertiary)]'
+            }`}>
+              {isDone ? s.doneLabel(progress) : s.label}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function PhotoUploadModal({
   isOpen,
   onClose,
   onPhotoCapture,
+  onPipelineComplete,
   bagType,
 }: PhotoUploadModalProps) {
   const [preview, setPreview] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [pipelineProgress, setPipelineProgress] = useState<PipelineProgress>({ stage: 'idle' });
+  const [isRunningPipeline, setIsRunningPipeline] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const MAX_SIZE_MB = 20; // Accept larger files since we'll compress them
+  const MAX_SIZE_MB = 20;
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
   const handleFileSelect = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -98,13 +183,11 @@ export default function PhotoUploadModal({
 
     setError(null);
 
-    // Validate file type
     if (!file.type.startsWith('image/')) {
       setError('Please select an image file');
       return;
     }
 
-    // Validate file size
     if (file.size > MAX_SIZE_BYTES) {
       setError(`Image too large. Maximum size is ${MAX_SIZE_MB}MB`);
       return;
@@ -113,32 +196,25 @@ export default function PhotoUploadModal({
     setIsProcessing(true);
 
     try {
-      // Read file as base64
       const reader = new FileReader();
 
       reader.onload = async (event) => {
         try {
           const base64 = event.target?.result as string;
 
-          // Validate data URL format (important for mobile compatibility)
           if (!base64 || typeof base64 !== 'string' || !base64.startsWith('data:image/')) {
-            console.error('Invalid image data from FileReader:', typeof base64, base64?.substring?.(0, 30));
             setError('Failed to read image. Please try again.');
             setIsProcessing(false);
             return;
           }
 
-          // Check if image needs compression (> 3.5MB to stay under Vercel's 4.5MB limit)
           const commaIdx = base64.indexOf(',');
           const base64Part = commaIdx > -1 ? base64.substring(commaIdx + 1) : base64;
           const sizeKB = Math.round((base64Part.length * 3) / 4 / 1024);
           let finalBase64 = base64;
 
           if (sizeKB > 3500) {
-            console.log(`Compressing image from ${sizeKB}KB...`);
             finalBase64 = await compressImage(base64, 3500);
-            const newSizeKB = Math.round((finalBase64.length * 3) / 4 / 1024);
-            console.log(`Compressed to ${newSizeKB}KB`);
           }
 
           setPreview(finalBase64);
@@ -163,13 +239,85 @@ export default function PhotoUploadModal({
   };
 
   const handleCameraCapture = () => {
-    // On mobile, this will open the camera
-    // On desktop, it will open file picker
     fileInputRef.current?.click();
   };
 
+  const runPipeline = useCallback(async () => {
+    if (!preview) return;
+
+    setIsRunningPipeline(true);
+    setError(null);
+    setPipelineProgress({ stage: 'scanning' });
+
+    try {
+      // Simulate stage transitions with a polling approach
+      // The actual API call is a single request, but we show staged progress
+      const progressTimer = setTimeout(() => {
+        setPipelineProgress(prev => ({ ...prev, stage: 'identifying' }));
+      }, 3000);
+
+      const validateTimer = setTimeout(() => {
+        setPipelineProgress(prev => ({ ...prev, stage: 'validating' }));
+      }, 12000);
+
+      const response = await fetch('/api/ai/identify-photo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          image: preview,
+          options: { bagType },
+        }),
+      });
+
+      clearTimeout(progressTimer);
+      clearTimeout(validateTimer);
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || `Request failed (${response.status})`);
+      }
+
+      const data = await response.json();
+
+      // Update progress with actual results
+      setPipelineProgress({
+        stage: 'complete',
+        itemsFound: data.pipeline?.totalDetected ?? data.products?.length ?? 0,
+        itemsIdentified: data.pipeline?.totalIdentified ?? data.products?.length ?? 0,
+        itemsVerified: data.pipeline?.totalVerified ?? 0,
+      });
+
+      // Wait a beat for the user to see the final status
+      await new Promise(r => setTimeout(r, 800));
+
+      if (onPipelineComplete) {
+        onPipelineComplete({
+          ...data,
+          sourceImageBase64: preview,
+        });
+      } else {
+        // Fallback: use legacy onPhotoCapture
+        onPhotoCapture(preview);
+      }
+
+      handleReset();
+    } catch (err: any) {
+      console.error('[PhotoUpload] Pipeline error:', err);
+      setPipelineProgress({ stage: 'error', error: err.message });
+      setError(err.message || 'Failed to identify products');
+    } finally {
+      setIsRunningPipeline(false);
+    }
+  }, [preview, bagType, onPhotoCapture, onPipelineComplete]);
+
   const handleUsePhoto = () => {
-    if (preview) {
+    if (!preview) return;
+
+    if (onPipelineComplete) {
+      // New path: run the full vision pipeline
+      runPipeline();
+    } else {
+      // Legacy path: just pass the base64 up
       onPhotoCapture(preview);
       handleReset();
     }
@@ -179,12 +327,15 @@ export default function PhotoUploadModal({
     setPreview(null);
     setError(null);
     setIsProcessing(false);
+    setIsRunningPipeline(false);
+    setPipelineProgress({ stage: 'idle' });
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
 
   const handleCloseModal = () => {
+    if (isRunningPipeline) return; // Don't close during pipeline
     handleReset();
     onClose();
   };
@@ -213,19 +364,21 @@ export default function PhotoUploadModal({
                 {bagType && ` (${bagType} items)`}
               </p>
             </div>
-            <button
-              onClick={handleCloseModal}
-              className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors rounded-lg hover:bg-[var(--surface-hover)] active:bg-[var(--surface-active)]"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
+            {!isRunningPipeline && (
+              <button
+                onClick={handleCloseModal}
+                className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors rounded-lg hover:bg-[var(--surface-hover)] active:bg-[var(--surface-active)]"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            )}
           </div>
 
           {/* Content */}
@@ -239,10 +392,32 @@ export default function PhotoUploadModal({
               className="hidden"
             />
 
-            {!preview ? (
+            {isRunningPipeline ? (
+              // Pipeline progress view
+              <div className="space-y-4">
+                {/* Thumbnail of source image */}
+                <div className="relative rounded-[var(--radius-lg)] overflow-hidden bg-[var(--sand-2)]">
+                  <img
+                    src={preview!}
+                    alt="Analyzing..."
+                    className="w-full h-auto max-h-48 object-contain opacity-75"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  <div className="absolute bottom-3 left-3 right-3">
+                    <p className="text-white text-sm font-medium">
+                      Analyzing your photo...
+                    </p>
+                  </div>
+                </div>
+
+                {/* Stage progress */}
+                <div className="bg-[var(--sky-2)] border border-[var(--sky-6)] rounded-[var(--radius-lg)] p-4">
+                  <StageIndicator stage={pipelineProgress.stage} progress={pipelineProgress} />
+                </div>
+              </div>
+            ) : !preview ? (
               // Upload buttons
               <div className="space-y-4">
-                {/* Camera button (primary on mobile) */}
                 <button
                   onClick={handleCameraCapture}
                   disabled={isProcessing}
@@ -265,7 +440,6 @@ export default function PhotoUploadModal({
                   {isProcessing ? 'Processing...' : 'Take Photo'}
                 </button>
 
-                {/* File upload button (secondary) */}
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isProcessing}
@@ -282,7 +456,6 @@ export default function PhotoUploadModal({
                   Choose from Device
                 </button>
 
-                {/* Info box */}
                 <div className="bg-[var(--sky-2)] border border-[var(--sky-6)] rounded-[var(--radius-lg)] p-4 mt-6">
                   <div className="flex gap-3">
                     <svg className="w-5 h-5 text-[var(--sky-11)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -299,7 +472,7 @@ export default function PhotoUploadModal({
                         <li>• Take clear, well-lit photos</li>
                         <li>• Include multiple items in one photo</li>
                         <li>• Ensure products are visible and in focus</li>
-                        <li>• Large photos will be automatically optimized</li>
+                        <li>• Each item will be individually identified</li>
                       </ul>
                     </div>
                   </div>
@@ -308,7 +481,6 @@ export default function PhotoUploadModal({
             ) : (
               // Preview and confirm
               <div className="space-y-4">
-                {/* Image preview */}
                 <div className="relative rounded-[var(--radius-lg)] overflow-hidden bg-[var(--sand-2)]">
                   <img
                     src={preview}
@@ -317,7 +489,6 @@ export default function PhotoUploadModal({
                   />
                 </div>
 
-                {/* Action buttons */}
                 <div className="flex items-center justify-between gap-3">
                   <button
                     onClick={handleReset}
@@ -347,7 +518,17 @@ export default function PhotoUploadModal({
                       d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  <p className="text-sm text-[var(--copper-11)]">{error}</p>
+                  <div>
+                    <p className="text-sm text-[var(--copper-11)]">{error}</p>
+                    {isRunningPipeline && (
+                      <button
+                        onClick={handleReset}
+                        className="mt-2 text-sm text-[var(--copper-11)] underline hover:no-underline"
+                      >
+                        Try again
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             )}

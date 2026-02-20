@@ -2,12 +2,12 @@
 
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Link, Images, Sparkles, Image, TrendingUp, ChevronRight, ChevronDown, Type, Layers } from 'lucide-react';
+import { Plus, Link, Images, Sparkles, Image, TrendingUp, ChevronRight, ChevronDown, Type, Layers, Camera } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { fadeUp } from '@/lib/animations';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 
-type ToolId = 'quickAdd' | 'bulkAdd' | 'photoMatch' | 'enhanceDetails' | 'coverPhoto' | 'analytics';
+type ToolId = 'quickAdd' | 'scanPhoto' | 'bulkAdd' | 'photoMatch' | 'enhanceDetails' | 'coverPhoto' | 'analytics';
 
 type ToolOption = {
   id: ToolId;
@@ -36,6 +36,7 @@ interface BagToolsMenuProps {
   renderAnalytics?: (onDismiss: () => void) => React.ReactNode;
   onBulkAddFromLinks: () => void;
   onBulkAddFromText: () => void;
+  onScanPhoto: () => void;
   onPhotoMatch: () => void;
   onEnhanceDetails: () => void;
 }
@@ -49,6 +50,7 @@ export function BagToolsMenu({
   renderAnalytics,
   onBulkAddFromLinks,
   onBulkAddFromText,
+  onScanPhoto,
   onPhotoMatch,
   onEnhanceDetails,
 }: BagToolsMenuProps) {
@@ -68,6 +70,20 @@ export function BagToolsMenu({
       stripBg: 'bg-[var(--teed-green-4)]',
       stripText: 'text-[var(--teed-green-11)]',
       visible: true,
+    },
+    {
+      id: 'scanPhoto',
+      icon: <Camera className="w-5 h-5" />,
+      stripIcon: <Camera className="w-3.5 h-3.5" />,
+      label: 'Scan Photo',
+      shortLabel: 'Scan',
+      description: 'Identify all products in a photo',
+      color: 'text-[var(--violet-10)]',
+      bgColor: 'bg-[var(--violet-3)]',
+      stripBg: 'bg-[var(--violet-4)]',
+      stripText: 'text-[var(--violet-11)]',
+      visible: true,
+      directAction: true,
     },
     {
       id: 'bulkAdd',
@@ -141,6 +157,7 @@ export function BagToolsMenu({
   const visibleTools = tools.filter((t) => t.visible);
 
   const directActionHandlers: Partial<Record<ToolId, () => void>> = {
+    scanPhoto: onScanPhoto,
     photoMatch: onPhotoMatch,
     enhanceDetails: onEnhanceDetails,
   };
@@ -156,7 +173,7 @@ export function BagToolsMenu({
       // BottomSheet tools: close picker then open sheet
       setTimeout(() => setActiveTool(toolId), 150);
     }
-  }, [onPhotoMatch, onEnhanceDetails]);
+  }, [onScanPhoto, onPhotoMatch, onEnhanceDetails]);
 
   const handleDismissTool = useCallback(() => {
     setActiveTool(null);

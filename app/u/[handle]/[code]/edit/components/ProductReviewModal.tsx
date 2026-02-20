@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, Check, X, Palette, Eye, Tag } from 'lucide-react';
+import { ChevronDown, Check, X, Palette, Eye, Tag, RefreshCw, ShieldCheck, ShieldAlert, ShieldQuestion } from 'lucide-react';
 
 // Structured color information
 interface ProductColors {
@@ -28,6 +28,8 @@ interface BrandSignature {
   visualConfidence: number;
 }
 
+type ValidationVerdict = 'verified' | 'unverified' | 'mismatch';
+
 export type IdentifiedProduct = {
   name: string;
   brand?: string;
@@ -52,6 +54,10 @@ export type IdentifiedProduct = {
     reason: string;
   }>;
   sourceImageIndex?: number;
+  // Vision pipeline fields
+  cropBase64?: string;
+  validationVerdict?: ValidationVerdict;
+  validationReferenceUrl?: string;
 };
 
 type ProductReviewModalProps = {
@@ -61,7 +67,64 @@ type ProductReviewModalProps = {
   totalConfidence: number;
   processingTime: number;
   onAddSelected: (selectedProducts: IdentifiedProduct[]) => Promise<void>;
+  onReidentify?: (index: number) => Promise<void>;
+  pipelineStats?: {
+    totalDetected: number;
+    totalIdentified: number;
+    totalVerified: number;
+  };
 };
+
+function ValidationBadge({ verdict }: { verdict?: ValidationVerdict }) {
+  if (!verdict) return null;
+
+  const config = {
+    verified: {
+      icon: ShieldCheck,
+      label: 'Verified',
+      className: 'bg-green-50 text-green-700 border-green-200',
+    },
+    unverified: {
+      icon: ShieldQuestion,
+      label: 'Unverified',
+      className: 'bg-yellow-50 text-yellow-700 border-yellow-200',
+    },
+    mismatch: {
+      icon: ShieldAlert,
+      label: 'Mismatch',
+      className: 'bg-red-50 text-red-700 border-red-200',
+    },
+  }[verdict];
+
+  const Icon = config.icon;
+
+  return (
+    <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-medium rounded border ${config.className}`}>
+      <Icon className="w-3 h-3" />
+      {config.label}
+    </span>
+  );
+}
+
+function ConfidenceBar({ confidence }: { confidence: number }) {
+  const getColor = (c: number) => {
+    if (c >= 70) return 'bg-green-500';
+    if (c >= 50) return 'bg-yellow-500';
+    return 'bg-red-400';
+  };
+
+  return (
+    <div className="flex items-center gap-1.5">
+      <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+        <div
+          className={`h-full rounded-full transition-all ${getColor(confidence)}`}
+          style={{ width: `${Math.min(100, confidence)}%` }}
+        />
+      </div>
+      <span className="text-xs text-gray-500">{confidence}%</span>
+    </div>
+  );
+}
 
 export default function ProductReviewModal({
   isOpen,
@@ -70,6 +133,8 @@ export default function ProductReviewModal({
   totalConfidence,
   processingTime,
   onAddSelected,
+  onReidentify,
+  pipelineStats,
 }: ProductReviewModalProps) {
   const [selectedIds, setSelectedIds] = useState<Set<number>>(
     new Set(products.map((_, i) => i))
@@ -77,6 +142,7 @@ export default function ProductReviewModal({
   const [editedProducts, setEditedProducts] = useState<IdentifiedProduct[]>(products);
   const [isAdding, setIsAdding] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const [reidentifyingIndex, setReidentifyingIndex] = useState<number | null>(null);
 
   const toggleSelection = (index: number) => {
     const newSelected = new Set(selectedIds);
@@ -112,6 +178,16 @@ export default function ProductReviewModal({
     setEditedProducts(updated);
   };
 
+  const handleReidentify = async (index: number) => {
+    if (!onReidentify) return;
+    setReidentifyingIndex(index);
+    try {
+      await onReidentify(index);
+    } finally {
+      setReidentifyingIndex(null);
+    }
+  };
+
   const handleAddSelected = async () => {
     const selected = editedProducts.filter((_, i) => selectedIds.has(i));
     if (selected.length === 0) return;
@@ -132,32 +208,38 @@ export default function ProductReviewModal({
   const selectedCount = selectedIds.size;
   const allSelected = selectedIds.size === products.length;
 
-  const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 70) return 'bg-green-500';
-    if (confidence >= 50) return 'bg-yellow-500';
-    return 'bg-red-500';
-  };
-
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-white md:bg-black/50 md:items-center md:justify-center md:p-4">
-      {/* Desktop backdrop - click to close */}
       <div
         className="hidden md:block fixed inset-0"
         onClick={onClose}
       />
 
-      {/* Modal container - full screen mobile, centered card desktop */}
       <div className="relative flex flex-col w-full h-full md:h-auto md:max-h-[90vh] md:max-w-2xl md:rounded-xl md:shadow-2xl bg-white overflow-hidden">
 
-        {/* Header - compact on mobile */}
+        {/* Header */}
         <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 md:px-6 md:py-4 border-b border-gray-200 bg-white">
           <div className="flex-1 min-w-0">
             <h2 className="text-lg font-semibold text-gray-900">
               Review Products
             </h2>
-            <p className="text-sm text-gray-500 mt-0.5">
-              {products.length} found • {totalConfidence}% confidence
-            </p>
+            <div className="flex items-center gap-2 mt-0.5">
+              <p className="text-sm text-gray-500">
+                {products.length} found
+              </p>
+              {pipelineStats && (
+                <>
+                  <span className="text-gray-300">|</span>
+                  <p className="text-sm text-gray-500">
+                    {pipelineStats.totalVerified} verified
+                  </p>
+                </>
+              )}
+              <span className="text-gray-300">|</span>
+              <p className="text-sm text-gray-500">
+                {(processingTime / 1000).toFixed(1)}s
+              </p>
+            </div>
           </div>
           <button
             onClick={onClose}
@@ -190,7 +272,7 @@ export default function ProductReviewModal({
           </span>
         </div>
 
-        {/* Products List - scrollable area */}
+        {/* Products List */}
         <div className="flex-1 overflow-y-auto overscroll-contain">
           {products.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
@@ -213,7 +295,7 @@ export default function ProductReviewModal({
                     key={index}
                     className={`transition-colors ${isSelected ? 'bg-[var(--sky-2)]' : 'bg-white'}`}
                   >
-                    {/* Product Row - always visible */}
+                    {/* Product Row */}
                     <div className="flex items-center gap-3 px-4 py-3">
                       {/* Selection checkbox */}
                       <button
@@ -229,25 +311,31 @@ export default function ProductReviewModal({
                         </div>
                       </button>
 
-                      {/* Product image thumbnail */}
-                      {product.productImage && (
+                      {/* Crop thumbnail (priority) or product image */}
+                      {product.cropBase64 ? (
+                        <img
+                          src={product.cropBase64}
+                          alt=""
+                          className="w-12 h-12 rounded-lg object-cover border border-gray-200 flex-shrink-0"
+                        />
+                      ) : product.productImage ? (
                         <img
                           src={product.productImage.thumbnailUrl}
                           alt=""
                           className="w-12 h-12 rounded-lg object-cover border border-gray-200 flex-shrink-0"
                           onError={(e) => { e.currentTarget.style.display = 'none'; }}
                         />
-                      )}
+                      ) : null}
 
                       {/* Product info */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0">
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 flex-wrap">
                               <h3 className="font-medium text-gray-900 truncate">
                                 {product.name}
                               </h3>
-                              {/* Source photo badge for bulk uploads */}
+                              <ValidationBadge verdict={product.validationVerdict} />
                               {typeof product.sourceImageIndex === 'number' && (
                                 <span className="flex-shrink-0 px-1.5 py-0.5 text-[10px] font-medium bg-[var(--sky-3)] text-[var(--sky-11)] rounded">
                                   Photo {product.sourceImageIndex + 1}
@@ -257,13 +345,13 @@ export default function ProductReviewModal({
                             {product.brand && (
                               <p className="text-sm text-gray-500 truncate">
                                 {product.brand}
+                                {product.color && <span className="text-gray-400"> · {product.color}</span>}
                               </p>
                             )}
                           </div>
-                          {/* Confidence indicator */}
-                          <div className="flex-shrink-0 flex items-center gap-1.5">
-                            <div className={`w-2 h-2 rounded-full ${getConfidenceColor(product.confidence)}`} />
-                            <span className="text-xs text-gray-500">{product.confidence}%</span>
+                          {/* Confidence */}
+                          <div className="flex-shrink-0">
+                            <ConfidenceBar confidence={product.confidence} />
                           </div>
                         </div>
                       </div>
@@ -280,6 +368,45 @@ export default function ProductReviewModal({
                     {/* Expanded edit section */}
                     {isExpanded && (
                       <div className="px-4 pb-4 pt-1 space-y-4 border-t border-gray-100 bg-gray-50/50">
+                        {/* Side-by-side: Crop vs Reference */}
+                        {(product.cropBase64 || product.validationReferenceUrl) && (
+                          <div className="flex gap-3">
+                            {product.cropBase64 && (
+                              <div className="flex-1">
+                                <p className="text-[10px] uppercase tracking-wider text-gray-400 mb-1">From Photo</p>
+                                <img
+                                  src={product.cropBase64}
+                                  alt="Crop"
+                                  className="w-full h-32 object-contain rounded-lg border border-gray-200 bg-white"
+                                />
+                              </div>
+                            )}
+                            {product.validationReferenceUrl && (
+                              <div className="flex-1">
+                                <p className="text-[10px] uppercase tracking-wider text-gray-400 mb-1">Reference</p>
+                                <img
+                                  src={product.validationReferenceUrl}
+                                  alt="Reference"
+                                  className="w-full h-32 object-contain rounded-lg border border-gray-200 bg-white"
+                                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Re-identify button */}
+                        {onReidentify && product.cropBase64 && (
+                          <button
+                            onClick={() => handleReidentify(index)}
+                            disabled={reidentifyingIndex === index}
+                            className="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-[var(--sky-11)] bg-[var(--sky-3)] hover:bg-[var(--sky-4)] rounded-lg transition-colors disabled:opacity-50"
+                          >
+                            <RefreshCw className={`w-4 h-4 ${reidentifyingIndex === index ? 'animate-spin' : ''}`} />
+                            {reidentifyingIndex === index ? 'Re-identifying...' : 'Re-identify This Item'}
+                          </button>
+                        )}
+
                         {/* Name input */}
                         <div>
                           <label className="block text-xs font-medium text-gray-600 mb-1.5">
@@ -317,18 +444,27 @@ export default function ProductReviewModal({
                             onChange={(e) => updateProduct(index, 'category', e.target.value)}
                             className="w-full px-3 py-3 text-base border border-gray-300 rounded-xl focus:ring-2 focus:ring-[var(--sky-6)] focus:border-transparent bg-white"
                           >
+                            <option value="electronics">Electronics</option>
+                            <option value="audio">Audio</option>
+                            <option value="computing">Computing</option>
+                            <option value="lighting">Lighting</option>
+                            <option value="accessories">Accessories</option>
+                            <option value="furniture">Furniture</option>
                             <option value="camping">Camping</option>
                             <option value="golf">Golf</option>
                             <option value="hiking">Hiking</option>
                             <option value="travel">Travel</option>
                             <option value="sports">Sports</option>
-                            <option value="electronics">Electronics</option>
                             <option value="clothing">Clothing</option>
+                            <option value="drinkware">Drinkware</option>
+                            <option value="stationery">Stationery</option>
+                            <option value="decor">Decor</option>
+                            <option value="tools">Tools</option>
                             <option value="other">Other</option>
                           </select>
                         </div>
 
-                        {/* Visual Attributes Section - NEW */}
+                        {/* Visual Attributes Section */}
                         {(product.colors || product.pattern || product.brandSignature) && (
                           <div className="pt-2 border-t border-gray-200">
                             <p className="text-xs font-medium text-gray-600 mb-3 flex items-center gap-1.5">
@@ -336,7 +472,6 @@ export default function ProductReviewModal({
                               Visual Details
                             </p>
 
-                            {/* Colors */}
                             {product.colors && (
                               <div className="mb-3">
                                 <div className="flex items-center gap-1.5 mb-1.5">
@@ -373,7 +508,6 @@ export default function ProductReviewModal({
                               </div>
                             )}
 
-                            {/* Pattern */}
                             {product.pattern && product.pattern.type !== 'solid' && (
                               <div className="mb-3">
                                 <div className="flex items-center gap-1.5 mb-1.5">
@@ -395,7 +529,6 @@ export default function ProductReviewModal({
                               </div>
                             )}
 
-                            {/* Brand Signature */}
                             {product.brandSignature && product.brandSignature.designCues.length > 0 && (
                               <div>
                                 <div className="flex items-center gap-1.5 mb-1.5">
@@ -446,7 +579,7 @@ export default function ProductReviewModal({
                                     <div>
                                       <span className="font-medium text-gray-900">{alt.name}</span>
                                       {alt.brand && (
-                                        <span className="text-gray-500"> • {alt.brand}</span>
+                                        <span className="text-gray-500"> · {alt.brand}</span>
                                       )}
                                     </div>
                                     <span className="text-xs text-gray-500">{alt.confidence}%</span>
@@ -466,7 +599,7 @@ export default function ProductReviewModal({
           )}
         </div>
 
-        {/* Footer - sticky at bottom */}
+        {/* Footer */}
         <div className="flex-shrink-0 px-4 py-4 md:px-6 border-t border-gray-200 bg-white safe-area-bottom">
           <div className="flex gap-3">
             <button
