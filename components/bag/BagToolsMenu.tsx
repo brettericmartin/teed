@@ -82,7 +82,7 @@ export function BagToolsMenu({
       bgColor: 'bg-[var(--violet-3)]',
       stripBg: 'bg-[var(--violet-4)]',
       stripText: 'text-[var(--violet-11)]',
-      visible: true,
+      visible: process.env.NODE_ENV === 'development',
       directAction: true,
     },
     {
