@@ -36,7 +36,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const { count: bagCount } = await supabase
     .from('bags')
     .select('id', { count: 'exact', head: true })
-    .eq('user_id', user.id);
+    .eq('owner_id', user.id);
 
   // If user has bags or completed onboarding, go straight to profile
   if ((bagCount && bagCount > 0) || profile.onboarding_completed_at) {
