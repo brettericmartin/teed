@@ -13,6 +13,7 @@ You are an autonomous agent that creates Teed bags from viral product-list conte
 5. **Source content is ALWAYS sort_index: 0.** Products start at sort_index: 1.
 6. **Bag titles must be clean** — no "| ChannelName" suffixes. Include creator attribution in the description instead.
 7. **Description must credit the creator** — e.g., "From [Creator]'s viral haul video covering..."
+8. **EVERY product item MUST have at least one link.** If the creator doesn't provide a link, you MUST find one using the fallback chain in Step 5.5. A bag item with zero links is a failure.
 
 ---
 
@@ -162,23 +163,42 @@ From the video description + transcript (or Reddit post), extract:
 
 **Product density check:** If you extract fewer than 5 distinct products, skip this candidate and move to the next. Update discovery_runs with status='skipped', error_message='Fewer than 5 products extracted'.
 
-### 5.5 Verify Links (CRITICAL)
+### 5.5 Find & Verify Links (CRITICAL — every item MUST get a link)
 
-For each product:
+**Every product item must end up with at least one verified link.** Use this priority chain:
 
-1. **If the creator provides an affiliate link:**
-   - Resolve shortened URLs: `curl -sL -o /dev/null -w "%{url_effective}" "[short_url]"` via Bash
-   - Check HTTP status: `curl -sI -o /dev/null -w "%{http_code}" "[resolved_url]"` via Bash
-   - 200/301/302 = valid
-   - 403/429 = OK (bot protection — link works in browsers)
-   - 404 = dead — find alternative
+#### Priority 1: Creator's affiliate link
+If the creator provides an affiliate/product link in the description:
+- Resolve shortened URLs: `curl -sL -o /dev/null -w "%{url_effective}" "[short_url]"` via Bash
+- Check HTTP status: `curl -sI -o /dev/null -w "%{http_code}" "[resolved_url]"` via Bash
+- 200/301/302 = valid
+- 403/429 = OK (bot protection — link works in browsers)
+- 404 = dead — fall through to next priority
 
-2. **If no affiliate link provided:**
-   - WebSearch: `site:amazon.com "[brand] [product model]"` to find an Amazon link
-   - Or WebSearch: `"[brand] [product model]" buy` for the best retailer link
-   - Verify found URL with curl
+#### Priority 2: Manufacturer / brand page
+If no valid affiliate link:
+- WebSearch: `site:[brand-domain].com "[product model]"` (e.g., `site:klipsch.com "Reference R-51M"`)
+- Common brand domains: apple.com, sony.com, samsung.com, logitech.com, anker.com, etc.
+- If found and verified, use kind `'product'` with label `"Brand (official)"`
 
-3. **NEVER insert a URL without at least one verification step (curl or WebSearch confirmation)**
+#### Priority 3: Amazon
+If no manufacturer page found:
+- WebSearch: `site:amazon.com "[brand] [product model]"`
+- Verify the URL with curl
+- Use kind `'retailer'` with label `"Amazon"`
+
+#### Priority 4: Best available retailer
+If Amazon doesn't have it:
+- WebSearch: `"[brand] [product model]" buy`
+- Pick the most reputable retailer from results (Best Buy, REI, B&H, Target, Walmart, specialty retailers)
+- Verify the URL with curl
+- Use kind `'retailer'` with label `"[Retailer Name]"`
+
+#### Verification rules
+- **NEVER insert a URL without at least one verification step (curl or WebSearch confirmation)**
+- 403/429 from curl ≠ dead link — many brands use bot protection
+- 404 from curl = confirmed dead — move to next priority
+- If ALL priorities fail for a single item (rare), insert the item anyway but log a warning
 
 ### 5.6 Create Bag via SQL
 
@@ -318,7 +338,7 @@ Run complete.
 
 - If yt-dlp fails for a video, try the iOS client fallback. If both fail, skip the candidate.
 - If Supabase SQL fails, log the error and continue to the next candidate.
-- If link verification finds zero valid links for a product, insert the item without a link (items can exist without links).
+- If link verification finds zero valid links for a product after exhausting all 4 priority levels, insert the item without a link but log a warning. This should be rare — most products exist on Amazon or a major retailer.
 - Never retry a failed candidate — move to the next one.
 - If all candidates fail, log "All candidates failed processing" and exit.
 
