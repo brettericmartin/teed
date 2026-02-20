@@ -2,9 +2,8 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Compass, Package, Search, Filter, X, Heart, ChevronDown, User, Bookmark, Zap } from 'lucide-react';
+import { Compass, Package, Search, Filter, X, Heart, ChevronDown, User, Bookmark } from 'lucide-react';
 import Link from 'next/link';
-import { BetaCapacityBadge } from '@/components/BetaCapacityCounter';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { staggerContainer, cardVariants } from '@/lib/animations';
 import { SkeletonBagGrid } from '@/components/ui/Skeleton';
@@ -323,23 +322,6 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
 
   return (
     <PageContainer variant="cool">
-      {/* Beta Banner */}
-      <Link
-        href="/join"
-        className="block bg-gradient-to-r from-[var(--teed-green-2)] to-[var(--teed-green-3)] border-b border-[var(--teed-green-6)] px-4 py-3 text-center hover:from-[var(--teed-green-3)] hover:to-[var(--teed-green-4)] transition-colors"
-      >
-        <div className="flex items-center justify-center gap-3 text-sm">
-          <Zap className="w-4 h-4 text-[var(--teed-green-9)]" />
-          <span className="text-[var(--text-primary)] font-medium">
-            Want to create your own bags?
-          </span>
-          <BetaCapacityBadge />
-          <span className="text-[var(--teed-green-11)] font-semibold hover:underline">
-            Apply for founding access →
-          </span>
-        </div>
-      </Link>
-
       {/* Filters Header - extends up to navbar */}
       <PageHeader className="pt-12">
         <ContentContainer className="pb-4">

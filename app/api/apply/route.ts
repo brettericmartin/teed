@@ -211,31 +211,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Failed to create application' }, { status: 500 });
   }
 
-  // Try auto-approve
-  let autoApproved = false;
-  try {
-    const { data: approveResult } = await supabase.rpc('try_auto_approve_application', {
-      application_id: appData.id,
-    });
-    if (approveResult?.success || approveResult?.auto_approved) {
-      autoApproved = true;
-    }
-  } catch (err) {
-    console.error('Auto-approve check error (non-fatal):', err);
-  }
-
-  // Belt-and-suspenders: if auto-approved, ensure profile beta_tier is set
-  if (autoApproved) {
-    await supabase
-      .from('profiles')
-      .update({ beta_tier: 'standard', beta_approved_at: new Date().toISOString() })
-      .eq('id', userId)
-      .is('beta_tier', null);
-  }
+  // Mark onboarding as completed
+  await supabase
+    .from('profiles')
+    .update({ onboarding_completed_at: new Date().toISOString() })
+    .eq('id', userId);
 
   return NextResponse.json({
     applicationId: appData.id,
     waitlistPosition: appData.waitlist_position,
-    autoApproved,
   });
 }

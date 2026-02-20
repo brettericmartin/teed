@@ -1474,6 +1474,19 @@ body {
 }
 
 /* ============================================
+   DARK SECTION UTILITIES
+   ============================================ */
+
+/* Override text color tokens for dark-background sections.
+   This makes the global h1-h6/p { color: var(--text-primary) } rules
+   naturally resolve to white inside dark sections. */
+.dark-section {
+  --text-primary: #fff;
+  --text-secondary: rgba(255,255,255,0.8);
+  --text-tertiary: rgba(255,255,255,0.65);
+}
+
+/* ============================================
    TYPOGRAPHY UTILITIES
    ============================================ */
 
@@ -2281,6 +2294,65 @@ body.settings-panel-open {
   min-height: 44px;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* ============================================
+   LANDING PAGE VISUAL OVERHAUL
+   ============================================ */
+
+/* Aurora drift - slow-moving gradient blobs for hero/CTA backgrounds */
+@keyframes aurora-drift-1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -20px) scale(1.05);
+  }
+  66% {
+    transform: translate(-20px, 15px) scale(0.95);
+  }
+}
+
+@keyframes aurora-drift-2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(-25px, 20px) scale(1.08);
+  }
+  66% {
+    transform: translate(15px, -25px) scale(0.92);
+  }
+}
+
+@keyframes aurora-drift-3 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1.02);
+  }
+  33% {
+    transform: translate(20px, 25px) scale(0.96);
+  }
+  66% {
+    transform: translate(-30px, -10px) scale(1.06);
+  }
+}
+
+/* CTA button glow pulse */
+@keyframes cta-glow {
+  0%, 100% {
+    box-shadow:
+      0 0 20px rgba(122, 151, 112, 0.3),
+      0 0 40px rgba(122, 151, 112, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 30px rgba(122, 151, 112, 0.5),
+      0 0 60px rgba(122, 151, 112, 0.2);
+  }
+}
+
+.animate-cta-glow {
+  animation: cta-glow 2s ease-in-out infinite;
 }
 
 /* ============================================

@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { fadeUp, smoothTransition } from '@/lib/animations';
+import { smoothTransition } from '@/lib/animations';
 import { analytics } from '@/lib/analytics';
 import PhoneMockup from './PhoneMockup';
 import type { FeaturedBag } from './FeaturedBagCard';
@@ -34,22 +33,47 @@ const heroItem = {
 };
 
 export default function HeroSection({ previewBag }: HeroSectionProps) {
-  const [spotsRemaining, setSpotsRemaining] = useState<number | null>(null);
-
-  useEffect(() => {
-    fetch('/api/beta/capacity')
-      .then(res => res.json())
-      .then(data => {
-        if (data.available != null) {
-          setSpotsRemaining(data.available);
-        }
-      })
-      .catch(() => {});
-  }, []);
-
   return (
-    <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[var(--teed-green-1)] to-[var(--background)]">
-      <div className="max-w-7xl mx-auto">
+    <section className="relative pt-24 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      {/* Aurora gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[var(--teed-green-1)] to-[var(--background)]" />
+
+      {/* Aurora blobs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div
+          className="absolute top-[-10%] left-[-5%] w-[60%] h-[60%] rounded-full opacity-30 blur-3xl"
+          style={{
+            background: 'radial-gradient(circle, var(--teed-green-4) 0%, transparent 70%)',
+            animation: 'aurora-drift-1 18s ease-in-out infinite',
+          }}
+        />
+        <div
+          className="absolute top-[10%] right-[-10%] w-[50%] h-[50%] rounded-full opacity-25 blur-3xl"
+          style={{
+            background: 'radial-gradient(circle, var(--sky-4) 0%, transparent 70%)',
+            animation: 'aurora-drift-2 20s ease-in-out infinite',
+            animationDelay: '3s',
+          }}
+        />
+        <div
+          className="absolute bottom-[-5%] left-[20%] w-[45%] h-[45%] rounded-full opacity-20 blur-3xl"
+          style={{
+            background: 'radial-gradient(circle, var(--sand-4) 0%, transparent 70%)',
+            animation: 'aurora-drift-3 16s ease-in-out infinite',
+            animationDelay: '7s',
+          }}
+        />
+      </div>
+
+      {/* Floating decorative elements - hidden on mobile */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none hidden sm:block">
+        <div className="absolute top-[15%] left-[8%] w-3 h-3 rounded-full bg-[var(--teed-green-6)] opacity-30 animate-float" />
+        <div className="absolute top-[25%] right-[12%] w-2 h-2 rounded-full bg-[var(--sky-6)] opacity-25 animate-float animation-delay-200" />
+        <div className="absolute bottom-[30%] left-[15%] w-4 h-4 rounded-full border-2 border-[var(--teed-green-5)] opacity-20 animate-float animation-delay-400" />
+        <div className="absolute top-[60%] right-[8%] w-2.5 h-2.5 rounded-full bg-[var(--sand-6)] opacity-30 animate-float animation-delay-600" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto">
         <div className="lg:grid lg:grid-cols-2 lg:gap-12 lg:items-center">
           {/* Left: Copy + CTA */}
           <motion.div
@@ -65,7 +89,7 @@ export default function HeroSection({ previewBag }: HeroSectionProps) {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--teed-green-9)] opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--teed-green-9)]" />
                 </span>
-                Founding Member Applications Open
+                Free During Launch — Founding Members Stay Free Forever
               </span>
             </motion.div>
 
@@ -74,7 +98,7 @@ export default function HeroSection({ previewBag }: HeroSectionProps) {
               variants={heroItem}
               className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)] tracking-tight mb-6"
             >
-              Your gear deserves a better home.
+              Your gear deserves <span className="font-serif italic text-[var(--teed-green-11)]">a better</span> home.
             </motion.h1>
 
             {/* Subhead */}
@@ -88,21 +112,20 @@ export default function HeroSection({ previewBag }: HeroSectionProps) {
 
             {/* CTA */}
             <motion.div variants={heroItem} className="flex flex-col items-center lg:items-start gap-3">
-              <Link
-                href="/join"
-                onClick={() => analytics.ctaClicked('founding_member', 'hero', '/join')}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-[var(--teed-green-9)] text-white text-lg font-semibold rounded-xl hover:bg-[var(--teed-green-10)] transition-all shadow-lg hover:shadow-xl hover:scale-105"
-              >
-                Become a Founding Member
-                <ArrowRight className="w-5 h-5" />
-              </Link>
+              <span className="animate-cta-glow rounded-xl">
+                <Link
+                  href="/signup"
+                  onClick={() => analytics.ctaClicked('founding_member', 'hero', '/signup')}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-[var(--teed-green-9)] text-white text-lg font-semibold rounded-xl hover:bg-[var(--teed-green-10)] transition-all shadow-lg hover:shadow-xl hover:scale-105"
+                >
+                  Create Your Free Account
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+              </span>
 
-              {/* Urgency line */}
-              {spotsRemaining !== null && spotsRemaining > 0 && (
-                <p className="text-sm text-[var(--text-tertiary)]">
-                  <span className="font-semibold text-[var(--teed-green-11)]">{spotsRemaining} of 50</span> founding spots remaining
-                </p>
-              )}
+              <p className="text-sm text-[var(--text-tertiary)]">
+                No credit card required. Takes 30 seconds.
+              </p>
             </motion.div>
           </motion.div>
 

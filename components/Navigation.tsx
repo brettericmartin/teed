@@ -4,8 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { User, Settings, LogOut, ChevronDown, Compass, LayoutDashboard, Shield, Sparkles, MessageCircle, BookOpen } from 'lucide-react';
-import { BetaCapacityBadge } from './BetaCapacityCounter';
-import { BetaCountdownBadge } from './BetaCountdown';
 import { useFeatureDiscovery, FEATURE_RELEASES } from './ui/FeatureBadge';
 
 interface NavigationProps {
@@ -172,17 +170,9 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
             )}
           </div>
 
-          {/* Right: Beta Badge + Profile Menu (when authenticated) */}
+          {/* Right: Profile Menu (when authenticated) */}
           {isAuthenticated && userHandle && (
             <div className="flex items-center gap-3">
-              {/* Beta Status Badges - also visible for authenticated users */}
-              <Link
-                href="/join"
-                className="hidden lg:flex items-center gap-2 hover:opacity-80 transition-opacity"
-              >
-                <BetaCapacityBadge />
-              </Link>
-
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
@@ -311,15 +301,6 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
           {/* Navigation + CTA (when not authenticated) */}
           {!isAuthenticated && (
             <div className="flex items-center gap-2 sm:gap-4">
-              {/* Beta Status Badges - visible for visitors */}
-              <Link
-                href="/join"
-                className="hidden lg:flex items-center gap-2 hover:opacity-80 transition-opacity"
-              >
-                <BetaCapacityBadge />
-                <BetaCountdownBadge />
-              </Link>
-
               {/* Discover link for visitors */}
               <Link
                 href="/discover"

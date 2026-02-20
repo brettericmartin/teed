@@ -51,8 +51,11 @@ export default function FeaturedBagsSection({ initialBags }: FeaturedBagsSection
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-[var(--surface)]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
+            <span className="inline-block px-3 py-1 text-xs font-medium tracking-widest uppercase text-[var(--text-tertiary)] border border-[var(--border-subtle)] rounded-full mb-4">
+              Collections
+            </span>
             <h2 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] mb-4">
-              See what people are sharing
+              See what people are <span className="bg-gradient-to-r from-[var(--teed-green-8)] to-[var(--sky-7)] bg-clip-text text-transparent">sharing</span>
             </h2>
             <p className="text-lg text-[var(--text-secondary)] max-w-3xl mx-auto">
               Real collections from real creators on Teed
@@ -93,8 +96,11 @@ export default function FeaturedBagsSection({ initialBags }: FeaturedBagsSection
           transition={smoothTransition}
           className="text-center mb-12"
         >
+          <span className="inline-block px-3 py-1 text-xs font-medium tracking-widest uppercase text-[var(--text-tertiary)] border border-[var(--border-subtle)] rounded-full mb-4">
+            Collections
+          </span>
           <h2 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] mb-4">
-            See what people are sharing
+            See what people are <span className="bg-gradient-to-r from-[var(--teed-green-8)] to-[var(--sky-7)] bg-clip-text text-transparent">sharing</span>
           </h2>
           <p className="text-lg text-[var(--text-secondary)] max-w-3xl mx-auto">
             Real collections from real creators on Teed
@@ -141,10 +147,10 @@ export default function FeaturedBagsSection({ initialBags }: FeaturedBagsSection
           className="text-center mt-10"
         >
           <Link
-            href="/join"
+            href="/signup"
             className="inline-flex items-center gap-2 text-[var(--teed-green-9)] hover:text-[var(--teed-green-10)] font-semibold transition-colors"
           >
-            Create yours
+            Create yours — it&apos;s free
             <ArrowRight className="w-4 h-4" />
           </Link>
         </motion.div>

@@ -2,14 +2,13 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import HeroSection from '@/components/home/HeroSection';
-import SocialProofBar from '@/components/home/SocialProofBar';
 import ProblemSection from '@/components/home/ProblemSection';
 import FeaturedBagsSection from '@/components/home/FeaturedBagsSection';
 import HowItWorksSection from '@/components/home/HowItWorksSection';
 import FeaturesSection from '@/components/home/FeaturesSection';
-import TestimonialsSection from '@/components/home/TestimonialsSection';
-import BetaSection from '@/components/home/BetaSection';
+import FoundingMemberCTA from '@/components/home/FoundingMemberCTA';
 import { analytics } from '@/lib/analytics';
 import type { FeaturedBag } from '@/components/home/FeaturedBagCard';
 
@@ -38,37 +37,45 @@ export default function HomeClient() {
       {/* 1. Hero */}
       <HeroSection previewBag={previewBag} />
 
-      {/* 2. Social Proof Bar */}
-      <SocialProofBar />
-
-      {/* 3. Problem/Agitation */}
+      {/* 2. Problem/Agitation (dark navy) */}
       <ProblemSection />
 
-      {/* 4. Featured Collections */}
+      {/* 3. Featured Collections */}
       <FeaturedBagsSection />
 
-      {/* 5. How It Works */}
+      {/* 4. How It Works */}
       <HowItWorksSection />
 
-      {/* 6. Features */}
+      {/* 5. Features */}
       <FeaturesSection />
 
-      {/* 7. Testimonials */}
-      <TestimonialsSection />
+      {/* Giant text divider before CTA */}
+      <div className="py-12 sm:py-20 text-center overflow-hidden bg-[var(--surface-elevated)]">
+        <motion.p
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+          className="text-5xl sm:text-7xl lg:text-8xl font-serif italic font-medium tracking-tight text-[var(--teed-green-3)] select-none"
+        >
+          Your gear. Your way.
+        </motion.p>
+      </div>
 
-      {/* 8. Founding Member CTA */}
-      <BetaSection />
+      {/* 6. Founding Member CTA (dark green) */}
+      <FoundingMemberCTA />
 
-      {/* 9. Footer */}
+      {/* 7. Footer */}
       <footer className="py-12 px-4 sm:px-6 lg:px-8 bg-[var(--surface)] border-t border-[var(--border-subtle)]">
         <div className="max-w-7xl mx-auto text-center">
-          <div className="text-3xl font-bold text-[var(--text-primary)] mb-4">Teed.club</div>
-          <p className="text-[var(--text-secondary)] mb-6">
+          <div className="text-3xl font-serif font-medium tracking-tight text-[var(--text-primary)] mb-4">Teed.club</div>
+          <p className="font-serif italic text-[var(--text-secondary)] mb-6">
             Organize. Curate. Share.
           </p>
+          <div className="divider-gradient mx-auto mb-6" />
           <div className="flex flex-wrap justify-center gap-6 text-sm text-[var(--text-tertiary)]">
-            <Link href="/join" className="hover:text-[var(--text-primary)] transition-colors">
-              Apply to Join
+            <Link href="/signup" className="hover:text-[var(--text-primary)] transition-colors">
+              Sign Up Free
             </Link>
             <Link href="/discover" className="hover:text-[var(--text-primary)] transition-colors">
               Discover
@@ -79,7 +86,6 @@ export default function HomeClient() {
             <Link href="/login" className="hover:text-[var(--text-primary)] transition-colors">
               Sign In
             </Link>
-            {/* Use case pages as footer links */}
             <Link href="/for/golfers" className="hover:text-[var(--text-primary)] transition-colors">
               Golfers
             </Link>

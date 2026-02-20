@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef, useState, useCallback } from 'react';
 import { ChevronDown, Package } from 'lucide-react';
 import Link from 'next/link';
 
@@ -117,7 +118,45 @@ const CATEGORIES: Record<string, string> = {
   other: '📦',
 };
 
+function useTiltEffect() {
+  const [tiltStyle, setTiltStyle] = useState({
+    transform: 'perspective(800px) rotateX(0deg) rotateY(0deg)',
+  });
+  const [glowPos, setGlowPos] = useState({ x: 50, y: 50 });
+  const [isHovering, setIsHovering] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    const rotateX = (0.5 - y) * 10; // ±5°
+    const rotateY = (x - 0.5) * 10; // ±5°
+
+    setTiltStyle({
+      transform: `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+    });
+    setGlowPos({ x: x * 100, y: y * 100 });
+  }, []);
+
+  const handleMouseEnter = useCallback(() => {
+    setIsHovering(true);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setIsHovering(false);
+    setTiltStyle({
+      transform: 'perspective(800px) rotateX(0deg) rotateY(0deg)',
+    });
+  }, []);
+
+  return { ref, tiltStyle, glowPos, isHovering, handleMouseMove, handleMouseEnter, handleMouseLeave };
+}
+
 export default function FeaturedBagCard({ bag, isExpanded, onToggleExpand }: FeaturedBagCardProps) {
+  const { ref: tiltRef, tiltStyle, glowPos, isHovering, handleMouseMove, handleMouseEnter, handleMouseLeave } = useTiltEffect();
+
   // Get all items with photos
   const allItemsWithPhotos = bag.items?.filter(item => item.photo_url) || [];
 
@@ -207,10 +246,20 @@ export default function FeaturedBagCard({ bag, isExpanded, onToggleExpand }: Fea
 
   return (
     <div
-      className={`bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border overflow-hidden transition-all duration-300 ${
+      ref={tiltRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        ...tiltStyle,
+        transition: isHovering ? 'transform 0.1s ease-out' : 'transform 0.4s ease-out',
+        transformStyle: 'preserve-3d',
+        willChange: 'transform',
+      }}
+      className={`bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border overflow-hidden ${
         isExpanded
           ? 'ring-2 ring-[var(--teed-green-6)] border-[var(--teed-green-6)] shadow-[var(--shadow-5)]'
-          : 'border-[var(--border-subtle)] hover:shadow-[var(--shadow-4)] hover:-translate-y-1'
+          : 'border-[var(--border-subtle)] hover:shadow-[var(--shadow-4)]'
       }`}
     >
       {/* Cover Image / Featured Items Grid */}
@@ -220,6 +269,16 @@ export default function FeaturedBagCard({ bag, isExpanded, onToggleExpand }: Fea
         className={`h-[200px] bg-gradient-to-br ${getBagGradient(bag.id)} relative overflow-hidden cursor-pointer border-b border-[var(--border-subtle)] group`}
       >
         {renderHeroContent()}
+
+        {/* Light reflection overlay on hover */}
+        {isHovering && (
+          <div
+            className="absolute inset-0 pointer-events-none transition-opacity duration-200"
+            style={{
+              background: `radial-gradient(circle at ${glowPos.x}% ${glowPos.y}%, rgba(255,255,255,0.15) 0%, transparent 60%)`,
+            }}
+          />
+        )}
 
         {/* Hover overlay with description */}
         {bag.description && !isExpanded && (

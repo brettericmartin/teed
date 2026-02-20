@@ -17,6 +17,7 @@ type Step = 1 | 2 | 3;
 interface OnboardingSurveyProps {
   userName: string;
   userEmail: string;
+  userHandle: string;
 }
 
 interface SurveyFormData {
@@ -34,10 +35,11 @@ interface SurveyFormData {
   usage_intent: string;
 }
 
-export default function OnboardingSurvey({ userName, userEmail }: OnboardingSurveyProps) {
+export default function OnboardingSurvey({ userName, userEmail, userHandle }: OnboardingSurveyProps) {
   const searchParams = useSearchParams();
   const [step, setStep] = useState<Step>(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSkipping, setIsSkipping] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<SurveyFormData>({
@@ -148,14 +150,31 @@ export default function OnboardingSurvey({ userName, userEmail }: OnboardingSurv
         return;
       }
 
-      // Hard navigation to re-evaluate dashboard server component
-      // (router.refresh() can be unreliable with server-side redirects)
-      window.location.href = '/dashboard';
+      // Redirect to profile after completing survey
+      window.location.href = `/u/${userHandle}`;
     } catch (err) {
       console.error('Survey submission error:', err);
       setError('Something went wrong. Please try again.');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleSkip = async () => {
+    setIsSkipping(true);
+    setError(null);
+    try {
+      const response = await fetch('/api/survey/skip', { method: 'POST' });
+      if (!response.ok) {
+        setError('Something went wrong. Please try again.');
+        return;
+      }
+      window.location.href = `/u/${userHandle}`;
+    } catch (err) {
+      console.error('Skip error:', err);
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setIsSkipping(false);
     }
   };
 
@@ -497,6 +516,17 @@ export default function OnboardingSurvey({ userName, userEmail }: OnboardingSurv
                   )}
                 </Button>
               )}
+            </div>
+
+            {/* Skip link */}
+            <div className="text-center mt-4">
+              <button
+                onClick={handleSkip}
+                disabled={isSkipping}
+                className="text-sm text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors underline underline-offset-2"
+              >
+                {isSkipping ? 'Skipping...' : 'Skip for now'}
+              </button>
             </div>
           </div>
         </div>

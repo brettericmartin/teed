@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
-import { checkBetaAccess } from '@/lib/betaGating';
 
 /**
  * POST /api/bags/[code]/copy
@@ -31,15 +30,6 @@ export async function POST(
 
     if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Check beta access
-    const { approved } = await checkBetaAccess(supabase, user.id);
-    if (!approved) {
-      return NextResponse.json(
-        { error: 'Beta access required to copy bags. Please apply or wait for approval.' },
-        { status: 403 }
-      );
     }
 
     // Get user's profile to get their handle
