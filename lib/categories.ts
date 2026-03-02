@@ -32,7 +32,7 @@ export interface Category {
  */
 export const CATEGORIES: Category[] = [
   { value: 'golf', label: 'Golf', icon: '⛳' },
-  { value: 'edc', label: 'EDC', icon: '🔪' },
+  { value: 'edc', label: 'EDC', icon: '🔑' },
   { value: 'travel', label: 'Travel', icon: '✈️' },
   { value: 'photography', label: 'Photography', icon: '📷' },
   { value: 'tech', label: 'Tech', icon: '💻' },

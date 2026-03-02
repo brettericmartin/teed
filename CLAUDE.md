@@ -184,3 +184,16 @@ import type { Item } from '@/types';
 - Text search: 300ms (fast feedback)
 - Handle availability: 300ms
 - Auto-save forms: 500ms (bag metadata), 1500ms (items)
+
+---
+
+## Agent Team Guidelines
+- Always run `npm run build` before marking implementation tasks complete
+- Frontend agents must use Tailwind CSS classes from existing components
+- API route agents must enable RLS on any new tables
+- Test agents should use: `npm run test:chromium`
+
+## Worktree Setup
+When starting in a new worktree:
+1. `npm install` (node_modules are not shared between worktrees)
+2. Copy `.env.local` from main working tree if needed

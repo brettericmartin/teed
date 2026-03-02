@@ -1,16 +1,17 @@
-import { chromium, FullConfig } from '@playwright/test';
+import { firefox, FullConfig } from '@playwright/test';
 
 /**
  * Global setup for Playwright tests
  * Authenticates once and saves the session state for all tests to reuse
+ * Note: Uses Firefox because Chromium has sandbox/crash issues on Linux 6.17+
  */
 async function globalSetup(config: FullConfig) {
   const { baseURL } = config.projects[0].use;
 
   console.log('🔐 Setting up authentication for tests...');
 
-  // Create a browser and page
-  const browser = await chromium.launch();
+  // Create a browser and page (Firefox — Chromium crashes on newPage with Linux 6.17)
+  const browser = await firefox.launch();
   const context = await browser.newContext();
   const page = await context.newPage();
 

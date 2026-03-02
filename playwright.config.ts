@@ -69,29 +69,30 @@ export default defineConfig({
   // Configure projects for major browsers
   projects: [
     // Setup project - runs auth tests without pre-loaded state
+    // Note: Uses Firefox because Chromium crashes on Linux 6.17+ kernels
     {
       name: 'setup',
       testMatch: /.*\.setup\.ts/,
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Firefox'] },
     },
 
-    // Authenticated tests - chromium
+    // Authenticated tests - firefox (primary, Chromium broken on Linux 6.17+)
     {
-      name: 'chromium',
+      name: 'firefox',
       use: {
-        ...devices['Desktop Chrome'],
-        // Use the saved auth state for all tests
+        ...devices['Desktop Firefox'],
         storageState: 'playwright/.auth/user.json',
       },
       dependencies: ['setup'],
       testIgnore: /.*\.setup\.ts/,
     },
 
-    // Authenticated tests - firefox
+    // Authenticated tests - chromium (disabled on Linux 6.17+ due to sandbox crash)
     {
-      name: 'firefox',
+      name: 'chromium',
       use: {
-        ...devices['Desktop Firefox'],
+        ...devices['Desktop Chrome'],
+        // Use the saved auth state for all tests
         storageState: 'playwright/.auth/user.json',
       },
       dependencies: ['setup'],

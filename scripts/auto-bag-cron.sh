@@ -12,6 +12,9 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+
+# Ensure claude CLI is on PATH (cron doesn't inherit interactive shell PATH)
+export PATH="$HOME/.local/bin:$PATH"
 LOG_DIR="/tmp/teed-auto-bag-logs"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 LOG_FILE="$LOG_DIR/auto-bag-${TIMESTAMP}.log"
