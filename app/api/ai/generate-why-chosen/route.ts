@@ -79,6 +79,20 @@ export async function POST(request: NextRequest) {
   // Get brand knowledge for richer context
   const brandContext = item.brand ? await generateBrandContext(item.brand) : null;
 
+  // Fetch sibling items from the same bag for collection cohesiveness
+  const { data: siblingItems } = await supabase
+    .from('bag_items')
+    .select('custom_name, brand')
+    .eq('bag_id', item.bag_id)
+    .neq('id', itemId)
+    .limit(20);
+
+  const siblingList = siblingItems
+    ?.filter((s: { custom_name: string | null }) => s.custom_name)
+    .map((s: { custom_name: string | null; brand: string | null }) =>
+      s.brand ? `${s.custom_name} by ${s.brand}` : s.custom_name
+    ) ?? [];
+
   // Build the prompt
   const toneGuides: Record<string, string> = {
     professional: 'Write in a professional, authoritative tone suitable for a product review or buying guide.',
@@ -88,7 +102,10 @@ export async function POST(request: NextRequest) {
 
   const systemPrompt = `You are a curation assistant helping creators explain why they chose specific items for their collections.
 
-Generate a brief "Why I Chose This" explanation (2-3 sentences max) that captures the essence of why this item is in the collection.
+Generate exactly 3 distinct "Why I Chose This" options, each 1-2 sentences. Each option should take a different angle:
+1. Focus on the product's standout feature or quality
+2. Focus on the personal experience or problem it solves
+3. Focus on how it fits into the broader collection or compares to alternatives
 
 ${toneGuides[tone]}
 
@@ -98,9 +115,14 @@ Guidelines:
 - If alternatives or comparisons are provided, subtly acknowledge the decision process
 - Keep it genuine and authentic, not salesy
 - Don't use generic phrases like "it's the best" without backing it up
-- Consider how this item fits into the broader collection context`;
+- Consider how this item fits into the broader collection context
 
-  const userPrompt = `Generate a "Why I Chose This" explanation for:
+Return the 3 options as a JSON array of strings. Example format:
+["Option 1 text here.", "Option 2 text here.", "Option 3 text here."]
+
+Return ONLY the JSON array, no other text.`;
+
+  const userPrompt = `Generate 3 "Why I Chose This" options for:
 
 Product: ${item.custom_name}${item.brand ? ` by ${item.brand}` : ''}
 ${item.custom_description ? `Description: ${item.custom_description}` : ''}
@@ -115,10 +137,9 @@ Collection Context:
 ${bag.category ? `- Category: ${bag.category}` : ''}
 ${bag.description ? `- About: ${bag.description}` : ''}
 ${bagContext ? `- Additional context: ${bagContext}` : ''}
+${siblingList.length > 0 ? `- This item is part of a collection that also includes: ${siblingList.join(', ')}. Consider how this item complements the collection.` : ''}
 
-${brandContext ? `Brand Background: ${brandContext}` : ''}
-
-Generate ONLY the "Why I Chose This" text - no preamble, no quotes, just the explanation.`;
+${brandContext ? `Brand Background: ${brandContext}` : ''}`;
 
   try {
     const completion = await openai.chat.completions.create({
@@ -127,16 +148,35 @@ Generate ONLY the "Why I Chose This" text - no preamble, no quotes, just the exp
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
       ],
-      max_tokens: 200,
-      temperature: 0.7,
+      max_tokens: 600,
+      temperature: 0.8,
     });
 
-    const whyChosen = completion.choices[0]?.message?.content?.trim() || '';
+    const raw = completion.choices[0]?.message?.content?.trim() || '';
 
-    // Return the generated text (don't auto-save, let the client decide)
+    // Parse the JSON array response
+    let options: string[] = [];
+    try {
+      // Try to extract JSON array from the response (handle potential markdown wrapping)
+      const jsonMatch = raw.match(/\[[\s\S]*\]/);
+      if (jsonMatch) {
+        options = JSON.parse(jsonMatch[0]);
+      }
+    } catch {
+      // If JSON parsing fails, treat the whole response as a single option
+      options = [raw];
+    }
+
+    // Ensure we have at least one option
+    if (options.length === 0) {
+      options = [raw];
+    }
+
+    // Return both new multi-option format and legacy single-option format
     return NextResponse.json({
       success: true,
-      whyChosen,
+      options,
+      whyChosen: options[0] || '', // backward compat: first option as the single value
       usage: {
         promptTokens: completion.usage?.prompt_tokens || 0,
         completionTokens: completion.usage?.completion_tokens || 0,

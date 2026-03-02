@@ -283,7 +283,7 @@ function buildTimeline(
         summary = `Retired "${itemName}"`;
         break;
       case 'updated':
-        summary = `Refined "${itemName}"`;
+        summary = getUpdateSummary(change.field_changed, itemName);
         break;
       case 'replaced':
         summary = change.change_note || `Switched to "${itemName}"`;
@@ -347,6 +347,37 @@ function getItemName(change: ItemVersionHistory): string {
   }
 
   return 'item';
+}
+
+function getUpdateSummary(fieldChanged: string | null, itemName: string): string {
+  switch (fieldChanged) {
+    case 'brand':
+      return `Updated brand for "${itemName}"`;
+    case 'custom_name':
+      return `Renamed "${itemName}"`;
+    case 'custom_description':
+      return `Updated description for "${itemName}"`;
+    case 'why_chosen':
+      return `Updated story for "${itemName}"`;
+    case 'notes':
+      return `Updated notes for "${itemName}"`;
+    case 'photo_url':
+      return `Updated photo for "${itemName}"`;
+    case 'is_featured':
+      return `Changed featured status for "${itemName}"`;
+    case 'sort_index':
+      return `Reordered "${itemName}"`;
+    case 'price_paid':
+      return `Updated price for "${itemName}"`;
+    case 'quantity':
+      return `Updated quantity for "${itemName}"`;
+    case 'promo_codes':
+      return `Updated promo code for "${itemName}"`;
+    case 'compared_to':
+      return `Updated comparison for "${itemName}"`;
+    default:
+      return `Refined "${itemName}"`;
+  }
 }
 
 function getDefaultSummary(changeType: string): string {

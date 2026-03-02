@@ -14,6 +14,7 @@ interface LinkSelection {
     custom_name: string;
     brand: string;
     custom_description: string;
+    notes?: string;
   };
   selectedPhotoUrl: string;
   purchaseUrl: string;
@@ -170,6 +171,7 @@ export async function POST(
             custom_name: selection.item.custom_name.trim(),
             custom_description: selection.item.custom_description?.trim() || null,
             brand: selection.item.brand?.trim() || null,
+            notes: selection.item.notes?.trim() || null,
             sort_index: nextSortIndex++,
           })
           .select()

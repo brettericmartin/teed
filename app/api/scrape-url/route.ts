@@ -168,6 +168,37 @@ async function searchGoogleImages(query: string): Promise<string | null> {
 }
 
 /**
+ * Get the best available YouTube thumbnail URL.
+ *
+ * Tries maxresdefault (1280x720) first with a HEAD check,
+ * then falls back to hqdefault (480x360) which always exists
+ * for valid videos.
+ *
+ * YouTube returns a tiny ~1KB gray placeholder for maxresdefault
+ * when the video doesn't have a custom high-res thumbnail, so we
+ * check Content-Length to detect that.
+ */
+async function getBestYouTubeThumbnail(videoId: string): Promise<string> {
+  const hqFallback = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+
+  try {
+    const maxresUrl = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
+    const res = await fetch(maxresUrl, { method: 'HEAD' });
+    if (res.ok) {
+      const contentLength = parseInt(res.headers.get('content-length') || '0');
+      // Real thumbnails are 10KB+; YouTube's gray placeholder is ~1KB
+      if (contentLength > 5000) {
+        return maxresUrl;
+      }
+    }
+  } catch {
+    // HEAD request failed — fall through to hqdefault
+  }
+
+  return hqFallback;
+}
+
+/**
  * Handle embed URLs using Link Intelligence library
  */
 async function handleEmbedUrl(url: string, platform: string): Promise<ScrapedMetadata | null> {
@@ -190,16 +221,19 @@ async function handleEmbedUrl(url: string, platform: string): Promise<ScrapedMet
   // Try to fetch oEmbed data for title and thumbnail
   const oembed = await fetchOEmbed(url);
 
-  // Generate thumbnail URL for YouTube
+  // Get verified thumbnail URL for YouTube
   let thumbnailUrl: string | null = null;
   if (platform === 'youtube' && embedData.contentId) {
-    thumbnailUrl = `https://img.youtube.com/vi/${embedData.contentId}/maxresdefault.jpg`;
+    thumbnailUrl = await getBestYouTubeThumbnail(embedData.contentId);
   }
+
+  // Prefer oEmbed thumbnail (always hqdefault, reliable), then our verified URL
+  const image = oembed?.thumbnailUrl || thumbnailUrl || null;
 
   return {
     title: oembed?.title || null,
     description: oembed?.authorName ? `Video by ${oembed.authorName}` : null,
-    image: oembed?.thumbnailUrl || thumbnailUrl || null,
+    image,
     price: null,
     domain: parsedUrl.hostname.replace('www.', ''),
     url,
