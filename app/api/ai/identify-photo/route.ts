@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     trackApiUsage({
       userId: user.id,
       endpoint: '/api/ai/identify-photo',
-      model: 'gemini-2.5-flash+gpt-4o',
+      model: 'gemini-2.5-flash+cloud-vision+gpt-4o',
       operationType: 'identify',
       durationMs,
       status: 'success',
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     trackApiUsage({
       userId: null,
       endpoint: '/api/ai/identify-photo',
-      model: 'gemini-2.5-flash+gpt-4o',
+      model: 'gemini-2.5-flash+cloud-vision+gpt-4o',
       operationType: 'identify',
       durationMs,
       status: 'error',

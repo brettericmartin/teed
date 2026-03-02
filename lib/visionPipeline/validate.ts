@@ -10,6 +10,37 @@ const CONCURRENCY_LIMIT = 5;
 const MIN_CONFIDENCE_FOR_VALIDATION = 40;
 
 /**
+ * Image domains that OpenAI cannot download (CDN auth, hotlink protection, etc.)
+ * These cause 400 errors when passed as reference image URLs.
+ */
+const BLOCKED_IMAGE_DOMAINS = [
+  'tiktokcdn.com',
+  'tiktokcdn-us.com',
+  'fbcdn.net',
+  'fbsbx.com',
+  'cdninstagram.com',
+  'pinimg.com',
+  'twimg.com',
+  'pbs.twimg.com',
+  'redd.it',
+  'i.redd.it',
+  'preview.redd.it',
+  'media.tumblr.com',
+];
+
+/** Check if a URL is from a blocked image domain */
+function isAccessibleImageUrl(url: string): boolean {
+  try {
+    const hostname = new URL(url).hostname.toLowerCase();
+    return !BLOCKED_IMAGE_DOMAINS.some(
+      (domain) => hostname === domain || hostname.endsWith(`.${domain}`)
+    );
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Stage 4: Validate identifications by comparing crops against reference images.
  *
  * For each identified item with confidence >= 40:
@@ -61,8 +92,28 @@ async function validateSingleItem(
     : item.label;
 
   try {
-    // Step 1: Find reference image (don't pass brand separately — it's already in productName)
-    const refImage = await fetchProductImage(productName);
+    // Step 1: Find reference image — prefer web detection images (free, already fetched)
+    let refImage: { imageUrl: string; thumbnailUrl: string; source: string } | null = null;
+
+    const webDetectionImages = [
+      ...(item.webDetection?.fullMatchingImageUrls ?? []),
+      ...(item.webDetection?.visuallySimilarImageUrls ?? []),
+    ].filter(isAccessibleImageUrl);
+    if (webDetectionImages.length > 0) {
+      refImage = {
+        imageUrl: webDetectionImages[0],
+        thumbnailUrl: webDetectionImages[0],
+        source: 'cloud-vision',
+      };
+    }
+
+    // Fall back to Google Custom Search if no web detection images
+    if (!refImage) {
+      const searchResult = await fetchProductImage(productName);
+      if (searchResult && isAccessibleImageUrl(searchResult.imageUrl)) {
+        refImage = searchResult;
+      }
+    }
 
     if (!refImage) {
       return {

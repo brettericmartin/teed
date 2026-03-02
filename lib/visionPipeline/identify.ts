@@ -1,24 +1,25 @@
 import { openai } from '@/lib/openaiClient';
-import type { CroppedItem, IdentifiedItem } from './types';
+import type { VisualSearchItem, IdentifiedItem, WebDetectionResult } from './types';
 
 /** Max concurrent GPT-4o calls */
 const CONCURRENCY_LIMIT = 5;
 
 /**
- * Stage 3: Identify each cropped item using GPT-4o.
+ * Stage 4: Identify each cropped item using GPT-4o + web detection hints.
  *
  * Sends each crop individually for focused identification.
+ * When web detection results are available, they're injected as hints.
  * Runs in parallel with a concurrency limit.
  */
 export async function identifyItems(
-  croppedItems: CroppedItem[],
+  items: VisualSearchItem[],
   bagType?: string
 ): Promise<IdentifiedItem[]> {
   const results: IdentifiedItem[] = [];
 
   // Process in batches of CONCURRENCY_LIMIT
-  for (let i = 0; i < croppedItems.length; i += CONCURRENCY_LIMIT) {
-    const batch = croppedItems.slice(i, i + CONCURRENCY_LIMIT);
+  for (let i = 0; i < items.length; i += CONCURRENCY_LIMIT) {
+    const batch = items.slice(i, i + CONCURRENCY_LIMIT);
     const batchResults = await Promise.all(
       batch.map((item) => identifySingleItem(item, bagType))
     );
@@ -29,25 +30,28 @@ export async function identifyItems(
 }
 
 async function identifySingleItem(
-  item: CroppedItem,
+  item: VisualSearchItem,
   bagType?: string
 ): Promise<IdentifiedItem> {
   const contextHint = bagType ? `\nThis item is from a "${bagType}" collection/setup.` : '';
+  const webHints = buildWebDetectionHints(item.webDetection);
 
   const prompt = `This is a cropped photo of a "${item.label}" from a larger scene.${contextHint}
-
+${webHints}
 TASK: Identify the brand, model name, and color of this product.
 
 INSTRUCTIONS:
 1. Describe what you see: shape, colors, logos, text, distinguishing design features
-2. Identify the brand using ALL available evidence — visible logos/text, distinctive design language, signature colorways, iconic product shapes, and material choices
-3. Many brands have unmistakable design signatures (e.g., Klipsch copper woofers, IKEA ALEX drawer proportions, Apple aluminum unibody). USE these confidently.
-4. Provide the most specific model you can. If you know the brand and product line but not the exact model, give the product line (e.g., "Reference" series, "ALEX" line).
-5. Only return null for brand if you genuinely have no reasonable hypothesis.
+2. Read any text/labels EXACTLY as printed — do not autocorrect or "fix" obscure brand names (e.g., "MANBA" is MANBA, not "Mamba"; "UGREEN" is UGREEN, not "Green")
+3. Identify the brand using ALL available evidence — visible logos/text, distinctive design language, signature colorways, iconic product shapes, and material choices
+4. Many brands have unmistakable design signatures (e.g., Klipsch copper woofers, IKEA ALEX drawer proportions, Apple aluminum unibody). USE these confidently.
+5. Provide the most specific model you can. If you know the brand and product line but not the exact model, give the product line (e.g., "Reference" series, "ALEX" line).
+6. If no brand text, logo, or unmistakable design signature is visible, return brand as null. Do NOT guess a brand based on vague shape alone.
+7. If WEB DETECTION HINTS are provided above, use them as strong signals — they come from reverse image search and are often accurate. But still verify against what you see in the image.
 
 Return JSON:
 {
-  "brand": "BrandName" or null if truly unidentifiable,
+  "brand": "BrandName" or null if no brand text/logo/signature visible,
   "model": "Specific Model Name" or "Product Line" or null,
   "color": "Primary color/colorway" or null,
   "confidence": 0-100,
@@ -55,11 +59,12 @@ Return JSON:
 }
 
 CONFIDENCE GUIDE:
-- 90-100: Brand text/logo clearly visible, exact model identifiable
-- 70-89: Strong design cues make brand near-certain, model likely (e.g., signature shapes, colors, materials)
-- 50-69: Design cues strongly suggest a brand, or general product type is clear
-- 30-49: Some visual hints but multiple brands possible
-- 0-29: Very uncertain, minimal visual evidence
+- 90-100: Brand text/logo clearly visible AND model confirmed by web detection or text on product
+- 75-89: Brand text/logo visible OR web detection confirms brand/model with matching visual cues
+- 50-74: Strong design cues suggest a brand (no text), or general product type is clear but brand uncertain
+- 30-49: Some visual hints but multiple brands possible, web detection inconclusive
+- 0-29: Very uncertain, no brand evidence, generic product
+IMPORTANT: If brand is null, confidence MUST be ≤60. Brand-only (no model) caps at 70.
 
 Return ONLY the JSON, no other text.`;
 
@@ -106,6 +111,37 @@ Return ONLY the JSON, no other text.`;
       identificationNotes: `Identification failed: ${error instanceof Error ? error.message : 'unknown error'}`,
     };
   }
+}
+
+function buildWebDetectionHints(webDetection: WebDetectionResult | null): string {
+  if (!webDetection) return '';
+
+  const parts: string[] = [];
+
+  if (webDetection.bestGuessLabels.length > 0) {
+    parts.push(`Best guess: "${webDetection.bestGuessLabels.join('", "')}"`);
+  }
+
+  const topEntities = webDetection.webEntities
+    .filter((e) => e.score > 0.3)
+    .slice(0, 5)
+    .map((e) => `${e.description} (${e.score.toFixed(1)})`)
+    .join(', ');
+  if (topEntities) {
+    parts.push(`Entities: ${topEntities}`);
+  }
+
+  const topPages = webDetection.matchingPages
+    .slice(0, 3)
+    .map((p) => p.pageTitle || p.url)
+    .join('; ');
+  if (topPages) {
+    parts.push(`Matching pages: ${topPages}`);
+  }
+
+  if (parts.length === 0) return '';
+
+  return `\nWEB DETECTION HINTS (from reverse image search):\n${parts.join('\n')}\n`;
 }
 
 function parseIdentificationResponse(text: string): {

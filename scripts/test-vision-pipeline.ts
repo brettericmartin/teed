@@ -1,5 +1,5 @@
 /**
- * Test script for the 4-stage vision pipeline.
+ * Test script for the 5-stage vision pipeline.
  *
  * Usage:
  *   set -a && source .env.local && set +a && npx tsx scripts/test-vision-pipeline.ts [image-path]
@@ -49,10 +49,11 @@ async function main() {
     console.log('\n=== Pipeline Results ===\n');
     console.log(`Total time: ${elapsed}s`);
     console.log(`Stage timings:`);
-    console.log(`  Enumerate: ${result.stats.stageTimings.enumerate}ms`);
-    console.log(`  Crop:      ${result.stats.stageTimings.crop}ms`);
-    console.log(`  Identify:  ${result.stats.stageTimings.identify}ms`);
-    console.log(`  Validate:  ${result.stats.stageTimings.validate}ms`);
+    console.log(`  Enumerate:     ${result.stats.stageTimings.enumerate}ms`);
+    console.log(`  Crop:          ${result.stats.stageTimings.crop}ms`);
+    console.log(`  Visual Search: ${result.stats.stageTimings.visualSearch}ms`);
+    console.log(`  Identify:      ${result.stats.stageTimings.identify}ms`);
+    console.log(`  Validate:      ${result.stats.stageTimings.validate}ms`);
     console.log('');
     console.log(`Detected: ${result.stats.totalDetected} items`);
     console.log(`Identified: ${result.stats.totalIdentified} items`);
@@ -73,6 +74,21 @@ async function main() {
         '?';
 
       console.log(`  ${i + 1}. [${verdictIcon}] ${brand} ${model} (${confidence}%) - ${item.label} [${item.category}]`);
+
+      // Show web detection results
+      if (item.webDetection) {
+        const wd = item.webDetection;
+        if (wd.bestGuessLabels.length > 0) {
+          console.log(`     Web guess: "${wd.bestGuessLabels.join('", "')}"`);
+        }
+        const topEntities = wd.webEntities.slice(0, 3).map((e) => `${e.description} (${e.score.toFixed(1)})`).join(', ');
+        if (topEntities) {
+          console.log(`     Entities: ${topEntities}`);
+        }
+        if (wd.matchingPages.length > 0) {
+          console.log(`     Top page: ${wd.matchingPages[0].pageTitle || wd.matchingPages[0].url}`);
+        }
+      }
 
       if (item.validation.discrepancies.length > 0) {
         console.log(`     Discrepancies: ${item.validation.discrepancies.join(', ')}`);
@@ -97,12 +113,13 @@ async function main() {
 
     // Estimate cost
     const geminiCost = 0.02;
+    const visionApiCostPerItem = 0.0035;
     const gpt4oCostPerItem = 0.03;
     const validateCostPerItem = 0.02;
     const totalCost = geminiCost +
-      result.stats.totalDetected * gpt4oCostPerItem +
+      result.stats.totalDetected * (visionApiCostPerItem + gpt4oCostPerItem) +
       result.stats.totalIdentified * validateCostPerItem;
-    console.log(`\nEstimated cost: $${totalCost.toFixed(2)}`);
+    console.log(`\nEstimated cost: $${totalCost.toFixed(3)} (includes Cloud Vision $${(result.stats.totalDetected * visionApiCostPerItem).toFixed(3)})`);
   } catch (error) {
     console.error('\nPipeline failed:', error);
     process.exit(1);

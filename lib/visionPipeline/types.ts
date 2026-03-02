@@ -1,6 +1,6 @@
 // ============================================================
 // Vision Pipeline Types
-// 4-stage pipeline: Enumerate → Crop → Identify → Validate
+// 5-stage pipeline: Enumerate → Crop → Visual Search → Identify → Validate
 // ============================================================
 
 /** Bounding box in Gemini's normalized coordinate system (0-1000) */
@@ -28,8 +28,23 @@ export interface CroppedItem extends EnumeratedItem {
   cropHeight: number;
 }
 
-/** Stage 3 output: identified product */
-export interface IdentifiedItem extends CroppedItem {
+/** Google Cloud Vision webDetection result */
+export interface WebDetectionResult {
+  bestGuessLabels: string[];
+  webEntities: Array<{ entityId?: string; description: string; score: number }>;
+  fullMatchingImageUrls: string[];
+  partialMatchingImageUrls: string[];
+  visuallySimilarImageUrls: string[];
+  matchingPages: Array<{ url: string; pageTitle?: string }>;
+}
+
+/** Stage 3 output: cropped item with web detection results */
+export interface VisualSearchItem extends CroppedItem {
+  webDetection: WebDetectionResult | null;
+}
+
+/** Stage 4 output: identified product */
+export interface IdentifiedItem extends VisualSearchItem {
   brand: string | null;
   model: string | null;
   color: string | null;
@@ -40,7 +55,7 @@ export interface IdentifiedItem extends CroppedItem {
 /** Validation verdict from reference image comparison */
 export type ValidationVerdict = 'verified' | 'unverified' | 'mismatch';
 
-/** Stage 4 output: validated identification */
+/** Stage 5 output: validated identification */
 export interface ValidatedItem extends IdentifiedItem {
   validation: {
     verdict: ValidationVerdict;
@@ -62,6 +77,7 @@ export interface ValidatedItem extends IdentifiedItem {
 export interface StageTimings {
   enumerate: number;
   crop: number;
+  visualSearch: number;
   identify: number;
   validate: number;
   total: number;
@@ -84,6 +100,8 @@ export interface PipelineOptions {
   bagType?: string;
   maxItems?: number;
   skipValidation?: boolean;
+  /** Skip the 55s API route timeout check (for CLI usage) */
+  noTimeout?: boolean;
 }
 
 // ============================================================
@@ -116,6 +134,7 @@ export interface IdentifiedProductCompat {
   cropBase64?: string;
   validationVerdict?: ValidationVerdict;
   validationReferenceUrl?: string;
+  webProductUrl?: string;
 }
 
 /** Convert a ValidatedItem to the IdentifiedProduct shape for ProductReviewModal */
@@ -145,5 +164,6 @@ export function toIdentifiedProductCompat(item: ValidatedItem): IdentifiedProduc
     cropBase64: item.cropBase64,
     validationVerdict: item.validation.verdict,
     validationReferenceUrl: item.validation.referenceImageUrl ?? undefined,
+    webProductUrl: item.webDetection?.matchingPages[0]?.url,
   };
 }
