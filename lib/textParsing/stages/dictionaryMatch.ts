@@ -11,6 +11,20 @@ import type { Category } from '@/lib/productLibrary/schema';
 import { levenshteinDistance } from '@/lib/utils';
 
 /**
+ * Common words that should NOT fuzzy-match to brand names.
+ * These are valid product descriptors, colors, materials, or generic terms
+ * that Levenshtein distance may incorrectly map to short brand names.
+ */
+const FUZZY_MATCH_EXCLUSIONS = new Set([
+  'espresso', 'coffee', 'driver', 'iron', 'blade', 'pro', 'studio', 'classic',
+  'sport', 'elite', 'black', 'white', 'gold', 'silver', 'carbon', 'steel',
+  'wood', 'premium', 'original', 'standard', 'compact', 'mini', 'max', 'plus',
+  'ultra', 'air', 'pure', 'flex', 'edge', 'core', 'one', 'zero', 'fresh',
+  'clean', 'clear', 'smart', 'speed', 'power', 'cool', 'hot', 'cold', 'ice',
+  'fire', 'wave',
+]);
+
+/**
  * Comprehensive brand dictionary with categories and aliases
  * Synced from DOMAIN_BRAND_MAP with 500+ brands across 50+ categories
  */
@@ -1937,6 +1951,9 @@ export function dictionaryMatch(text: string): DictionaryMatchResult {
       for (const candidate of candidates) {
         if (candidate.length < 4) continue; // Skip short words — too many false positives at 3 chars
 
+        // Skip common descriptors that should never fuzzy-match to brands
+        if (FUZZY_MATCH_EXCLUSIONS.has(candidate)) continue;
+
         for (const brandEntry of sortedBrands) {
           // Check against normalized name
           const namesToCheck = [brandEntry.normalizedName, ...brandEntry.aliases.map(a => a.toLowerCase())];
@@ -1977,7 +1994,7 @@ export function dictionaryMatch(text: string): DictionaryMatchResult {
         brand: bestFuzzyMatch.brand,
         matchedText: bestFuzzyMatch.matchedText,
         position: bestFuzzyMatch.position,
-        confidence: 0.7, // Lower confidence for fuzzy matches
+        confidence: 0.55, // Lower confidence for fuzzy matches
       });
     }
   }
@@ -2001,7 +2018,7 @@ export function dictionaryMatch(text: string): DictionaryMatchResult {
     };
 
     // Track fuzzy correction if the matched text doesn't exactly match the brand name or aliases
-    if (bestMatch.confidence <= 0.7) {
+    if (bestMatch.confidence <= 0.55) {
       fuzzyCorrection = {
         original: bestMatch.matchedText,
         corrected: bestMatch.brand.name,
