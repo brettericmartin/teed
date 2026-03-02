@@ -228,7 +228,7 @@ export function MuseumView({
     if (b.id === heroItemId) return 1;
     if (a.is_featured && !b.is_featured) return -1;
     if (!a.is_featured && b.is_featured) return 1;
-    return 0;
+    return a.sort_index - b.sort_index;
   });
 
   return (

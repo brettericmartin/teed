@@ -178,6 +178,8 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm, onAddF
   const [searchTier, setSearchTier] = useState<'library' | 'library+ai' | 'ai' | 'vision' | 'fallback' | 'error' | undefined>();
   const [isAdding, setIsAdding] = useState(false);
   const [previewingSuggestion, setPreviewingSuggestion] = useState<ProductSuggestion | null>(null);
+  const [autoEnhance, setAutoEnhance] = useState(false);
+  const [enhancingIndex, setEnhancingIndex] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showTooltip, setShowTooltip] = useState(false);
   const [parsedPreview, setParsedPreview] = useState<ParsedTextResult | null>(null);
@@ -304,6 +306,23 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm, onAddF
     }
   }, []);
 
+  // Clear a parsed field entirely (from chip dismiss)
+  const clearParsedField = useCallback((field: 'brand' | 'color' | 'productName') => {
+    setParsedPreview(prev => {
+      if (!prev) return prev;
+      if (field === 'brand') {
+        return { ...prev, brand: null, fuzzyCorrection: null };
+      }
+      if (field === 'color') {
+        return { ...prev, color: null };
+      }
+      if (field === 'productName') {
+        return { ...prev, productName: null };
+      }
+      return prev;
+    });
+  }, []);
+
   // Explicit search trigger - only fires on button click or Enter key
   const handleSearch = useCallback((forceAI = false) => {
     if (input.trim().length < 2) return;
@@ -341,6 +360,13 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm, onAddF
       telemetrySessionRef.current = null;
     }
 
+    setAutoEnhance(false);
+    setPreviewingSuggestion(suggestion);
+  };
+
+  const handleEnhanceSuggestion = (suggestion: ProductSuggestion) => {
+    setAutoEnhance(true);
+    setEnhancingIndex(suggestions.indexOf(suggestion));
     setPreviewingSuggestion(suggestion);
   };
 
@@ -363,6 +389,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm, onAddF
       setPreviewingSuggestion(null);
       setParsedPreview(null);
       setHasSearched(false);
+      setEnhancingIndex(null);
     } catch (error) {
       console.error('Error adding item:', error);
     } finally {
@@ -372,6 +399,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm, onAddF
 
   const handleCancelPreview = () => {
     setPreviewingSuggestion(null);
+    setEnhancingIndex(null);
   };
 
   const handleAnswerQuestion = (answers: Record<string, string>) => {
@@ -466,6 +494,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm, onAddF
           onConfirm={handleConfirmPreview}
           onCancel={handleCancelPreview}
           isAdding={isAdding}
+          autoEnhance={autoEnhance}
         />
       )}
 
@@ -673,7 +702,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm, onAddF
           {/* Parsed Preview chips */}
           {parsedPreview && input.trim().length >= 2 && (
             <div className="mt-2">
-              <ParsedPreview parsed={parsedPreview} />
+              <ParsedPreview parsed={parsedPreview} onClearField={clearParsedField} />
             </div>
           )}
 
@@ -685,8 +714,10 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm, onAddF
                 clarificationNeeded={clarificationNeeded}
                 questions={questions}
                 onSelectSuggestion={handleSelectSuggestion}
+                onEnhanceSuggestion={handleEnhanceSuggestion}
                 onAnswerQuestion={handleAnswerQuestion}
                 isLoading={isLoadingSuggestions}
+                enhancingIndex={enhancingIndex}
                 searchTier={searchTier}
                 onForceAI={handleForceAI}
                 onAddManually={handleAddManually}

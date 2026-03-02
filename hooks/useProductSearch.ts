@@ -68,13 +68,30 @@ export function useProductSearch({ bagContext, categoryHint }: UseProductSearchO
     setParsedPreview(prev => {
       if (!prev) return prev;
       if (field === 'brand') {
-        return { ...prev, brand: value ? { value, confidence: 1, source: 'user' } : null };
+        return { ...prev, brand: value ? { value, confidence: 1, source: 'user' } : null, fuzzyCorrection: null };
       }
       if (field === 'color') {
         return { ...prev, color: value || null };
       }
       if (field === 'productName') {
         return { ...prev, productName: value ? { value, confidence: 1 } : null };
+      }
+      return prev;
+    });
+  }, []);
+
+  // Clear a parsed field entirely (from chip dismiss)
+  const clearParsedField = useCallback((field: 'brand' | 'color' | 'productName') => {
+    setParsedPreview(prev => {
+      if (!prev) return prev;
+      if (field === 'brand') {
+        return { ...prev, brand: null, fuzzyCorrection: null };
+      }
+      if (field === 'color') {
+        return { ...prev, color: null };
+      }
+      if (field === 'productName') {
+        return { ...prev, productName: null };
       }
       return prev;
     });
@@ -174,6 +191,7 @@ export function useProductSearch({ bagContext, categoryHint }: UseProductSearchO
     setInput: updateInput,
     parsedPreview,
     updateParsedField,
+    clearParsedField,
     suggestions,
     isLoading,
     clarificationNeeded,

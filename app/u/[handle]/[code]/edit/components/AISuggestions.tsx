@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Sparkles } from 'lucide-react';
 import InlineClarificationCard from '@/components/clarification/InlineClarificationCard';
 import { getConfidenceLevel } from '@/lib/analytics/identificationTelemetry';
 
@@ -29,8 +29,10 @@ type AISuggestionsProps = {
   clarificationNeeded: boolean;
   questions: ClarificationQuestion[];
   onSelectSuggestion: (suggestion: ProductSuggestion) => void;
+  onEnhanceSuggestion?: (suggestion: ProductSuggestion) => void;
   onAnswerQuestion: (answers: Record<string, string>) => void;
   isLoading?: boolean;
+  enhancingIndex?: number | null; // Index of suggestion currently being enhanced
   searchTier?: 'library' | 'library+ai' | 'ai' | 'vision' | 'fallback' | 'error';
   onForceAI?: () => void; // Trigger AI search when "None of these" is clicked
   onAddManually?: () => void; // Allow user to add item manually
@@ -42,8 +44,10 @@ export default function AISuggestions({
   clarificationNeeded,
   questions,
   onSelectSuggestion,
+  onEnhanceSuggestion,
   onAnswerQuestion,
   isLoading = false,
+  enhancingIndex = null,
   searchTier,
   onForceAI,
   onAddManually,
@@ -259,6 +263,50 @@ export default function AISuggestions({
                   </div>
                 </div>
               </div>
+              {/* Enhance & Add button */}
+              {onEnhanceSuggestion && (
+                <div className="mt-2 pt-2 border-t border-gray-100 flex justify-end">
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (enhancingIndex === null) {
+                        onEnhanceSuggestion(suggestion);
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (enhancingIndex === null) {
+                          onEnhanceSuggestion(suggestion);
+                        }
+                      }
+                    }}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                      enhancingIndex === index
+                        ? 'text-purple-600 bg-purple-100'
+                        : enhancingIndex !== null
+                          ? 'text-gray-400 bg-gray-50 cursor-not-allowed'
+                          : 'text-purple-700 bg-purple-50 hover:bg-purple-100'
+                    }`}
+                  >
+                    {enhancingIndex === index ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        Enhancing...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-3.5 h-3.5" />
+                        Enhance & Add
+                      </>
+                    )}
+                  </span>
+                </div>
+              )}
             </button>
           );
         })}

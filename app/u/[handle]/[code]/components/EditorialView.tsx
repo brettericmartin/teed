@@ -206,12 +206,13 @@ export function EditorialView({
   onItemClick,
   onLinkClick,
 }: EditorialViewProps) {
-  // Separate hero, featured, and regular items
-  const heroItem = items.find(item => item.id === heroItemId);
-  const featuredItems = items.filter(
+  // Sort items by sort_index, then separate hero, featured, and regular
+  const sorted = [...items].sort((a, b) => a.sort_index - b.sort_index);
+  const heroItem = sorted.find(item => item.id === heroItemId);
+  const featuredItems = sorted.filter(
     item => item.is_featured && item.id !== heroItemId
   );
-  const regularItems = items.filter(
+  const regularItems = sorted.filter(
     item => !item.is_featured && item.id !== heroItemId
   );
 
@@ -231,8 +232,9 @@ export function EditorialView({
     });
   }
 
-  // Regular items in groups of 3-4
-  for (let i = 0; i < regularItems.length; i += 3) {
+  // Regular items in groups of 3 (skip first if it was shown in hero sidebar)
+  const gridStartIndex = heroItem ? 1 : 0;
+  for (let i = gridStartIndex; i < regularItems.length; i += 3) {
     sections.push({
       type: 'grid',
       items: regularItems.slice(i, i + 3),

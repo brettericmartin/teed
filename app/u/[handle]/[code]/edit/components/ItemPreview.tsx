@@ -22,9 +22,10 @@ type ItemPreviewProps = {
   onConfirm: (editedSuggestion: ProductSuggestion) => void;
   onCancel: () => void;
   isAdding?: boolean;
+  autoEnhance?: boolean;
 };
 
-export default function ItemPreview({ suggestion, onConfirm, onCancel, isAdding = false }: ItemPreviewProps) {
+export default function ItemPreview({ suggestion, onConfirm, onCancel, isAdding = false, autoEnhance = false }: ItemPreviewProps) {
   const [editedSuggestion, setEditedSuggestion] = useState<ProductSuggestion>(suggestion);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedFactIndex, setSelectedFactIndex] = useState<number | null>(null); // null = no fact selected
@@ -38,6 +39,8 @@ export default function ItemPreview({ suggestion, onConfirm, onCancel, isAdding 
   const [isLoadingPhotos, setIsLoadingPhotos] = useState(false);
   const [photoError, setPhotoError] = useState<string | null>(null);
   const [failedPhotos, setFailedPhotos] = useState<Set<number>>(new Set());
+  const [brandEdited, setBrandEdited] = useState(false);
+  const [isResearching, setIsResearching] = useState(false);
 
   // Fetch product photos on mount (if no existing image)
   useEffect(() => {
@@ -45,6 +48,9 @@ export default function ItemPreview({ suggestion, onConfirm, onCancel, isAdding 
       fetchPhotos();
     }
   }, [suggestion]);
+
+  // Auto-enhance: trigger fun fact generation on mount when autoEnhance is true
+  const [autoEnhanceFired, setAutoEnhanceFired] = useState(false);
 
   const fetchPhotos = async () => {
     setIsLoadingPhotos(true);
@@ -157,7 +163,28 @@ export default function ItemPreview({ suggestion, onConfirm, onCancel, isAdding 
     }
   };
 
+  const handleResearchWithNewBrand = async () => {
+    setIsResearching(true);
+    setBrandEdited(false);
+    // Re-fetch photos with updated brand
+    await fetchPhotos();
+    // Re-generate fun facts with updated brand
+    setEditedSuggestion(prev => ({ ...prev, funFactOptions: undefined }));
+    setSelectedFactIndex(null);
+    setShowFactOptions(false);
+    await generateFunFacts();
+    setIsResearching(false);
+  };
+
   const hasFunFactOptions = editedSuggestion.funFactOptions && editedSuggestion.funFactOptions.length > 0;
+
+  // Auto-enhance: auto-generate fun facts when autoEnhance is true
+  useEffect(() => {
+    if (autoEnhance && !autoEnhanceFired && !hasFunFactOptions && !isGeneratingFacts) {
+      setAutoEnhanceFired(true);
+      generateFunFacts();
+    }
+  }, [autoEnhance, autoEnhanceFired, hasFunFactOptions, isGeneratingFacts]);
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
@@ -298,14 +325,36 @@ export default function ItemPreview({ suggestion, onConfirm, onCancel, isAdding 
               Brand
             </label>
             {isEditing ? (
-              <input
-                type="text"
-                value={editedSuggestion.brand || ''}
-                onChange={(e) =>
-                  setEditedSuggestion({ ...editedSuggestion, brand: e.target.value })
-                }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+              <div className="space-y-2">
+                <input
+                  type="text"
+                  value={editedSuggestion.brand || ''}
+                  onChange={(e) => {
+                    setEditedSuggestion({ ...editedSuggestion, brand: e.target.value });
+                    setBrandEdited(e.target.value !== suggestion.brand);
+                  }}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                {brandEdited && (
+                  <button
+                    onClick={handleResearchWithNewBrand}
+                    disabled={isResearching}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors disabled:opacity-50"
+                  >
+                    {isResearching ? (
+                      <>
+                        <Loader2 className="w-3 h-3 animate-spin" />
+                        Searching...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-3 h-3" />
+                        Re-search with updated brand
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
             ) : (
               <div className="px-4 py-2 bg-gray-50 rounded-lg text-gray-900 font-medium">
                 {editedSuggestion.brand || 'Not specified'}

@@ -1704,8 +1704,10 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           brand: item.brand,
           custom_description: item.custom_description,
           currentPhotoUrl: item.photo_url,
-          // Get the first product URL from item links for image extraction
-          productUrl: item.links?.find(link => link.url)?.url || null,
+          // Prefer product links for image extraction; fall back to any link (including video)
+          productUrl: item.links?.find(link => link.kind === 'product')?.url
+            || item.links?.find(link => link.url)?.url
+            || null,
         }))}
         onApplyPhotos={handleApplyBatchPhotos}
       />

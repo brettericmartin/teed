@@ -1,12 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import { X } from 'lucide-react';
 import type { ParsedTextResult } from '@/lib/textParsing';
 import { cn } from '@/lib/utils';
 
 interface ParsedPreviewProps {
   parsed: ParsedTextResult;
   onUpdateField?: (field: 'brand' | 'color' | 'productName', value: string) => void;
+  onClearField?: (field: 'brand' | 'color' | 'productName') => void;
 }
 
 type ChipData = {
@@ -17,7 +19,7 @@ type ChipData = {
   correction?: { original: string; corrected: string };
 };
 
-export default function ParsedPreview({ parsed, onUpdateField }: ParsedPreviewProps) {
+export default function ParsedPreview({ parsed, onUpdateField, onClearField }: ParsedPreviewProps) {
   const [editingField, setEditingField] = useState<string | null>(null);
   const [editValue, setEditValue] = useState('');
 
@@ -25,11 +27,14 @@ export default function ParsedPreview({ parsed, onUpdateField }: ParsedPreviewPr
   const chips: ChipData[] = [];
 
   if (parsed.brand) {
+    const isFuzzy = !!parsed.fuzzyCorrection;
     chips.push({
-      label: 'Brand',
+      label: isFuzzy ? 'Suggested' : 'Brand',
       value: parsed.brand.value,
       field: 'brand',
-      chipColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+      chipColor: isFuzzy
+        ? 'bg-amber-50 text-amber-800 border-amber-300 border-dashed'
+        : 'bg-emerald-100 text-emerald-800 border-emerald-200',
       correction: parsed.fuzzyCorrection || undefined,
     });
   }
@@ -76,6 +81,11 @@ export default function ParsedPreview({ parsed, onUpdateField }: ParsedPreviewPr
     setEditValue('');
   };
 
+  const handleClear = (e: React.MouseEvent, field: 'brand' | 'color' | 'productName') => {
+    e.stopPropagation();
+    onClearField?.(field);
+  };
+
   return (
     <div className="flex flex-wrap gap-1.5 py-1.5">
       {chips.map((chip) => (
@@ -114,6 +124,24 @@ export default function ParsedPreview({ parsed, onUpdateField }: ParsedPreviewPr
               <span>{chip.value}</span>
               {chip.correction && (
                 <span className="text-[10px] opacity-50" title={`corrected from "${chip.correction.original}"`}>*</span>
+              )}
+              {onClearField && (
+                <span
+                  role="button"
+                  tabIndex={0}
+                  onClick={(e) => handleClear(e, chip.field)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onClearField(chip.field);
+                    }
+                  }}
+                  className="ml-0.5 inline-flex items-center justify-center rounded-full hover:bg-black/10 p-0.5 transition-colors"
+                  title="Remove"
+                >
+                  <X className="w-3 h-3" />
+                </span>
               )}
             </button>
           )}

@@ -82,9 +82,17 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const [itemLinks, setItemLinks] = useState(item.links);
   const [isGeneratingWhyChosen, setIsGeneratingWhyChosen] = useState(false);
+  const [whyChosenOptions, setWhyChosenOptions] = useState<string[]>([]);
+  const [whyChosenError, setWhyChosenError] = useState<string | null>(null);
+
+  const hasMinimalData = !item.brand && !item.custom_description && !item.custom_name;
 
   const handleGenerateWhyChosen = async () => {
+    if (hasMinimalData) return;
+
     setIsGeneratingWhyChosen(true);
+    setWhyChosenError(null);
+    setWhyChosenOptions([]);
     try {
       const response = await fetch('/api/ai/generate-why-chosen', {
         method: 'POST',
@@ -96,19 +104,35 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
       });
 
       if (!response.ok) {
-        throw new Error('Failed to generate');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to generate');
       }
 
       const data = await response.json();
-      if (data.whyChosen) {
-        setEditWhyChosen(data.whyChosen);
+
+      // Handle new multi-option format and legacy single-option format
+      if (data.options && Array.isArray(data.options) && data.options.length > 0) {
+        setWhyChosenOptions(data.options);
+      } else if (data.whyChosen) {
+        setWhyChosenOptions([data.whyChosen]);
       }
     } catch (error) {
       console.error('Error generating why chosen:', error);
+      setWhyChosenError(error instanceof Error ? error.message : 'Failed to generate. Please try again.');
     } finally {
       setIsGeneratingWhyChosen(false);
     }
   };
+
+  const handleSelectWhyChosenOption = (option: string) => {
+    setEditWhyChosen(option);
+    setWhyChosenOptions([]);
+  };
+
+  const handleDismissWhyChosenOptions = () => {
+    setWhyChosenOptions([]);
+  };
+
   const [copySuccess, setCopySuccess] = useState(false);
 
   // Update itemLinks when item.links changes (e.g., after Fill Links is clicked)
@@ -221,13 +245,33 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
                   className="w-full text-base sm:text-lg font-semibold px-3 py-2 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent placeholder:text-[var(--input-placeholder)]"
                   autoFocus
                 />
-                <input
-                  type="text"
-                  value={editBrand}
-                  onChange={(e) => setEditBrand(e.target.value)}
-                  placeholder="Brand (e.g., TaylorMade, MAC, Patagonia)"
-                  className="w-full text-base px-3 py-2 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent placeholder:text-[var(--input-placeholder)]"
-                />
+                <div className="space-y-1">
+                  <input
+                    type="text"
+                    value={editBrand}
+                    onChange={(e) => setEditBrand(e.target.value)}
+                    placeholder="Brand (e.g., TaylorMade, MAC, Patagonia)"
+                    className="w-full text-base px-3 py-2 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent placeholder:text-[var(--input-placeholder)]"
+                  />
+                  {editBrand.trim() !== (item.brand || '') && onEnrichItem && (
+                    <button
+                      onClick={() => {
+                        // Save all current edits first, then re-enrich
+                        handleSaveEdit();
+                        onEnrichItem(item.id);
+                      }}
+                      disabled={isEnrichingItem}
+                      className="flex items-center gap-1 px-2 py-1 text-xs font-medium text-purple-700 bg-purple-50 hover:bg-purple-100 rounded transition-colors disabled:opacity-50"
+                    >
+                      {isEnrichingItem ? (
+                        <Loader2 className="w-3 h-3 animate-spin" />
+                      ) : (
+                        <Sparkles className="w-3 h-3" />
+                      )}
+                      Re-enrich with new brand
+                    </button>
+                  )}
+                </div>
                 <textarea
                   value={editDescription}
                   onChange={(e) => setEditDescription(e.target.value)}
@@ -276,20 +320,73 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
                         <label className="block text-sm font-medium text-[var(--text-primary)]">
                           Why I chose this
                         </label>
-                        <button
-                          type="button"
-                          onClick={handleGenerateWhyChosen}
-                          disabled={isGeneratingWhyChosen}
-                          className="inline-flex items-center gap-1.5 px-2 py-1 text-xs font-medium text-[var(--sky-11)] bg-[var(--sky-3)] hover:bg-[var(--sky-4)] rounded-md transition-colors disabled:opacity-50"
-                        >
-                          {isGeneratingWhyChosen ? (
-                            <Loader2 className="w-3 h-3 animate-spin" />
-                          ) : (
-                            <Sparkles className="w-3 h-3" />
+                        <div className="flex items-center gap-2">
+                          {whyChosenOptions.length > 0 && (
+                            <button
+                              type="button"
+                              onClick={handleGenerateWhyChosen}
+                              disabled={isGeneratingWhyChosen}
+                              className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-[var(--text-tertiary)] hover:text-[var(--sky-11)] bg-[var(--surface-hover)] hover:bg-[var(--sky-3)] rounded-md transition-colors disabled:opacity-50"
+                            >
+                              <Sparkles className="w-3 h-3" />
+                              Regenerate
+                            </button>
                           )}
-                          {isGeneratingWhyChosen ? 'Generating...' : 'AI Generate'}
-                        </button>
+                          {hasMinimalData ? (
+                            <span className="text-xs text-[var(--text-tertiary)] italic">
+                              Add more details for better AI generation
+                            </span>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={handleGenerateWhyChosen}
+                              disabled={isGeneratingWhyChosen}
+                              className="inline-flex items-center gap-1.5 px-2 py-1 text-xs font-medium text-[var(--sky-11)] bg-[var(--sky-3)] hover:bg-[var(--sky-4)] rounded-md transition-colors disabled:opacity-50"
+                            >
+                              {isGeneratingWhyChosen ? (
+                                <Loader2 className="w-3 h-3 animate-spin" />
+                              ) : (
+                                <Sparkles className="w-3 h-3" />
+                              )}
+                              {isGeneratingWhyChosen ? 'Generating...' : 'AI Generate'}
+                            </button>
+                          )}
+                        </div>
                       </div>
+
+                      {/* Error message */}
+                      {whyChosenError && (
+                        <p className="text-xs text-[var(--copper-9)] mb-1.5">
+                          {whyChosenError}
+                        </p>
+                      )}
+
+                      {/* Options selection UI */}
+                      {whyChosenOptions.length > 0 && (
+                        <div className="mb-2 space-y-2 animate-in fade-in duration-300">
+                          <p className="text-xs text-[var(--text-secondary)] font-medium">
+                            Pick an option, or edit after selecting:
+                          </p>
+                          {whyChosenOptions.map((option, index) => (
+                            <button
+                              key={index}
+                              type="button"
+                              onClick={() => handleSelectWhyChosenOption(option)}
+                              className="w-full text-left p-2.5 text-sm rounded-lg border border-[var(--border-subtle)] bg-[var(--surface)] hover:border-[var(--teed-green-6)] hover:bg-[var(--teed-green-2)] transition-colors cursor-pointer"
+                            >
+                              <span className="text-[var(--text-primary)]">{option}</span>
+                            </button>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={handleDismissWhyChosenOptions}
+                            className="text-xs text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors"
+                          >
+                            Dismiss
+                          </button>
+                        </div>
+                      )}
+
                       <textarea
                         value={editWhyChosen}
                         onChange={(e) => setEditWhyChosen(e.target.value)}

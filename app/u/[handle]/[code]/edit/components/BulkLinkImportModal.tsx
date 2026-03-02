@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { X, Check, Loader2, Link as LinkIcon, ChevronDown, ChevronUp, ExternalLink, AlertCircle, Image as ImageIcon, Sparkles } from 'lucide-react';
 import { BulkLinkProcessingView } from './BulkLinkProcessingView';
+import ItemPreview from './ItemPreview';
 import type {
   ProcessingStage,
   BulkLinkStreamEvent,
@@ -75,6 +76,19 @@ interface BulkLinkImportModalProps {
 }
 
 type Step = 'input' | 'processing' | 'review';
+
+type ProductSuggestion = {
+  custom_name: string;
+  custom_description: string;
+  notes: string;
+  category: string;
+  confidence: number;
+  brand?: string;
+  funFactOptions?: string[];
+  productUrl?: string;
+  imageUrl?: string;
+  price?: string;
+};
 
 // ============================================================
 // HELPER COMPONENTS
@@ -175,6 +189,10 @@ export default function BulkLinkImportModal({
   const [isSaving, setIsSaving] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
+  // Single-link ItemPreview mode
+  const [singleLinkPreview, setSingleLinkPreview] = useState<ProductSuggestion | null>(null);
+  const [singleLinkResult, setSingleLinkResult] = useState<EditedResult | null>(null);
+
   // Streaming state for progressive loading
   const [streamingResults, setStreamingResults] = useState<Map<number, StreamingItem>>(new Map());
   const [currentStages, setCurrentStages] = useState<Map<number, ProcessingStage>>(new Map());
@@ -269,7 +287,27 @@ export default function BulkLinkImportModal({
               selectedPhotoIndex: r.photoOptions.findIndex(p => p.isPrimary) >= 0 ? r.photoOptions.findIndex(p => p.isPrimary) : 0,
             }));
             setResults(editedResults);
-            setStep('review');
+
+            // Single-link mode: open ItemPreview instead of review grid
+            if (isSingleLinkMode && editedResults.length === 1 && editedResults[0].status !== 'failed') {
+              const r = editedResults[0];
+              const primaryPhoto = r.photoOptions[r.selectedPhotoIndex]?.url || r.photoOptions[0]?.url;
+              setSingleLinkResult(r);
+              setSingleLinkPreview({
+                custom_name: r.editedName,
+                custom_description: r.editedDescription,
+                notes: '',
+                category: r.analysis?.category || 'other',
+                confidence: r.analysis?.confidence || 0.5,
+                brand: r.editedBrand || undefined,
+                productUrl: r.originalUrl,
+                imageUrl: primaryPhoto,
+                price: r.scraped?.price || undefined,
+              });
+              setStep('review');
+            } else {
+              setStep('review');
+            }
           } catch (error) {
             console.error('Error processing links:', error);
             alert('Failed to process link. Please try again.');
@@ -569,6 +607,42 @@ export default function BulkLinkImportModal({
     }
   };
 
+  const handleSingleLinkPreviewConfirm = async (editedSuggestion: ProductSuggestion) => {
+    if (!singleLinkResult) return;
+    setIsSaving(true);
+
+    try {
+      const selections = [{
+        resultIndex: singleLinkResult.index,
+        item: {
+          custom_name: editedSuggestion.custom_name,
+          brand: editedSuggestion.brand || '',
+          custom_description: editedSuggestion.custom_description,
+          notes: editedSuggestion.notes || '',
+        },
+        selectedPhotoUrl: editedSuggestion.imageUrl || '',
+        purchaseUrl: singleLinkResult.originalUrl,
+      }];
+
+      const response = await fetch(`/api/bags/${bagCode}/bulk-links/save`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ selections }),
+      });
+
+      if (!response.ok) throw new Error('Failed to save item');
+
+      const data = await response.json();
+      onItemsAdded(data.createdItems?.length || 1);
+      handleClose();
+    } catch (error) {
+      console.error('Error saving item from link:', error);
+      alert('Failed to save item. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const handleClose = () => {
     setStep('input');
     setInputText('');
@@ -576,6 +650,8 @@ export default function BulkLinkImportModal({
     setResults([]);
     setSummary(null);
     setExpandedIndex(null);
+    setSingleLinkPreview(null);
+    setSingleLinkResult(null);
     // Reset streaming state
     setStreamingResults(new Map());
     setCurrentStages(new Map());
@@ -615,6 +691,19 @@ export default function BulkLinkImportModal({
           </button>
         </div>
       </div>
+    );
+  }
+
+  // Single-link mode: show ItemPreview instead of review grid
+  if (singleLinkPreview && step === 'review') {
+    return (
+      <ItemPreview
+        suggestion={singleLinkPreview}
+        onConfirm={handleSingleLinkPreviewConfirm}
+        onCancel={handleClose}
+        isAdding={isSaving}
+        autoEnhance
+      />
     );
   }
 

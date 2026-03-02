@@ -32,6 +32,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm, onAddF
     setInput,
     parsedPreview,
     updateParsedField,
+    clearParsedField,
     suggestions,
     isLoading,
     clarificationNeeded,
@@ -220,6 +221,7 @@ export default function QuickAddItem({ onAdd, bagTitle, onShowManualForm, onAddF
           <ParsedPreview
             parsed={parsedPreview}
             onUpdateField={updateParsedField}
+            onClearField={clearParsedField}
           />
         )}
 

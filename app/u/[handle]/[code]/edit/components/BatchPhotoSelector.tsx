@@ -67,6 +67,48 @@ function buildProductSearchQuery(
   return query || productName || 'product';
 }
 
+/**
+ * Extract YouTube video ID from various YouTube URL formats.
+ * Returns null if not a YouTube URL.
+ */
+function extractYouTubeVideoId(url: string): string | null {
+  if (!url) return null;
+  try {
+    const parsed = new URL(url);
+    const hostname = parsed.hostname.replace('www.', '');
+
+    // youtube.com/watch?v=ID
+    if ((hostname === 'youtube.com' || hostname === 'm.youtube.com') && parsed.searchParams.get('v')) {
+      return parsed.searchParams.get('v');
+    }
+    // youtube.com/shorts/ID, youtube.com/embed/ID, youtube.com/live/ID
+    const pathMatch = parsed.pathname.match(/^\/(shorts|embed|live|v)\/([a-zA-Z0-9_-]{11})/);
+    if ((hostname === 'youtube.com' || hostname === 'm.youtube.com') && pathMatch) {
+      return pathMatch[2];
+    }
+    // youtu.be/ID
+    if (hostname === 'youtu.be') {
+      const id = parsed.pathname.slice(1).split('/')[0];
+      if (id && /^[a-zA-Z0-9_-]{11}$/.test(id)) return id;
+    }
+  } catch {
+    // Not a valid URL
+  }
+  return null;
+}
+
+/**
+ * Get YouTube thumbnail URLs for a video ID.
+ * Returns multiple quality options: maxresdefault first, hqdefault as reliable fallback.
+ */
+function getYouTubeThumbnailUrls(videoId: string): string[] {
+  return [
+    `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`,
+    `https://i.ytimg.com/vi/${videoId}/sddefault.jpg`,
+    `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+  ];
+}
+
 interface ItemWithSuggestion {
   id: string;
   custom_name: string;
@@ -126,8 +168,17 @@ export default function BatchPhotoSelector({
         try {
           let imageUrls: string[] = [];
 
-          // STRATEGY 1: If item has a product URL, try to extract images from it first
+          // STRATEGY 0: If the URL is a YouTube video, use the thumbnail directly
           if (item.productUrl) {
+            const ytVideoId = extractYouTubeVideoId(item.productUrl);
+            if (ytVideoId) {
+              console.log(`[BatchPhotoSelector] YouTube video detected for ${item.custom_name}, using thumbnail (${ytVideoId})`);
+              imageUrls = getYouTubeThumbnailUrls(ytVideoId);
+            }
+          }
+
+          // STRATEGY 1: If item has a product URL (non-video), try to extract images from it
+          if (imageUrls.length === 0 && item.productUrl) {
             console.log(`[BatchPhotoSelector] Trying to extract images from product URL for ${item.custom_name}:`, item.productUrl);
 
             const extractResponse = await fetch('/api/ai/extract-product-images', {

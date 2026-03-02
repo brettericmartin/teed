@@ -640,6 +640,7 @@ export function AddItemFlow({
                     <ParsedPreview
                       parsed={productSearch.parsedPreview}
                       onUpdateField={productSearch.updateParsedField}
+                      onClearField={productSearch.clearParsedField}
                     />
                   )}
                 </div>
