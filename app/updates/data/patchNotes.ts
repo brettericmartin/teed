@@ -43,11 +43,35 @@ export const CATEGORY_META: Record<CategoryType, {
 
 export const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.10.0',
+    releaseDate: '2026-03-01',
+    title: 'Vision Pipeline V2 & Editor Polish',
+    summary: 'Photo identification upgraded to a 5-stage pipeline with reverse image search. Fuzzy matching is smarter about false positives, parsed preview chips are dismissible, and "Why I Chose This" now generates 3 options.',
+    isLatest: true,
+    changes: [
+      { text: 'Vision pipeline upgraded from 4 to 5 stages — new Cloud Vision web detection stage uses reverse image search to feed brand/product hints to GPT-4o', category: 'feature' },
+      { text: 'Validation stage now prefers free web detection images over paid Google Custom Search for reference comparison', category: 'improvement' },
+      { text: 'Blocked image domain list prevents validation failures from TikTok, Facebook, Reddit, and other CDNs that reject external requests', category: 'improvement' },
+      { text: 'GPT-4o identification prompt improved — reads text labels exactly as printed, uses web detection hints, and caps confidence when brand is uncertain', category: 'improvement' },
+      { text: 'Photo-to-bag CLI script — create a complete bag from a single photo with vision pipeline + automatic link finding', category: 'feature' },
+      { text: 'Fuzzy brand matching now excludes 40+ common descriptors (espresso, driver, carbon, etc.) that falsely matched to brand names', category: 'improvement' },
+      { text: 'Fuzzy match confidence lowered from 0.7 to 0.55 — fuzzy-matched brands now display as "Suggested" with dashed amber chips instead of solid green', category: 'improvement' },
+      { text: 'Parsed preview chips are now dismissible — tap the X to remove a brand, color, or product name the system got wrong', category: 'feature' },
+      { text: '"Why I Chose This" now generates 3 distinct options from different angles — standout feature, personal experience, and collection fit', category: 'feature' },
+      { text: '"Why I Chose This" uses sibling items from the same bag for collection-aware suggestions', category: 'improvement' },
+      { text: 'Item cards show brand badges, link count indicators, and improved layout in the bag editor', category: 'improvement' },
+      { text: 'Batch photo selector prefers product links over video links for better image extraction', category: 'improvement' },
+      { text: 'Bulk link import modal polished with better progress states and error handling', category: 'improvement' },
+      { text: 'Item history tracking expanded with new migration for richer change audit trails', category: 'feature' },
+      { text: 'URL scraping improved with timeout handling and meta tag fallbacks', category: 'improvement' },
+    ]
+  },
+  {
     version: '2.9.0',
     releaseDate: '2026-02-12',
     title: 'New Logo & Visual Identity',
     summary: 'Teed has a brand new logo and visual identity, born from a Freelancer contest that attracted 2,635 entries in just 3 days. The rebrand also updates the display name to Teed.club across the entire platform.',
-    isLatest: true,
+    isLatest: false,
     changes: [
       { text: 'New logo designed through a Freelancer contest with 2,635 entries from designers worldwide', category: 'feature' },
       { text: 'Two logo variants — circular icon for compact contexts (favicon, nav) and full horizontal lockup with wordmark', category: 'feature' },

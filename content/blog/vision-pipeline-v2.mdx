@@ -1,0 +1,93 @@
+---
+title: "Three AIs Are Better Than One: How We Identify Products from Photos"
+description: "We upgraded our vision pipeline from 4 stages to 5 — adding reverse image search between detection and identification. Here's what changed and why accuracy jumped."
+publishedAt: "2026-03-01"
+author: "Teed.club"
+category: "build-log"
+tags: ["build-log", "AI", "computer vision", "product identification", "reverse image search"]
+keywords: ["AI product identification", "Google Cloud Vision", "reverse image search", "multi-model AI pipeline", "GPT-4o vision", "Gemini vision", "product detection from photos", "computer vision pipeline"]
+relatedSlugs: ["building-ai-product-identification", "smarter-search", "1400-brands-and-counting"]
+---
+
+## The original pipeline was good. Not great.
+
+Back in December, I wrote about [building AI product identification](/blog/building-ai-product-identification) — the system that lets you photograph your gear and have Teed figure out what everything is. That version used a 4-stage pipeline: Gemini detects items and draws bounding boxes, sharp crops each one, GPT-4o identifies the brand and model, then GPT-4o validates against reference images.
+
+It worked. Mostly. GPT-4o is genuinely impressive at recognizing well-known products — Apple devices, popular headphones, iconic cameras. But it had a consistent weakness: products where the brand isn't visually obvious.
+
+A black mouse on a desk. A plain USB-C hub. A mechanical keyboard with no visible logo. GPT-4o would look at the shape, the color, guess a brand, and be wrong 40% of the time on those items. It would confidently say "Logitech MX Master 3" when it was actually a Razer DeathAdder. The shape was vaguely similar. The confidence score was high. The answer was wrong.
+
+## What reverse image search gives you
+
+The insight was obvious in hindsight: Google already knows what most products look like. Their image index has millions of product photos, and Cloud Vision's web detection API can reverse-search any image and return matching pages, entity labels, and visually similar results.
+
+So we inserted a new stage between cropping and identification. Each cropped item gets sent to Cloud Vision's web detection before GPT-4o ever sees it. The results come back as structured hints:
+
+- **Best guess labels** — Google's top-level guess ("Razer DeathAdder V3")
+- **Web entities** — scored concepts found in matching images ("Razer", "gaming mouse", "ergonomic")
+- **Matching pages** — actual product pages where this image (or similar ones) appears
+- **Visually similar images** — other photos that look like this one
+
+These hints get injected into GPT-4o's identification prompt. The model still looks at the image with its own eyes, but now it has context: "web detection thinks this might be a Razer DeathAdder, and here are the product pages where similar images appear."
+
+## How the 5-stage pipeline works
+
+The full pipeline now runs:
+
+**Stage 1: Enumerate** — Gemini 2.5 Flash scans the entire photo and detects every distinct item with bounding boxes and category labels. A desk setup photo might return 12 items: monitor, keyboard, mouse, headphones, speakers, etc.
+
+**Stage 2: Crop** — Sharp extracts each item region from the original image using the bounding boxes. Each crop becomes an independent identification task.
+
+**Stage 3: Visual Search** — Each crop goes to Cloud Vision's web detection API. This is the new stage. It returns labels, entities, matching pages, and similar images. It costs about $0.0035 per item.
+
+**Stage 4: Identify** — GPT-4o receives each crop plus the web detection hints. The prompt explicitly tells it to use the hints as strong signals while still verifying against what's visible in the image. If the web detection says "Razer DeathAdder" but the image clearly shows a Logitech logo, GPT-4o should trust the logo.
+
+**Stage 5: Validate** — GPT-4o compares each crop against a reference image of the identified product. "Does this crop of a black mouse actually look like a Razer DeathAdder V3?" This catches misidentifications before they reach the user. The validation stage now prefers free images from the web detection results over paid Google Custom Search calls.
+
+## The confidence calibration problem
+
+Adding web detection exposed a problem with our confidence scores. The original pipeline was too generous. GPT-4o would return 85% confidence on a product it guessed purely from shape — no logo, no text, no distinctive design cues. That 85% implied "pretty sure" when it really meant "decent guess."
+
+We recalibrated:
+
+- **90-100%** — Brand text or logo clearly visible AND model confirmed by web detection or text on the product
+- **75-89%** — Brand text visible OR web detection confirms with matching visual cues
+- **50-74%** — Design cues suggest a brand (no text), or product type is clear but brand uncertain
+- **30-49%** — Multiple brands possible, web detection inconclusive
+- **Below 30%** — Minimal evidence
+
+The key rule: if the brand is null (truly unidentifiable), confidence must be 60 or below. Brand-only identification without a model caps at 70. This prevents the system from projecting confidence it doesn't have.
+
+## Fixing false positives in text search too
+
+While upgrading the vision pipeline, I also tackled a related annoyance in text-based search. The [fuzzy matching system](/blog/smarter-search) that corrects misspelled brand names was triggering on common words.
+
+Type "espresso machine" and the system would fuzzy-match "espresso" to some brand name with a similar letter pattern. "Driver" would match a brand. "Carbon" would match a brand. These words are perfectly valid product descriptors — they shouldn't be candidates for brand correction.
+
+The fix was a blocklist: 40+ common product descriptors, colors, and materials that should never fuzzy-match to brand names. Words like espresso, driver, carbon, steel, blade, studio, classic, gold, silver. If your input contains one of these words, we skip it during fuzzy matching and treat it as a product attribute instead.
+
+We also lowered the confidence threshold for fuzzy matches from 0.7 to 0.55. The practical effect: fuzzy-matched brands now appear as amber "Suggested" chips with a dashed border, instead of solid green "Brand" chips. You typed "senheiser" and we think you might mean Sennheiser — but we're showing it as a suggestion, not a correction. Tap the X to dismiss it if we're wrong.
+
+## The small UX things
+
+A few smaller changes that don't deserve their own blog post but collectively make the editor feel better:
+
+**Dismissible parsed chips.** Previously, if the text parser tagged something wrong — matched your product name to the wrong brand, or extracted the wrong color — you had to retype your query. Now every chip has an X button. Wrong brand? Dismiss it and search again.
+
+**Three "Why I Chose This" options.** The AI-generated curation notes used to produce one option. Now it generates three, each from a different angle: the product's standout feature, the personal experience or problem it solves, and how it fits into the broader collection. Having options makes it easier to find one that sounds like you.
+
+**Collection-aware suggestions.** Those "Why I Chose This" notes now see the other items in your bag. If you're writing about a Razer mouse and your bag also has a Razer keyboard and headset, the suggestion can reference the ecosystem play. It makes the notes feel less generic.
+
+## Cost and speed
+
+The new stage adds about $0.0035 per item for Cloud Vision, but saves money on validation by reusing web detection images instead of making separate Google Custom Search calls. For a typical 10-item photo, the total pipeline cost is roughly $0.75 — about the same as before, just redistributed.
+
+Speed-wise, web detection adds 1-2 seconds per batch (items are searched in parallel). The entire pipeline for a 10-item desk setup runs in about 15-20 seconds. Not instant, but acceptable for a "scan your whole setup" feature.
+
+## What's next
+
+The vision pipeline still struggles with three categories: generic items with no brand markings (a plain white mug), items where the interesting part is internal (a laptop where the specs matter more than the exterior), and items photographed at extreme angles or with heavy shadows.
+
+For generic items, I'm exploring a hybrid approach where Cloud Vision's label detection ("ceramic mug," "desk lamp") feeds into a product recommendation rather than identification — "we can't tell the brand, but here are popular ceramic mugs that look like this."
+
+For everything else, the three-AI approach is working well. Each model brings something different to the table: Gemini is fast and cheap for spatial detection, Cloud Vision has Google's image index, and GPT-4o has the reasoning to tie it all together. None of them could do this alone. Together, they're surprisingly good.
