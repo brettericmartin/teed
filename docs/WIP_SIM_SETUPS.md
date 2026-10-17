@@ -33,7 +33,8 @@ which does not resolve.
 - [ ] Typecheck + local run (needs `.env.local` from the Vercel project)
 - [ ] Seed the garage-sim bag under @brett
 - [ ] Browser verification of editor + public view + /for/golf-simulators
-- [ ] Push branch; Vercel preview; owner merges
+- [x] Branch pushed (5d39c84). **Preview build FAILED: `supabaseKey is required`** at module load in 26 admin/API routes — the Vercel *Preview* environment has no env vars (this is the project's first preview deploy ever; production builds fine). Fix = owner enables the env vars for Preview in Vercel → Settings → Environment Variables, then redeploy. Not a code change on this branch.
+- [ ] Owner merges after preview verification
 
 ## Files touched
 

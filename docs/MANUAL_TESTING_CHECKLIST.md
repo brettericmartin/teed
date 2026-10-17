@@ -191,6 +191,18 @@ Test as applicable:
 
 ---
 
+### 2.12 Sections & Tags (added 2026-10-17)
+
+- [ ] In the bag editor, the **Sections** panel appears above the item list once the bag has items
+- [ ] "Add Section" creates a section; rename and delete work; deleting a section with items leaves them unsectioned
+- [ ] Editing an item shows a **Section** select when sections exist; saving assigns it (reload persists)
+- [ ] **Tags** row: typing a tag and pressing Enter or comma adds a lowercase chip; the x removes it; Backspace on an empty input removes the last chip; autosave fires (reload persists)
+- [ ] Public bag view: with at least one item assigned, items render under section headings (name, count, description) in Grid, Flow, Editorial and List views; Slides stays one continuous carousel
+- [ ] Unassigned items appear under "Everything else" after the named sections
+- [ ] Tags on the public view link to `/discover?tags=...`
+- [ ] `/for/golf-simulators`, `/blog/best/golf-simulator-setups` and `/discover?category=golf-sim` render; a bag with category "Golf Sim" shows in all three
+- [ ] View source on any page: canonical `<link>` and JSON-LD URLs start with `https://www.teed.club`
+
 ## Part 3: Complete Panel Workflow (10-15 minutes)
 
 ### Panel Types Reference
@@ -412,3 +424,4 @@ When finding issues, capture:
 | Date | Change |
 |------|--------|
 | 2026-01-25 | Initial checklist created |
+| 2026-10-17 | Added 2.12 Sections & Tags, golf-sim pages, canonical host check |
