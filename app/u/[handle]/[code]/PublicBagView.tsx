@@ -37,6 +37,45 @@ import { SignUpModal } from '@/components/prompts/SignUpModal';
 
 type PendingAction = 'save' | 'clone' | 'follow' | 'add-to-bag';
 
+type ItemGroup = {
+  key: string;
+  name: string | null;
+  description: string | null;
+  isSectioned: boolean;
+  items: BagViewItem[];
+};
+
+/**
+ * Group items by bag section (ordered by section sort_index), with any
+ * unsectioned items in a trailing "Everything else" group. When the bag has
+ * no sections, or no item is assigned to one, returns a single flat group so
+ * the existing views render exactly as before.
+ */
+function groupItemsBySection(
+  sections: BagViewBag['sections'] | undefined,
+  items: BagViewItem[]
+): ItemGroup[] {
+  const ordered = [...(sections || [])].sort((a, b) => a.sort_index - b.sort_index);
+  const hasAssigned = ordered.length > 0 && items.some((it) => it.section_id && ordered.some((s) => s.id === it.section_id));
+  if (!hasAssigned) {
+    return [{ key: 'all', name: null, description: null, isSectioned: false, items }];
+  }
+  const groups: ItemGroup[] = ordered
+    .map((s) => ({
+      key: s.id,
+      name: s.name,
+      description: s.description,
+      isSectioned: true,
+      items: items.filter((it) => it.section_id === s.id),
+    }))
+    .filter((g) => g.items.length > 0);
+  const rest = items.filter((it) => !it.section_id || !ordered.some((s) => s.id === it.section_id));
+  if (rest.length > 0) {
+    groups.push({ key: 'unsectioned', name: 'Everything else', description: null, isSectioned: true, items: rest });
+  }
+  return groups;
+}
+
 // Re-export types for component props
 type Item = BagViewItem;
 type Bag = BagViewBag;
@@ -663,55 +702,80 @@ export default function PublicBagView({
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
             >
-              {viewStyle === 'list' ? (
-                /* List View */
-                <div className="flex flex-col bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden">
-                  {items.map((item) => (
-                    <ListViewItem
-                      key={item.id}
-                      item={item}
-                      isHero={bag.hero_item_id === item.id}
-                      onItemClick={() => handleItemClick(item)}
+              {/* Carousel is one continuous slideshow; every other view honours bag sections */}
+              {(viewStyle === 'carousel'
+                ? [{ key: 'all', name: null, description: null, isSectioned: false, items } as ItemGroup]
+                : groupItemsBySection(bag.sections, items)
+              ).map((group) => (
+                <section
+                  key={group.key}
+                  className={group.isSectioned ? 'mb-10 last:mb-0' : undefined}
+                  aria-label={group.name || undefined}
+                >
+                  {group.isSectioned && (
+                    <div className="mb-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                      <h2 className="text-lg md:text-xl font-semibold text-[var(--text-primary)]">
+                        {group.name}
+                      </h2>
+                      <span className="text-xs text-[var(--text-tertiary)]">
+                        {group.items.length} {group.items.length === 1 ? 'item' : 'items'}
+                      </span>
+                      {group.description && (
+                        <p className="basis-full text-sm text-[var(--text-secondary)]">{group.description}</p>
+                      )}
+                    </div>
+                  )}
+                  {viewStyle === 'list' ? (
+                    /* List View */
+                    <div className="flex flex-col bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden">
+                      {group.items.map((item) => (
+                        <ListViewItem
+                          key={item.id}
+                          item={item}
+                          isHero={bag.hero_item_id === item.id}
+                          onItemClick={() => handleItemClick(item)}
+                          onLinkClick={trackLinkClick}
+                          getLinkCTA={getLinkCTA}
+                          getLinkDomain={getLinkDomain}
+                        />
+                      ))}
+                    </div>
+                  ) : viewStyle === 'masonry' ? (
+                    /* Masonry Flow View */
+                    <MasonryView
+                      items={group.items}
+                      heroItemId={bag.hero_item_id}
+                      onItemClick={handleItemClick}
                       onLinkClick={trackLinkClick}
-                      getLinkCTA={getLinkCTA}
-                      getLinkDomain={getLinkDomain}
                     />
-                  ))}
-                </div>
-              ) : viewStyle === 'masonry' ? (
-                /* Masonry Flow View */
-                <MasonryView
-                  items={items}
-                  heroItemId={bag.hero_item_id}
-                  onItemClick={handleItemClick}
-                  onLinkClick={trackLinkClick}
-                />
-              ) : viewStyle === 'editorial' ? (
-                /* Editorial Magazine View */
-                <EditorialView
-                  items={items}
-                  heroItemId={bag.hero_item_id}
-                  onItemClick={handleItemClick}
-                  onLinkClick={trackLinkClick}
-                />
-              ) : viewStyle === 'carousel' ? (
-                /* Carousel Slideshow View */
-                <CarouselView
-                  items={items}
-                  heroItemId={bag.hero_item_id}
-                  bagTitle={bag.title}
-                  onItemClick={handleItemClick}
-                  onLinkClick={trackLinkClick}
-                />
-              ) : (
-                /* Grid View (default) */
-                <GridView
-                  items={items}
-                  heroItemId={bag.hero_item_id}
-                  onItemClick={handleItemClick}
-                  onLinkClick={trackLinkClick}
-                />
-              )}
+                  ) : viewStyle === 'editorial' ? (
+                    /* Editorial Magazine View */
+                    <EditorialView
+                      items={group.items}
+                      heroItemId={bag.hero_item_id}
+                      onItemClick={handleItemClick}
+                      onLinkClick={trackLinkClick}
+                    />
+                  ) : viewStyle === 'carousel' ? (
+                    /* Carousel Slideshow View */
+                    <CarouselView
+                      items={group.items}
+                      heroItemId={bag.hero_item_id}
+                      bagTitle={bag.title}
+                      onItemClick={handleItemClick}
+                      onLinkClick={trackLinkClick}
+                    />
+                  ) : (
+                    /* Grid View (default) */
+                    <GridView
+                      items={group.items}
+                      heroItemId={bag.hero_item_id}
+                      onItemClick={handleItemClick}
+                      onLinkClick={trackLinkClick}
+                    />
+                  )}
+                </section>
+              ))}
             </motion.div>
           </AnimatePresence>
         )}

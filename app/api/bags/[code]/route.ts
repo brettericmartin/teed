@@ -271,6 +271,25 @@ export async function PUT(
       updates.category = body.category?.trim() || null;
     }
 
+    // Handle tags (owner-editable; normalized to lowercase, deduped, max 20)
+    if (body.tags !== undefined) {
+      if (body.tags === null) {
+        updates.tags = [];
+      } else if (Array.isArray(body.tags)) {
+        const cleaned = Array.from(
+          new Set(
+            body.tags
+              .filter((t: unknown): t is string => typeof t === 'string')
+              .map((t: string) => t.trim().toLowerCase().replace(/\s+/g, ' '))
+              .filter((t: string) => t.length > 0 && t.length <= 40)
+          )
+        ).slice(0, 20);
+        updates.tags = cleaned;
+      } else {
+        return NextResponse.json({ error: 'tags must be an array of strings' }, { status: 400 });
+      }
+    }
+
     // Handle hero_item_id (the designated hero item for this bag)
     if (body.hero_item_id !== undefined) {
       if (body.hero_item_id === null) {

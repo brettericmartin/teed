@@ -61,7 +61,7 @@ export function get(code: string, opts?: RequestOptions) {
   return api.get<Bag>(`/api/bags/${code}`, opts);
 }
 
-export function update(code: string, data: Partial<Pick<Bag, 'title' | 'description' | 'is_public' | 'category' | 'hero_item_id'>>) {
+export function update(code: string, data: Partial<Pick<Bag, 'title' | 'description' | 'is_public' | 'category' | 'hero_item_id'>> & { tags?: string[] }) {
   return api.put<Bag>(`/api/bags/${code}`, data);
 }
 

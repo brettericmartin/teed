@@ -95,7 +95,7 @@ export const useCases: Record<string, UseCase> = {
       },
       {
         question: 'How do I share my bag setup?',
-        answer: 'Once you create your bag on Teed, you get a unique URL like teed.so/u/yourname/mybag. Share this link anywhere - social media, forums, or directly with friends. You can also generate a QR code.',
+        answer: 'Once you create your bag on Teed, you get a unique URL like teed.club/u/yourname/mybag. Share this link anywhere - social media, forums, or directly with friends. You can also generate a QR code.',
       },
       {
         question: 'Is Teed free for golfers?',
@@ -107,6 +107,91 @@ export const useCases: Record<string, UseCase> = {
       },
     ],
     discoverCategory: 'golf',
+  },
+
+  'golf-simulators': {
+    slug: 'golf-simulators',
+    title: 'Golf Simulators',
+    headline: 'Teed for Golf Simulator Builds',
+    subheadline:
+      'Real home simulator setups, part by part: enclosure, launch monitor, projector, computer, mat and software, with the price paid and the reason behind each piece',
+    ctaText: 'Document Your Sim Setup',
+    heroEmoji: '🎯',
+    metaTitle: 'Golf Simulator Setups - Real Home Sim Builds, Part by Part | Teed',
+    metaDescription:
+      'Browse complete home golf simulator setups: launch monitor, projector, enclosure and screen, computer, mat and software, with prices and reasons. Document your own build and keep its history as you upgrade.',
+    keywords: [
+      'golf simulator setup',
+      'home golf simulator',
+      'garage golf simulator',
+      'golf simulator build list',
+      'launch monitor projector setup',
+      'golf simulator equipment',
+      'GSPro setup',
+      'golf simulator under 5000',
+    ],
+    painPoints: [
+      'Every "complete sim" article hides the real total: subscriptions, the PC, the mat, the screen',
+      'Forum builds are scattered across posts and photos with no single parts list',
+      'You can\'t tell which launch monitor fits your room depth until it is already bought',
+      'Your own setup changes every season and nobody, including you, remembers what it was',
+    ],
+    solutions: [
+      'One page per setup: every component, what it cost, and why it was chosen',
+      'Sections for enclosure, launch monitor, projector, computer and software, mat, and extras',
+      'Tags for budget tier, room size, no-PC builds, renters, and garage installs',
+      'Automatic history as you swap parts, with the old version preserved',
+    ],
+    features: [
+      {
+        title: 'Setup Sections',
+        description: 'Group parts the way a build actually works: screen, launch monitor, projector, computer, mat, extras',
+        icon: 'folder',
+      },
+      {
+        title: 'Honest Totals',
+        description: 'Price paid per item plus the subscriptions that most guides leave out',
+        icon: 'list',
+      },
+      {
+        title: 'Upgrade History',
+        description: 'Change the projector or launch monitor and the previous setup stays on the record',
+        icon: 'sparkles',
+      },
+      {
+        title: 'Shareable Link + QR',
+        description: 'One clean URL for the forum post, the group chat, or a sign on the garage wall',
+        icon: 'share',
+      },
+    ],
+    faqs: [
+      {
+        question: 'What do I need for a complete home golf simulator?',
+        answer:
+          'A launch monitor, simulator software, something to show the picture (a projector and impact screen, or a TV for a net setup), a hitting mat, and a computer or tablet if the launch monitor needs one. An enclosure keeps the ball and the light contained. Setups on Teed list all of it with prices, so you can see real totals instead of a headline number.',
+      },
+      {
+        question: 'How much room does a golf simulator need?',
+        answer:
+          'Width and ceiling height are set by your swing: most people want about 10 feet of width and a ceiling of 9 feet or more, although 8-foot-ceiling builds exist. Depth depends on the launch monitor. Camera units that sit beside the ball fit in a short room; radar units that sit behind the ball usually need 6 to 8 feet behind you plus the ball flight, so 14 feet or more in total. Check the room-size tags on each setup.',
+      },
+      {
+        question: 'Do I need a gaming PC?',
+        answer:
+          'Only for PC-based software such as GSPro, which wants a Windows machine with a capable graphics card. Several launch monitors run their own software on an iPad or phone, and a few send the picture straight to a projector over HDMI with no computer at all. Setups tagged "no-pc" show those builds.',
+      },
+      {
+        question: 'What are the ongoing subscription costs?',
+        answer:
+          'This is the number most guides skip. Many launch monitors charge an annual fee to unlock third-party software, and the simulator software itself is often a yearly subscription. Setups on Teed list software and subscriptions as their own items, with the yearly cost, so the first-year and ongoing totals are both visible.',
+      },
+      {
+        question: 'Can I document my own setup and update it over time?',
+        answer:
+          'Yes. Create a bag, add each component with the price you paid and why you chose it, and group them into sections. When you upgrade a part, the change is recorded automatically and the earlier version stays on the page, so your setup has a history instead of being overwritten.',
+      },
+    ],
+    discoverCategory: 'golf-sim',
   },
 
   photographers: {

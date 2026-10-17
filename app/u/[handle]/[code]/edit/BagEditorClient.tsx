@@ -32,6 +32,7 @@ import * as aiApi from '@/lib/api/domains/ai';
 import BagCompletionButton from '@/components/BagCompletionButton';
 import { EditorOnboarding } from '@/components/EditorOnboarding';
 import StoryTimeline from '@/components/story/StoryTimeline';
+import SectionManager from './components/SectionManager';
 
 /**
  * Robust data URL to Blob converter that handles mobile browser quirks.
@@ -160,6 +161,7 @@ type Bag = {
   cover_photo_aspect: string | null;
   created_at: string;
   updated_at: string | null;
+  tags?: string[] | null;
   items: Item[];
   sections: Section[];
 };
@@ -179,7 +181,40 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [description, setDescription] = useState(bag.description || '');
   const [isPublic, setIsPublic] = useState(bag.is_public);
   const [category, setCategory] = useState(bag.category || '');
+  const [tags, setTags] = useState<string[]>(Array.isArray(bag.tags) ? bag.tags : []);
+  const [tagDraft, setTagDraft] = useState('');
+  const [sections, setSections] = useState<Section[]>(
+    [...(initialBag.sections || [])].sort((a, b) => a.sort_index - b.sort_index)
+  );
   const [isSaving, setIsSaving] = useState(false);
+
+  // Tag helpers (owner-editable bag tags; normalized server-side too)
+  const commitTagDraft = () => {
+    const parts = tagDraft
+      .split(',')
+      .map((t) => t.trim().toLowerCase())
+      .filter((t) => t.length > 0 && t.length <= 40);
+    if (parts.length === 0) {
+      setTagDraft('');
+      return;
+    }
+    setTags((prev) => Array.from(new Set([...prev, ...parts])).slice(0, 20));
+    setTagDraft('');
+  };
+  const removeTag = (tag: string) => setTags((prev) => prev.filter((t) => t !== tag));
+
+  // Section → item assignment (persists via items API, mirrors into local state)
+  const handleItemSectionChange = async (itemId: string, sectionId: string | null) => {
+    setBag((prev) => ({
+      ...prev,
+      items: prev.items.map((it) => (it.id === itemId ? { ...it, section_id: sectionId } : it)),
+    }));
+    try {
+      await itemsApi.update(itemId, { section_id: sectionId });
+    } catch (error) {
+      console.error('Error updating item section:', error);
+    }
+  };
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [showManualForm, setShowManualForm] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -238,7 +273,8 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       title !== bag.title ||
       description !== (bag.description || '') ||
       isPublic !== bag.is_public ||
-      category !== (bag.category || '');
+      category !== (bag.category || '') ||
+      JSON.stringify(tags) !== JSON.stringify(Array.isArray(bag.tags) ? bag.tags : []);
 
     if (!hasChanges) return;
 
@@ -247,7 +283,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     }, 500); // 500ms debounce
 
     return () => clearTimeout(timeoutId);
-  }, [title, description, isPublic, category]);
+  }, [title, description, isPublic, category, tags]);
 
   const saveBagMetadata = async () => {
     setIsSaving(true);
@@ -258,6 +294,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         description: description || null,
         is_public: isPublic,
         category: category || null,
+        tags,
       });
 
       setBag((prev) => ({ ...prev, ...updatedBag }));
@@ -1226,6 +1263,45 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
               )}
             </div>
 
+            {/* Tags Editor */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <label className="text-xs font-medium text-[var(--text-secondary)]">Tags:</label>
+              {tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-[var(--teed-green-3)] text-[var(--teed-green-11)]"
+                >
+                  {tag}
+                  <button
+                    type="button"
+                    onClick={() => removeTag(tag)}
+                    aria-label={`Remove tag ${tag}`}
+                    className="hover:text-[var(--copper-9)]"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              ))}
+              {tags.length < 20 && (
+                <input
+                  type="text"
+                  value={tagDraft}
+                  onChange={(e) => setTagDraft(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ',') {
+                      e.preventDefault();
+                      commitTagDraft();
+                    } else if (e.key === 'Backspace' && tagDraft === '' && tags.length > 0) {
+                      removeTag(tags[tags.length - 1]);
+                    }
+                  }}
+                  onBlur={commitTagDraft}
+                  placeholder={tags.length === 0 ? 'add tags (budget, garage, no-pc)…' : 'add…'}
+                  className="text-xs bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] rounded px-2 py-1 w-44 focus:outline-none focus:border-[var(--teed-green-8)] transition-colors placeholder:text-[var(--text-tertiary)]"
+                />
+              )}
+            </div>
+
           </div>
         </div>
       </header>
@@ -1466,9 +1542,23 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
           />
         </div>
 
+        {/* Sections (optional grouping of items) */}
+        {bag.items.length > 0 && (
+          <div className="mb-6 p-4 bg-[var(--surface)] rounded-[var(--radius-lg)] border border-[var(--border-subtle)]">
+            <SectionManager
+              bagCode={bag.code}
+              sections={sections}
+              items={bag.items.map((it) => ({ id: it.id, custom_name: it.custom_name, section_id: it.section_id }))}
+              onSectionsChange={setSections}
+              onItemSectionChange={handleItemSectionChange}
+            />
+          </div>
+        )}
+
         {/* Items List */}
         {bag.items.length > 0 ? (
           <ItemList
+            sections={sections}
             items={bag.items}
             onDelete={handleDeleteItem}
             onUpdate={handleUpdateItem}

@@ -24,13 +24,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://teed.so',
+    url: 'https://www.teed.club',
     siteName: 'Teed.club',
     title: 'Teed.club - Your Gear Deserves a Better Home',
     description: 'Create beautiful, shareable collections of everything you use. One link for your golf bag, camera kit, travel setup, or desk gear.',
     images: [
       {
-        url: 'https://teed.so/og-image.png',
+        url: 'https://www.teed.club/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Teed.club - Curate and Share Your Gear',
@@ -41,10 +41,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Teed.club - Your Gear Deserves a Better Home',
     description: 'Create beautiful, shareable collections of everything you use. One link for your golf bag, camera kit, travel setup, or desk gear.',
-    images: ['https://teed.so/og-image.png'],
+    images: ['https://www.teed.club/og-image.png'],
   },
   alternates: {
-    canonical: 'https://teed.so',
+    canonical: 'https://www.teed.club',
   },
   robots: {
     index: true,
@@ -65,12 +65,12 @@ const jsonLd = {
   '@graph': [
     {
       '@type': 'Organization',
-      '@id': 'https://teed.so/#organization',
+      '@id': 'https://www.teed.club/#organization',
       name: 'Teed.club',
-      url: 'https://teed.so',
+      url: 'https://www.teed.club',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://teed.so/logo.png',
+        url: 'https://www.teed.club/logo.png',
         width: 512,
         height: 512,
       },
@@ -79,9 +79,9 @@ const jsonLd = {
     },
     {
       '@type': 'WebApplication',
-      '@id': 'https://teed.so/#application',
+      '@id': 'https://www.teed.club/#application',
       name: 'Teed.club',
-      url: 'https://teed.so',
+      url: 'https://www.teed.club',
       applicationCategory: 'LifestyleApplication',
       operatingSystem: 'Web',
       description: 'Create beautiful, shareable collections of your gear, products, and recommendations. Smart product organization, custom profile URLs, and stunning sharing pages.',
@@ -107,12 +107,12 @@ const jsonLd = {
     },
     {
       '@type': 'WebSite',
-      '@id': 'https://teed.so/#website',
-      url: 'https://teed.so',
+      '@id': 'https://www.teed.club/#website',
+      url: 'https://www.teed.club',
       name: 'Teed.club',
       description: 'Curate and share your gear collections',
       publisher: {
-        '@id': 'https://teed.so/#organization',
+        '@id': 'https://www.teed.club/#organization',
       },
     },
   ],

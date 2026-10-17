@@ -62,9 +62,10 @@ type ItemCardProps = {
   onItemMoved?: (itemId: string, targetBagTitle: string) => void;
   onEnrichItem?: (itemId: string) => void;
   isEnrichingItem?: boolean;
+  sections?: Section[];
 };
 
-export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = false, onToggleHero, onItemMoved, onEnrichItem, isEnrichingItem }: ItemCardProps) {
+export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = false, onToggleHero, onItemMoved, onEnrichItem, isEnrichingItem, sections = [] }: ItemCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isMoveModalOpen, setIsMoveModalOpen] = useState(false);
@@ -79,6 +80,7 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
   const [editComparedTo, setEditComparedTo] = useState(item.compared_to || '');
   const [editPricePaid, setEditPricePaid] = useState(item.price_paid?.toString() || '');
   const [editPurchaseDate, setEditPurchaseDate] = useState(item.purchase_date || '');
+  const [editSectionId, setEditSectionId] = useState<string>(item.section_id || '');
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const [itemLinks, setItemLinks] = useState(item.links);
   const [isGeneratingWhyChosen, setIsGeneratingWhyChosen] = useState(false);
@@ -153,6 +155,7 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
       compared_to: editComparedTo.trim() || null,
       price_paid: editPricePaid ? parseFloat(editPricePaid) : null,
       purchase_date: editPurchaseDate || null,
+      section_id: editSectionId || null,
     });
     setIsEditing(false);
   };
@@ -169,6 +172,7 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
     setEditComparedTo(item.compared_to || '');
     setEditPricePaid(item.price_paid?.toString() || '');
     setEditPurchaseDate(item.purchase_date || '');
+    setEditSectionId(item.section_id || '');
     setIsEditing(false);
   };
 
@@ -438,6 +442,25 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
                           className="w-full text-base px-3 py-2 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent"
                         />
                       </div>
+                      {sections.length > 0 && (
+                        <div className="sm:col-span-2">
+                          <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+                            Section
+                          </label>
+                          <select
+                            value={editSectionId}
+                            onChange={(e) => setEditSectionId(e.target.value)}
+                            className="w-full text-base px-3 py-2 border border-[var(--input-border)] rounded bg-[var(--input-bg)] text-[var(--input-text)] focus:ring-2 focus:ring-[var(--input-border-focus)] focus:border-transparent"
+                          >
+                            <option value="">No section</option>
+                            {sections.map((s) => (
+                              <option key={s.id} value={s.id}>
+                                {s.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

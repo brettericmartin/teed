@@ -89,6 +89,9 @@ export default function HomeClient() {
             <Link href="/for/golfers" className="hover:text-[var(--text-primary)] transition-colors">
               Golfers
             </Link>
+            <Link href="/for/golf-simulators" className="hover:text-[var(--text-primary)] transition-colors">
+              Golf Sims
+            </Link>
             <Link href="/for/creators" className="hover:text-[var(--text-primary)] transition-colors">
               Creators
             </Link>

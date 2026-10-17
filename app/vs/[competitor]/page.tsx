@@ -33,13 +33,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       type: 'website',
       locale: 'en_US',
-      url: `https://teed.so/vs/${comparison.slug}`,
+      url: `https://www.teed.club/vs/${comparison.slug}`,
       siteName: 'Teed.club',
       title: comparison.metaTitle,
       description: comparison.metaDescription,
       images: [
         {
-          url: 'https://teed.so/og-image.png',
+          url: 'https://www.teed.club/og-image.png',
           width: 1200,
           height: 630,
           alt: comparison.headline,
@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: comparison.metaDescription,
     },
     alternates: {
-      canonical: `https://teed.so/vs/${comparison.slug}`,
+      canonical: `https://www.teed.club/vs/${comparison.slug}`,
     },
   };
 }
@@ -81,19 +81,19 @@ function generateBreadcrumbSchema(comparison: Comparison) {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://teed.so',
+        item: 'https://www.teed.club',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Comparisons',
-        item: 'https://teed.so/alternatives',
+        item: 'https://www.teed.club/alternatives',
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: `vs ${comparison.competitorName}`,
-        item: `https://teed.so/vs/${comparison.slug}`,
+        item: `https://www.teed.club/vs/${comparison.slug}`,
       },
     ],
   };

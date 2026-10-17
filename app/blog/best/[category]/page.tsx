@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import { getRoundupCategory, getAllRoundupSlugs } from '@/lib/blog/categories';
 import { generateBreadcrumbJsonLd } from '@/lib/seo/structuredData';
 
-const BASE_URL = 'https://teed.so';
+const BASE_URL = 'https://www.teed.club';
 
 export const revalidate = 3600; // ISR: revalidate every hour
 

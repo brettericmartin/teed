@@ -1,7 +1,7 @@
 import { getAllPosts } from '@/lib/blog';
 import { CATEGORY_LABELS } from '@/lib/blog/types';
 
-const BASE_URL = 'https://teed.so';
+const BASE_URL = 'https://www.teed.club';
 
 export async function GET() {
   const posts = getAllPosts();

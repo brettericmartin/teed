@@ -4,7 +4,7 @@ import { getAllPosts } from '@/lib/blog';
 import { getAllRoundupSlugs } from '@/lib/blog/categories';
 import { getAllProductSlugs } from '@/lib/products/resolveProduct';
 
-const BASE_URL = 'https://teed.so';
+const BASE_URL = 'https://www.teed.club';
 
 // Static supabase client for sitemap generation (no auth needed)
 const supabase = createClient(
@@ -26,6 +26,7 @@ const staticPages = [
 // Use case landing pages
 const useCasePages = [
   'golfers',
+  'golf-simulators',
   'photographers',
   'creators',
   'travelers',

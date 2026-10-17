@@ -125,7 +125,7 @@ export const comparisons: Record<string, Comparison> = {
       'Links to various platforms without product focus',
     ],
     migrationSteps: [
-      'Sign up for Teed at teed.so/join',
+      'Sign up for Teed at teed.club/join',
       'Create your first "bag" (collection)',
       'Add your products using photos, URLs, or manual entry',
       'Organize items into sections if needed',

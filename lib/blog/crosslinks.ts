@@ -7,6 +7,7 @@ import type { BlogPostMeta } from './types';
  */
 const useCaseToBlogTags: Record<string, string[]> = {
   golfers: ['golf', 'golf bags'],
+  'golf-simulators': ['golf simulator', 'simulator', 'launch monitor', 'golf sim'],
   photographers: ['photography', 'camera gear'],
   creators: ['creators', 'creator tools', 'affiliate links', 'monetization'],
   travelers: ['travel', 'travel gear'],

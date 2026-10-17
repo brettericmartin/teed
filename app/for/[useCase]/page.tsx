@@ -45,13 +45,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       type: 'website',
       locale: 'en_US',
-      url: `https://teed.so/for/${useCase.slug}`,
+      url: `https://www.teed.club/for/${useCase.slug}`,
       siteName: 'Teed.club',
       title: useCase.metaTitle,
       description: useCase.metaDescription,
       images: [
         {
-          url: 'https://teed.so/og-image.png',
+          url: 'https://www.teed.club/og-image.png',
           width: 1200,
           height: 630,
           alt: useCase.headline,
@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: useCase.metaDescription,
     },
     alternates: {
-      canonical: `https://teed.so/for/${useCase.slug}`,
+      canonical: `https://www.teed.club/for/${useCase.slug}`,
     },
   };
 }
@@ -106,13 +106,13 @@ function generateBreadcrumbSchema(useCase: UseCase) {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://teed.so',
+        item: 'https://www.teed.club',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: useCase.title,
-        item: `https://teed.so/for/${useCase.slug}`,
+        item: `https://www.teed.club/for/${useCase.slug}`,
       },
     ],
   };
