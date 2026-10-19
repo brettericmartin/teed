@@ -5,12 +5,12 @@
     "short-throw",
     "ultra-short-throw",
     "standard-throw",
-    "off-centre-capable"
+    "off-center-capable"
   ],
   "notes": {
     "qualification": "5+ independent sources = qualified, 10+ = core. Brand pages excluded from the count. Reddit counted via search snippets and the redditrecs aggregator because reddit.com cannot be fetched.",
     "room_fit_math": "For a native 16:9 projector filling a 4:3 impact screen, the projector must throw an image 16/9 x screen height wide. A 10 ft x 7.5 ft (4:3) screen needs a 13.33 ft wide image, so distance = throw ratio x 13.33 ft. A 9 ft 6 in wide 4:3 screen (7 ft 1.5 in tall) needs a 12.67 ft wide image. Distances below are computed from each maker's throw ratio, not published by the maker, unless stated.",
-    "off_centre_definition": "Off-centre capable = optical lens shift on at least one axis, or a short enough throw plus enough keystone to sit beside the hitting line on a floor case or cart. Digital keystone discards pixels and softens the image; every source ranks it last after physical placement and lens shift.",
+    "off_centre_definition": "Off-center capable = optical lens shift on at least one axis, or a short enough throw plus enough keystone to sit beside the hitting line on a floor case or cart. Digital keystone discards pixels and softens the image; every source ranks it last after physical placement and lens shift.",
     "search_budget": "WebSearch budget ran out mid-task; later model-specific Reddit queries could not be run. Counts for Reddit lean on the first wave of searches and the redditrecs pages."
   },
   "products": [
@@ -57,11 +57,11 @@
         "input_lag": "33.4 ms at 4K/60 and 1080p/60; 16.7 ms at 1080p/120; 8.4 ms at 1080p/240 (BenQ page)",
         "light_source": "laser phosphor, 20,000 h",
         "noise": "32 dB normal, 29 dB eco (ProjectorCentral)",
-        "other": "IP5X sealed engine; Golf Mode colour preset; powered focus; 7.5 lb",
+        "other": "IP5X sealed engine; Golf Mode color preset; powered focus; 7.5 lb",
         "mount_positions": "ceiling behind the golfer (BenQ recommends behind the golfer using the low offset); floor case possible with a short-throw offset but not the common choice",
         "spec_sources": "https://www.projectorcentral.com/benq-ak700st.htm; https://www.benq.com/en-us/projector/golf/ak700st.html; https://homeperformancelab.com/best-benq-projector-for-golf-simulator/"
       },
-      "room_fit": "10 ft wide 16:9 image: 6.9 to 8.3 ft lens to screen. 10 ft x 7.5 ft 4:3 screen: 9.2 to 11.1 ft (Top Shelf Golf quotes 9 ft 2 in to 11 ft 1 in, above the golfer). 9 ft 6 in wide 4:3: 8.7 to 10.5 ft. Centre ceiling mount above or just behind the ball. Off-centre only via digital keystone, so a cart beside the mat is not what it is built for.",
+      "room_fit": "10 ft wide 16:9 image: 6.9 to 8.3 ft lens to screen. 10 ft x 7.5 ft 4:3 screen: 9.2 to 11.1 ft (Top Shelf Golf quotes 9 ft 2 in to 11 ft 1 in, above the golfer). 9 ft 6 in wide 4:3: 8.7 to 10.5 ft. Center ceiling mount above or just behind the ball. Off-center only via digital keystone, so a cart beside the mat is not what it is built for.",
       "off_centre": "keystone only (no lens shift)",
       "who_its_for": "The builder with a 16 ft or deeper bay who wants the golf-specific feature set (Golf Mode, Auto Screen Fit, sealed engine) and 4K, and is willing to pay for it.",
       "pros": [
@@ -134,7 +134,7 @@
       "who_its_for": "The builder who wants the AK700ST install experience (Auto Screen Fit, Golf Mode, sealed laser) and does not care about 4K on an impact screen.",
       "pros": [
         "Easiest install in the class thanks to Auto Screen Fit and auto focus",
-        "4,000 lumen rating and 95% Rec.709 colour",
+        "4,000 lumen rating and 95% Rec.709 color",
         "Low 16.7 ms lag"
       ],
       "cons": [
@@ -197,7 +197,7 @@
         "mount_positions": "ceiling above or just behind the ball; GSF owner mounts just behind a hitting area 10 ft from the screen",
         "spec_sources": "https://www.projectorcentral.com/benq-tk710sti.htm; https://www.carlofet.com/blog/benq-tk710sti-review; https://www.thesmarthomehookup.com/ultimate-golf-sim-projector-comparison-and-setup-guide-2024/"
       },
-      "room_fit": "6.9 to 8.3 ft for a 10 ft wide 16:9 image; 9.2 to 11.1 ft to fill a 10 ft x 7.5 ft 4:3 screen (GSF: 9 ft 4 in to 11 ft 3 in); 8.7 to 10.5 ft for a 9 ft 6 in wide 4:3 screen. Centre ceiling mount. Off-centre only with keystone.",
+      "room_fit": "6.9 to 8.3 ft for a 10 ft wide 16:9 image; 9.2 to 11.1 ft to fill a 10 ft x 7.5 ft 4:3 screen (GSF: 9 ft 4 in to 11 ft 3 in); 8.7 to 10.5 ft for a 9 ft 6 in wide 4:3 screen. Center ceiling mount. Off-center only with keystone.",
       "off_centre": "keystone only (3-axis digital, no lens shift)",
       "who_its_for": "The most common 4K pick for a home bay under $2,200: dark or lights-off garage, 10 to 13 ft wide screens, GSPro at 1080p/240 for the lag.",
       "pros": [
@@ -258,7 +258,7 @@
         "light_source": "240 W metal halide lamp, 4,000 h normal, 15,000 h eco",
         "noise": "35 dB normal, 29 dB eco",
         "other": "projector sits about 9 in above the top of the image when ceiling mounted (GSF)",
-        "mount_positions": "ceiling, well behind the golfer because of the long throw; one GSF member floor-mounts it 3 ft off-centre in a low-light garage",
+        "mount_positions": "ceiling, well behind the golfer because of the long throw; one GSF member floor-mounts it 3 ft off-center in a low-light garage",
         "spec_sources": "https://www.projectorcentral.com/benq-tk700sti.htm; https://golfsimulatorforum.com/forum/build-your-own/projectors/376703-benq-tk700sti-question"
       },
       "room_fit": "9.0 to 10.8 ft for a 10 ft wide 16:9 image; 12.0 to 14.4 ft to fill a 10 ft x 7.5 ft 4:3 screen (GSF members quote 13 ft 4 in to 14 ft 8 in); 11.4 to 13.7 ft for a 9 ft 6 in wide 4:3 screen. Needs a deep room; a GSF owner mounted it 16 ft back for a 13 ft wide screen. Shadow risk is the recurring complaint.",
@@ -329,7 +329,7 @@
         "mount_positions": "ceiling directly over the ball (GSF 'I'm lost' thread: about 9 ft back for a 9 ft wide 4:3 image); Golfstead reader Q&A suggests it for floor mounting",
         "spec_sources": "https://www.projectorcentral.com/benq-th671st.htm; https://homeperformancelab.com/golf-simulator-projector-placement/; https://mygolfsimulator.com/best-golf-simulator-projectors/"
       },
-      "room_fit": "6.9 to 8.3 ft for a 10 ft wide 16:9 image; 9.2 to 11.1 ft to fill a 10 ft x 7.5 ft 4:3 screen; 8.7 to 10.5 ft for a 9 ft 6 in wide 4:3 screen. Carl's Place: 79 to 95 in from the screen at its 115 in native width. Low offset makes it the flush-ceiling favourite under 9 ft ceilings. Vertical-only keystone means it cannot be squared from beside the mat.",
+      "room_fit": "6.9 to 8.3 ft for a 10 ft wide 16:9 image; 9.2 to 11.1 ft to fill a 10 ft x 7.5 ft 4:3 screen; 8.7 to 10.5 ft for a 9 ft 6 in wide 4:3 screen. Carl's Place: 79 to 95 in from the screen at its 115 in native width. Low offset makes it the flush-ceiling favorite under 9 ft ceilings. Vertical-only keystone means it cannot be squared from beside the mat.",
       "off_centre": "no (vertical keystone only)",
       "who_its_for": "The starter bay on a budget with a dark, controlled room; the forums' default 'just get the 671' answer from 2019 to 2024.",
       "pros": [
@@ -352,7 +352,7 @@
     {
       "brand": "BenQ",
       "name": "LK936ST",
-      "subtype": "off-centre-capable",
+      "subtype": "off-center-capable",
       "tier": "core",
       "mention_count": 17,
       "mention_sources": [
@@ -395,14 +395,14 @@
         "light_source": "laser phosphor, 20,000 h (30,000 eco)",
         "noise": "40 dB normal, 33 dB eco (ProjectorCentral); Home Performance Lab measured 53.6 dB",
         "other": "Golf Mode corrects purple fringing; 15.4 lb; effectively 0% native offset, uses lens shift instead",
-        "mount_positions": "ceiling centre, ceiling off to one side, or beside a launch monitor, thanks to the shift range; too heavy and long-throw for a floor case in front of the mat",
+        "mount_positions": "ceiling center, ceiling off to one side, or beside a launch monitor, thanks to the shift range; too heavy and long-throw for a floor case in front of the mat",
         "spec_sources": "https://www.projectorcentral.com/benq-lk936st.htm; https://homeperformancelab.com/golf-simulator-projector-placement/; https://mygolfsimulator.com/keystone-correction/"
       },
-      "room_fit": "8.1 to 8.9 ft for a 10 ft wide 16:9 image; 10.8 to 11.9 ft to fill a 10 ft x 7.5 ft 4:3 screen (Top Shelf: 10 ft 10 in to 11 ft 10 in, above the golfer); 10.3 to 11.3 ft for a 9 ft 6 in wide 4:3 screen. The only mainstream home model that can be hung 2 ft off the centreline and still show a square, full-resolution image. Not a cart projector: 15 lb and a long throw.",
+      "room_fit": "8.1 to 8.9 ft for a 10 ft wide 16:9 image; 10.8 to 11.9 ft to fill a 10 ft x 7.5 ft 4:3 screen (Top Shelf: 10 ft 10 in to 11 ft 10 in, above the golfer); 10.3 to 11.3 ft for a 9 ft 6 in wide 4:3 screen. The only mainstream home model that can be hung 2 ft off the centerline and still show a square, full-resolution image. Not a cart projector: 15 lb and a long throw.",
       "off_centre": "yes (optical H +/-23%, V +/-60%)",
-      "who_its_for": "The bright or dual-use room, the ductwork or launch-monitor conflict on the centreline, or the commercial bay. Overkill for a dark garage.",
+      "who_its_for": "The bright or dual-use room, the ductwork or launch-monitor conflict on the centerline, or the commercial bay. Overkill for a dark garage.",
       "pros": [
-        "Real horizontal and vertical lens shift, the feature every off-centre thread asks for",
+        "Real horizontal and vertical lens shift, the feature every off-center thread asks for",
         "5,100 lumens for lights-on play",
         "Golf Mode and warping"
       ],
@@ -592,7 +592,7 @@
       ],
       "known_issues": [
         "Guides mix it up with the GT2100HDR and GT2400HDR; the three share the 0.496 lens and differ in lumens and HDR",
-        "No Golf Sim colour mode on this SKU (Optoma page)"
+        "No Golf Sim color mode on this SKU (Optoma page)"
       ],
       "why_people_choose_it": "It is the value laser the retailers push for tight garages: 30,000 hour light source, sealed, and it fills a 10 ft screen from about 5 ft so it hangs in front of the golfer where no shadow can reach.",
       "image_url": "https://www.projectorcentral.com/images/projectors2/img12116.jpg"
@@ -746,7 +746,7 @@
         "pricing_note": "Discontinued December 2022; no current street price listed. Used only.",
         "price_source_url": "https://www.projectorcentral.com/optoma-gt1090hdr.htm"
       },
-      "room_fit": "5.0 ft for a 10 ft wide 16:9 image; 6.7 ft to fill a 10 ft x 7.5 ft 4:3 screen. The 2020 to 2022 forum favourite for short bays; a GSF owner says it looks great even in bright light.",
+      "room_fit": "5.0 ft for a 10 ft wide 16:9 image; 6.7 ft to fill a 10 ft x 7.5 ft 4:3 screen. The 2020 to 2022 forum favorite for short bays; a GSF owner says it looks great even in bright light.",
       "off_centre": "limited (digital H and V keystone)",
       "who_its_for": "The used-market buyer; it is the laser predecessor of the GT2000 series and still the model many forum threads mean by 'the 1090'.",
       "pros": [
@@ -881,7 +881,7 @@
     {
       "brand": "Panasonic",
       "name": "PT-VMZ51",
-      "subtype": "off-centre-capable",
+      "subtype": "off-center-capable",
       "tier": "qualified",
       "mention_count": 6,
       "mention_sources": [
@@ -916,12 +916,12 @@
         "mount_positions": "ceiling well behind the golfer, or off to one side using the shift; the only sub-$3,000 lens-shift option in the sim guides",
         "spec_sources": "https://www.projectorcentral.com/panasonic-pt-vmz51u.htm; https://mygolfsimulator.com/best-golf-simulator-projectors/"
       },
-      "room_fit": "10.9 to 17.7 ft for a 10 ft wide 16:10 image; a 10 ft x 7.5 ft 4:3 screen needs a 12 ft wide image, so 13.1 to 21.2 ft. Only for deep rooms (18 ft plus) where the projector sits behind the golfer; the vertical shift then drops the image to the floor without tilt. The horizontal shift lets it hang beside a centreline obstruction.",
+      "room_fit": "10.9 to 17.7 ft for a 10 ft wide 16:10 image; a 10 ft x 7.5 ft 4:3 screen needs a 12 ft wide image, so 13.1 to 21.2 ft. Only for deep rooms (18 ft plus) where the projector sits behind the golfer; the vertical shift then drops the image to the floor without tilt. The horizontal shift lets it hang beside a centerline obstruction.",
       "off_centre": "yes (optical H +/-20%, V +44%) but standard throw",
       "who_its_for": "The deep, bright room that needs lens shift under $3,000, or a dual-use media room; Shop Indoor Golf's old best overall.",
       "pros": [
         "Real horizontal and vertical lens shift",
-        "5,200 lumens, 3LCD colour",
+        "5,200 lumens, 3LCD color",
         "Quiet 26 dB eco"
       ],
       "cons": [
@@ -963,7 +963,7 @@
       "read_url": "https://redditrecs.com/home-projector/model/epson-epiqvision-ultra-ls800-ultra-short-throw-laser-projector/",
       "specs": {
         "throw_ratio": "0.16 (Epson, via search snippet); sits inches from the screen",
-        "lumens": "4,000 colour and white (ISO)",
+        "lumens": "4,000 color and white (ISO)",
         "resolution": "4K PRO-UHD (pixel shift), 3LCD",
         "native_aspect": "16:9",
         "lens_shift": "none",
@@ -976,7 +976,7 @@
         "spec_sources": "https://epson.com/For-Home/Projectors/Laser-Projection-TV/EpiqVision-Ultra-LS800-4K-PRO-UHD-Ultra-Short-Throw-3-Chip-3LCD-Smart-Streaming-Laser-Projector/p/V11HA90120"
       },
       "room_fit": "Needs almost no throw (about 1.6 ft of lens-to-screen for 10 ft wide), which is the appeal for a 5 ft deep bay. The catch is the screen: UST optics exaggerate every ripple in a tensioned impact screen, the unit sits where balls land, and Reddit owners say a UST needs an ALR screen. ProjectorCentral's golf guide says UST projectors generally do not work with impact screens.",
-      "off_centre": "no (must be centred under the screen)",
+      "off_centre": "no (must be centered under the screen)",
       "who_its_for": "Honestly, the home theatre buyer; it appears in sim guides as the UST example rather than a recommendation. Worth listing because builders with very shallow bays keep asking about it.",
       "pros": [
         "4,000 lumen 3LCD laser with no shadow possible",
@@ -1103,12 +1103,12 @@
     {
       "brand": "Eiki",
       "name": "EK-308U",
-      "reason": "Four mentions; Foresight used it on a stand to the golfer's right in Sim in a Box with about 7% shift. The historical off-centre answer."
+      "reason": "Four mentions; Foresight used it on a stand to the golfer's right in Sim in a Box with about 7% shift. The historical off-center answer."
     },
     {
       "brand": "LG",
       "name": "ProBeam BU53RG",
-      "reason": "Four mentions; 4K 5,000 lm with H +/-20% V +/-50% shift at 0.94 to 1.14. Worth re-checking next pass; it would be the second off-centre 4K."
+      "reason": "Four mentions; 4K 5,000 lm with H +/-20% V +/-50% shift at 0.94 to 1.14. Worth re-checking next pass; it would be the second off-center 4K."
     }
   ],
   "sources": [
@@ -1201,14 +1201,14 @@
       "type": "retailer",
       "title": "BenQ vs Optoma for Golf Simulators, Top Shelf Golf",
       "date": "2025-10-03",
-      "what_it_says": "Optoma wins brightness per dollar, BenQ wins colour (95% Rec.709) and golf modes."
+      "what_it_says": "Optoma wins brightness per dollar, BenQ wins color (95% Rec.709) and golf modes."
     },
     {
       "url": "https://mygolfsimulator.com/where-to-mount-your-golf-simulator-projector/",
       "type": "review",
       "title": "Where to Mount your Golf Simulator Projector, MyGolfSimulator",
       "date": "2026",
-      "what_it_says": "Five positions incl. ceiling off-centre and side-mounted; side mount needs horizontal keystone or lens shift; names 13 models and the SIMBR and Skyrail mounts."
+      "what_it_says": "Five positions incl. ceiling off-center and side-mounted; side mount needs horizontal keystone or lens shift; names 13 models and the SIMBR and Skyrail mounts."
     },
     {
       "url": "https://mygolfsimulator.com/keystone-correction/",
@@ -1355,14 +1355,14 @@
       "type": "forum",
       "title": "EH412ST Projector, Floor Placement Positioning for 120 x 91 Screen",
       "date": "2021-01-06",
-      "what_it_says": "Floor-mounted 0.5 unit, 4:3 at 1440x1080, 80 in from the screen; no lens shift means edge distortion off-centre; advice to seek 2 to 3 in offset plus horizontal shift."
+      "what_it_says": "Floor-mounted 0.5 unit, 4:3 at 1440x1080, 80 in from the screen; no lens shift means edge distortion off-center; advice to seek 2 to 3 in offset plus horizontal shift."
     },
     {
       "url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/376703-benq-tk700sti-question",
       "type": "forum",
       "title": "Benq TK700sti question",
       "date": "2022-10-24",
-      "what_it_says": "Shadow math (golfer height over mount height times throw), buyer switches to the UHD35STx; one member plans a floor mount 3 ft off-centre."
+      "what_it_says": "Shadow math (golfer height over mount height times throw), buyer switches to the UHD35STx; one member plans a floor mount 3 ft off-center."
     },
     {
       "url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/332344-i%E2%80%99m-lost-guys",
@@ -1376,7 +1376,7 @@
       "type": "forum",
       "title": "Best 4k Projector for Me",
       "date": "2024-08-19",
-      "what_it_says": "Under $1,500 4K: TK710STi is about the only option; off-centre needs keystone and cheap units distort; LK936ST vs Epson L730U for lights-on play."
+      "what_it_says": "Under $1,500 4K: TK710STi is about the only option; off-center needs keystone and cheap units distort; LK936ST vs Epson L730U for lights-on play."
     },
     {
       "url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/357676-projector-location-w-eye-xo",
@@ -1460,7 +1460,7 @@
       "type": "brand",
       "title": "Keystone and Lens Shift are Important on a Golf Sim Projector Setup, BenQ",
       "date": "2026",
-      "what_it_says": "Brand explainer on why lens shift beats keystone for off-centre mounts."
+      "what_it_says": "Brand explainer on why lens shift beats keystone for off-center mounts."
     },
     {
       "url": "https://www.avforums.com/threads/new-optoma-projector-lens-issues-uhz50.2478119/",
@@ -1484,14 +1484,14 @@
       "Throw math for a 10 ft bay: throw distance = throw ratio x image width; a 16:9 projector must throw 13 ft 4 in wide to fill a 10 ft x 7 ft 6 in 4:3 screen, so 0.5 units sit about 6 ft 7 in out and 0.69 to 0.83 units sit 9 to 11 ft out (Top Shelf Golf table, BenQ formula)",
       "4:3 vs 16:9 on an impact screen: why screens are 4:3 (ball clearance in a narrow bay), letterboxing a 16:9 projector costs 25% of the pixels and a third of the light (multiply lumens by 1.33, ProjectorCentral), and how Auto Screen Fit, Screen Fill and a 1440x1080 PC resolution handle it",
       "Ceiling vs floor vs cart: ceiling behind the ball is the default (Carl's: about 4 ft behind the tee); floor cases in front of the mat for 0.5 units under 8 ft 6 in ceilings, offset 12 in from the hitting line (GSF); carts are discouraged (shadows, bumps, space) but work for a temporary bay",
-      "Off-centre when the ceiling mount is impossible: order of operations is placement, then optical lens shift, then digital keystone (every guide); what +/-15 deg (Optoma) vs +/-30 deg (BenQ) vs +/-40 deg (ViewSonic, UHD35STx) actually buys you; the LK936ST (+/-23% H) and PT-VMZ51 (+/-20% H) as the two lens-shift options; the 'over the ball, angled in' trick from the GSF horizontal lens shift thread; the floor case beside the mat",
+      "Off-center when the ceiling mount is impossible: order of operations is placement, then optical lens shift, then digital keystone (every guide); what +/-15 deg (Optoma) vs +/-30 deg (BenQ) vs +/-40 deg (ViewSonic, UHD35STx) actually buys you; the LK936ST (+/-23% H) and PT-VMZ51 (+/-20% H) as the two lens-shift options; the 'over the ball, angled in' trick from the GSF horizontal lens shift thread; the floor case beside the mat",
       "Ultra-short-throw honesty section: the LS800 and PX3-Pro sit where balls land and show every ripple in a tensioned screen; forum verdict is traditional short throw",
       "Lumens for a lit garage: rated vs measured (TK710STi 3,200 rated, 2,448 measured; AH700ST 2,200 in Golf mode), the 1.33 letterbox penalty, 3,000 for lights-off and 4,000 plus for a door-open garage (Rain or Shine, Smart Home Perfected), blackout curtains as the cheapest lumen upgrade",
       "Lamp vs laser vs LED: 4,000 hour bulbs that dim and cost $150 to $300 (TH671ST, TK700STi, UHD35STx) vs 20,000 to 30,000 hour lasers; sealed IP5X and IP6X engines for dusty garages",
       "What to spend: under $1,000 (TH671ST, ZW350ST), $1,200 to $1,500 (GT2000HDR, GT2400HDR, UHD35STx), $2,000 to $2,500 (TK710STi, AH500ST, LK830ST, AH700ST), $2,900 (AK700ST), $4,900 (LK936ST); price tiers, not rankings",
       "Input lag and the GSPro rig: 16.7 ms at 4K/60 vs 4 ms at 1080p/240, why most builders run 1080p anyway, GPU needed for 4K",
       "Before you drill: the ladder shadow test (GSF), draw a side view with your height (GSF Eye XO thread), use the Carl's or Rain or Shine calculator at the 4:3 setting, and pad the beam near the lens",
-      "Reference bag: the qualified projectors by price tier with their throw distance to a 10 ft screen, off-centre capability and the forum thread to read"
+      "Reference bag: the qualified projectors by price tier with their throw distance to a 10 ft screen, off-center capability and the forum thread to read"
     ]
   }
 }

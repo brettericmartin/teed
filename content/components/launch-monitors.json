@@ -870,7 +870,7 @@
       "read_url": "https://golfsimulatorforum.com/forum/skytrak/391267-skytrak",
       "specs": {
         "technology": "Photometric camera plus Doppler radar for club speed",
-        "placement": "beside the ball on the laser dot, 11.5 to 12.5 in from sensor face to ball centre",
+        "placement": "beside the ball on the laser dot, 11.5 to 12.5 in from sensor face to ball center",
         "ball_flight_ft": 10,
         "min_room_depth_ft": 10,
         "indoor_outdoor": "indoor",
@@ -1776,7 +1776,7 @@
       "type": "forum",
       "title": "Used launch monitors",
       "date": "2023-07-17",
-      "what_it_says": "Used GC2 is the forum favourite; camera beats radar indoors on sidespin; ask for serial, usage and flash/battery history."
+      "what_it_says": "Used GC2 is the forum favorite; camera beats radar indoors on sidespin; ask for serial, usage and flash/battery history."
     },
     {
       "url": "https://golfsimulatorforum.com/forum/skytrak/175342-distance-from-hitting-area-to-screen",
