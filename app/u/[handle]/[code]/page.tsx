@@ -1,19 +1,13 @@
 import { Suspense } from 'react';
 import { SITE_URL } from '@/lib/siteUrl';
 import { notFound } from 'next/navigation';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabasePublic } from '@/lib/supabasePublic';
 import type { Metadata } from 'next';
 import PublicBagView from './PublicBagView';
 import {
   generateBagJsonLd,
   generateBreadcrumbJsonLd,
 } from '@/lib/seo/structuredData';
-
-// Public Supabase client (no auth required for public bags)
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 interface PageProps {
   params: Promise<{ handle: string; code: string }>;
@@ -23,7 +17,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { handle, code } = await params;
 
   // Fetch bag info for metadata
-  const { data: profile } = await supabase
+  const { data: profile } = await getSupabasePublic()
     .from('profiles')
     .select('id, display_name')
     .eq('handle', handle)
@@ -35,7 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  const { data: bag } = await supabase
+  const { data: bag } = await getSupabasePublic()
     .from('bags')
     .select('title, description, cover_photo_id')
     .eq('owner_id', profile.id)
@@ -96,7 +90,7 @@ export default async function UserBagPage({ params }: PageProps) {
   const { handle, code } = await params;
 
   // First, fetch the user profile to get owner_id
-  const { data: profile, error: profileError } = await supabase
+  const { data: profile, error: profileError } = await getSupabasePublic()
     .from('profiles')
     .select('id, handle, display_name')
     .eq('handle', handle)
@@ -108,7 +102,7 @@ export default async function UserBagPage({ params }: PageProps) {
   }
 
   // Fetch the bag with all items, links, and sections (scoped to this user)
-  const { data: bag, error } = await supabase
+  const { data: bag, error } = await getSupabasePublic()
     .from('bags')
     .select(`
       *,
@@ -175,7 +169,7 @@ export default async function UserBagPage({ params }: PageProps) {
   let photoUrls: Record<string, string> = {};
 
   if (photoIds.length > 0) {
-    const { data: mediaAssets, error: mediaError } = await supabase
+    const { data: mediaAssets, error: mediaError } = await getSupabasePublic()
       .from('media_assets')
       .select('id, url')
       .in('id', photoIds);
@@ -205,7 +199,7 @@ export default async function UserBagPage({ params }: PageProps) {
   // Bag-level links (links.bag_id, migration 001; kind 'source' = the credit line).
   // A plain second query: `links` carries two FKs (bag_id -> bags, bag_item_id -> bag_items)
   // and the nested embed above already resolves the item side.
-  const { data: bagLinks } = await supabase
+  const { data: bagLinks } = await getSupabasePublic()
     .from('links')
     .select('id, url, kind, label, metadata, is_auto_generated')
     .eq('bag_id', bag.id)

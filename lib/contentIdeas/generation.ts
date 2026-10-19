@@ -3,7 +3,7 @@
  * LLM-powered functions for generating content ideas, hooks, and outlines
  */
 
-import { openai } from '../openaiClient';
+import { getOpenAI } from '../openaiClient';
 import type {
   ContentIdea,
   ContentTag,
@@ -220,7 +220,7 @@ Return JSON array with this structure:
 }`;
 
   const response = await retryWithBackoff(() =>
-    openai.chat.completions.create({
+    getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },
@@ -333,7 +333,7 @@ Return as JSON:
 }`;
 
   const response = await retryWithBackoff(() =>
-    openai.chat.completions.create({
+    getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },
@@ -450,7 +450,7 @@ Return as JSON:
 }`;
 
   const response = await retryWithBackoff(() =>
-    openai.chat.completions.create({
+    getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },
@@ -564,7 +564,7 @@ Return as JSON:
 }`;
 
   const response = await retryWithBackoff(() =>
-    openai.chat.completions.create({
+    getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },
@@ -662,7 +662,7 @@ Return as JSON:
 }`;
 
   const response = await retryWithBackoff(() =>
-    openai.chat.completions.create({
+    getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },
@@ -734,7 +734,7 @@ Return as JSON:
 }`;
 
   const response = await retryWithBackoff(() =>
-    openai.chat.completions.create({
+    getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },

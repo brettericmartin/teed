@@ -6,7 +6,7 @@
  */
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import OpenAI from 'openai';
+import { getOpenAI } from '@/lib/openaiClient';
 import { searchYouTubeVideos, getVideoDetails } from '@/lib/contentIdeas/youtube';
 import { fetchViaJinaReader } from '@/lib/linkIdentification/jinaReader';
 import {
@@ -29,8 +29,6 @@ import type {
   ProductLink,
   DbDiscoverySource,
 } from '../types';
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 // ============================================================================
 // YouTube Research
@@ -550,7 +548,7 @@ Respond in JSON format:
 }`;
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },

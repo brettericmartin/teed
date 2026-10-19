@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/apiAuth';
 import { createServerSupabase } from '@/lib/serverSupabase';
-import { openai } from '@/lib/openaiClient';
+import { getOpenAI } from '@/lib/openaiClient';
 import { validateAndCompressImage } from '@/lib/ai';
 import type {
   DetectObjectsRequest,
@@ -99,7 +99,7 @@ Rules:
       userPrompt += `\n\nUser hint: "${textHint}" - use this context but still identify ALL objects you see.`;
     }
 
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini', // Fast and cheap for object detection
       messages: [
         { role: 'system', content: systemPrompt },

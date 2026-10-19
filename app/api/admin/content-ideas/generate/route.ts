@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { withAdminApi } from '@/lib/withAdmin';
 import { logAdminAction } from '@/lib/adminAuth';
 import {
@@ -15,13 +15,6 @@ import type {
   GenerateContentResponse,
   ExtractedProduct,
 } from '@/lib/types/contentIdeas';
-
-// Use service role for database operations
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
 
 /**
  * POST /api/admin/content-ideas/generate
@@ -61,7 +54,7 @@ export async function POST(request: NextRequest) {
     } = options;
 
     // Fetch the selected ideas
-    const { data: ideas, error: fetchError } = await supabaseAdmin
+    const { data: ideas, error: fetchError } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('*')
       .in('id', ideaIds)
@@ -93,7 +86,7 @@ export async function POST(request: NextRequest) {
 
       try {
         // Mark as generating
-        await supabaseAdmin
+        await getSupabaseAdmin()
           .from('content_ideas')
           .update({ status: 'generating' })
           .eq('id', idea.id);
@@ -162,7 +155,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Update the idea with generated content
-        const { error: updateError } = await supabaseAdmin
+        const { error: updateError } = await getSupabaseAdmin()
           .from('content_ideas')
           .update({
             status: 'generated',
@@ -196,7 +189,7 @@ export async function POST(request: NextRequest) {
         console.error(`[Generate] Error for ${idea.id}:`, ideaError);
 
         // Mark as failed (revert to selected so it can be retried)
-        await supabaseAdmin
+        await getSupabaseAdmin()
           .from('content_ideas')
           .update({ status: 'selected' })
           .eq('id', idea.id);
@@ -244,7 +237,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get selected ideas awaiting generation
-    const { data: ideas, error } = await supabaseAdmin
+    const { data: ideas, error } = await getSupabaseAdmin()
       .from('content_ideas')
       .select(`
         id,
@@ -269,13 +262,13 @@ export async function GET(request: NextRequest) {
     }
 
     // Get count of already generated
-    const { count: generatedCount } = await supabaseAdmin
+    const { count: generatedCount } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('id', { count: 'exact', head: true })
       .eq('status', 'generated');
 
     // Get count currently generating
-    const { count: generatingCount } = await supabaseAdmin
+    const { count: generatingCount } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('id', { count: 'exact', head: true })
       .eq('status', 'generating');

@@ -7,16 +7,10 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { withAdminApi } from '@/lib/withAdmin';
 import { logAdminAction } from '@/lib/adminAuth';
 import type { ContentIdea } from '@/lib/types/contentIdeas';
-
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -114,7 +108,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     // Fetch the content idea
-    const { data: contentIdea, error: fetchError } = await supabaseAdmin
+    const { data: contentIdea, error: fetchError } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('*')
       .eq('id', id)
@@ -209,7 +203,7 @@ async function handleObjectValidation(
 
   // Save feedback records
   if (feedbackRecords.length > 0) {
-    const { error: feedbackError } = await supabaseAdmin
+    const { error: feedbackError } = await getSupabaseAdmin()
       .from('extraction_feedback')
       .insert(feedbackRecords);
 
@@ -243,7 +237,7 @@ async function handleObjectValidation(
   ];
 
   // Update content idea
-  const { error: updateError } = await supabaseAdmin
+  const { error: updateError } = await getSupabaseAdmin()
     .from('content_ideas')
     .update({
       validated_products: validatedProducts,
@@ -347,7 +341,7 @@ async function handleProductValidation(
 
   // Save feedback records
   if (feedbackRecords.length > 0) {
-    const { error: feedbackError } = await supabaseAdmin
+    const { error: feedbackError } = await getSupabaseAdmin()
       .from('extraction_feedback')
       .insert(feedbackRecords);
 
@@ -377,7 +371,7 @@ async function handleProductValidation(
   });
 
   // Update content idea
-  const { error: updateError } = await supabaseAdmin
+  const { error: updateError } = await getSupabaseAdmin()
     .from('content_ideas')
     .update({
       validated_products: finalProducts,
@@ -439,7 +433,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     const { id } = await params;
 
-    const { data: contentIdea, error } = await supabaseAdmin
+    const { data: contentIdea, error } = await getSupabaseAdmin()
       .from('content_ideas')
       .select(`
         id,

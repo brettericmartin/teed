@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/apiAuth';
 import { createServerSupabase } from '@/lib/serverSupabase';
-import OpenAI from 'openai';
+import { getOpenAI } from '@/lib/openaiClient';
 import { trackApiUsage } from '@/lib/apiUsageTracker';
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 type ProductIdentification = {
   custom_name: string;
@@ -110,7 +106,7 @@ ${bagContext ? `Context: This is for a "${bagContext}" collection.` : ''}`;
 ${bagContext ? `Context: This is for a "${bagContext}" collection.` : ''}`;
     }
 
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [
         {

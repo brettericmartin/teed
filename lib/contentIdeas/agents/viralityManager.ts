@@ -6,7 +6,7 @@
  * Provides strategic direction for Wave 3 platform specialists.
  */
 
-import { openai } from '@/lib/openaiClient';
+import { getOpenAI } from '@/lib/openaiClient';
 import type { ViralityManagerOutput, HookCandidate } from '@/lib/types/teamGeneration';
 import type {
   BaseAgent,
@@ -231,7 +231,7 @@ Return JSON:
     }
 
     try {
-      const response = await openai.chat.completions.create({
+      const response = await getOpenAI().chat.completions.create({
         model: this.config.model,
         messages: [
           { role: 'system', content: this.getSystemPrompt() },

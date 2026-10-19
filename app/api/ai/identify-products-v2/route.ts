@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/apiAuth';
 import { createServerSupabase } from '@/lib/serverSupabase';
-import { openai } from '@/lib/openaiClient';
+import { getOpenAI } from '@/lib/openaiClient';
 import { validateAndCompressImage } from '@/lib/ai';
 import { generateBrandContext } from '@/lib/brandKnowledge';
 import type {
@@ -182,7 +182,7 @@ IMPORTANT:
 3. Provide alternatives when confidence is below 70%
 4. Be specific with brand and model names`;
 
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [
         { role: 'system', content: systemPrompt },

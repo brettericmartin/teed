@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/apiAuth';
 import { createServerSupabase } from '@/lib/serverSupabase';
-import { openai } from '@/lib/openaiClient';
+import { getOpenAI } from '@/lib/openaiClient';
 import { trackApiUsage } from '@/lib/apiUsageTracker';
 
 /**
@@ -106,7 +106,7 @@ ${contextInfo}
 
 Provide brand, formatted specifications, product differentiation notes, and fun facts.`;
 
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o', // Use full model for better product knowledge
       messages: [
         { role: 'system', content: systemPrompt },

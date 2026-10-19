@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import * as cheerio from 'cheerio';
-import { openai } from '@/lib/openaiClient';
+import { getOpenAI } from '@/lib/openaiClient';
 import { identifyProduct, parseProductUrl } from '@/lib/linkIdentification';
 import { classifyUrl } from '@/lib/links/classifyUrl';
 import { fetchOEmbed } from '@/lib/linkIntelligence';
@@ -262,7 +262,7 @@ async function analyzeWithAI(url: string, scraped: ScrapedData | null): Promise<
   if (!scraped?.title) return null;
 
   try {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [
         {

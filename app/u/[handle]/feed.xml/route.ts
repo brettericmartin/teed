@@ -1,10 +1,5 @@
 import { NextRequest } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { getSupabasePublic } from '@/lib/supabasePublic';
 
 /**
  * RSS Feed for a user's profile.
@@ -19,7 +14,7 @@ export async function GET(
   const { handle } = await params;
 
   // Fetch profile
-  const { data: profile } = await supabase
+  const { data: profile } = await getSupabasePublic()
     .from('profiles')
     .select('id, handle, display_name, bio, avatar_url')
     .eq('handle', handle)
@@ -30,7 +25,7 @@ export async function GET(
   }
 
   // Fetch public bags
-  const { data: bags } = await supabase
+  const { data: bags } = await getSupabasePublic()
     .from('bags')
     .select(`
       id,

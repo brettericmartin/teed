@@ -1,9 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { getSupabasePublic } from '@/lib/supabasePublic';
 
 export interface ProductAppearance {
   itemId: string;
@@ -61,7 +56,7 @@ export async function resolveProduct(slug: string): Promise<ResolvedProduct | nu
   const searchTerms = slug.replace(/-/g, ' ');
 
   // Search for items matching this slug pattern
-  const { data: items, error } = await supabase
+  const { data: items, error } = await getSupabasePublic()
     .from('bag_items')
     .select(`
       id,
@@ -108,7 +103,7 @@ export async function resolveProduct(slug: string): Promise<ResolvedProduct | nu
 
   let photoUrls: Record<string, string> = {};
   if (photoIds.length > 0) {
-    const { data: assets } = await supabase
+    const { data: assets } = await getSupabasePublic()
       .from('media_assets')
       .select('id, url')
       .in('id', photoIds);
@@ -170,7 +165,7 @@ export async function resolveProduct(slug: string): Promise<ResolvedProduct | nu
  * Get all unique product slugs for sitemap generation.
  */
 export async function getAllProductSlugs(): Promise<Array<{ slug: string; updatedAt: string }>> {
-  const { data: items, error } = await supabase
+  const { data: items, error } = await getSupabasePublic()
     .from('bag_items')
     .select(`
       custom_name,

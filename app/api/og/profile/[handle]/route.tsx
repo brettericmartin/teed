@@ -1,13 +1,8 @@
 import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabasePublic } from '@/lib/supabasePublic';
 
 export const runtime = 'edge';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 export async function GET(
   request: NextRequest,
@@ -17,7 +12,7 @@ export async function GET(
     const { handle } = await params;
 
     // Fetch profile with public bags count
-    const { data: profile } = await supabase
+    const { data: profile } = await getSupabasePublic()
       .from('profiles')
       .select('id, handle, display_name, avatar_url, bio, created_at')
       .eq('handle', handle)
@@ -28,14 +23,14 @@ export async function GET(
     }
 
     // Get public bag count
-    const { count: bagCount } = await supabase
+    const { count: bagCount } = await getSupabasePublic()
       .from('bags')
       .select('id', { count: 'exact', head: true })
       .eq('owner_id', profile.id)
       .eq('is_public', true);
 
     // Get total item count across public bags
-    const { data: bags } = await supabase
+    const { data: bags } = await getSupabasePublic()
       .from('bags')
       .select('id')
       .eq('owner_id', profile.id)
@@ -44,7 +39,7 @@ export async function GET(
     let itemCount = 0;
     if (bags && bags.length > 0) {
       const bagIds = bags.map(b => b.id);
-      const { count } = await supabase
+      const { count } = await getSupabasePublic()
         .from('bag_items')
         .select('id', { count: 'exact', head: true })
         .in('bag_id', bagIds);

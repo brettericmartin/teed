@@ -1,5 +1,5 @@
 import { geminiFlash } from '@/lib/geminiClient';
-import { openai } from '@/lib/openaiClient';
+import { getOpenAI } from '@/lib/openaiClient';
 import type { EnumeratedItem, BoundingBox } from './types';
 
 const ENUMERATION_PROMPT = `You are analyzing a photo to find every distinct physical product or object.
@@ -115,7 +115,7 @@ async function enumerateWithGPT4o(imageBase64: string): Promise<EnumeratedItem[]
     ? imageBase64
     : `data:image/jpeg;base64,${imageBase64}`;
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: 'gpt-4o',
     messages: [
       {

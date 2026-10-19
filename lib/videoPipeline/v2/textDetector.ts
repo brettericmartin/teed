@@ -9,7 +9,7 @@
  * lets us know WHERE products are shown before expensive GPT-4o analysis.
  */
 
-import { openai } from '../../openaiClient';
+import { getOpenAI } from '../../openaiClient';
 import type { FrameStore } from './frameStore';
 import type { TextDetectionResult } from './types';
 
@@ -91,7 +91,7 @@ If no text is visible in a frame, return an empty texts array.
 Include ALL text you can read, even partial text.`;
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [{
         role: 'user',

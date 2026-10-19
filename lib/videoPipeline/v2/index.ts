@@ -24,7 +24,7 @@ import type { TranscriptSegment } from '../../contentIdeas/transcript';
 import { parseIsoDuration } from '../../contentIdeas/videoFrames';
 import { identifyProduct } from '../../linkIdentification/index';
 import { searchGoogleImages, buildProductSearchQuery } from '../../linkIdentification/googleImageSearch';
-import { openai } from '../../openaiClient';
+import { getOpenAI } from '../../openaiClient';
 import { isTikTokUrl, fetchTikTokMetadata } from '../tiktokFrames';
 
 import type {
@@ -609,7 +609,7 @@ Return JSON:
 }`;
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },
@@ -734,7 +734,7 @@ Return JSON:
 If no additional products are found, return {"products": []}`;
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },

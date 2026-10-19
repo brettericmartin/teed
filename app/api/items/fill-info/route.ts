@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import { findBestProductLinks, detectProductAge } from '@/lib/services/SmartLinkFinder';
-import { openai } from '@/lib/openaiClient';
+import { getOpenAI } from '@/lib/openaiClient';
 
 // Predefined categorical tags (not brands, just categories/activities)
 const CATEGORICAL_TAGS = [
@@ -138,7 +138,7 @@ export async function POST(request: NextRequest) {
         try {
           console.log(`Enriching details for: ${item.custom_name}`);
 
-          const enrichResponse = await openai.chat.completions.create({
+          const enrichResponse = await getOpenAI().chat.completions.create({
             model: 'gpt-4o',
             messages: [
               {
@@ -306,7 +306,7 @@ Fill in missing: ${!item.brand ? 'brand' : ''} ${!item.custom_description ? 'des
 
         console.log(`Generating tags for bag with items: ${itemSummary}`);
 
-        const tagResponse = await openai.chat.completions.create({
+        const tagResponse = await getOpenAI().chat.completions.create({
           model: 'gpt-4o-mini',
           messages: [
             {

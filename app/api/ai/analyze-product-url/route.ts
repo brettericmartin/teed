@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/apiAuth';
 import { createServerSupabase } from '@/lib/serverSupabase';
-import { openai } from '@/lib/openaiClient';
+import { getOpenAI } from '@/lib/openaiClient';
 import * as cheerio from 'cheerio';
 import { trackApiUsage } from '@/lib/apiUsageTracker';
 
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
     console.log(`[AI URL Analyze] Analyzing with GPT-4...`);
 
     // Use GPT-4 to understand the product
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [
         {

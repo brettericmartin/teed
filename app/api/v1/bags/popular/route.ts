@@ -1,13 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SITE_URL } from '@/lib/siteUrl';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { checkRateLimit, v1Headers } from '@/lib/api/rateLimit';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
 
 /**
  * GET /api/v1/bags/popular?category=golf&limit=10
@@ -29,7 +23,7 @@ export async function GET(request: NextRequest) {
   const limit = Math.min(50, Math.max(1, parseInt(searchParams.get('limit') || '10')));
 
   try {
-    let query = supabase
+    let query = getSupabaseAdmin()
       .from('bags')
       .select(`
         id,

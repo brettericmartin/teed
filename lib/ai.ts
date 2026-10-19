@@ -1,4 +1,4 @@
-import { openai } from './openaiClient';
+import { getOpenAI } from './openaiClient';
 import { generateBrandContext, loadCategoryKnowledge } from './brandKnowledge';
 import {
   generateProductLibraryContext,
@@ -222,7 +222,7 @@ Rules:
 
   try {
     const response = await retryWithBackoff(async () => {
-      return await openai.chat.completions.create({
+      return await getOpenAI().chat.completions.create({
         model: 'gpt-4o-mini', // Fast and cheap for category detection
         messages: [
           { role: 'system', content: systemPrompt },
@@ -493,7 +493,7 @@ Requirements:
   try {
     // Best Practice: Use retry logic for reliability
     const response = await retryWithBackoff(async () => {
-      return await openai.chat.completions.create({
+      return await getOpenAI().chat.completions.create({
         model: 'gpt-4o', // Best practice: Use latest vision model
         messages: [
           {
@@ -740,7 +740,7 @@ export async function generateItemDescription(input: {
     input.url ? ` (URL: ${input.url})` : ''
   }`;
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
       {
@@ -767,7 +767,7 @@ export async function summarizeContainer(input: {
 
   const prompt = `Summarize the following container "${input.name}" and its items:\n\n${itemsList}`;
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
       {
@@ -830,7 +830,7 @@ What type of bag is this?`;
 
   try {
     const response = await retryWithBackoff(async () => {
-      return await openai.chat.completions.create({
+      return await getOpenAI().chat.completions.create({
         model: 'gpt-4o-mini', // Cost-effective for simple categorization
         messages: [
           {
@@ -921,7 +921,7 @@ What items should be included? Prioritize essential items first.`;
 
   try {
     const response = await retryWithBackoff(async () => {
-      return await openai.chat.completions.create({
+      return await getOpenAI().chat.completions.create({
         model: 'gpt-4o-mini',
         messages: [
           {

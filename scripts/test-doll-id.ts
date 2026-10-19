@@ -1,7 +1,7 @@
 /**
  * Test targeted doll/character keychain identification
  */
-import { openai } from '../lib/openaiClient';
+import { getOpenAI } from '../lib/openaiClient';
 import { promises as fs } from 'fs';
 
 async function main() {
@@ -15,7 +15,7 @@ async function main() {
 
   console.log('Sending frames to GPT-4o for doll/charm identification...');
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: 'gpt-4o',
     messages: [{
       role: 'user',

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
-import { openai } from '@/lib/openaiClient';
+import { getOpenAI } from '@/lib/openaiClient';
 import { generateBrandContext, loadCategoryKnowledge } from '@/lib/brandKnowledge';
 import { trackApiUsage } from '@/lib/apiUsageTracker';
 
@@ -206,7 +206,7 @@ IMPORTANT:
 - Lower confidence for "I have a..." without details${brandContext ? '\n- Use brand knowledge to improve spelling and identification accuracy' : ''}`;
 
     // Use GPT-4 to extract product mentions
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [
         {

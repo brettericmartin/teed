@@ -1,11 +1,6 @@
 import { notFound } from 'next/navigation';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabasePublic } from '@/lib/supabasePublic';
 import EmbedProfileView from '@/components/embed/EmbedProfileView';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 interface PageProps {
   params: Promise<{ handle: string }>;
@@ -15,7 +10,7 @@ export default async function EmbedProfilePage({ params }: PageProps) {
   const { handle } = await params;
 
   // Fetch profile
-  const { data: profile } = await supabase
+  const { data: profile } = await getSupabasePublic()
     .from('profiles')
     .select('id, handle, display_name, avatar_url, bio')
     .eq('handle', handle)
@@ -26,7 +21,7 @@ export default async function EmbedProfilePage({ params }: PageProps) {
   }
 
   // Fetch public bags with item counts
-  const { data: bags } = await supabase
+  const { data: bags } = await getSupabasePublic()
     .from('bags')
     .select(`
       code,

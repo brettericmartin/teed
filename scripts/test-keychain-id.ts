@@ -2,7 +2,7 @@
  * Test targeted keychain/charm identification from hi-res frames
  * Sends multiple frames showing the keychains to GPT-4o
  */
-import { openai } from '../lib/openaiClient';
+import { getOpenAI } from '../lib/openaiClient';
 import { promises as fs } from 'fs';
 
 async function main() {
@@ -30,7 +30,7 @@ async function main() {
 
   console.log(`Sending ${images.length} frames to GPT-4o...`);
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: 'gpt-4o',
     messages: [{
       role: 'user',

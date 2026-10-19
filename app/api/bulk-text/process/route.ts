@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { requireAuth } from '@/lib/apiAuth';
 import { createServerSupabase } from '@/lib/serverSupabase';
-import OpenAI from 'openai';
+import { getOpenAI } from '@/lib/openaiClient';
 import { parseText, buildSearchQuery } from '@/lib/textParsing';
 import { smartSearch } from '@/lib/productLibrary';
 import { generateBrandContext } from '@/lib/brandKnowledge';
@@ -16,10 +16,6 @@ import type {
   TextBatchSummary,
   TextProcessingStage,
 } from '@/lib/types/bulkTextStream';
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 // ============================================================
 // SSE Helper Functions
@@ -296,7 +292,7 @@ Return JSON with:
 Return 1-3 suggestions, ordered by confidence. If you recognize the product, confidence should be 0.7+. If guessing, use 0.3-0.6.`;
 
   try {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [
         { role: 'system', content: systemPrompt },

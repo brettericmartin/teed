@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/apiAuth';
 import { createServerSupabase } from '@/lib/serverSupabase';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import type {
   StoreCorrectionRequest,
   StoreCorrectionResponse,
@@ -15,11 +15,6 @@ import type {
  * Stores user corrections to improve future identifications.
  * Implements quality filtering before learning.
  */
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 export async function POST(request: NextRequest): Promise<NextResponse<StoreCorrectionResponse>> {
   const authClient = await createServerSupabase();
@@ -113,7 +108,7 @@ async function storeCorrection(
 ): Promise<void> {
   try {
     // Check if we have the corrections table
-    const { error: insertError } = await supabase
+    const { error: insertError } = await getSupabaseAdmin()
       .from('ai_corrections')
       .insert({
         correction_type: correction.correctionType,

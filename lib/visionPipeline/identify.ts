@@ -1,4 +1,4 @@
-import { openai } from '@/lib/openaiClient';
+import { getOpenAI } from '@/lib/openaiClient';
 import type { VisualSearchItem, IdentifiedItem, WebDetectionResult } from './types';
 
 /** Max concurrent GPT-4o calls */
@@ -69,7 +69,7 @@ IMPORTANT: If brand is null, confidence MUST be ≤60. Brand-only (no model) cap
 Return ONLY the JSON, no other text.`;
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [
         {
@@ -200,7 +200,7 @@ Return JSON:
 Return ONLY the JSON, no other text.`;
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [
         {

@@ -4,18 +4,12 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { withAdminApi } from '@/lib/withAdmin';
 import { logAdminAction } from '@/lib/adminAuth';
 import { extractProductsFromAllSources } from '@/lib/contentIdeas/unifiedExtraction';
 import { buildYouTubeUrl } from '@/lib/contentIdeas/youtube';
 import type { ContentIdea, ContentVertical } from '@/lib/types/contentIdeas';
-
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -44,7 +38,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     } = body;
 
     // Fetch the content idea
-    const { data: contentIdea, error: fetchError } = await supabaseAdmin
+    const { data: contentIdea, error: fetchError } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('*')
       .eq('id', id)
@@ -98,7 +92,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     console.log(`[Extract] Sources used: description=${extractionResult.extractionSources.description}, transcript=${extractionResult.extractionSources.transcript}, frames=${extractionResult.extractionSources.frames}`);
 
     // Update the content idea with extracted products
-    const { error: updateError } = await supabaseAdmin
+    const { error: updateError } = await getSupabaseAdmin()
       .from('content_ideas')
       .update({
         extracted_products: extractionResult.products,
@@ -175,7 +169,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     const { id } = await params;
 
-    const { data: contentIdea, error } = await supabaseAdmin
+    const { data: contentIdea, error } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('id, extracted_products, extraction_metadata')
       .eq('id', id)

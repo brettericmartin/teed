@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { withAdminApi } from '@/lib/withAdmin';
 import { logAdminAction } from '@/lib/adminAuth';
 import {
@@ -16,13 +16,6 @@ import type {
   DiscoverVideosResponse,
   ExtractedProduct,
 } from '@/lib/types/contentIdeas';
-
-// Use service role for database operations
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
 
 // Default verticals to scan (top 5 most active)
 const DEFAULT_VERTICALS: ContentVertical[] = ['golf', 'camera', 'tech', 'gaming', 'desk'];
@@ -123,7 +116,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Fetch dynamic queries from database for all requested verticals
-    const { data: dynamicQueriesData } = await supabaseAdmin
+    const { data: dynamicQueriesData } = await getSupabaseAdmin()
       .from('content_search_queries')
       .select('query, vertical, priority')
       .in('vertical', verticals)
@@ -165,7 +158,7 @@ export async function POST(request: NextRequest) {
           try {
             // Check if video already exists
             if (skipExisting) {
-              const { data: existing } = await supabaseAdmin
+              const { data: existing } = await getSupabaseAdmin()
                 .from('content_ideas')
                 .select('id')
                 .eq('source_url', videoUrl)
@@ -216,7 +209,7 @@ export async function POST(request: NextRequest) {
             );
 
             // Insert content idea with status='discovered'
-            const { error: insertError } = await supabaseAdmin
+            const { error: insertError } = await getSupabaseAdmin()
               .from('content_ideas')
               .insert({
                 source_platform: 'youtube',
@@ -306,13 +299,13 @@ export async function GET(request: NextRequest) {
     }
 
     // Get count of discovered videos awaiting screening
-    const { count: discoveredCount } = await supabaseAdmin
+    const { count: discoveredCount } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('id', { count: 'exact', head: true })
       .eq('status', 'discovered');
 
     // Get recent discoveries
-    const { data: recentDiscoveries } = await supabaseAdmin
+    const { data: recentDiscoveries } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('id, source_url, source_channel_name, vertical, discovered_at, source_metadata')
       .eq('status', 'discovered')

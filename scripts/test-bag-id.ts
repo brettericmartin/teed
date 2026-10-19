@@ -1,7 +1,7 @@
 /**
  * Test targeted bag identification with hi-res frame
  */
-import { openai } from '../lib/openaiClient';
+import { getOpenAI } from '../lib/openaiClient';
 import { promises as fs } from 'fs';
 
 async function main() {
@@ -11,7 +11,7 @@ async function main() {
   const frameData2 = await fs.readFile('/tmp/bag-frames/hires_030s.jpg');
   const base642 = `data:image/jpeg;base64,${frameData2.toString('base64')}`;
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: 'gpt-4o',
     messages: [{
       role: 'user',

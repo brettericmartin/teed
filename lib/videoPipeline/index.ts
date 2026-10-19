@@ -18,7 +18,7 @@ import type { TranscriptSegment } from '../contentIdeas/transcript';
 import { parseIsoDuration } from '../contentIdeas/videoFrames';
 import { identifyProduct } from '../linkIdentification/index';
 import { searchGoogleImages, buildProductSearchQuery } from '../linkIdentification/googleImageSearch';
-import { openai } from '../openaiClient';
+import { getOpenAI } from '../openaiClient';
 import { analyzeFramesWithTranscript, analyzeYouTubeFramesBatched, analyzeTikTokFrames, identifyFashionItems, isUnbrandedFashionItem } from './combinedAnalysis';
 import { extractRealFrames, extractEvenlySpacedFrames, extractHighResFrames, type ExtractedFrame } from './youtubeStoryboard';
 import { findTranscriptGaps, resolveGap, fixProductBrand } from './gapResolver';
@@ -909,7 +909,7 @@ Return JSON:
 }`;
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },
@@ -1334,7 +1334,7 @@ Return JSON:
 }`;
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },

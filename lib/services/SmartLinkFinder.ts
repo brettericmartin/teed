@@ -1,4 +1,4 @@
-import { openai } from '../openaiClient';
+import { getOpenAI } from '../openaiClient';
 import { trackApiUsage } from '../apiUsageTracker';
 
 /**
@@ -419,7 +419,7 @@ Search results:
 ${resultsText}`;
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
         { role: 'system', content: systemPrompt },
@@ -551,7 +551,7 @@ ${context.length > 0 ? context.join('\n') : ''}
 
 Where should someone look to buy this? Provide actual search URLs, not generic homepage links.`;
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
       { role: 'system', content: systemPrompt },

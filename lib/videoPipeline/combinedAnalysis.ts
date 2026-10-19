@@ -9,7 +9,7 @@
  *  - TikTok:  high-res frames only, vision is primary, reads text overlays
  */
 
-import { openai } from '../openaiClient';
+import { getOpenAI } from '../openaiClient';
 import type { VisionProduct } from './types';
 
 // ═══════════════════════════════════════════════════════════════════
@@ -371,7 +371,7 @@ async function callVision(
   frames: FrameInput[],
 ): Promise<CombinedAnalysisResult> {
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [
         {
@@ -523,7 +523,7 @@ Return JSON: { "brand": "Brand", "name": "Product name", "confidence": 75 }`;
         }
       }
 
-      const response = await openai.chat.completions.create({
+      const response = await getOpenAI().chat.completions.create({
         model: 'gpt-4o',
         messages: [{
           role: 'user',

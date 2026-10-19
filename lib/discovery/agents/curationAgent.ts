@@ -6,7 +6,6 @@
  */
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import OpenAI from 'openai';
 import { identifyProduct } from '@/lib/linkIdentification';
 import { findBestProductLinks } from '@/lib/services/SmartLinkFinder';
 import { searchGoogleImages } from '@/lib/linkIdentification/googleImageSearch';
@@ -21,8 +20,6 @@ import type {
   CuratedItem,
   CuratedLink,
 } from '../types';
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 // ============================================================================
 // Product Matching

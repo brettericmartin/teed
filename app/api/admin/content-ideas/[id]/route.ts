@@ -1,15 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { withAdminApi } from '@/lib/withAdmin';
 import { logAdminAction } from '@/lib/adminAuth';
 import type { UpdateContentIdeaRequest, ExtractedLink } from '@/lib/types/contentIdeas';
 import { extractBrandFromProductName } from '@/lib/brandKnowledge';
-
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -28,7 +22,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     const { id } = await params;
 
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('*')
       .eq('id', id)
@@ -41,14 +35,14 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     // Fetch related bag if available
     let primaryBag = null;
     if (data.primary_bag_id) {
-      const { data: bag } = await supabaseAdmin
+      const { data: bag } = await getSupabaseAdmin()
         .from('bags')
         .select('id, code, title, owner_id')
         .eq('id', data.primary_bag_id)
         .single();
 
       if (bag) {
-        const { data: owner } = await supabaseAdmin
+        const { data: owner } = await getSupabaseAdmin()
           .from('profiles')
           .select('id, handle, display_name')
           .eq('id', bag.owner_id)
@@ -86,7 +80,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     const { id } = await params;
     const body: UpdateContentIdeaRequest = await request.json();
 
-    const { data: existing, error: fetchError } = await supabaseAdmin
+    const { data: existing, error: fetchError } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('id, status')
       .eq('id', id)
@@ -117,7 +111,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       updates.created_by_admin_id = admin.id;
     }
 
-    const { data: updated, error: updateError } = await supabaseAdmin
+    const { data: updated, error: updateError } = await getSupabaseAdmin()
       .from('content_ideas')
       .update(updates)
       .eq('id', id)
@@ -155,7 +149,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     const { id } = await params;
 
-    const { data: existing, error: fetchError } = await supabaseAdmin
+    const { data: existing, error: fetchError } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('id, source_url, idea_title')
       .eq('id', id)
@@ -165,7 +159,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'Content idea not found' }, { status: 404 });
     }
 
-    const { error: deleteError } = await supabaseAdmin
+    const { error: deleteError } = await getSupabaseAdmin()
       .from('content_ideas')
       .delete()
       .eq('id', id);
@@ -207,7 +201,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
     }
 
-    const { data: idea, error: fetchError } = await supabaseAdmin
+    const { data: idea, error: fetchError } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('*')
       .eq('id', id)
@@ -250,7 +244,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     let suffix = 2;
 
     while (suffix < 100) {
-      const { data: existingBag } = await supabaseAdmin
+      const { data: existingBag } = await getSupabaseAdmin()
         .from('bags')
         .select('id')
         .eq('owner_id', admin.id)
@@ -262,7 +256,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       suffix++;
     }
 
-    const { data: newBag, error: bagError } = await supabaseAdmin
+    const { data: newBag, error: bagError } = await getSupabaseAdmin()
       .from('bags')
       .insert({
         owner_id: admin.id,
@@ -289,7 +283,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     // Add source video as first item
     if (idea.source_url && youtube?.title) {
-      const { data: videoItem } = await supabaseAdmin
+      const { data: videoItem } = await getSupabaseAdmin()
         .from('bag_items')
         .insert({
           bag_id: newBag.id,
@@ -303,7 +297,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         .single();
 
       if (videoItem) {
-        await supabaseAdmin.from('links').insert({
+        await getSupabaseAdmin().from('links').insert({
           bag_item_id: videoItem.id,
           url: idea.source_url,
           kind: 'youtube',
@@ -322,7 +316,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       // Extract brand from product name (e.g., "Sony FX3" → brand: "Sony", name: "FX3")
       const { brand, productName } = extractBrandFromProductName(fullName);
 
-      const { data: newItem, error: itemError } = await supabaseAdmin
+      const { data: newItem, error: itemError } = await getSupabaseAdmin()
         .from('bag_items')
         .insert({
           bag_id: newBag.id,
@@ -339,7 +333,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       if (newItem) {
         createdItems.push({ id: newItem.id, name: productName });
 
-        const { error: linkError } = await supabaseAdmin.from('links').insert({
+        const { error: linkError } = await getSupabaseAdmin().from('links').insert({
           bag_item_id: newItem.id,
           url: link.url,
           kind: link.domain.includes('amazon') ? 'amazon' : 'website',
@@ -352,14 +346,14 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     // Set hero item
     if (createdItems.length > 0) {
-      await supabaseAdmin
+      await getSupabaseAdmin()
         .from('bags')
         .update({ hero_item_id: createdItems[0].id })
         .eq('id', newBag.id);
     }
 
     // Link content idea to bag
-    await supabaseAdmin
+    await getSupabaseAdmin()
       .from('content_ideas')
       .update({ primary_bag_id: newBag.id })
       .eq('id', id);

@@ -12,7 +12,7 @@ import { execFile } from 'child_process';
 import { promises as fsPromises } from 'fs';
 import * as path from 'path';
 import sharp from 'sharp';
-import { openai } from '../../openaiClient';
+import { getOpenAI } from '../../openaiClient';
 import type { TranscriptProduct } from '../types';
 import type { ProductCluster, V2IdentifiedProduct, CrossValidatedProduct } from './types';
 import type { FrameStore } from './frameStore';
@@ -187,7 +187,7 @@ Return JSON:
 If you cannot identify the specific product, return { "product": null }.`;
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [{
         role: 'user',

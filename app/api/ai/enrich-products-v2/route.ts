@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/apiAuth';
 import { createServerSupabase } from '@/lib/serverSupabase';
-import { openai } from '@/lib/openaiClient';
+import { getOpenAI } from '@/lib/openaiClient';
 import { fetchProductImage } from '@/lib/ai';
 import type {
   EnrichProductsRequest,
@@ -134,7 +134,7 @@ ${product.generation ? `Generation: ${product.generation}` : ''}
 ${product.specifications?.length ? `Known specs: ${product.specifications.join(', ')}` : ''}`;
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini', // Use mini for enrichment (faster, cheaper)
       messages: [
         { role: 'system', content: systemPrompt },

@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { getOpenAI } from '@/lib/openaiClient';
 import { createServerSupabase } from '@/lib/serverSupabase';
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 /**
  * POST /api/ai/generate-bag-description
@@ -114,7 +110,7 @@ ${profile?.display_name ? `Creator: ${profile.display_name}` : ''}
 
 Write ONLY the description - no preamble, no quotes. Make it engaging but authentic.`;
 
-      const descCompletion = await openai.chat.completions.create({
+      const descCompletion = await getOpenAI().chat.completions.create({
         model: 'gpt-4o-mini',
         messages: [
           { role: 'system', content: systemPrompt },
@@ -144,7 +140,7 @@ Requirements:
 
 Write ONLY the meta description - no preamble, no character count, no quotes.`;
 
-      const metaCompletion = await openai.chat.completions.create({
+      const metaCompletion = await getOpenAI().chat.completions.create({
         model: 'gpt-4o-mini',
         messages: [
           { role: 'system', content: systemPrompt },

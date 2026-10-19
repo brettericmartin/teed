@@ -8,13 +8,7 @@ import {
   generateProfileJsonLd,
   generateBreadcrumbJsonLd,
 } from '@/lib/seo/structuredData';
-import { createClient } from '@supabase/supabase-js';
-
-// Static supabase client for metadata generation (no auth)
-const supabaseStatic = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { getSupabasePublic } from '@/lib/supabasePublic';
 
 type PageProps = {
   params: Promise<{
@@ -30,7 +24,7 @@ type PageProps = {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { handle } = await params;
 
-  const { data: profile } = await supabaseStatic
+  const { data: profile } = await getSupabasePublic()
     .from('profiles')
     .select('id, display_name, bio, avatar_url')
     .eq('handle', handle)
@@ -43,7 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   // Get public bag count
-  const { count: bagCount } = await supabaseStatic
+  const { count: bagCount } = await getSupabasePublic()
     .from('bags')
     .select('id', { count: 'exact', head: true })
     .eq('owner_id', profile.id)

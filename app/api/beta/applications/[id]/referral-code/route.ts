@@ -1,14 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SITE_URL } from '@/lib/siteUrl';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const dynamic = 'force-dynamic';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
 
 /**
  * GET /api/beta/applications/[id]/referral-code
@@ -20,7 +14,7 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  const { data: app, error } = await supabase
+  const { data: app, error } = await getSupabaseAdmin()
     .from('beta_applications')
     .select('id, custom_referral_code')
     .eq('id', id)
@@ -65,7 +59,7 @@ export async function POST(
   }
 
   // Call the claim function
-  const { data, error } = await supabase.rpc('claim_custom_referral_code', {
+  const { data, error } = await getSupabaseAdmin().rpc('claim_custom_referral_code', {
     app_id: id,
     code: code,
   });
@@ -112,7 +106,7 @@ export async function PUT(
   }
 
   // Call the check function
-  const { data, error } = await supabase.rpc('check_custom_code_available', {
+  const { data, error } = await getSupabaseAdmin().rpc('check_custom_code_available', {
     code: code,
   });
 

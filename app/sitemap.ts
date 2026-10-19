@@ -1,16 +1,10 @@
 import { MetadataRoute } from 'next';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabasePublic } from '@/lib/supabasePublic';
 import { getAllPosts } from '@/lib/blog';
 import { getAllRoundupSlugs } from '@/lib/blog/categories';
 import { getAllProductSlugs } from '@/lib/products/resolveProduct';
 
 const BASE_URL = 'https://www.teed.club';
-
-// Static supabase client for sitemap generation (no auth needed)
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 // Static pages that should be indexed
 const staticPages = [
@@ -87,44 +81,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Fetch public profiles with handles
-  const { data: profiles } = await supabase
-    .from('profiles')
-    .select('handle, last_active_at')
-    .not('handle', 'is', null)
-    .order('last_active_at', { ascending: false, nullsFirst: false })
-    .limit(1000);
-
-  const profileEntries: MetadataRoute.Sitemap = (profiles || []).map((profile) => ({
-    url: `${BASE_URL}/u/${profile.handle}`,
-    lastModified: profile.last_active_at ? new Date(profile.last_active_at) : now,
-    changeFrequency: 'weekly' as const,
-    priority: 0.6,
-  }));
-
-  // Fetch public bags
-  const { data: bags } = await supabase
-    .from('bags')
-    .select(`
-      code,
-      updated_at,
-      owner_id,
-      profiles!inner(handle)
-    `)
-    .eq('is_public', true)
-    .eq('is_hidden', false)
-    .order('updated_at', { ascending: false, nullsFirst: false })
-    .limit(5000);
-
-  const bagEntries: MetadataRoute.Sitemap = (bags || []).map((bag) => {
-    const profile = bag.profiles as unknown as { handle: string };
-    return {
-      url: `${BASE_URL}/u/${profile.handle}/${bag.code}`,
-      lastModified: bag.updated_at ? new Date(bag.updated_at) : now,
-      changeFrequency: 'weekly' as const,
-      priority: 0.5,
-    };
-  });
+  // Database-backed entries (profiles, bags, products). Skipped, with a
+  // warning, when Supabase is unavailable or not configured (e.g. a preview
+  // build with no env) so the sitemap still ships its static entries.
+  const { profileEntries, bagEntries, productEntries } = await fetchDatabaseEntries(now);
 
   // Blog listing page
   const blogStaticEntries: MetadataRoute.Sitemap = [
@@ -153,15 +113,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  // Product aggregate pages
-  const productSlugs = await getAllProductSlugs();
-  const productEntries: MetadataRoute.Sitemap = productSlugs.map((product) => ({
-    url: `${BASE_URL}/products/${product.slug}`,
-    lastModified: new Date(product.updatedAt),
-    changeFrequency: 'weekly' as const,
-    priority: 0.6,
-  }));
-
   return [
     ...staticEntries,
     ...useCaseEntries,
@@ -174,4 +125,67 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...bagEntries,
     ...productEntries,
   ];
+}
+
+type DatabaseEntries = {
+  profileEntries: MetadataRoute.Sitemap;
+  bagEntries: MetadataRoute.Sitemap;
+  productEntries: MetadataRoute.Sitemap;
+};
+
+async function fetchDatabaseEntries(now: Date): Promise<DatabaseEntries> {
+  try {
+    // Fetch public profiles with handles
+    const { data: profiles } = await getSupabasePublic()
+      .from('profiles')
+      .select('handle, last_active_at')
+      .not('handle', 'is', null)
+      .order('last_active_at', { ascending: false, nullsFirst: false })
+      .limit(1000);
+
+    const profileEntries: MetadataRoute.Sitemap = (profiles || []).map((profile) => ({
+      url: `${BASE_URL}/u/${profile.handle}`,
+      lastModified: profile.last_active_at ? new Date(profile.last_active_at) : now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+    }));
+
+    // Fetch public bags
+    const { data: bags } = await getSupabasePublic()
+      .from('bags')
+      .select(`
+        code,
+        updated_at,
+        owner_id,
+        profiles!inner(handle)
+      `)
+      .eq('is_public', true)
+      .eq('is_hidden', false)
+      .order('updated_at', { ascending: false, nullsFirst: false })
+      .limit(5000);
+
+    const bagEntries: MetadataRoute.Sitemap = (bags || []).map((bag) => {
+      const profile = bag.profiles as unknown as { handle: string };
+      return {
+        url: `${BASE_URL}/u/${profile.handle}/${bag.code}`,
+        lastModified: bag.updated_at ? new Date(bag.updated_at) : now,
+        changeFrequency: 'weekly' as const,
+        priority: 0.5,
+      };
+    });
+
+    // Product aggregate pages
+    const productSlugs = await getAllProductSlugs();
+    const productEntries: MetadataRoute.Sitemap = productSlugs.map((product) => ({
+      url: `${BASE_URL}/products/${product.slug}`,
+      lastModified: new Date(product.updatedAt),
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+    }));
+
+    return { profileEntries, bagEntries, productEntries };
+  } catch (error) {
+    console.warn('[sitemap] Skipping database-backed entries:', error instanceof Error ? error.message : error);
+    return { profileEntries: [], bagEntries: [], productEntries: [] };
+  }
 }

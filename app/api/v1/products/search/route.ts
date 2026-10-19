@@ -1,13 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SITE_URL } from '@/lib/siteUrl';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { checkRateLimit, v1Headers } from '@/lib/api/rateLimit';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
 
 /**
  * GET /api/v1/products/search?q=Sony+A7IV&limit=20
@@ -41,7 +35,7 @@ export async function GET(request: NextRequest) {
 
   try {
     // Search items in public bags
-    const { data: items, error } = await supabase
+    const { data: items, error } = await getSupabaseAdmin()
       .from('bag_items')
       .select(`
         id,

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { withAdminApi } from '@/lib/withAdmin';
 import { logAdminAction } from '@/lib/adminAuth';
 import type {
@@ -10,13 +10,6 @@ import type {
   ContentIdeaStatus,
   ContentVertical,
 } from '@/lib/types/contentIdeas';
-
-// Use service role for database operations
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
 
 /**
  * GET /api/admin/content-ideas
@@ -44,7 +37,7 @@ export async function GET(request: NextRequest) {
     };
 
     // Build query
-    let query = supabaseAdmin
+    let query = getSupabaseAdmin()
       .from('content_ideas')
       .select(
         `
@@ -126,7 +119,7 @@ export async function GET(request: NextRequest) {
  */
 async function getStats(): Promise<ContentIdeasStats> {
   // Get total and by status
-  const { data: statusData } = await supabaseAdmin
+  const { data: statusData } = await getSupabaseAdmin()
     .from('content_ideas')
     .select('status');
 
@@ -152,7 +145,7 @@ async function getStats(): Promise<ContentIdeasStats> {
   });
 
   // Get by vertical
-  const { data: verticalData } = await supabaseAdmin
+  const { data: verticalData } = await getSupabaseAdmin()
     .from('content_ideas')
     .select('vertical');
 
@@ -165,7 +158,7 @@ async function getStats(): Promise<ContentIdeasStats> {
   });
 
   // Get with creator affiliate
-  const { count: withAffiliate } = await supabaseAdmin
+  const { count: withAffiliate } = await getSupabaseAdmin()
     .from('content_ideas')
     .select('id', { count: 'exact', head: true })
     .eq('has_creator_affiliate', true);
@@ -173,7 +166,7 @@ async function getStats(): Promise<ContentIdeasStats> {
   // Get this week count
   const oneWeekAgo = new Date();
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-  const { count: thisWeek } = await supabaseAdmin
+  const { count: thisWeek } = await getSupabaseAdmin()
     .from('content_ideas')
     .select('id', { count: 'exact', head: true })
     .gte('created_at', oneWeekAgo.toISOString());
@@ -212,7 +205,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check for duplicate
-    const { data: existing } = await supabaseAdmin
+    const { data: existing } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('id')
       .eq('source_url', body.source_url)
@@ -226,7 +219,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Insert new content idea
-    const { data: newIdea, error: insertError } = await supabaseAdmin
+    const { data: newIdea, error: insertError } = await getSupabaseAdmin()
       .from('content_ideas')
       .insert({
         source_platform: body.source_platform,

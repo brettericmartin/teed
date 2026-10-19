@@ -5,7 +5,7 @@
  * creative bag ideas beyond traditional gear collections.
  */
 
-import { openai } from '../openaiClient';
+import { getOpenAI } from '../openaiClient';
 import { createClient } from '@supabase/supabase-js';
 import type {
   IdeaCategory,
@@ -262,7 +262,7 @@ Generate ${limit} personalized, creative bag ideas with 3-5 suggested items each
 
   try {
     const response = await retryWithBackoff(async () => {
-      return await openai.chat.completions.create({
+      return await getOpenAI().chat.completions.create({
         model: 'gpt-4o-mini',
         messages: [
           { role: 'system', content: systemPrompt },
