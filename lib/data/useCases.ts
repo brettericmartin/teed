@@ -4,10 +4,32 @@ export interface UseCase {
   headline: string;
   subheadline: string;
   ctaText: string;
-  heroEmoji: string;
+  /** Optional: when absent the hero renders no emoji (golf-simulators). */
+  heroEmoji?: string;
   metaTitle: string;
   metaDescription: string;
   keywords: string[];
+
+  // Optional hero overrides (landing evaluation 2026-10-18 #1). When absent the
+  // template keeps its single `ctaText` button to /join, so the other pages do not change.
+  primaryCta?: string;
+  primaryHref?: string;
+  secondaryCta?: string;
+  secondaryHref?: string;
+  /** One quiet line under the buttons ("Free to read, no account needed. ..."). */
+  underCtaLine?: string;
+  /** Render the owner disclosure sentence under the hero (lib/disclosure.ts). */
+  showDisclosure?: boolean;
+
+  // Optional per-page section headings (#8); defaults "Sound familiar?" / "Teed makes it easy"
+  problemHeading?: string;
+  solutionHeading?: string;
+  /** Heading for the features grid; default "Features for {title}". */
+  featuresHeading?: string;
+  /** Heading for the #setups section; default "Setups". */
+  setupsHeading?: string;
+  /** What one bag is called on this page ("setup"); default "collection". */
+  bagNoun?: string;
 
   // Problem/Solution section
   painPoints: string[];
@@ -110,16 +132,27 @@ export const useCases: Record<string, UseCase> = {
   },
 
   'golf-simulators': {
+    // Copy: copy-bank § T4 (council 2026-10-18), hero tightened per the landing evaluation #1.
     slug: 'golf-simulators',
-    title: 'Golf Simulators',
-    headline: 'Teed for Golf Simulator Builds',
+    title: 'Golf Sim',
+    headline: 'Home golf simulator setups, part by part',
     subheadline:
-      'Real home simulator setups, part by part: enclosure, launch monitor, projector, computer, mat and software, with the price paid and the reason behind each piece',
-    ctaText: 'Document Your Sim Setup',
-    heroEmoji: '🎯',
-    metaTitle: 'Golf Simulator Setups - Real Home Sim Builds, Part by Part | Teed',
+      'Garage, basement and spare-room builds from people who paid for the parts. Every setup lists the enclosure, launch monitor, projector, computer, mat and software, with the price paid, the yearly fees, and why each piece was chosen.',
+    ctaText: 'Document your setup',
+    primaryCta: 'Browse setups',
+    primaryHref: '#setups',
+    secondaryCta: 'Document your setup',
+    secondaryHref: '/signup?ref=golf-sim',
+    underCtaLine: 'Free to read, no account needed. An account only to add yours.',
+    showDisclosure: true,
+    problemHeading: 'What most build guides leave out',
+    solutionHeading: 'What every setup here shows',
+    featuresHeading: 'What every setup here shows',
+    setupsHeading: 'Setups',
+    bagNoun: 'setup',
+    metaTitle: 'Home golf simulator setups with prices, part by part | Teed',
     metaDescription:
-      'Browse complete home golf simulator setups: launch monitor, projector, enclosure and screen, computer, mat and software, with prices and reasons. Document your own build and keep its history as you upgrade.',
+      'Real home golf simulator builds listed part by part: enclosure, launch monitor, projector, computer, mat, software and the yearly fees, with the price paid and why each piece was chosen. Free to read.',
     keywords: [
       'golf simulator setup',
       'home golf simulator',
@@ -131,64 +164,62 @@ export const useCases: Record<string, UseCase> = {
       'golf simulator under 5000',
     ],
     painPoints: [
-      'Every "complete sim" article hides the real total: subscriptions, the PC, the mat, the screen',
-      'Forum builds are scattered across posts and photos with no single parts list',
-      'You can\'t tell which launch monitor fits your room depth until it is already bought',
-      'Your own setup changes every season and nobody, including you, remembers what it was',
+      'Every "complete sim" article hides the real total: the subscriptions, the PC, the mat, the screen.',
+      'Forum builds are scattered across posts, photos and comment threads with no single parts list.',
+      'You can\'t tell which launch monitor fits your room depth until it\'s already bought.',
     ],
     solutions: [
-      'One page per setup: every component, what it cost, and why it was chosen',
-      'Sections for enclosure, launch monitor, projector, computer and software, mat, and extras',
-      'Tags for budget tier, room size, no-PC builds, renters, and garage installs',
-      'Automatic history as you swap parts, with the old version preserved',
+      'One page per setup: every component, what it cost, and why the builder chose it.',
+      'Sections the way a build actually works: Enclosure & screen · Launch monitor · Projector · PC & software · Mat · Yearly fees · Extras.',
+      'The room as the builder measured it: width × depth × ceiling, driver OK, monitor type and the depth it forces.',
     ],
     features: [
       {
-        title: 'Setup Sections',
-        description: 'Group parts the way a build actually works: screen, launch monitor, projector, computer, mat, extras',
-        icon: 'folder',
-      },
-      {
-        title: 'Honest Totals',
-        description: 'Price paid per item plus the subscriptions that most guides leave out',
+        title: 'Honest totals',
+        description: 'Price paid per item plus the yearly software and launch-monitor fees most guides leave out.',
         icon: 'list',
       },
       {
-        title: 'Upgrade History',
-        description: 'Change the projector or launch monitor and the previous setup stays on the record',
+        title: 'Setup sections',
+        description: 'Grouped the way you shop and the way you fail: enclosure and screen, launch monitor, projector, PC and software, mat, extras.',
+        icon: 'folder',
+      },
+      {
+        title: 'Why I chose it',
+        description: "One line per part in the builder's own words, not a retailer blurb.",
         icon: 'sparkles',
       },
       {
-        title: 'Shareable Link + QR',
-        description: 'One clean URL for the forum post, the group chat, or a sign on the garage wall',
-        icon: 'share',
+        title: 'Upgrade history',
+        description: 'Swap a part and the earlier version stays on the record.',
+        icon: 'trending',
       },
     ],
     faqs: [
       {
-        question: 'What do I need for a complete home golf simulator?',
+        question: 'How much room does a home golf simulator actually need?',
         answer:
-          'A launch monitor, simulator software, something to show the picture (a projector and impact screen, or a TV for a net setup), a hitting mat, and a computer or tablet if the launch monitor needs one. An enclosure keeps the ball and the light contained. Setups on Teed list all of it with prices, so you can see real totals instead of a headline number.',
-      },
-      {
-        question: 'How much room does a golf simulator need?',
-        answer:
-          'Width and ceiling height are set by your swing: most people want about 10 feet of width and a ceiling of 9 feet or more, although 8-foot-ceiling builds exist. Depth depends on the launch monitor. Camera units that sit beside the ball fit in a short room; radar units that sit behind the ball usually need 6 to 8 feet behind you plus the ball flight, so 14 feet or more in total. Check the room-size tags on each setup.',
+          'Width and ceiling are set by your swing: most people want about 10 ft of width and a 9 ft ceiling or more, though 8 ft builds exist. Depth is set by the launch monitor. Camera units that sit beside the ball fit in roughly 15 ft of total room; behind-the-ball radar units want 6.5 to 8.5 ft behind you plus the ball flight, so plan 18 ft or more. Every setup here carries a room-size tag and the monitor it was built around.',
       },
       {
         question: 'Do I need a gaming PC?',
         answer:
-          'Only for PC-based software such as GSPro, which wants a Windows machine with a capable graphics card. Several launch monitors run their own software on an iPad or phone, and a few send the picture straight to a projector over HDMI with no computer at all. Setups tagged "no-pc" show those builds.',
+          'Only for PC software such as GSPro, which wants Windows and a capable graphics card. An older gaming laptop on wall power runs one bay fine. Several launch monitors run their own software on a phone or iPad, and some send the picture straight to a projector with no computer at all. Setups tagged no-pc show those builds.',
       },
       {
-        question: 'What are the ongoing subscription costs?',
+        question: 'What are the subscription costs nobody mentions?',
         answer:
-          'This is the number most guides skip. Many launch monitors charge an annual fee to unlock third-party software, and the simulator software itself is often a yearly subscription. Setups on Teed list software and subscriptions as their own items, with the yearly cost, so the first-year and ongoing totals are both visible.',
+          'This is the number most guides skip. Many launch monitors charge a yearly fee to talk to third-party software (Rapsodo Premium is $199.99 a year, for example), and the simulator software itself is usually yearly (GSPro is $250 a year). Setups here list software and subscriptions as their own items with the yearly cost.',
       },
       {
-        question: 'Can I document my own setup and update it over time?',
+        question: 'Why is StowGolf in some of these setups, and is this an ad for it?',
         answer:
-          'Yes. Create a bag, add each component with the price you paid and why you chose it, and group them into sections. When you upgrade a part, the change is recorded automatically and the earlier version stays on the page, so your setup has a history instead of being overwritten.',
+          "Disclosure: Brett Martin runs Teed and builds StowGolf. It shows up as an item in Brett's own garage build and in comparisons where a fold-flat enclosure is one of the options, with its price next to the DIY and off-the-shelf alternatives. Most setups in this library have nothing to do with it. If your build is here, you decide what's in it.",
+      },
+      {
+        question: 'Will my setup disappear?',
+        answer:
+          'No. A setup from two years ago is as valid as one from today. Nothing here decays, gets buried, or expires because you stopped posting.',
       },
     ],
     discoverCategory: 'golf-sim',
