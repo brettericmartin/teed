@@ -24,6 +24,7 @@ export async function PUT(
       .from('bags')
       .select('id, owner_id')
       .eq('code', code)
+      .eq('owner_id', user.id)
       .single();
 
     if (bagError || !bag) {
@@ -117,6 +118,7 @@ export async function DELETE(
       .from('bags')
       .select('id, owner_id')
       .eq('code', code)
+      .eq('owner_id', user.id)
       .single();
 
     if (bagError || !bag) {

@@ -41,6 +41,7 @@ export async function POST(
       .from('bags')
       .select('id, owner_id, title, category, tags')
       .eq('code', code)
+      .eq('owner_id', user.id)
       .single();
 
     if (bagError || !bag) {
