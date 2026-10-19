@@ -39,7 +39,7 @@ export async function GET(
       description,
       created_at,
       updated_at,
-      items:bag_items(id)
+      items:bag_items!bag_items_bag_id_fkey(id)
     `)
     .eq('owner_id', profile.id)
     .eq('is_public', true)

@@ -75,7 +75,7 @@ export async function resolveProduct(slug: string): Promise<ResolvedProduct | nu
       price_paid,
       specs,
       custom_photo_id,
-      bags!inner (
+      bags!bag_items_bag_id_fkey!inner (
         code,
         title,
         category,
@@ -176,7 +176,7 @@ export async function getAllProductSlugs(): Promise<Array<{ slug: string; update
       custom_name,
       brand,
       created_at,
-      bags!inner (
+      bags!bag_items_bag_id_fkey!inner (
         is_public,
         is_hidden
       )

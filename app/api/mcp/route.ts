@@ -149,7 +149,7 @@ async function listMyBags(
 
   const { data, error } = await supabase
     .from('bags')
-    .select('code, title, description, category, is_public, updated_at, bag_items(count)')
+    .select('code, title, description, category, is_public, updated_at, bag_items!bag_items_bag_id_fkey(count)')
     .eq('owner_id', userId)
     .order('updated_at', { ascending: false });
 
@@ -185,7 +185,7 @@ async function getBag(
     .select(`
       code, title, description, category, is_public, owner_id, updated_at,
       profiles!bags_owner_id_fkey(handle, display_name),
-      bag_items(id, custom_name, brand, custom_description, quantity, sort_index,
+      bag_items!bag_items_bag_id_fkey(id, custom_name, brand, custom_description, quantity, sort_index,
         links(url, kind, label))
     `)
     .eq('code', bagCode)
@@ -229,7 +229,7 @@ async function searchBags(
     .select(`
       code, title, description, category, updated_at,
       profiles!bags_owner_id_fkey(handle, display_name),
-      bag_items(count)
+      bag_items!bag_items_bag_id_fkey(count)
     `)
     .eq('is_public', true)
     .order('updated_at', { ascending: false })
@@ -279,7 +279,7 @@ async function searchItems(
     .from('bag_items')
     .select(`
       id, custom_name, brand, custom_description,
-      bags!inner(code, title, category, is_public, profiles!bags_owner_id_fkey(handle))
+      bags!bag_items_bag_id_fkey!inner(code, title, category, is_public, profiles!bags_owner_id_fkey(handle))
     `)
     .eq('bags.is_public', true)
     .or(`custom_name.ilike.%${query}%,brand.ilike.%${query}%`)
@@ -325,7 +325,7 @@ async function discoverFeaturedBags(supabase: ReturnType<typeof getUserSupabase>
 
       const { data: bag } = await supabase
         .from('bags')
-        .select('code, title, description, category, bag_items(count)')
+        .select('code, title, description, category, bag_items!bag_items_bag_id_fkey(count)')
         .eq('owner_id', profile.id)
         .eq('code', code)
         .eq('is_public', true)

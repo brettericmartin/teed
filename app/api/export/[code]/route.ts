@@ -33,7 +33,7 @@ export async function GET(
         handle,
         display_name
       ),
-      items:bag_items(
+      items:bag_items!bag_items_bag_id_fkey(
         id,
         custom_name,
         brand,

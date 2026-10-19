@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
       .select(`
         brand,
         why_chosen,
-        bags!inner (
+        bags!bag_items_bag_id_fkey!inner (
           is_public
         )
       `)

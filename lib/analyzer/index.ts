@@ -138,7 +138,7 @@ async function fetchBagData(
       is_public,
       created_at,
       updated_at,
-      bag_items (
+      bag_items!bag_items_bag_id_fkey (
         id,
         name,
         brand,

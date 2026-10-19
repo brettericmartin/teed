@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
           handle,
           display_name
         ),
-        bag_items (
+        bag_items!bag_items_bag_id_fkey (
           id,
           custom_name,
           brand,
@@ -62,7 +62,11 @@ export async function GET(request: NextRequest) {
     if (error) {
       console.error('Popular bags error:', error);
       return NextResponse.json(
-        { error: 'Query failed' },
+        {
+          error: 'Query failed',
+          // Surface the PostgREST message outside production so embed/FK issues are debuggable
+          ...(process.env.NODE_ENV !== 'production' ? { detail: error.message, code: error.code } : {}),
+        },
         { status: 500, headers: v1Headers() }
       );
     }

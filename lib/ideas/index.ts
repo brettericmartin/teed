@@ -92,7 +92,7 @@ export async function gatherUserContext(userId: string): Promise<UserContext> {
       title,
       category,
       tags,
-      bag_items (id)
+      bag_items!bag_items_bag_id_fkey (id)
     `)
     .eq('owner_id', userId)
     .order('created_at', { ascending: false });

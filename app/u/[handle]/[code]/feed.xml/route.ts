@@ -38,7 +38,7 @@ export async function GET(
       title,
       description,
       updated_at,
-      items:bag_items(
+      items:bag_items!bag_items_bag_id_fkey(
         id,
         custom_name,
         brand,

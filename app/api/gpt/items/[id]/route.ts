@@ -26,7 +26,7 @@ export async function GET(
         photo_url,
         sort_index,
         bag_id,
-        bags!inner (
+        bags!bag_items_bag_id_fkey!inner (
           id,
           code,
           title,
@@ -111,7 +111,7 @@ export async function PUT(
         id,
         custom_name,
         bag_id,
-        bags!inner (
+        bags!bag_items_bag_id_fkey!inner (
           id,
           owner_id,
           title
@@ -223,7 +223,7 @@ export async function DELETE(
         id,
         custom_name,
         bag_id,
-        bags!inner (
+        bags!bag_items_bag_id_fkey!inner (
           id,
           owner_id,
           title

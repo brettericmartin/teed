@@ -92,7 +92,7 @@ export async function POST(request: NextRequest, context: RouteParams) {
         code,
         name,
         cover_image_url,
-        items:bag_items(
+        items:bag_items!bag_items_bag_id_fkey(
           id,
           name,
           brand,

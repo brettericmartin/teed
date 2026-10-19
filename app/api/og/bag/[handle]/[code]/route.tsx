@@ -36,7 +36,7 @@ export async function GET(
         description,
         cover_photo_id,
         updated_at,
-        items:bag_items(
+        items:bag_items!bag_items_bag_id_fkey(
           id,
           custom_name,
           brand,

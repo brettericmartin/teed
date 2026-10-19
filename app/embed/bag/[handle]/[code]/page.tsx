@@ -33,7 +33,7 @@ export default async function EmbedBagPage({ params }: PageProps) {
       code,
       title,
       description,
-      items:bag_items(
+      items:bag_items!bag_items_bag_id_fkey(
         id,
         custom_name,
         brand,

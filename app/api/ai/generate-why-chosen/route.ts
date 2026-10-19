@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       alternatives,
       price_paid,
       bag_id,
-      bags!inner(id, title, category, description, owner_id)
+      bags!bag_items_bag_id_fkey!inner(id, title, category, description, owner_id)
     `)
     .eq('id', itemId)
     .single();
