@@ -69,6 +69,8 @@ npx tsx scripts/seed-components.ts --fixture --dry-run       # content/component
 npx tsx scripts/seed-components.ts --file C:\path\to\staging.json --dry-run
 npx tsx scripts/seed-components.ts                           # writes (needs env, see below)
 npx tsx scripts/seed-components.ts --category enclosures --prune
+npx tsx scripts/seed-components.ts --emit-sql --category turf --out docs/sql/sim-turf.sql
+                                                             # SQL for the Supabase MCP (no env, no DB)
 ```
 
 What it writes, per category, on the house account (`profiles.handle = 'teed'`, id
@@ -101,6 +103,57 @@ different id):
 
 Re-running updates in place and never duplicates. Items in the bag that are no longer in the JSON
 are listed with a warning and deleted only with `--prune`.
+
+#### 2b. `--emit-sql`: loading a bag through the Supabase MCP
+
+The chief has database access through the Supabase MCP but no local service-role key, so the seed
+can also write the upsert path out as plain SQL instead of running it:
+
+```
+npx tsx scripts/seed-components.ts --emit-sql --category turf --out docs/sql/sim-turf.sql
+npx tsx scripts/seed-components.ts --emit-sql --category turf --check-images --out docs/sql/sim-turf.sql
+npx tsx scripts/seed-components.ts --emit-sql --out docs/sql/all-components.sql     # every category
+npx tsx scripts/seed-components.ts --fixture --emit-sql --out docs/_fixture.sql      # smoke test, then delete
+```
+
+Needs no env and makes no database call. Without `--out` the SQL goes to stdout. `--dry-run` and
+`--prune` do not combine with it.
+
+What the file is: one PostgreSQL script, `BEGIN` ... `COMMIT`, with a `DO $seed$ ... $seed$` block
+per bag that does exactly what `seedBag()` does, in the same order:
+
+1. `SELECT id FROM profiles WHERE handle = 'teed'` into `v_owner`; `RAISE EXCEPTION` unless it equals
+   `2c3e503a-78ce-4a8d-ae37-60b4a16d916e` (the same refusal as the script).
+2. `bags` found by `(owner_id, code)`; insert or update `title`, `description`, `category`
+   `golf-sim`, `tags` jsonb, `is_public` true, `updated_at = now()`.
+3. `bag_sections` by `(bag_id, name)` with `sort_index` in file order (column names from migration 065).
+4. `bag_items` by `(bag_id, custom_name)`: `section_id`, `brand`, `custom_description`,
+   `why_chosen`, `notes`, `price_paid` NULL, `item_type`, `specs` jsonb, `photo_url`, `quantity` 1,
+   `sort_index`.
+5. `links`: `DELETE ... WHERE bag_item_id = v_item`, then one `INSERT` per item in product, purchase,
+   review order (`bag_item_id`, `kind`, `url`, `label`, from migration 001; `links` has no sort
+   column, so order is insertion order, as the script does). Re-runs never duplicate.
+6. `hero_item_id` set to the first item only when the bag has none; items in the bag that are not
+   in the JSON are counted in a `RAISE NOTICE` and never deleted (there is no `--prune` in SQL).
+7. A final `SELECT` of bag code, section count, item count and link count for the bags in the file.
+
+Every text value is dollar-quoted (`$q$...$q$`) and every JSON value is `$j$...$j$::jsonb`, so
+apostrophes, newlines and backslashes in the research need no escaping; the tag is bumped
+(`$q1$`) if a value happens to contain it. The whole file is one transaction: any failure rolls back
+everything, and running it twice leaves the same rows.
+
+**`--emit-sql` never checks images.** Every `photo_url` is `NULL` unless the run also passes
+`--check-images`, in which case each https `image_url` is fetched and kept only on a 200 (same
+rule as the write path). The header comment of the file says which of the two it was.
+
+How the chief applies it: generate one file per category, read it, then pass its contents to the
+Supabase MCP as one migration per category (`apply_migration` with a name like
+`seed_sim_turf_2026_10_19`; `execute_sql` also works for a re-run). The MCP runs the statement
+inside its own transaction, so Postgres may log a notice about `BEGIN` while a transaction is
+already in progress; that is harmless, and the final `COMMIT` is a no-op in that case. Check the
+summary row that comes back (sections, items, links) against the `[emit-sql] wrote ...` line the
+script printed, then open `/u/teed/sim-<category>`. The generated `.sql` files are a build output,
+not source: keep them out of the repo or delete them after they are applied.
 
 ### 3. Product-library entries
 
@@ -164,6 +217,7 @@ the list is inert until the posts land.
 |---|---|
 | `npx tsc --noEmit`, both scripts with `--dry-run` | nothing |
 | `seed-components.ts --dry-run --check-images`, `components-to-library.ts --dry-run --check-images` | network only |
+| `seed-components.ts --emit-sql` | nothing (`--check-images` adds network); the file is applied through the Supabase MCP |
 | `seed-components.ts` (write) | `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` in `.env.local` (dotenv loads it) or the shell; exits 2 with a message otherwise |
 | `components-to-library.ts` (write) | network for image checks; no env |
 | `/for/golf-simulators` bag check at render | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (same as the Setups strip) |
@@ -178,6 +232,10 @@ Node is not on the sandbox PATH on this machine; from Git Bash call
   `packages/mcp-server/**`, untouched.
 - `scripts/seed-components.ts --fixture --dry-run`: 1 bag, 3 sections (gaming-laptop,
   prebuilt-desktop, Software), 3 items (1 software), 6 links, the http image skipped.
+- `scripts/seed-components.ts --fixture --emit-sql --out docs/_fixture.sql`: one DO block, the
+  same 3 sections / 3 items / 6 links, every `photo_url` NULL, multi-line notes and the apostrophe
+  in "maker's page" intact inside `$q$` quotes; the file was read through and then deleted. Not run
+  against the database.
 - `scripts/components-to-library.ts --fixture --dry-run`: would add 3 products (2 new brands).
   A real run against the fixture appended 185 lines and removed only the three root counters;
   the second run wrote nothing; `golf.json` was then reverted.

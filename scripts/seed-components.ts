@@ -25,12 +25,17 @@
  *   npx tsx scripts/seed-components.ts --file path.json     a staging file (e.g. the scratchpad)
  *   npx tsx scripts/seed-components.ts --fixture            content/components/_example.json
  *   ... --dry-run        print counts and the first item; no DB, no network
- *   ... --check-images   verify image URLs during a dry run (network, no DB)
+ *   ... --check-images   verify image URLs during a dry run or an --emit-sql run (network, no DB)
  *   ... --prune          delete items no longer in the JSON
+ *   ... --emit-sql --out docs/sql/sim-turf.sql
+ *                        write one idempotent SQL script (BEGIN ... COMMIT, a DO block per bag)
+ *                        that does what the upsert path does, for the Supabase MCP / SQL editor;
+ *                        no env, no DB; images are checked only with --check-images (else null)
  *
- * Needs NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY unless --dry-run.
+ * Needs NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY unless --dry-run or --emit-sql.
  */
 
+import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -63,24 +68,32 @@ type Args = {
   dryRun: boolean;
   checkImages: boolean;
   prune: boolean;
+  emitSql: boolean;
+  out?: string;
   category?: string;
   file?: string;
 };
 
 function parseArgs(argv: string[]): Args {
-  const args: Args = { dryRun: false, checkImages: false, prune: false };
+  const args: Args = { dryRun: false, checkImages: false, prune: false, emitSql: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--dry-run') args.dryRun = true;
     else if (a === '--check-images') args.checkImages = true;
     else if (a === '--prune') args.prune = true;
+    else if (a === '--emit-sql') args.emitSql = true;
     else if (a === '--fixture') args.file = path.join(COMPONENTS_DIR, '_example.json');
     else if (a === '--category') args.category = argv[++i];
     else if (a === '--file') args.file = argv[++i];
+    else if (a === '--out') args.out = argv[++i];
     else if (a.startsWith('--category=')) args.category = a.slice('--category='.length);
     else if (a.startsWith('--file=')) args.file = a.slice('--file='.length);
+    else if (a.startsWith('--out=')) args.out = a.slice('--out='.length);
     else throw new Error(`Unknown argument: ${a}`);
   }
+  if (args.emitSql && args.dryRun) throw new Error('--emit-sql and --dry-run are separate modes; pass one.');
+  if (args.emitSql && args.prune) throw new Error('--prune is not available with --emit-sql (the emitted script never deletes items).');
+  if (args.out && !args.emitSql) throw new Error('--out only applies to --emit-sql.');
   return args;
 }
 
@@ -430,6 +443,194 @@ async function seedBag(supabase: SupabaseClient, ownerId: string, bag: SeedBag, 
 }
 
 // =============================================================================
+// SQL emitter (--emit-sql): the upsert path as one re-runnable PostgreSQL script
+// =============================================================================
+//
+// Mirrors seedBag() statement for statement so the chief can load a bag through
+// the Supabase MCP (apply_migration / execute_sql) without a service-role key:
+// owner by handle (asserted against HOUSE_USER_ID), bag by (owner_id, code),
+// sections by (bag_id, name), items by (bag_id, custom_name), links deleted and
+// re-inserted per item, hero_item_id set only when the bag has none, stale items
+// reported with RAISE NOTICE and never deleted. Column names follow the live
+// schema: bag_sections.sort_index (migration 065), links.bag_item_id / kind /
+// url / label (001; links has no sort column, rows go in product, purchase,
+// review order, the same order the upsert path inserts them).
+
+/** A dollar-quote tag built from `base` that occurs in none of `contents`. */
+function dollarTag(base: string, ...contents: string[]): string {
+  for (let n = 0; ; n++) {
+    const tag = `$${base}${n === 0 ? '' : n}$`;
+    if (!contents.some((c) => c.includes(tag))) return tag;
+  }
+}
+
+/** Text literal, dollar-quoted so nothing inside needs escaping; NULL for null. */
+function sqlText(value: string | null | undefined): string {
+  if (value === null || value === undefined) return 'NULL';
+  const tag = dollarTag('q', value);
+  return `${tag}${value}${tag}`;
+}
+
+function sqlJsonb(value: unknown): string {
+  const json = JSON.stringify(value);
+  const tag = dollarTag('j', json);
+  return `${tag}${json}${tag}::jsonb`;
+}
+
+function sqlUuid(value: string): string {
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value)) throw new Error(`not a uuid: ${value}`);
+  return `'${value}'::uuid`;
+}
+
+/** The DO-block body for one bag (no outer delimiters; emitSql picks a tag that is not inside). */
+function bagDoBody(bag: SeedBag, photos: Record<string, string | null>): string {
+  const lines: string[] = [];
+  const push = (s = '') => lines.push(s);
+
+  push('DECLARE');
+  push('  v_owner uuid;');
+  push('  v_bag uuid;');
+  push('  v_section uuid;');
+  push('  v_item uuid;');
+  push('  v_first_item uuid := NULL;');
+  push('  v_stale integer := 0;');
+  push('BEGIN');
+  push(`  -- 1. Owner: @${HOUSE_HANDLE} must resolve to the house account.`);
+  push(`  SELECT id INTO v_owner FROM profiles WHERE handle = ${sqlText(HOUSE_HANDLE)};`);
+  push('  IF v_owner IS NULL THEN');
+  push(`    RAISE EXCEPTION 'House account @${HOUSE_HANDLE} not found in profiles';`);
+  push('  END IF;');
+  push(`  IF v_owner <> ${sqlUuid(HOUSE_USER_ID)} THEN`);
+  push(`    RAISE EXCEPTION '@${HOUSE_HANDLE} resolved to %, expected ${HOUSE_USER_ID}; refusing to seed under the wrong account', v_owner;`);
+  push('  END IF;');
+  push();
+  push(`  -- 2. Bag ${bag.code} by (owner_id, code).`);
+  push(`  SELECT id INTO v_bag FROM bags WHERE owner_id = v_owner AND code = ${sqlText(bag.code)};`);
+  push('  IF v_bag IS NULL THEN');
+  push('    INSERT INTO bags (owner_id, code, title, description, category, tags, is_public, updated_at)');
+  push(`    VALUES (v_owner, ${sqlText(bag.code)}, ${sqlText(bag.title)}, ${sqlText(bag.description)}, ${sqlText(BAG_CATEGORY)}, ${sqlJsonb(bag.tags)}, true, now())`);
+  push('    RETURNING id INTO v_bag;');
+  push('  ELSE');
+  push('    UPDATE bags SET');
+  push(`      title = ${sqlText(bag.title)},`);
+  push(`      description = ${sqlText(bag.description)},`);
+  push(`      category = ${sqlText(BAG_CATEGORY)},`);
+  push(`      tags = ${sqlJsonb(bag.tags)},`);
+  push('      is_public = true,');
+  push('      updated_at = now()');
+  push('    WHERE id = v_bag;');
+  push('  END IF;');
+  push();
+  push('  -- 3. Sections by (bag_id, name), sort_index in file order.');
+  for (const [index, name] of bag.sections.entries()) {
+    push(`  SELECT id INTO v_section FROM bag_sections WHERE bag_id = v_bag AND name = ${sqlText(name)};`);
+    push('  IF v_section IS NULL THEN');
+    push(`    INSERT INTO bag_sections (bag_id, name, sort_index) VALUES (v_bag, ${sqlText(name)}, ${index});`);
+    push('  ELSE');
+    push(`    UPDATE bag_sections SET sort_index = ${index} WHERE id = v_section;`);
+    push('  END IF;');
+  }
+  push();
+  push("  -- 4. Items by (bag_id, custom_name); 5. each item's links deleted and re-inserted.");
+  for (const [index, item] of bag.items.entries()) {
+    const photo = photos[item.customName] ?? null;
+    push(`  -- item ${index + 1}: ${item.customName.replace(/[\r\n]+/g, ' ')}`);
+    push(`  SELECT id INTO v_section FROM bag_sections WHERE bag_id = v_bag AND name = ${sqlText(item.section)};`);
+    push(`  SELECT id INTO v_item FROM bag_items WHERE bag_id = v_bag AND custom_name = ${sqlText(item.customName)};`);
+    push('  IF v_item IS NULL THEN');
+    push('    INSERT INTO bag_items (bag_id, section_id, custom_name, brand, custom_description, why_chosen, notes, price_paid, item_type, specs, photo_url, quantity, sort_index)');
+    push(
+      `    VALUES (v_bag, v_section, ${sqlText(item.customName)}, ${sqlText(item.brand)}, ${sqlText(item.customDescription)}, ${sqlText(item.whyChosen)}, ${sqlText(item.notes)}, NULL, ${sqlText(item.itemType)}, ${sqlJsonb(item.specs)}, ${sqlText(photo)}, 1, ${index + 1})`
+    );
+    push('    RETURNING id INTO v_item;');
+    push('  ELSE');
+    push('    UPDATE bag_items SET');
+    push('      section_id = v_section,');
+    push(`      brand = ${sqlText(item.brand)},`);
+    push(`      custom_description = ${sqlText(item.customDescription)},`);
+    push(`      why_chosen = ${sqlText(item.whyChosen)},`);
+    push(`      notes = ${sqlText(item.notes)},`);
+    push('      price_paid = NULL,');
+    push(`      item_type = ${sqlText(item.itemType)},`);
+    push(`      specs = ${sqlJsonb(item.specs)},`);
+    push(`      photo_url = ${sqlText(photo)},`);
+    push('      quantity = 1,');
+    push(`      sort_index = ${index + 1}`);
+    push('    WHERE id = v_item;');
+    push('  END IF;');
+    push('  IF v_first_item IS NULL THEN v_first_item := v_item; END IF;');
+    push('  DELETE FROM links WHERE bag_item_id = v_item;');
+    if (item.links.length) {
+      push('  INSERT INTO links (bag_item_id, kind, url, label) VALUES');
+      item.links.forEach((l, i) => {
+        const end = i === item.links.length - 1 ? ';' : ',';
+        push(`    (v_item, ${sqlText(l.kind)}, ${sqlText(l.url)}, ${sqlText(l.label)})${end}`);
+      });
+    }
+    push();
+  }
+  push('  -- Items in the bag that are not in the JSON are reported, never deleted (no --prune here).');
+  push('  SELECT count(*) INTO v_stale FROM bag_items');
+  push(`  WHERE bag_id = v_bag AND custom_name NOT IN (${bag.items.map((i) => sqlText(i.customName)).join(', ')});`);
+  push('  IF v_stale > 0 THEN');
+  push(`    RAISE NOTICE '${bag.code}: % item(s) in the bag are not in the JSON', v_stale;`);
+  push('  END IF;');
+  push();
+  push('  -- hero_item_id: the first item, only when the bag has none.');
+  push('  IF v_first_item IS NOT NULL THEN');
+  push('    UPDATE bags SET hero_item_id = v_first_item WHERE id = v_bag AND hero_item_id IS NULL;');
+  push('  END IF;');
+  push(`  RAISE NOTICE '${bag.code}: bag %, ${bag.sections.length} section(s), ${bag.items.length} item(s) upserted', v_bag;`);
+  push('END');
+  return lines.join('\n');
+}
+
+/** One script for every bag: BEGIN, a DO block per bag, the summary select, COMMIT. */
+export function emitSql(
+  bags: SeedBag[],
+  photosByBag: Record<string, Record<string, string | null>>,
+  source: string,
+  imagesChecked: boolean
+): string {
+  const out: string[] = [];
+  out.push(`-- Generated by scripts/seed-components.ts --emit-sql on ${new Date().toISOString()}`);
+  out.push(`-- Source: ${source}`);
+  out.push(`-- Bags: ${bags.map((b) => b.code).join(', ')} on @${HOUSE_HANDLE} (${HOUSE_USER_ID})`);
+  out.push(
+    imagesChecked
+      ? '-- Images: checked with --check-images; photo_url is set only where the image answered 200.'
+      : '-- Images: not checked (re-run with --check-images to verify them); every photo_url is NULL.'
+  );
+  out.push('-- Idempotent: re-running updates in place (bag by owner_id + code, sections by bag_id + name,');
+  out.push("-- items by bag_id + custom_name; each seeded item's links are deleted and re-inserted). Nothing");
+  out.push('-- else is deleted. One transaction: any error rolls the whole file back.');
+  out.push('BEGIN;');
+  out.push('');
+  for (const bag of bags) {
+    const body = bagDoBody(bag, photosByBag[bag.code] || {});
+    const tag = dollarTag('seed', body);
+    out.push(`-- ${bag.code}: ${bag.title}`);
+    out.push(`DO ${tag}`);
+    out.push(body);
+    out.push(`${tag};`);
+    out.push('');
+  }
+  out.push('-- 6. Summary: one row per bag.');
+  out.push('SELECT');
+  out.push('  b.code,');
+  out.push('  (SELECT count(*) FROM bag_sections s WHERE s.bag_id = b.id) AS sections,');
+  out.push('  (SELECT count(*) FROM bag_items i WHERE i.bag_id = b.id) AS items,');
+  out.push('  (SELECT count(*) FROM links l JOIN bag_items i ON i.id = l.bag_item_id WHERE i.bag_id = b.id) AS links');
+  out.push('FROM bags b');
+  out.push(`WHERE b.owner_id = ${sqlUuid(HOUSE_USER_ID)} AND b.code IN (${bags.map((b) => sqlText(b.code)).join(', ')})`);
+  out.push('ORDER BY b.code;');
+  out.push('');
+  out.push('COMMIT;');
+  out.push('');
+  return out.join('\n');
+}
+
+// =============================================================================
 // Main
 // =============================================================================
 
@@ -471,6 +672,34 @@ async function main() {
       console.log(JSON.stringify(bag.items[0], null, 2).replace(/^/gm, '    '));
     }
     console.log(`\n[dry run] ${bags.length} bag(s). No database call made.`);
+    return;
+  }
+
+  if (args.emitSql) {
+    const photosByBag: Record<string, Record<string, string | null>> = {};
+    for (const bag of bags) {
+      photosByBag[bag.code] = args.checkImages
+        ? await verifyImages(bag)
+        : Object.fromEntries(bag.items.map((i) => [i.customName, null]));
+    }
+    const source = args.file
+      ? path.relative(process.cwd(), args.file).replace(/\\/g, '/')
+      : args.category
+        ? `content/components/${args.category}.json`
+        : 'content/components/*.json';
+    const sql = emitSql(bags, photosByBag, source, args.checkImages);
+    const itemCount = bags.reduce((n, b) => n + b.items.length, 0);
+    const linkCount = bags.reduce((n, b) => n + b.items.reduce((m, i) => m + i.links.length, 0), 0);
+    if (args.out) {
+      fs.mkdirSync(path.dirname(path.resolve(args.out)), { recursive: true });
+      fs.writeFileSync(args.out, sql, 'utf-8');
+      console.log(
+        `[emit-sql] wrote ${args.out}: ${bags.length} bag(s), ${itemCount} item(s), ${linkCount} link(s)` +
+          `${args.checkImages ? '' : '; images not checked (every photo_url NULL)'}. No database call made.`
+      );
+    } else {
+      process.stdout.write(sql);
+    }
     return;
   }
 
