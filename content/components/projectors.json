@@ -10,7 +10,7 @@
   "notes": {
     "qualification": "5+ independent sources = qualified, 10+ = core. Brand pages excluded from the count. Reddit counted via search snippets and the redditrecs aggregator because reddit.com cannot be fetched.",
     "room_fit_math": "For a native 16:9 projector filling a 4:3 impact screen, the projector must throw an image 16/9 x screen height wide. A 10 ft x 7.5 ft (4:3) screen needs a 13.33 ft wide image, so distance = throw ratio x 13.33 ft. A 9 ft 6 in wide 4:3 screen (7 ft 1.5 in tall) needs a 12.67 ft wide image. Distances below are computed from each maker's throw ratio, not published by the maker, unless stated.",
-    "off_centre_definition": "Off-center capable = optical lens shift on at least one axis, or a short enough throw plus enough keystone to sit beside the hitting line on a floor case or cart. Digital keystone discards pixels and softens the image; every source ranks it last after physical placement and lens shift.",
+    "off_center_definition": "Off-center capable = optical lens shift on at least one axis, or a short enough throw plus enough keystone to sit beside the hitting line on a floor case or cart. Digital keystone discards pixels and softens the image; every source ranks it last after physical placement and lens shift.",
     "search_budget": "WebSearch budget ran out mid-task; later model-specific Reddit queries could not be run. Counts for Reddit lean on the first wave of searches and the redditrecs pages."
   },
   "products": [
@@ -62,7 +62,7 @@
         "spec_sources": "https://www.projectorcentral.com/benq-ak700st.htm; https://www.benq.com/en-us/projector/golf/ak700st.html; https://homeperformancelab.com/best-benq-projector-for-golf-simulator/"
       },
       "room_fit": "10 ft wide 16:9 image: 6.9 to 8.3 ft lens to screen. 10 ft x 7.5 ft 4:3 screen: 9.2 to 11.1 ft (Top Shelf Golf quotes 9 ft 2 in to 11 ft 1 in, above the golfer). 9 ft 6 in wide 4:3: 8.7 to 10.5 ft. Center ceiling mount above or just behind the ball. Off-center only via digital keystone, so a cart beside the mat is not what it is built for.",
-      "off_centre": "keystone only (no lens shift)",
+      "off_center": "keystone only (no lens shift)",
       "who_its_for": "The builder with a 16 ft or deeper bay who wants the golf-specific feature set (Golf Mode, Auto Screen Fit, sealed engine) and 4K, and is willing to pay for it.",
       "pros": [
         "Auto Screen Fit squares a 4:3 or 1:1 impact screen without manual keystone",
@@ -130,7 +130,7 @@
         "spec_sources": "https://www.projectorcentral.com/benq-ah700st.htm; https://www.projectorreviews.com/benq/benq-ah700st-laser-golf-simulator-projector/"
       },
       "room_fit": "Same geometry as the AK700ST: 6.9 to 8.3 ft for a 10 ft wide 16:9 image, 9.2 to 11.1 ft to fill a 10 ft x 7.5 ft 4:3 screen, 8.7 to 10.5 ft for a 9 ft 6 in wide 4:3 screen. Smart Home Perfected calls it the fit for a standard garage bay with a 10 ft screen.",
-      "off_centre": "keystone only (no lens shift)",
+      "off_center": "keystone only (no lens shift)",
       "who_its_for": "The builder who wants the AK700ST install experience (Auto Screen Fit, Golf Mode, sealed laser) and does not care about 4K on an impact screen.",
       "pros": [
         "Easiest install in the class thanks to Auto Screen Fit and auto focus",
@@ -198,7 +198,7 @@
         "spec_sources": "https://www.projectorcentral.com/benq-tk710sti.htm; https://www.carlofet.com/blog/benq-tk710sti-review; https://www.thesmarthomehookup.com/ultimate-golf-sim-projector-comparison-and-setup-guide-2024/"
       },
       "room_fit": "6.9 to 8.3 ft for a 10 ft wide 16:9 image; 9.2 to 11.1 ft to fill a 10 ft x 7.5 ft 4:3 screen (GSF: 9 ft 4 in to 11 ft 3 in); 8.7 to 10.5 ft for a 9 ft 6 in wide 4:3 screen. Center ceiling mount. Off-center only with keystone.",
-      "off_centre": "keystone only (3-axis digital, no lens shift)",
+      "off_center": "keystone only (3-axis digital, no lens shift)",
       "who_its_for": "The most common 4K pick for a home bay under $2,200: dark or lights-off garage, 10 to 13 ft wide screens, GSPro at 1080p/240 for the lag.",
       "pros": [
         "Cheapest widely stocked 4K short throw with the BenQ 0.69 to 0.83 geometry",
@@ -262,7 +262,7 @@
         "spec_sources": "https://www.projectorcentral.com/benq-tk700sti.htm; https://golfsimulatorforum.com/forum/build-your-own/projectors/376703-benq-tk700sti-question"
       },
       "room_fit": "9.0 to 10.8 ft for a 10 ft wide 16:9 image; 12.0 to 14.4 ft to fill a 10 ft x 7.5 ft 4:3 screen (GSF members quote 13 ft 4 in to 14 ft 8 in); 11.4 to 13.7 ft for a 9 ft 6 in wide 4:3 screen. Needs a deep room; a GSF owner mounted it 16 ft back for a 13 ft wide screen. Shadow risk is the recurring complaint.",
-      "off_centre": "keystone only",
+      "off_center": "keystone only",
       "who_its_for": "The deep-room builder who finds one at the discontinued price and already has 14 ft or more of throw; otherwise the TK710STi replaced it for a reason.",
       "pros": [
         "4K at a used-market price",
@@ -330,7 +330,7 @@
         "spec_sources": "https://www.projectorcentral.com/benq-th671st.htm; https://homeperformancelab.com/golf-simulator-projector-placement/; https://mygolfsimulator.com/best-golf-simulator-projectors/"
       },
       "room_fit": "6.9 to 8.3 ft for a 10 ft wide 16:9 image; 9.2 to 11.1 ft to fill a 10 ft x 7.5 ft 4:3 screen; 8.7 to 10.5 ft for a 9 ft 6 in wide 4:3 screen. Carl's Place: 79 to 95 in from the screen at its 115 in native width. Low offset makes it the flush-ceiling favorite under 9 ft ceilings. Vertical-only keystone means it cannot be squared from beside the mat.",
-      "off_centre": "no (vertical keystone only)",
+      "off_center": "no (vertical keystone only)",
       "who_its_for": "The starter bay on a budget with a dark, controlled room; the forums' default 'just get the 671' answer from 2019 to 2024.",
       "pros": [
         "Under $900 new, far less used, with the same throw geometry as the $2,900 BenQ golf models",
@@ -399,7 +399,7 @@
         "spec_sources": "https://www.projectorcentral.com/benq-lk936st.htm; https://homeperformancelab.com/golf-simulator-projector-placement/; https://mygolfsimulator.com/keystone-correction/"
       },
       "room_fit": "8.1 to 8.9 ft for a 10 ft wide 16:9 image; 10.8 to 11.9 ft to fill a 10 ft x 7.5 ft 4:3 screen (Top Shelf: 10 ft 10 in to 11 ft 10 in, above the golfer); 10.3 to 11.3 ft for a 9 ft 6 in wide 4:3 screen. The only mainstream home model that can be hung 2 ft off the centerline and still show a square, full-resolution image. Not a cart projector: 15 lb and a long throw.",
-      "off_centre": "yes (optical H +/-23%, V +/-60%)",
+      "off_center": "yes (optical H +/-23%, V +/-60%)",
       "who_its_for": "The bright or dual-use room, the ductwork or launch-monitor conflict on the centerline, or the commercial bay. Overkill for a dark garage.",
       "pros": [
         "Real horizontal and vertical lens shift, the feature every off-center thread asks for",
@@ -459,7 +459,7 @@
         "spec_sources": "https://www.projectorcentral.com/benq-ah500st.htm; https://topshelfgolf.com/pages/golf-simulator-projectors-guide"
       },
       "room_fit": "5.0 ft for a 10 ft wide 16:9 image; 6.7 ft to fill a 10 ft x 7.5 ft 4:3 screen; 6.3 ft for 9 ft 6 in wide. Sits ahead of the golfer, so it suits bays under 14 to 16 ft deep and low ceilings; BenQ's comparison says it makes a 7.2 ft tall image from an 8 ft ceiling without tilt, versus 6.9 ft for the Optoma GT2100HDR.",
-      "off_centre": "keystone only",
+      "off_center": "keystone only",
       "who_its_for": "The shallow bay (under about 14 ft) that wants a sealed laser and Screen Fill rather than an Optoma.",
       "pros": [
         "0.5 throw with low offset for flush ceiling mounts in short rooms",
@@ -516,7 +516,7 @@
         "spec_sources": "https://www.projectorcentral.com/benq-lk830st.htm; https://homeperformancelab.com/best-benq-projector-for-golf-simulator/"
       },
       "room_fit": "5.0 ft for a 10 ft wide 16:9 image; 6.6 ft to fill a 10 ft x 7.5 ft 4:3 screen; 6.3 ft for 9 ft 6 in wide. Home Performance Lab: best BenQ for rooms under 16 ft deep; Home Golf Hero: rooms under about 14 ft.",
-      "off_centre": "keystone only",
+      "off_center": "keystone only",
       "who_its_for": "The short bay that wants 4K and BenQ's golf tooling without stepping to the LK936ST.",
       "pros": [
         "4K at a 0.5 throw, so the projector sits in front of the golfer in a 12 to 14 ft room",
@@ -578,7 +578,7 @@
         "spec_sources": "https://www.optomausa.com/product/gt2000hdr; https://www.projectorcentral.com/optoma-gt2000hdr.htm"
       },
       "room_fit": "5.0 ft for a 10 ft wide 16:9 image; 6.6 ft to fill a 10 ft x 7.5 ft 4:3 screen; 6.3 ft for 9 ft 6 in wide. Rain or Shine: a 10 ft screen at 0.5 needs about 5 ft. The 116% offset is the catch on a flush 8 ft ceiling: BenQ's own comparison shows the Optoma making a 6.9 ft tall image from 8 ft up versus 7.2 ft for the AH500ST.",
-      "off_centre": "limited (H and V keystone +/-15 deg only)",
+      "off_center": "limited (H and V keystone +/-15 deg only)",
       "who_its_for": "The under-$1,200 laser buyer with a short bay; Top Shelf Golf's number one for most home simulators and Shop Indoor Golf's third best seller of 2026.",
       "pros": [
         "Cheapest laser short throw that the sim retailers all carry",
@@ -637,7 +637,7 @@
         "spec_sources": "https://www.optomausa.com/product/gt2100hdr; https://www.projectorcentral.com/optoma-gt2100hdr.htm"
       },
       "room_fit": "Same as GT2000HDR: 5.0 ft for 10 ft wide 16:9, 6.6 ft to fill a 10 ft x 7.5 ft 4:3 screen, 6.3 ft at 9 ft 6 in. Home Performance Lab names it the tight-room pick but flags the high offset for ceiling alignment.",
-      "off_centre": "limited (H and V keystone +/-15 deg only)",
+      "off_center": "limited (H and V keystone +/-15 deg only)",
       "who_its_for": "The GT2000HDR buyer who wants the extra 700 lumens for a lit garage.",
       "pros": [
         "Brightest sub-$1,300 laser short throw",
@@ -695,7 +695,7 @@
         "spec_sources": "https://www.projectorcentral.com/optoma-gt2400hdr.htm; https://golfstead.com/best-golf-simulator-projectors"
       },
       "room_fit": "4.8 to 5.0 ft for a 10 ft wide 16:9 image; 6.4 to 6.6 ft to fill a 10 ft x 7.5 ft 4:3 screen; about 6.2 ft at 9 ft 6 in.",
-      "off_centre": "limited (H and V keystone +/-15 deg only)",
+      "off_center": "limited (H and V keystone +/-15 deg only)",
       "who_its_for": "The 2026 buyer who would have bought the GT2100HDR; Golfstead's number one and Home Golf Hero's best value for the year.",
       "pros": [
         "Brightness per dollar leader in Top Shelf Golf's comparison",
@@ -747,7 +747,7 @@
         "price_source_url": "https://www.projectorcentral.com/optoma-gt1090hdr.htm"
       },
       "room_fit": "5.0 ft for a 10 ft wide 16:9 image; 6.7 ft to fill a 10 ft x 7.5 ft 4:3 screen. The 2020 to 2022 forum favorite for short bays; a GSF owner says it looks great even in bright light.",
-      "off_centre": "limited (digital H and V keystone)",
+      "off_center": "limited (digital H and V keystone)",
       "who_its_for": "The used-market buyer; it is the laser predecessor of the GT2000 series and still the model many forum threads mean by 'the 1090'.",
       "pros": [
         "4,200 lumen laser at used prices",
@@ -803,7 +803,7 @@
         "spec_sources": "https://www.optomausa.com/product/uhd35stx; https://www.projectorcentral.com/optoma-uhd35stx.htm"
       },
       "room_fit": "5.0 ft for a 10 ft wide 16:9 image; 6.7 ft to fill a 10 ft x 7.5 ft 4:3 screen. GSF: mounts about 8 ft from the screen for a 14 ft wide image versus 14 ft for the TK700STi.",
-      "off_centre": "limited (digital H and V keystone +/-40 deg)",
+      "off_center": "limited (digital H and V keystone +/-40 deg)",
       "who_its_for": "The forum's 2022 to 2023 alternative to the TK700STi: 4K, brighter, half the throw, lamp instead of laser.",
       "pros": [
         "4K at a 0.5 throw for about $1,400",
@@ -860,7 +860,7 @@
         "spec_sources": "https://www.projectorcentral.com/optoma-zw350st.htm; https://topshelfgolf.com/pages/golf-simulator-projectors-guide"
       },
       "room_fit": "5.2 ft for a 10 ft wide image; a 10 ft x 7.5 ft 4:3 screen on this 16:10 panel needs a 12 ft wide image, so about 6.2 ft.",
-      "off_centre": "no to limited (keystone range disputed between sources)",
+      "off_center": "no to limited (keystone range disputed between sources)",
       "who_its_for": "The sub-$1,000 laser buyer who accepts 1280x800; Shop Indoor Golf's best value and second best seller of 2026.",
       "pros": [
         "Cheapest laser short throw the sim retailers stock",
@@ -917,7 +917,7 @@
         "spec_sources": "https://www.projectorcentral.com/panasonic-pt-vmz51u.htm; https://mygolfsimulator.com/best-golf-simulator-projectors/"
       },
       "room_fit": "10.9 to 17.7 ft for a 10 ft wide 16:10 image; a 10 ft x 7.5 ft 4:3 screen needs a 12 ft wide image, so 13.1 to 21.2 ft. Only for deep rooms (18 ft plus) where the projector sits behind the golfer; the vertical shift then drops the image to the floor without tilt. The horizontal shift lets it hang beside a centerline obstruction.",
-      "off_centre": "yes (optical H +/-20%, V +44%) but standard throw",
+      "off_center": "yes (optical H +/-20%, V +44%) but standard throw",
       "who_its_for": "The deep, bright room that needs lens shift under $3,000, or a dual-use media room; Shop Indoor Golf's old best overall.",
       "pros": [
         "Real horizontal and vertical lens shift",
@@ -976,7 +976,7 @@
         "spec_sources": "https://epson.com/For-Home/Projectors/Laser-Projection-TV/EpiqVision-Ultra-LS800-4K-PRO-UHD-Ultra-Short-Throw-3-Chip-3LCD-Smart-Streaming-Laser-Projector/p/V11HA90120"
       },
       "room_fit": "Needs almost no throw (about 1.6 ft of lens-to-screen for 10 ft wide), which is the appeal for a 5 ft deep bay. The catch is the screen: UST optics exaggerate every ripple in a tensioned impact screen, the unit sits where balls land, and Reddit owners say a UST needs an ALR screen. ProjectorCentral's golf guide says UST projectors generally do not work with impact screens.",
-      "off_centre": "no (must be centered under the screen)",
+      "off_center": "no (must be centered under the screen)",
       "who_its_for": "Honestly, the home theatre buyer; it appears in sim guides as the UST example rather than a recommendation. Worth listing because builders with very shallow bays keep asking about it.",
       "pros": [
         "4,000 lumen 3LCD laser with no shadow possible",
@@ -1034,7 +1034,7 @@
         "spec_sources": "https://www.projectorcentral.com/viewsonic-px701-4k.htm; https://www.projectorcentral.com/ViewSonic-PX701-4K-Projector-Review.htm"
       },
       "room_fit": "15 to 16.5 ft for a 10 ft wide 16:9 image; 20 to 22 ft to fill a 10 ft x 7.5 ft 4:3 screen. GSF: about 19 ft for a 9 ft wide image. Only works in a long room with the projector far behind the golfer, where shadows are the next problem. A four-corner and +/-40 deg H keystone set makes it the rare budget unit that can be squared from a side shelf, at a sharpness cost.",
-      "off_centre": "keystone only (H and V +/-40 deg plus four-corner)",
+      "off_center": "keystone only (H and V +/-40 deg plus four-corner)",
       "who_its_for": "The long-room or dual-use media room buyer who wants 4K under $1,000 and has 15 ft plus of throw; not for a garage bay.",
       "pros": [
         "Cheapest 4K with 240 Hz low-lag mode",
