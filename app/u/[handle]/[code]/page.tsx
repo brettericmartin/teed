@@ -201,33 +201,12 @@ export default async function UserBagPage({ params }: PageProps) {
   // Get cover photo URL if present
   const coverPhotoUrl = bag.cover_photo_id ? photoUrls[bag.cover_photo_id] || null : null;
 
-  // Check if bag has affiliate links
-  const itemIds = bag.items?.map((item: any) => item.id) || [];
-  let hasAffiliateLinks = false;
-  let disclosureText = undefined;
-
-  if (itemIds.length > 0) {
-    // Check for affiliate links
-    const { data: affiliateLinks } = await supabase
-      .from('affiliate_links')
-      .select('id')
-      .in('bag_item_id', itemIds)
-      .eq('is_active', true)
-      .limit(1);
-
-    hasAffiliateLinks = (affiliateLinks?.length || 0) > 0;
-
-    // If has affiliate links, fetch creator's disclosure settings
-    if (hasAffiliateLinks) {
-      const { data: creatorSettings } = await supabase
-        .from('creator_settings')
-        .select('custom_disclosure_text')
-        .eq('profile_id', profile.id)
-        .single();
-
-      disclosureText = creatorSettings?.custom_disclosure_text || undefined;
-    }
-  }
+  // Affiliate disclosure strip: affiliate_links has no bag_item_id column and there
+  // is no creator_settings table, so the old lookup always errored and the strip
+  // could never show. Keep the rendering path; feed it an empty result until a
+  // per-item affiliate model exists.
+  const hasAffiliateLinks = false;
+  const disclosureText: string | undefined = undefined;
 
   // Create bag object with cover photo URL
   const bagWithCover = {

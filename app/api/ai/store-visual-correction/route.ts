@@ -127,8 +127,14 @@ export async function POST(request: NextRequest): Promise<NextResponse<VisualCor
     // Extract model keywords for searching
     const modelKeywords = extractModelKeywords(correction.name, originalGuess.name);
 
-    // Store in database
-    const { data, error: insertError } = await supabase
+    // Store in database. The ai_visual_corrections table does not exist in the
+    // current schema, so the write is skipped and the correction stays in logs only
+    // (the existing insertError branch below handles that). Set to false once the
+    // table is migrated.
+    const TABLE_MISSING = true;
+    const { data, error: insertError } = TABLE_MISSING
+      ? { data: null, error: { message: 'ai_visual_corrections table not provisioned' } }
+      : await supabase
       .from('ai_visual_corrections')
       .insert({
         object_type: visualDescription.objectType,

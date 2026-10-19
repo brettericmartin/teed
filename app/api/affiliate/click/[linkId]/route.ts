@@ -95,14 +95,10 @@ export async function GET(
         device_type: deviceType,
       };
 
-      const { error: insertError } = await supabase
-        .from('affiliate_clicks')
-        .insert(clickEvent);
-
-      if (insertError) {
-        console.error('[Affiliate Click] Failed to log click:', insertError);
-        // Don't block redirect on tracking failure
-      }
+      // The affiliate_clicks table does not exist in the current schema, so the
+      // per-click row is not written. user_activity below still records the event.
+      // Restore: `await supabase.from('affiliate_clicks').insert(clickEvent)`.
+      void clickEvent;
 
       // Also insert into user_activity for unified analytics pipeline (fire-and-forget)
       supabase
