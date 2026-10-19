@@ -64,7 +64,7 @@ const sections: SeedSection[] = [
         pricePaid: null,
         purchaseDate: '2026-10-08',
         links: [
-          { url: 'https://stowgolf.com/', kind: 'product', label: 'StowGolf' },
+          { url: 'https://stowgolf.com/', kind: 'product', label: 'StowGolf (stowgolf.com)' },
           { url: 'https://stowgolf.com/finish-your-bay', kind: 'article', label: 'Finish your bay: what else you need' },
         ],
       },
