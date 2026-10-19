@@ -286,7 +286,7 @@ export default async function UseCasePage({ params }: PageProps) {
                 {useCase.ctaText}
               </Link>
               <Link
-                href="/discover"
+                href={useCase.discoverCategory ? `/discover?category=${useCase.discoverCategory}` : '/discover'}
                 className="inline-block px-10 py-4 bg-[var(--surface)] text-[var(--text-primary)] text-lg font-semibold rounded-[var(--radius-xl)] border border-[var(--border-default)] hover:border-[var(--teed-green-6)] transition-all duration-300"
               >
                 Browse Collections
