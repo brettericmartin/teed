@@ -6,6 +6,11 @@ import type { BlogPostMeta } from './types';
 
 const BLOG_DIR = path.join(process.cwd(), 'content', 'blog');
 
+/** Files starting with "_" (templates, drafts in progress) are never posts. */
+function isTemplateSlug(slug: string): boolean {
+  return slug.startsWith('_');
+}
+
 function parseMdxFile(filePath: string): { meta: BlogPostMeta; content: string } | null {
   const raw = fs.readFileSync(filePath, 'utf-8');
   const { data, content } = matter(raw);
@@ -36,7 +41,9 @@ function parseMdxFile(filePath: string): { meta: BlogPostMeta; content: string }
 export function getAllPosts(): BlogPostMeta[] {
   if (!fs.existsSync(BLOG_DIR)) return [];
 
-  const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith('.mdx'));
+  const files = fs
+    .readdirSync(BLOG_DIR)
+    .filter((f) => f.endsWith('.mdx') && !isTemplateSlug(f));
   const posts: BlogPostMeta[] = [];
 
   for (const file of files) {
@@ -52,6 +59,7 @@ export function getAllPosts(): BlogPostMeta[] {
 }
 
 export function getPostBySlug(slug: string): { meta: BlogPostMeta; content: string } | null {
+  if (isTemplateSlug(slug)) return null;
   const filePath = path.join(BLOG_DIR, `${slug}.mdx`);
   if (!fs.existsSync(filePath)) return null;
   return parseMdxFile(filePath);
