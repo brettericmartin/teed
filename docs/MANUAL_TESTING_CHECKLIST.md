@@ -203,6 +203,32 @@ Test as applicable:
 - [ ] `/for/golf-simulators`, `/blog/best/golf-simulator-setups` and `/discover?category=golf-sim` render; a bag with category "Golf Sim" shows in all three
 - [ ] View source on any page: canonical `<link>` and JSON-LD URLs start with `https://www.teed.club`
 
+### 2.13 Setup bags, golf-sim (added 2026-10-19, week 1)
+
+Seed first: `set -a && source .env.local && set +a && npx tsx scripts/create-garage-sim-bag.ts`
+(`--dry-run` prints the payload without touching the database). Then open `/u/brett/garage-sim-fall-2026`.
+
+- [ ] The bag opens in **List** view on desktop and on a 390-px phone with no `?style` in the URL; the view picker still switches views and `?style=` round-trips
+- [ ] A bag in any other category still opens in Flow (desktop) / Editorial (mobile)
+- [ ] Header meta row shows "Total listed $x · n of m priced · $y a year" (subscriptions counted per year); an older bag with no prices shows no total and no price column
+- [ ] Each section header: small-caps name, item count, subtotal on the right ("from 2 of 3 priced" when an item is unpriced), a 3-px coloured left rule (evergreen enclosure, sky launch monitor, sand projector, grey PC, green mat); the description under it is plain sans
+- [ ] List row: thumb / text / price / exit on desktop; stacked rows on mobile with a full-width 44-px exit; names wrap to two lines, never truncate
+- [ ] Price cell: `$476` for price paid, `$2,495 list` in grey for the StowGolf sample, `$250 a year` for GSPro, an en dash for the laptop
+- [ ] Spec pairs on the StowGolf row read "Width 10 ft · Height 90 in · Depth 5 ft" (list and founders prices are not shown as pairs)
+- [ ] Why-chosen sits under the specs with a 2-px evergreen left rule and no emoji; the StowGolf row shows "Disclosure: Brett Martin runs Teed and builds StowGolf." under it in 12-px grey; no other row shows it
+- [ ] "More" expands the notes inline without opening the modal; clicking anywhere else on the row opens the modal
+- [ ] Exit button reads "See it · stowgolf.com" on the StowGolf row and "Carl's Place · carlofet.com" style elsewhere (domain always shown); "+1 link" opens the modal
+- [ ] Every stowgolf.com link carries `utm_source=teed&utm_medium=bag&utm_campaign=garage-sim-fall-2026&ref=TEED-GARAGE-SIM-FALL-202`
+- [ ] Hero item shows an outline "Centerpiece" chip; nothing amber anywhere
+- [ ] Modal on the StowGolf item: "Why I chose this" with the evergreen rule, the disclosure line under Notes, "See it · stowgolf.com" as the primary button and "Add to My Bag" as an outline button (signed in, not own bag). On a non-golf-sim bag the modal is unchanged
+- [ ] Under the bag description: "Source: How this bay was finished · stowgolf.com" (the bag-level `source` link); other bag-level links appear in a "Read" row under the tags
+- [ ] `/discover?category=golf-sim` paints only golf-sim bags on first load; picking a category, tag, search or sort updates the URL (defaults omitted, no scroll jump); the browser back button is not polluted
+- [ ] `/for/golf-simulators`: H1 "Home golf simulator setups, part by part", "Browse setups" scrolls to `#setups`, "Document your setup" goes to `/signup?ref=golf-sim`, the free-to-read line and the disclosure line sit under the buttons, no emoji
+- [ ] `#setups` lists the seeded bag as a card (16:9 cover or 2 x 2 photo tiles, title, total, item count, @brett); the section is absent when no public golf-sim bag exists; the count line reads "1 so far · as of <month year>"
+- [ ] FAQ shows five questions, collapsed at 390 px, open on desktop; the closing block reads "Add yours" with the real count and no "Join thousands" line
+- [ ] Footer renders on `/for/*` with About and Manifesto links; `/for/golfers` and the other use-case pages look as before (single CTA to `/join`, emoji, two-column pains/solutions)
+- [ ] 390 px: "Sign In" and "Sign Up" stay on one line in the nav; the hero (H1, sub, both buttons, free-to-read, disclosure) fits in the first screen with the top of the first card visible
+
 ## Part 3: Complete Panel Workflow (10-15 minutes)
 
 ### Panel Types Reference
@@ -425,3 +451,4 @@ When finding issues, capture:
 |------|--------|
 | 2026-01-25 | Initial checklist created |
 | 2026-10-17 | Added 2.12 Sections & Tags, golf-sim pages, canonical host check |
+| 2026-10-19 | Added 2.13 Setup bags (golf-sim): List default, totals, StowGolf row, modal, bag-level links, Discover URL state, /for/golf-simulators |
