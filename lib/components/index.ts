@@ -136,7 +136,10 @@ export class ComponentDataError extends Error {
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const SOURCE_TYPES = new Set(['forum', 'reddit', 'review', 'video', 'retailer', 'brand']);
-const TIERS = new Set(['core', 'qualified']);
+const TIERS = new Set(['core', 'qualified', 'stowgolf', 'custom-build', 'watch']);
+/** Tiers that are circulated enough to go into a reference bag; 'watch' stays in the research only. */
+export const SEEDABLE_TIERS = new Set(['core', 'qualified', 'stowgolf', 'custom-build']);
+const TIER_RANK: Record<string, number> = { core: 0, qualified: 1, 'custom-build': 2, stowgolf: 3, watch: 4 };
 const PERIODS = new Set(['monthly', 'yearly', 'lifetime']);
 const PRICING_MODELS = new Set(['subscription', 'one_time', 'free']);
 
@@ -164,7 +167,7 @@ function validatePrice(file: string, where: string, v: unknown): void {
 function validateProductCommon(file: string, where: string, p: Record<string, unknown>): void {
   if (typeof p.brand !== 'string' || !p.brand.trim()) fail(file, where, 'brand is required');
   if (typeof p.name !== 'string' || !p.name.trim()) fail(file, where, 'name is required');
-  if (!TIERS.has(p.tier as string)) fail(file, where, `tier must be "core" or "qualified" (got ${JSON.stringify(p.tier)})`);
+  if (!TIERS.has(p.tier as string)) fail(file, where, `tier must be one of core, qualified, stowgolf, custom-build, watch (got ${JSON.stringify(p.tier)})`);
   if (typeof p.mention_count !== 'number' || p.mention_count < 0) fail(file, where, 'mention_count must be a number');
   if (!isStringArray(p.mention_sources)) fail(file, where, 'mention_sources must be a string array');
   validatePrice(file, where, p.price);
@@ -340,7 +343,7 @@ export function getAllComponentProducts(): ComponentProductWithCategory[] {
 
 /** Core before qualified, then by mention count. This is circulation order, not a ranking. */
 export function tierThenMentions(a: { tier: string; mention_count: number }, b: { tier: string; mention_count: number }): number {
-  if (a.tier !== b.tier) return a.tier === 'core' ? -1 : 1;
+  if (a.tier !== b.tier) return (TIER_RANK[a.tier] ?? 9) - (TIER_RANK[b.tier] ?? 9);
   return b.mention_count - a.mention_count;
 }
 

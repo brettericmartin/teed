@@ -1,0 +1,1401 @@
+{
+  "category": "hitting-mats",
+  "read_date": "2026-10-19",
+  "subtypes": [
+    "full-stance",
+    "strip",
+    "insert-system",
+    "launch-monitor-friendly",
+    "practice-portable"
+  ],
+  "notes": {
+    "qualification": "5+ independent sources = qualified; 10+ = core. Brand pages and the brand's own retailer do not count toward the five.",
+    "verification": "Every direct_url, fallback_url, read_url, image_url and source url was curl-checked on 2026-10-19 with a browser user agent. GolfWRX and the MyGolfSpy forum return 403 to curl (Cloudflare) but load in a browser; they are kept as sources with verified: false. homeperformancelab.com timed out to curl but was fetched and read in full the same day.",
+    "not_qualified": [
+      "SkyTrak 5x5 Hitting Mat: only 2 independent mentions found (thinkindoor.com, Golf Simulators Direct listing); brand page skytrakgolf.com lists $599.99, 32mm nylon turf, 14mm foam base, 21 reviews 4.8.",
+      "ProForm hitting mat: no source found at all; nothing recorded.",
+      "GoSports PRO 5x4, DURA-PRO 5x5, Matzilla, Monster Mat, Bearwill 31mm, Big Moss True Launch, Divot Action, Wittek Quatro, Perfect Reaction, TrueBirdie Beaver Tail, Net Return Pro Turf, PlayBetter SimStudio: 1 to 4 mentions each; named in the map only."
+    ]
+  },
+  "products": [
+    {
+      "brand": "SIGPRO (Shop Indoor Golf)",
+      "name": "SIGPRO Softy 4' x 7' Golf Mat",
+      "subtype": "full-stance",
+      "tier": "core",
+      "mention_count": 19,
+      "mention_sources": [
+        "https://mygolfspy.com/we-tried-it/sigpro-softy-golf-hitting-mat-review/",
+        "https://friendlygolfer.com/sigpro-softy-golf-mat-review/",
+        "https://friendlygolfer.com/best-golf-hitting-mats/",
+        "https://golfstead.com/best-golf-mats-for-home",
+        "https://homeperformancelab.com/best-hitting-mat-golf-simulator/",
+        "https://topshelfgolf.com/pages/the-complete-guide-to-golf-simulator-hitting-mats-2026-buyers-guide",
+        "https://hittingthegolfball.com/best-golf-hitting-mats/",
+        "https://golfergeeks.com/best-golf-mats/",
+        "https://golfersauthority.com/best-golf-hitting-mat/",
+        "https://golferlogic.com/golf-simulator-mats/",
+        "https://golfinsideruk.com/best-golf-simulator-mats/",
+        "https://breakingeighty.com/golf-hitting-mats",
+        "https://mygaragegolf.com/blogs/buying-guides/sigpro-golf-mats-softy-lite-or-supersofty",
+        "https://onthegreen.golf/hitting-strips/",
+        "https://forums.golfwrx.com/topic/2011029-who-has-used-both-the-sigpro-softy-and-the-fiberbuilt-hitting-mat/",
+        "https://www.youtube.com/watch?v=HiMYjpCA1QE",
+        "https://www.youtube.com/watch?v=6Oj3l7zIQWo",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/339859-best-golf-matt",
+        "https://www.yardstickgolf.com/golf-hitting-mats.html"
+      ],
+      "price": {
+        "amount": 999.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://shopindoorgolf.com/products/sigpro-4-x-7-golf-mat"
+      },
+      "direct_url": "https://shopindoorgolf.com/products/sigpro-4-x-7-golf-mat",
+      "fallback_url": "https://golfsimdepot.com/products/sigpro-softy-4x7-hitting-mat",
+      "read_url": "https://friendlygolfer.com/sigpro-softy-golf-mat-review/",
+      "specs": {
+        "size": "4 ft deep x 7 ft wide (strip centred, 24 in from front edge to strip centre)",
+        "height_in": 2.5,
+        "weight_lb": 21,
+        "turf": "SIG proprietary Teeline turf; 1 in thick turf layer on the insert",
+        "hitting_strip": "SIGPRO Softy insert 28 x 12 x 2.5 in, 4 lb, replaceable ($249.99)",
+        "base": "soft foam backing, thin ABS polyurethane layer, three compression slots",
+        "tee": "real tee anywhere on the Softy insert; Preferred insert (+$119.99) takes a real tee; 3D insert (+$159.99) does not",
+        "variants": "Softy LITE 1.25 in low profile (no real tee); Super Softy with 48 in XL strip and rubber tile base; 4 x 10 at $1,399.99",
+        "reviews": "4.7 from 106 reviews on the maker page"
+      },
+      "subscriptions": [],
+      "room_fit": "4 ft deep, so it sits inside a 5 ft deep bay with a foot to spare; 2.5 in tall is the tallest of the mainstream mats, which matters under a low ceiling and when a side-mounted camera unit needs to sit level with the ball",
+      "who_its_for": "the garage builder who wants one mat that does everything, takes a real tee, and is kind to elbows; the community's default answer since about 2021",
+      "pros": [
+        "softest mainstream mat that still takes a real tee",
+        "replaceable 12 x 28 strip, so a worn centre costs $249.99 not a new mat",
+        "two-piece stance mat snaps together in seconds and is only 21 lb",
+        "4.7 to 4.9 star retailer ratings across several stores"
+      ],
+      "cons": [
+        "2.5 in tall; needs a roughly 2 in subfloor to run flush with putting turf",
+        "strip is smaller than a GCQuad 14 x 14 in hitting zone (fits GC3 and SkyTrak)",
+        "some golfers find it too soft and slightly grabby on chips and flops",
+        "$1,000 for a 4 x 7"
+      ],
+      "known_issues": [
+        "wear mark on the strip after one GSPro round where the ball is repeatedly placed (Friendly Golfer), though it did not worsen much",
+        "original three-piece foam base can creep on bare concrete",
+        "one eBay buyer reported the strip sagging in the middle",
+        "shipping delays of 3+ weeks reported on marketplace listings"
+      ],
+      "why_people_choose_it": "It is the mat people land on after their elbow starts to hurt. Nobody on the forums says it is the most realistic, but almost everyone says it is the one they would recommend to a friend who does not want to think about it.",
+      "image_url": "https://shopindoorgolf.com/cdn/shop/files/softy-4x7.jpg"
+    },
+    {
+      "brand": "SIGPRO (Shop Indoor Golf)",
+      "name": "SIGPRO Softy Hitting Strip",
+      "subtype": "strip",
+      "tier": "core",
+      "mention_count": 10,
+      "mention_sources": [
+        "https://onthegreen.golf/hitting-strips/",
+        "https://swingyard.com/sigpro-softy-hitting-strip-review-is-it-the-best-golf-simulator-turf/",
+        "https://homeperformancelab.com/best-hitting-mat-golf-simulator/",
+        "https://friendlygolfer.com/best-golf-hitting-mats/",
+        "https://golfstead.com/best-golf-mats-for-home",
+        "https://topshelfgolf.com/pages/the-complete-guide-to-golf-simulator-hitting-mats-2026-buyers-guide",
+        "https://mygaragegolf.com/blogs/buying-guides/sigpro-golf-mats-softy-lite-or-supersofty",
+        "https://hittingthegolfball.com/best-golf-hitting-mats/",
+        "https://www.youtube.com/shorts/koVV0Sr0nn4",
+        "https://www.yardstickgolf.com/golf-hitting-mats.html"
+      ],
+      "price": {
+        "amount": 249.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://shopindoorgolf.com/products/sigpro-softy-hitting-strip"
+      },
+      "direct_url": "https://shopindoorgolf.com/products/sigpro-softy-hitting-strip",
+      "fallback_url": "",
+      "read_url": "https://swingyard.com/sigpro-softy-hitting-strip-review-is-it-the-best-golf-simulator-turf/",
+      "specs": {
+        "size": "28 x 12 in",
+        "height_in": 2.5,
+        "weight_lb": 4,
+        "turf": "1 in thick Teeline turf",
+        "base": "super soft foam core over a thin responsive ABS polyurethane layer",
+        "tee": "real tee, any height",
+        "reviews": "4.8 from 111 reviews on the maker page"
+      },
+      "subscriptions": [],
+      "room_fit": "drop-in for a DIY turf floor; plan the cutout and a 2 in build-up so the strip sits flush",
+      "who_its_for": "the builder who already has stance turf and wants the Softy feel in a recessed strip, or the SIGPRO owner replacing a worn centre",
+      "pros": [
+        "the most recommended strip on the comparison charts",
+        "real tee",
+        "replaces the worn zone of a SIGPRO mat for $249.99"
+      ],
+      "cons": [
+        "2.5 in tall, taller than most DIY floors",
+        "no fallback retailer page; sold by the maker and marketplaces only"
+      ],
+      "known_issues": [
+        "sag in the middle reported by one marketplace buyer",
+        "early wear mark where the ball is always placed"
+      ],
+      "why_people_choose_it": "On The Green's chart calls it the strip it recommends most; builders pick it because it is soft without being mushy and still holds a wooden tee.",
+      "image_url": "https://shopindoorgolf.com/cdn/shop/files/softy-hitting-strip_4d4638a1-3bfb-4a02-8755-a802de383a4f.jpg"
+    },
+    {
+      "brand": "Fiberbuilt",
+      "name": "Fiberbuilt Grass Series Studio Golf Mat, Single Hitting, 7' x 4'",
+      "subtype": "insert-system",
+      "tier": "core",
+      "mention_count": 27,
+      "mention_sources": [
+        "https://friendlygolfer.com/fiberbuilt-grass-mat-review/",
+        "https://friendlygolfer.com/best-golf-hitting-mats/",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/387946-best-budget-sub-400-mat",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/183886-truestrike-or-fiberbuilt",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/375427-fiberbuilt-mats-grass-series-vs-preferred",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/338433-fiberbuilt-player-preferred-mats",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/337568-holy-grail-hitting-strip",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/320945-is-true-strike-still-most-forgiving-mat",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/385396-hitting-mat-vs-strip",
+        "https://forums.golfwrx.com/topic/1868657-best-mat-for-golfers-elbow/",
+        "https://forums.golfwrx.com/topic/1845163-fiberbuilt-vs-country-club-vs-trustrike-mats-for-home-simulator/",
+        "https://forums.golfwrx.com/topic/2011029-who-has-used-both-the-sigpro-softy-and-the-fiberbuilt-hitting-mat/",
+        "https://forums.golfwrx.com/topic/2076576-fiberbuilt-grass-vs-player-preferred/",
+        "https://slickdeals.net/f/17924430-537-21-fiberbuilt-golf-5-x4-hourglass-pro-studio-mat-kit-at-amazon",
+        "https://slickdeals.net/f/19037008-109-65-gosports-elite-golf-hitting-mats-for-indoor-outdoor-practice-5-x-4-15mm-at-amazon",
+        "https://homeperformancelab.com/best-hitting-mat-golf-simulator/",
+        "https://topshelfgolf.com/pages/the-complete-guide-to-golf-simulator-hitting-mats-2026-buyers-guide",
+        "https://hittingthegolfball.com/best-golf-hitting-mats/",
+        "https://golfergeeks.com/best-golf-mats/",
+        "https://golfersauthority.com/best-golf-hitting-mat/",
+        "https://breakingeighty.com/golf-hitting-mats",
+        "https://golfinsideruk.com/best-golf-simulator-mats/",
+        "https://www.carlofet.com/blog/best-golf-hitting-mats",
+        "https://onthegreen.golf/hitting-strips/",
+        "https://www.youtube.com/watch?v=CRayeCuEyfM",
+        "https://www.yardstickgolf.com/golf-hitting-mats.html",
+        "https://mygolfsim.net/guides/best-golf-hitting-mats"
+      ],
+      "price": {
+        "amount": 1249,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://fiberbuiltgolf.com/products/studio-mat-4-x-7-gs2"
+      },
+      "direct_url": "https://fiberbuiltgolf.com/products/studio-mat-4-x-7-gs2",
+      "fallback_url": "https://www.intheholegolf.com/FIB-T7R5X4KIT/Fiberbuilt-Grass-Series-Hourglass-Pro-Studio-Golf-Mat---Single-Hitting---5x4.html",
+      "read_url": "https://friendlygolfer.com/fiberbuilt-grass-mat-review/",
+      "specs": {
+        "size": "85 in wide x 49 in deep (7 x 4 ft nominal); 9 x 4 centre hitting $1,499; 10 x 4 double $1,949; Hourglass Pro 5 x 4 kit $849 sale / $1,049 MSRP at In The Hole Golf",
+        "height_in": 2,
+        "weight_lb": 141,
+        "turf": "Fiberbuilt Grass: long nylon bristle fibres in a 1 x 4 ft hitting panel; Precision Turf stance panels with 1 in foam under them",
+        "hitting_strip": "1 x 4 ft Fiberbuilt Grass panel, replaceable (12 x 35 in strip about $279 on comparison charts); Holy Grail and EZ Tee Hybrid strips are cut to drop into the same opening",
+        "base": "modular interlocking rubber base with a 2 ft spacer panel for a side launch monitor or ball tray",
+        "tee": "4 tee holes; ships with one 2.625 in rubber tee and one friction-fit holder for real tees; Adjustable Tee production temporarily discontinued per the maker page",
+        "guarantee": "300,000 shots on the Fiberbuilt Grass panel"
+      },
+      "subscriptions": [],
+      "room_fit": "49 in deep so it fits a 5 ft deep bay with room behind; at 141 lb it is the mat that goes down once and stays; 2 in tall so a radar unit needs a level run to the screen",
+      "who_its_for": "the golfer who hits a lot of balls and already has or fears elbow and wrist pain; the standard answer on GolfWRX and Golf Simulator Forum for joint relief",
+      "pros": [
+        "the consensus pick for injury prevention across forums and reviewers",
+        "300,000 shot guarantee and owners reporting 10,000+ shots with little wear",
+        "spacer panel gives a SkyTrak, GC3 or Launch Pro a level place to sit",
+        "replaceable panel, and third-party strips fit the opening"
+      ],
+      "cons": [
+        "bristles feel nothing like turf to many golfers; very little resistance on fat shots",
+        "chips and short shots feel like hitting off a tee",
+        "putting across the bristles is slow and grounding the putter is awkward",
+        "heavy and hard to blend into a flush floor"
+      ],
+      "known_issues": [
+        "GC2 users reported inconsistent reads on the Grass panel (forum thread 338433)",
+        "carry distances half a club shorter than other mats reported by one GolfWRX poster",
+        "a GolfWRX owner called it overpriced with poor customer service and a $600 quote to replace the hitting section",
+        "adjustable tees not currently in production"
+      ],
+      "why_people_choose_it": "Builders buy it after the first month of tendonitis. Friendly Golfer calls it the best option he tested for injury prevention and sends realism chasers elsewhere; the forums say the same thing in more words.",
+      "image_url": "https://fiberbuiltgolf.com/cdn/shop/files/preview_images/Fiberbuilt-Grass_7x4_Studio-Mat_DTL_1080x720_98129009-0b44-43e7-afd3-3fddc26005e8.jpg"
+    },
+    {
+      "brand": "Fiberbuilt",
+      "name": "Fiberbuilt Player Preferred Series Studio Golf Mat, Single Hitting, 7' x 4' and 8' x 4'",
+      "subtype": "launch-monitor-friendly",
+      "tier": "core",
+      "mention_count": 16,
+      "mention_sources": [
+        "https://friendlygolfer.com/fiberbuilt-player-preferred-review/",
+        "https://friendlygolfer.com/best-golf-hitting-mats/",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/338433-fiberbuilt-player-preferred-mats",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/375427-fiberbuilt-mats-grass-series-vs-preferred",
+        "https://forums.golfwrx.com/topic/2076576-fiberbuilt-grass-vs-player-preferred/",
+        "https://www.carlofet.com/blog/best-golf-hitting-mats",
+        "https://homeperformancelab.com/best-hitting-mat-golf-simulator/",
+        "https://topshelfgolf.com/pages/the-complete-guide-to-golf-simulator-hitting-mats-2026-buyers-guide",
+        "https://golferlogic.com/golf-simulator-mats/",
+        "https://breakingeighty.com/golf-hitting-mats",
+        "https://golfersauthority.com/best-golf-hitting-mat/",
+        "https://www.youtube.com/watch?v=CRayeCuEyfM",
+        "https://www.youtube.com/watch?v=ijrLcKTaOL0",
+        "https://mygolfsim.net/guides/best-golf-hitting-mats",
+        "https://www.yardstickgolf.com/golf-hitting-mats.html",
+        "https://golfinsideruk.com/best-golf-simulator-mats/"
+      ],
+      "price": {
+        "amount": 1299,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://fiberbuiltgolf.com/products/player-preferred-series-studio-golf-mat-single-hitting-7x4"
+      },
+      "direct_url": "https://fiberbuiltgolf.com/products/player-preferred-series-studio-golf-mat-single-hitting-7x4",
+      "fallback_url": "https://www.playbetter.com/products/fiberbuilt-player-preferred-series-studio-golf-simulator-hitting-mat",
+      "read_url": "https://friendlygolfer.com/fiberbuilt-player-preferred-review/",
+      "specs": {
+        "size": "7 x 4 at $1,299 (limited time, 85 x 49 x 1.75 in, 122 lb, 1 x 4 ft panel); 8 x 4 at $1,499 on fiberbuiltgolf.com ($1,399 at PlayBetter, 2 x 4 ft panel); 9 x 4 centre $1,599; 10 x 4 centre $1,699; 12 x 4 double $2,499",
+        "height_in": 1.75,
+        "weight_lb": 122,
+        "turf": "Pure Impact short turf over a Vibration Absorption Layer the maker says absorbs 94.7 percent of clubhead vibration; rubber-backed stance and spacer panels",
+        "hitting_strip": "1 x 4 ft (7 x 4) or 2 x 4 ft (8 x 4 and up) Pure Impact panel, replaceable and flippable",
+        "base": "modular rubber base pieces joined with rubber push pins",
+        "tee": "friction-fit tee holder takes real tees; tee holes do not sit on the centre line, so some owners use Birtees",
+        "guarantee": "manufacturer warranty via authorised dealer; no shot count stated on the page"
+      },
+      "subscriptions": [],
+      "room_fit": "1.75 in height lines up with 1 in foam tiles plus turf; the 2 x 4 ft panel on the 8 x 4 covers the full GCQuad and EYE XO hitting zones, which is why it is the overhead-camera builder's mat",
+      "who_its_for": "the better player with a permanent bay and a camera launch monitor who wants fat shots punished and clean strikes rewarded",
+      "pros": [
+        "most realistic turf interaction in Fiberbuilt's line and in several head-to-heads",
+        "Foresight GCQuad testing cited by Breaking Eighty as best replicating real turf",
+        "large hitting panel suits GCQuad, EYE XO and two-golfer households",
+        "heavy base does not move; thin rubber borders blend into a floor"
+      ],
+      "cons": [
+        "firm; fat shots bounce and carry about 30 yards (Friendly Golfer)",
+        "too firm for high handicappers and anyone with elbow or wrist history",
+        "$1,299 to $2,499",
+        "hard to move once built"
+      ],
+      "known_issues": [
+        "visible indent in the hitting area after under 5,000 shots for one owner; others saw none at 8 months",
+        "owners expect the hitting section to need replacing in 1 to 2 years of regular use",
+        "green marks on irons after several months",
+        "only about 12 x 18 in of the centre is true strip on some units; the rest is hard underneath"
+      ],
+      "why_people_choose_it": "Players who got bored of the Grass Series bristles move here. Friendly Golfer chose it over the Softy for his own bay because of the height and the 2 x 4 panel, and the GCQuad and EYE XO crowd follow the hitting zone.",
+      "image_url": "https://fiberbuiltgolf.com/cdn/shop/files/preview_images/PPS-Studio-Mat-Single-7x4_DTL-Wedge_2160x1620_6d215475-5090-4c0d-b4b1-d489856dca30.jpg"
+    },
+    {
+      "brand": "Fiberbuilt",
+      "name": "Fiberbuilt Grass Series Flight Deck and Practice Station",
+      "subtype": "practice-portable",
+      "tier": "core",
+      "mention_count": 11,
+      "mention_sources": [
+        "https://golfersauthority.com/best-golf-hitting-mat/",
+        "https://forum.mygolfspy.com/topic/58208-hitting-mat-simulating-rough/",
+        "https://kaizengolf.com.au/blogs/news/fiberbuilt-golf-mat-a-review",
+        "https://golfsimulatorstore.com/fiberbuilt-flightdeck-practicestation-golfmat-review/",
+        "https://swingsense.com/extensive-review-of-the-fibrebuilt-flightdeck-practicestation-golfmat/",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/387946-best-budget-sub-400-mat",
+        "https://breakingeighty.com/golf-hitting-mats",
+        "https://www.golfinfluence.com/gear/accessories/best-golf-mats/",
+        "https://rainorshinegolf.com/products/fiberbuilt-flight-deck-golf-mat-practice-station",
+        "https://shopindoorgolf.com/products/fiberbuilt-flight-deck-golf-mat",
+        "https://www.carlofet.com/blog/fiberbuilt-golf-mats-buyers-guide"
+      ],
+      "price": {
+        "amount": 99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://fiberbuiltgolf.com/products/flight-deck"
+      },
+      "direct_url": "https://fiberbuiltgolf.com/products/flight-deck",
+      "fallback_url": "https://rainorshinegolf.com/products/fiberbuilt-flight-deck-golf-mat-practice-station",
+      "read_url": "https://kaizengolf.com.au/blogs/news/fiberbuilt-golf-mat-a-review",
+      "specs": {
+        "size": "Flight Deck: 2 x 1 ft oval, $99 with adjustable tee. Practice Station: Flight Deck plus modular rubber stance base, 61 x 40 x 2 in, 69 lb, 4 alignment rods, $499 (fiberbuiltgolf.com and Rain or Shine)",
+        "height_in": 2,
+        "weight_lb": 69,
+        "turf": "the same Fiberbuilt Grass bristle turf as the studio mats",
+        "tee": "adjustable tee included (slides up and down for any club)",
+        "guarantee": "300,000 shots"
+      },
+      "subscriptions": [],
+      "room_fit": "the cheapest way to get the Fiberbuilt hitting surface; the 2 x 1 ft oval needs a stance mat at the same 2 in height or the ball sits about 5 cm above your feet",
+      "who_its_for": "the net-and-launch-monitor practiser, or the sub-$500 builder who wants joint protection first and a full mat later",
+      "pros": [
+        "$99 for the Fiberbuilt Grass surface with a 300,000 shot guarantee",
+        "Practice Station is a complete sub-$500 setup that converts to other uses",
+        "easy on joints; one MyGolfSpy forum owner reports two years of heavy use"
+      ],
+      "cons": [
+        "bristles are stiff and the oval sits high; alone it is not a level hitting surface",
+        "Flight Deck is often out of stock on Amazon",
+        "Practice Station footprint is 61 x 40 in, so it is a practice setup, not a bay mat"
+      ],
+      "known_issues": [
+        "ball sits about 5 cm above foot level without the stance mat (Kaizen Golf)"
+      ],
+      "why_people_choose_it": "It is the entry ticket to Fiberbuilt. Forum members point sub-$400 builders at a used Practice Station, and the oval shows up in garages next to a net and an R10.",
+      "image_url": "https://fiberbuiltgolf.com/cdn/shop/files/Flight-Deck_Hero_1080x720_bcc2c3c2-27b5-48c3-9acb-d56af11748a3.jpg"
+    },
+    {
+      "brand": "Carl's Place",
+      "name": "Carl's HotShot Golf Mat System",
+      "subtype": "insert-system",
+      "tier": "core",
+      "mention_count": 20,
+      "mention_sources": [
+        "https://golfergeeks.com/best-golf-mats/",
+        "https://wiscogolfaddict.com/2025/12/15/carls-place-hotshot-hitting-mats-review/",
+        "https://friendlygolfer.com/carls-place-hotshot-hitting-mat-review/",
+        "https://friendlygolfer.com/best-golf-hitting-mats/",
+        "https://www.independentgolfreviews.com/carls-hotshot-hitting-strips-review/",
+        "https://homeperformancelab.com/best-hitting-mat-golf-simulator/",
+        "https://topshelfgolf.com/pages/the-complete-guide-to-golf-simulator-hitting-mats-2026-buyers-guide",
+        "https://hittingthegolfball.com/best-golf-hitting-mats/",
+        "https://golfstead.com/best-golf-mats-for-home",
+        "https://breakingeighty.com/golf-hitting-mats",
+        "https://golferlogic.com/golf-simulator-mats/",
+        "https://onthegreen.golf/hitting-strips/",
+        "https://www.youtube.com/watch?v=vKv4gE-2dJ8",
+        "https://www.youtube.com/watch?v=ODnpjs8biKw",
+        "https://www.youtube.com/watch?v=DYGDCUTiqB4",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/398828-how-to-build-a-golf-simulator-carl-s-golf-enclosure-hotshot-golf-mat-review",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/375427-fiberbuilt-mats-grass-series-vs-preferred",
+        "https://www.yardstickgolf.com/golf-hitting-mats.html",
+        "https://mygolfsim.net/guides/best-golf-hitting-mats",
+        "https://golfsimulatorsdirect.com/products/carls-place-carls-hotshot-golf-hitting-mat"
+      ],
+      "price": {
+        "amount": 499.95,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://golfsimulatorsdirect.com/products/carls-place-carls-hotshot-golf-hitting-mat"
+      },
+      "direct_url": "https://shop.carlofet.com/carls-hotshot-golf-mat-system",
+      "fallback_url": "https://golfsimulatorsdirect.com/products/carls-place-carls-hotshot-golf-hitting-mat",
+      "read_url": "https://friendlygolfer.com/carls-place-hotshot-hitting-mat-review/",
+      "specs": {
+        "size": "4 x 5 offset ($499.95 standard, $649.95 foam, $699.95 gel); 5 x 8 offset ($765.90 / $915.90 / $965.90); 4 x 9 centre ($779.95 / $929.95 / $979.95); 6 x 10 centre ($1,059.95 / $1,209.95 / $1,259.95). Prices read at Golf Simulators Direct and matched by Top Shelf Golf; the Carl's page renders prices in-browser only",
+        "height_in": 1.75,
+        "turf": "soft, dense anti-fatigue fibre mat; ships rolled",
+        "hitting_strip": "30 x 12 x 1.75 in insert. Standard (same turf, three tee holes, real tees, about $80 alone), Foam Divot (softest, about $230), Gel Divot (most realistic, about $280); strips sold separately on the chart at onthegreen.golf",
+        "base": "optional EPDM rubber non-slip base in 1.75 in corner and side pieces (sold separately); mat slides on smooth floors without it",
+        "tee": "real tees only in the Standard insert; black HotShot indoor tees, driver and iron tees sold by Carl's, black so they do not interfere with launch monitor ball reads"
+      },
+      "subscriptions": [],
+      "room_fit": "4 ft deep sizes fit a 5 ft deep bay; 1.75 in sits a quarter inch above 1 in foam tiles plus turf, so plan the flush cut; Carl's sizes the room at 13 to 16 ft long for the 5 x 8 through 6 x 10",
+      "who_its_for": "the builder who wants to change the feel later without buying another mat, and anyone already buying a Carl's enclosure",
+      "pros": [
+        "three swappable inserts: foam for joints, gel for realism, standard for real tees",
+        "Golfer Geeks 2026 Editor's Pick; Friendly Golfer calls the gel the best-feeling mat he has used",
+        "cheapest of the premium mats at $499.95 for a 4 x 5",
+        "ships rolled, so it is the easiest premium mat to store or move"
+      ],
+      "cons": [
+        "base is extra and nearly doubles the cost (Golfer Geeks)",
+        "foam and gel inserts do not take a real tee; many owners switch to cone tees",
+        "standard insert's three tee holes swallow balls on irons",
+        "slides on smooth floors without the base"
+      ],
+      "known_issues": [
+        "one Golf Simulators Direct buyer wore a hole through a 4 x 5 in 3 to 4 months and found support dismissive",
+        "standard insert turf shreds noticeably after limited use (Friendly Golfer)",
+        "gel insert may aggravate existing elbow or wrist injuries; reviewers steer injured golfers to foam",
+        "older compressed mats leave gel and foam inserts sitting proud of the turf"
+      ],
+      "why_people_choose_it": "It is the mat you can tune. Builders buy the standard, discover they want softer or firmer, and swap a $230 insert instead of a $1,000 mat. The YouTube reviews are mostly about which insert, not whether.",
+      "image_url": "https://shop.carlofet.com/media/catalog/product/cache/6edf21fe715e48c4b037b8bb42a53918/h/o/hotshot-mats-stacked-flat-dims-logo-no5x7.jpg"
+    },
+    {
+      "brand": "Real Feel Golf Mats",
+      "name": "Country Club Elite (CCE) Real Feel Golf Mat",
+      "subtype": "full-stance",
+      "tier": "core",
+      "mention_count": 22,
+      "mention_sources": [
+        "https://www.thehackersparadise.com/forum/index.php?threads/real-feel-country-club-elite-golf-mat-review.51713/",
+        "https://golfsimulatorforum.com/forum/skytrak/120205-best-hitting-mat-for-skytrak-to-reduce-wrist-impact-and-feel-like-real-turf",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/183886-truestrike-or-fiberbuilt",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/385396-hitting-mat-vs-strip",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/320945-is-true-strike-still-most-forgiving-mat",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/276488-swingturf",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/387986-bullseye-hitting-strip",
+        "https://forums.golfwrx.com/topic/1845163-fiberbuilt-vs-country-club-vs-trustrike-mats-for-home-simulator/",
+        "https://forums.golfwrx.com/topic/1868657-best-mat-for-golfers-elbow/",
+        "https://www.carlofet.com/blog/best-golf-hitting-mats",
+        "https://golfergeeks.com/best-golf-mats/",
+        "https://golfinsideruk.com/best-golf-simulator-mats/",
+        "https://hittingthegolfball.com/best-golf-hitting-mats/",
+        "https://topshelfgolf.com/pages/the-complete-guide-to-golf-simulator-hitting-mats-2026-buyers-guide",
+        "https://golferlogic.com/golf-simulator-mats/",
+        "https://breakingeighty.com/golf-hitting-mats",
+        "https://www.golfinfluence.com/gear/accessories/best-golf-mats/",
+        "https://friendlygolfer.com/best-golf-hitting-mats/",
+        "https://www.yardstickgolf.com/golf-hitting-mats.html",
+        "https://swingsense.com/extensive-review-of-the-fibrebuilt-flightdeck-practicestation-golfmat/",
+        "https://www.par2pro.com/products/real-feel-country-club-elite-hitting-strip-usa",
+        "https://www.thenetreturn.com/products/country-club-t-turf-reel-feel-2x3-thick-tee"
+      ],
+      "price": {
+        "amount": 479,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://rainorshinegolf.com/products/country-club-elite-real-feel-golf-mat"
+      },
+      "direct_url": "https://www.realfeelgolfmats.com/",
+      "fallback_url": "https://rainorshinegolf.com/products/country-club-elite-real-feel-golf-mat",
+      "read_url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/183886-truestrike-or-fiberbuilt",
+      "specs": {
+        "size": "4 x 5 at $479; 5 x 5 about $599; 5 x 8 $959; 5 x 10 $1,199 (Rain or Shine configurator; Top Shelf lists the same)",
+        "height_in": 1.75,
+        "turf": "Long Dense Fiber System: tall, dense nylon fibres that hold a real wooden tee anywhere and slow a fat shot the way turf does",
+        "hitting_strip": "none; one-piece fixed turf, no inserts (a 10 x 30 in CCE hitting strip exists separately, about $73 at Walmart per search snippet)",
+        "base": "one piece, no assembly, sits directly on concrete; can live outdoors (a Phoenix owner leaves one outside most of the year)",
+        "tee": "real wooden tee anywhere",
+        "reviews": "4.8 from 133 reviews at Rain or Shine"
+      },
+      "subscriptions": [],
+      "room_fit": "5 ft deep sizes fill a 5 ft deep bay edge to edge; 4 x 5 is the smallest size recommended for a driver; Rain or Shine says the hitting zone aligns with standard portable and overhead launch monitor fields but to confirm overhead units first",
+      "who_its_for": "sweepers and range-mat lovers who want one firm, honest surface with a real tee and no assembly; the Golfer Geeks bargain pick at about a third of premium prices",
+      "pros": [
+        "takes a real tee anywhere, no inserts, no assembly",
+        "slows fat shots noticeably, so feedback is honest",
+        "durable indoors or out; 133 retailer reviews at 4.8",
+        "cheapest route to a 5 x 10 full-stance mat"
+      ],
+      "cons": [
+        "Carl's rates comfort 2 of 5: firm, range-style, harsh on joints",
+        "nearly every GolfWRX and forum member who moved to Fiberbuilt or TrueStrike left a CCE because it hurt",
+        "Yardstick's Reddit survey scored it below average on feel and shock absorption",
+        "no replaceable strip; the centre wears as one piece"
+      ],
+      "known_issues": [
+        "wrist, elbow, hand and back pain reported across multiple forum threads, especially for steep divot-takers",
+        "Friendly Golfer says he has heard of many injuries from the CCE and will not review it",
+        "the only in-depth hands-on review is a 2013 Hackers Paradise post"
+      ],
+      "why_people_choose_it": "It is the mat people buy first because it looks and tees like a range mat and costs half as much. The forums are full of the second purchase.",
+      "image_url": ""
+    },
+    {
+      "brand": "TrueStrike",
+      "name": "TrueStrike Academy (and Single) Golf Mat",
+      "subtype": "full-stance",
+      "tier": "core",
+      "mention_count": 16,
+      "mention_sources": [
+        "https://pluggedingolf.com/truestrike-golf-mat-review/",
+        "https://friendlygolfer.com/truestrike-golf-mat-review/",
+        "https://friendlygolfer.com/best-golf-hitting-mats/",
+        "https://www.carlofet.com/blog/best-golf-hitting-mats",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/183886-truestrike-or-fiberbuilt",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/320945-is-true-strike-still-most-forgiving-mat",
+        "https://golfsimulatorforum.com/forum/skytrak/120205-best-hitting-mat-for-skytrak-to-reduce-wrist-impact-and-feel-like-real-turf",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/338433-fiberbuilt-player-preferred-mats",
+        "https://forums.golfwrx.com/topic/1845163-fiberbuilt-vs-country-club-vs-trustrike-mats-for-home-simulator/",
+        "https://golferlogic.com/golf-simulator-mats/",
+        "https://golfergeeks.com/best-golf-mats/",
+        "https://golfinsideruk.com/best-golf-simulator-mats/",
+        "https://hittingthegolfball.com/best-golf-hitting-mats/",
+        "https://breakingeighty.com/golf-hitting-mats",
+        "https://golfersauthority.com/best-golf-hitting-mat/",
+        "https://www.yardstickgolf.com/golf-hitting-mats.html"
+      ],
+      "price": {
+        "amount": 1248,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://shopindoorgolf.com/products/truestrike-academy-golf-mat"
+      },
+      "direct_url": "https://truestrike.com/products/academy-golf-mat",
+      "fallback_url": "https://shopindoorgolf.com/products/truestrike-academy-golf-mat",
+      "read_url": "https://pluggedingolf.com/truestrike-golf-mat-review/",
+      "specs": {
+        "size": "Academy 52 x 80 in (about 4.3 x 6.7 ft), 2 3/8 in tall, 134 lb, $1,248 at Shop Indoor Golf (out of stock, no ship date) and £665 direct from truestrike.com (UK); Single $1,098 at Rain or Shine (backordered, 16 reviews 4.6); Hitting The Golf Ball lists the Single at 112 lb",
+        "height_in": 2.375,
+        "weight_lb": 134,
+        "turf": "ruckable nylon strike surface over a gel-filled divot subsurface (gel bag, strike surface, strike surround) on a silicone base",
+        "hitting_strip": "modular gel section, replaceable; maker claims 55,000 strikes before replacement; strike surface about $55 to $99 and gel plus surface about $385 in older threads",
+        "base": "interlocking plastic teeth and trim pieces; tool-free but fiddly and leaves seams",
+        "tee": "tee receiver with 25 long and 25 short tees; any tee height"
+      },
+      "subscriptions": [],
+      "room_fit": "Single is too small to hold a side camera unit (Friendly Golfer could not swing a driver with a GCQuad on it); Academy's centre hitting position suits a bay; 2 3/8 in tall; the raised edge trim makes putting across it awkward",
+      "who_its_for": "the golfer who wants the softest realistic strike and will tolerate a heavy modular kit, often a commercial or coaching bay",
+      "pros": [
+        "gel strike section is one of the kindest surfaces on joints (Carl's comfort 4 of 5, GolferLogic top forgiveness pick)",
+        "any tee height",
+        "modular parts replace individually",
+        "Golf Insider best outdoor mat"
+      ],
+      "cons": [
+        "expensive, heavy, and annoying to assemble flat",
+        "Friendly Golfer found it disappointing: plastic feel and sound, seams, round trim that fights flush flooring",
+        "US stock is thin: Shop Indoor Golf out of stock, Rain or Shine backordered on 2026-10-19",
+        "tee receiver holes may fall outside a launch monitor hitting zone"
+      ],
+      "known_issues": [
+        "a US seller stopped selling individual pieces for a period (forum, 2021), leaving owners unable to replace only the gel section",
+        "turf tearing and divots after three months with a SkyTrak reported in Plugged In Golf comments",
+        "wears faster than Fiberbuilt in commercial use per forum members"
+      ],
+      "why_people_choose_it": "The 2019 Golf Simulator Forum thread is still the reference: TrueStrike owners say soft on wrists and elbows, Fiberbuilt owners say forgiving, and both groups left a CCE. People choose it for the gel.",
+      "image_url": "https://truestrike.com/cdn/shop/files/academy-2.jpg"
+    },
+    {
+      "brand": "SwingTurf (Rain or Shine Golf)",
+      "name": "SwingTurf Golf Hitting Mat",
+      "subtype": "full-stance",
+      "tier": "core",
+      "mention_count": 13,
+      "mention_sources": [
+        "https://forums.golfwrx.com/topic/2054561-swingturf-golf-mat/",
+        "https://golfinsideruk.com/best-golf-simulator-mats/",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/276488-swingturf",
+        "https://golfstead.com/best-golf-mats-for-home",
+        "https://www.clubupgolf.com/swingturf-golf-mat-review/",
+        "https://mygaragegolf.com/blogs/buying-guides/garage-golfs-top-5-best-golf-mats",
+        "https://homeperformancelab.com/best-hitting-mat-golf-simulator/",
+        "https://thegolfbandit.com/swingturf-golf-mat-review/",
+        "https://hittingthegolfball.com/best-golf-hitting-mats/",
+        "https://breakingeighty.com/golf-hitting-mats",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/320945-is-true-strike-still-most-forgiving-mat",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/387946-best-budget-sub-400-mat",
+        "https://mygolfspy.com/buyers-guide/best-golf-mats/"
+      ],
+      "price": {
+        "amount": 399,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://rainorshinegolf.com/products/swingturf-golf-mat"
+      },
+      "direct_url": "https://rainorshinegolf.com/products/swingturf-golf-mat",
+      "fallback_url": "",
+      "read_url": "https://www.clubupgolf.com/swingturf-golf-mat-review/",
+      "specs": {
+        "size": "4 x 4 $399 (32 lb); 5 x 5 $549 (45 lb); 4 x 7 $749 (53 lb); 4 x 9 $849 (63 lb); larger sizes derived from the configurator add-ons",
+        "height_in": 1.7,
+        "weight_lb": 45,
+        "turf": "1 in pile nylon fibre system over 5/8 in high-density foam",
+        "hitting_strip": "none built in; a separate SwingTurf Hitting Strip is now sold",
+        "base": "foam backing; can shift on bare concrete without an underlay",
+        "tee": "real wooden tee anywhere; some owners trim tees to height",
+        "warranty": "3 years, extendable to lifetime for $89",
+        "reviews": "4.8 from 282 reviews at Rain or Shine"
+      },
+      "subscriptions": [],
+      "room_fit": "1.7 in is low enough to run flush over 1 in foam tiles; 4 x 7 and 4 x 9 fit a 5 ft deep bay; the Bushnell Launch Pro bundles use the 5 x 5 or 4 x 9",
+      "who_its_for": "the 1 to 3 sessions a week builder who wants a real-tee mat under $600 with a warranty; MyGolfSpy's 2023 Best Overall",
+      "pros": [
+        "MyGolfSpy 2023 Best Overall and Golf Insider's top simulator mat",
+        "real tees, 3-year warranty, 282 reviews at 4.8",
+        "Club Up Golf's reviewer says his elbow issues went away on it",
+        "mid-price for a full-stance mat"
+      ],
+      "cons": [
+        "firmer than the Softy; some forum members wanted more cushion",
+        "heavy daily hitters may wear through the strike zone in 12 to 18 months",
+        "no replaceable strip in the mat itself",
+        "swingturf.com is a parked domain; the brand lives only on rainorshinegolf.com"
+      ],
+      "known_issues": [
+        "base shifts slightly on bare concrete without a non-slip underlay (Home Performance Lab)",
+        "less joint protection than Fiberbuilt or the Softy (Garage Golf)"
+      ],
+      "why_people_choose_it": "Rain or Shine built it as the middle ground between a CCE and a Fiberbuilt, and the forum thread where the co-owner asked for size suggestions is still how people describe it: less fluffy than Fiberbuilt, less hard than CCE.",
+      "image_url": "https://rainorshinegolf.com/cdn/shop/files/swingturf_fairway_feel.jpg"
+    },
+    {
+      "brand": "GungHo Golf",
+      "name": "Holy Grail Hitting Strip V2",
+      "subtype": "strip",
+      "tier": "core",
+      "mention_count": 15,
+      "mention_sources": [
+        "https://friendlygolfer.com/holy-grail-hitting-strip-review/",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/337568-holy-grail-hitting-strip",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/374916-holy-grail-hitting-mat",
+        "https://swingyard.com/holy-grail-hitting-strip-review/",
+        "https://onthegreen.golf/hitting-strips/",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/385396-hitting-mat-vs-strip",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/387946-best-budget-sub-400-mat",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/339859-best-golf-matt",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/338433-fiberbuilt-player-preferred-mats",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/387986-bullseye-hitting-strip",
+        "https://slickdeals.net/f/17924430-537-21-fiberbuilt-golf-5-x4-hourglass-pro-studio-mat-kit-at-amazon",
+        "https://homeperformancelab.com/best-hitting-mat-golf-simulator/",
+        "https://hittingthegolfball.com/best-golf-hitting-mats/",
+        "https://friendlygolfer.com/best-golf-hitting-mats/",
+        "https://www.yardstickgolf.com/golf-hitting-mats.html"
+      ],
+      "price": {
+        "amount": 179.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://gunghogolf.com/products/holy-grail-hitting-strip-12x30"
+      },
+      "direct_url": "https://gunghogolf.com/products/holy-grail-hitting-strip-12x30",
+      "fallback_url": "",
+      "read_url": "https://swingyard.com/holy-grail-hitting-strip-review/",
+      "specs": {
+        "size": "12 x 30 in at $179.99; 12 x 35 and 12 x 46.5 in (Fiberbuilt opening sizes) and custom sizes cost more; full Holy Grail mats $749.99 and $999.99 per Hitting The Golf Ball",
+        "height_in": 1.375,
+        "turf": "GrassTex Money Putt 100 percent nylon putting-style turf (stimps about 11), 3/8 in",
+        "hitting_strip": "five foam support layers (up from three in V1) under a black polycarbonate layer; designed to sit in putting turf raised on a 1 in Foamular or EVA sublayer",
+        "base": "none; velcro it down (2 in full-width velcro front and back on earlier versions)",
+        "tee": "no real tees; K2 or standard sim tees",
+        "warranty": "12 months residential; full refund if not satisfied"
+      },
+      "subscriptions": [],
+      "room_fit": "1 3/8 in total matches a 1 in foam sublayer plus putting turf, which is why DIY flush-floor builders like it; cut the opening to 12.25 x 30 in",
+      "who_its_for": "the DIY floor builder, and the Fiberbuilt owner who wants a quieter, softer, putt-true replacement for the bristle panel",
+      "pros": [
+        "drop-in replacement for the Fiberbuilt panel",
+        "soft and quiet; Swing Yard says the wrist and elbow protection is real",
+        "ball rolls true for putting",
+        "$179.99"
+      ],
+      "cons": [
+        "no real tees",
+        "thin construction lets the ball shift if you ground the club firmly",
+        "must be velcroed down or the corners peel"
+      ],
+      "known_issues": [
+        "waves and turf separating from the backing within a few months for one forum owner (replaced under warranty)",
+        "low spots and grooves forming in the middle reported by several members in the 2022 to 2023 thread; others report no wear after a year of heavy use",
+        "corners peeling after a month when not velcroed (Swing Yard)"
+      ],
+      "why_people_choose_it": "It was built by a forum member for forum members, and the 6-page 2021 thread is the proof. Builders choose it to get the Fiberbuilt opening without the Fiberbuilt bristles.",
+      "image_url": "https://gunghogolf.com/cdn/shop/files/Untitleddesign_1.png"
+    },
+    {
+      "brand": "SimTurf (Synthetic Turf International)",
+      "name": "EZ Tee Hybrid Hitting Strip and Mat",
+      "subtype": "strip",
+      "tier": "core",
+      "mention_count": 13,
+      "mention_sources": [
+        "https://friendlygolfer.com/ez-tee-hybrid-review/",
+        "https://golfsimulatordepot.com/blogs/learn-golf-better/ez-hybrid-tee-hitting-mat",
+        "https://www.carlofet.com/blog/best-golf-hitting-mats",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/401252-hitting-mat-suggestions",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/387946-best-budget-sub-400-mat",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/320945-is-true-strike-still-most-forgiving-mat",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/276488-swingturf",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/387986-bullseye-hitting-strip",
+        "https://onthegreen.golf/hitting-strips/",
+        "https://hittingthegolfball.com/best-golf-hitting-mats/",
+        "https://www.yardstickgolf.com/golf-hitting-mats.html",
+        "https://topshelfgolf.com/blogs/golf/uneekor-launch-monitors-compared",
+        "https://grandgoldman.com/blogs/golf/best-hitting-strip-for-simulator"
+      ],
+      "price": {
+        "amount": 85,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://simturf.com/products/ez-tee-hybrid"
+      },
+      "direct_url": "https://simturf.com/products/ez-tee-hybrid",
+      "fallback_url": "https://golfsimulatordepot.com/blogs/learn-golf-better/ez-hybrid-tee-hitting-mat",
+      "read_url": "https://friendlygolfer.com/ez-tee-hybrid-review/",
+      "specs": {
+        "size": "33 sizes from 12 x 30 in strips to 12 x 6 ft; $75 to $1,165, $85 for the selected default; 12 x 46.5 in is the Fiberbuilt-opening cut; 5 x 5 about $425 per Yardstick",
+        "height_in": 1.125,
+        "turf": "1 1/4 in pile polypropylene and nylon blend, non-infilled, 120 oz per sq yd, woven polypropylene backing with ArmorLoc 3L; just turf, no foam (Friendly Golfer)",
+        "hitting_strip": "the turf itself; cut to any size; a 2 in MegaMat ($590) is the foam-backed full mat",
+        "base": "none; velcro or glue down; measures 1 1/8 in installed (Friendly Golfer) versus 1.75 in quoted by Golf Simulator Depot",
+        "tee": "real tee, any club",
+        "origin": "made in USA"
+      },
+      "subscriptions": [],
+      "room_fit": "the lowest-profile real-tee option at 1 1/8 in, which is why a 9 ft 6 in ceiling, concrete-floor builder picked it; Uneekor ships it in the EYE XO SIMKIT",
+      "who_its_for": "the DIY floor builder on a budget who wants a real tee and the longest fibre feel, and will add his own foam if he needs cushion",
+      "pros": [
+        "cheapest qualified real-tee strip; made in USA",
+        "33 sizes including the Fiberbuilt cut",
+        "forum members report no wrist or elbow issues on concrete at 1 1/8 in",
+        "long fibres give a realistic, turf-like strike"
+      ],
+      "cons": [
+        "no foam at all; Friendly Golfer would not recommend it alone to anyone worried about injury",
+        "a touch too grabby for steep swings",
+        "needs gluing or velcro; sheds fibre debris at first",
+        "Carl's notes no rubber tee receivers"
+      ],
+      "known_issues": [
+        "forearm and elbow complaints from some buyers (Golf Simulator Forum budget thread flagged it; a competitor quotes a customer with the same)",
+        "sources disagree on construction: turf-only versus part foam"
+      ],
+      "why_people_choose_it": "Grand Goldman's line is accurate: any time someone asks for a strip on the forums, EZ Tee Hybrid gets mentioned. It is cheap, it tees, and it fits the Fiberbuilt hole.",
+      "image_url": "https://simturf.com/cdn/shop/files/ezhybrid.png"
+    },
+    {
+      "brand": "Tartan Turf",
+      "name": "Bullseye Hitting Strip (and Champion 5x5 mat)",
+      "subtype": "strip",
+      "tier": "qualified",
+      "mention_count": 6,
+      "mention_sources": [
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/387986-bullseye-hitting-strip",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/387946-best-budget-sub-400-mat",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/385396-hitting-mat-vs-strip",
+        "https://forums.golfwrx.com/topic/1931674-tartan-turf-champion-mat-bullseye-hitting-strip/",
+        "https://homeperformancelab.com/best-hitting-mat-golf-simulator/",
+        "https://www.yardstickgolf.com/golf-hitting-mats.html"
+      ],
+      "price": {
+        "amount": 450,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/387946-best-budget-sub-400-mat"
+      },
+      "direct_url": "https://tartanturf.com/",
+      "fallback_url": "",
+      "read_url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/387986-bullseye-hitting-strip",
+      "specs": {
+        "size": "12 x 24, 12 x 46.5 in strips (about $140 USD, $189 CAD, for the 46.5 in from a Canadian dealer in 2023) and a 5 x 5 Champion mat with Bullseye strip ($450 direct in 2023; Yardstick lists $850 for a 5 x 5 in 2026)",
+        "turf": "bright green turf that takes a real tee and putts well; softer than EZ Tee, less fluffy than Fiberbuilt; the Bullseye 3D version is praised for divot feel",
+        "base": "Montreal-made by a driving-range mat maker; sold through local dealers; no US product page found",
+        "tee": "real tee"
+      },
+      "subscriptions": [],
+      "room_fit": "12 x 46.5 in fits the Fiberbuilt opening and sits slightly lower; the 5 x 5 Champion is a bit soft underfoot as a stance mat",
+      "who_its_for": "the Canadian or northern US builder with a local Tartan dealer, who wants real-tee divot feel cheaper than EZ Tee",
+      "pros": [
+        "real tee and realistic fat-shot feedback",
+        "forum owners report no joint pain at 500 shots a day",
+        "cheaper than EZ Tee through a local dealer",
+        "Yardstick's Reddit survey gave it the top realistic-feel score"
+      ],
+      "cons": [
+        "bright green colour is the most common complaint",
+        "no retail web presence; prices are forum quotes, not a verified page",
+        "thin evidence base: one 2023 forum thread and one GolfWRX thread"
+      ],
+      "known_issues": [
+        "a GC3 detected only about half of shots on the bright Bullseye strip versus near-perfect on a solid olive mat (forum member TWB212, no fix posted)"
+      ],
+      "why_people_choose_it": "A sub-$400 builder on the forum bought the 5 x 5 at $450 and wrote back: it's perfect. Divot feel with a real tee for less than the big names, if you can find a dealer.",
+      "image_url": ""
+    },
+    {
+      "brand": "Rukket Sports",
+      "name": "Rukket Tri-Turf Golf Hitting Mat (and Tri-Turf XL)",
+      "subtype": "practice-portable",
+      "tier": "qualified",
+      "mention_count": 6,
+      "mention_sources": [
+        "https://forum.mygolfspy.com/topic/37909-rukket-sports-haack-golf-net-and-tri-turf-mat/",
+        "https://mygolfspy.com/buyers-guides/golf-accessories/2022-golf-hitting-mat-buyers-guide/",
+        "https://www.golfinfluence.com/gear/accessories/best-golf-mats/",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/387946-best-budget-sub-400-mat",
+        "https://hittingthegolfball.com/best-golf-hitting-mats/",
+        "https://www.walmart.com/ip/Rukket-Tri-Turf-Golf-Hitting-Mat-Attack-Portable-Driving-Chipping-Training-Aids-for-Backyard-with-Adjustable-Tees-and-Foam-Practice-Balls/17384155499"
+      ],
+      "price": {
+        "amount": 134.62,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.walmart.com/ip/Rukket-Tri-Turf-Golf-Hitting-Mat-Attack-Portable-Driving-Chipping-Training-Aids-for-Backyard-with-Adjustable-Tees-and-Foam-Practice-Balls/17384155499"
+      },
+      "direct_url": "",
+      "fallback_url": "https://www.amazon.com/dp/B07NH4CH3M",
+      "read_url": "https://www.golfinfluence.com/gear/accessories/best-golf-mats/",
+      "specs": {
+        "size": "standard 25 x 16 in (40 x 62 cm) with 16 mm fairway, 35 mm rough and 35 mm tee turf over a 2 mm rubber base; XL 36 x 24 in with a thicker base; Attack bundle adds tees and foam balls",
+        "turf": "three zones: fairway, rough, tee box",
+        "base": "thin rubber; the standard size slides, the XL is more stable",
+        "tee": "adjustable rubber tees",
+        "note": "rukket.com returned 404 on 2026-10-19 and the Amazon page blocks scripted price reads; Walmart price recorded instead. Lifetime guarantee claimed by Golf Influence."
+      },
+      "subscriptions": [],
+      "room_fit": "a net-and-backyard practice mat, not a simulator mat; you need a separate stance mat and it slid during use in one forum setup",
+      "who_its_for": "the backyard net owner who wants rough and fairway lies for chipping practice",
+      "pros": [
+        "fairway zone feels lush and realistic (MyGolfSpy)",
+        "rough zone sticks into the grain like real rough",
+        "portable and cheap"
+      ],
+      "cons": [
+        "too small and too thin for a simulator bay",
+        "rough grabs and the mat moves (MyGolfSpy 2022)",
+        "strips are narrow (Golf Influence)"
+      ],
+      "known_issues": [
+        "slides under full swings unless weighted or on the XL base"
+      ],
+      "why_people_choose_it": "It is the mat in the Rukket net bundle, so it ends up in thousands of garages by default. MyGolfSpy leans XL over regular because size keeps it from sliding.",
+      "image_url": ""
+    },
+    {
+      "brand": "Champkey",
+      "name": "Champkey Premium Synthetic Turf Golf Hitting Mat",
+      "subtype": "practice-portable",
+      "tier": "qualified",
+      "mention_count": 7,
+      "mention_sources": [
+        "https://www.golfmonthly.com/reviews/accessories/champkey-golf-mat",
+        "https://www.golfmonthly.com/best-golf-deals/best-golf-mat-213474",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/350589-champkey-golf-mat-for-impact-location-and-path",
+        "https://www.si.com/golf/best-golf-practice-mats-2025",
+        "https://www.golfinfluence.com/gear/accessories/best-golf-mats/",
+        "https://golfersauthority.com/best-golf-hitting-mat/",
+        "https://www.amazon.com/dp/B083WLLXZ3"
+      ],
+      "price": {
+        "amount": 29.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.amazon.com/dp/B083WLLXZ3"
+      },
+      "direct_url": "",
+      "fallback_url": "https://www.amazon.com/dp/B083WLLXZ3",
+      "read_url": "https://www.golfmonthly.com/reviews/accessories/champkey-golf-mat",
+      "specs": {
+        "size": "13 x 17 in base size ($29.99 on Amazon, 4.3 stars from 3,086 ratings); 18 x 26 in and 16 x 25 in sizes about $60 (SI); 5 x 4 ft versions exist on Amazon under other Champkey listings",
+        "turf": "three-layer synthetic turf with 16 mm surface over a heavy rubber base",
+        "base": "thick rubber; stays put in a basement per reviewers",
+        "tee": "rubber tee plus 9 plastic tees",
+        "note": "champkey.com returned an empty page; the only maker presence found is the Amazon storefront"
+      },
+      "subscriptions": [],
+      "room_fit": "a net mat; the standard size is too small for a stance and the impact-feedback model is a diagnostic, not a hitting surface",
+      "who_its_for": "the backyard net golfer on a $30 to $60 budget, or someone who wants an impact-marking mat for a few swings per session",
+      "pros": [
+        "Golf Monthly 4.5 stars: well built and good value",
+        "heavy base does not lift during strikes",
+        "3,000+ Amazon ratings"
+      ],
+      "cons": [
+        "compact size is too small for many golfers (Golf Monthly)",
+        "no simulator reviewer ranks it for a bay",
+        "the impact-feedback model ripped in under 100 hits for one forum member"
+      ],
+      "known_issues": [
+        "Golf Simulator Forum members doubt the thin fibres last; one called the impact mat a waste of money"
+      ],
+      "why_people_choose_it": "It is the Amazon default under $40 with thousands of ratings, and the Golf Monthly review gives it cover. Nobody on the simulator forums chooses it for a bay.",
+      "image_url": ""
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://friendlygolfer.com/best-golf-hitting-mats/",
+      "type": "review",
+      "title": "Best Golf Hitting Mats for Home Simulators and Practice (Friendly Golfer)",
+      "date": "2026-01-29",
+      "what_it_says": "Tested roundup: Softy best all-around, Player Preferred for good golfers, Grass for injury prevention, HotShot gel best feel, Holy Grail very soft, EZ Tee grabby, TrueStrike disappointing; author got tennis elbow 30 days into mat golf.",
+      "verified": true
+    },
+    {
+      "url": "https://friendlygolfer.com/sigpro-softy-golf-mat-review/",
+      "type": "review",
+      "title": "SIGPRO Softy Golf Mat Review (Friendly Golfer)",
+      "date": "2023-06-19",
+      "what_it_says": "4 x 7 tested: 2.5 in tall, 1 in turf, 12 x 28 strip; wear mark after one GSPro round; strip smaller than a GCQuad zone; author chose Player Preferred for his bay.",
+      "verified": true
+    },
+    {
+      "url": "https://mygolfspy.com/we-tried-it/sigpro-softy-golf-hitting-mat-review/",
+      "type": "review",
+      "title": "SIGPRO Softy Golf Hitting Mat Review (MyGolfSpy We Tried It)",
+      "date": "",
+      "what_it_says": "Stable platform with give; too soft for one tester; 2 3/8 in height flagged for low ceilings; price the main complaint. (403 to WebFetch; snippet only.)",
+      "verified": true
+    },
+    {
+      "url": "https://friendlygolfer.com/fiberbuilt-grass-mat-review/",
+      "type": "review",
+      "title": "Fiberbuilt Grass Series Hitting Mat Review (Friendly Golfer)",
+      "date": "2023-06-19",
+      "what_it_says": "Nine months on a 5 x 4: best option tested for injury prevention, realism only acceptable, slight wear, putting awkward, 2 in height complicates radar units.",
+      "verified": true
+    },
+    {
+      "url": "https://friendlygolfer.com/fiberbuilt-player-preferred-review/",
+      "type": "review",
+      "title": "Fiberbuilt Player Preferred Mat Review (Friendly Golfer)",
+      "date": "2024-02-20",
+      "what_it_says": "Firm, very realistic, fat shots bounce 30 yards, 2 x 4 panel covers the GCQuad zone, Facebook owners report 1 to 2 year section life.",
+      "verified": true
+    },
+    {
+      "url": "https://friendlygolfer.com/carls-place-hotshot-hitting-mat-review/",
+      "type": "review",
+      "title": "Carl's Place HotShot Hitting Mat Review: Standard vs Foam vs Gel (Friendly Golfer)",
+      "date": "2026-08-14",
+      "what_it_says": "1.75 in measured; foam is the clear winner for most golfers and the safe choice for elbows; gel most realistic; standard turf shreds early.",
+      "verified": true
+    },
+    {
+      "url": "https://wiscogolfaddict.com/2025/12/15/carls-place-hotshot-hitting-mats-review/",
+      "type": "review",
+      "title": "Carl's Place HotShot Hitting Mats Review: Durability Tested (Wisco Golf Addict)",
+      "date": "2025-12-15",
+      "what_it_says": "4 x 9 after a month of heavy use shows no real wear; gel most responsive; heavy to move alone.",
+      "verified": true
+    },
+    {
+      "url": "https://www.independentgolfreviews.com/carls-hotshot-hitting-strips-review/",
+      "type": "review",
+      "title": "Carl's HotShot Hitting Strips Review (Independent Golf Reviews)",
+      "date": "2026-10-05",
+      "what_it_says": "Gel for irons, foam softest on joints, standard for drivers and real tees; 4 of 5.",
+      "verified": true
+    },
+    {
+      "url": "https://pluggedingolf.com/truestrike-golf-mat-review/",
+      "type": "review",
+      "title": "TrueStrike Golf Mat Review (Plugged In Golf)",
+      "date": "2020-01-26",
+      "what_it_says": "Gel strike area, 55,000 strike claim, any tee height, strongly recommended; comments report turf tearing at three months with a SkyTrak.",
+      "verified": true
+    },
+    {
+      "url": "https://friendlygolfer.com/truestrike-golf-mat-review/",
+      "type": "review",
+      "title": "My TrueStrike Golf Mat Review (Friendly Golfer)",
+      "date": "2023-06-14",
+      "what_it_says": "Disappointing: plastic feel and sound, seams, single too small for a GCQuad.",
+      "verified": true
+    },
+    {
+      "url": "https://www.clubupgolf.com/swingturf-golf-mat-review/",
+      "type": "review",
+      "title": "SwingTurf Golf Mat Review (Club Up Golf)",
+      "date": "2022-12-20",
+      "what_it_says": "1 5/8 in, holds real tees, elbow issues went away, 4.6 of 5.",
+      "verified": true
+    },
+    {
+      "url": "https://swingyard.com/holy-grail-hitting-strip-review/",
+      "type": "review",
+      "title": "Holy Grail Hitting Strip Review (Swing Yard)",
+      "date": "2026-06-22",
+      "what_it_says": "Five foam layers, 1.5 in, no real tees, wrist and elbow protection is real, corners peel if not velcroed.",
+      "verified": true
+    },
+    {
+      "url": "https://friendlygolfer.com/holy-grail-hitting-strip-review/",
+      "type": "review",
+      "title": "My Holy Grail Hitting Strip Review (Friendly Golfer)",
+      "date": "",
+      "what_it_says": "Lets you hit down through the ball while staying soft enough not to beat up the arm.",
+      "verified": true
+    },
+    {
+      "url": "https://friendlygolfer.com/ez-tee-hybrid-review/",
+      "type": "review",
+      "title": "EZ Tee Hybrid Review (Friendly Golfer)",
+      "date": "2023-06-19",
+      "what_it_says": "Turf only, 1 1/8 in, real tee, a touch grabby; would not recommend alone to anyone worried about injury.",
+      "verified": true
+    },
+    {
+      "url": "https://golfsimulatordepot.com/blogs/learn-golf-better/ez-hybrid-tee-hitting-mat",
+      "type": "retailer",
+      "title": "EZ Tee Hybrid Hitting Mat Review (Golf Simulator Depot)",
+      "date": "2025-11-01",
+      "what_it_says": "Retailer review: real tees, 1.75 in overall quoted, recommends a 3/8 in underlay on concrete.",
+      "verified": true
+    },
+    {
+      "url": "https://www.carlofet.com/blog/best-golf-hitting-mats",
+      "type": "brand",
+      "title": "Best Golf Hitting Mats for Indoor Simulators (Carl's Place blog)",
+      "date": "",
+      "what_it_says": "Carl's own ratings: TrueStrike comfort 4, Player Preferred 3.75, CCE comfort 2 and harsh on joints, EZ Tee budget pick, GoSports entry-level; notes tee-receiver holes can fall outside a launch monitor zone.",
+      "verified": true
+    },
+    {
+      "url": "https://onthegreen.golf/hitting-strips/",
+      "type": "review",
+      "title": "Hitting Strips Comparison Chart (On The Green)",
+      "date": "2025",
+      "what_it_says": "Chart of 11 strips with price, size, height, real-tee and pain-free ratings: Softy $249, Softy Lite $219, Softy XL $399, HotShot foam $230 and gel $280, Holy Grail $229.99, EZ Tee $125, Fiberbuilt Grass $279.",
+      "verified": true
+    },
+    {
+      "url": "https://homeperformancelab.com/best-hitting-mat-golf-simulator/",
+      "type": "review",
+      "title": "Best Hitting Mat for Golf Simulator 2026 (Home Performance Lab)",
+      "date": "2026-06-29",
+      "what_it_says": "Softy best overall, Player Preferred for permanent bays, HotShot for swappable feel, Grass for joints, SwingTurf value; explains mat height rules for side cameras, overhead units and radar.",
+      "verified": false
+    },
+    {
+      "url": "https://topshelfgolf.com/pages/the-complete-guide-to-golf-simulator-hitting-mats-2026-buyers-guide",
+      "type": "retailer",
+      "title": "Golf Simulator Hitting Mats Guide 2026 (Top Shelf Golf)",
+      "date": "2026",
+      "what_it_says": "Retailer price table for HotShot, Fiberbuilt, SIGPRO and CCE by size with room-length guidance; recalibrate the launch monitor once the mat is down.",
+      "verified": true
+    },
+    {
+      "url": "https://hittingthegolfball.com/best-golf-hitting-mats/",
+      "type": "review",
+      "title": "The 11 Best Golf Hitting Mats For Your Home Simulator (Hitting The Golf Ball)",
+      "date": "2026-10-08",
+      "what_it_says": "Prices for 12 mats including TrueStrike Single $1,098 at 112 lb, Holy Grail mats $749.99 and $999.99, Big Moss True Launch $274, Matzilla from $99.",
+      "verified": true
+    },
+    {
+      "url": "https://golfergeeks.com/best-golf-mats/",
+      "type": "review",
+      "title": "Best Golf Mats 2026 (Golfer Geeks)",
+      "date": "2026-10-06",
+      "what_it_says": "HotShot Editor's Pick (base nearly doubles the cost), Fiberbuilt former pick, CCE bargain pick at a third of premium prices, DURA-PRO and GoSports budget runners-up.",
+      "verified": true
+    },
+    {
+      "url": "https://golfersauthority.com/best-golf-hitting-mat/",
+      "type": "review",
+      "title": "Best Golf Hitting Mats 2026 (Golfer's Authority)",
+      "date": "2026",
+      "what_it_says": "Claims cheap mats like DURA-PRO distort launch monitor spin by thousands of rpm; Softy, Player Preferred, TrueStrike, CCE, Champkey Tri-Turf named.",
+      "verified": true
+    },
+    {
+      "url": "https://golferlogic.com/golf-simulator-mats/",
+      "type": "review",
+      "title": "Top landing and hitting mats for golf simulators in 2026 (GolferLogic)",
+      "date": "2026-01-27",
+      "what_it_says": "TrueStrike Academy best overall for its silicone base; HotShot budget pick; Player Preferred, CCE and Softy named.",
+      "verified": true
+    },
+    {
+      "url": "https://golfstead.com/best-golf-mats-for-home",
+      "type": "review",
+      "title": "10 Best Golf Mats For Home 2025 (Golfstead)",
+      "date": "2025-11-03",
+      "what_it_says": "Softy 4 x 7 first, HotShot second, SwingTurf third.",
+      "verified": true
+    },
+    {
+      "url": "https://breakingeighty.com/golf-hitting-mats",
+      "type": "review",
+      "title": "10 Best Golf Hitting Mats for Your Indoor Simulator in 2026 (Breaking Eighty)",
+      "date": "2026-07-08",
+      "what_it_says": "Fiberbuilt Performance Turf $479+ best for most, Softy $999+, Grass $1,199+, Player Preferred $1,399+ most accurate per GCQuad testing, DURA-PRO $89.",
+      "verified": true
+    },
+    {
+      "url": "https://golfinsideruk.com/best-golf-simulator-mats/",
+      "type": "review",
+      "title": "The Best Golf Mats For Your Home Simulator (Golf Insider UK)",
+      "date": "2022-11-09",
+      "what_it_says": "SwingTurf best overall, CCE best value (dense feel may strain wrists), Fiberbuilt combo premium, TrueStrike outdoor, Softy 4 x 10 large.",
+      "verified": true
+    },
+    {
+      "url": "https://www.yardstickgolf.com/golf-hitting-mats.html",
+      "type": "reddit",
+      "title": "Best Golf Hitting Mats for Home Simulators 2026 Guide (Yardstick Golf)",
+      "date": "2026-03-11",
+      "what_it_says": "Scores from a survey of just over 300 Reddit buyers: Fiberbuilt top shock absorption, Bullseye top feel, CCE below average on both, GoSports cheapest; 5 x 5 starting prices for 12 mats.",
+      "verified": true
+    },
+    {
+      "url": "https://mygolfsim.net/guides/best-golf-hitting-mats",
+      "type": "review",
+      "title": "The Best Golf Hitting Mats for a Home Simulator (MyGolfSim.net)",
+      "date": "2026-09-09",
+      "what_it_says": "Budget Amazon tier (Bearwill 31mm, Fanshaw, GoSports); camera units read best off an even consistent surface and busy turf patterns under the ball add noise.",
+      "verified": true
+    },
+    {
+      "url": "https://mygaragegolf.com/blogs/buying-guides/sigpro-golf-mats-softy-lite-or-supersofty",
+      "type": "review",
+      "title": "SIGPRO Golf Mats: Softy, Lite, or SuperSofty? (Garage Golf)",
+      "date": "2024-12-01",
+      "what_it_says": "Softy 2 3/8 in with real tees; Lite 1 1/4 in without; Super Softy rubber tile base.",
+      "verified": true
+    },
+    {
+      "url": "https://www.playbetter.com/blogs/golf-nets-mats/how-to-choose-the-best-golf-hitting-mat",
+      "type": "retailer",
+      "title": "How to Choose the Best Golf Hitting Mat for Your Home Simulator (PlayBetter)",
+      "date": "2025-04-04",
+      "what_it_says": "Retailer guide: some mats are as hard as concrete, others squishy soft, you want neither; HotShot and Fiberbuilt lines and sizes.",
+      "verified": true
+    },
+    {
+      "url": "https://www.carlofet.com/blog/golf-simulator-flooring",
+      "type": "brand",
+      "title": "Golf Simulator Flooring Guide: Turf, Subfloor, and Mats (Carl's Place)",
+      "date": "",
+      "what_it_says": "Recessing the strip flush with the turf is one of the biggest upgrades; foam tiles 1/2 to 1 in; account for mat thickness when planning floor height.",
+      "verified": true
+    },
+    {
+      "url": "https://thegaragegolfer.com/hi/blogs/news/simulator-mat-vs-hitting-strip",
+      "type": "review",
+      "title": "Simulator Mat vs Hitting Strip: Which Fits? (The Garage Golfer)",
+      "date": "2026-08-30",
+      "what_it_says": "Full mat for movable garage setups; strip for permanent bays; measure every layer so the strip sits flush.",
+      "verified": true
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/385396-hitting-mat-vs-strip",
+      "type": "forum",
+      "title": "Hitting Mat vs. Strip (Golf Simulator Forum)",
+      "date": "2023-03-05",
+      "what_it_says": "Stance mat should be firm, strip compliant; sweepers can use a CCE for both, divot takers want a CCE stance plus Fiberbuilt strip; a strip ended one member's joint pain.",
+      "verified": true
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/387946-best-budget-sub-400-mat",
+      "type": "forum",
+      "title": "Best Budget (Sub $400) Mat (Golf Simulator Forum)",
+      "date": "2023-10-11",
+      "what_it_says": "Advice: strip plus cheap stance turf first; Fiberbuilt Grass, Bullseye and Holy Grail strips as starting points; EZ Tee flagged for joint complaints; OP bought a 5 x 5 Tartan Bullseye at $450.",
+      "verified": true
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/183886-truestrike-or-fiberbuilt",
+      "type": "forum",
+      "title": "TrueStrike or Fiberbuilt (Golf Simulator Forum, 7 pages)",
+      "date": "2020-02",
+      "what_it_says": "14 members on page 1: 8 favour Fiberbuilt, 2 own TrueStrike and praise it, 6 left a CCE because it hurt; replacement part prices quoted.",
+      "verified": true
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/320945-is-true-strike-still-most-forgiving-mat",
+      "type": "forum",
+      "title": "Is True Strike still most forgiving mat? (Golf Simulator Forum)",
+      "date": "2021-02-27",
+      "what_it_says": "No consensus; Divot Action felt gentlest but wore fast commercially; TrueStrike pieces hard to get; Fiberbuilt for durability.",
+      "verified": true
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/375427-fiberbuilt-mats-grass-series-vs-preferred",
+      "type": "forum",
+      "title": "Fiberbuilt Mats: Grass Series vs. Preferred? (Golf Simulator Forum)",
+      "date": "2024-09-02",
+      "what_it_says": "10 members: Preferred realistic and forgiving on joints for most; one indent under 5,000 shots; only 12 x 18 in of true strip on some units; 1 7/16 in height quoted.",
+      "verified": true
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/338433-fiberbuilt-player-preferred-mats",
+      "type": "forum",
+      "title": "Fiberbuilt Player Preferred Mats (Golf Simulator Forum)",
+      "date": "2022-01-12",
+      "what_it_says": "7 members: Preferred most realistic but less forgiving than Grass or Holy Grail; GC2 users saw inconsistent reads on Grass; tee holes off centre.",
+      "verified": true
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/337568-holy-grail-hitting-strip",
+      "type": "forum",
+      "title": "Holy Grail Hitting Strip (Golf Simulator Forum, 6 pages)",
+      "date": "2021-07",
+      "what_it_says": "12 members on page 1 including the maker: 1 3/8 in, fits the Fiberbuilt studio opening, 35 and 46.5 in lengths, 12-month guarantee.",
+      "verified": true
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/374916-holy-grail-hitting-mat",
+      "type": "forum",
+      "title": "Holy Grail Hitting Mat (Golf Simulator Forum)",
+      "date": "2023-05-31",
+      "what_it_says": "12 members: waves, sinking and low spots for several owners, replaced under warranty; others report no wear after a year.",
+      "verified": true
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/387986-bullseye-hitting-strip",
+      "type": "forum",
+      "title": "Bullseye hitting strip (Golf Simulator Forum)",
+      "date": "2023-04-30",
+      "what_it_says": "8 members: real tee, divot feel, easy on joints at 500 shots a day; bright green disliked; a GC3 read only about half of shots on it versus near-perfect on an olive mat.",
+      "verified": true
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/401252-hitting-mat-suggestions",
+      "type": "forum",
+      "title": "Hitting Mat Suggestions (Golf Simulator Forum)",
+      "date": "2024-02-05",
+      "what_it_says": "9 ft 6 in ceiling on concrete: EZ Tee Hybrid at 1 1/8 in directly on concrete with no wrist or elbow issues; MegaMat 2 in as the thick option.",
+      "verified": true
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/skytrak/120205-best-hitting-mat-for-skytrak-to-reduce-wrist-impact-and-feel-like-real-turf",
+      "type": "forum",
+      "title": "Best hitting mat for SkyTrak to reduce wrist impact (Golf Simulator Forum)",
+      "date": "2017-06-10",
+      "what_it_says": "CCE named by 5 members with split wrist reports; Matzilla leading edge digs in on fat shots; TrueStrike more forgiving.",
+      "verified": true
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/276488-swingturf",
+      "type": "forum",
+      "title": "SwingTurf (Golf Simulator Forum)",
+      "date": "2021-01-06",
+      "what_it_says": "16 members; Rain or Shine co-owner states 1 3/4 in overall with 5/8 in foam; owners report more cushion than STI turf and a mat that stays put.",
+      "verified": true
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/350589-champkey-golf-mat-for-impact-location-and-path",
+      "type": "forum",
+      "title": "CHAMPKEY Golf Mat for impact location and path (Golf Simulator Forum)",
+      "date": "2021-11-30",
+      "what_it_says": "4 members: impact-feedback mat ripped in under 100 hits for one; thin fibres doubted.",
+      "verified": true
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/339859-best-golf-matt",
+      "type": "forum",
+      "title": "Best golf matt (Golf Simulator Forum)",
+      "date": "2021-08-19",
+      "what_it_says": "DW Quail, Wittek Quatro, Fiberbuilt Grass, SigPro and Holy Grail named by 3 members.",
+      "verified": true
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/398828-how-to-build-a-golf-simulator-carl-s-golf-enclosure-hotshot-golf-mat-review",
+      "type": "forum",
+      "title": "How to Build a Golf Simulator: Carl's Enclosure and HotShot Mat Review (Golf Simulator Forum)",
+      "date": "2023-12-18",
+      "what_it_says": "Member build thread linking a YouTube review of the C-Series enclosure and HotShot mat.",
+      "verified": true
+    },
+    {
+      "url": "https://forums.golfwrx.com/topic/2011029-who-has-used-both-the-sigpro-softy-and-the-fiberbuilt-hitting-mat/",
+      "type": "forum",
+      "title": "Who has used BOTH the SigPro Softy and the Fiberbuilt Hitting Mat? (GolfWRX)",
+      "date": "",
+      "what_it_says": "Split: one found Fiberbuilt better and the Softy too soft; others found Fiberbuilt bristles unrealistic for putting; Softy padding keeps shock out of the hands. (403 to curl; loads in a browser.)",
+      "verified": false
+    },
+    {
+      "url": "https://forums.golfwrx.com/topic/1845163-fiberbuilt-vs-country-club-vs-trustrike-mats-for-home-simulator/",
+      "type": "forum",
+      "title": "Fiberbuilt vs. Country Club vs. TruStrike mats for home simulator (GolfWRX)",
+      "date": "",
+      "what_it_says": "Three-way comparison thread; CCE harder on joints. (403 to curl.)",
+      "verified": false
+    },
+    {
+      "url": "https://forums.golfwrx.com/topic/1868657-best-mat-for-golfers-elbow/",
+      "type": "forum",
+      "title": "Best mat for golfers elbow? (GolfWRX)",
+      "date": "",
+      "what_it_says": "Fiberbuilt the most common recommendation; one poster's carry ran half a club shorter on it. (403 to curl.)",
+      "verified": false
+    },
+    {
+      "url": "https://forums.golfwrx.com/topic/2076576-fiberbuilt-grass-vs-player-preferred/",
+      "type": "forum",
+      "title": "Fiberbuilt grass vs player preferred (GolfWRX)",
+      "date": "",
+      "what_it_says": "One owner calls the Preferred overpriced with poor service and a $600 hitting-section replacement quote. (403 to curl.)",
+      "verified": false
+    },
+    {
+      "url": "https://forum.mygolfspy.com/topic/58208-hitting-mat-simulating-rough/",
+      "type": "forum",
+      "title": "Hitting mat simulating rough? (MyGolfSpy Forum)",
+      "date": "",
+      "what_it_says": "Flight Deck owner: easy on the joints, closer to real turf than cheaper mats, holding up after two years of heavy use. (403 to curl.)",
+      "verified": false
+    },
+    {
+      "url": "https://www.thehackersparadise.com/forum/index.php?threads/real-feel-country-club-elite-golf-mat-review.51713/",
+      "type": "forum",
+      "title": "Real Feel Country Club Elite Golf Mat Review (The Hackers Paradise)",
+      "date": "2013",
+      "what_it_says": "Slows a fat shot noticeably, no range-mat vibration through the arms, 3 x 5 big enough for every club.",
+      "verified": true
+    },
+    {
+      "url": "https://slickdeals.net/f/17924430-537-21-fiberbuilt-golf-5-x4-hourglass-pro-studio-mat-kit-at-amazon",
+      "type": "forum",
+      "title": "Fiberbuilt 5 x 4 Hourglass Pro Studio Mat Kit deal thread (Slickdeals)",
+      "date": "2024-11",
+      "what_it_says": "Owner with 10,000+ shots reports little wear and no joint pain; Holy Grail insert suggested as an alternative; shape awkward in some bays.",
+      "verified": true
+    },
+    {
+      "url": "https://slickdeals.net/f/19037008-109-65-gosports-elite-golf-hitting-mats-for-indoor-outdoor-practice-5-x-4-15mm-at-amazon",
+      "type": "forum",
+      "title": "GoSports Elite 5 x 4 15mm deal thread (Slickdeals)",
+      "date": "2025-12",
+      "what_it_says": "A thick commercial range mat still destroyed one poster's joints; a Fiberbuilt Grass mat was much easier on the body; another reports permanent elbow and wrist damage from a cheap mat.",
+      "verified": true
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=6Oj3l7zIQWo",
+      "type": "video",
+      "title": "I Tested All the Most Popular Hitting Mats for Golf Simulators (Friendly Golfer)",
+      "date": "",
+      "what_it_says": "Video companion to the Friendly Golfer roundup.",
+      "verified": true
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=HiMYjpCA1QE",
+      "type": "video",
+      "title": "A Review of the Sig Pro Softy Hitting Mat (Friendly Golfer)",
+      "date": "",
+      "what_it_says": "Video review of the Softy 4 x 7.",
+      "verified": true
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=CRayeCuEyfM",
+      "type": "video",
+      "title": "Testing Three Different Fiberbuilt Series Golf Mats (Garage Golf)",
+      "date": "",
+      "what_it_says": "Grass, Performance Turf and Player Preferred compared on camera.",
+      "verified": true
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=vKv4gE-2dJ8",
+      "type": "video",
+      "title": "Carl's HotShot Golf Mat and Hitting Strips Review: Which One is Right for You? (Garage Golf)",
+      "date": "",
+      "what_it_says": "Insert-by-insert video review of the HotShot.",
+      "verified": true
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=ODnpjs8biKw",
+      "type": "video",
+      "title": "Carl's hitting mat and hitting insert REVIEW + GIVEAWAY (Pixel Golf)",
+      "date": "",
+      "what_it_says": "Independent video review of the HotShot mat and inserts.",
+      "verified": true
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=ijrLcKTaOL0",
+      "type": "video",
+      "title": "A look at the Fiberbuilt Player Preferred Golf Hitting Mat (PGA Show 2026)",
+      "date": "2026",
+      "what_it_says": "Show-floor walkthrough of the Player Preferred.",
+      "verified": true
+    },
+    {
+      "url": "https://www.yardstickgolf.com/golf-hitting-mats.html",
+      "type": "reddit",
+      "title": "Reddit buyer survey summarised by Yardstick Golf",
+      "date": "2026-03-11",
+      "what_it_says": "The only Reddit-derived data found: search engines returned no reddit.com threads for any mat query on 2026-10-19.",
+      "verified": true
+    }
+  ],
+  "blog_outline": {
+    "title": "The hitting mat is the part of your simulator that touches your body: a garage builder's guide",
+    "sections": [
+      "Why the mat matters more than the screen for your joints: the tendonitis timeline (Friendly Golfer's 30 days), what the forums say about CCE refugees, and why thickness alone does not protect you (the Slickdeals range-mat story)",
+      "Strip vs full stance: firm feet, soft ball. The Golf Simulator Forum rule (stance mat firm, strip compliant), who can get away with one surface (sweepers), and the cost math of a $180 to $250 strip versus a $1,000 mat",
+      "The four feels on the market: bristle (Fiberbuilt Grass), foam-under-turf (SIGPRO Softy, HotShot foam, Holy Grail), gel (TrueStrike, HotShot gel), and dense range turf (CCE, SwingTurf, EZ Tee), with who each one suits",
+      "Launch monitor compatibility: side cameras need the unit level with the ball (riser or spacer panel), overhead units need the strip to cover the hitting zone (GCQuad 14 x 14, EYE XO 12 x 16), radar does not care about height but wants a level run to the screen; busy or bright turf can hurt camera reads (the GC3 on bright green Bullseye story), Uneekor's no-trouble-mats rule, and black tees",
+      "Height is a spec: 1 1/8 in (EZ Tee) to 2.5 in (Softy); low ceilings, flush floors over 1 in foam tiles, and why the Softy and Fiberbuilt need a 2 in subfloor to putt to the screen",
+      "What a 5 ft deep bay needs: most full mats are 4 ft deep (SIGPRO 4 x 7, Fiberbuilt 7 x 4 at 49 in, HotShot 4 x 5 and 4 x 9, SwingTurf 4 x 7), 5 ft deep mats (CCE 5 x 8, HotShot 5 x 8, SwingTurf 5 x 5) fill it edge to edge; tee position relative to the screen and the side-unit footprint",
+      "The mat that never folds: in a fold-flat bay the enclosure goes against the wall and the mat is the one thing left on the floor. A 21 lb SIGPRO 4 x 7 slides aside, a HotShot ships rolled, a 141 lb Fiberbuilt studio mat is furniture. StowGolf's published bay is 10 ft wide and 5 ft deep, so a 4 ft deep mat leaves a foot behind the tee. Disclosure: Brett Martin runs Teed and builds StowGolf.",
+      "What to spend, by tier not by rank: under $150 (Flight Deck, EZ Tee strip, Champkey or Rukket for a net), $180 to $280 (Holy Grail, Softy strip, HotShot inserts), $400 to $700 (SwingTurf, CCE 4 x 5, HotShot 4 x 5, Practice Station), $850 to $1,300 (Fiberbuilt studio, Softy 4 x 7, TrueStrike), and the replacement-strip cost that decides the 5-year price",
+      "Known issues to check before you buy: early wear marks, sagging strips, sliding bases, tee holes that swallow balls, replacement-part availability, and the US stock situation for TrueStrike",
+      "Sources: the forum threads, reviews and retailer pages this guide is built from, with the Reddit survey caveat"
+    ]
+  }
+}

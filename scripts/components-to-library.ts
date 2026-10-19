@@ -37,6 +37,7 @@ import {
   getComponentCategory,
   loadComponentCategoryFile,
   tierThenMentions,
+  SEEDABLE_TIERS,
   type ComponentCategoryFile,
   type ComponentCategoryMeta,
   type ComponentProduct,
@@ -204,7 +205,7 @@ async function planMerge(library: ProductLibrary, files: ComponentCategoryFile[]
 
   for (const file of files) {
     const meta = COMPONENT_CATEGORIES[file.category];
-    const entries: Entry[] = [...file.products, ...(file.software || [])].sort(tierThenMentions);
+    const entries: Entry[] = [...file.products, ...(file.software || [])].filter((p) => SEEDABLE_TIERS.has(p.tier)).sort(tierThenMentions);
     for (const entry of entries) {
       const catalog = findBrand(library, entry.brand);
       const existing = catalog ? findProduct(catalog, entry.name) : undefined;

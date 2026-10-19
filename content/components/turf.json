@@ -1,0 +1,1451 @@
+{
+  "category": "turf",
+  "read_date": "2026-10-19",
+  "subtypes": [
+    "landing-turf",
+    "putting-turf",
+    "underlay",
+    "tiles"
+  ],
+  "notes": {
+    "scope": "Floor turf around and in front of the hitting mat, putting turf, underlay and tiles. Hitting mats are a separate category.",
+    "qualification": "5+ independent sources = qualified, 10+ = core. Brand pages excluded from the count. Entries with tier 'watch' are below 5 and are included for the map only; the parent decides whether they ship.",
+    "verification": "Every URL curl-checked 2026-10-19. Home Depot and Lowe's product pages return 403 to curl and to WebFetch (bot block); their prices come from search-result snippets of the live listing and are marked unverified.",
+    "reddit": "No Reddit threads surfaced in any search (site: and r/ queries returned nothing usable), so mention counts lean on golfsimulatorforum.com threads, review sites, build logs, YouTube and retailers."
+  },
+  "products": [
+    {
+      "brand": "GrassTex",
+      "name": "Money Putt putting turf (sold as TIGS Money Putt at Shop Indoor Golf, RoS Money Putt at Rain or Shine, STI NP45 at Indoor Golf Outlet, Money Putt at Greatmats)",
+      "subtype": "putting-turf",
+      "tier": "qualified",
+      "mention_count": 9,
+      "mention_sources": [
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/385319-turf-recommendations",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/351127-turf-flooring",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/346815-are-sti-np45-and-grass-tex-money-putt-the-same",
+        "https://www.parpercision.com/golf-simulator-turf",
+        "https://www.greatmats.com/how-much-does-an-artificial-grass-putting-green-cost.php",
+        "https://www.greatmats.com/artificial-turf/golfing-putting-money-putt.php",
+        "https://indoorgolfoutlet.com/collections/putting-turf/products/np45-green-putting-turf",
+        "https://shopindoorgolf.com/products/moneyputt-golf-turf",
+        "https://rainorshinegolf.com/products/money-putt-golf-simulator-turf"
+      ],
+      "price": {
+        "amount": 4.55,
+        "currency": "USD",
+        "unit": "per sq ft, plus $299 flat freight; 15 ft x 5 ft roll $640, 15 ft x 25 ft $1,990",
+        "read_on": "2026-10-19",
+        "source_url": "https://shopindoorgolf.com/products/moneyputt-golf-turf"
+      },
+      "other_prices": [
+        {
+          "amount": 4.54,
+          "unit": "per sq ft (regular $5.34), 15 ft minimum cut",
+          "read_on": "2026-10-19",
+          "source_url": "https://www.greatmats.com/artificial-turf/golfing-putting-money-putt.php"
+        },
+        {
+          "amount": 640,
+          "unit": "15 ft x 5 ft; 15 ft x 10 ft $980; 15 ft x 30 ft $2,710",
+          "read_on": "2026-10-19",
+          "source_url": "https://rainorshinegolf.com/products/money-putt-golf-simulator-turf"
+        },
+        {
+          "amount": 1040,
+          "unit": "STI NP45 15 ft x 5 ft; 15 ft x 10 ft $1,470",
+          "read_on": "2026-10-19",
+          "source_url": "https://indoorgolfoutlet.com/collections/putting-turf/products/np45-green-putting-turf"
+        }
+      ],
+      "direct_url": "https://shopindoorgolf.com/products/moneyputt-golf-turf",
+      "direct_url_note": "No GrassTex maker product page found; Shop Indoor Golf is the main retailer. Greatmats spec sheet: https://www.greatmats.com/specs/grasstex/specs-grasstex-money-putt.pdf",
+      "fallback_url": "https://www.greatmats.com/artificial-turf/golfing-putting-money-putt.php",
+      "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/346815-are-sti-np45-and-grass-tex-money-putt-the-same",
+      "specs": {
+        "pile_height_in": "3/8 (Greatmats, Rain or Shine); Shop Indoor Golf lists 1/2",
+        "face_weight": "36 oz per sq yd (Greatmats); Rain or Shine lists 63 oz per sq yd",
+        "fiber": "nylon (Rain or Shine)",
+        "backing": "ArmorLoc 3L stabilized woven PP/PET multilayer (Greatmats); polyurethane coated (Rain or Shine)",
+        "roll_width_ft": 15,
+        "stimp": "10 to 11 with no sand infill (Rain or Shine); 12 to 13 with infill (Greatmats)",
+        "infill": "not required; sand speeds it up",
+        "colors": "Forest Green, Black (Midnight Black at Rain or Shine, Bermuda Black at SIG)",
+        "spec_conflicts": "Resellers disagree on pile height, face weight and stimp; treat the Greatmats spec sheet as the maker number until confirmed."
+      },
+      "room_fit": "15 ft roll width means a 10 ft x 15 ft bay is one seamless 15 ft x 10 ft piece (150 sq ft): about $683 plus $299 freight at Shop Indoor Golf, $980 at Rain or Shine. Cut a hitting-mat opening and inset the mat flush.",
+      "who_its_for": "Builders who want to putt for real on the whole bay floor and want one turf for landing zone and stance area at mid price.",
+      "pros": [
+        "Lies flat without glue or tape (forum, GungHo Golf)",
+        "No infill needed",
+        "Easy to cut, takes a utility knife",
+        "Sold by four sim retailers, in green and black",
+        "Stimp in the 10 to 13 range depending on infill"
+      ],
+      "cons": [
+        "Freight adds $299 to $300 per order at SIG; forum reports $200 to $300 per roll",
+        "Custom cuts take 3 to 5 weeks at SIG and are non-returnable",
+        "Price per 15 ft x 5 ft roll ranges from $640 to $1,040 depending on which reseller name you buy under"
+      ],
+      "known_issues": [
+        "Reseller spec sheets conflict (3/8 vs 1/2 in pile, 36 vs 63 oz)",
+        "Hitting full shots directly off it wears the strike zone; builders cut in a hitting strip (forum 351127)"
+      ],
+      "why_people_choose_it": "It is the putting turf the forum keeps naming at about $4 to $4.50 a foot, and GungHo Golf confirmed NP45 and Money Putt come off the same Dalton, Georgia line, so you can shop the cheapest reseller name.",
+      "image_url": "https://shopindoorgolf.com/cdn/shop/files/tigs-moneyputt.jpg"
+    },
+    {
+      "brand": "SYNLawn",
+      "name": "Precision Putt putting turf (Classic Putt, SYNPutt at Lowe's, and dealer remnants also come up)",
+      "subtype": "putting-turf",
+      "tier": "core",
+      "mention_count": 10,
+      "mention_sources": [
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/385319-turf-recommendations",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/170329-what-did-you-do-about-large-turf-in-sim-room",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/177780-flooring-between-screan-and-mat",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/147532-turf-between-the-stance-mat-and-screen",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/91735-flooring-not-the-hitting-or-stance-mat",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/170150-hitting-full-shots-off-of-putting-turf-instead-of-a-mat",
+        "https://www.carlofet.com/blog/golf-simulator-flooring",
+        "https://walfosbrand.com/blogs/golf/best-turf-for-simulator",
+        "https://indoorgolfoutlet.com/collections/putting-turf/products/synlawn-precision-putt-putting-turf",
+        "https://www.lowes.com/pd/SYNLawn-SYNPutt-Cut-To-Length-Artificial-Grass/5015141807"
+      ],
+      "price": {
+        "amount": 1810,
+        "currency": "USD",
+        "unit": "15 ft x 10 ft (about $12.07 per sq ft); 15 ft x 5 ft $1,300; 15 ft x 30 ft $4,020",
+        "read_on": "2026-10-19",
+        "source_url": "https://indoorgolfoutlet.com/collections/putting-turf/products/synlawn-precision-putt-putting-turf"
+      },
+      "other_prices": [
+        {
+          "amount": 5.49,
+          "unit": "per sq ft MSRP via a SYNLawn partner reseller page (search snippet, not fetched)",
+          "read_on": "2026-10-19",
+          "source_url": "https://synlawnidahopartners.com/pricing"
+        },
+        {
+          "amount": 1.5,
+          "unit": "to $2.00 per sq ft for dealer remnants (forum, Feb 2023)",
+          "read_on": "2023-02-28",
+          "source_url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/385319-turf-recommendations"
+        }
+      ],
+      "direct_url": "https://www.synlawn.com/products/golf/",
+      "direct_url_note": "SYNLawn golf category page (verified 200); the Precision Putt product page is linked from it but was not fetched. Lowe's SYNPutt page returns 403 to bots.",
+      "fallback_url": "https://indoorgolfoutlet.com/collections/putting-turf/products/synlawn-precision-putt-putting-turf",
+      "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/385319-turf-recommendations",
+      "specs": {
+        "pile_height_in": "3/8",
+        "face_weight": "47 oz finished pile weight; 84 oz total",
+        "fiber": "100% texturized nylon",
+        "backing": "13PP/18PET two-part primary with 20 oz embossed rubber coating",
+        "roll_width_ft": 15,
+        "stimp": "10 to 12.5 (Indoor Golf Outlet); a forum member measured Lowe's SYNLawn at about 11",
+        "infill": "not required indoors",
+        "warranty": "limited lifetime (Indoor Golf Outlet)"
+      },
+      "room_fit": "One 15 ft x 10 ft piece covers a 10 ft x 15 ft bay with no seam at $1,810 from Indoor Golf Outlet; remnants from a local SYNLawn dealer are the cheap route the forum keeps recommending.",
+      "who_its_for": "Builders who want the premium nylon putting surface and are near a SYNLawn dealer (remnants) or willing to pay the reseller price.",
+      "pros": [
+        "Highest-spec nylon putting turf in the sim market; TGL's turf partner",
+        "Fast true roll, 10 to 12.5 stimp",
+        "Dealer remnants at $1.50 to $2.00 per sq ft are the forum's favorite bargain",
+        "Also sold at Lowe's cut to length (SYNPutt, Forest)"
+      ],
+      "cons": [
+        "Full-price reseller cuts run $9 to $17 per sq ft",
+        "Lowe's raised its minimum order (forum, 2023)",
+        "Wears in the strike zone if you hit full shots off it; builders plan to cut and replace that section"
+      ],
+      "known_issues": [
+        "A $600 remnant quote for 10 x 10 was called excessive on the forum; prices vary a lot by dealer"
+      ],
+      "why_people_choose_it": "It is the name every forum veteran reaches for when putting quality matters, and the remnant trick (call the local dealer) gets premium nylon for budget money.",
+      "image_url": "https://indoorgolfoutlet.com/cdn/shop/files/SYNLawn-Precision-Putt-Putting-Turf-corner-closup_2048x.png"
+    },
+    {
+      "brand": "TrafficMaster (Home Depot)",
+      "name": "Putting Green 6 ft wide cut to length (TMSPUTT06CTL); also Fescue Multipurpose 12 ft wide (TMCSBRN421275) and Grizzly Grass 6 ft wide (7GRBD860072H)",
+      "subtype": "landing-turf",
+      "tier": "qualified",
+      "mention_count": 8,
+      "mention_sources": [
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/385319-turf-recommendations",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/177780-flooring-between-screan-and-mat",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/147532-turf-between-the-stance-mat-and-screen",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/284629-diy-turf-setup",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/321787-ideas-on-garage-flooring",
+        "https://www.carlofet.com/blog/golf-simulator-flooring",
+        "https://onthegreen.golf/how-to-build-a-budget-golf-simulator/",
+        "https://simweekly1.substack.com/p/is-this-the-coolest-garage-sim"
+      ],
+      "price": {
+        "amount": 1.98,
+        "currency": "USD",
+        "unit": "per sq ft ($11.87 per linear ft at 6 ft wide), online SKU",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.homedepot.com/p/TrafficMaster-Putting-Green-6-ft-Wide-x-Cut-to-Length-Artificial-Grass-Turf-TMSPUTT06CTL/313236789",
+        "verified": false,
+        "verification_note": "Home Depot returns 403 to curl and WebFetch; price taken from the search snippet of the live listing"
+      },
+      "other_prices": [
+        {
+          "amount": 1.65,
+          "unit": "per sq ft, TrafficMaster Putting Green (forum, Nov 2020)",
+          "read_on": "2020-11-01",
+          "source_url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/177780-flooring-between-screan-and-mat"
+        },
+        {
+          "amount": 0.5,
+          "unit": "per sq ft, Grizzly Grass (forum, 2020)",
+          "read_on": "2020-11-01",
+          "source_url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/177780-flooring-between-screan-and-mat"
+        }
+      ],
+      "direct_url": "https://www.homedepot.com/p/TrafficMaster-Putting-Green-6-ft-Wide-x-Cut-to-Length-Artificial-Grass-Turf-TMSPUTT06CTL/313236789",
+      "direct_url_note": "403 to bots on 2026-10-19; listing exists per search index. Fescue: https://www.homedepot.com/p/TrafficMaster-Fescue-Multipurpose-12-ft-Wide-x-Cut-to-Length-Green-Artificial-Grass-Carpet-TMCSBRN421275/311276440 ; Grizzly Grass: https://www.homedepot.com/p/TrafficMaster-Grizzly-Grass-6-ft-Wide-x-Cut-to-Length-Green-Artificial-Grass-Turf-7GRBD860072H/311280619",
+      "fallback_url": "",
+      "read_url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/177780-flooring-between-screan-and-mat",
+      "specs": {
+        "pile_height_in": "not stated on the snippets read",
+        "roll_width_ft": "6 (Putting Green, Grizzly Grass); 12 (Fescue Multipurpose)",
+        "stimp": "forum DIY stimp test on carpet: TrafficMaster Putting Green 10, Grizzly Grass 11 front, Garland cheap grass 9",
+        "backing": "not stated",
+        "ordering": "no minimum, free ship to store (forum, 2023)"
+      },
+      "room_fit": "6 ft rolls mean seams: two 6 ft x 15 ft strips (180 sq ft, about $356) laid across a 10 ft x 15 ft bay with one seam, or three 6 ft x 10 ft lengths. Fescue at 12 ft wide covers the width with one seam at the back.",
+      "who_its_for": "Garage builders who want a floor that stops bounce and looks like grass for under $400 and will not putt seriously.",
+      "pros": [
+        "Cheapest turf the forum rates as usable for putting (10 stimp on a DIY test)",
+        "No minimum, ship to store free",
+        "Carl's Place names the Fescue SKU in its own flooring guide"
+      ],
+      "cons": [
+        "6 ft width forces seams in any bay wider than 6 ft",
+        "Thin; on bare concrete the ball still bounces hard (forum)",
+        "Not a true putting surface; the cheapest grass rolled poorly"
+      ],
+      "known_issues": [
+        "Store SKU (TMSPUTT0650) and online SKU (TMSPUTT06CTL) are priced differently and stock varies by store",
+        "Thicker pet-style Home Depot turf stops the ball dead, which some builders wanted and others did not"
+      ],
+      "why_people_choose_it": "It is the turf you can touch at the store, buy by the foot, and have on the floor the same afternoon; builders who later upgrade to nylon putting turf often started here.",
+      "image_url": ""
+    },
+    {
+      "brand": "GoSports",
+      "name": "Elite Golf Simulator Turf 15 mm (10 x 6, 12 x 6, 15 x 6 ft)",
+      "subtype": "landing-turf",
+      "tier": "qualified",
+      "mention_count": 7,
+      "mention_sources": [
+        "https://thinkindoor.com/best-turf-for-golf-simulator/",
+        "https://golfsim.co/gear/golf-simulator-flooring-turf/",
+        "https://middleagedmale.com/best-golf-simulator-turf/",
+        "https://golfworldtrips.com/best-turfs-for-golf-simulator/",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/402566-preparing-for-sim-build-flooring-turf-options-as-well-as-suspension-help",
+        "https://www.golfgalaxy.com/p/gosports-10-x-6-indoor-turf-home-simulator-26gosugolfk4d42rgofcu/26gosugolfk4d42rgofcu",
+        "https://pricehistory.app/p/gosports-golf-simulator-turf-15-mm-elite-KiR61F2h"
+      ],
+      "price": {
+        "amount": 249.99,
+        "currency": "USD",
+        "unit": "15 ft x 6 ft; 12 ft x 6 ft $199.99",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.playgosports.com/products/gosports-golf-simulator-turf-15-mm-elite-golf-mat-for-indoor-home-setups"
+      },
+      "other_prices": [
+        {
+          "amount": 179.99,
+          "unit": "10 ft x 6 ft on Amazon (price tracker, Jul 2026)",
+          "read_on": "2026-07-15",
+          "source_url": "https://pricehistory.app/p/gosports-golf-simulator-turf-15-mm-elite-KiR61F2h"
+        }
+      ],
+      "direct_url": "https://www.playgosports.com/products/gosports-golf-simulator-turf-15-mm-elite-golf-mat-for-indoor-home-setups",
+      "fallback_url": "",
+      "fallback_note": "Amazon ASIN not confirmed (the candidate ASIN page returned 500).",
+      "read_url": "https://thinkindoor.com/best-turf-for-golf-simulator/",
+      "specs": {
+        "pile_height_in": "15 mm (about 0.6 in)",
+        "fiber": "polypropylene and polyurethane blend (review site)",
+        "roll_width_ft": "10, 12 or 15; all 6 ft deep",
+        "weight": "32 lb for the 10 x 6",
+        "install": "carpet tape included; works on concrete, wood, firm carpet",
+        "stimp": "not stated"
+      },
+      "room_fit": "Each piece is only 6 ft deep, so it is a landing strip, not a floor. A 10 ft x 15 ft bay takes two 15 x 6 pieces side by side (one seam, 12 ft of depth) plus a strip at the back.",
+      "who_its_for": "Net or screen users who want a finished-looking landing strip in front of the mat without ordering freight turf.",
+      "pros": [
+        "Ships parcel, no freight",
+        "Three widths match common enclosure widths",
+        "Named top pick by four affiliate roundups"
+      ],
+      "cons": [
+        "6 ft depth only",
+        "Not a putting surface; no stimp published",
+        "The only forum mention is of GoSports 4 x 5 landing mats, and that builder bought a cheaper brand at half the cost"
+      ],
+      "known_issues": [
+        "Roundup sites are affiliate content, not tests",
+        "Heavy roll that is not foldable"
+      ],
+      "why_people_choose_it": "It is the Amazon-easy answer for the space between mat and screen, and it matches the GoSports enclosure most of those buyers already own.",
+      "image_url": ""
+    },
+    {
+      "brand": "Pro Putt Systems",
+      "name": "TourPutt Ultimate bulk putting turf and D-Base / O-Base / Elite-Base panel systems",
+      "subtype": "putting-turf",
+      "tier": "qualified",
+      "mention_count": 5,
+      "mention_sources": [
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/284629-diy-turf-setup",
+        "https://walfosbrand.com/blogs/golf/best-turf-for-simulator",
+        "https://www.virtual-golf-simulator.com/best-golf-simulator-flooring-and-turf-complete-guide-for-home-setups/",
+        "https://www.flooringinc.com/shop/pro-putt-premium-turf-rolls-10281.html",
+        "https://magnoliaturf.com/synthetic-turf-cost"
+      ],
+      "price": {
+        "amount": 5.37,
+        "currency": "USD",
+        "unit": "per sq ft for 150 to 300 sq ft; $5.05 at 901 to 1,500 sq ft; freight extra",
+        "read_on": "2026-10-19",
+        "source_url": "https://proputtsystems.com/shop/bulk-turf/"
+      },
+      "other_prices": [
+        {
+          "amount": 11,
+          "unit": "to $14 per sq ft, D-Base full system plus freight; O-Base $21 to $26; Elite-Base $29 to $34",
+          "read_on": "2026-10-19",
+          "source_url": "https://proputtsystems.com/simulator-turf/"
+        },
+        {
+          "amount": 6000,
+          "unit": "to $7,000 reseller quote for half a room (forum, Aug 2020)",
+          "read_on": "2020-08-21",
+          "source_url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/284629-diy-turf-setup"
+        }
+      ],
+      "direct_url": "https://proputtsystems.com/shop/bulk-turf/",
+      "fallback_url": "https://www.flooringinc.com/shop/pro-putt-premium-turf-rolls-10281.html",
+      "read_url": "https://www.virtual-golf-simulator.com/best-golf-simulator-flooring-and-turf-complete-guide-for-home-setups/",
+      "specs": {
+        "thickness_in": "0.50",
+        "weight": "0.60 lb per sq ft",
+        "fiber": "nylon",
+        "roll_width_ft": 15,
+        "roll_length_ft": "10 to 100",
+        "stimp": "11 ft 3 in plus",
+        "infill": "not stated",
+        "install": "lays without glue",
+        "bases": "D-Base 0.75 in molded panels (turf plus base 1 to 1.25 in); O-Base 1.0 in 2 x 2 ft panels (1.5 in total); Elite-Base 2.0 in, 23 x 23 in panels (2.5 in total, takes thick hitting mats flush)"
+      },
+      "room_fit": "150 sq ft is exactly the bulk minimum: $805.50 plus freight for a seamless 15 x 10 piece. A D-Base system for the same bay is roughly $1,650 to $2,100 plus freight and sets the mat flush.",
+      "who_its_for": "Builders who want a finished putting green with a flush hitting mat and would rather buy a system than engineer a foam-and-plywood build-up.",
+      "pros": [
+        "Fastest published stimp in this set (11 ft 3 in plus)",
+        "Base panels solve the flush-mat problem by design",
+        "Serving sim rooms since 2010; sells 50/50 black-green and Tour Black turf too"
+      ],
+      "cons": [
+        "150 sq ft minimum on bulk turf",
+        "System pricing runs $11 to $34 per sq ft plus freight",
+        "Only one forum mention, and it was a quote the builder walked away from"
+      ],
+      "known_issues": [
+        "Pile height and face weight are not published on the bulk page"
+      ],
+      "why_people_choose_it": "You buy the base and the turf from one place and the mat sits flush on day one, which is the step most DIY floors get wrong.",
+      "image_url": "https://proputtsystems.com/wp-content/uploads/2026/01/Best-Sim-Turf-2026-1024x766.jpg"
+    },
+    {
+      "brand": "Big Moss Golf",
+      "name": "Golf Simulator Putting Turf for Carl's Place DIY Enclosure (green, and Midnight Shadow black)",
+      "subtype": "putting-turf",
+      "tier": "qualified",
+      "mention_count": 5,
+      "mention_note": "Thin: two guides plus three reseller listings. Flag before shipping as qualified.",
+      "mention_sources": [
+        "https://walfosbrand.com/blogs/golf/best-turf-for-simulator",
+        "https://www.virtual-golf-simulator.com/best-golf-simulator-flooring-and-turf-complete-guide-for-home-setups/",
+        "https://indoorgolfoutlet.com/collections/putting-turf/products/big-moss-midnight-shadow-gst-golf-simulator-putting-turf-for-carls-place-diy-enclosure",
+        "https://shop.carlofet.com/big-moss-turf-diy",
+        "https://golfsimulatorsdirect.com/collections/carls-place"
+      ],
+      "price": {
+        "amount": 2040,
+        "currency": "USD",
+        "unit": "10 ft W x 12 ft D (Midnight Shadow at Indoor Golf Outlet); 8 x 12 $1,815; 13 x 12 $2,375",
+        "read_on": "2026-10-19",
+        "source_url": "https://indoorgolfoutlet.com/collections/putting-turf/products/big-moss-midnight-shadow-gst-golf-simulator-putting-turf-for-carls-place-diy-enclosure"
+      },
+      "direct_url": "https://shop.carlofet.com/big-moss-turf-diy",
+      "direct_url_note": "Carl's page lists six enclosure-matched sizes (100 to 163 sq ft) but showed no price on the fetch; search index shows $1,816.95 to $2,379.95.",
+      "fallback_url": "https://indoorgolfoutlet.com/collections/putting-turf/products/big-moss-midnight-shadow-gst-golf-simulator-putting-turf-for-carls-place-diy-enclosure",
+      "read_url": "https://www.virtual-golf-simulator.com/best-golf-simulator-flooring-and-turf-complete-guide-for-home-setups/",
+      "specs": {
+        "pile_height_in": "3/8",
+        "stimp": "13 rolling down grain (Indoor Golf Outlet)",
+        "sizes": "cut and hemmed to the Carl's DIY enclosure: 8 x 8 x 5 ft enclosure takes 97.75 x 144 in (100 sq ft); 7.7 x 10 x 5 takes 122.5 x 144 in (124 sq ft); up to 161 x 144 in (163 sq ft)",
+        "included": "precut holes, two cups and flags; Carl's version includes foam break pads and an 18 x 36 in return strip",
+        "depth_ft": 12,
+        "backing": "not stated"
+      },
+      "room_fit": "The 10 ft wide enclosure size is 122.5 x 144 in (124 sq ft) and extends 12 in past the screen line; it fills the bay from the screen back about 12 ft, so a 15 ft deep bay has 3 ft of bare floor behind it.",
+      "who_its_for": "Carl's DIY enclosure owners who want a matched, hemmed drop-in green with break pads rather than cutting roll goods.",
+      "pros": [
+        "Pre-cut and hemmed to the enclosure, with holes and ball return",
+        "Break pads under it allow sloped putts",
+        "Fast (13 stimp) true-roll surface"
+      ],
+      "cons": [
+        "$15 to $18 per sq ft equivalent",
+        "Ships freight, US only",
+        "Few independent mentions; it is bought as part of the Carl's package"
+      ],
+      "known_issues": [
+        "Pile and backing not published on Carl's page"
+      ],
+      "why_people_choose_it": "Because it arrives already shaped to the enclosure and the break pads turn the landing zone into a practice green with slope.",
+      "image_url": "https://shop.carlofet.com/media/catalog/product/cache/6edf21fe715e48c4b037b8bb42a53918/b/i/big-moss-golf-simulator-turf-logo_1.jpg"
+    },
+    {
+      "brand": "Shop Indoor Golf (TIGS)",
+      "name": "SIG landing pad turf (SIG8 / SIG10 / SIG12 and SIG DIY landing pads; SIG Custom Golf Simulator Turf in Money Putt green or Bermuda Black)",
+      "subtype": "landing-turf",
+      "tier": "qualified",
+      "mention_count": 5,
+      "mention_note": "Thin and reseller-heavy: one review site, Indoor Golf Outlet, and package resellers. Flag before shipping as qualified.",
+      "mention_sources": [
+        "https://www.parpercision.com/golf-simulator-turf",
+        "https://indoorgolfoutlet.com/collections/putting-turf/products/landing-pad-mat-for-sig-diy-golf-simulator-enclosure",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/350536-putting-and-mat-questions",
+        "https://m.reach.dog/shop/scratch-golf/products/sig10-simulator-studio",
+        "https://golfsimdepot.com/products/sig8-golf-simulator-studio"
+      ],
+      "price": {
+        "amount": 899.99,
+        "currency": "USD",
+        "unit": "SIG10 landing pad 10 ft 6 in x 8 ft (compare at $999.99)",
+        "read_on": "2026-10-19",
+        "source_url": "https://shopindoorgolf.com/products/sig10-landing-pad"
+      },
+      "other_prices": [
+        {
+          "amount": 699.99,
+          "unit": "SIG DIY landing pad 8 ft 2 in wide, up to $1,299.99 at 15 ft wide",
+          "read_on": "2026-10-19",
+          "source_url": "https://indoorgolfoutlet.com/collections/putting-turf/products/landing-pad-mat-for-sig-diy-golf-simulator-enclosure"
+        },
+        {
+          "amount": 4.55,
+          "unit": "per sq ft custom cut (24 to 480 in long, 24 to 180 in wide) plus $299 freight",
+          "read_on": "2026-10-19",
+          "source_url": "https://shopindoorgolf.com/products/sig-custom-golf-simulator-turf"
+        }
+      ],
+      "direct_url": "https://shopindoorgolf.com/products/sig10-landing-pad",
+      "fallback_url": "https://indoorgolfoutlet.com/collections/putting-turf/products/landing-pad-mat-for-sig-diy-golf-simulator-enclosure",
+      "read_url": "https://www.parpercision.com/golf-simulator-turf",
+      "specs": {
+        "pile_height_in": "1/2",
+        "fiber": "nylon (landing pads); Bermuda Black is tufted polypropylene",
+        "size": "SIG10: 10 ft 6 in x 8 ft, 38 lb; DIY pad ships as two halves rolled together",
+        "backing": "dual-layer woven polypropylene (custom turf)",
+        "stimp": "not stated",
+        "made_in": "USA"
+      },
+      "room_fit": "The SIG10 pad is 10.5 x 8 ft (84 sq ft): it fills the screen-to-mat zone of a 10 ft x 15 ft bay and leaves the stance area and the back 7 ft bare; the custom turf at $4.55 per sq ft covers the whole 150 sq ft for about $683 plus freight.",
+      "who_its_for": "SIG enclosure owners who want the matched pad, and anyone who wants black landing turf.",
+      "pros": [
+        "Sized to the enclosure, protects the floor, doubles as a putting surface",
+        "Custom cut to any size in green or black",
+        "Made in the USA"
+      ],
+      "cons": [
+        "$899.99 for 84 sq ft is about $10.70 per sq ft",
+        "Custom orders take 3 to 5 weeks and cannot be returned",
+        "Almost no independent discussion; forum users post the SIGPRO flooring image, not the pad"
+      ],
+      "known_issues": [
+        "SIG lists Money Putt pile as 1/2 in while Greatmats and Rain or Shine list 3/8 in for the same GrassTex turf"
+      ],
+      "why_people_choose_it": "It is the no-measuring option for a SIG bay, and the black version gives the floor contrast against a green hitting mat.",
+      "image_url": "https://shopindoorgolf.com/cdn/shop/files/landing-pad_b8f0aade-4424-42da-8dd8-dc0d0e5f5d29.jpg"
+    },
+    {
+      "brand": "SIGPRO (Shop Indoor Golf)",
+      "name": "SIGPRO Golf Simulator Flooring (interlocking panels plus putting turf plus hitting strip)",
+      "subtype": "tiles",
+      "tier": "qualified",
+      "mention_count": 5,
+      "mention_sources": [
+        "https://golfsim.co/gear/golf-simulator-flooring-turf/",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/350536-putting-and-mat-questions",
+        "https://indoorgolfoutlet.com/collections/putting-turf",
+        "https://golfsimdepot.com/products/sigpro-golf-simulator-flooring",
+        "https://mygaragegolf.com/products/sigpro-golf-simulator-flooring-sig10"
+      ],
+      "price": {
+        "amount": 3919.99,
+        "currency": "USD",
+        "unit": "SIG10 size (11 ft 7 in x 15 ft 6 in); SIG8 $3,359.99; SIG12 $4,399.99",
+        "read_on": "2026-10-19",
+        "source_url": "https://shopindoorgolf.com/products/sigpro-golf-simulator-flooring"
+      },
+      "direct_url": "https://shopindoorgolf.com/products/sigpro-golf-simulator-flooring",
+      "fallback_url": "https://indoorgolfoutlet.com/collections/putting-turf/products/sigpro-golf-simulator-flooring",
+      "read_url": "https://golfsim.co/gear/golf-simulator-flooring-turf/",
+      "specs": {
+        "panel_thickness_in": 2,
+        "total_height_in": 2.375,
+        "putting_turf": "3/8 in",
+        "stimp": "9 to 10",
+        "hitting_strip": "integrated, replaceable, takes tees",
+        "included": "panels, putting turf, hitting strip, four cups; flags not included; undulation foam kit is an add-on",
+        "sizes": "SIG10 11 ft 7 in W x 15 ft 6 in D; SIG12 13 ft 6 in W x 15 ft 6 in D",
+        "reviews": "4.6 from 10 reviews (9 five-star, 1 one-star)"
+      },
+      "room_fit": "The SIG10 size is 11 ft 7 in x 15 ft 6 in, so it slightly overfills a 10 ft x 15 ft bay; the SIG8 size is the fit for a 10 ft wide bay if its dimensions (image only) are under 10 ft.",
+      "who_its_for": "Buyers who want the whole floor solved in one box: flush strip, putting green, and a base, for a SIG enclosure.",
+      "pros": [
+        "Flush replaceable hitting strip with no build-up carpentry",
+        "Putting green rolls 9 to 10",
+        "Highest-rated turf product in this set with 10 reviews"
+      ],
+      "cons": [
+        "$3,360 to $4,400",
+        "2.375 in tall floor needs a transition at the room edge",
+        "Sized to SIG enclosures"
+      ],
+      "known_issues": [
+        "One one-star review among ten; content not read"
+      ],
+      "why_people_choose_it": "One forum member said he would rather buy the swappable flush hitting area than build his own; that is the whole pitch.",
+      "image_url": "https://shopindoorgolf.com/cdn/shop/products/golf-simulator-flooring-1.jpg"
+    },
+    {
+      "brand": "Generic (BalanceFrom, Meister X-Thick, ProsourceFit, Harbor Freight)",
+      "name": "Interlocking EVA foam gym tiles, 1/2 to 1.5 in, as turf underlay",
+      "subtype": "underlay",
+      "tier": "core",
+      "mention_count": 15,
+      "mention_sources": [
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/170329-what-did-you-do-about-large-turf-in-sim-room",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/376776-foam-board-insulation-under-turf",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/177780-flooring-between-screan-and-mat",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/147532-turf-between-the-stance-mat-and-screen",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/351127-turf-flooring",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/284629-diy-turf-setup",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/417787-garage-sim-build-flooring-build",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/321787-ideas-on-garage-flooring",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/346815-are-sti-np45-and-grass-tex-money-putt-the-same",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/350536-putting-and-mat-questions",
+        "https://golfsim.co/gear/golf-simulator-flooring-turf/",
+        "https://www.greatmats.com/what-kind-of-mats-are-good-for-a-golf-simulator.php",
+        "https://onthegreen.golf/how-to-build-a-budget-golf-simulator/",
+        "https://www.virtual-golf-simulator.com/best-golf-simulator-flooring-and-turf-complete-guide-for-home-setups/",
+        "https://simweekly1.substack.com/p/is-this-the-coolest-garage-sim"
+      ],
+      "price": {
+        "amount": 569,
+        "currency": "USD",
+        "unit": "Meister X-Thick 1.5 in, 144 sq ft (forum, Mar 2023)",
+        "read_on": "2023-03-01",
+        "source_url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/376776-foam-board-insulation-under-turf"
+      },
+      "other_prices": [
+        {
+          "amount": 6,
+          "unit": "per 2 x 2 ft 5/8 in tile at Greatmats; 1.25 in jiu jitsu tiles about $25 per 10.89 sq ft",
+          "read_on": "2024-12-01",
+          "source_url": "https://www.greatmats.com/what-kind-of-mats-are-good-for-a-golf-simulator.php"
+        },
+        {
+          "amount": 29,
+          "unit": "Rain or Shine 3/4 in high-density EVA tile, 2 x 2 ft",
+          "read_on": "2026-10-19",
+          "source_url": "https://rainorshinegolf.com/products/golf-simulator-flooring-tiles"
+        },
+        {
+          "amount": 240,
+          "unit": "SimTurf 5/8 in or 1 in EVA, case of 25 (100 sq ft), range to $390",
+          "read_on": "2026-10-19",
+          "source_url": "https://simturf.com/product/simturf-foam-floor-tiles/"
+        }
+      ],
+      "direct_url": "https://www.amazon.com/dp/B07BXMCNM8",
+      "direct_url_note": "BalanceFrom 1 in EVA puzzle mat, 6 tiles per 24 sq ft; this is the ASIN a forum builder bought to match a hitting-strip height. Amazon price not read (page too long to parse).",
+      "fallback_url": "https://rainorshinegolf.com/products/golf-simulator-flooring-tiles",
+      "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/376776-foam-board-insulation-under-turf",
+      "specs": {
+        "tile_size": "2 x 2 ft (4 sq ft)",
+        "thickness_in": "1/2, 5/8, 3/4, 1, 1.25, 1.5",
+        "material": "EVA closed-cell foam; high-density grades sold by Rain or Shine, Ace Indoor Golf (3/4 in tatami), SimTurf",
+        "height_match": "5/8 in tile plus 3/8 in putting turf = 1 in (SimTurf); 1 in tile plus 1/2 in turf meets a 1.5 in Fiberbuilt; 1.5 in Meister plus turf approaches a 2 in SIG Softy"
+      },
+      "room_fit": "A 10 ft x 15 ft bay is 38 two-foot tiles; at 1 in that is seven 6-tile BalanceFrom packs, or 38 Rain or Shine tiles (about $1,100 at the single-tile price, less by the 30-pack).",
+      "who_its_for": "Anyone laying turf over concrete who needs to raise the floor to the hitting mat height cheaply and wants the bay removable.",
+      "pros": [
+        "Cheapest way to match turf height to the hitting mat",
+        "Kills bounce and noise on concrete (many builders)",
+        "Removable; one builder has run 1 in puzzle mats for five years and 1,000 hours",
+        "Insulates a cold slab"
+      ],
+      "cons": [
+        "Too spongy for some (a forum member called it squishy and swapped to firmer mats)",
+        "One builder found balls bounced twice as high over gym tiles and went back to bare concrete",
+        "Not stable under a hitting mat per GolfingSim; put the mat on rubber or plywood",
+        "Lower-density tiles compress in traffic (Carl's guide)"
+      ],
+      "known_issues": [
+        "Tile edges telegraph through thin turf; cover with 3/8 in plywood for a dead-flat putting surface (forum build)"
+      ],
+      "why_people_choose_it": "It is the default DIY base: cheap, cut with a knife, and it lets the hitting strip sit flush, which is the detail every build thread ends up chasing.",
+      "image_url": ""
+    },
+    {
+      "brand": "Carl's Place",
+      "name": "Golf Room Floor Tile System (1.25 in interlocking foam tiles with tapered edges and corners)",
+      "subtype": "tiles",
+      "tier": "qualified",
+      "mention_count": 6,
+      "mention_sources": [
+        "https://indoorgolfoutlet.com/collections/putting-turf/products/carls-place-golf-room-floor-tile-system",
+        "https://elitesimgolf.com/products/carl-s-place-golf-room-floor-tile-kit",
+        "https://golfsimgenies.com/collections/carls-place",
+        "https://www.golfprofactory.com/products/carl-s-place-golf-room-floor-tile-system/",
+        "https://www.elevatedgolfsimulators.com/products/carls-place-carpet-floor-tiles",
+        "https://onthegreen.golf/how-to-build-a-budget-golf-simulator/"
+      ],
+      "price": {
+        "amount": 229.95,
+        "currency": "USD",
+        "unit": "5-pack of 40.25 x 40.25 in tiles (about 56 sq ft); 6-pack $275.95; edge 6-packs $109.95; corner 4-pack $59.95",
+        "read_on": "2026-10-19",
+        "source_url": "https://shop.carlofet.com/golf-room-floor-tiles"
+      },
+      "direct_url": "https://shop.carlofet.com/golf-room-floor-tiles",
+      "fallback_url": "https://indoorgolfoutlet.com/collections/putting-turf/products/carls-place-golf-room-floor-tile-system",
+      "read_url": "https://onthegreen.golf/how-to-build-a-budget-golf-simulator/",
+      "specs": {
+        "thickness_in": 1.25,
+        "tile_size": "40.25 x 40.25 in (about 11.25 sq ft)",
+        "material": "cushioned interlocking foam (type not named)",
+        "edges": "tapered depth and width edge pieces and corners for a no-trip transition",
+        "use": "subfloor under turf with a hitting mat or strip inset"
+      },
+      "room_fit": "A 10 ft x 15 ft bay needs about 14 tiles (three 5-packs, about $690) plus edge packs on the open sides; Carl's recommends ordering a little extra for the interlock loss.",
+      "who_its_for": "Builders who want a thicker, finished-edge foam base from a sim retailer rather than gym tiles.",
+      "pros": [
+        "1.25 in puts most hitting mats flush without stacking",
+        "Finished tapered edges",
+        "Sold by six sim retailers"
+      ],
+      "cons": [
+        "About $4 per sq ft before edges, roughly double gym tiles",
+        "Foam type and density not published"
+      ],
+      "known_issues": [
+        "Coverage per pack is not stated; it is a calculation"
+      ],
+      "why_people_choose_it": "It is the tile Carl's own flooring guide points to, with edge pieces that make a garage floor look finished.",
+      "image_url": "https://shop.carlofet.com/media/catalog/product/cache/6edf21fe715e48c4b037b8bb42a53918/f/l/floor-tile-edge-hero.jpg"
+    },
+    {
+      "brand": "Generic (Tractor Supply stall mats, Rubber Flooring Inc rolls, Rubber-Cal)",
+      "name": "Rubber base: 4 x 6 ft 3/4 in horse stall mats, or 3/8 to 1/2 in rubber rolls and tiles",
+      "subtype": "underlay",
+      "tier": "core",
+      "mention_count": 10,
+      "mention_sources": [
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/177780-flooring-between-screan-and-mat",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/147532-turf-between-the-stance-mat-and-screen",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/91735-flooring-not-the-hitting-or-stance-mat",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/170150-hitting-full-shots-off-of-putting-turf-instead-of-a-mat",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/321787-ideas-on-garage-flooring",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/170329-what-did-you-do-about-large-turf-in-sim-room",
+        "https://golfsim.co/gear/golf-simulator-flooring-turf/",
+        "https://golfingsim.com/blogs/news/best-flooring-for-a-golf-simulator-room-rubber-turf-foam-or-hardwood",
+        "https://www.virtual-golf-simulator.com/best-golf-simulator-flooring-and-turf-complete-guide-for-home-setups/",
+        "https://www.golf-simulators.com/Flooring.html"
+      ],
+      "price": {
+        "amount": 3.5,
+        "currency": "USD",
+        "unit": "per sq ft, rubber tiles (GolfingSim estimate, Apr 2026); foam about $1.50",
+        "read_on": "2026-04-20",
+        "source_url": "https://golfingsim.com/blogs/news/best-flooring-for-a-golf-simulator-room-rubber-turf-foam-or-hardwood"
+      },
+      "other_prices": [
+        {
+          "amount": 49,
+          "unit": "per 3 x 3 ft 5/8 in rubber interlocking tile (GSA)",
+          "read_on": "2026-10-19",
+          "source_url": "https://www.golf-simulators.com/Flooring.html"
+        }
+      ],
+      "direct_url": "https://www.rubberflooringinc.com/",
+      "direct_url_note": "Category site; no single maker page. Tractor Supply stall mat page not fetched.",
+      "fallback_url": "",
+      "read_url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/91735-flooring-not-the-hitting-or-stance-mat",
+      "specs": {
+        "thickness_in": "3/4 (stall mats); 3/8 or 1/2 (rolls)",
+        "mat_size": "4 x 6 ft stall mats, about 100 lb each",
+        "noise_claim": "GolfingSim cites Second Skin Audio: 1/2 in rubber under the hitting mat cuts perceived impact noise 35 to 50% vs bare concrete (vendor claim, not independently tested)",
+        "lifespan_claim": "10 to 20 years (GolfingSim)"
+      },
+      "room_fit": "A 10 ft x 15 ft bay is seven 4 x 6 stall mats (168 sq ft) at about 700 lb; GolfingSim prices a full 150 sq ft rubber floor at about $525 plus a 3 x 10 turf strip.",
+      "who_its_for": "Garage builders who want a dead, durable base that also survives a car, with turf only in the hitting lane.",
+      "pros": [
+        "Indestructible, keeps the ball from bouncing all over (forum)",
+        "Stable under a hitting mat where foam is not",
+        "A sulli182-style rubber roll base lets the car and the sim share the floor"
+      ],
+      "cons": [
+        "Heavy (a builder bought about 1,000 lb of stall mats); freight is costly so buy locally",
+        "Fresh mats from an outdoor pallet smell; let them air out",
+        "Does not look like a golf course; needs turf on top"
+      ],
+      "known_issues": [
+        "Stacking two stall mats to meet a 1.5 in Fiberbuilt mat works but doubles the weight"
+      ],
+      "why_people_choose_it": "It is the base that survives everything, and the hybrid rubber-floor-plus-turf-strip layout is the one most guides now recommend for garages.",
+      "image_url": ""
+    },
+    {
+      "brand": "Owens Corning (FOAMULAR 150) and generic XPS / EPS",
+      "name": "Rigid foam insulation board (1 to 1.5 in) under putting turf, usually capped with 3/8 in plywood or 1/2 in OSB",
+      "subtype": "underlay",
+      "tier": "qualified",
+      "mention_count": 6,
+      "mention_sources": [
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/376776-foam-board-insulation-under-turf",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/417787-garage-sim-build-flooring-build",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/177780-flooring-between-screan-and-mat",
+        "https://rogueengineer.com/ultimate-diy-home-golf-simulator/",
+        "https://www.youtube.com/watch?v=7xhQrPdcxXI",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/402566-preparing-for-sim-build-flooring-turf-options-as-well-as-suspension-help"
+      ],
+      "price": {
+        "amount": 300,
+        "currency": "USD",
+        "unit": "under $300 of 1.5 in rigid foam for about 220 sq ft (forum, Oct 2022)",
+        "read_on": "2022-10-25",
+        "source_url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/376776-foam-board-insulation-under-turf"
+      },
+      "direct_url": "https://www.owenscorning.com/en-us/insulation/products/foamular-150",
+      "fallback_url": "",
+      "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/376776-foam-board-insulation-under-turf",
+      "specs": {
+        "thickness_in": "1 (Rogue Engineer, FOAMULAR 150 4 x 8 sheets, R-5) or 1.5 (forum build-ups)",
+        "stack": "1.5 in foam, 3/8 in plywood glued on, 1/8 in foam underlayment, putting turf (forum JT789); or 1 in foam, double-faced tape, putting turf (Rogue Engineer)",
+        "compression": "rated for use under concrete slabs; does not compress under foot traffic (forum)"
+      },
+      "room_fit": "Five 4 x 8 sheets cover a 10 ft x 15 ft bay with offcuts; cap with five sheets of 3/8 in plywood if you want a putting-flat floor.",
+      "who_its_for": "Builders chasing a dead-flat, firm putting floor that still comes up to a 2 in hitting strip, on a budget.",
+      "pros": [
+        "Firm, not spongy; one builder has had a Fiberbuilt on EPS over concrete for nine years with no issues",
+        "Cheapest way to build 1.5 in of height",
+        "Light enough to move (Rogue Engineer)"
+      ],
+      "cons": [
+        "Uncovered foam gets brittle and flakes; cap it",
+        "Never under the hitting area without a plywood cap, since club impact flakes it",
+        "A cheap carpet pad on top feels squishy; use thin underlayment or none"
+      ],
+      "known_issues": [
+        "The forum thread that proposed it never reported the final build"
+      ],
+      "why_people_choose_it": "It is how the Triple Bogey Golf and Rogue Engineer builds got a flush mat and a true putting floor for a few hundred dollars.",
+      "image_url": ""
+    },
+    {
+      "brand": "Petgrow",
+      "name": "Petgrow / Petgrow Pro putting green turf (Amazon)",
+      "subtype": "putting-turf",
+      "tier": "qualified",
+      "mention_count": 5,
+      "mention_sources": [
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/307907-putting-turf-review",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/376776-foam-board-insulation-under-turf",
+        "https://golfsim.co/gear/golf-simulator-flooring-turf/",
+        "https://wellwhisk.com/?p=223902",
+        "https://www.puravidabybrandt.com/?p=88787"
+      ],
+      "price": {
+        "amount": 70,
+        "currency": "USD",
+        "unit": "3 x 10 ft roll with free shipping (forum, spring 2020 purchase)",
+        "read_on": "2020-12-31",
+        "source_url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/307907-putting-turf-review"
+      },
+      "direct_url": "",
+      "direct_url_note": "No maker page and no confirmed Amazon ASIN found; search Amazon for Petgrow Pro Putting Green Turf 6 x 10.",
+      "fallback_url": "",
+      "read_url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/307907-putting-turf-review",
+      "specs": {
+        "pile_height_in": "about 1/4 (forum measurement); Pro version 0.47 in rubber-backed per roundups",
+        "stimp": "about 12 per the product info the reviewer found; he matched E6 to it and called it very accurate with a Mevo+",
+        "sizes": "3 x 10 ft; Pro 6 x 10 ft",
+        "fiber": "PE (roundup)"
+      },
+      "room_fit": "Sold in small pieces, so a 10 ft x 15 ft bay means three or more seams; it is a putting strip or a hitting-zone fill, not a floor.",
+      "who_its_for": "Budget builders who want a fast putting strip beside the mat for under $100.",
+      "pros": [
+        "Cheap and fast (about 12 stimp)",
+        "A forum builder glued a cut piece to a board outdoors and it held up",
+        "Lies flat on a basement floor without anchoring"
+      ],
+      "cons": [
+        "Small pieces; seams everywhere on a full floor",
+        "Creasing from shipping is the common complaint (roundup)"
+      ],
+      "known_issues": [
+        "A forum builder laid Petgrow Pro over 1/8 in underlayment on plywood over foam; reported soft-firm after one month, no long-term report"
+      ],
+      "why_people_choose_it": "It is the sub-$100 Amazon putting turf with a forum review that says the stimp number was real.",
+      "image_url": ""
+    },
+    {
+      "brand": "Synthetic Turf International (STI)",
+      "name": "NP50 / NP55 texturized nylon putting turf (and PL306 One Putt with 5 mm foam backing)",
+      "subtype": "putting-turf",
+      "tier": "qualified",
+      "mention_count": 5,
+      "mention_sources": [
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/170329-what-did-you-do-about-large-turf-in-sim-room",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/147532-turf-between-the-stance-mat-and-screen",
+        "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/91735-flooring-not-the-hitting-or-stance-mat",
+        "https://www.virtual-golf-simulator.com/best-golf-simulator-flooring-and-turf-complete-guide-for-home-setups/",
+        "https://indoorgolfoutlet.com/collections/putting-turf/products/np50-putting-turf"
+      ],
+      "price": {
+        "amount": 1125,
+        "currency": "USD",
+        "unit": "NP50 15 ft x 5 ft, from (Indoor Golf Outlet)",
+        "read_on": "2026-10-19",
+        "source_url": "https://indoorgolfoutlet.com/collections/putting-turf/products/np50-putting-turf"
+      },
+      "other_prices": [
+        {
+          "amount": 5,
+          "unit": "per sq ft plus shipping for NP50 in 2014; PL306 about $4 per sq ft in 2016 (forum)",
+          "read_on": "2017-02-25",
+          "source_url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/91735-flooring-not-the-hitting-or-stance-mat"
+        }
+      ],
+      "direct_url": "https://indoorgolfoutlet.com/collections/putting-turf/products/np50-putting-turf",
+      "direct_url_note": "STI's own product page was not found; Indoor Golf Outlet is the sim retailer carrying NP45, NP50, NP55 and Fast Putt.",
+      "fallback_url": "",
+      "read_url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/91735-flooring-not-the-hitting-or-stance-mat",
+      "specs": {
+        "fiber": "texturized nylon",
+        "backing": "heavy rubber (NP50); PL306 carries a 5 mm foam back for concrete",
+        "roll_width_ft": 15,
+        "rank": "Indoor Golf Outlet ranks NP45 just below NP50 and NP55",
+        "mill": "Grass Turf Mills, Dalton, Georgia; sister company to GrassTex (forum)"
+      },
+      "room_fit": "15 ft roll: one 15 x 10 piece for a 10 ft x 15 ft bay; buy from an authorized STI rep, since the forum found online resellers charging much more.",
+      "who_its_for": "Builders near an STI dealer who want top-tier nylon and have been told to buy direct.",
+      "pros": [
+        "Top-tier nylon; same mill family as Money Putt",
+        "PL306's foam back is the forum's preferred answer for turf straight on concrete",
+        "Available in black at Indoor Golf Outlet"
+      ],
+      "cons": [
+        "Reseller prices are high; a 15 x 5 is $1,125 vs $640 for Money Putt",
+        "Dealer network, not a web cart"
+      ],
+      "known_issues": [
+        "The same product is sold under several names, which confuses price comparison"
+      ],
+      "why_people_choose_it": "The forum's long-time turf voice (cspin) buys STI through a rep and tells everyone else to do the same.",
+      "image_url": "https://indoorgolfoutlet.com/cdn/shop/files/NP45-Green-Putting-Turf_2048x.png"
+    },
+    {
+      "brand": "Rain or Shine Golf",
+      "name": "RoS Landing Pad Turf (compact 5 x 8 to 5 x 12; 10 x 10 bundle) and Studio Turf full-floor kit",
+      "subtype": "landing-turf",
+      "tier": "watch",
+      "mention_count": 3,
+      "mention_sources": [
+        "https://www.parpercision.com/golf-simulator-turf",
+        "https://indoorgolfoutlet.com/collections/putting-turf",
+        "https://indoorgolfoutlet.com/collections/rain-or-shine-golf"
+      ],
+      "price": {
+        "amount": 349,
+        "currency": "USD",
+        "unit": "5 x 8 ft compact; 5 x 10.5 $399; 5 x 12 $449; 10 x 10 bundle $780 (compare at $899); Studio Turf 11 ft 6 in x 14 ft 6 in $4,000, 13 ft 2 in x 16 ft 2 in $4,500",
+        "read_on": "2026-10-19",
+        "source_url": "https://rainorshinegolf.com/products/landing-pad-turf"
+      },
+      "direct_url": "https://rainorshinegolf.com/products/landing-pad-turf",
+      "fallback_url": "https://indoorgolfoutlet.com/collections/putting-turf/products/turf-landing-pad-and-putting-green",
+      "read_url": "https://www.parpercision.com/golf-simulator-turf",
+      "specs": {
+        "pile_height_in": "1 (landing pad)",
+        "backing": "foam-backed",
+        "usable_area": "about 7 x 7 ft on the 10 x 10 bundle",
+        "fiber": "putting green turf; Studio Turf is nylon",
+        "pairs_with": "SwingTurf mat; also Fiberbuilt, TrueStrike, CCE"
+      },
+      "room_fit": "The 10 x 10 bundle covers the front two-thirds of a 10 ft x 15 ft bay; the Studio Turf 11 ft 6 in x 14 ft 6 in kit is a near-exact full-floor match at $4,000.",
+      "who_its_for": "Rain or Shine package buyers who want the matched pad.",
+      "pros": [
+        "Foam-backed, so it goes straight on concrete",
+        "Sizes match the SwingBay packages",
+        "Multi-year warranty"
+      ],
+      "cons": [
+        "Almost no independent discussion",
+        "1 in pile is a landing surface, not a putting speed"
+      ],
+      "known_issues": [
+        "Product images on the page are placeholders; no image URL could be captured"
+      ],
+      "why_people_choose_it": "It comes in the box with the SwingBay.",
+      "image_url": ""
+    },
+    {
+      "brand": "Turf Factory Direct",
+      "name": "TFD Putting Elite (and Nylon 36 padded, Birdie Putt Elite, Putt Putt)",
+      "subtype": "putting-turf",
+      "tier": "watch",
+      "mention_count": 4,
+      "mention_sources": [
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/385319-turf-recommendations",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/417787-garage-sim-build-flooring-build",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/346815-are-sti-np45-and-grass-tex-money-putt-the-same",
+        "https://onthegreen.golf/how-to-build-a-budget-golf-simulator/"
+      ],
+      "price": {
+        "amount": 3.99,
+        "currency": "USD",
+        "unit": "per sq ft, Putting Elite; Birdie Putt Elite $2.89; Putt Putt $1.99",
+        "read_on": "2026-10-19",
+        "source_url": "https://turffactorydirect.com/product/tfd-putting-elite/"
+      },
+      "direct_url": "https://turffactorydirect.com/product/tfd-putting-elite/",
+      "fallback_url": "https://turffactorydirect.com/product-category/putting-green/",
+      "read_url": "https://onthegreen.golf/how-to-build-a-budget-golf-simulator/",
+      "specs": {
+        "pile_height_in": "7/16",
+        "face_weight": "36 oz per sq yd",
+        "fiber": "texturized nylon",
+        "backing": "28 oz natural rubber",
+        "roll_width_ft": 15,
+        "stimp": "not listed",
+        "infill": "TFD suggests its 30/50 putting green infill as an add-on"
+      },
+      "room_fit": "15 ft roll; 150 sq ft of Putting Elite is about $599 plus shipping.",
+      "who_its_for": "Budget builders who want nylon putting turf under $4 a foot and padded nylon for the lane.",
+      "pros": [
+        "Nylon at $3.99 per sq ft",
+        "Padded nylon option named by a 2026 build thread and by the OnTheGreen budget guide",
+        "GungHo Golf pointed a wet-garage builder here"
+      ],
+      "cons": [
+        "Four mentions, not five",
+        "No stimp published"
+      ],
+      "known_issues": [],
+      "why_people_choose_it": "Cheapest nylon putting turf with a rubber back that the forum has actually pointed people to.",
+      "image_url": "https://turffactorydirect.com/wp-content/uploads/2015/04/Copy-of-PUTTING-ELITE-20-OFF.jpg"
+    },
+    {
+      "brand": "PreGra (Costco)",
+      "name": "PreGra 62 oz Select artificial turf, 15 ft wide by the linear foot (also 50 oz Premium and All-Purpose rolls)",
+      "subtype": "landing-turf",
+      "tier": "watch",
+      "mention_count": 4,
+      "mention_note": "Zero sim-builder mentions; all four are general turf-buying sources. Included because the brief asked about Costco.",
+      "mention_sources": [
+        "https://www.youtube.com/watch?v=hBzCJQUMhDo",
+        "https://www.housedigest.com/1917387/costco-artificial-grass-price-efficient-worth-buying-yard/",
+        "https://bellaturf.ca/blog/costco-artificial-grass/",
+        "https://shopping.yahoo.com/home-garden/outdoor/articles/costcos-artificial-grass-worth-buying-171500396.html"
+      ],
+      "price": {
+        "amount": 0,
+        "currency": "USD",
+        "unit": "price not shown on the fetched page; the YouTube title quotes $124 for a 3.75 x 12.5 ft PreGra roll (different SKU)",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.costco.com/pregra-62-oz-select-artificial-turf.product.100704799.html"
+      },
+      "direct_url": "https://www.costco.com/pregra-62-oz-select-artificial-turf.product.100704799.html",
+      "fallback_url": "",
+      "read_url": "https://www.youtube.com/watch?v=hBzCJQUMhDo",
+      "specs": {
+        "pile_height_in": 1.75,
+        "face_weight": "62 oz",
+        "roll_width_ft": 15,
+        "sold_by": "linear foot in 1 ft increments",
+        "infill": "PreGra listings say all PreGra turf requires infill for proper installation (search snippet)",
+        "reviews": "0 member reviews on the fetched page"
+      },
+      "room_fit": "15 ft wide, so one 10 ft length covers a 10 ft x 15 ft bay; but 1.75 in landscape pile is rough-length, holds a ball dead and is not a putting surface.",
+      "who_its_for": "Nobody in the sim sources; a landscape turf that garage builders ask about because the price is low.",
+      "pros": [
+        "15 ft width, cut by the foot",
+        "Warehouse pickup, no freight"
+      ],
+      "cons": [
+        "Requires infill per the maker",
+        "1.75 in pile is far taller than any sim turf (3/8 to 1 in)",
+        "No sim build found using it"
+      ],
+      "known_issues": [
+        "Self-install reduces the warranty payout (reviews)"
+      ],
+      "why_people_choose_it": "They do not, in any source found; it is the question that gets asked, and the answer is that the pile is too long.",
+      "image_url": "https://gdx-assets.costco.com/adobe/assets/urn:aaid:aem:b858a3cd-64dc-427d-a98d-be8f242d22e8/as/100704799-847__1.avif"
+    },
+    {
+      "brand": "BirdieBall",
+      "name": "Golf Simulator Turf 2-in-1 (tour-grade putting green with optional 3 x 5 hitting turf)",
+      "subtype": "putting-turf",
+      "tier": "watch",
+      "mention_count": 3,
+      "mention_sources": [
+        "https://simweekly1.substack.com/p/is-this-the-coolest-garage-sim",
+        "https://www.independentgolfreviews.com/best-indoor-putting-green/",
+        "https://golfersauthority.com/best-putting-mats/"
+      ],
+      "price": {
+        "amount": 810,
+        "currency": "USD",
+        "unit": "base (7.5 ft wide x 8 ft); length to 18 ft; optional 3 x 5 hitting turf plus $185; hole-deepening shims plus $99",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.birdieball.com/products/2-in-1-simulator-turf-putting-green-combined"
+      },
+      "direct_url": "https://www.birdieball.com/products/2-in-1-simulator-turf-putting-green-combined",
+      "fallback_url": "",
+      "read_url": "https://simweekly1.substack.com/p/is-this-the-coolest-garage-sim",
+      "specs": {
+        "depth_in": "1/2",
+        "width_ft": "6 or 7.5",
+        "length_ft": "8 to 18 in 1 ft steps",
+        "stimp": "10 to 11, grain neutral",
+        "features": "no seam, drop-in cups, heavy rubber bumpers, portable, indoor or outdoor"
+      },
+      "room_fit": "7.5 ft wide x 15 ft long fits a 10 ft x 15 ft bay as a center runner with 15 in of bare floor each side; the garage build in Sim Weekly raised it on foam squares to meet the mat.",
+      "who_its_for": "Garage builders who want a portable, seamless green they can lift out when the car comes in.",
+      "pros": [
+        "Seamless, portable, bumpers keep balls on it",
+        "Published stimp",
+        "The one garage build log that named its upgrade path went Home Depot turf to BirdieBall"
+      ],
+      "cons": [
+        "Repeated full swings wear the center; the hitting turf is an add-on",
+        "Not full-width"
+      ],
+      "known_issues": [],
+      "why_people_choose_it": "It is a green you can pick up, which matters in a garage that still parks a car.",
+      "image_url": "https://www.birdieball.com/cdn/shop/files/simulatorwmatwebsitebadges.jpg"
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/385319-turf-recommendations",
+      "type": "forum",
+      "title": "Turf Recommendations",
+      "date": "2023-02-21 to 2023-03-26",
+      "what_it_says": "Putting turf under $3 per sq ft is hard to find; Money Putt $4 to $4.50 plus $200 to $300 freight; SYNLawn remnants $1.50 to $2; TrafficMaster Putting Green best value; Lowe's SYNLawn rolled 11; Purchase Green clearance $2.59."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/170329-what-did-you-do-about-large-turf-in-sim-room",
+      "type": "forum",
+      "title": "What did you do about large turf in sim room?",
+      "date": "2018-11-13 to 2018-11-22",
+      "what_it_says": "Most turf comes 15 ft wide so a 15 ft room is seamless; a heavy single piece lay flat for two years with no glue; good putting turf is $4 or more; foam underlay divisive; sand brushed in speeds putting turf."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/376776-foam-board-insulation-under-turf",
+      "type": "forum",
+      "title": "Foam board insulation under turf??",
+      "date": "2022-10-25 to 2023-04-07",
+      "what_it_says": "Rigid foam is rated for under slabs and will not compress, but cap it with plywood or OSB and keep it out of the hitting zone; Meister 1.5 in EVA about $569 per 144 sq ft; thick carpet pad is squishy."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/177780-flooring-between-screan-and-mat",
+      "type": "forum",
+      "title": "Flooring between Screen and Mat",
+      "date": "2019-01-08 to 2020-11-01",
+      "what_it_says": "Stall mats, foam tiles, carpet pad bumpers; a DIY stimp test put Grizzly Grass at 11, TrafficMaster Putting Green at 10 and cheap Garland grass at 9; the screen, not the floor, drives bounce."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/147532-turf-between-the-stance-mat-and-screen",
+      "type": "forum",
+      "title": "Turf between the stance mat and screen",
+      "date": "2018-03-03 to 2018-07-20",
+      "what_it_says": "Budget turf from Menards, Lowe's, used stock or remnants is enough unless you putt; STI PL306 foam-back on concrete; a $600 SYNLawn remnant quote was called excessive; buy a sample and watch freight."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/351127-turf-flooring",
+      "type": "forum",
+      "title": "Turf Flooring",
+      "date": "2021-12-02 to 2022-02-10",
+      "what_it_says": "Unglued turf over 1 in EVA stayed put on a 14 x 18 floor; quality turf can serve as the stance area; wear modest after 50 rounds; no metal spikes; overhang the foam edge 1/4 in."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/284629-diy-turf-setup",
+      "type": "forum",
+      "title": "DIY Turf Setup?",
+      "date": "2020-08-21",
+      "what_it_says": "A Pro Putt reseller quoted $6 to $7k; proposed stack was gym tiles, Home Depot GREENLINE putting turf and a Fiberbuilt strip; one reply found balls bounced twice as high over gym tiles and laid thick turf straight on concrete."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/417787-garage-sim-build-flooring-build",
+      "type": "forum",
+      "title": "Garage Sim Build - Flooring build",
+      "date": "2026-03-05 to 2026-03-17",
+      "what_it_says": "15 x 15 turf around a 2 in Fiberbuilt on garage concrete; options were EPS/XPS build-up, 1.5 in gym tiles or 1 in puzzle mats; nine years on EPS and five years on puzzle mats reported; Turf Factory Direct padded nylon linked."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/321787-ideas-on-garage-flooring",
+      "type": "forum",
+      "title": "Ideas on garage flooring",
+      "date": "2021-03-01 to 2021-03-26",
+      "what_it_says": "Garage that must still fit a car: rubber rolls as a base, carpet tiles glued down that a car parks on, foam tiles covered by a rolled rug, turf rolled up and hoisted to the ceiling, tarps; tile indentations recovered."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/402566-preparing-for-sim-build-flooring-turf-options-as-well-as-suspension-help",
+      "type": "forum",
+      "title": "Preparing for sim build flooring / turf options",
+      "date": "2024-03-02 to 2024-04-04",
+      "what_it_says": "Go big on the hitting mat and small on the landing turf; one build spent about $4 per sq ft on the floor; GoSports landing mats swapped for a cheaper brand at half the cost."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/91735-flooring-not-the-hitting-or-stance-mat",
+      "type": "forum",
+      "title": "flooring (not the hitting or stance mat)",
+      "date": "2016-12-20 to 2017-02-25",
+      "what_it_says": "STI NP50 about $5 per sq ft, PL306 about $4, buy through an STI rep; 1,000 lb of Tractor Supply stall mats as a base with SYNLawn remnants at $0.50 to $0.70; fresh stall mats smell."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/346815-are-sti-np45-and-grass-tex-money-putt-the-same",
+      "type": "forum",
+      "title": "Are STI NP45 and Grass Tex Money Putt the same?!?",
+      "date": "2021-10-25 to 2021-10-26",
+      "what_it_says": "GungHo Golf: yes, sister companies, same production facility; Money Putt needs no glue or tape; shallow cups can be cut into it over 1 in foam tiles."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/307907-putting-turf-review",
+      "type": "forum",
+      "title": "Putting turf review",
+      "date": "2020-12-31",
+      "what_it_says": "Petgrow 3 x 10 from Amazon for about $70; about 1/4 in pile, stimp about 12, matched E6 and read very accurately on a Mevo+."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/170150-hitting-full-shots-off-of-putting-turf-instead-of-a-mat",
+      "type": "forum",
+      "title": "Hitting full shots off of putting turf instead of a mat?",
+      "date": "2018-11-11 to 2018-11-12",
+      "what_it_says": "SYNLawn Precision Putt over 1/2 in foam with a rubber-mat hitting pocket worked so far, but the thread leans toward a real hitting mat and cheaper putting turf; expect to cut and replace the strike zone."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/mats-turf-and-flooring/350536-putting-and-mat-questions",
+      "type": "forum",
+      "title": "Putting and mat questions",
+      "date": "2021-11-28 to 2021-11-29",
+      "what_it_says": "Garage concrete, Amazon putting turf over foam tiles with a 35 x 12 in hitting strip inset flush works great; a SIGPRO flooring photo posted as the buy-it alternative."
+    },
+    {
+      "url": "https://www.carlofet.com/blog/golf-simulator-flooring",
+      "type": "brand",
+      "title": "Golf Simulator Flooring Guide: Turf, Subfloor, & Mats (Carl's Place)",
+      "date": "2026 (undated)",
+      "what_it_says": "Putting turf for roll vs high-pile 1/2 to 1 in for looks; stimp 8 to 10 public, 10 to 11 sim turf; concrete needs foam tiles or a 2x4 and 3/4 in plywood subfloor plus a vapor barrier; names TrafficMaster Fescue and Lowe's SYNLawn Forest; acclimate, trim with a utility knife, tape seams."
+    },
+    {
+      "url": "https://golfsim.co/gear/golf-simulator-flooring-turf/",
+      "type": "review",
+      "title": "Top 5 Golf Simulator Flooring & Turf Options (2026)",
+      "date": "2026 (undated)",
+      "what_it_says": "GoSports turf top pick, SIGPRO flooring best all-in-one, Petgrow Pro best putting turf, Rubber-Cal 3/16 in rubber best base, ProsourceFit 1/2 in foam budget subfloor."
+    },
+    {
+      "url": "https://thinkindoor.com/best-turf-for-golf-simulator/",
+      "type": "review",
+      "title": "9 Best Turf for Golf Simulator 2026",
+      "date": "2026 (undated)",
+      "what_it_says": "Three GoSports 15 mm sizes at $90 to $250, GAIARENA 11 mm turf tiles on 8 mm EVA as underlay, Ottomanson budget mat; affiliate roundup."
+    },
+    {
+      "url": "https://middleagedmale.com/best-golf-simulator-turf/",
+      "type": "review",
+      "title": "Best Golf Simulator Turf - 2026 Reviews",
+      "date": "2026-09-05",
+      "what_it_says": "Mostly hitting mats; names GoSports 10 x 6, DCQ 12 x 6 and WICTTISPOSI 10 x 4.8 turf as floor covering, not hitting surfaces."
+    },
+    {
+      "url": "https://golfworldtrips.com/best-turfs-for-golf-simulator/",
+      "type": "review",
+      "title": "7 Best Turfs for Golf Simulator 2026",
+      "date": "2026 (undated)",
+      "what_it_says": "GoSports 10 x 6 and 15 x 6, DCQ, Durbles, WICTTISPOSI, all 15 mm Amazon rolls; no prices."
+    },
+    {
+      "url": "https://www.parpercision.com/golf-simulator-turf",
+      "type": "review",
+      "title": "Best Golf Simulator Turf for Home (2026)",
+      "date": "2025-02-23, updated 2026-03-27",
+      "what_it_says": "HomeCourse landing pad $250, MoneyPutt $640, SIGPRO turf mat $599, True Turf $3.60 per sq ft, Bermuda Silverback $640, SIG commercial landing pad $289, Rain or Shine 10 x 10 pad $780."
+    },
+    {
+      "url": "https://walfosbrand.com/blogs/golf/best-turf-for-simulator",
+      "type": "review",
+      "title": "10 Best Turfs for Golf Simulators",
+      "date": "2026 (undated)",
+      "what_it_says": "Look for 9 to 11 stimp; names Pro Putt 1/2 in rolls, Big Moss, SYNLawn, TurfTek tiles, Fiberbuilt combo."
+    },
+    {
+      "url": "https://www.virtual-golf-simulator.com/best-golf-simulator-flooring-and-turf-complete-guide-for-home-setups/",
+      "type": "review",
+      "title": "Best Golf Simulator Flooring & Turf: Complete Guide",
+      "date": "undated",
+      "what_it_says": "Surround turf about 1 in pile, putting turf low pile; on concrete use 1/2 in rubber gym tiles, closed-cell foam or EVA; budget under $500, midrange $500 to $1,200; names Big Moss, STI, Pro Putt."
+    },
+    {
+      "url": "https://golfingsim.com/blogs/news/best-flooring-for-a-golf-simulator-room-rubber-turf-foam-or-hardwood",
+      "type": "review",
+      "title": "Best Flooring for a Golf Simulator Room: Rubber, Turf, Foam, or Hardwood",
+      "date": "2026-04-20",
+      "what_it_says": "Rubber base across the room, turf as a strip in the hitting lane; foam about $1.50, rubber $3.50, foam-backed turf $6.33 per sq ft; 3/8 in rubber minimum on concrete, 1/2 in for noise; never foam under the hitting mat; 35 to 50% noise claim cited to Second Skin Audio."
+    },
+    {
+      "url": "https://www.greatmats.com/what-kind-of-mats-are-good-for-a-golf-simulator.php",
+      "type": "review",
+      "title": "What Kind of Flooring and Mats Are Good For A Golf Simulator?",
+      "date": "2021-11, modified 2024-12",
+      "what_it_says": "Greatmats turf rolls at about $120 per linear ft (1 in pile, 15 ft), One Putt 1/4 in with 5 mm pad, 5/8 in foam tiles about $6 each, 1.25 in jiu jitsu tiles about $25."
+    },
+    {
+      "url": "https://www.greatmats.com/how-much-does-an-artificial-grass-putting-green-cost.php",
+      "type": "review",
+      "title": "How Much Does An Artificial Grass Putting Green Cost?",
+      "date": "2021-11, modified 2025-09",
+      "what_it_says": "True Turf about $5.50, Perfect Putt $3.00 (needs sand infill), Money Putt $4.50 (no infill, glue or seam tape), One Putt 5 mm padded $5.00, all per sq ft."
+    },
+    {
+      "url": "https://www.greatmats.com/artificial-turf/golfing-putting-money-putt.php",
+      "type": "retailer",
+      "title": "Money Putt Artificial Grass Turf Roll 3/8 Inch x 15 Ft. Wide Per SF",
+      "date": "2026-10-19",
+      "what_it_says": "GrassTex Money Putt $4.54 per sq ft, 3/8 in pile, 36 oz, ArmorLoc 3L backing, stimp 12 to 13 with infill, 15 ft minimum cut, green or black; spec PDF linked."
+    },
+    {
+      "url": "https://www.turftekusa.com/blog/12-innovative-turf-flooring-ideas-for-your-golf-simulator-setup",
+      "type": "review",
+      "title": "12 Innovative Turf Flooring Ideas For Your Golf Simulator Setup",
+      "date": "2026 (undated)",
+      "what_it_says": "0.5 to 0.75 in turf is the balance of cushion and accuracy; excessively thick turf can interfere with launch monitor readings; foam padding under turf."
+    },
+    {
+      "url": "https://www.golf-simulators.com/Flooring.html",
+      "type": "retailer",
+      "title": "GSA Advanced Golf Simulators: Flooring",
+      "date": "undated",
+      "what_it_says": "Padded 3/4 in turf 15 x 15 $1,599, short-pile 1/2 in padded 15 x 15 $1,199; turf attached with double-sided carpet tape or glue; rubber 3 x 3 tiles $49; raised wood floor 2 to 4 in on 2x4s; hitting cutouts typically 12 x 48 in."
+    },
+    {
+      "url": "https://onthegreen.golf/how-to-build-a-budget-golf-simulator/",
+      "type": "review",
+      "title": "How To Build a Golf Simulator On A Budget in 2026",
+      "date": "2026 (undated)",
+      "what_it_says": "Search Home Depot, Lowe's, Turf Factory Direct and Sim Turf Shop; recommends TFD Nylon 36 padded and Putting Elite over foam gym tiles with a cut-in hitting strip; does not recommend cheap Home Depot or Amazon turf with padding."
+    },
+    {
+      "url": "https://rogueengineer.com/ultimate-diy-home-golf-simulator/",
+      "type": "review",
+      "title": "DIY Golf Simulator: the Ultimate Home Build (Rogue Engineer)",
+      "date": "2023-01-15, updated 2026-07-18",
+      "what_it_says": "Amazon putting green turf over 1 in Owens Corning FOAMULAR 150 attached with double-faced tape; 5 x 8 Country Club Elite mat; thicker Amazon turf as rough strips to fill a 12 ft screen width."
+    },
+    {
+      "url": "https://simweekly1.substack.com/p/is-this-the-coolest-garage-sim",
+      "type": "review",
+      "title": "Is this the coolest garage sim (Sim Weekly)",
+      "date": "2025-07-17",
+      "what_it_says": "Garage build started with Home Depot turf in front of the mat, upgraded to a BirdieBall putting surface raised on foam workout squares to meet the mat."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=7xhQrPdcxXI",
+      "type": "video",
+      "title": "Golf Simulator Flooring DIY: Build It with Foam Board, EVA/Rubber & Turf! (Triple Bogey Golf)",
+      "date": "undated",
+      "what_it_says": "The XPS foam board build-up video the forum points to for a flush mat and putting floor."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=VxbtLgxIqn8",
+      "type": "video",
+      "title": "From Garage to Dream Golf Simulator | Full DIY Build Video & Tour (Triple Bogey Golf)",
+      "date": "undated",
+      "what_it_says": "Full garage conversion tour including the floor."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=8KXa5GXnDj8",
+      "type": "video",
+      "title": "Golf Simulator Build Episode 4: Artificial Turf Grass & Screen Fix (The Lawn Engineer)",
+      "date": "undated",
+      "what_it_says": "Artificial turf installed over rubber floor mats in an affordable DIY series."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=rJXHqUIO9mk",
+      "type": "video",
+      "title": "Hybrid Me Golf Sim - Flooring and Golf Mat Choice (Philip Stewart - Hybrid Me)",
+      "date": "undated",
+      "what_it_says": "A builder's flooring and mat selection walkthrough."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=YLTVi-KWhFE",
+      "type": "video",
+      "title": "DIY Garage Golf Simulator Without Sacrificing Parking!? 5 Minute Setup. (The Hook Up)",
+      "date": "undated",
+      "what_it_says": "Garage sim that stows into the ceiling so the car still parks; the fold-away floor question in video form."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=hBzCJQUMhDo",
+      "type": "video",
+      "title": "Costco! Pregra Artificial Grass 3.75ft x 12.5 ft! $124!!! (Sterling W)",
+      "date": "undated",
+      "what_it_says": "The Costco PreGra roll people ask about; a landscape turf, not a sim build."
+    },
+    {
+      "url": "https://www.cbasports.com/blog/can-you-drive-on-artificial-grass/",
+      "type": "review",
+      "title": "Can You Drive on Artificial Grass? (CBA Sports)",
+      "date": "2026 (undated)",
+      "what_it_says": "Occasional driving is fine on quality turf with a proper base; frequent parking shortens life, tires flatten fibers, turning snags and tears, infill shifts."
+    },
+    {
+      "url": "https://www.turfkingz.com/articles/can-you-drive-on-artificial-turf",
+      "type": "review",
+      "title": "Can You Drive on Artificial Turf? Tips, Safety & Limits (Turf Kingz)",
+      "date": "2024-12-17",
+      "what_it_says": "Drive straight on, never turn the wheels while stopped on turf; drivable turf has short dense 1 to 1.5 in fibers, reinforced backing and a compacted base; sedans minimal impact, trucks high risk."
+    },
+    {
+      "url": "https://www.globalsynturf.com/will-it-be-okay-if-i-park-my-car-on-top-of-artificial-grass",
+      "type": "review",
+      "title": "Will it be okay if I park my car on top of artificial grass? (Global Syn-Turf)",
+      "date": "undated",
+      "what_it_says": "Turf maker FAQ on parking; returned 403 to the fetch tool but 200 to curl, so content is from the search snippet: a few hours is fine, heavy weight compacts fibers."
+    },
+    {
+      "url": "https://www.perfectlygreen.co.uk/Blog/Static-electricity-and-artificial-grass/",
+      "type": "review",
+      "title": "Static Electricity and Artificial Grass (Perfectly Green)",
+      "date": "2023-08-22",
+      "what_it_says": "Static is normal on new synthetic grass, worst in the first months and unusual after six; treat with a wetting agent or fabric softener solution; not a defect."
+    },
+    {
+      "url": "https://shopindoorgolf.com/products/moneyputt-golf-turf",
+      "type": "retailer",
+      "title": "TIGS Money Putt Golf Turf (Shop Indoor Golf)",
+      "date": "2026-10-19",
+      "what_it_says": "$4.55 per sq ft plus $299 freight, 15 ft roll, 1/2 in pile, woven PP backing, 15 x 5 $640 to 15 x 25 $1,990, no reviews."
+    },
+    {
+      "url": "https://shopindoorgolf.com/products/sig-custom-golf-simulator-turf",
+      "type": "retailer",
+      "title": "SIG Custom Golf Simulator Turf",
+      "date": "2026-10-19",
+      "what_it_says": "Custom cut Money Putt green or Bermuda Black, 24 to 480 in by 24 to 180 in, $4.55 per sq ft plus $299 freight, 3 to 5 weeks, non-returnable."
+    },
+    {
+      "url": "https://shopindoorgolf.com/products/sigpro-golf-simulator-flooring",
+      "type": "retailer",
+      "title": "SIGPRO Golf Simulator Flooring",
+      "date": "2026-10-19",
+      "what_it_says": "2 in panels, 3/8 in putting turf, stimp 9 to 10, replaceable hitting strip, SIG8 $3,359.99 to SIG12 $4,399.99, 4.6 from 10 reviews."
+    },
+    {
+      "url": "https://rainorshinegolf.com/products/money-putt-golf-simulator-turf",
+      "type": "retailer",
+      "title": "RoS Money Putt Golf Simulator Turf",
+      "date": "2026-10-19",
+      "what_it_says": "Nylon, 3/8 in pile, 63 oz, PU-coated woven backing, stimp 10 to 11 with no infill, 15 ft wide, $640 for 15 x 5 to $2,710 for 15 x 30, green or Midnight Black, made in USA."
+    },
+    {
+      "url": "https://rainorshinegolf.com/products/landing-pad-turf",
+      "type": "retailer",
+      "title": "RoS Landing Pad Turf",
+      "date": "2026-10-19",
+      "what_it_says": "1 in pile foam-backed putting green turf, 5 x 8 $349 to 5 x 12 $449; 10 x 10 bundle $780 with about 7 x 7 usable; Studio Turf full floor $4,000 to $4,500."
+    },
+    {
+      "url": "https://proputtsystems.com/simulator-turf/",
+      "type": "brand",
+      "title": "Golf Simulator Turf - Pro Putt Systems",
+      "date": "2026 (undated)",
+      "what_it_says": "D-Base 0.75 in $11 to $14 per sq ft, O-Base 1 in $21 to $26, Elite-Base 2 in $29 to $34, all plus freight; bulk TourPutt $5.05 to $5.37 per sq ft, 0.5 in, nylon, 15 ft rolls, 11 ft 3 in plus stimp."
+    },
+    {
+      "url": "https://indoorgolfoutlet.com/collections/putting-turf",
+      "type": "retailer",
+      "title": "Putting Turf collection (Indoor Golf Outlet)",
+      "date": "2026-10-19",
+      "what_it_says": "27 listings: STI Money Putt from $640, NP45 green and black from $1,040, NP50 and NP55 from $1,125, SYNLawn Precision Putt from $1,300, Big Moss from $1,800, SIG landing pads $699.99 to $1,099.99, Rain or Shine pad from $780, Carl's tiles $229.95."
+    },
+    {
+      "url": "https://www.playgosports.com/products/gosports-golf-simulator-turf-15-mm-elite-golf-mat-for-indoor-home-setups",
+      "type": "brand",
+      "title": "GoSports Elite Golf Simulator Turf 15 mm",
+      "date": "2026-10-19",
+      "what_it_says": "15 x 6 $249.99, 12 x 6 $199.99; 10 x 6 price not shown on the collection page."
+    },
+    {
+      "url": "https://www.homedepot.com/p/TrafficMaster-Putting-Green-6-ft-Wide-x-Cut-to-Length-Artificial-Grass-Turf-TMSPUTT06CTL/313236789",
+      "type": "retailer",
+      "title": "TrafficMaster Putting Green 6 ft Wide x Cut to Length (Home Depot)",
+      "date": "2026-10-19 (search snippet; page 403 to bots)",
+      "what_it_says": "$1.98 per sq ft, $11.87 per linear foot at 6 ft wide, cut to order."
+    },
+    {
+      "url": "https://turffactorydirect.com/product/tfd-putting-elite/",
+      "type": "retailer",
+      "title": "TFD Putting Elite (Turf Factory Direct)",
+      "date": "2026-10-19",
+      "what_it_says": "$3.99 per sq ft, 7/16 in texturized nylon, 36 oz, 28 oz natural rubber back, 15 ft rolls."
+    },
+    {
+      "url": "https://www.birdieball.com/products/2-in-1-simulator-turf-putting-green-combined",
+      "type": "brand",
+      "title": "Golf Simulator Turf 2-in-1 (BirdieBall)",
+      "date": "2026-10-19",
+      "what_it_says": "$810 base, 6 or 7.5 ft wide, 8 to 18 ft long, 1/2 in, stimp 10 to 11, optional 3 x 5 hitting turf plus $185; repeated full swings wear the center."
+    },
+    {
+      "url": "https://www.costco.com/pregra-62-oz-select-artificial-turf.product.100704799.html",
+      "type": "retailer",
+      "title": "PreGra 62 oz Select Artificial Turf (Costco)",
+      "date": "2026-10-19",
+      "what_it_says": "15 ft wide by the linear foot, 1.75 in pile, 62 oz; price not shown on the fetched page; 0 reviews."
+    }
+  ],
+  "blog_outline": {
+    "title": "Turf for a garage golf simulator: it is a floor, not a mat",
+    "sections": [
+      "Turf is a floor, not a mat: the mat takes the club, the turf takes the ball and your feet; what pile height means (3/8 in putting, 1/2 in landing, 1 in looks, 1.75 in landscape is too tall)",
+      "The three jobs the floor does: stop the bounce (the screen causes most of it), let the mat sit flush, give you something to putt on",
+      "How much to buy for a 10 x 15 bay: rolls are 15 ft wide, so buy 10 running feet and lay it sideways for zero seams; 6 ft Home Depot rolls mean a seam; add 5 to 10 percent and plan the hitting-mat cutout",
+      "What goes under it on concrete: bare slab (cheap, loud, bouncy), EVA tiles (1/2 to 1.5 in, cheap, sometimes spongy), rubber stall mats or rolls (dead and car-proof), rigid foam capped with plywood (flat and firm), or a 2x4 and plywood platform; vapor barrier in basements",
+      "Getting the mat flush: stack math worked for Fiberbuilt (1.5 in), SIG Softy (2 to 2.375 in) and Country Club Elite (3/4 in); why the one thing you cannot fix later is a floor that is too tall",
+      "Putting turf speed: what stimp 9 to 13 feels like, why new turf speeds up, sand infill, and matching the sim software green speed to your floor",
+      "The two-name problem: Money Putt, NP45, TIGS and RoS are one GrassTex turf; shop the cheapest label and read the spec sheet",
+      "Budget ladder with 2026 prices: Home Depot TrafficMaster at $1.98, TFD Putting Elite at $3.99, Money Putt at $4.55 plus freight, Pro Putt bulk at $5.37, SYNLawn at $9 to $17 per foot (or remnants at $2), and the all-in-one SIGPRO floor at $3,360 to $4,400",
+      "Black turf: it is sold for looks and contrast, not for launch monitors; no source ties floor-turf color to ball detection",
+      "Cutting, seaming, holding it down: acclimate it, trim with a utility knife, carpet tape or seam tape at joints, heavy turf lies flat on its own, Velcro squares for a removable strip, no metal spikes",
+      "Static and infill indoors: static is a first-six-months thing on new turf, treat with a wetting agent; most sim putting turf needs no infill, sand brushed in makes it faster",
+      "The fold-away bay where the car parks on the floor: what driveway turf makers say (occasional parking fine, turning wheels tears fibers, daily parking compacts), what forum garages actually do (rubber or carpet-tile base in the tire path, turf rolled up or tarped, a hoist to the ceiling), and the layout that works: hard floor where the tires go, turf only in the lane. Mention that a fold-flat enclosure like StowGolf keeps the bay clear for the car, with the disclosure sentence: Disclosure: Brett Martin runs Teed and builds StowGolf.",
+      "Reference bag: the qualified products by subtype with direct links and one forum thread each"
+    ]
+  }
+}

@@ -21,7 +21,7 @@ export const COMPONENT_CATEGORY_SLUGS = [
 export type ComponentCategorySlug = (typeof COMPONENT_CATEGORY_SLUGS)[number];
 
 /** `core` = 10 or more independent sources (shown first); `qualified` = 5 to 9. */
-export type ComponentTier = 'core' | 'qualified';
+export type ComponentTier = 'core' | 'qualified' | 'stowgolf' | 'custom-build' | 'watch';
 
 export type ComponentSourceType = 'forum' | 'reddit' | 'review' | 'video' | 'retailer' | 'brand';
 

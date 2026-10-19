@@ -48,6 +48,7 @@ import {
   sectionFor,
   sectionsFor,
   tierThenMentions,
+  SEEDABLE_TIERS,
   type ComponentCategoryFile,
   type ComponentCategoryMeta,
   type ComponentProduct,
@@ -251,7 +252,7 @@ export function buildBag(file: ComponentCategoryFile): SeedBag {
   // Section order, then core before qualified, then mention count (circulation, not a ranking).
   for (const section of sections) {
     const inSection = [...file.products, ...(file.software || [])]
-      .filter((p) => sectionFor(meta, p) === section)
+      .filter((p) => SEEDABLE_TIERS.has(p.tier) && sectionFor(meta, p) === section)
       .sort(tierThenMentions);
     for (const p of inSection) items.push(buildItem(p, meta));
   }

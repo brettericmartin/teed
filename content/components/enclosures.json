@@ -1,0 +1,2161 @@
+{
+  "category": "enclosures",
+  "read_date": "2026-10-19",
+  "subtypes": [
+    "net-cage",
+    "freestanding-fold-flat",
+    "freestanding-fixed",
+    "retractable",
+    "diy",
+    "inflatable",
+    "custom-build"
+  ],
+  "notes": {
+    "qualification": "A product is listed when 5 or more independent sources discuss it (brand site excluded; each retailer, review, forum thread or video counts once). 10 or more = core. Under-qualified products the brief named are kept in 'watchlist' so they are not circulated as products.",
+    "prices": "Every price carries the date read and the URL it was read from. Sale prices in this category change weekly; list and compare-at prices are both recorded where the page shows both.",
+    "verification": "Every URL below returned HTTP 200 to curl on 2026-10-19 except four bot-walled pages (403: forums.golfwrx.com, forum.mygolfspy.com, pojo.com, fccj.org). Those are cited as sources but never used as a product's direct, fallback or read link.",
+    "stowgolf": "StowGolf appears once, under freestanding-fold-flat, with only its published facts, tier 'stowgolf', and the disclosure sentence. It is never first in any list and never called the best.",
+    "search_budget": "The shared web-search budget ran out mid-task; later evidence came from direct page fetches. Mention counts are therefore floors, not ceilings."
+  },
+  "products": [
+    {
+      "brand": "The Net Return",
+      "name": "Pro Series V2 golf net (8 x 7.5 ft)",
+      "subtype": "net-cage",
+      "tier": "qualified",
+      "mention_count": 6,
+      "mention_sources": [
+        "https://topshelfgolf.com/products/the-net-return-pro-series-v2-large-golf-net",
+        "https://localgolfsims.com/blog/net-return-simulator-series-review",
+        "https://golfsimulatoradvisor.com/the-net-return-simulator-series-review/",
+        "https://golfsimulatoradvisor.com/best-golf-simulator-net/",
+        "https://golfnets.com/products/pro-series-v2-golf-net-by-the-net-return",
+        "https://thegolftrainingaidstore.com/products/the-net-return-pro-series-v2-golf-multi-sport-net"
+      ],
+      "price": {
+        "amount": 795,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.thenetreturn.com/products/pro-series-golf-net",
+        "note": "Simulator Kit add-on $399 on the same page; Local Golf Sims (Aug 2026 pricing) says the price rose from about $550."
+      },
+      "direct_url": "https://www.thenetreturn.com/products/pro-series-golf-net",
+      "fallback_url": "https://topshelfgolf.com/products/the-net-return-pro-series-v2-large-golf-net",
+      "read_url": "https://localgolfsims.com/blog/net-return-simulator-series-review",
+      "specs": {
+        "width_ft": 8,
+        "depth_ft": 3.5,
+        "height_ft": 7.5,
+        "frame_material": "powder-coated aluminum (brand page)",
+        "screen_included": "no; netting only, auto ball return. Projection screen and projector are separate purchases (brand page; Local Golf Sims: 'No' for projection)",
+        "screen_layers": "",
+        "mount_type": "freestanding",
+        "folds_or_retracts": "folds for storage, sets up in minutes (Local Golf Sims)",
+        "shipping": "parcel; 28 lb (brand) / 45 lb (Local Golf Sims)",
+        "assembly_time_claimed": "a few minutes (Local Golf Sims)",
+        "warranty": "lifetime frame, 1 year net (Local Golf Sims)"
+      },
+      "room_fit": "7.5 ft tall net; needs the swing clearance of the room, not the net. Full driver swings need sandbags or a wall behind it (Local Golf Sims).",
+      "who_its_for": "The practice-first buyer in an apartment or a shared garage who wants ball return and a 3-minute set-up, and who will add a screen later or never.",
+      "pros": [
+        "automatic ball return for well-struck shots",
+        "quiet impact, 65 to 70 dB measured (Local Golf Sims)",
+        "no net wear after six months of heavy use (Local Golf Sims)",
+        "170 reviews at 5.0 on the brand site"
+      ],
+      "cons": [
+        "far more expensive than a Spornia SPG-7 at $240 to $350",
+        "no projection surface; a sim needs a separate impact screen",
+        "ball return is inconsistent on low chips"
+      ],
+      "known_issues": [
+        "ball returns slowly no matter how hard you hit it (brand-site reviewer)",
+        "needs stabilising for driver"
+      ],
+      "why_people_choose_it": "It is the net you buy when the room is a living room first and a range second: up in minutes, down in minutes, and the ball comes back to your feet. Builders who later add a projector hang a screen in front of it rather than replace it.",
+      "image_url": "https://www.thenetreturn.com/cdn/shop/files/pro-02-angleright_26c2efba-9b03-430b-bd8d-7964a96230b1.jpg"
+    },
+    {
+      "brand": "Spornia",
+      "name": "SPG-8 XL practice net (Simulator Series) and SPG-7",
+      "subtype": "net-cage",
+      "tier": "qualified",
+      "mention_count": 5,
+      "mention_sources": [
+        "https://forum.mygolfspy.com/topic/68624-unofficial-review-spornia-spg-7-practice-net/",
+        "https://golfersauthority.com/spornia-spg-7-golf-practice-net/",
+        "https://golfsimdepot.com/products/spornia-spg-7-golf-practice-net",
+        "https://localgolfsims.com/blog/net-return-simulator-series-review",
+        "https://www.walmart.com/ip/2332474544"
+      ],
+      "price": {
+        "amount": 499.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://spornia.com/products/spg-8-golf-practice-net%C2%AE-simulator-series",
+        "note": "SPG-8 XL. SPG-7 is $330 at Golfer's Authority and $240 to $350 per Local Golf Sims. The simulator/projection target is sold separately, price not shown."
+      },
+      "direct_url": "https://spornia.com/products/spg-8-golf-practice-net%C2%AE-simulator-series",
+      "fallback_url": "https://golfsimdepot.com/products/spornia-spg-7-golf-practice-net",
+      "read_url": "https://golfersauthority.com/spornia-spg-7-golf-practice-net/",
+      "specs": {
+        "width_ft": 8,
+        "depth_ft": 8,
+        "height_ft": 8,
+        "frame_material": "not stated on the page (pop-up poles and ground stakes)",
+        "screen_included": "no; a white projection target sheet is an add-on",
+        "screen_layers": "",
+        "mount_type": "freestanding",
+        "folds_or_retracts": "pop-up; packs into a carry bag (MyGolfSpy owner: ~40 takedowns, no wear)",
+        "shipping": "parcel, 30 lb (brand comparison table)",
+        "assembly_time_claimed": "2 minutes tool-free (Golfer's Authority, SPG-7)",
+        "warranty": ""
+      },
+      "room_fit": "About 9 ft high with the roof panel; the SPG-8 is the size Spornia points simulator users to.",
+      "who_its_for": "The budget practice buyer who wants ball return under $500 and may project onto the target sheet later.",
+      "pros": [
+        "199 reviews on the brand page, 90 percent five-star",
+        "survives repeated assembly and teardown (MyGolfSpy owner)",
+        "target sheet sits off the back net and absorbs impact"
+      ],
+      "cons": [
+        "projection target is an add-on, not an impact screen",
+        "frame material unstated",
+        "brand pages are the main source of simulator claims"
+      ],
+      "known_issues": [],
+      "why_people_choose_it": "It is the cheapest thing on this list that catches a driver and gives the ball back. People buy it to find out whether they will actually practice before they spend on an enclosure.",
+      "image_url": "https://spornia.com/cdn/shop/files/SPG-8-01_1800x1800.jpg"
+    },
+    {
+      "brand": "StowGolf",
+      "name": "StowGolf fold-flat enclosure",
+      "subtype": "freestanding-fold-flat",
+      "tier": "stowgolf",
+      "mention_count": 0,
+      "mention_sources": [],
+      "mention_note": "No independent source mentions StowGolf as of 2026-10-19; two exact-name searches returned nothing. Listed under the plan's StowGolf exception, not the qualification rule.",
+      "price": {
+        "amount": 2495,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://stowgolf.com/facts",
+        "note": "List $2,495. The first 25 at $2,295. $100 refundable reservation. First 25 ship January 2027 (estimate)."
+      },
+      "direct_url": "https://stowgolf.com/?utm_source=teed&utm_medium=component&utm_campaign=enclosures",
+      "fallback_url": "",
+      "read_url": "https://stowgolf.com/facts",
+      "specs": {
+        "width_ft": 10,
+        "depth_ft": 5,
+        "height_ft": 7.5,
+        "height_note": "7 ft 6 in to the top of the impact screen",
+        "frame_material": "",
+        "screen_included": "yes, 540 gsm 3-layer impact screen",
+        "screen_layers": "3",
+        "mount_type": "freestanding; nothing drilled",
+        "folds_or_retracts": "folds flat against the wall",
+        "shipping": "ships in two cartons",
+        "assembly_time_claimed": ""
+      },
+      "room_fit": "7 ft 6 in to the screen top, 5 ft deep when open; folds flat against the wall when the car comes back.",
+      "who_its_for": "The shared-garage golfer who needs the bay to disappear between sessions and will not drill the house.",
+      "pros": [
+        "freestanding, nothing drilled",
+        "folds flat against the wall",
+        "10 ft wide, 5 ft deep, 7 ft 6 in to the screen top",
+        "540 gsm 3-layer impact screen included"
+      ],
+      "cons": [
+        "not yet shipping; first 25 estimated January 2027",
+        "no owner reviews yet"
+      ],
+      "known_issues": [],
+      "why_people_choose_it": "",
+      "image_url": "",
+      "disclosure": "Disclosure: Brett Martin runs Teed and builds StowGolf."
+    },
+    {
+      "brand": "Carl's Place",
+      "name": "DIY Golf Simulator Enclosure Kit with Impact Screen (C-Series)",
+      "subtype": "freestanding-fixed",
+      "tier": "core",
+      "mention_count": 21,
+      "mention_sources": [
+        "https://www.playbetter.com/products/carls-place-diy-golf-simulator-enclosure-kit-with-impact-screen",
+        "https://golfsimulatorsdirect.com/products/carls-place-diy-golf-simulator-enclosure-kit-with-impact-screen",
+        "https://www.scheels.com/p/carls-place-diy-golf-simulator-enclosure-kit-with-impact-screen/950639-DIYSIM/",
+        "https://indoorgolfessentials.com/collections/carls-place-enclosures",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/404686-review-carl-s-place-diy-golf-enclosure-vs-custom-pro-golf-enclosure",
+        "https://golfsimulatorforum.com/forum/build-your-own/enclosures/211230-carl-s-golf-simulator-enclosure-kit-with-impact-screen",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/281075-cost-breakdown",
+        "https://golfsimulatorforum.com/forum/build-your-own/enclosures/253998-bounce-back-over-10-feet-with-new-enclosure",
+        "https://golfsimulatorforum.com/forum/build-your-own/enclosures/301022-bounce-back",
+        "https://golfsimulatorforum.com/forum/build-your-own/enclosures/185585-allsportsystems-vs-carls",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/247350-foldable-enclosure-allows-car-in-garage-when-launch-monitor-is-not-in-use",
+        "https://friendlygolfer.com/carls-golf-simulator-enclosure-review/",
+        "https://www.independentgolfreviews.com/carls-place-diy-simulator-review/",
+        "https://golfsimulatorvideos.com/carls-place-golf-simulator-enclosures-review/",
+        "https://golfstead.com/best-golf-simulator-enclosures",
+        "https://charlesandhudson.com/8-best-golf-simulator-enclosures-for-home-garages-small-spaces-2026/",
+        "https://www.delightfullynotedblog.com/5-best-golf-simulator-enclosures-for-garages-and-small-rooms-2026/",
+        "https://golfingsim.com/blogs/news/golf-simulator-ceiling-height-requirements-for-a-garage-build-the-real-numbers-before-you-buy-a-frame",
+        "https://www.tomsguide.com/wellness/fitness/i-built-the-ultimate-golf-simulator-in-my-home-for-under-usd10k-heres-the-products-i-used",
+        "https://simweekly1.substack.com/p/were-upgrading-our-sim",
+        "https://www.youtube.com/watch?v=wQ96bav-9CQ"
+      ],
+      "price": {
+        "amount": 1199.94,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.playbetter.com/products/carls-place-diy-golf-simulator-enclosure-kit-with-impact-screen",
+        "note": "PlayBetter lists $1,199.94 with no markdown. 'From $999.95' at Golf Simulators Direct and Scheels and on golfingsim.com (read 2026-10-17 there). Indoor Golf Essentials showed a $749.95 sale against $999.95. Pipe framing kit sold separately, from $349.95 (Indoor Golf Outlet) to ~$470 (Delightfully Noted). Carl's own page hides prices behind a size loader."
+      },
+      "direct_url": "https://shop.carlofet.com/diy-golf-simulator-enclosure-kit-with-impact-screen",
+      "fallback_url": "https://www.playbetter.com/products/carls-place-diy-golf-simulator-enclosure-kit-with-impact-screen",
+      "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/404686-review-carl-s-place-diy-golf-enclosure-vs-custom-pro-golf-enclosure",
+      "specs": {
+        "sizes": "7.7x10, 7.7x13, 8x8, 8x10.5, 8.5x11.5, 9x12 ft (H x W), custom at no extra cost up to 112 x 150 in viewable (Golf Sim Depot)",
+        "depth_ft": 5,
+        "frame_material": "1 in EMT conduit, true OD 1.163 in; steel corner fittings included, pipe not included",
+        "screen_included": "yes: Standard (loosely woven polyester), Preferred (silicone-reinforced tight knit), Premium (3 layers with noise-dampening core), High-Contrast Gray Premium",
+        "screen_layers": "Premium = 3",
+        "mount_type": "freestanding pipe frame; 12 in rear buffer recommended, 8.25 in minimum for the rear fittings",
+        "folds_or_retracts": "no",
+        "shipping": "ground, regular boxes; made to order, Golf Simulators Direct lead time 2 to 3 weeks",
+        "assembly_time_claimed": "about an hour (Carl's blog); 'just over an hour' solo (Friendly Golfer); ~2 hours (Independent Golf Reviews)"
+      },
+      "room_fit": "Frame about 8 ft 4 in tall for the 8-ft kits; golfingsim.com puts it in the 9-ft-ceiling tier and says a 9.5-ft frame is too tight there. Independent Golf Reviews: not for ceilings under 9 ft.",
+      "who_its_for": "The first-time builder with a hardware store nearby and a dedicated bay: garage, basement or spare room, 9 ft or more of ceiling, happy to cut conduit.",
+      "pros": [
+        "lowest entry price for a brand-name kit",
+        "six standard sizes plus custom to the inch",
+        "screen runs to the turf with no bottom pipe",
+        "Premium screen is 3 layers and noticeably quieter than Standard (GSF 404686)",
+        "customer support praised across reviews"
+      ],
+      "cons": [
+        "pipe is not included; EMT must be bought and cut (or the pipe kit added)",
+        "1 in EMT cannot carry an overhead launch monitor or projector",
+        "releasable zip ties are hard to loosen and break in the high-impact zone (Friendly Golfer)",
+        "DIY fabric is opaque; Pro fabric lets light through (GSF 404686)"
+      ],
+      "known_issues": [
+        "bounce-back when the screen is too tight: balls returned to chest and head height from 10 ft, two hit a GC2 (GSF 253998); loosen bungees, trim bars that are 1/2 to 3/4 in long",
+        "wedges over the head off the upper third of the screen; fixes are baffles, foam behind the top half, more top bungees (GSF 264435)",
+        "Standard screen bounces back noticeably more than Premium (GSF 404686)",
+        "cutting EMT: 30 minutes with an angle grinder, sparks; rough welds on fittings (GSF 211230)",
+        "one negative customer-service account (GSF 404686 reply)"
+      ],
+      "why_people_choose_it": "Forum builders land at $1,006 ($899.95 kit plus $106.39 of Home Depot EMT, GSF 211230) or $1,263 for a custom 8.5 x 11 with pipe and cutter (GSF 281075) and say they would buy it again. It is the default answer when someone asks 'what enclosure' on the forum.",
+      "image_url": "https://www.playbetter.com/cdn/shop/files/carls-place-diy-7-7x10-screen_700x700.jpg"
+    },
+    {
+      "brand": "Carl's Place",
+      "name": "Pro Golf Simulator Enclosure Kit",
+      "subtype": "freestanding-fixed",
+      "tier": "core",
+      "mention_count": 11,
+      "mention_sources": [
+        "https://topshelfgolf.com/products/carls-place-pro-golf-simulator-enclosure",
+        "https://friendlygolfer.com/carls-place-pro-enclosure-review-my-experience-after-4-months/",
+        "https://golfsimulatorvideos.com/carls-place-golf-simulator-enclosures-review/",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/404686-review-carl-s-place-diy-golf-enclosure-vs-custom-pro-golf-enclosure",
+        "https://www.youtube.com/watch?v=rhElITGWtAk",
+        "https://www.youtube.com/watch?v=lkQtZY3fw2A",
+        "https://golfsimulatorsdirect.com/pages/carls-place-enclosure-review-transcript",
+        "https://golfsimulatoradvisor.com/best-golf-simulator-screens-enclosures/",
+        "https://golfingsim.com/blogs/news/golf-simulator-ceiling-height-requirements-for-a-garage-build-the-real-numbers-before-you-buy-a-frame",
+        "https://www.playbetter.com/blogs/golf-simulator-space/whats-the-difference-between-carls-place-diy-pro-curved-enclosures",
+        "https://simweekly1.substack.com/p/were-upgrading-our-sim"
+      ],
+      "price": {
+        "amount": 3409.95,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://topshelfgolf.com/products/carls-place-pro-golf-simulator-enclosure",
+        "note": "8 ft x 10.5 ft x 5 ft deep with Premium screen. 9 x 12 x 5 is $3,549.95; 10 x 15.5 x 15 is $5,104.95; High-Contrast Gray adds ~$355 to $505. Pipe kits, crossbar, baffles, back cover and projector mount are extra. Golf Simulator Advisor shows $2,979 to $7,794 across configurations."
+      },
+      "direct_url": "https://www.carlofet.com/blog/carls-place-diy-vs-pro-enclosure",
+      "fallback_url": "https://topshelfgolf.com/products/carls-place-pro-golf-simulator-enclosure",
+      "read_url": "https://friendlygolfer.com/carls-place-pro-enclosure-review-my-experience-after-4-months/",
+      "specs": {
+        "sizes": "18 options: 8x10.5, 8.5x11, 8.5x14.5, 9x12, 10x13, 10x15.5 ft (H x W); depths 5, 8, 10, 15 ft by size; custom to the inch",
+        "frame_material": "2 in EMT (Top Shelf lists '2-inch steel frame'); pipe sold separately or as a pre-cut kit",
+        "screen_included": "yes, Premium or High-Contrast Gray only",
+        "screen_layers": "3",
+        "mount_type": "freestanding heavy frame; projectors, lighting and overhead launch monitors mount to it",
+        "folds_or_retracts": "no",
+        "shipping": "not stated on the fetched pages",
+        "assembly_time_claimed": "two people, two ladders, about two hours (Golf Simulator Videos); 'just over an hour' for one buyer (Golf Simulators Direct transcript)"
+      },
+      "room_fit": "Heights 8 to 10 ft; golfingsim.com places it in the 10-ft-and-up tier. Friendly Golfer built 15 ft 4 in wide x 9 ft 10 in tall x 8 ft deep in a garage.",
+      "who_its_for": "The dedicated-room builder who wants an overhead launch monitor or projector on the frame, a deep bay, and a commercial look.",
+      "pros": [
+        "frame carries a projector and an overhead launch monitor",
+        "custom sizing to the inch; bays to 20 ft wide and deep",
+        "quieter and less bounce-back than the DIY Standard screen (GSF 404686)",
+        "one-piece BlackStop cover and foam inserts included",
+        "screen stayed tensioned over four months (Friendly Golfer)"
+      ],
+      "cons": [
+        "2 in EMT is heavy, harder to source and needs a saw; two people minimum",
+        "pipe kit and back-cover pipe add significant cost",
+        "more enclosure than a small room needs (Friendly Golfer)",
+        "no wiring channel in the poles; running Ethernet and power took longer than mounting the launch monitor (Golf Simulator Videos)"
+      ],
+      "known_issues": [
+        "heavy-duty zip ties broke near the top centre of the screen; owner doubled them (Friendly Golfer)",
+        "ball marks from spinning shots; creases at install that relaxed after about four months",
+        "high, spinny shots can still bounce back big (GSF 404686)"
+      ],
+      "why_people_choose_it": "It is what the forum means by 'buy once'. Sim Weekly moved its garage sim to a Carl's Pro in March 2026 to 'enter the big leagues', and a 166 mph drive did not come halfway back in Jay's build.",
+      "image_url": "https://topshelfgolf.com/cdn/shop/files/Carls-Place-Pro-Golf-Enclosure-Kit_7635f8ab-5e7e-49be-a7ef-0a251ff88435.png"
+    },
+    {
+      "brand": "The Indoor Golf Shop (Shop Indoor Golf)",
+      "name": "SIG10 Golf Simulator Enclosure (SIG12 noted)",
+      "subtype": "freestanding-fixed",
+      "tier": "qualified",
+      "mention_count": 8,
+      "mention_sources": [
+        "https://friendlygolfer.com/sig10-golf-simulator-enclosure-review/",
+        "https://golfstead.com/best-golf-simulator-enclosures",
+        "https://indoorgolfoutlet.com/products/sig10-golf-simulator-enclosure",
+        "https://golfsimulatorsdirect.com/products/sigpro-professional-golf-simulator-enclosure",
+        "https://mygolfdirect.com/products/sig10-golf-simulator-enclosure",
+        "https://indoorgolfdirect.com/blogs/indoor-golf-direct-blog-1/sig10-golf-simulator-enclosure-the-premier-choice-for-realistic-indoor-golf-setups",
+        "https://golfsimulatoradvisor.com/best-golf-simulator-screens-enclosures/",
+        "https://golfsimdepot.com/products/sig10-golf-simulator-enclosure"
+      ],
+      "mention_note": "Several of these retailers are The Indoor Golf Shop affiliates (Golf Sim Depot, Indoor Golf Outlet). Counted once each but weighted lightly.",
+      "price": {
+        "amount": 1599.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://shopindoorgolf.com/products/sig10-golf-simulator-enclosure",
+        "note": "Sale; compare-at $1,999.99. SIG12: $1,999.99 sale, $2,499.99 compare-at, 12 ft 2 in x 9 ft 4 in x 5 ft (read 2026-10-19). Golf Simulators Direct shows SIG10 at $1,999."
+      },
+      "direct_url": "https://shopindoorgolf.com/products/sig10-golf-simulator-enclosure",
+      "fallback_url": "https://golfsimulatorsdirect.com/products/sigpro-professional-golf-simulator-enclosure",
+      "read_url": "https://friendlygolfer.com/sig10-golf-simulator-enclosure-review/",
+      "specs": {
+        "width": "10 ft 10 in",
+        "depth_ft": 5,
+        "height": "8 ft 4 in",
+        "screen_viewable": "10 ft 1 in x 7 ft 7 in, 12 ft 7 in diagonal",
+        "frame_material": "colour-coded aluminum push-pin poles with steel connectors (Friendly Golfer; brand page does not name the metal)",
+        "screen_included": "yes, SIGPRO Premium; store says 'thicker, triple layer material' in a review reply, layer count not on the spec",
+        "screen_layers": "3 (store reply, not the spec sheet)",
+        "mount_type": "freestanding",
+        "folds_or_retracts": "no",
+        "shipping": "free, ships in 1 to 3 business days",
+        "assembly_time_claimed": "not stated; Golfstead says an hour or less; SIG12 reviewers report 30 minutes to 3 hours, two people recommended"
+      },
+      "room_fit": "Frame 8 ft 4 in; brand says more than 9 ft of ceiling if your swing needs it. Golfstead: 12 ft W x 9 ft H x 18 ft D recommended. Friendly Golfer fit it with inches to spare in a ~12-ft-wide room.",
+      "who_its_for": "The buyer who wants a complete, padded, tool-free bay in one box and has a 9-ft ceiling and 12 ft of width.",
+      "pros": [
+        "tool-free colour-coded assembly",
+        "foam padding on every pole and side barrier netting with sandbags included",
+        "no gaps behind the enclosure even with little wall clearance (Friendly Golfer)",
+        "4.8 from 28 reviews on the brand page"
+      ],
+      "cons": [
+        "8 ft 4 in frame will not fit an 8-ft garage",
+        "surround material is thin (Friendly Golfer)",
+        "the SIG retailer network repeats the same marketing copy, so independent owner reports are few",
+        "250 mph screen claim rests on the maker's own assembly PDF"
+      ],
+      "known_issues": [
+        "shipping wrinkles visible with the projector off, relax over time",
+        "bounce-back manageable; bungees can be removed to tune it"
+      ],
+      "why_people_choose_it": "It is the one that gets recommended to first-time builders who do not want a hardware-store trip: open the box, push the pins, hang the screen, done in an afternoon.",
+      "image_url": "https://shopindoorgolf.com/cdn/shop/products/SIG10-Enclosure.jpg"
+    },
+    {
+      "brand": "The Indoor Golf Shop (Shop Indoor Golf)",
+      "name": "SIG8 Golf Simulator Enclosure",
+      "subtype": "freestanding-fixed",
+      "tier": "qualified",
+      "mention_count": 6,
+      "mention_sources": [
+        "https://charlesandhudson.com/8-best-golf-simulator-enclosures-for-home-garages-small-spaces-2026/",
+        "https://www.delightfullynotedblog.com/5-best-golf-simulator-enclosures-for-garages-and-small-rooms-2026/",
+        "https://golfsimdepot.com/blogs/knowledge-center/garage-golf-simulator",
+        "https://golfsimulatoradvisor.com/best-golf-simulator-screens-enclosures/",
+        "https://golfsimulatorsdirect.com/products/sigpro-professional-golf-simulator-enclosure",
+        "https://indoorgolfoutlet.com/products/sig10-golf-simulator-enclosure"
+      ],
+      "price": {
+        "amount": 1439.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://shopindoorgolf.com/products/sig8-golf-simulator-enclosure",
+        "note": "Sale; compare-at $1,799.99. Golf Simulators Direct shows $1,599.99. Golf Simulator Advisor's 'SIG8 Studio from $3,499' is a package with more gear."
+      },
+      "direct_url": "https://shopindoorgolf.com/products/sig8-golf-simulator-enclosure",
+      "fallback_url": "https://golfsimulatorsdirect.com/products/sigpro-professional-golf-simulator-enclosure",
+      "read_url": "https://www.delightfullynotedblog.com/5-best-golf-simulator-enclosures-for-garages-and-small-rooms-2026/",
+      "specs": {
+        "width": "8 ft 4 in",
+        "depth_ft": 5,
+        "height": "8 ft 4 in",
+        "screen_viewable": "7 ft 7 in square, 10 ft 8 in diagonal, 1:1",
+        "frame_material": "colour-coded push-pin pipe kit, metal unstated",
+        "screen_included": "yes, SIGPRO Premium",
+        "screen_layers": "3 (store reply, not the spec sheet)",
+        "mount_type": "freestanding",
+        "folds_or_retracts": "no",
+        "shipping": "free, 1 to 3 business days",
+        "assembly_time_claimed": "not stated; 'fiddly' (Delightfully Noted)"
+      },
+      "room_fit": "Fits a single-car bay or a room under 9 ft wide; still 8 ft 4 in tall, so an 8-ft ceiling is out. Delightfully Noted: about 13 ft 7 in of room depth recommended. Brand: taller players may need more than 9 ft.",
+      "who_its_for": "The single-bay or narrow-room builder with a 9-ft ceiling who will accept a square 7 ft 7 in screen.",
+      "pros": [
+        "narrowest credible fixed enclosure (Charles & Hudson)",
+        "padding, side nets and sandbags included",
+        "4.6 from 11 reviews on the brand page"
+      ],
+      "cons": [
+        "square screen gives a smaller image; projector fills only about 80 percent of it (Delightfully Noted)",
+        "8 ft 4 in frame in an 8-ft garage does not fit"
+      ],
+      "known_issues": [
+        "assembly described as fiddly (Delightfully Noted)"
+      ],
+      "why_people_choose_it": "It is the fixed bay for the garage that only has one bay to give: 8 ft 4 in wide, push-pin poles, screen rated for driver.",
+      "image_url": "https://shopindoorgolf.com/cdn/shop/products/sig8-enclosure.jpg"
+    },
+    {
+      "brand": "Rain or Shine Golf",
+      "name": "SwingBay Golf Simulator Screen and Enclosure",
+      "subtype": "freestanding-fixed",
+      "tier": "qualified",
+      "mention_count": 7,
+      "mention_sources": [
+        "https://www.pgatoursuperstore.com/rain-or-shine-swingbay-screen-and-enclosure---8-x-10.5/2000000047222.html",
+        "https://indoorgolfoutlet.com/collections/rain-or-shine-golf",
+        "https://www.elevatedgolfsimulators.com/products/rain-or-shine-swingbay-golf-simulaotr-enclosure",
+        "https://golfstead.com/best-golf-simulator-enclosures",
+        "https://charlesandhudson.com/8-best-golf-simulator-enclosures-for-home-garages-small-spaces-2026/",
+        "https://golfsimulatoradvisor.com/best-golf-simulator-screens-enclosures/",
+        "https://golfsimspot.com/blog/garage-golf-simulator/"
+      ],
+      "price": {
+        "amount": 1999,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://rainorshinegolf.com/products/swingbay-golf-simulator-screen-enclosure",
+        "note": "8 x 10.5 ft, single-layer screen, $3,499 struck through on the brand page. 9 x 12 adds $1,000; triple-layer screen adds $500. PGA TOUR Superstore lists the 8 x 10.5 at $2,999; Elevated Golf Simulators $3,099 sale; Indoor Golf Outlet from $2,499."
+      },
+      "direct_url": "https://rainorshinegolf.com/products/swingbay-golf-simulator-screen-enclosure",
+      "fallback_url": "https://www.pgatoursuperstore.com/rain-or-shine-swingbay-screen-and-enclosure---8-x-10.5/2000000047222.html",
+      "read_url": "https://charlesandhudson.com/8-best-golf-simulator-enclosures-for-home-garages-small-spaces-2026/",
+      "specs": {
+        "sizes": "8 ft H x 10 ft 5 in W x 4 ft 2 in D; 9 ft H x 12 ft W x 4 ft 2 in D",
+        "footprint": "11 ft W x 15 ft D x 8.1 ft H overall (brand page)",
+        "frame_material": "1.5 in powder-coated extruded aluminum with steel bracket hardware",
+        "screen_included": "yes, 'ballistics-grade'; single layer standard, triple layer +$500 (quieter, less bounce-back)",
+        "screen_layers": "1 standard, 3 optional",
+        "mount_type": "freestanding",
+        "folds_or_retracts": "no",
+        "shipping": "free freight to the contiguous US from Charlotte NC, 1 to 3 business days",
+        "assembly_time_claimed": "under 20 minutes, push-button quick-connect, usually solo",
+        "warranty": "3-year frame, 1-year screen (Charles & Hudson)"
+      },
+      "room_fit": "9-ft minimum ceiling for most players, 10 ft for full clearance (brand). Shallowest fixed frame in the Charles & Hudson list at 4 ft 2 in deep. Elevated Golf Simulators recommends 9 ft H x 12 ft W x 16 ft D.",
+      "who_its_for": "The buyer who wants the category's benchmark name, blackout curtains and a 20-minute build, and who has 9 ft of ceiling.",
+      "pros": [
+        "fastest claimed assembly of any fixed frame here",
+        "blackout curtains, side netting, padding and sandbags included",
+        "4.9 from 25 brand-page reviews"
+      ],
+      "cons": [
+        "single-layer screen is standard; the quiet 3-layer screen costs $500 more",
+        "needs about 11 ft wide by 15 ft deep of floor (Charles & Hudson)",
+        "most reviews live on the brand's own site"
+      ],
+      "known_issues": [
+        "3,000-plus lumen projector recommended (Golfstead)",
+        "taller players may need more than 9 ft (Charles & Hudson)"
+      ],
+      "why_people_choose_it": "It is the enclosure in half the launch-monitor bundles buyers see first (SkyTrak, Full Swing KIT), and the one owners say they built alone in about an hour.",
+      "image_url": ""
+    },
+    {
+      "brand": "Top Shelf Golf (bundling Carl's Place)",
+      "name": "PerfectBay Golf Simulator Studio (Carl's DIY enclosure bundle)",
+      "subtype": "freestanding-fixed",
+      "tier": "qualified",
+      "mention_count": 5,
+      "mention_sources": [
+        "https://golfstead.com/best-golf-simulator-enclosures",
+        "https://golferlogic.com/golf-simulator-enclosure/",
+        "https://golfsimulatorvideos.com/product/diy-golf-simulator-enclosure/",
+        "https://swingsense.com/shop/enclosures/perfectbay-golf-simulator-enclosure/",
+        "https://tpfgolf.com/best-golf-simulators-under-5000/"
+      ],
+      "price": {
+        "amount": 3891.9,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://topshelfgolf.com/products/perfectbay-golf-simulator-studio",
+        "note": "Default BYO build (enclosure, pipe kit, Premium screen, foam, side nets, baffle, 5x5 mat, Optoma ZW350ST projector and mount), was $4,041.65. Launch monitor chosen separately; builds run to $23,890.90. SwingSense's older $2,299 and Golfstead's 'as low as $2,799' refer to the enclosure-only era."
+      },
+      "direct_url": "https://topshelfgolf.com/products/perfectbay-golf-simulator-studio",
+      "fallback_url": "",
+      "read_url": "https://golfstead.com/best-golf-simulator-enclosures",
+      "specs": {
+        "sizes": "8 ft W x 8 ft H; 10 x 7.7; 10.5 x 8; 11.5 x 8.5; 12 x 9; 13 x 7.7 (W x H), all 5 ft deep",
+        "frame_material": "1 in EMT pre-cut framing kit (it is Carl's DIY enclosure)",
+        "screen_included": "yes, Carl's Premium triple-layer",
+        "screen_layers": "3",
+        "mount_type": "freestanding",
+        "folds_or_retracts": "no",
+        "shipping": "",
+        "assembly_time_claimed": "about a day with hand tools (Top Shelf)"
+      },
+      "room_fit": "Default 10-ft kit wants 10 ft 11 in W x 8 ft 3 in H x 16 ft 9 in D; a full driver swing needs 18 ft 9 in deep (Top Shelf). Golfstead: 12 ft W x 9 ft H x 16 ft D.",
+      "who_its_for": "The buyer who wants Carl's quality but one order, with pipe, mat and projector already matched.",
+      "pros": [
+        "no tools-and-pipe chase: pipe kit, foam, nets and baffle are in the bundle",
+        "made in the USA, triple-layer screen (Golfstead)",
+        "4.9 from 58 reviews"
+      ],
+      "cons": [
+        "the 'PerfectBay' name hides that it is a Carl's DIY kit; buyers comparing prices should know",
+        "the bundle price moves with the launch monitor"
+      ],
+      "known_issues": [
+        "ball bounces back further than expected; owners skip some bungees (Top Shelf reviews via search)"
+      ],
+      "why_people_choose_it": "Buyers who do not want to size pipe or match a projector throw buy the bundle; the forum crowd buys the kit underneath it for a third of the price.",
+      "image_url": "https://cdn.shopify.com/s/files/1/0041/6386/2626/files/All-In-One-Golf-Simulator-600x420.jpg"
+    },
+    {
+      "brand": "GoSports",
+      "name": "10 x 8 ft Golf Simulator Enclosure with HD Impact Screen and Shank Nets",
+      "subtype": "freestanding-fixed",
+      "tier": "core",
+      "mention_count": 10,
+      "mention_sources": [
+        "https://www.pojo.com/gosports-golf-sim/",
+        "https://www.globalgolf.com/golf-accessories/1088488.9-go-sports-simulator-enclosure-10-x-8-ft-nets/?cdt=7",
+        "https://golferhive.com/best-golf-simulator-enclosures/",
+        "https://charlesandhudson.com/8-best-golf-simulator-enclosures-for-home-garages-small-spaces-2026/",
+        "https://www.delightfullynotedblog.com/5-best-golf-simulator-enclosures-for-garages-and-small-rooms-2026/",
+        "https://www.fccj.org/best-golf-simulator-enclosures-for-garages/",
+        "https://golferlogic.com/golf-simulator-enclosure/",
+        "https://simgolflab.com/diy-golf-simulator-enclosure-the-500-home-depot-blueprint-no-sewing/",
+        "https://camelcamelcamel.com/product/B0GLFQKS5W",
+        "https://www.ebay.com/p/14060869310"
+      ],
+      "price": {
+        "amount": 749.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.playgosports.com/products/gosports-golf-simulator-enclosure-with-impact-screen-and-shank-nets-10-x-8-ft-golf-sim-with-hd-impact-screen-kit-for-at-home-practice",
+        "note": "Brand page today. $999.99 at GlobalGolf and on the Amazon tracker (read 2026-10-18); Charles & Hudson and Delightfully Noted list ~$1,000; 12 x 9 and 14 x 8 sizes $1,299.99 (Golfer Hive)."
+      },
+      "direct_url": "https://www.playgosports.com/products/gosports-golf-simulator-enclosure-with-impact-screen-and-shank-nets-10-x-8-ft-golf-sim-with-hd-impact-screen-kit-for-at-home-practice",
+      "fallback_url": "https://www.globalgolf.com/golf-accessories/1088488.9-go-sports-simulator-enclosure-10-x-8-ft-nets/?cdt=7",
+      "read_url": "https://golferhive.com/best-golf-simulator-enclosures/",
+      "specs": {
+        "width": "10 ft 7 in",
+        "depth_ft": "5 (brand page caption) or 6 (roundups)",
+        "height_ft": 8,
+        "frame_material": "powder-coated steel",
+        "screen_included": "yes, high-density woven polyester, 'multi-layer' per the brand; layers unstated",
+        "screen_layers": "",
+        "mount_type": "freestanding",
+        "folds_or_retracts": "no",
+        "shipping": "one box about 75 lb (Pojo); Prime eligible per the Amazon tracker",
+        "assembly_time_claimed": "about 30 minutes or less"
+      },
+      "room_fit": "Brand says 9 ft-plus ceiling; the 12 x 9 size needs about 10 ft (Golfer Hive).",
+      "who_its_for": "The under-$1,000 buyer who wants a complete cage with padding and shank nets from a known brand and will tune the screen tension.",
+      "pros": [
+        "cheapest complete enclosure from a brand with a review history",
+        "foam padding on the poles and two shank nets included",
+        "frame handled driver in long-term use (Pojo)"
+      ],
+      "cons": [
+        "no blackout features; image depends on room light",
+        "screen quality and durability below the premium kits (Delightfully Noted)",
+        "assembly takes longer than advertised (Delightfully Noted)"
+      ],
+      "known_issues": [
+        "strong bounce-back out of the box; Pojo removed about a third of the bungees on all four sides to fix it",
+        "thin padding, heavy rebound (fccj)",
+        "wrinkles out of the box (Golfer Hive)",
+        "14 x 8 size has a 2.0 rating on the brand site with 'thin and flimsy' frame complaints"
+      ],
+      "why_people_choose_it": "It is what $750 to $1,000 buys in a single box with a brand behind it, and the review sites keep ranking it the budget pick; the tension tweak is the first thing every owner does.",
+      "image_url": "https://www.playgosports.com/cdn/shop/files/GOLF-SIMBAY-10X8-LTE_MAIN.jpg"
+    },
+    {
+      "brand": "Generic (RXFSP, Bezliving, Durbles, Diandian, Sturdum, ZivPlay, YSDDAOG and similar)",
+      "name": "Generic 10 x 8 ft steel-frame cage with impact screen (Amazon and Walmart class)",
+      "subtype": "freestanding-fixed",
+      "tier": "qualified",
+      "mention_count": 7,
+      "mention_sources": [
+        "https://www.walmart.com/ip/18892761792",
+        "https://www.kohls.com/product/prd-8562568/complete-10x8ft-golf-simulator-enclosure-with-4k-dual-layer-impact-screen-full-blackout-cage.jsp",
+        "https://slickdeals.net/f/17739939-10x7ft-golf-hitting-cage-with-steel-frame-practice-net-with-simulator-cloth-155-free-shipping",
+        "https://www.fccj.org/best-golf-simulator-enclosures-for-garages/",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/404972-how-i-built-an-incredible-home-golf-simulator-for-under-4500-usd",
+        "https://www.walmart.com/ip/18905265607",
+        "https://golferlogic.com/golf-simulator-enclosure/"
+      ],
+      "price": {
+        "amount": 759,
+        "currency": "USD",
+        "read_on": "2026-10-18",
+        "source_url": "https://www.walmart.com/ip/18892761792",
+        "note": "Walmart RXFSP 10 x 8, was $859.99 (search snippet; page sits behind a bot check). Kohl's 10 x 8 'dual layer' $499.99; Bezliving $549.99 (search snippet 2026-10-19); a GSF builder paid $414 USD for a Walmart.ca cage in 2024."
+      },
+      "direct_url": "",
+      "fallback_url": "https://www.walmart.com/ip/18892761792",
+      "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/404972-how-i-built-an-incredible-home-golf-simulator-for-under-4500-usd",
+      "specs": {
+        "width_ft": 10,
+        "depth_ft": 5,
+        "height": "95 in (RXFSP listing)",
+        "frame_material": "steel or aluminum, varies by listing",
+        "screen_included": "yes, 'HD' or 'dual layer' polyester, gsm unstated",
+        "screen_layers": "1 or 2 (listing claims)",
+        "mount_type": "freestanding",
+        "folds_or_retracts": "no",
+        "shipping": "parcel, 59 lb (RXFSP), 3-plus days",
+        "assembly_time_claimed": "tool-free, under an hour (fccj)",
+        "warranty": "RXFSP: 'No written warranty'"
+      },
+      "room_fit": "95 in tall frames need a true 8-ft ceiling plus a little; a 10 x 7 variant was called 'definitely not tall enough' on Slickdeals.",
+      "who_its_for": "The buyer who found '$5,000 appeared to be the average price' and chose $414 instead (GSF 404972): a cage, curtains and a $187 screen.",
+      "pros": [
+        "$500 to $800 for frame, screen, side and top covers, often padding and free shipping",
+        "the GSF builder finished a whole sim for $4,086 around one"
+      ],
+      "cons": [
+        "screen weight and layers unstated; '200 mph' claims are the seller's",
+        "no written warranty on the RXFSP listing",
+        "instructions assume taller ceilings; needs the full 10 ft of width (fccj on Durbles)"
+      ],
+      "known_issues": [
+        "screen sag and wrinkles (fccj on Diandian)",
+        "bouncy screen, balls roll back (fccj on ZivPlay)",
+        "single-layer entry curtain (fccj on Sturdum)",
+        "small review counts: Walmart RXFSP 3.3 from 3 reviews"
+      ],
+      "why_people_choose_it": "The money. Builders who spend their budget on the launch monitor and projector buy the cage that costs what a mat costs and fix the bounce with curtains and a foam topper.",
+      "image_url": ""
+    },
+    {
+      "brand": "GolfBays",
+      "name": "SimBox Golf Simulator Enclosure (7 sizes)",
+      "subtype": "freestanding-fixed",
+      "tier": "qualified",
+      "mention_count": 7,
+      "mention_sources": [
+        "https://www.walmart.com/ip/SimBox-Golf-Simulator-Enclosure-6-sizes/2597439463",
+        "https://business.walmart.com/ip/SimBox-Golf-Simulator-Enclosure-6-sizes/3621367857",
+        "https://charlesandhudson.com/8-best-golf-simulator-enclosures-for-home-garages-small-spaces-2026/",
+        "https://www.delightfullynotedblog.com/5-best-golf-simulator-enclosures-for-garages-and-small-rooms-2026/",
+        "https://www.opengolfer.co.uk/blogs/docs/simspace-vs-golfbays-simbox",
+        "https://betterbirdiesgolf.com/products/golfbays-simbox-golf-simulator-enclosure-6-sizes",
+        "https://simulatorgolfpro.com/golfbays-simbox-golf-simulator-enclosure/"
+      ],
+      "price": {
+        "amount": 1444.15,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://golfbays.com/products/simbox-golf-simulator-enclosure-6-sizes",
+        "note": "Listed at $1,699 with $254.85 off on the brand page. Walmart $1,599 to $1,799; Delightfully Noted $1,495; Charles & Hudson ~$1,700; UK from GBP 1,161."
+      },
+      "direct_url": "https://golfbays.com/products/simbox-golf-simulator-enclosure-6-sizes",
+      "fallback_url": "https://www.walmart.com/ip/SimBox-Golf-Simulator-Enclosure-6-sizes/2597439463",
+      "read_url": "https://www.opengolfer.co.uk/blogs/docs/simspace-vs-golfbays-simbox",
+      "specs": {
+        "sizes": "8 ft 6 in x 8 ft 2 in x 4 ft 11 in; 9 ft 10 in x 8 ft 2 in x 4 ft 11 in; 11 ft 10 in x 8 ft 2 in; 13 ft 2 in x 8 ft 2 in; 12 ft 5 in x 9 ft 2 in; 9 ft 10 in cube; 13 ft 2 in x 9 ft 10 in x 9 ft 10 in (W x H x D)",
+        "frame_material": "aluminium poles, black velvet surround",
+        "screen_included": "yes, HD PRO+ triple-layer",
+        "screen_layers": "3",
+        "mount_type": "freestanding",
+        "folds_or_retracts": "brand says it 'folds down for storage'; no folded dimension is published, so treat it as a knock-down frame",
+        "shipping": "free in the USA from Clearwater FL, 1 to 4 days",
+        "assembly_time_claimed": "30 to 60 minutes tool-free (three different figures on the brand page)"
+      },
+      "room_fit": "8 ft 2 in frame is the lowest fixed frame here; Charles & Hudson says the low option helps where a door track or opener eats headroom. Still needs a ceiling above 8 ft 2 in.",
+      "who_its_for": "The garage with a door opener in the way, or the buyer who wants the PRO+ screen in a tool-free frame at under $1,500.",
+      "pros": [
+        "seven sizes including a 4 ft 11 in depth",
+        "tool-free click-together aluminium",
+        "triple-layer screen included at this price",
+        "20 brand reviews, 16 five-star"
+      ],
+      "cons": [
+        "8 ft 2 in height is too low for a long, upright swing (Delightfully Noted)",
+        "printed directions could be clearer (Charles & Hudson)",
+        "one Walmart seller review at 2 stars"
+      ],
+      "known_issues": [
+        "PRO+ screen has no eyelets on all sides and cannot be rotated to spread wear (Open Golfer)"
+      ],
+      "why_people_choose_it": "It is the fixed frame that ducks under a garage-door rail, and the UK comparison site's pick when you want the PRO+ screen inside a bay.",
+      "image_url": "https://golfbays.com/cdn/shop/files/simbox356.jpg"
+    },
+    {
+      "brand": "HomeCourse Golf",
+      "name": "ProScreen 180 retractable screen",
+      "subtype": "retractable",
+      "tier": "core",
+      "mention_count": 13,
+      "mention_sources": [
+        "https://forums.golfwrx.com/topic/2082168-looking-for-reviews-on-the-homecourse-proscreen-180-retractable-golf-simulator-screen",
+        "https://golf.forum/community/threads/homecourse-pro-180-retractable-golf-simulator-impact-screen-review.55497/",
+        "https://swingsense.com/homecourse-pro-retractable-golf-simulator-impact-screen-review/",
+        "https://simplygolfsimulators.com/blogs/news/a-deep-dive-into-the-homecourse-golf-proscreen-180",
+        "https://topshelfgolf.com/products/homecourse-pro-retractable-golf-simulator-impact-screen",
+        "https://shopindoorgolf.com/products/homecourse-pro-golf-simulator-screen",
+        "https://skytrakgolf.com/products/homecourse-proscreen-180",
+        "https://golfstead.com/best-golf-simulator-enclosures",
+        "https://charlesandhudson.com/8-best-golf-simulator-enclosures-for-home-garages-small-spaces-2026/",
+        "https://www.delightfullynotedblog.com/5-best-golf-simulator-enclosures-for-garages-and-small-rooms-2026/",
+        "https://golfsimulatoradvisor.com/best-golf-simulator-screens-enclosures/",
+        "https://golfsimulatorforum.com/forum/classified-ads/home-golf-simulators/393039-homecourse-pro-180-retractable-golf-screen-dfw-tx-area",
+        "https://vimeo.com/301072999"
+      ],
+      "price": {
+        "amount": 2299,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://shop.homecoursegolf.com/proscreen-180/",
+        "note": "Brand page regular price. Shop Indoor Golf $1,999 sale against $2,299 (read 2026-10-18); wall mount kit $79.99 to $125 extra."
+      },
+      "direct_url": "https://shop.homecoursegolf.com/proscreen-180/",
+      "fallback_url": "https://shopindoorgolf.com/products/homecourse-pro-golf-simulator-screen",
+      "read_url": "https://golf.forum/community/threads/homecourse-pro-180-retractable-golf-simulator-impact-screen-review.55497/",
+      "specs": {
+        "screen": "8 ft wide x 8 ft high",
+        "projectable_width": "Pro Arms extend to about 14 ft for 16:9 (vendor claim)",
+        "frame_material": "housing with extending Pro Arms; ballistic-grade side material on the newer model",
+        "screen_included": "yes, retractable; not a full bay",
+        "screen_layers": "",
+        "mount_type": "ceiling (kit included) or wall (kit extra)",
+        "folds_or_retracts": "retracts; lithium-ion battery motor with remote, under 30 seconds",
+        "shipping": "dealer",
+        "assembly_time_claimed": "",
+        "included": "screen, ceiling mount kit, charging cable, remote, reach pole"
+      },
+      "room_fit": "Minimum 8 ft 6 in ceiling, about 10 ft wide, 8 ft deep (Golfstead, Charles & Hudson). The nearest 'give the garage back' product that mounts overhead.",
+      "who_its_for": "The garage that parks a car and has 8 ft 6 in of ceiling and a joist to hang from; the buyer who wants the sim to vanish with a remote.",
+      "pros": [
+        "disappears into its housing in under 30 seconds",
+        "works with any projector; Pro Arms and sky net contain mis-hits",
+        "the most-discussed retractable on this list"
+      ],
+      "cons": [
+        "8 x 8 screen only; not a full enclosure, so tight rooms need extra side netting or wall padding",
+        "wall mount kit and landing pad are extras",
+        "battery powered"
+      ],
+      "known_issues": [
+        "screen wrinkles easily and picture quality is below a tensioned screen (GolfWRX owner, two years on the original model)",
+        "the weighted bottom does not stay tight to the ground; the ball still hits the wall occasionally (GolfWRX)",
+        "sag and creasing hurt image quality (Delightfully Noted)",
+        "supplied install guide is weak; a YouTube guide was better (brand-site reviewer)"
+      ],
+      "why_people_choose_it": "It is the first thing a two-car-garage golfer finds when they search 'retractable': remote up, remote down, car back in. The trade is an 8-ft-wide screen that hangs rather than stretches.",
+      "image_url": "https://cdn11.bigcommerce.com/s-vmt15d9ru2/products/112/images/399/Danny-Action-Shot-2__43086.1614274070.500.750.jpg"
+    },
+    {
+      "brand": "SportScreen",
+      "name": "Vanish Series retractable golf enclosure (Vanish 9 / 11 / 13H / 16 / 16H; Vanish LITE noted)",
+      "subtype": "retractable",
+      "tier": "qualified",
+      "mention_count": 9,
+      "mention_sources": [
+        "https://rainorshinegolf.com/products/the-sportscreen-golf-studio-retractable-screen-and-enclosure",
+        "https://indoorgolfoutlet.com/products/the-sportscreen-vanish-series-retractable-golf-simulator-enclosure",
+        "https://golfbays.com/products/vanish-series-retractable-golf-enclosure-vanish-16",
+        "https://simplygolfsimulators.com/products/vanish-series-retractable-golf-enclosure",
+        "https://indoorgolfessentials.com/products/the-sportsscreen-vanish-series-golf-simulator-enclosure",
+        "https://allsportsystems.shop/products/sportscreen-retractable-golf-bay-screen-enclosure",
+        "https://charlesandhudson.com/8-best-golf-simulator-enclosures-for-home-garages-small-spaces-2026/",
+        "https://golfsimdepot.com/blogs/knowledge-center/garage-golf-simulator",
+        "https://golfsimulatorforum.com/forum/build-your-own/enclosures/363741-curtain-style-impact-screen"
+      ],
+      "price": {
+        "amount": 2999.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://thesportscreen.com/products/vanish-series-retractable-golf-enclosure",
+        "note": "Vanish 9 starting price on the brand page. Vanish LITE (semi-retractable) from $2,299.99 (brand blog 2026-04-08). Retailers: Vanish 11 $3,499.99 hand crank, $4,499.99 power crank with remote; Indoor Golf Essentials $2,549.99 sale (search snippets 2026-10-19)."
+      },
+      "direct_url": "https://thesportscreen.com/products/vanish-series-retractable-golf-enclosure",
+      "fallback_url": "https://rainorshinegolf.com/products/the-sportscreen-golf-studio-retractable-screen-and-enclosure",
+      "read_url": "https://charlesandhudson.com/8-best-golf-simulator-enclosures-for-home-garages-small-spaces-2026/",
+      "specs": {
+        "sizes": "five standard widths, custom to 16 ft; 5-ft-deep side screens",
+        "frame_material": "roller housing on wall or ceiling brackets",
+        "screen_included": "yes, 3-ply impact screen plus rear impact membrane or blackout screen, two 5-ft side screens, ceiling panel, corner pieces, side and front baffles",
+        "screen_layers": "3",
+        "mount_type": "wall or ceiling brackets (also shown on garage rails)",
+        "folds_or_retracts": "fully retracts; hand crank or remote (Alexa, Google Home, Tuya)",
+        "shipping": "free over $99 in the contiguous US and Canada; 1 to 15 business days, custom 10 to 15",
+        "assembly_time_claimed": "not stated; owners say it takes time",
+        "warranty": "2 years (Charles & Hudson)"
+      },
+      "room_fit": "Ceiling height not stated on the page; the LITE is pitched at taller or sloped ceilings. Golf Sim Depot's garage guide names the Vanish as the retractable to pair with a ground-based monitor when you still park.",
+      "who_its_for": "The garage or multi-use room owner who wants the whole bay, side screens included, to roll up to the ceiling.",
+      "pros": [
+        "the only retractable here that includes side screens, a ceiling panel and baffles",
+        "crank or remote, no floor track",
+        "37 brand ratings at five stars; 'many screens have considerable bounce back, I have not found that with this screen' (Simply Golf Simulators reviewer)"
+      ],
+      "cons": [
+        "costs more than most fixed enclosures",
+        "installation is more involved; the brackets need better instructions (Rain or Shine reviewer)",
+        "the corner Velcro pieces take 'a lot of time and effort to install and remove' (Indoor Golf Essentials reviewer)"
+      ],
+      "known_issues": [
+        "brand page showed both 'add to cart' and 'out of stock' on 2026-10-19"
+      ],
+      "why_people_choose_it": "When the question is 'how do I keep the car and the sim', the Vanish is the answer the retailer blogs give: full bay, rolls up, two-year warranty. The price is the objection.",
+      "image_url": "https://thesportscreen.com/cdn/shop/files/Vanish-11-Up-and-Down-with-no-retraction-mechanism-in-image.gif"
+    },
+    {
+      "brand": "G-TRAK (sold by Rain or Shine Golf and The Indoor Golf Shop)",
+      "name": "G-TRAK retractable impact screen",
+      "subtype": "retractable",
+      "tier": "qualified",
+      "mention_count": 5,
+      "mention_sources": [
+        "https://golfsimdepot.com/products/g-trak-retractable-impact-screen",
+        "https://indoorgolfoutlet.com/products/g-trak-retractable-impact-screen",
+        "https://charlesandhudson.com/8-best-golf-simulator-enclosures-for-home-garages-small-spaces-2026/",
+        "https://golfsimspot.com/blog/garage-golf-simulator/",
+        "https://rainorshinegolf.com/products/g-trak-retractable-screen"
+      ],
+      "mention_note": "Maker not identified on any page; Rain or Shine is counted as a retailer, not the brand.",
+      "price": {
+        "amount": 1999.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://rainorshinegolf.com/products/g-trak-retractable-screen",
+        "note": "Base: 8-ft door, 7-ft screen. 9 x 8 +$200; 10 x 8 +$400; 16 x 10 +$500; 16 x 12 +$750; 16 x 14 +$1,000 (totals to $2,999.99 are the add-ons summed)."
+      },
+      "direct_url": "https://rainorshinegolf.com/products/g-trak-retractable-screen",
+      "fallback_url": "https://golfsimdepot.com/products/g-trak-retractable-impact-screen",
+      "read_url": "https://charlesandhudson.com/8-best-golf-simulator-enclosures-for-home-garages-small-spaces-2026/",
+      "specs": {
+        "widths": "screens 7, 8, 10, 12, 14 ft for 8, 9, 10, 16 ft door openings",
+        "viewable_height": "87 in (Charles & Hudson)",
+        "frame_material": "ceiling track (Rain or Shine version) or garage-door-rail mount with remote (Golf Sim Depot version)",
+        "screen_included": "yes, impact screen",
+        "screen_layers": "",
+        "mount_type": "ceiling joists or garage door tracks",
+        "folds_or_retracts": "retracts along the track; manual (RoS) or remote (Golf Sim Depot)",
+        "shipping": "",
+        "assembly_time_claimed": ""
+      },
+      "room_fit": "Floor to the bottom of the garage rail should be about 96 to 103 in (Charles & Hudson); the garage door still works.",
+      "who_its_for": "The garage that parks a car and whose door rails are the only structure to hang from.",
+      "pros": [
+        "mounts to the door tracks so the door keeps working",
+        "sized to standard door openings"
+      ],
+      "cons": [
+        "under 3 ft of side netting, so limited shank protection",
+        "two different mechanisms sold under one name; confirm which you are buying",
+        "one review on the Rain or Shine page"
+      ],
+      "known_issues": [],
+      "why_people_choose_it": "It is the retractable for the garage that still parks: the screen hangs under the door rail and rolls away, and the netting is the compromise.",
+      "image_url": ""
+    },
+    {
+      "brand": "All Sports Inflatables (class reference)",
+      "name": "Inflatable golf simulator enclosure 12 x 16 (and the inflatable class)",
+      "subtype": "inflatable",
+      "tier": "qualified",
+      "mention_count": 6,
+      "mention_sources": [
+        "https://golfsimjim.com/simulators/inflatable-golf-simulator/",
+        "https://xsgolf.com/portable-inflatable-golf-simulator-setups-2026/",
+        "https://golfsimulatoradvisor.com/best-inflatable-golf-simulator-tent/",
+        "https://popcaddie.com/inflatable-enclosures/",
+        "https://gotinflatables.com/products/inflatable-golf-simulator-enclosure-for-indoor-outdoor-use",
+        "https://www.ebay.de/itm/135726761621"
+      ],
+      "mention_note": "Counted as a class; no single inflatable reaches five independent sources on its own.",
+      "price": {
+        "amount": 2999,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://allsportsinflatables.com/products/inflatable-golf-simulator-enclosure-12-16",
+        "note": "Sold out on the brand page today. Class range: FunJain Pro $1,299 (13.1 x 9.8 ft, too shallow per XS Golf); FunJain Lite $699; GoSports inflatable ~$1,300 (about two stars, golfsimjim); eBay factory-direct $850 to $2,150; All Sports 16 x 16 $4,999, 16 x 20 $5,999, 18 x 30 $9,999 (XS Golf, checked 2026-09-15)."
+      },
+      "direct_url": "https://allsportsinflatables.com/products/inflatable-golf-simulator-enclosure-12-16",
+      "fallback_url": "",
+      "read_url": "https://xsgolf.com/portable-inflatable-golf-simulator-setups-2026/",
+      "specs": {
+        "width_ft": 12,
+        "depth_ft": 16,
+        "height_ft": 10,
+        "dimensions_note": "outside dimensions; interior is smaller",
+        "frame_material": "sealed-air commercial PVC, 800 W pump included",
+        "screen_included": "yes, 10 x 9 ft 4:3 forward-shifted impact screen with rear buffer and rear impact net",
+        "screen_layers": "",
+        "mount_type": "freestanding inflatable",
+        "folds_or_retracts": "deflates; inflates in 5 minutes, ready in under 30",
+        "shipping": "",
+        "assembly_time_claimed": "under 30 minutes"
+      },
+      "room_fit": "XS Golf's minimums for a working inflatable sim: 9 ft ceiling (10 recommended), 12 ft wide with an offset mat, 15 ft deep. Only the 12 x 16 and larger meet them; the sub-$1,500 tents do not.",
+      "who_its_for": "The outdoor or event bay, or the renter who can give up 12 x 16 ft of floor and wants nothing drilled.",
+      "pros": [
+        "no frame, no drilling, up in minutes",
+        "full bay with side netting and blackout cover (12 x 16)"
+      ],
+      "cons": [
+        "mat, turf, sandbags and projector enclosure are extra; offset mat required",
+        "one person at a time inside the 12 x 16",
+        "cheap tents need the blower running and are not impact-rated"
+      ],
+      "known_issues": [
+        "GoSports inflatable: fit and durability complaints, about two stars (golfsimjim)",
+        "seam quality, screen density and UV life unverified on marketplace units (XS Golf)"
+      ],
+      "why_people_choose_it": "It is the enclosure for a driveway party or a rented space; the review sites agree that below the commercial units it is a hitting bay, not a simulator.",
+      "image_url": "https://allsportsinflatables.com/cdn/shop/files/12x16-flat-mockup.jpg"
+    },
+    {
+      "brand": "DIY (Carl's Place kit on self-cut EMT)",
+      "name": "DIY build: Carl's DIY kit plus 1 in EMT from the hardware store",
+      "subtype": "diy",
+      "tier": "core",
+      "mention_count": 12,
+      "mention_sources": [
+        "https://golfsimulatorforum.com/forum/build-your-own/enclosures/211230-carl-s-golf-simulator-enclosure-kit-with-impact-screen",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/281075-cost-breakdown",
+        "https://golfsimulatorforum.com/forum/build-your-own/enclosures/253998-bounce-back-over-10-feet-with-new-enclosure",
+        "https://golfsimulatorforum.com/forum/build-your-own/enclosures/301022-bounce-back",
+        "https://golfsimulatorforum.com/forum/build-your-own/enclosures/264435-bounceback-on-short-irons-and-wedges",
+        "https://golfsimulatorforum.com/forum/build-your-own/enclosures/185585-allsportsystems-vs-carls",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/404686-review-carl-s-place-diy-golf-enclosure-vs-custom-pro-golf-enclosure",
+        "https://friendlygolfer.com/carls-golf-simulator-enclosure-review/",
+        "https://www.independentgolfreviews.com/carls-place-diy-simulator-review/",
+        "https://yardstickgolf.com/diy-golf-simulator-enclosure/",
+        "https://www.carlofet.com/blog/how-to-assemble-a-diy-golf-simulator-enclosure-kit",
+        "https://www.youtube.com/watch?v=wQ96bav-9CQ"
+      ],
+      "price": {
+        "amount": 1006.34,
+        "currency": "USD",
+        "read_on": "2019-06-20",
+        "source_url": "https://golfsimulatorforum.com/forum/build-your-own/enclosures/211230-carl-s-golf-simulator-enclosure-kit-with-impact-screen",
+        "note": "As posted: $899.95 8 x 8 kit from Amazon plus nine 1 in EMT sticks at $10.92 = $106.39 after tax, before cutting tools. A 2020 custom 8.5 x 11 with pipes and a cutter was $1,263.04 (GSF 281075). Today's kit is $999.95 to $1,199.94 and EMT is $8 to $12 a stick (Home Performance Lab, 2026)."
+      },
+      "direct_url": "https://shop.carlofet.com/diy-golf-simulator-enclosure-kit-with-impact-screen",
+      "fallback_url": "https://www.playbetter.com/products/carls-place-diy-golf-simulator-enclosure-kit-with-impact-screen",
+      "read_url": "https://golfsimulatorforum.com/forum/build-your-own/enclosures/211230-carl-s-golf-simulator-enclosure-kit-with-impact-screen",
+      "parts_list": [
+        {
+          "item": "Carl's DIY enclosure kit (screen, BlackStop surround, steel corner fittings, zip ties)",
+          "cost": "$899.95 (2019, Amazon) / $999.95 to $1,199.94 (2026)"
+        },
+        {
+          "item": "1 in EMT conduit, 10 ft sticks, 9 to 12",
+          "cost": "$106.39 for nine (2019) / $8 to $12 each (2026)"
+        },
+        {
+          "item": "tube cutter or angle grinder",
+          "cost": "$13 (Gung Ho) or borrowed"
+        },
+        {
+          "item": "foam pipe insulation, 1 in",
+          "cost": "$30 to $50"
+        },
+        {
+          "item": "optional Carl's pipe framing kit instead of self-cut EMT",
+          "cost": "from $349.95"
+        }
+      ],
+      "specs": {
+        "sizes": "any of Carl's six sizes or custom; 5 ft deep",
+        "frame_material": "1 in EMT, self-cut",
+        "screen_included": "Standard, Preferred or Premium per the kit",
+        "screen_layers": "Premium = 3",
+        "mount_type": "freestanding",
+        "folds_or_retracts": "no (see the fold-away DIY entry)",
+        "shipping": "kit by ground; pipe from the store",
+        "assembly_time_claimed": "about an hour plus 30 minutes of cutting"
+      },
+      "room_fit": "Same as the kit: 9 ft of ceiling for the 8-ft frames; the forum's 8 ft 4 in garage build went to wood framing instead (GSF 321467).",
+      "who_its_for": "The builder-sharer: he posts the parts list, the total and the ceiling height, and the next asker copies it.",
+      "pros": [
+        "the cheapest brand-name screen-and-surround route on the forum",
+        "Carl's cut lengths leave enough pole inserted to tighten the screen (GSF 185585)"
+      ],
+      "cons": [
+        "cutting EMT is the job nobody enjoys; the store will cut it if asked (GSF 211230 replies)",
+        "1 in EMT carries nothing overhead"
+      ],
+      "known_issues": [
+        "too-tight screen trampolines the ball back to head height (GSF 253998, 301022)",
+        "wedges over the head off the top third; baffles 12 in wide spaced 16 in, foam behind the top half (GSF 264435)",
+        "rough welds on fittings scratch floors (GSF 211230)"
+      ],
+      "why_people_choose_it": "Two GSF builders put the all-in number at $1,006 and $1,263 and both said they would buy it again. That is the number the whole category gets measured against.",
+      "image_url": ""
+    },
+    {
+      "brand": "DIY (EMT frame with a budget screen)",
+      "name": "DIY build: EMT frame, canopy fittings and a budget impact screen (the $500 blueprint)",
+      "subtype": "diy",
+      "tier": "qualified",
+      "mention_count": 7,
+      "mention_sources": [
+        "https://simgolflab.com/diy-golf-simulator-enclosure-the-500-home-depot-blueprint-no-sewing/",
+        "https://yardstickgolf.com/diy-golf-simulator-enclosure/",
+        "https://homeperformancelab.com/diy-golf-simulator-enclosure/",
+        "https://gunghogolf.com/blogs/simulators/how-to-build-your-own-diy-impact-screen-enclosure-for-your-golf-simulator-studio",
+        "https://www.canvasetc.com/diy-golf-impact-screen-and-enclosure/",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/147901",
+        "https://www.bullseyegolfsims.com/can/product/std-fitting-kit/"
+      ],
+      "price": {
+        "amount": 500,
+        "currency": "USD",
+        "read_on": "2025-12-23",
+        "source_url": "https://simgolflab.com/diy-golf-simulator-enclosure-the-500-home-depot-blueprint-no-sewing/",
+        "note": "Article total 'roughly $500' for 10 ft x 8 ft 6 in x 5 ft; its itemised lines add to about $290 and the screen, fittings and bungees are unpriced. Gung Ho Golf: about $1,060 for 16 x 9 x 3.5 ft including a top-quality screen (2023). Home Performance Lab: frame $200 to $275, screen $100 to $300 (2026). Yardstick: under $200 of conduit for a 10 x 12 (2026). GSF 147901 (2018): aluminum conduit $68.90, canopy hardware $103.82, screen $250 to $750."
+      },
+      "direct_url": "",
+      "fallback_url": "",
+      "read_url": "https://simgolflab.com/diy-golf-simulator-enclosure-the-500-home-depot-blueprint-no-sewing/",
+      "parts_list": [
+        {
+          "item": "1 in EMT conduit, 10 ft, 11 sticks",
+          "cost": "$210 to $250"
+        },
+        {
+          "item": "canopy or steel box fittings: 6 three-way corners, 2 two-way L corners (not stocked at Home Depot; order online)",
+          "cost": "$65 plus shipping (A1 Tarps) / $229 to $279 (Bullseye kit)"
+        },
+        {
+          "item": "foam pipe insulation, 12 to 18 sticks",
+          "cost": "$30 to $50"
+        },
+        {
+          "item": "impact screen with grommets (GoSports 8 x 10.5 or Carl's Standard)",
+          "cost": "$100 to $300"
+        },
+        {
+          "item": "6 in ball bungees, 50 pack, and tarp clips",
+          "cost": "$8 to $23"
+        },
+        {
+          "item": "black commando cloth or heavy curtains for sides and top",
+          "cost": "$179 plus shipping for 12 yards (Gung Ho) or Amazon curtains ~$150"
+        },
+        {
+          "item": "tube cutter rated for steel",
+          "cost": "$13"
+        }
+      ],
+      "specs": {
+        "sizes": "10 to 12 ft wide, 8 to 10 ft tall, 5 ft deep (Yardstick's assumed standard)",
+        "frame_material": "1 in EMT; PVC rejected by every guide (shatters, sags over 8 ft)",
+        "screen_included": "bring your own",
+        "screen_layers": "1 (budget screens)",
+        "mount_type": "freestanding",
+        "folds_or_retracts": "no",
+        "shipping": "",
+        "assembly_time_claimed": ""
+      },
+      "room_fit": "Cut the verticals to the ceiling you have; Yardstick says at least 5 ft of depth.",
+      "who_its_for": "The under-$3k builder (GSF 147901: $2,954.25 whole sim) who would rather cut pipe than pay for a surround.",
+      "pros": [
+        "frame for $200 to $275",
+        "sized to the room, not the catalogue"
+      ],
+      "cons": [
+        "the fittings are the catch: hardware stores do not stock three-way corners",
+        "a budget single-layer screen bounces and shows wrinkles",
+        "no padding, surround or baffle unless you add them"
+      ],
+      "known_issues": [
+        "PVC frames shatter on direct hits (Yardstick, Gung Ho)",
+        "bare metal pipe needs foam lagging (Yardstick)"
+      ],
+      "why_people_choose_it": "It is the build that proves the hobby before the money: $500 and a Saturday, then upgrade the screen when the bounce-back gets old.",
+      "image_url": ""
+    },
+    {
+      "brand": "DIY (curtain track, pipe-and-drape)",
+      "name": "DIY build: ceiling-track curtain or pipe-and-drape with a hanging grommeted screen",
+      "subtype": "diy",
+      "tier": "qualified",
+      "mention_count": 6,
+      "mention_sources": [
+        "https://golfsimulatorforum.com/forum/build-your-own/enclosures/363741-curtain-style-impact-screen",
+        "https://golfsimulatorforum.com/forum/build-your-own/enclosures/162427-foldable-sides-please-see-drawing",
+        "https://www.youtube.com/watch?v=Fqh_yDz5OHo",
+        "https://simweekly1.substack.com/p/is-this-the-coolest-garage-sim",
+        "https://golfsimspot.com/blog/garage-golf-simulator/",
+        "https://golfsimdepot.com/blogs/knowledge-center/garage-golf-simulator"
+      ],
+      "price": {
+        "amount": 599,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://rainorshinegolf.com/products/diy-golf-simulator-enclosure-curtain-kit",
+        "note": "Rain or Shine ceiling curtain track kit base: one blackout curtain 8 x 10 or 9 x 10 ft, track and hooks; add-ons +$20 to +$320; no impact screen. A YouTube build claims a $30 curtain-track garage screen. GSF 363741: Amazon metal room dividers plus a grommeted Carl's screen, 18 months in service."
+      },
+      "direct_url": "https://rainorshinegolf.com/products/diy-golf-simulator-enclosure-curtain-kit",
+      "fallback_url": "",
+      "read_url": "https://golfsimulatorforum.com/forum/build-your-own/enclosures/363741-curtain-style-impact-screen",
+      "parts_list": [
+        {
+          "item": "ceiling curtain track (or Amazon metal room-divider track), mounted to joists or rated anchors",
+          "cost": "$30 (YouTube) to $599 kit (Rain or Shine)"
+        },
+        {
+          "item": "grommeted impact screen hung from the track (Carl's Preferred from $298.95)",
+          "cost": "$150 to $600"
+        },
+        {
+          "item": "blackout curtains for sides",
+          "cost": "$150 to $290 (GSF 147901 curtains $288.63)"
+        },
+        {
+          "item": "floor anchors: PVC posts at each track end, bungees to weights on the floor (GSF 363741)",
+          "cost": "under $50"
+        }
+      ],
+      "specs": {
+        "frame_material": "track only; no frame",
+        "screen_included": "bring your own",
+        "screen_layers": "",
+        "mount_type": "ceiling (drill required)",
+        "folds_or_retracts": "slides open like a curtain; the screen hangs no more than 12 in off the wall (GSF 363741)",
+        "shipping": "",
+        "assembly_time_claimed": "about 1 hour, one person (Rain or Shine kit)"
+      },
+      "room_fit": "Needs joists or rated drywall anchors and a wall behind the screen; the screen must be anchored top and bottom or it swings.",
+      "who_its_for": "The garage that blocks a window or parks a car and will drill the ceiling but not build a frame.",
+      "pros": [
+        "the bay slides open in seconds",
+        "cheapest retractable route by far",
+        "Reddit's 208-upvote garage sim used a retractable screen with side rollers and hid the mat too (Sim Weekly)"
+      ],
+      "cons": [
+        "no containment on the sides without curtains and a baffle",
+        "a free-hanging screen needs weights and bungees at the bottom or the ball finds the wall",
+        "curtains sag and collect ball marks"
+      ],
+      "known_issues": [
+        "bottom anchoring is the whole problem; every reply in GSF 363741 is about it"
+      ],
+      "why_people_choose_it": "It is the fold-away that costs the least and needs the most tinkering; the forum answer to 'can I keep the window' and 'can I keep the car' before the roller products existed.",
+      "image_url": ""
+    },
+    {
+      "brand": "DIY (hinged or hoisted EMT)",
+      "name": "DIY build: hinged side panels or a frame that pivots into the ceiling",
+      "subtype": "diy",
+      "tier": "qualified",
+      "mention_count": 7,
+      "mention_sources": [
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/247350-foldable-enclosure-allows-car-in-garage-when-launch-monitor-is-not-in-use",
+        "https://golfsimulatorforum.com/forum/build-your-own/enclosures/133261-new-fold-up-garage-sim",
+        "https://golfsimulatorforum.com/forum/build-your-own/enclosures/383722-diy-foldable-golf-enclosure-with-emts",
+        "https://golfsimulatorforum.com/forum/build-your-own/enclosures/162427-foldable-sides-please-see-drawing",
+        "https://www.thesmarthomehookup.com/diy-golf-simulator-folds-into-the-ceiling-in-5-minutes-park-cars-in-the-garage-and-have-a-sim/",
+        "https://www.youtube.com/watch?v=h8qT5SRz-XM",
+        "https://www.youtube.com/watch?v=6uvdufAwmoM"
+      ],
+      "price": {
+        "amount": 1145,
+        "currency": "USD",
+        "read_on": "2023-02-10",
+        "source_url": "https://www.thesmarthomehookup.com/diy-golf-simulator-folds-into-the-ceiling-in-5-minutes-park-cars-in-the-garage-and-have-a-sim/",
+        "note": "Screen frame, hoist and safety system $550 plus a $595 Carl's custom screen; the whole project with vaulted trusses, drywall and a mini-split was $10,177. GSF 247350 (hinged Carl's side panels) posted no cost; GSF 133261 (frame pivots to the ceiling on velcro straps and bike hooks) posted $60 foam wedges, ~$100 canvas and a ~$700 garage-door opener."
+      },
+      "direct_url": "",
+      "fallback_url": "",
+      "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/247350-foldable-enclosure-allows-car-in-garage-when-launch-monitor-is-not-in-use",
+      "parts_list": [
+        {
+          "item": "Carl's DIY enclosure on 1 in EMT with hinges added to the side panels (GSF 247350)",
+          "cost": "kit plus EMT plus 1.5 in stainless adjustable corner connectors, epoxied with JB Weld after drilling failed"
+        },
+        {
+          "item": "aluminum snap-on hinges for 1 in EMT, 2-pack (GSF 383722)",
+          "cost": ""
+        },
+        {
+          "item": "ceiling pivot: four eye lag bolts, 100-lb velcro straps, 75-lb bike hooks, 2x4s and lag bolts (GSF 133261)",
+          "cost": ""
+        },
+        {
+          "item": "1x3 steel tube frame on pillow-block bearings with a 440-lb wireless hoist on Unistrut (Smart Home Hookup)",
+          "cost": "$550 with the safety rail"
+        }
+      ],
+      "specs": {
+        "frame_material": "1 in EMT with hinges, or steel tube on bearings",
+        "screen_included": "bring your own (Carl's screens in every example)",
+        "screen_layers": "",
+        "mount_type": "wall, ceiling joists or floor pivots; drilling required",
+        "folds_or_retracts": "hinged sides fold the resting footprint to about 1 x 8 ft (GSF 247350); the pivot frame leaves about 6 in under the garage door (GSF 133261)",
+        "shipping": "",
+        "assembly_time_claimed": "stows in under five minutes (Smart Home Hookup)"
+      },
+      "room_fit": "The ceiling examples: 8 ft 6 in (GSF 247350 target), 9 ft 6 in (GSF 133261), 8 ft 6 in vaulted to 10 ft by cutting four trusses (Smart Home Hookup).",
+      "who_its_for": "The builder whose spouse 'refuses to give up half of our 2-car garage for a toy' (GSF 247350) and who owns a drill, a grinder and patience.",
+      "pros": [
+        "the car comes back",
+        "proven designs with photos on the forum"
+      ],
+      "cons": [
+        "the engineering is on you (GSF 383722 reply)",
+        "stainless connectors burned two drill bits before the builder switched to epoxy (GSF 247350)",
+        "the swivel-fitting design in GSF 162427 was never built; the thread drifted to curtain track"
+      ],
+      "known_issues": [
+        "hoist and pivot builds need a safety catch; the Smart Home Hookup build added a linear rail in case the hoist fails"
+      ],
+      "why_people_choose_it": "Before any product folded, people hinged Carl's side panels and hung the frame from the joists. The threads are old (2017 to 2023) and still get bumped, which says the problem never went away.",
+      "image_url": ""
+    },
+    {
+      "brand": "Rain or Shine Golf",
+      "name": "Custom golf simulator rooms (design, build, install)",
+      "subtype": "custom-build",
+      "tier": "custom-build",
+      "mention_count": 2,
+      "mention_sources": [
+        "https://golfsimdepot.com/blogs/knowledge-center/garage-golf-simulator",
+        "https://www.playbetter.com/blogs/golf-simulator-comparisons/how-much-is-a-golf-simulator"
+      ],
+      "price": null,
+      "direct_url": "https://rainorshinegolf.com/pages/custom-golf-simulator-rooms",
+      "fallback_url": "",
+      "read_url": "https://www.simulatorconsultants.com/blog/golf-simulator-cost/",
+      "specs": {
+        "service_area": "install team covers the continental US",
+        "what_they_make": "SwingBay, SwingTurf and screens in-house; build sheets you can hand your own contractor",
+        "pricing_note": "The page quotes no range: free 30-minute consult, a 3D model with build sheets and priced parts, design fee refunded on purchase. A search snippet on 2026-10-19 attributed 'about $10K to $50K+' and a 6 to 12 week Signature timeline to Rain or Shine; neither appears on the fetched page, so treat them as unverified.",
+        "price_source_url": "https://rainorshinegolf.com/pages/custom-golf-simulator-rooms"
+      },
+      "room_fit": "",
+      "who_its_for": "The dedicated-room owner who wants one vendor to design, supply and install.",
+      "pros": [
+        "build sheets are yours even if you do not buy the install"
+      ],
+      "cons": [
+        "no published price"
+      ],
+      "known_issues": [],
+      "why_people_choose_it": "",
+      "image_url": ""
+    },
+    {
+      "brand": "Premier Sims",
+      "name": "Custom golf simulator packages (Arizona and Southern California)",
+      "subtype": "custom-build",
+      "tier": "custom-build",
+      "mention_count": 1,
+      "mention_sources": [
+        "https://www.premiersims.com/"
+      ],
+      "price": {
+        "amount": 34995,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.premiersims.com/",
+        "note": "'Custom golf simulator packages start at $34,995.00.' Authorized TrackMan, Uneekor and SkyTrak dealer and installer; Garmin also listed. Showroom in Scottsdale."
+      },
+      "direct_url": "https://www.premiersims.com/",
+      "fallback_url": "",
+      "read_url": "https://www.forefrontsims.com/2026/07/professional-home-golf-simulator-cost/",
+      "specs": {
+        "service_area": "Phoenix, Scottsdale, Tucson, Los Angeles, Orange County, San Diego, Newport Beach; select projects elsewhere"
+      },
+      "room_fit": "",
+      "who_its_for": "The Phoenix-area buyer with a $35k-plus budget who wants a TrackMan or Uneekor room installed.",
+      "pros": [
+        "local showroom",
+        "published starting price"
+      ],
+      "cons": [
+        "starting price is launch-monitor-led; the enclosure is a fraction of it"
+      ],
+      "known_issues": [],
+      "why_people_choose_it": "",
+      "image_url": ""
+    },
+    {
+      "brand": "Assembled Golf",
+      "name": "Nationwide golf simulator design and installation",
+      "subtype": "custom-build",
+      "tier": "custom-build",
+      "mention_count": 1,
+      "mention_sources": [
+        "https://assembledgolf.com/"
+      ],
+      "price": null,
+      "direct_url": "https://assembledgolf.com/",
+      "fallback_url": "",
+      "read_url": "https://www.simulatorconsultants.com/blog/golf-simulator-cost/",
+      "specs": {
+        "service_area": "about 30 states plus DC listed; claims 45",
+        "pricing_note": "No price published; free consultation and quote. Process: consultation, planning, installation and calibration, support.",
+        "price_source_url": "https://assembledgolf.com/"
+      },
+      "room_fit": "",
+      "who_its_for": "The buyer who already owns the gear and wants an installer, anywhere in the US.",
+      "pros": [
+        "installs enclosures, projectors, launch monitors, turf"
+      ],
+      "cons": [
+        "no price signal at all"
+      ],
+      "known_issues": [],
+      "why_people_choose_it": "",
+      "image_url": ""
+    },
+    {
+      "brand": "The Indoor Golf Shop",
+      "name": "Custom design and build (Celina, Texas)",
+      "subtype": "custom-build",
+      "tier": "custom-build",
+      "mention_count": 1,
+      "mention_sources": [
+        "https://shopindoorgolf.com/pages/build-your-own-home-golf-simulator-room-on-any-budget"
+      ],
+      "price": null,
+      "direct_url": "https://shopindoorgolf.com/pages/custom-design-builds",
+      "fallback_url": "",
+      "read_url": "https://www.trackman.com/blog/golf/how-to-build-a-golf-simulator-in-2026-complete-setup-guide",
+      "specs": {
+        "service_area": "not stated; business in Celina TX, example install in Colleyville TX",
+        "pricing_note": "No price or timeline; designers render the room from your dimensions, you sign off on the render, then they build and install. A Room Builder tool and financing are offered.",
+        "price_source_url": "https://shopindoorgolf.com/pages/custom-design-builds"
+      },
+      "room_fit": "",
+      "who_its_for": "The SIG buyer who wants the same company to render and install the room.",
+      "pros": [
+        "render and animation before any build"
+      ],
+      "cons": [
+        "no price, no stated service area"
+      ],
+      "known_issues": [],
+      "why_people_choose_it": "",
+      "image_url": ""
+    },
+    {
+      "brand": "ForeFront Simulator Solutions",
+      "name": "Professional built-in home simulator (planning estimates)",
+      "subtype": "custom-build",
+      "tier": "custom-build",
+      "mention_count": 1,
+      "mention_sources": [
+        "https://www.forefrontsims.com/2026/07/luxury-home-golf-simulator-planning-guide/"
+      ],
+      "price": {
+        "amount": 50000,
+        "currency": "USD",
+        "read_on": "2026-07-19",
+        "source_url": "https://www.forefrontsims.com/2026/07/professional-home-golf-simulator-cost/",
+        "note": "$50,000 to $100,000 for a professionally designed built-in room (design, construction, technology, install, flooring, protection, finishes); $100,000-plus for large high-end rooms; $100,000 to $200,000-plus for a detached golf shed. Planning estimates, not quotes."
+      },
+      "direct_url": "https://www.forefrontsims.com/2026/07/professional-home-golf-simulator-cost/",
+      "fallback_url": "",
+      "read_url": "https://www.forefrontsims.com/2026/07/professional-home-golf-simulator-cost/",
+      "specs": {
+        "cost_drivers": "launch monitor tier, finish level, existing room conditions (ductwork, gas lines, door hardware, ceiling height, windows, sound), framing and low-voltage, bars and extra screens"
+      },
+      "room_fit": "",
+      "who_its_for": "The buyer at the top of the market who wants the room, not an enclosure.",
+      "pros": [
+        "the only installer source that publishes a full-room range"
+      ],
+      "cons": [
+        "location not stated on the page"
+      ],
+      "known_issues": [],
+      "why_people_choose_it": "",
+      "image_url": ""
+    }
+  ],
+  "custom_build_cost_references": [
+    {
+      "source_url": "https://www.simulatorconsultants.com/blog/golf-simulator-cost/",
+      "date": "2026-08-18",
+      "what_it_says": "Install labor $500 to $2,500 for a ready room, $1,500 to $5,000 with framing, mounting and cable management; ceiling work $1,000 to $4,000; wall padding $300 to $1,200; electrical $200 to $800; room prep $1,000 to $2,000. Equipment-only tiers $12,000 to $42,000-plus; DIY enclosure kits $800 to $1,500; custom two-piece screen $3,375 to $3,575."
+    },
+    {
+      "source_url": "https://www.trackman.com/blog/golf/how-to-build-a-golf-simulator-in-2026-complete-setup-guide",
+      "date": "2026",
+      "what_it_says": "Trackman Custom Integrated Build from USD 47,990 installed; tech-only from about USD 20,000."
+    },
+    {
+      "source_url": "https://www.forefrontsims.com/2026/07/professional-home-golf-simulator-cost/",
+      "date": "2026-07-19",
+      "what_it_says": "$50k to $100k built-in; $100k to $200k-plus detached shed."
+    },
+    {
+      "source_url": "https://www.premiersims.com/",
+      "date": "2026-10-19",
+      "what_it_says": "Packages from $34,995, Arizona and Southern California."
+    },
+    {
+      "source_url": "https://golfsimulatorsource.com/golf-simulator-cost-guide/",
+      "date": "2026",
+      "what_it_says": "Turnkey packages $8,000 to $25,000; software subscriptions $200 to $750 a year (search snippet, page not fetched)."
+    }
+  ],
+  "watchlist": [
+    {
+      "brand": "Impact Sports (KHAMPA)",
+      "name": "Foldable golf simulator enclosure",
+      "subtype": "freestanding-fold-flat",
+      "independent_sources": 4,
+      "why_not_listed": "Fewer than 5 independent sources: Walmart, Amazon (sold as KHAMPA), Total Golf Simulators, a 2023 Yardstick roundup. The brand page says 'folds to 13 in width' and the July vault research read it as wall-anchored; the page does not state the mount.",
+      "price_note": "$2,338 brand page 2026-10-19; Walmart $2,349.89 (2026-10-18); 9 ft 10 in W x 8 ft 2 in H x 8 ft 6 in D (Amazon title); 30-day warranty on Amazon; 4.7 from 9 Walmart reviews.",
+      "urls": [
+        "https://www.impactsportsstore.com/product-page/foldable-collapsible-golf-simulator-enclosure-bay",
+        "https://www.walmart.com/ip/IMPACT-SPORTS-Foldable-DIY-Golf-Simulator-Impact-Screen-Frame-Enclosure-Kit/3300682163",
+        "https://www.amazon.com/KHAMPA-Impact-Screen-Enclosure-Foldable/dp/B0BVFGRDQ8"
+      ]
+    },
+    {
+      "brand": "Anything Sports",
+      "name": "Fold Up Golf Simulator Enclosure (wall-mounted)",
+      "subtype": "freestanding-fold-flat",
+      "independent_sources": 3,
+      "why_not_listed": "Amazon (two listings, no written reviews), fccj roundup, one YouTube six-month review whose brand could not be confirmed. Sold out on the brand page. Mounts directly to the wall and 'folds nearly flat in about a minute'; 91 x 91 in screen; 8 ft 4 in x 8 ft 4 in x 5 ft or 11 x 8 ft 4 in x 5 ft.",
+      "price_note": "$899.99 to $999.99 brand page 2026-10-19.",
+      "urls": [
+        "https://shop.anythingsports.org/products/fold-up-golf-simulator-enclosure",
+        "https://www.amazon.com/Fold-Up-Golf-Simulator-Enclosure/dp/B0H31J7473"
+      ]
+    },
+    {
+      "brand": "Elite Screens",
+      "name": "GolfSim Portable ImpactWhite 350 (8 x 10 ft folding frame)",
+      "subtype": "freestanding-fixed",
+      "independent_sources": 3,
+      "why_not_listed": "Projector Reviews, Amazon, TruSimPlay only. Aluminum folding frame with carry bag, 44 lb boxed, 150 mph screen rating, 1 brand review.",
+      "price_note": "$1,284 brand page 2026-10-19 (sold out); $1,468 Projector Reviews 2024-10-31; $1,595 TruSimPlay.",
+      "urls": [
+        "https://shop.elitescreens.com/products/golfsim-portable-impactwhite-350",
+        "https://www.projectorreviews.com/elite/elite-screens-golfsim-portable-impactwhite-350-series-screen-review/"
+      ]
+    },
+    {
+      "brand": "Elite Screens",
+      "name": "GolfSim Bay Series",
+      "subtype": "freestanding-fixed",
+      "independent_sources": 1,
+      "why_not_listed": "AVI-SPL listing only. $3,240 for 13 x 10 ft on the brand page (sold out), 3-layer 4.5 mm ImpactWhite 1145, freight.",
+      "urls": [
+        "https://shop.elitescreens.com/products/golfsim-bay-series"
+      ]
+    },
+    {
+      "brand": "AllSportSystems",
+      "name": "Super Bay and DIY Bay",
+      "subtype": "freestanding-fixed",
+      "independent_sources": 2,
+      "why_not_listed": "One 2019 forum thread (screen would not tension, cut lengths too short) and a Walmart listing. Super Bay 8 x 10 x 5 $1,449, DIY Bay $899, poles not included, about 3 hours setup (brand page 2026-10-19).",
+      "urls": [
+        "https://allsportsystems.shop/products/golf-simulator-hitting-bay-superbay",
+        "https://golfsimulatorforum.com/forum/build-your-own/enclosures/185585-allsportsystems-vs-carls"
+      ]
+    },
+    {
+      "brand": "PlayBetter",
+      "name": "SimStudio BYO",
+      "subtype": "freestanding-fixed",
+      "independent_sources": 2,
+      "why_not_listed": "Golfstead and Golf Simulator Advisor only. $2,195 (was $2,995) 2026-10-19; SimStudio8 7.5 ft tall x 4 ft deep is the lowest frame seen in this research; SimStudio10 and 12 are 8 ft 6 in tall.",
+      "urls": [
+        "https://www.playbetter.com/products/playbetter-simstudio-byo-studio-package"
+      ]
+    },
+    {
+      "brand": "The Indoor Golf Shop",
+      "name": "SIGPRO commercial enclosure (2 in frame)",
+      "subtype": "freestanding-fixed",
+      "independent_sources": 2,
+      "why_not_listed": "Golfstead and Golf Simulators Direct; the search for more was cut off by the budget. Heights 8 ft to 10 ft 5 in, widths to 16 ft 3 in, depths 5 to 15 ft.",
+      "urls": [
+        "https://golfstead.com/best-golf-simulator-enclosures"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/247350-foldable-enclosure-allows-car-in-garage-when-launch-monitor-is-not-in-use",
+      "type": "forum",
+      "title": "Foldable enclosure allows car in garage when launch monitor is not in use",
+      "date": "2020-02-18",
+      "what_it_says": "Hinged the side panels of a Carl's enclosure on EMT; folded footprint about 1 x 8 ft; stainless corner connectors epoxied after drilling failed; 14-plus replies."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/enclosures/133261-new-fold-up-garage-sim",
+      "type": "forum",
+      "title": "New fold up garage sim",
+      "date": "2017-11-15",
+      "what_it_says": "12 x 9 ft EMT frame pivots into a 9 ft 6 in ceiling on velcro straps and bike hooks, 6 in under the garage door; Carl's Premium screen."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/enclosures/383722-diy-foldable-golf-enclosure-with-emts",
+      "type": "forum",
+      "title": "DIY foldable golf enclosure with EMTs?",
+      "date": "2023-01-30",
+      "what_it_says": "Budget 8 x 8 x 5 fold-up ask; replies: snap-on aluminum EMT hinges, hinged frame around a retractable screen; no costs."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/enclosures/162427-foldable-sides-please-see-drawing",
+      "type": "forum",
+      "title": "Foldable sides... please see drawing",
+      "date": "2018-08-14",
+      "what_it_says": "Swivel-fitting fold design nobody built; the thread drifted to curtain track."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/404686-review-carl-s-place-diy-golf-enclosure-vs-custom-pro-golf-enclosure",
+      "type": "forum",
+      "title": "REVIEW: Carl's Place DIY vs custom Pro enclosure",
+      "date": "2024-04-28",
+      "what_it_says": "Standard screen bounces more; Pro Premium quieter; 1 in EMT solo-buildable, 2 in needs two people and a saw; one negative customer-service reply."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/enclosures/211230-carl-s-golf-simulator-enclosure-kit-with-impact-screen",
+      "type": "forum",
+      "title": "Carl's golf simulator enclosure kit with impact screen",
+      "date": "2019-06-20",
+      "what_it_says": "$899.95 kit plus $106.39 EMT = $1,006.34; angle-grinder cutting; rough welds on fittings."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/281075-cost-breakdown",
+      "type": "forum",
+      "title": "Cost breakdown",
+      "date": "2020-07-27",
+      "what_it_says": "Carl's custom 8.5 x 11 enclosure with EMT and cutter $1,263.04 inside a $7,167.79 SkyTrak build."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/404972-how-i-built-an-incredible-home-golf-simulator-for-under-4500-usd",
+      "type": "forum",
+      "title": "How I built an incredible home golf simulator for under $4,500 USD",
+      "date": "2024-05-07",
+      "what_it_says": "'$5,000 appeared to be the average price' for enclosures; bought a $414 Walmart cage, $187 screen, curtains; $4,086 total."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/321467",
+      "type": "forum",
+      "title": "Start of the garage build, with low ceilings (8'4\")",
+      "date": "2021-02-27",
+      "what_it_says": "8 ft 4 in garage; wood-framed DIY enclosure; 3-wood hit a beam, moved the hitting zone to 9 ft from the screen, then 'clearing fine' with driver."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/147901",
+      "type": "forum",
+      "title": "Under $3k loft build",
+      "date": "2018-03-06",
+      "what_it_says": "$2,954.25 total: 1 in aluminum conduit $68.90, canopy fittings $103.82, curtains $288.63, screen $250 to $750."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/enclosures/253998-bounce-back-over-10-feet-with-new-enclosure",
+      "type": "forum",
+      "title": "Bounce back over 10 feet with new enclosure",
+      "date": "2020-03-22",
+      "what_it_says": "Carl's DIY 13 x 8.5 Premium; balls back to head height, two hit the GC2; loosen bungees, trim bars 1/2 to 3/4 in, soft floor, foam behind."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/enclosures/301022-bounce-back",
+      "type": "forum",
+      "title": "Bounce back",
+      "date": "2020-12-02",
+      "what_it_says": "Carl's Premium from 6 ft; tight = roll-back to the wall, loose = worse image; netting on the lower half, sherpa blanket behind."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/enclosures/264435-bounceback-on-short-irons-and-wedges",
+      "type": "forum",
+      "title": "Bounceback on short irons and wedges",
+      "date": "2020-04-24",
+      "what_it_says": "Wedges over the head off the top third; 12 in baffles 16 in apart suggested; fix was foam behind the top half, a full enclosure, 8 top bungees."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/enclosures/363741-curtain-style-impact-screen",
+      "type": "forum",
+      "title": "'Curtain' style impact screen",
+      "date": "2022-03-14",
+      "what_it_says": "Room-divider track plus grommeted Carl's screen, 18 months; anchor top and bottom with PVC posts and bungees to weights; Stealth, Design2Golf and Sportscreen rollers named."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/enclosures/185585-allsportsystems-vs-carls",
+      "type": "forum",
+      "title": "allsportsystems vs Carls",
+      "date": "2019-02-10",
+      "what_it_says": "AllSports screen would not tension, cut lengths too short; Carl's cut lengths leave enough pole; OP ordered a custom Carl's 8.25 x 13 x 5 for a 9-ft ceiling."
+    },
+    {
+      "url": "https://forums.golfwrx.com/topic/2082168-looking-for-reviews-on-the-homecourse-proscreen-180-retractable-golf-simulator-screen",
+      "type": "forum",
+      "title": "Looking for reviews on the HomeCourse ProScreen 180",
+      "date": "2026 (about 8 months old)",
+      "what_it_says": "Two-year owner: wrinkles easily, picture below a tensioned screen, weighted bottom does not stay tight, ball still hits the wall; would switch. 403 to curl."
+    },
+    {
+      "url": "https://golf.forum/community/threads/homecourse-pro-180-retractable-golf-simulator-impact-screen-review.55497/",
+      "type": "forum",
+      "title": "HomeCourse Pro 180 retractable screen review",
+      "date": "",
+      "what_it_says": "Owner review thread; 8 ft 6 in ceiling, 30-second retract."
+    },
+    {
+      "url": "https://forum.mygolfspy.com/topic/68624-unofficial-review-spornia-spg-7-practice-net/",
+      "type": "forum",
+      "title": "Unofficial review: Spornia SPG-7",
+      "date": "",
+      "what_it_says": "Over a year and about 40 assemblies with no wear; target sheet sits off the back net. 403 to curl."
+    },
+    {
+      "url": "https://simweekly1.substack.com/p/is-this-the-coolest-garage-sim",
+      "type": "reddit",
+      "title": "Sim Weekly: Is THIS the coolest garage sim? (u/joeshmoe9898, 208 upvotes)",
+      "date": "2025-07-17",
+      "what_it_says": "Reddit-featured garage build with a Gungho retractable screen with side rollers; screen and mat disappear; gable roof needed framing."
+    },
+    {
+      "url": "https://simweekly1.substack.com/p/were-upgrading-our-sim",
+      "type": "reddit",
+      "title": "Sim Weekly: We're upgrading our sim",
+      "date": "2026-03-12",
+      "what_it_says": "The newsletter moved its compact garage sim to a Carl's Pro enclosure."
+    },
+    {
+      "url": "https://slickdeals.net/f/17739939-10x7ft-golf-hitting-cage-with-steel-frame-practice-net-with-simulator-cloth-155-free-shipping",
+      "type": "reddit",
+      "title": "Slickdeals: 10 x 7 ft hitting cage $155",
+      "date": "",
+      "what_it_says": "Deal-forum consensus that 7 ft is 'definitely not tall enough'; a Full Swing owner hits the ceiling of a 10-ft box with a wedge."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=h8qT5SRz-XM",
+      "type": "video",
+      "title": "DIY golf simulator folds into the ceiling in 5 minutes (The Smart Home Hookup)",
+      "date": "2023-02-10",
+      "what_it_says": "Steel-tube screen frame on pillow-block bearings hoisted into a vaulted garage ceiling; $550 frame and hoist, $595 Carl's screen, $10,177 project."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=6uvdufAwmoM",
+      "type": "video",
+      "title": "No spare room? Build this fold-away DIY golf simulator enclosure instead",
+      "date": "",
+      "what_it_says": "Fold-away DIY build video; description not readable by fetch, title only."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=Fqh_yDz5OHo",
+      "type": "video",
+      "title": "DIY garage golf impact screen for just $30",
+      "date": "",
+      "what_it_says": "Curtain-track garage screen build; $30 claim in the title."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=Vq5t3PzuM0I",
+      "type": "video",
+      "title": "After 6 months... would I still buy this golf simulator enclosure?",
+      "date": "",
+      "what_it_says": "Six-month owner review surfaced on the Anything Sports search; brand unconfirmed by fetch."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=rhElITGWtAk",
+      "type": "video",
+      "title": "Carl's PRO enclosure build and review",
+      "date": "",
+      "what_it_says": "Commercial-size Carl's Pro build video."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=lkQtZY3fw2A",
+      "type": "video",
+      "title": "How to build a golf simulator at home with Carl's Place Pro enclosure",
+      "date": "",
+      "what_it_says": "Third-party step-by-step C-Series Pro build."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=wQ96bav-9CQ",
+      "type": "video",
+      "title": "How to assemble a Carl's Place DIY enclosure: C-Series",
+      "date": "",
+      "what_it_says": "Official assembly walkthrough; 1 in EMT, about an hour."
+    },
+    {
+      "url": "https://friendlygolfer.com/sig10-golf-simulator-enclosure-review/",
+      "type": "review",
+      "title": "SIG10 enclosure review",
+      "date": "2026-01-13",
+      "what_it_says": "Solo tool-free build; aluminum poles, steel connectors; inches of side clearance in a 12-ft room; thin surround; shipping wrinkles; manageable bounce-back; affiliate links."
+    },
+    {
+      "url": "https://friendlygolfer.com/carls-place-pro-enclosure-review-my-experience-after-4-months/",
+      "type": "review",
+      "title": "Carl's Place Pro enclosure review after 4 months",
+      "date": "2026-10-09",
+      "what_it_says": "15 ft 4 in x 9 ft 10 in x 8 ft garage build; zip ties broke at top centre; creases relaxed in four months; would pick DIY for small rooms."
+    },
+    {
+      "url": "https://friendlygolfer.com/carls-golf-simulator-enclosure-review/",
+      "type": "review",
+      "title": "Carl's Place DIY enclosure review",
+      "date": "2026-01-14 (updated)",
+      "what_it_says": "Just over an hour solo; zip ties replaced ball bungees; 'perfectly flat screens are not the goal'; hits from 11.5 ft."
+    },
+    {
+      "url": "https://www.independentgolfreviews.com/carls-place-diy-simulator-review/",
+      "type": "review",
+      "title": "Carl's Place DIY simulator review",
+      "date": "2026-10-05 (updated)",
+      "what_it_says": "Needs 11 x 12 ft and a 9-ft ceiling; about two hours; foam pads and fewer bungees cut bounce-back; 4.5 of 5."
+    },
+    {
+      "url": "https://golfsimulatorvideos.com/carls-place-golf-simulator-enclosures-review/",
+      "type": "review",
+      "title": "Carl's Place enclosures review: DIY vs PRO",
+      "date": "2026-10-17 (prices)",
+      "what_it_says": "DIY from $999.95 on 1 in EMT, 5 ft deep; PRO from $3,409.95 on 2 in EMT, 5 to 15 ft deep; 166 mph drive did not come halfway back."
+    },
+    {
+      "url": "https://golfstead.com/best-golf-simulator-enclosures",
+      "type": "review",
+      "title": "7 best golf simulator enclosures (Golfstead)",
+      "date": "2026-01-07",
+      "what_it_says": "SIG10, Carl's DIY, PlayBetter SimStudio, PerfectBay, SwingBay, SIGPRO, HomeCourse; room sizes per product; no prices."
+    },
+    {
+      "url": "https://charlesandhudson.com/8-best-golf-simulator-enclosures-for-home-garages-small-spaces-2026/",
+      "type": "review",
+      "title": "8 best enclosures for garages and small spaces 2026",
+      "date": "2026-10-07",
+      "what_it_says": "GolfBays SimBox ~$1,700, Vanish ~$3,000, Carl's DIY ~$1,000 plus pipe, SIG8 ~$1,800, SwingBay ~$2,000, G-TRAK ~$2,000, HomeCourse ~$2,300, GoSports ~$1,000, with ceiling notes."
+    },
+    {
+      "url": "https://www.delightfullynotedblog.com/5-best-golf-simulator-enclosures-for-garages-and-small-rooms-2026/",
+      "type": "review",
+      "title": "5 best enclosures for garages and small rooms 2026",
+      "date": "2026-09-22",
+      "what_it_says": "SimBox $1,495 (8 ft 2 in too low for upright swings), Carl's C-Series ~$1,155 plus $350 to $470 pipe, HomeCourse sag and creasing, SIG8 image fills 80 percent, GoSports $999.99."
+    },
+    {
+      "url": "https://golferhive.com/best-golf-simulator-enclosures/",
+      "type": "review",
+      "title": "5 best golf sim enclosures (Golfer Hive)",
+      "date": "2026-02-10",
+      "what_it_says": "GoSports 10 x 8 $999.99, 12 x 9 and 14 x 8 $1,299.99; generic 11 x 8 ft 4 in cage $799.99 and 8 ft 4 in cube $699.99; wrinkles out of the box."
+    },
+    {
+      "url": "https://www.fccj.org/best-golf-simulator-enclosures-for-garages/",
+      "type": "review",
+      "title": "10 best golf simulator enclosures for garages (October 2026)",
+      "date": "2026-10-05",
+      "what_it_says": "GoSports, Anything Sports complete and folding, Durbles, Diandian (sag, wrinkles), Sturdum, ZivPlay (bouncy), YSDDAOG, Glide Gear; no prices. 403 to curl."
+    },
+    {
+      "url": "https://golfsimulatoradvisor.com/best-golf-simulator-screens-enclosures/",
+      "type": "review",
+      "title": "13 best impact screens and enclosures 2026",
+      "date": "2026-10-10",
+      "what_it_says": "SIG12 studio $3,899 to $7,920, SwingBay $2,999 to $3,499, HomeCourse $1,999, Carl's Pro $2,979 to $7,794, SIG DIY from $1,299, SimStudio from $2,499, SIG8 studio from $3,499."
+    },
+    {
+      "url": "https://golferlogic.com/golf-simulator-enclosure/",
+      "type": "review",
+      "title": "The best golf simulator enclosures in 2026 (Golfer Logic)",
+      "date": "2026-01-25",
+      "what_it_says": "PerfectBay cheaper than SIG; Carl's the most competitive DIY retailer; GoSports the under-$1,000 budget pick; no model prices."
+    },
+    {
+      "url": "https://www.pojo.com/gosports-golf-sim/",
+      "type": "review",
+      "title": "GoSports golf simulator enclosure review (Pojo)",
+      "date": "",
+      "what_it_says": "One 75-lb box; bounce-back too strong until a third of the bungees came off; frame fine for driver. 403 to curl."
+    },
+    {
+      "url": "https://www.projectorreviews.com/elite/elite-screens-golfsim-portable-impactwhite-350-series-screen-review/",
+      "type": "review",
+      "title": "Elite Screens GolfSim Portable review",
+      "date": "2024-10-31",
+      "what_it_says": "$1,468; 44-lb five-foot box; folding aluminum frame; 150 mph screen."
+    },
+    {
+      "url": "https://www.opengolfer.co.uk/blogs/docs/simspace-vs-golfbays-simbox",
+      "type": "review",
+      "title": "SimSpace v GolfBays SimBox",
+      "date": "2026-10-06",
+      "what_it_says": "From GBP 1,161; aluminium click-together under an hour; PRO+ screen cannot be rotated; SimBox wins if you want PRO+ in a bay."
+    },
+    {
+      "url": "https://localgolfsims.com/blog/net-return-simulator-series-review",
+      "type": "review",
+      "title": "Net Return review (Local Golf Sims)",
+      "date": "2025-11-26, prices 2026-08",
+      "what_it_says": "Pro V2 $795, 7.5 x 8 x 3.5 ft, 45 lb, 65 to 70 dB, no projection; Spornia SPG-7 $240 to $350 as the budget pick."
+    },
+    {
+      "url": "https://golfersauthority.com/spornia-spg-7-golf-practice-net/",
+      "type": "review",
+      "title": "Spornia SPG-7 review",
+      "date": "",
+      "what_it_says": "$330; 2-minute tool-free setup; 25-lb frame with carry bag."
+    },
+    {
+      "url": "https://golfsimjim.com/simulators/inflatable-golf-simulator/",
+      "type": "review",
+      "title": "Best inflatable golf simulators 2026",
+      "date": "2026-07-10",
+      "what_it_says": "Five inflatables $699 to $1,400; GoSports inflatable about two stars with fit and durability issues."
+    },
+    {
+      "url": "https://xsgolf.com/portable-inflatable-golf-simulator-setups-2026/",
+      "type": "review",
+      "title": "Inflatable golf simulator enclosures 2026 (XS Golf)",
+      "date": "2026-09-19",
+      "what_it_says": "Minimums 9 ft ceiling, 12 ft wide, 15 ft deep; All Sports 12 x 16 $2,999 is the smallest that meets them; FunJain Pro too shallow."
+    },
+    {
+      "url": "https://golfsimdepot.com/blogs/knowledge-center/garage-golf-simulator",
+      "type": "review",
+      "title": "Garage golf simulator buying guide 2026 (The Indoor Golf Shop)",
+      "date": "2026-04-08",
+      "what_it_says": "8 ft or below means ground-based monitors; advises against under 9 ft; pair a Vanish retractable with a portable monitor to keep parking."
+    },
+    {
+      "url": "https://golfingsim.com/blogs/news/golf-simulator-ceiling-height-requirements-for-a-garage-build-the-real-numbers-before-you-buy-a-frame",
+      "type": "review",
+      "title": "Ceiling height requirements for a garage build",
+      "date": "2026-09-25",
+      "what_it_says": "Tier table: under 8 ft wall-hung panel; 8 ft to 8 ft 6 in short or semi-retractable sub-8-ft frame, driver only under 5 ft 8 in; 9 ft standard 8 ft 4 in frame; 10 ft-plus Pro frame. 2 to 3 in buffer; mat costs 2 to 2.5 in."
+    },
+    {
+      "url": "https://golfsimspot.com/blog/garage-golf-simulator/",
+      "type": "review",
+      "title": "Garage golf simulator guide: real builds, sizes, setups",
+      "date": "2026-10-12",
+      "what_it_says": "9 ft practical minimum, 10 comfortable; measure to the lowest obstruction; keeping a car is 'the most solved problem'; Tarps.com 8 x 8 kit ~$409; Carl's room kit with retractable screen $1,185."
+    },
+    {
+      "url": "https://simgolflab.com/diy-golf-simulator-enclosure-the-500-home-depot-blueprint-no-sewing/",
+      "type": "review",
+      "title": "DIY enclosure: the $500 Home Depot blueprint",
+      "date": "2025-12-23",
+      "what_it_says": "10 x 8 ft 6 in x 5 ft; 11 EMT sticks ~$250, insulation ~$30, GoSports 8 x 10.5 screen; fittings must be ordered online."
+    },
+    {
+      "url": "https://yardstickgolf.com/diy-golf-simulator-enclosure/",
+      "type": "review",
+      "title": "DIY enclosure plans: the complete EMT guide",
+      "date": "2026-04-20",
+      "what_it_says": "10 to 12 sticks of 1 in EMT, under $200 for a 10 x 12; canopy fittings with thumb screws; PVC is a hazard; foam-lag the pipe."
+    },
+    {
+      "url": "https://homeperformancelab.com/diy-golf-simulator-enclosure/",
+      "type": "review",
+      "title": "DIY enclosure: frame, screen and full build guide 2026",
+      "date": "2026-06-17",
+      "what_it_says": "Frame $200 to $275, EMT $8 to $12 a stick; budget screen $100 to $300; Gung Ho build ~$380 in materials ex screen."
+    },
+    {
+      "url": "https://gunghogolf.com/blogs/simulators/how-to-build-your-own-diy-impact-screen-enclosure-for-your-golf-simulator-studio",
+      "type": "review",
+      "title": "How to build your own DIY impact screen enclosure (Gung Ho Golf)",
+      "date": "2023-06-27",
+      "what_it_says": "16 x 9 x 3.5 ft for about $1,060 including a top screen; itemised fittings, foam, clips and commando cloth."
+    },
+    {
+      "url": "https://www.simulatorconsultants.com/blog/golf-simulator-cost/",
+      "type": "review",
+      "title": "How much does a golf simulator cost? 2026 breakdown",
+      "date": "2026-08-18",
+      "what_it_says": "Install labor $500 to $2,500 ready room, $1,500 to $5,000 with framing; ceiling work, padding, electrical and prep itemised."
+    },
+    {
+      "url": "https://www.forefrontsims.com/2026/07/professional-home-golf-simulator-cost/",
+      "type": "review",
+      "title": "How much does a professional home golf simulator cost? (ForeFront)",
+      "date": "2026-07-19",
+      "what_it_says": "$50k to $100k built-in; $100k to $200k-plus detached shed; what drives it."
+    },
+    {
+      "url": "https://www.playbetter.com/blogs/golf-simulator-space/whats-the-difference-between-carls-place-diy-pro-curved-enclosures",
+      "type": "retailer",
+      "title": "Carl's Place DIY, Pro and Curved enclosures (PlayBetter)",
+      "date": "",
+      "what_it_says": "Retailer explainer of the three Carl's lines."
+    },
+    {
+      "url": "https://www.playbetter.com/products/carls-place-diy-golf-simulator-enclosure-kit-with-impact-screen",
+      "type": "retailer",
+      "title": "Carl's Place DIY kit (PlayBetter)",
+      "date": "2026-10-19",
+      "what_it_says": "$1,199.94; screen tiers; pipe not included."
+    },
+    {
+      "url": "https://topshelfgolf.com/products/carls-place-pro-golf-simulator-enclosure",
+      "type": "retailer",
+      "title": "Carl's Place Pro enclosure (Top Shelf Golf)",
+      "date": "2026-10-19",
+      "what_it_says": "18 sizes priced $3,409.95 to $5,609.95; 2 in frame; 58 reviews."
+    },
+    {
+      "url": "https://topshelfgolf.com/products/perfectbay-golf-simulator-studio",
+      "type": "retailer",
+      "title": "PerfectBay studio kit (Top Shelf Golf)",
+      "date": "2026-10-19",
+      "what_it_says": "Carl's DIY bundle with pipe, mat and projector from $3,891.90; room minimums; 4.9 from 58."
+    },
+    {
+      "url": "https://golfsimulatorsdirect.com/products/sigpro-professional-golf-simulator-enclosure",
+      "type": "retailer",
+      "title": "SIGPRO home enclosure (Golf Simulators Direct)",
+      "date": "2026-10-19",
+      "what_it_says": "SIG8 $1,599.99, SIG10 $1,999, SIG12 $2,499.99; one-week lead time; 3 reviews."
+    },
+    {
+      "url": "https://www.pgatoursuperstore.com/rain-or-shine-swingbay-screen-and-enclosure---8-x-10.5/2000000047222.html",
+      "type": "retailer",
+      "title": "SwingBay 8 x 10.5 (PGA TOUR Superstore)",
+      "date": "2026-10-18",
+      "what_it_says": "$2,999 for the enclosure alone."
+    },
+    {
+      "url": "https://shopindoorgolf.com/products/homecourse-pro-golf-simulator-screen",
+      "type": "retailer",
+      "title": "HomeCourse Pro retractable screen (Shop Indoor Golf)",
+      "date": "2026-10-18",
+      "what_it_says": "$1,999 sale, $2,299 regular; wall mount $79.99; 8 ft 6 in ceiling."
+    },
+    {
+      "url": "https://rainorshinegolf.com/products/the-sportscreen-golf-studio-retractable-screen-and-enclosure",
+      "type": "retailer",
+      "title": "SportScreen Vanish (Rain or Shine Golf)",
+      "date": "2026-10-19",
+      "what_it_says": "Reviewer: 'takes a bit to get setup'; brackets need better instructions."
+    },
+    {
+      "url": "https://golfsimdepot.com/products/g-trak-retractable-impact-screen",
+      "type": "retailer",
+      "title": "G-TRAK retractable screen (Golf Sim Depot)",
+      "date": "2026-10-19",
+      "what_it_says": "Remote version on garage-door rails, 8 to 16 ft openings, screens 7 to 14 ft."
+    },
+    {
+      "url": "https://www.walmart.com/ip/18892761792",
+      "type": "retailer",
+      "title": "RXFSP 10 x 8 enclosure (Walmart)",
+      "date": "2026-10-18",
+      "what_it_says": "$759 was $859.99; 95 in tall; 59 lb; 'no written warranty'; 3.3 from 3 reviews."
+    },
+    {
+      "url": "https://www.walmart.com/ip/SimBox-Golf-Simulator-Enclosure-6-sizes/2597439463",
+      "type": "retailer",
+      "title": "GolfBays SimBox (Walmart)",
+      "date": "2026-10-19",
+      "what_it_says": "$1,599 to $1,799 by size; one 2-star seller review."
+    },
+    {
+      "url": "https://www.globalgolf.com/golf-accessories/1088488.9-go-sports-simulator-enclosure-10-x-8-ft-nets/?cdt=7",
+      "type": "retailer",
+      "title": "GoSports 10 x 8 (GlobalGolf)",
+      "date": "2026-10-18",
+      "what_it_says": "$999.99."
+    },
+    {
+      "url": "https://www.amazon.com/KHAMPA-Impact-Screen-Enclosure-Foldable/dp/B0BVFGRDQ8",
+      "type": "retailer",
+      "title": "Impact Sports / KHAMPA foldable enclosure (Amazon)",
+      "date": "2026-10-19",
+      "what_it_says": "9 ft 10 in x 8 ft 2 in x 8 ft 6 in; sold under the KHAMPA name; 30-day warranty."
+    },
+    {
+      "url": "https://www.amazon.com/Fold-Up-Golf-Simulator-Enclosure/dp/B0H31J7473",
+      "type": "retailer",
+      "title": "Anything Sports fold-up enclosure (Amazon)",
+      "date": "2026-10-19",
+      "what_it_says": "Wall-mounted, folds nearly flat in about a minute, 91 x 91 in screen; no written reviews."
+    },
+    {
+      "url": "https://shop.carlofet.com/diy-golf-simulator-enclosure-kit-with-impact-screen",
+      "type": "brand",
+      "title": "Carl's Place DIY kit",
+      "date": "2026-10-19",
+      "what_it_says": "Screen tiers; 1 in EMT OD 1.163 in; 12 in rear buffer; prices behind a loader."
+    },
+    {
+      "url": "https://www.carlofet.com/blog/carls-place-diy-vs-pro-enclosure",
+      "type": "brand",
+      "title": "Find the type of enclosure that fits your room (Carl's Place)",
+      "date": "",
+      "what_it_says": "1 in vs 2 in EMT; what mounts to each; which rooms each suits."
+    },
+    {
+      "url": "https://shopindoorgolf.com/products/sig10-golf-simulator-enclosure",
+      "type": "brand",
+      "title": "SIG10",
+      "date": "2026-10-19",
+      "what_it_says": "$1,599.99 sale; 10 ft 10 in x 8 ft 4 in x 5 ft; 4.8 from 28."
+    },
+    {
+      "url": "https://shopindoorgolf.com/products/sig8-golf-simulator-enclosure",
+      "type": "brand",
+      "title": "SIG8",
+      "date": "2026-10-19",
+      "what_it_says": "$1,439.99 sale; 8 ft 4 in cube x 5 ft; 4.6 from 11."
+    },
+    {
+      "url": "https://shopindoorgolf.com/products/sig12-golf-simulator-enclosure",
+      "type": "brand",
+      "title": "SIG12",
+      "date": "2026-10-19",
+      "what_it_says": "$1,999.99 sale; 12 ft 2 in x 9 ft 4 in x 5 ft; reviewers 30 minutes to 3 hours."
+    },
+    {
+      "url": "https://rainorshinegolf.com/products/swingbay-golf-simulator-screen-enclosure",
+      "type": "brand",
+      "title": "SwingBay",
+      "date": "2026-10-19",
+      "what_it_says": "$1,999 8 x 10.5 single-layer; +$1,000 9 x 12; +$500 triple layer; 1.5 in aluminum; under 20 minutes; free freight."
+    },
+    {
+      "url": "https://shop.homecoursegolf.com/proscreen-180/",
+      "type": "brand",
+      "title": "ProScreen 180",
+      "date": "2026-10-19",
+      "what_it_says": "$2,299; 8 x 8; ceiling kit, remote, reach pole; 4 reviews."
+    },
+    {
+      "url": "https://thesportscreen.com/products/vanish-series-retractable-golf-enclosure",
+      "type": "brand",
+      "title": "Vanish Series",
+      "date": "2026-10-19",
+      "what_it_says": "$2,999.99; 3-ply screen; side screens, ceiling panel, baffles; crank or remote; 37 ratings."
+    },
+    {
+      "url": "https://thesportscreen.com/blogs/news/vanish-series-vs-vanish-lite-choosing-the-right-retractable-golf-enclosure",
+      "type": "brand",
+      "title": "Vanish Series vs Vanish LITE",
+      "date": "2026-04-08",
+      "what_it_says": "LITE from $2,299.99 semi-retractable; Series from $2,999.99 fully retractable."
+    },
+    {
+      "url": "https://rainorshinegolf.com/products/g-trak-retractable-screen",
+      "type": "brand",
+      "title": "G-Trak retractable screen (Rain or Shine)",
+      "date": "2026-10-19",
+      "what_it_says": "$1,999.99 base; ceiling-track manual; add-ons to +$1,000."
+    },
+    {
+      "url": "https://golfbays.com/products/simbox-golf-simulator-enclosure-6-sizes",
+      "type": "brand",
+      "title": "SimBox",
+      "date": "2026-10-19",
+      "what_it_says": "$1,444.15 (list $1,699); 7 sizes; aluminium; PRO+ triple layer; 'folds down for storage'."
+    },
+    {
+      "url": "https://www.playgosports.com/products/gosports-golf-simulator-enclosure-with-impact-screen-and-shank-nets-10-x-8-ft-golf-sim-with-hd-impact-screen-kit-for-at-home-practice",
+      "type": "brand",
+      "title": "GoSports 10 x 8",
+      "date": "2026-10-19",
+      "what_it_says": "$749.99; 10 ft 7 in x 8 x 5; steel; 30 minutes; 9 ft-plus ceiling."
+    },
+    {
+      "url": "https://www.thenetreturn.com/products/pro-series-golf-net",
+      "type": "brand",
+      "title": "Net Return Pro",
+      "date": "2026-10-19",
+      "what_it_says": "$795; 8 x 7.5 ft; 28 lb; Simulator Kit $399; 170 reviews."
+    },
+    {
+      "url": "https://spornia.com/products/spg-8-golf-practice-net%C2%AE-simulator-series",
+      "type": "brand",
+      "title": "Spornia SPG-8 XL",
+      "date": "2026-10-19",
+      "what_it_says": "$499.99; 8 x 8 x 8; projection target sold separately; 199 reviews."
+    },
+    {
+      "url": "https://allsportsinflatables.com/products/inflatable-golf-simulator-enclosure-12-16",
+      "type": "brand",
+      "title": "All Sports Inflatables 12 x 16",
+      "date": "2026-10-19",
+      "what_it_says": "$2,999 sold out; 12 x 16 x 10 ft; 800 W pump; 10 x 9 ft screen; offset mat required."
+    },
+    {
+      "url": "https://rainorshinegolf.com/products/diy-golf-simulator-enclosure-curtain-kit",
+      "type": "brand",
+      "title": "DIY ceiling curtain track kit (Rain or Shine)",
+      "date": "2026-10-19",
+      "what_it_says": "$599 base; blackout curtain, track, hooks; no screen; about an hour."
+    },
+    {
+      "url": "https://rainorshinegolf.com/pages/custom-golf-simulator-rooms",
+      "type": "brand",
+      "title": "Custom golf simulator rooms (Rain or Shine)",
+      "date": "2026-10-19",
+      "what_it_says": "Consult, 3D model, itemised quote, nationwide install; no price on the page."
+    },
+    {
+      "url": "https://www.premiersims.com/",
+      "type": "brand",
+      "title": "Premier Sims",
+      "date": "2026-10-19",
+      "what_it_says": "Packages from $34,995; Scottsdale showroom; AZ and SoCal."
+    },
+    {
+      "url": "https://assembledgolf.com/",
+      "type": "brand",
+      "title": "Assembled Golf",
+      "date": "2026-10-19",
+      "what_it_says": "Nationwide install; quote only."
+    },
+    {
+      "url": "https://shopindoorgolf.com/pages/custom-design-builds",
+      "type": "brand",
+      "title": "Custom design and build (The Indoor Golf Shop)",
+      "date": "2026-10-19",
+      "what_it_says": "Render, sign-off, build, install; Celina TX; no price."
+    },
+    {
+      "url": "https://stowgolf.com/facts",
+      "type": "brand",
+      "title": "StowGolf facts",
+      "date": "2026-10-19",
+      "what_it_says": "10 x 5 x 7 ft 6 in; folds flat; nothing drilled; two cartons; $2,495 list, $2,295 first 25, $100 refundable hold; first 25 January 2027 estimate."
+    }
+  ],
+  "blog_outline": {
+    "title": "The garage enclosure question: five shapes, what each costs you when the car comes back",
+    "audience": "the garage builder who still parks",
+    "sections": [
+      "Open with the number everyone meets first: a GSF builder found '$5,000 appeared to be the average price' and bought a $414 Walmart cage instead; another put a Carl's kit and $106 of EMT together for $1,006. The spread is the story.",
+      "Shape 1, the net cage (Net Return Pro $795, Spornia SPG-8 $499.99): 3.5 to 8 ft of depth, folds or pops down in minutes, no projection unless you add a target sheet; floor space when the car comes back: zero, it lives in a bag or against the wall.",
+      "Shape 2, the fixed frame (Carl's DIY from $999.95 plus pipe, GoSports $749.99 to $999.99, SIG8 $1,439.99, SIG10 $1,599.99, GolfBays SimBox $1,444.15, SwingBay $1,999, Carl's Pro from $3,409.95): 4 ft 2 in to 6 ft deep by 8 to 12 ft wide, permanently; the car does not come back to that bay. Frame heights 7 ft 7 in (SimStudio8) to 9 ft 4 in (SIG12) decide the ceiling.",
+      "Shape 3, the retractable (HomeCourse ProScreen 180 $1,999 to $2,299, SportScreen Vanish from $2,999.99, Vanish LITE from $2,299.99, G-TRAK from $1,999.99, DIY curtain track from $30 to $599): the bay rolls to the ceiling or the wall; needs 8 ft 6 in (HomeCourse) or a joist or a door rail; owners report wrinkles, bottom gap and install time; the garage keeps its parking.",
+      "Shape 4, the freestanding fold-flat: the DIY precedents (hinged Carl's panels to a 1 x 8 ft footprint in 2020; a frame on velcro straps pivoting into a 9 ft 6 in ceiling in 2017; a hoisted steel frame into cut trusses in 2023) and the products that claim a fold (Anything Sports wall-mounted $899.99 to $999.99, Impact Sports $2,338, StowGolf $2,495 list, first 25 at $2,295, 10 ft wide, 5 ft deep, 7 ft 6 in to the screen top, nothing drilled). Disclosure: Brett Martin runs Teed and builds StowGolf.",
+      "Shape 5, the inflatable and the custom room: All Sports 12 x 16 at $2,999 needs 12 x 16 ft of floor; a custom room is $50k to $100k (ForeFront) or $34,995-plus (Premier Sims) and the car never comes back.",
+      "The DIY math, sourced: Carl's kit $999.95 to $1,199.94 plus 9 to 12 EMT sticks at $8 to $12 (2026) or the $349.95 pipe kit; the $500 blueprint (11 sticks ~$250, foam $30, online-only fittings $65 to $279, a $100 to $300 screen); the Gung Ho 16 x 9 at ~$1,060; and the two forum totals, $1,006 and $1,263. What you do not get: padding, a baffle, a warranty, and a Saturday.",
+      "The 8-ft ceiling question, sourced: golfingsim.com's tier table (under 8 ft: wall-hung panel; 8 to 8 ft 6 in: a sub-8-ft frame, driver only under 5 ft 8 in; 9 ft: the standard 8 ft 4 in frame; 10 ft: Pro); the 2 to 3 in frame buffer and the 2 to 2.5 in a mat eats; the GSF 8 ft 4 in garage that moved the mat 9 ft from the screen and cleared driver; The Indoor Golf Shop's 'advise against under 9 ft'; the one product frame under 8 ft (SimStudio8 at 7 ft 6 in) and StowGolf's 7 ft 6 in to the screen top. No ranking; the reader measures to the lowest obstruction, not the drywall.",
+      "What 'folds' actually means across products, sourced claims only: Net Return and Spornia fold to a bag; GolfBays 'folds down for storage' with no folded dimension published; Elite GolfSim Portable has a folding frame and a carry bag (44 lb boxed); Anything Sports 'folds nearly flat in about a minute' against the wall it is bolted to; Impact Sports 'folds to 13 in width', mount unstated; HomeCourse, Vanish and G-TRAK retract rather than fold; StowGolf 'folds flat against the wall', freestanding. The DIY hinged build folds to about 1 x 8 ft.",
+      "Bounce-back is an enclosure problem, not a screen problem: the GSF fixes (loosen bungees, trim bars 1/2 to 3/4 in, foam behind the top half, 12 in baffles 16 in apart, a soft floor) apply to every shape above.",
+      "Close with the reference bag embed and the builder's three numbers: width x depth x ceiling as measured, driver yes or no, and the price paid with its date."
+    ]
+  }
+}

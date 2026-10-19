@@ -1,0 +1,2184 @@
+{
+  "category": "launch-monitors",
+  "read_date": "2026-10-19",
+  "subtypes": [
+    "radar",
+    "camera",
+    "overhead"
+  ],
+  "notes": "Mention counts include only independent sources that returned HTTP 200 to curl on 2026-10-19 (forum threads, review sites, YouTube pages, retailer pages, deal threads). Brand pages are excluded from counts. Reddit could not be searched or fetched this pass; forum.mygolfspy.com and homeperformancelab.com pages were readable but returned 403 or no response to curl, so they are excluded from counts and from the sources list. Prices and subscriptions carry the date read and the URL. Empty fields had no verifiable source.",
+  "products": [
+    {
+      "brand": "Rapsodo",
+      "name": "MLM2PRO",
+      "subtype": "radar",
+      "tier": "core",
+      "mention_count": 19,
+      "mention_sources": [
+        "https://breakingeighty.com/rapsodo-mlm-2-pro-review",
+        "https://friendlygolfer.com/rapsodo-mlm2pro-review/",
+        "https://topshelfgolf.com/blogs/golf/rapsodo-mlm2pro-review-2026",
+        "https://eliteindoorgolf.com/blogs/main-1/rapsodo-mlm2pro-review-2026-is-it-worth-it",
+        "https://www.golfsimulatornerd.com/blog/rapsodo-mlm2-pro-review-2026",
+        "https://mygolfspy.com/reviews/golf-technology/rapsodo-mlm2pro-personal-launch-monitor-review/",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/rapsodo-mlm2pro/383338-rapsodo-mlm2pro-launch-monitor",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/rapsodo-mlm2pro/384148-rapsodo-mlm-2-pro-everything-you-need-to-know-data-putting-subscription-more",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/rapsodo-mlm2pro/392390-mlm2pro-just-about-done-with-it",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/rapsodo-mlm2pro/391813-mlm2pro-subscription-and-rpt-balls",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/rapsodo-mlm2pro/410044-mlm2pro-still-a-huge-disappointment",
+        "https://slickdeals.net/f/17593368-rapsodo-mlm2pro-mobile-launch-monitor-golf-simulator-grey-621-42",
+        "https://www.playbetter.com/blogs/golf-simulator-comparisons/what-is-the-best-golf-launch-monitor-under-1000",
+        "https://www.independentgolfreviews.com/best-golf-launch-monitors/",
+        "https://breakingeighty.com/best-indoor-golf-launch-monitors",
+        "https://www.youtube.com/watch?v=KZfgqnKDTiA",
+        "https://www.youtube.com/watch?v=ePyma6kFRW4",
+        "https://www.youtube.com/watch?v=AbUgF4G93Zg",
+        "https://topshelfgolf.com/blogs/golf/rapsodo-mlm2pro-vs-skytrak-st-max"
+      ],
+      "price": {
+        "amount": 549.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://rapsodo.com/products/mlm2pro-mobile-launch-monitor-golf-simulator",
+        "note": "Sale price; list $699.99. The MLM2XPRO ($899.99) launched 2026-10-15 above it."
+      },
+      "direct_url": "https://rapsodo.com/products/mlm2pro-mobile-launch-monitor-golf-simulator",
+      "fallback_url": "",
+      "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/rapsodo-mlm2pro/391813-mlm2pro-subscription-and-rpt-balls",
+      "specs": {
+        "technology": "Doppler radar plus two cameras (radar for club and ball speed, cameras for launch, spin with RPT balls)",
+        "placement": "6.5 to 8.5 ft directly behind the ball, aimed down the target line (Rapsodo product page)",
+        "ball_flight_ft": 8,
+        "min_room_depth_ft": 15,
+        "indoor_outdoor": "both",
+        "club_data": "club speed, path and face via Core membership; no dynamic loft",
+        "spin": "measured with Rapsodo RPT marked balls, otherwise calculated",
+        "connectivity": "Wi-Fi direct or network to iOS or Android app; PC app for sims",
+        "spec_sources": "https://rapsodo.com/products/mlm2pro-mobile-launch-monitor-golf-simulator; https://rapsodo.zendesk.com/hc/en-us/articles/43996709470995-MLM2PRO-and-MLM-Troubleshooting-Guide"
+      },
+      "subscriptions": [
+        {
+          "name": "Rapsodo Core",
+          "amount": 199.99,
+          "period": "yearly",
+          "required_for": "spin and spin axis display, club data, 30,000 courses, third-party sim access (GSPro, E6, Awesome Golf); 21-day trial included",
+          "source_url": "https://rapsodo.com/pages/rapsodo-golf-memberships"
+        },
+        {
+          "name": "Rapsodo Studios",
+          "amount": 399.99,
+          "period": "yearly",
+          "required_for": "optional 4K course library on PC; includes Core",
+          "source_url": "https://rapsodo.com/pages/rapsodo-golf-memberships"
+        },
+        {
+          "name": "GSPro",
+          "amount": 250,
+          "period": "yearly",
+          "required_for": "GSPro course play (on top of Core)",
+          "source_url": "https://northcourse.golf/articles/gspro-cost"
+        }
+      ],
+      "room_fit": "Needs about 15 ft of depth (6.5 to 8.5 ft behind plus 8 ft of flight) and a clear lane behind the golfer; does not fit a 5 ft deep bay unless the unit sits outside the enclosure.",
+      "who_its_for": "The sub-$1,000 buyer who wants camera-measured spin, swing video and a path into GSPro, and accepts a yearly fee.",
+      "pros": [
+        "Measured spin and spin axis with RPT balls",
+        "Swing video and impact capture built in",
+        "Works outdoors and indoors",
+        "Native GSPro, E6 and Awesome Golf support",
+        "Cheapest unit MyGolfSpy ranked among the top indoor performers with RPT balls"
+      ],
+      "cons": [
+        "Core membership needed for spin, club data and any third-party sim",
+        "RPT balls needed for measured spin",
+        "Needs a radar lane behind the golfer",
+        "No putting (the MLM2XPRO adds it)"
+      ],
+      "known_issues": [
+        "Wi-Fi disconnects mid-round reported 2023 to 2025 on golfsimulatorforum.com; some owners say later firmware and replacement units fixed it",
+        "No-reads on low stingers and short pitches reported in the 2023 thread",
+        "Early units could not connect to GSPro natively; now supported through the Rapsodo app"
+      ],
+      "why_people_choose_it": "It is the first unit under $700 that actually measures spin with a camera, so the ball flight in GSPro looks like your real shot. You pay the Core fee and buy RPT balls, and you budget a 15 ft lane.",
+      "image_url": "https://rapsodo.com/cdn/shop/files/Thumbnail_Image_1.png?v=1740989939"
+    },
+    {
+      "brand": "Rapsodo",
+      "name": "MLM2XPRO",
+      "subtype": "radar",
+      "tier": "qualified",
+      "mention_count": 7,
+      "mention_sources": [
+        "https://mygolfspy.com/news-opinion/the-new-rapsodo-mlm2x-pro-launch-monitor-isnt-perfect-but-at-899-it-doesnt-have-to-be/",
+        "https://www.playbetter.com/blogs/golf-tech-news/rapsodo-mlm2xpro-everything-you-need-to-know",
+        "https://golfsimulatorvideos.com/2026/10/rapsodo-mlm2xpro-review-putting-4k-pc-software/",
+        "https://golficity.com/first-look-rapsodo-mlm2xpro-adds-putting-faster-performance-more/",
+        "https://finance.yahoo.com/technology/articles/rapsodo-unveils-golf-ecosystem-led-140000168.html",
+        "https://menafn.com/1111815128/Practice-Smarter-Play-The-Entire-Hole-With-Rapsodo-MLM2XPRO-And-Rapsodo-Studios-Available-Today",
+        "https://www.youtube.com/watch?v=o2kiWxh90ho"
+      ],
+      "price": {
+        "amount": 899.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.playbetter.com/blogs/golf-tech-news/rapsodo-mlm2xpro-everything-you-need-to-know",
+        "note": "On sale from 2026-10-15; includes 12 RPT balls and a 21-day Core trial."
+      },
+      "direct_url": "",
+      "fallback_url": "",
+      "read_url": "https://golficity.com/first-look-rapsodo-mlm2xpro-adds-putting-faster-performance-more/",
+      "specs": {
+        "technology": "Same dual camera plus Doppler radar as the MLM2PRO, faster processing, on-unit display, adjustable tripod",
+        "placement": "behind the ball (same sensor layout as MLM2PRO; exact distance not yet published in the sources read)",
+        "indoor_outdoor": "both",
+        "club_data": "yes with Core",
+        "spin": "measured with RPT balls",
+        "connectivity": "mobile app plus new Rapsodo PC app",
+        "spec_sources": "https://www.playbetter.com/blogs/golf-tech-news/rapsodo-mlm2xpro-everything-you-need-to-know"
+      },
+      "subscriptions": [
+        {
+          "name": "Rapsodo Core",
+          "amount": 199.99,
+          "period": "yearly",
+          "required_for": "full metrics, courses, third-party sims (GSPro, E6, Awesome Golf per Rapsodo)",
+          "source_url": "https://www.playbetter.com/blogs/golf-tech-news/rapsodo-mlm2xpro-everything-you-need-to-know"
+        },
+        {
+          "name": "Rapsodo Studios",
+          "amount": 399.99,
+          "period": "yearly",
+          "required_for": "4K course library on PC",
+          "source_url": "https://www.playbetter.com/blogs/golf-tech-news/rapsodo-mlm2xpro-everything-you-need-to-know"
+        }
+      ],
+      "room_fit": "Assume the MLM2PRO lane until Rapsodo publishes a placement spec.",
+      "who_its_for": "Buyers who wanted an MLM2PRO but needed simulated putting and a screen on the unit.",
+      "pros": [
+        "Adds putting",
+        "Shot processing about twice as fast per Rapsodo",
+        "On-unit level and battery display",
+        "Same Core price as the MLM2PRO"
+      ],
+      "cons": [
+        "$200 more than the MLM2PRO for the same sensors",
+        "Core fee still required",
+        "Four days on sale at read date, so almost no owner feedback",
+        "Northcourse notes GSPro's official list did not yet show the MLM2XPRO as of October 2026"
+      ],
+      "known_issues": [
+        "None yet; the unit shipped 2026-10-15"
+      ],
+      "why_people_choose_it": "It is the MLM2PRO with the two things owners asked for most, putting and a built-in screen, for about $200 more.",
+      "image_url": ""
+    },
+    {
+      "brand": "Garmin",
+      "name": "Approach R10",
+      "subtype": "radar",
+      "tier": "core",
+      "mention_count": 12,
+      "mention_sources": [
+        "https://breakingeighty.com/garmin-approach-r10-review",
+        "https://www.playbetter.com/blogs/golf-simulator-reviews/garmin-approach-r10-review-golf-launch-monitor-under-1000",
+        "https://golfersauthority.com/garmin-r10-review/",
+        "https://golfsimulatorsource.com/garmin-approach-r10/",
+        "https://t5golf.com/garmin-approach-r10-review/",
+        "https://www.tomsguide.com/Garmin-approach-R10-review",
+        "https://mygolfspy.com/reviews/golf-technology/garmin-approach-r10/",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/garmin/354547-garmin-r10-getting-seriously-good",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/356045-mevo-vs-garmin-approach-r10-which-one-is-better",
+        "https://www.independentgolfreviews.com/best-golf-launch-monitors/",
+        "https://topshelfgolf.com/blogs/golf/swing-caddie-sc4-pro-vs-garmin-approach-r10",
+        "https://www.youtube.com/watch?v=XNPXvJEjDGw"
+      ],
+      "price": {
+        "amount": 499.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.garmin.com/en-US/p/695391/",
+        "note": "List was $599.99; Garmin's own page shows $499.99."
+      },
+      "direct_url": "https://www.garmin.com/en-US/p/695391/",
+      "fallback_url": "",
+      "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/garmin/354547-garmin-r10-getting-seriously-good",
+      "specs": {
+        "technology": "Doppler radar",
+        "placement": "6 to 8 ft behind the ball on the included tripod, 7 ft recommended; red line aligned to target",
+        "ball_flight_ft": 8,
+        "min_room_depth_ft": 16,
+        "indoor_outdoor": "both (IPX7)",
+        "club_data": "club speed, path, face to path (radar estimated)",
+        "spin": "calculated indoors unless Titleist RCT balls are used; measured outdoors above roughly 20 m of flight",
+        "connectivity": "Bluetooth to phone; Wi-Fi to PC for sims",
+        "spec_sources": "https://www.playbetter.com/blogs/golf-simulator-reviews/garmin-approach-r10-review-golf-launch-monitor-under-1000; https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/garmin/354547-garmin-r10-getting-seriously-good"
+      },
+      "subscriptions": [
+        {
+          "name": "Garmin Golf membership",
+          "amount": 99.99,
+          "period": "yearly",
+          "required_for": "Home Tee Hero courses only ($9.99 monthly option); not needed for third-party sims",
+          "source_url": "https://topshelfgolf.com/blogs/golf/garmin-approach-r50-review"
+        },
+        {
+          "name": "GSPro",
+          "amount": 250,
+          "period": "yearly",
+          "required_for": "GSPro course play; no Garmin-side fee",
+          "source_url": "https://northcourse.golf/articles/gspro-cost"
+        },
+        {
+          "name": "E6 Connect Basic",
+          "amount": 300,
+          "period": "yearly",
+          "required_for": "E6 course play beyond the 5 free iOS courses",
+          "source_url": "https://northcourse.golf/articles/e6-connect-cost"
+        },
+        {
+          "name": "Awesome Golf",
+          "amount": 159.99,
+          "period": "yearly",
+          "required_for": "Awesome Golf courses ($349.99 lifetime option)",
+          "source_url": "https://northcourse.golf/articles/awesome-golf-cost"
+        }
+      ],
+      "room_fit": "A radar lane: 6 to 8 ft behind the ball plus 8 ft of flight minimum, so plan 16 ft and prefer 18. One forum owner recessed the unit into a wall to get by with just over 15 ft.",
+      "who_its_for": "The cheapest route into GSPro or E6 for someone with a long garage who can live with calculated spin.",
+      "pros": [
+        "Lowest price of any sim-capable unit",
+        "Wide software support (E6, Awesome Golf, TGC 2019, Creative Golf, GSPro)",
+        "Portable and weatherproof",
+        "No Garmin fee for third-party sims"
+      ],
+      "cons": [
+        "Spin and spin axis are estimates indoors without RCT balls",
+        "Forum owners report spin axis wrong at least half the time indoors",
+        "Needs the full radar lane",
+        "Putting is weak beyond about 6 ft"
+      ],
+      "known_issues": [
+        "Driver carry 8 to 20 yards short of reference units in owner tests",
+        "Early false triggers on club waggle (fixed by firmware)",
+        "Unit must sit at mat height; raised mats require raising the tripod"
+      ],
+      "why_people_choose_it": "It is the $500 way to find out whether you will actually use a simulator before you spend $3,000, and it plugs into almost every sim package.",
+      "image_url": "https://res.garmin.com/en/products/010-02356-00/v/cf-lg-a7501688-d5a9-4407-805d-15310371e621.jpg"
+    },
+    {
+      "brand": "Garmin",
+      "name": "Approach R50",
+      "subtype": "camera",
+      "tier": "core",
+      "mention_count": 14,
+      "mention_sources": [
+        "https://pluggedingolf.com/garmin-approach-r50-launch-monitor-review/",
+        "https://www.golfmonthly.com/reviews/golf-tech-and-training-aids/garmin-approach-r50-review-does-it-live-up-to-the-hype",
+        "https://www.playbetter.com/blogs/golf-simulator-reviews/garmin-approach-r50-review",
+        "https://shopindoorgolf.com/products/garmin-approach-r50-launch-monitor-golf-simulator",
+        "https://www.independentgolfreviews.com/garmin-approach-r50-launch-monitor-review/",
+        "https://topshelfgolf.com/blogs/golf/garmin-approach-r50-review",
+        "https://t5golf.com/garmin-approach-r50-review/",
+        "https://simbayfit.com/launch-monitors/garmin-approach-r50/",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/general-and-unlisted/409839-garmin-r50",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/garmin/409821-new-r50-model-from-garmin",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/409887-first-sim-size-and-launchmonitor-dilemma",
+        "https://www.playbetter.com/blogs/golf-simulator-space/garmin-approach-r50-space-requirements",
+        "https://topshelfgolf.com/products/garmin-approach-r50-launch-monitor-and-golf-simulator",
+        "https://www.playbetter.com/products/garmin-approach-r50-hitting-net-studio-package"
+      ],
+      "price": {
+        "amount": 4999.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.independentgolfreviews.com/best-golf-launch-monitors/",
+        "note": "List price; retailers showed $4,499.99 sale pricing in 2026."
+      },
+      "direct_url": "https://shopindoorgolf.com/products/garmin-approach-r50-launch-monitor-golf-simulator",
+      "fallback_url": "https://topshelfgolf.com/products/garmin-approach-r50-launch-monitor-and-golf-simulator",
+      "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/general-and-unlisted/409839-garmin-r50",
+      "specs": {
+        "technology": "Three-camera photometric with built-in 10 in touchscreen and onboard simulator",
+        "placement": "about 1.5 ft (0.5 m) to the side of the tee, facing it, at tee height (Garmin owner's manual)",
+        "ball_flight_ft": 10,
+        "min_room_depth_ft": 10,
+        "indoor_outdoor": "both",
+        "club_data": "club speed, path, face angle, face to path, attack angle with the included R50 stickers; no dynamic loft or impact location",
+        "spin": "measured",
+        "connectivity": "HDMI out to TV or projector, Wi-Fi to PC for GSPro, E6, Awesome Golf",
+        "spec_sources": "https://www8.garmin.com/manuals/webhelp/GUID-D31AA1A2-C026-46EB-9699-FA94F1E8AF0B/EN-US/Approach_R50_OM_EN-US.pdf; https://www.playbetter.com/blogs/golf-simulator-space/garmin-approach-r50-space-requirements",
+        "brand_page_note": "garmin.com renders product pages with JavaScript; the R50 page could not be resolved by curl on 2026-10-19, so the owner's manual on garmin.com is the brand document and Shop Indoor Golf is the direct retailer link."
+      },
+      "subscriptions": [
+        {
+          "name": "Garmin Golf membership",
+          "amount": 99.99,
+          "period": "yearly",
+          "required_for": "Home Tee Hero 43,000 courses on the unit ($9.99 monthly option); launch monitor works without it",
+          "source_url": "https://topshelfgolf.com/blogs/golf/garmin-approach-r50-review"
+        },
+        {
+          "name": "GSPro",
+          "amount": 250,
+          "period": "yearly",
+          "required_for": "GSPro on a PC; no Garmin-side fee",
+          "source_url": "https://northcourse.golf/articles/gspro-cost"
+        }
+      ],
+      "room_fit": "Sits beside the ball, so 10 ft from tee to screen is the floor and 12 ft is comfortable; no lane behind the golfer. Width about 10 ft, ceiling 9 ft.",
+      "who_its_for": "Someone who wants one box, one HDMI cable and no PC, and will pay for it.",
+      "pros": [
+        "No PC, phone or tablet needed; about 40 s from power on to first tee",
+        "Measured spin and club data included with no add-on fee",
+        "Within a yard or two of a GC3 in PlayBetter's test",
+        "Short room depth"
+      ],
+      "cons": [
+        "$5,000",
+        "Screen is on the unit near the floor, which forum posters called a back and knee issue",
+        "No dynamic loft, spin loft or impact location",
+        "Heavy and top-heavy at 9 lb; plastic body"
+      ],
+      "known_issues": [
+        "Foresight club stickers read only about two thirds of shots; use the larger Garmin fiducials",
+        "Outdoor range-ball spin numbers less reliable than indoor"
+      ],
+      "why_people_choose_it": "It is the only premium unit that is a whole simulator by itself, so the garage build stops needing a gaming PC. You trade the fitter-grade metrics for simplicity.",
+      "image_url": ""
+    },
+    {
+      "brand": "FlightScope",
+      "name": "Mevo Gen2",
+      "subtype": "radar",
+      "tier": "core",
+      "mention_count": 13,
+      "mention_sources": [
+        "https://www.playbetter.com/blogs/golf-simulator-reviews/flightscope-mevo-gen2-review",
+        "https://pluggedingolf.com/flightscope-mevo-gen2-launch-monitor-review/",
+        "https://topshelfgolf.com/blogs/golf/flightscope-mevo-gen2-review-2026-is-it-worth-it",
+        "https://centerfacegolf.com/flightscope-mevo-gen2-review/",
+        "https://thegolface.com/golf-accessories/flightscope-mevo-gen2-review/",
+        "https://www.thehackersparadise.com/flightscope-mevo-gen2-review/",
+        "https://golfsimulatoradvisor.com/flightscope-mevo-gen2-launch-monitor-review/",
+        "https://www.playbetter.com/blogs/golf-simulator-space/flightscope-mevo-gen2-space-requirements",
+        "https://breakingeighty.com/best-indoor-golf-launch-monitors",
+        "https://www.independentgolfreviews.com/best-golf-launch-monitors/",
+        "https://golfsimulatoradvisor.com/launch-monitor-radar-vs-camera-vs-overhead-room-sizing/",
+        "https://www.youtube.com/watch?v=KZfgqnKDTiA",
+        "https://www.amazon.com/dp/B0FK8M3VLB"
+      ],
+      "price": {
+        "amount": 1299,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://flightscope.com/products/mevo-gen2"
+      },
+      "direct_url": "https://flightscope.com/products/mevo-gen2",
+      "fallback_url": "https://www.amazon.com/dp/B0FK8M3VLB",
+      "read_url": "https://pluggedingolf.com/flightscope-mevo-gen2-launch-monitor-review/",
+      "specs": {
+        "technology": "Fusion Tracking: 3D Doppler radar plus front camera",
+        "placement": "8 ft directly behind the ball, in line with the camera (FlightScope setup guide); FAQ allows 7 to 9 ft",
+        "ball_flight_ft": 8,
+        "min_room_depth_ft": 16,
+        "indoor_outdoor": "both",
+        "club_data": "club speed, smash included; path, face angle, dynamic loft need the Pro Package",
+        "spin": "measured with metallic dot stickers or RCT balls indoors; calculated otherwise in limited flight",
+        "connectivity": "Wi-Fi to iOS, Android, PC; GSPro, E6 Connect, Awesome Golf, Creative Golf",
+        "spec_sources": "https://flightscope.com/blogs/blogs/how-to-set-up-your-mevo-gen2; https://flightscope.com/products/mevo-gen2",
+        "subscription_note": "None for core use: ships with 8 lifetime E6 Connect courses and the FS Golf app"
+      },
+      "subscriptions": [
+        {
+          "name": "Pro Package (one time)",
+          "amount": 1000,
+          "period": "lifetime",
+          "required_for": "club path, face angle, dynamic loft and 11 more parameters; seen at $599 to $699 on sale",
+          "source_url": "https://www.playbetter.com/blogs/golf-simulator-reviews/flightscope-mevo-gen2-review"
+        },
+        {
+          "name": "Face Impact Location (one time)",
+          "amount": 499,
+          "period": "lifetime",
+          "required_for": "impact location; $1,499 bundled with Pro Package",
+          "source_url": "https://www.playbetter.com/blogs/golf-simulator-reviews/flightscope-mevo-gen2-review"
+        },
+        {
+          "name": "GSPro",
+          "amount": 250,
+          "period": "yearly",
+          "required_for": "GSPro; no FlightScope-side fee",
+          "source_url": "https://northcourse.golf/articles/gspro-cost"
+        }
+      ],
+      "room_fit": "8 ft behind plus 8 ft of flight is the published minimum, so 16 ft; retailers recommend 13 ft of flight for spin, which pushes a comfortable build to 19 to 21 ft.",
+      "who_its_for": "The builder with a long room who wants no subscription and a unit that also goes to the range.",
+      "pros": [
+        "No subscription for the core unit",
+        "Eight E6 courses owned for life",
+        "Radar plus camera gives better indoor spin than radar alone",
+        "Works outdoors with full flight"
+      ],
+      "cons": [
+        "Full club data is a $1,000 list add-on",
+        "Needs stickers or RCT balls for measured spin indoors",
+        "Longest room requirement in its price class",
+        "App interface described as dated"
+      ],
+      "known_issues": [
+        "Setup is sensitive to tilt and alignment; the FS Golf app has to show green before data is trustworthy",
+        "Windows 11 connection quirks documented by owners"
+      ],
+      "why_people_choose_it": "You buy it once, own the E6 courses, and never pay FlightScope again. The price is a 16 to 20 ft room.",
+      "image_url": "https://flightscope.com/cdn/shop/files/Mevo-Gen2-Launch-Monitor-side.webp?v=1780853767"
+    },
+    {
+      "brand": "FlightScope",
+      "name": "Mevo+ (2023 edition, clearance)",
+      "subtype": "radar",
+      "tier": "core",
+      "mention_count": 10,
+      "mention_sources": [
+        "https://breakingeighty.com/flightscope-mevo-plus-review",
+        "https://friendlygolfer.com/flightscope-mevo-plus-review/",
+        "https://golfersauthority.com/flightscope-mevo-plus-pro-package-upgrade/",
+        "https://www.par2pro.com/products/flightscope-mevo-pro-package",
+        "https://shopindoorgolf.com/collections/flightscope/flightscope",
+        "https://golfsimulatorforum.com/forum/flightscope/376088-considering-mevo-space-concerns",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/356045-mevo-vs-garmin-approach-r10-which-one-is-better",
+        "https://golfsimulatorforum.com/forum/flightscope/371737-mevo-or-wait-for-uneekor-eye-mini",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/409887-first-sim-size-and-launchmonitor-dilemma",
+        "https://www.playbetter.com/products/flightscope-mevo-plus-pro-package-upgrade"
+      ],
+      "price": {
+        "amount": 1099,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://flightscope.com/products/mevo-plus",
+        "note": "Clearance; FlightScope says remaining stock will not be restocked. Replaced by the Mevo Gen2."
+      },
+      "direct_url": "https://flightscope.com/products/mevo-plus",
+      "fallback_url": "https://shopindoorgolf.com/collections/flightscope/flightscope",
+      "read_url": "https://golfsimulatorforum.com/forum/flightscope/376088-considering-mevo-space-concerns",
+      "specs": {
+        "technology": "3D Doppler radar plus camera (Fusion Tracking)",
+        "placement": "7 to 9 ft behind the ball; 8 ft in Short Indoor Mode",
+        "ball_flight_ft": 8,
+        "min_room_depth_ft": 16,
+        "indoor_outdoor": "both",
+        "club_data": "with the Pro Package",
+        "spin": "measured with metallic stickers or RCT balls indoors",
+        "connectivity": "Wi-Fi to iOS, Android, PC; GSPro with Pro Package",
+        "spec_sources": "https://golfsimulatorforum.com/forum/flightscope/376088-considering-mevo-space-concerns; https://flightscope.com/products/mevo-plus",
+        "subscription_note": "None for core use: ships with E6 courses"
+      },
+      "subscriptions": [
+        {
+          "name": "Pro Package (one time)",
+          "amount": 1000,
+          "period": "lifetime",
+          "required_for": "club data; $699 on FlightScope's store at read date",
+          "source_url": "https://flightscope.com/products/pro-package"
+        }
+      ],
+      "room_fit": "Forum owners say 8 ft of flight works for irons and wedges and driver data settles at about 10 ft; 16 ft is the practical floor.",
+      "who_its_for": "The value buyer grabbing the last discounted units who does not need the Gen2's newer body.",
+      "pros": [
+        "Same tracking as the Gen2 at a lower clearance price",
+        "No subscription",
+        "Included St Andrews and Pebble Beach E6 courses in the 2023 bundle"
+      ],
+      "cons": [
+        "Discontinued, so no future stock",
+        "Putting and short chips are weak",
+        "Club data costs extra"
+      ],
+      "known_issues": [
+        "Spin inconsistent under about 10 ft of ball flight (forum owners)",
+        "Owner reports of 10 to 15 yards of driver loss indoors versus outdoors"
+      ],
+      "why_people_choose_it": "The clearance price gets you Gen2-level radar for about $200 less while stock lasts; nothing else changes about the room you need.",
+      "image_url": "https://flightscope.com/cdn/shop/files/MevoPlus-Gray-Side-1.jpg?v=1759316726"
+    },
+    {
+      "brand": "Voice Caddie",
+      "name": "Swing Caddie SC4 Pro",
+      "subtype": "radar",
+      "tier": "qualified",
+      "mention_count": 9,
+      "mention_sources": [
+        "https://www.playbetter.com/blogs/golf-simulator-reviews/swing-caddie-sc4-pro-review",
+        "https://golfersauthority.com/swing-caddie-sc4-pro-launch-monitor-review/",
+        "https://golfersauthority.com/swing-caddie-sc4-pro-vs-sc4/",
+        "https://topshelfgolf.com/blogs/golf/swing-caddie-sc4-pro-review-2026",
+        "https://topshelfgolf.com/blogs/golf/swing-caddie-sc4-pro-vs-garmin-approach-r10",
+        "https://topshelfgolf.com/products/voice-caddie-swing-caddie-sc4-launch-monitor-and-golf-simulator",
+        "https://rainorshinegolf.com/products/swing-caddie-sc4-launch-monitor",
+        "https://www.birdiereport.com/blog/swing-caddie-sc4-pro-review/",
+        "https://breakingeighty.com/best-indoor-golf-launch-monitors"
+      ],
+      "price": {
+        "amount": 599.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://voicecaddie.com/products/sc4-pro"
+      },
+      "direct_url": "https://voicecaddie.com/products/sc4-pro",
+      "fallback_url": "https://rainorshinegolf.com/products/swing-caddie-sc4-launch-monitor",
+      "read_url": "https://www.playbetter.com/blogs/golf-simulator-reviews/swing-caddie-sc4-pro-review",
+      "specs": {
+        "technology": "Doppler radar with built-in screen",
+        "placement": "5 ft behind the ball on the same level, ball lined up with the red mark (Voice Caddie page)",
+        "ball_flight_ft": 8,
+        "min_room_depth_ft": 13,
+        "indoor_outdoor": "both",
+        "club_data": "club speed and smash; no path, face or dynamic loft",
+        "spin": "calculated",
+        "connectivity": "Bluetooth to app; E6 Connect and OptiShot Orion; no GSPro",
+        "spec_sources": "https://voicecaddie.com/products/sc4-pro; https://www.playbetter.com/blogs/golf-simulator-reviews/swing-caddie-sc4-pro-review",
+        "subscription_note": "None: 5 E6 Connect courses plus a range are included; E6 course suite is an optional subscription"
+      },
+      "subscriptions": [
+        {
+          "name": "E6 Connect Basic",
+          "amount": 300,
+          "period": "yearly",
+          "required_for": "more E6 courses",
+          "source_url": "https://northcourse.golf/articles/e6-connect-cost"
+        }
+      ],
+      "room_fit": "Shortest radar lane in the group: 5 ft behind plus 8 ft of flight, so about 13 ft.",
+      "who_its_for": "The net-and-mat practicer who wants numbers on a screen with no phone and no fee, and does not need GSPro.",
+      "pros": [
+        "Built-in screen, no app needed",
+        "No subscription",
+        "Only 5 ft behind the ball",
+        "10 h battery"
+      ],
+      "cons": [
+        "No GSPro or TGC support",
+        "Spin is calculated and indoor spin is inconsistent",
+        "About one in 15 shots reads clearly wrong (PlayBetter)",
+        "Connecting the app blanks the built-in screen"
+      ],
+      "known_issues": [
+        "E6 Connect integration was not working at PlayBetter's December 2024 test",
+        "Driver distances off by more than 10 yards in some tests"
+      ],
+      "why_people_choose_it": "It is the radar unit for a 13 ft garage and a net: switch it on, hit, read the screen. Skip it if GSPro is the goal.",
+      "image_url": "https://voicecaddie.com/cdn/shop/files/SC4_Product_Image_03.jpg?v=1775681377"
+    },
+    {
+      "brand": "Bushnell",
+      "name": "Launch Pro (Circle B Edition)",
+      "subtype": "camera",
+      "tier": "core",
+      "mention_count": 17,
+      "mention_sources": [
+        "https://www.playbetter.com/blogs/golf-simulator-reviews/indepth-bushnell-launch-pro-review-should-you-buy",
+        "https://breakingeighty.com/bushnell-launch-pro-review",
+        "https://mygolfspy.com/news-opinion/why-the-new-bushnell-circle-b-launch-pro-series-has-me-confused/",
+        "https://golfsimulatorsource.com/bushnell-launch-pro/",
+        "https://topshelfgolf.com/pages/bushnell-launch-pro-golf-simulator-guide",
+        "https://golfersauthority.com/bushnell-launch-pro-vs-gc3/",
+        "https://golfsimulatorguide.com/reviews/launch-monitors/bushnell-launch-pro/",
+        "https://mygolfsimulator.com/bushnell-launch-pro-space-requirements/",
+        "https://www.playbetter.com/blogs/golf-simulator-space/bushnell-launch-pro-space-requirements-for-golf-simulator",
+        "https://topshelfgolf.com/products/bushnell-launch-pro-launch-monitor-and-golf-simulator",
+        "https://slickdeals.net/f/17658234-bushnell-launch-pro-golf-simulator-and-launch-monitor-with-club-data-2999-99-500-off",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/392170-used-launch-monitors",
+        "https://golfsimulatornerd.com/compare/bushnell-launch-pro-vs-foresight-gc3",
+        "https://parandpeg.com/compare/bushnell-launch-pro-vs-foresight-gc3",
+        "https://breakingeighty.com/best-indoor-golf-launch-monitors",
+        "https://www.independentgolfreviews.com/best-golf-launch-monitors/",
+        "https://northcourse.golf/articles/gspro-cost"
+      ],
+      "price": {
+        "amount": 2999.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.bushnellgolf.com/products/launch-pro",
+        "note": "Several 2026 reviews quote $2,499 for the Circle B edition; Bushnell's page showed $2,999.99 at read date."
+      },
+      "direct_url": "https://www.bushnellgolf.com/products/launch-pro",
+      "fallback_url": "https://topshelfgolf.com/products/bushnell-launch-pro-launch-monitor-and-golf-simulator",
+      "read_url": "https://mygolfspy.com/news-opinion/why-the-new-bushnell-circle-b-launch-pro-series-has-me-confused/",
+      "specs": {
+        "technology": "Three-camera photometric (same sensor as the Foresight GC3)",
+        "placement": "beside the ball on the same level, about 2 ft forward of address and about 1 ft lateral; 7 x 10 in hitting zone",
+        "ball_flight_ft": 10,
+        "min_room_depth_ft": 10,
+        "indoor_outdoor": "both",
+        "club_data": "yes with stickers, paid tier",
+        "spin": "measured",
+        "connectivity": "USB or Wi-Fi to PC; FSX Play, GSPro (Gold), E6 separate license; TGC 2019 not supported",
+        "spec_sources": "https://www.bushnellgolf.com/products/launch-pro; https://www.playbetter.com/blogs/golf-simulator-space/bushnell-launch-pro-space-requirements-for-golf-simulator"
+      },
+      "subscriptions": [
+        {
+          "name": "Foresight+ Free",
+          "amount": 0,
+          "period": "yearly",
+          "required_for": "ball data only",
+          "source_url": "https://www.bushnellgolf.com/products/launch-pro"
+        },
+        {
+          "name": "Foresight+ Silver",
+          "amount": 199,
+          "period": "yearly",
+          "required_for": "unlimited history, practice modes; no third-party software",
+          "source_url": "https://www.bushnellgolf.com/products/launch-pro"
+        },
+        {
+          "name": "Foresight+ Gold",
+          "amount": 599,
+          "period": "yearly",
+          "required_for": "third-party software including GSPro, swing video, club comparison (reviews earlier in 2026 quoted $499)",
+          "source_url": "https://www.bushnellgolf.com/products/launch-pro"
+        },
+        {
+          "name": "Course Pass / Course Pass PRO",
+          "amount": 295,
+          "period": "yearly",
+          "required_for": "35 FSX Play courses ($595 for 111); needs Silver or Gold",
+          "source_url": "https://www.bushnellgolf.com/products/launch-pro"
+        },
+        {
+          "name": "GSPro",
+          "amount": 250,
+          "period": "yearly",
+          "required_for": "GSPro on top of Gold, about $849 a year total",
+          "source_url": "https://northcourse.golf/articles/gspro-cost"
+        }
+      ],
+      "room_fit": "Side of the ball, so 10 ft of flight is the floor and 12 to 15 ft is comfortable; no lane behind. Must be moved to switch between right and left handers.",
+      "who_its_for": "The accuracy-first builder who wants GC3 data at half the hardware price and accepts the yearly Gold fee.",
+      "pros": [
+        "MyGolfSpy measured about 1.1 percent average indoor deviation from reference",
+        "Short room depth",
+        "Built-in screen works without a PC for ball data",
+        "Cheapest entry to Foresight-grade data"
+      ],
+      "cons": [
+        "GSPro requires Gold ($599) plus GSPro ($250)",
+        "Price of Gold rose during 2026",
+        "Club data behind a paywall",
+        "20 percent restocking fee on returns"
+      ],
+      "known_issues": [
+        "Ball speed reads about 1 mph faster than a GC3 (Breaking Eighty)",
+        "1-Dot Mode misreads if the unit sits lower than the ball; Bushnell suggests raising it 1 to 1.5 in",
+        "Forum posters question whether Silver is enough for sim software; Bushnell says Gold"
+      ],
+      "why_people_choose_it": "Same cameras as the GC3 for $3,000, in a room only 10 ft deep. The catch everyone on the forums repeats: about $850 a year to run GSPro.",
+      "image_url": "https://www.bushnellgolf.com/cdn/shop/files/LP_Product_Carousel_1_2_1__62065.1762889085.386.513_4c815453-5a18-4f6b-b55d-5e161ad7ab2a.png?v=1781021541&width=1200"
+    },
+    {
+      "brand": "Foresight Sports",
+      "name": "GC3",
+      "subtype": "camera",
+      "tier": "core",
+      "mention_count": 10,
+      "mention_sources": [
+        "https://breakingeighty.com/foresight-gc3-review",
+        "https://golfersauthority.com/bushnell-launch-pro-vs-gc3/",
+        "https://golfsimulatorsource.com/foresight-gc3/",
+        "https://caddiebay.com/launch-monitors/foresight-gc3/",
+        "https://golflaunchlab.com/reviews/foresight-gc3/",
+        "https://launchmonitorhq.com/guides/foresight-gc3-review/",
+        "https://golfsimulatornerd.com/compare/bushnell-launch-pro-vs-foresight-gc3",
+        "https://parandpeg.com/compare/bushnell-launch-pro-vs-foresight-gc3",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/403770-which-launch-monitor-for-me-gc3-not-cutting-it",
+        "https://golfsimulatoradvisor.com/launch-monitor-radar-vs-camera-vs-overhead-room-sizing/"
+      ],
+      "price": {
+        "amount": 3999,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.foresightsports.com/pages/gc3",
+        "note": "Sale from $6,999 on Foresight's page at read date; most 2026 reviews still quote $6,999."
+      },
+      "direct_url": "https://www.foresightsports.com/pages/gc3",
+      "fallback_url": "",
+      "read_url": "https://breakingeighty.com/foresight-gc3-review",
+      "specs": {
+        "technology": "Three-camera photometric with touchscreen",
+        "placement": "beside the ball, about 2 ft to the side, level with the hitting surface; 7 x 10 in hitting zone",
+        "ball_flight_ft": 10,
+        "min_room_depth_ft": 10,
+        "indoor_outdoor": "both",
+        "club_data": "yes with club stickers",
+        "spin": "measured",
+        "connectivity": "USB or Wi-Fi to PC; FSX Play included; GSPro via Foresight+ Gold",
+        "spec_sources": "https://breakingeighty.com/foresight-gc3-review; https://golfsimulatorsource.com/foresight-gc3/"
+      },
+      "subscriptions": [
+        {
+          "name": "Foresight+ Gold",
+          "amount": 599,
+          "period": "yearly",
+          "required_for": "third-party software including GSPro on units sold under the 2026 Foresight+ scheme; units with a perpetual FSX Play or FSX 2020 license are exempt (Northcourse, Golf Simulator Source). Breaking Eighty's June 2026 review says the GC3 itself needs no subscription; the two accounts conflict, so confirm with Foresight before buying for GSPro.",
+          "source_url": "https://northcourse.golf/articles/gspro-cost"
+        },
+        {
+          "name": "GSPro",
+          "amount": 250,
+          "period": "yearly",
+          "required_for": "GSPro",
+          "source_url": "https://northcourse.golf/articles/gspro-cost"
+        }
+      ],
+      "room_fit": "Side placement; 10 x 10 x 9 ft minimum, 18 x 16 x 10 ft recommended (Golf Simulator Source).",
+      "who_its_for": "The buyer who wants Foresight hardware without the Bushnell paywall, now that the sale price has halved the gap.",
+      "pros": [
+        "Highest average accuracy indoors and out in MyGolfSpy's 2025 guide",
+        "FSX Play included; Breaking Eighty calls it the best sim software it has used",
+        "Includes the Bushnell Pro X3 LINK rangefinder",
+        "Light, battery powered, works outdoors"
+      ],
+      "cons": [
+        "GSPro may still need Foresight+ Gold on current units",
+        "Club stickers every session for club data",
+        "Premium FSX courses cost $50 to $500 each",
+        "Gaming PC required for simulation"
+      ],
+      "known_issues": [
+        "Low spin readings with range balls (forum thread, April 2024)",
+        "Roll and pitch bug on a limited number of units (Breaking Eighty hearsay)",
+        "2025 to 2026 community reports of battery reliability"
+      ],
+      "why_people_choose_it": "At the $3,999 sale price it is the Launch Pro without the Gold tier tax, if your unit carries a perpetual FSX license. Check that before you buy.",
+      "image_url": "https://www.foresightsports.com/cdn/shop/files/GC3-Gallery-3.jpg?v=1686344110&width=2048"
+    },
+    {
+      "brand": "SkyTrak",
+      "name": "ST MAX",
+      "subtype": "camera",
+      "tier": "core",
+      "mention_count": 10,
+      "mention_sources": [
+        "https://golfsimulatorvideos.com/skytrak-st-max-review/",
+        "https://golfsimulatorvideos.com/skytrak-membership-plans/",
+        "https://simlab.golf/reviews/skytrak-st-max/",
+        "https://shopindoorgolf.com/blogs/helpful-articles-videos/skytrak-st-max-review-whats-actually-new",
+        "https://breakingeighty.com/skytrak-plus-vs-skytrak-st-max",
+        "https://topshelfgolf.com/blogs/golf/rapsodo-mlm2pro-vs-skytrak-st-max",
+        "https://www.independentgolfreviews.com/best-golf-launch-monitors/",
+        "https://breakingeighty.com/best-indoor-golf-launch-monitors",
+        "https://shopindoorgolf.com/collections/skytrak-golf-simulators",
+        "https://northcourse.golf/articles/gspro-cost"
+      ],
+      "price": {
+        "amount": 1695,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.skytrakgolf.com/products/launch-monitor",
+        "note": "Sale with a free year of Core: Foresight; list $2,995."
+      },
+      "direct_url": "https://www.skytrakgolf.com/products/launch-monitor",
+      "fallback_url": "https://shopindoorgolf.com/collections/skytrak-golf-simulators",
+      "read_url": "https://golfsimulatorvideos.com/skytrak-membership-plans/",
+      "specs": {
+        "technology": "Photometric camera, floor unit",
+        "placement": "beside the ball, about 12 to 15 in from the ball on the laser dot, bottom level with the hitting surface",
+        "ball_flight_ft": 10,
+        "min_room_depth_ft": 10,
+        "indoor_outdoor": "indoor (outdoor possible out of direct sun)",
+        "club_data": "club speed, path, face angle; no attack angle or dynamic loft",
+        "spin": "measured",
+        "connectivity": "Wi-Fi or USB-C to iOS, Android, PC, Mac; SkyTrak app only, GSPro not on the official list",
+        "spec_sources": "https://golfsimulatorvideos.com/skytrak-st-max-review/; https://shopindoorgolf.com/blogs/helpful-articles-videos/skytrak-st-max-review-whats-actually-new"
+      },
+      "subscriptions": [
+        {
+          "name": "Essential",
+          "amount": 99.99,
+          "period": "yearly",
+          "required_for": "practice features, no course play",
+          "source_url": "https://golfsimulatorvideos.com/skytrak-membership-plans/"
+        },
+        {
+          "name": "Core: Foresight",
+          "amount": 299.99,
+          "period": "yearly",
+          "required_for": "course play with 50 Foresight courses (Core: TrackMan with 52 courses is $349.99)",
+          "source_url": "https://golfsimulatorvideos.com/skytrak-membership-plans/"
+        },
+        {
+          "name": "Elite",
+          "amount": 599.99,
+          "period": "yearly",
+          "required_for": "both course packs",
+          "source_url": "https://www.skytrakgolf.com/products/elite-membership"
+        },
+        {
+          "name": "GSPro",
+          "amount": 250,
+          "period": "yearly",
+          "required_for": "GSPro only through the unsanctioned OpenSkyPlus 2 community bridge; SkyTrak is not on GSPro's official list",
+          "source_url": "https://northcourse.golf/articles/gspro-cost"
+        }
+      ],
+      "room_fit": "Side unit; works in rooms about 10 ft deep. Keep IR-emitting LED fixtures away from the sensor.",
+      "who_its_for": "The dedicated-room builder who is happy inside SkyTrak's own Course Play ecosystem and does not need GSPro.",
+      "pros": [
+        "Lowest sale price of any club-data camera unit at read date",
+        "Mac and iPad friendly",
+        "Small footprint beside the ball",
+        "GOLFTEC speed training module"
+      ],
+      "cons": [
+        "Course play needs a $299.99 or more yearly tier",
+        "GSPro is not officially supported and SkyTrak is moving to a closed system",
+        "Noticeable shot delay",
+        "6-month warranty"
+      ],
+      "known_issues": [
+        "Tier names and prices changed twice in 2025 to 2026 (Essential was $129.99 in one 2025 review)",
+        "SkyTrak+ owners report charging and lockup issues on golfsimulatorforum.com; ST MAX shares the core hardware"
+      ],
+      "why_people_choose_it": "At $1,695 it is the cheapest way to get measured spin and club data beside the ball, as long as SkyTrak's own software is enough for you.",
+      "image_url": "https://www.skytrakgolf.com/cdn/shop/files/STMAX-Prod_img_1yearFreeBadge.jpg?v=1787888997&width=2048"
+    },
+    {
+      "brand": "SkyTrak",
+      "name": "SkyTrak+ (discontinued, certified renew)",
+      "subtype": "camera",
+      "tier": "core",
+      "mention_count": 10,
+      "mention_sources": [
+        "https://www.playbetter.com/blogs/golf-simulator-reviews/skytrak-plus-in-depth-review",
+        "https://friendlygolfer.com/skytrak-plus-review/",
+        "https://www.golfsimulatornerd.com/blog/skytrak-plus-review-2026",
+        "https://bogeylicious.com/blog/skytrak-plus-review-2026",
+        "https://golfsimgenius.com/skytrak-plus-review/",
+        "https://golfsimulatorforum.com/forum/skytrak/391267-skytrak",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/409887-first-sim-size-and-launchmonitor-dilemma",
+        "https://golfsimulatorsource.com/comparisons/skytrak-plus-vs-square-golf-omni/",
+        "https://breakingeighty.com/skytrak-plus-vs-skytrak-st-max",
+        "https://www.youtube.com/watch?v=tZuTdUQXVzc"
+      ],
+      "price": {
+        "amount": 1795,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://breakingeighty.com/best-indoor-golf-launch-monitors",
+        "note": "Closeout price quoted July 2026; SkyTrak's own store now lists only a $2,495 certified-renew studio package."
+      },
+      "direct_url": "https://www.skytrakgolf.com/",
+      "fallback_url": "https://shopindoorgolf.com/collections/skytrak-golf-simulators",
+      "read_url": "https://golfsimulatorforum.com/forum/skytrak/391267-skytrak",
+      "specs": {
+        "technology": "Photometric camera plus Doppler radar for club speed",
+        "placement": "beside the ball on the laser dot, 11.5 to 12.5 in from sensor face to ball centre",
+        "ball_flight_ft": 10,
+        "min_room_depth_ft": 10,
+        "indoor_outdoor": "indoor",
+        "club_data": "club speed, path, face angle",
+        "spin": "measured",
+        "connectivity": "Wi-Fi or USB-C; existing GSPro connection kept for SkyTrak+ owners",
+        "spec_sources": "https://golfsimulatorsource.com/comparisons/skytrak-plus-vs-square-golf-omni/; https://breakingeighty.com/skytrak-plus-vs-skytrak-st-max"
+      },
+      "subscriptions": [
+        {
+          "name": "Essential",
+          "amount": 99.99,
+          "period": "yearly",
+          "required_for": "required before any third-party connection will work (Golf Simulator Source)",
+          "source_url": "https://golfsimulatorsource.com/comparisons/skytrak-plus-vs-square-golf-omni/"
+        },
+        {
+          "name": "Core: Foresight",
+          "amount": 299.99,
+          "period": "yearly",
+          "required_for": "course play",
+          "source_url": "https://golfsimulatorvideos.com/skytrak-membership-plans/"
+        }
+      ],
+      "room_fit": "Same as the ST MAX: about 10 ft deep, side placement.",
+      "who_its_for": "The bargain hunter who finds closeout or certified stock and already has a GSPro path through the legacy connection.",
+      "pros": [
+        "Closeout pricing",
+        "Same tracking as the ST MAX",
+        "Mac friendly",
+        "SkyTrak+ owners keep their GSPro connection"
+      ],
+      "cons": [
+        "Discontinued",
+        "Membership needed for connections and courses",
+        "Shot delay",
+        "Owner reports of charging and lockup problems"
+      ],
+      "known_issues": [
+        "Units that would not charge past about 60 percent and lockups after 10 to 30 shots over Wi-Fi (forum thread 2023 to 2025)",
+        "Short warranty on renewed units"
+      ],
+      "why_people_choose_it": "Breaking Eighty called the closeout SkyTrak+ a no-brainer in 2026: ST MAX hardware minus speed training, for several hundred dollars less, while it lasts.",
+      "image_url": ""
+    },
+    {
+      "brand": "Uneekor",
+      "name": "EYE MINI LITE",
+      "subtype": "camera",
+      "tier": "core",
+      "mention_count": 11,
+      "mention_sources": [
+        "https://breakingeighty.com/uneekor-eye-mini-lite",
+        "https://www.golfmonthly.com/reviews/golf-tech-and-training-aids/uneekor-eye-mini-lite-launch-monitor-review",
+        "https://golfersauthority.com/uneekor-eye-mini-lite-launch-monitor-review/",
+        "https://topshelfgolf.com/products/uneekor-eye-mini-lite-launch-monitor-golf-simulator",
+        "https://swingyard.com/uneekor-eye-mini-lite-launch-monitor-review/",
+        "https://www.parpercision.com/uneekor-eye-mini-lite",
+        "https://golfsimulatoradvisor.com/uneekor-eye-mini-lite-review/",
+        "https://slickdeals.net/f/18805774-uneekor-eye-mini-core-golf-launch-monitor-simulator-15-ball-data-points-near-zero-latency-easy-setup-works-with-gspro-tgc19-e6-pc-laptop-required-amazon-exclusive-999",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/409887-first-sim-size-and-launchmonitor-dilemma",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/407152-best-launch-monitor-focus-on-practice",
+        "https://topshelfgolf.com/blogs/golf/uneekor-eye-mini-review"
+      ],
+      "price": {
+        "amount": 1999,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://uneekor.com/en-us/products/eye-mini-lite-standalone",
+        "note": "Down from $2,750. The ball-data-only EYE MINI Core is $1,249."
+      },
+      "direct_url": "https://uneekor.com/en-us/products/eye-mini-lite-standalone",
+      "fallback_url": "https://topshelfgolf.com/products/uneekor-eye-mini-lite-launch-monitor-golf-simulator",
+      "read_url": "https://breakingeighty.com/uneekor-eye-mini-lite",
+      "specs": {
+        "technology": "Dual high-speed camera photometric, stationary, wired",
+        "placement": "beside the ball; 12 x 8 in hitting zone (Uneekor); the sibling EYE MINI sits 15.75 in from the ball",
+        "ball_flight_ft": 10,
+        "min_room_depth_ft": 10,
+        "indoor_outdoor": "indoor only",
+        "club_data": "yes with club stickers",
+        "spin": "measured (marked balls not required)",
+        "connectivity": "Ethernet to a Windows 11 gaming PC (i7 12th gen or Ryzen 7 5000, 32 GB, RTX 4070 Ti class per Uneekor); no battery, Wi-Fi or screen",
+        "spec_sources": "https://uneekor.com/en-us/products/eye-mini-lite-standalone; https://pluggedingolf.com/uneekor-eye-mini-launch-monitor-review/"
+      },
+      "subscriptions": [
+        {
+          "name": "Player",
+          "amount": 0,
+          "period": "yearly",
+          "required_for": "ball and club data, VIEW range (included)",
+          "source_url": "https://uneekor.com/en-us/products/eye-mini-lite-standalone"
+        },
+        {
+          "name": "Pro",
+          "amount": 199,
+          "period": "yearly",
+          "required_for": "third-party connector (GSPro, E6, TGC), Refine with 5 courses",
+          "source_url": "https://uneekor.com/en-us/products/eye-mini-lite-standalone"
+        },
+        {
+          "name": "Champion / Ultimate",
+          "amount": 399,
+          "period": "yearly",
+          "required_for": "AI Trainer and Refine+ ($399); GAMEDAY and online play ($599)",
+          "source_url": "https://uneekor.com/en-us/products/eye-mini-lite-standalone"
+        },
+        {
+          "name": "GSPro",
+          "amount": 250,
+          "period": "yearly",
+          "required_for": "GSPro on top of Pro, about $449 a year total",
+          "source_url": "https://breakingeighty.com/uneekor-eye-mini-lite"
+        }
+      ],
+      "room_fit": "Side placement in a dedicated indoor room; 10 ft of flight is the floor. Plan the Ethernet run and a PC with two network ports.",
+      "who_its_for": "The permanent-bay builder who already owns a gaming PC and wants Uneekor accuracy and club data for under $2,000.",
+      "pros": [
+        "Within 1 to 2 percent of a GCQuad in reviewer tests",
+        "Club data included without a sticker-marked ball",
+        "VIEW practice software included",
+        "Lowest price for this class of data"
+      ],
+      "cons": [
+        "Stationary, wired, indoor only; no screen or battery",
+        "Pro tier needed for GSPro",
+        "Setup is more technical than consumer units",
+        "Demanding PC spec for AI features"
+      ],
+      "known_issues": [
+        "Occasional failure to register club data even with stickers (Breaking Eighty)",
+        "Early setup problems resolved by a software update",
+        "GAMEDAY needs two displays"
+      ],
+      "why_people_choose_it": "It is the unit forum regulars point to when someone says 'dedicated room, gaming PC, under $2k': Foresight-class numbers, no portability, $199 a year to reach GSPro.",
+      "image_url": "https://cdn.shopify.com/s/files/1/0388/4423/5907/files/1._Main_Image_1049cf33-2edb-42db-a5e9-f60c51bdff4d.png?v=1786441380&width=1200"
+    },
+    {
+      "brand": "Uneekor",
+      "name": "EYE MINI",
+      "subtype": "camera",
+      "tier": "qualified",
+      "mention_count": 7,
+      "mention_sources": [
+        "https://breakingeighty.com/uneekor-eye-mini-review",
+        "https://pluggedingolf.com/uneekor-eye-mini-launch-monitor-review/",
+        "https://www.golfmonthly.com/buying-advice/one-of-the-most-feature-packed-launch-monitors-weve-tested-just-got-a-massive-33-percent-price-drop",
+        "https://topshelfgolf.com/products/uneekor-eye-mini-launch-monitor-golf-simulator",
+        "https://topshelfgolf.com/blogs/golf/uneekor-eye-mini-review",
+        "https://golfsimulatorforum.com/forum/flightscope/371737-mevo-or-wait-for-uneekor-eye-mini",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/407152-best-launch-monitor-focus-on-practice"
+      ],
+      "price": {
+        "amount": 2999,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://uneekor.com/en-us/products/eye-mini-standalone",
+        "note": "Cut from $4,500 in October 2026."
+      },
+      "direct_url": "https://uneekor.com/en-us/products/eye-mini-standalone",
+      "fallback_url": "https://topshelfgolf.com/products/uneekor-eye-mini-launch-monitor-golf-simulator",
+      "read_url": "https://pluggedingolf.com/uneekor-eye-mini-launch-monitor-review/",
+      "specs": {
+        "technology": "Dual camera photometric, portable with battery and E-Ink display",
+        "placement": "beside the ball, 15.75 in from the ball, two-ball alignment; 12 x 8 in hitting zone",
+        "ball_flight_ft": 10,
+        "min_room_depth_ft": 10,
+        "indoor_outdoor": "both",
+        "club_data": "yes with club stickers",
+        "spin": "measured",
+        "connectivity": "Wi-Fi to PC, tablet; 5 to 6 h battery",
+        "spec_sources": "https://pluggedingolf.com/uneekor-eye-mini-launch-monitor-review/; https://uneekor.com/en-us/products/eye-mini-standalone"
+      },
+      "subscriptions": [
+        {
+          "name": "Pro",
+          "amount": 199,
+          "period": "yearly",
+          "required_for": "third-party connector for GSPro, E6, TGC",
+          "source_url": "https://uneekor.com/en-us/products/eye-mini-standalone"
+        },
+        {
+          "name": "GSPro",
+          "amount": 250,
+          "period": "yearly",
+          "required_for": "GSPro",
+          "source_url": "https://northcourse.golf/articles/gspro-cost"
+        }
+      ],
+      "room_fit": "Side placement, 10 ft of flight; the only Uneekor unit that also travels to the range.",
+      "who_its_for": "The buyer who wants EYE MINI LITE data plus a battery, a screen and outdoor use.",
+      "pros": [
+        "Portable with onboard display",
+        "Near GCQuad accuracy through mid irons (Plugged In Golf)",
+        "Price cut of a third in October 2026"
+      ],
+      "cons": [
+        "Larger gaps on long irons and woods (up to 4 yards carry)",
+        "Software is the weak point (Breaking Eighty)",
+        "PC still needed for first setup and sims"
+      ],
+      "known_issues": [
+        "Screen lag while searching for the ball",
+        "Refine software has demanding PC requirements"
+      ],
+      "why_people_choose_it": "It was the $4,500 unit nobody could justify over the Lite; at $2,999 it is the portable Uneekor for the golfer who hits outdoors too.",
+      "image_url": "https://cdn.shopify.com/s/files/1/0388/4423/5907/files/1._Main_Image_04768523-0d81-40c8-9edf-f7d5ac89bacc.png?v=1786441622&width=1200"
+    },
+    {
+      "brand": "Uneekor",
+      "name": "EYE XO2",
+      "subtype": "overhead",
+      "tier": "core",
+      "mention_count": 10,
+      "mention_sources": [
+        "https://golfersauthority.com/uneekor-eye-xo2-launch-monitor-review/",
+        "https://golfstead.com/uneekor-eye-xo2-launch-monitor-review",
+        "https://golfsimulatorguide.com/reviews/launch-monitors/uneekor-eye-xo2/",
+        "https://topshelfgolf.com/blogs/golf/uneekor-eye-xo2-review",
+        "https://www.simgolfer.com/blogs/simulator-academy/uneekor-eye-xo2-review-2026",
+        "https://topshelfgolf.com/products/uneekor-eye-xo-2-launch-monitor-golf-simulator",
+        "https://www.parpercision.com/uneekor-eye-xo2",
+        "https://www.elevatedgolfsimulators.com/blogs/featured-blog-posts/uneekor-eye-xo2-review-the-ultimate-overhead-launch-monitor-for-golfers-in-2025",
+        "https://indoorgolfoutlet.com/blogs/main/uneekor-eye-xr-vs-eye-xo2",
+        "https://golfsimulatoradvisor.com/launch-monitor-radar-vs-camera-vs-overhead-room-sizing/"
+      ],
+      "price": {
+        "amount": 10999,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://uneekor.com/en-us/products/eye-xo2-standalone"
+      },
+      "direct_url": "https://uneekor.com/en-us/products/eye-xo2-standalone",
+      "fallback_url": "https://topshelfgolf.com/products/uneekor-eye-xo-2-launch-monitor-golf-simulator",
+      "read_url": "https://golfstead.com/uneekor-eye-xo2-launch-monitor-review",
+      "specs": {
+        "technology": "Three high-speed infrared cameras, ceiling mounted in front of the golfer",
+        "placement": "ceiling, 3.5 ft in front of the tee toward the screen; optimal mount height 10 ft",
+        "ball_flight_ft": 10,
+        "min_room_depth_ft": 16,
+        "indoor_outdoor": "indoor",
+        "club_data": "yes with club stickers; 28 x 21 in hitting zone",
+        "spin": "measured",
+        "connectivity": "Ethernet to Windows 11 gaming PC",
+        "spec_sources": "https://uneekor.com/en-us/products/eye-xo2-standalone"
+      },
+      "subscriptions": [
+        {
+          "name": "Pro",
+          "amount": 199,
+          "period": "yearly",
+          "required_for": "third-party connector (GSPro, E6, TGC)",
+          "source_url": "https://uneekor.com/en-us/products/eye-xo2-standalone"
+        },
+        {
+          "name": "Champion / Ultimate",
+          "amount": 399,
+          "period": "yearly",
+          "required_for": "AI Trainer, Refine+ ($399); GAMEDAY ($599)",
+          "source_url": "https://uneekor.com/en-us/products/eye-xo2-standalone"
+        },
+        {
+          "name": "GSPro",
+          "amount": 250,
+          "period": "yearly",
+          "required_for": "GSPro",
+          "source_url": "https://northcourse.golf/articles/gspro-cost"
+        }
+      ],
+      "room_fit": "Uneekor recommends 13 ft wide, 16 ft deep, 10 ft high. Nothing on the floor, so left and right handers share the bay.",
+      "who_its_for": "The finished-room owner who wants an overhead unit with the biggest hitting zone and does not need Trackman.",
+      "pros": [
+        "Largest overhead hitting zone",
+        "Nothing on the floor",
+        "Reviewers put it near Trackman performance at half the price",
+        "Built-in IR tolerates ambient light"
+      ],
+      "cons": [
+        "$11,000",
+        "Ceiling install",
+        "Pro tier for GSPro",
+        "One reviewer scored value 6.5 because the step up from the original XO is small"
+      ],
+      "known_issues": [
+        "Low overhead baffles can block the camera view",
+        "Dealer pricing varies widely ($6,999 to $13,000 bundles appear in reviews)"
+      ],
+      "why_people_choose_it": "Overhead means the floor is clean and both handers play; owners who were quoted a Trackman iO at $14k plus $700 a year look here first.",
+      "image_url": "https://cdn.shopify.com/s/files/1/0388/4423/5907/files/1._Main_Image_7ae95f54-d382-4967-b314-648e260cf702.png?v=1786449248&width=1200"
+    },
+    {
+      "brand": "Uneekor",
+      "name": "EYE XR",
+      "subtype": "overhead",
+      "tier": "qualified",
+      "mention_count": 7,
+      "mention_sources": [
+        "https://www.playbetter.com/blogs/golf-simulator-reviews/first-look-uneekor-eye-xr-overhead-launch-monitor",
+        "https://www.playbetter.com/products/uneekor-eye-xr-golf-launch-monitor-simulator",
+        "https://topshelfgolf.com/blogs/golf/uneekor-eye-xr-review",
+        "https://indoorgolfoutlet.com/blogs/main/uneekor-eye-xr-vs-eye-xo2",
+        "https://onthegreen.golf/overhead-launch-monitors/",
+        "https://topshelfgolf.com/products/uneekor-eye-xr-launch-monitor-golf-simulator",
+        "https://golfsimulatoradvisor.com/uneekor-eye-xr-launch-monitor-review/"
+      ],
+      "price": {
+        "amount": 5999,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://uneekor.com/en-us/products/eye-xr-standalone",
+        "note": "Down from $6,999."
+      },
+      "direct_url": "https://uneekor.com/en-us/products/eye-xr-standalone",
+      "fallback_url": "https://www.playbetter.com/products/uneekor-eye-xr-golf-launch-monitor-simulator",
+      "read_url": "https://www.playbetter.com/blogs/golf-simulator-reviews/first-look-uneekor-eye-xr-overhead-launch-monitor",
+      "specs": {
+        "technology": "Dual infrared cameras, ceiling mounted behind the golfer, Club AI (no stickers)",
+        "placement": "ceiling, rear mounted behind the golfer; optimal mount height 10 ft; 14 x 12 in hitting zone",
+        "ball_flight_ft": 10,
+        "min_room_depth_ft": 16,
+        "indoor_outdoor": "indoor",
+        "club_data": "yes, no stickers or marked balls",
+        "spin": "measured",
+        "connectivity": "Ethernet to Windows PC",
+        "spec_sources": "https://uneekor.com/en-us/products/eye-xr-standalone"
+      },
+      "subscriptions": [
+        {
+          "name": "Pro",
+          "amount": 199,
+          "period": "yearly",
+          "required_for": "third-party connector (GSPro, E6, TGC)",
+          "source_url": "https://uneekor.com/en-us/products/eye-xr-standalone"
+        },
+        {
+          "name": "GSPro",
+          "amount": 250,
+          "period": "yearly",
+          "required_for": "GSPro",
+          "source_url": "https://northcourse.golf/articles/gspro-cost"
+        }
+      ],
+      "room_fit": "13 x 16 x 10 ft recommended by Uneekor. Mounts behind the tee, the opposite side from the XO2, so check the model before drilling.",
+      "who_its_for": "The overhead buyer under $6,000 who hates stickers.",
+      "pros": [
+        "No club stickers or marked balls",
+        "Cheapest Uneekor overhead",
+        "Floor stays clear"
+      ],
+      "cons": [
+        "Smaller hitting zone than the XO2",
+        "Sources disagree on camera count and data points",
+        "Pro tier for GSPro"
+      ],
+      "known_issues": [
+        "Spec sheets conflict between dealers (18, 19 or 25 data points), so confirm with Uneekor"
+      ],
+      "why_people_choose_it": "Sticker-free overhead tracking for about the price of a ProTee VX, with the Uneekor software stack behind it.",
+      "image_url": "https://cdn.shopify.com/s/files/1/0388/4423/5907/files/1._Main_Image_64c62850-e8e5-471d-9b78-c031321195b2.png?v=1786442563&width=1200"
+    },
+    {
+      "brand": "Square Golf",
+      "name": "Launch Monitor Home Edition",
+      "subtype": "camera",
+      "tier": "core",
+      "mention_count": 17,
+      "mention_sources": [
+        "https://golfersauthority.com/square-golf-launch-monitor/",
+        "https://www.playbetter.com/blogs/golf-simulator-reviews/square-golf-launch-monitor-review",
+        "https://breakingeighty.com/square-golf-launch-monitor",
+        "https://golfsimulatorvideos.com/square-golf-launch-monitor-review/",
+        "https://friendlygolfer.com/square-golf-launch-monitor-review/",
+        "https://golfstead.com/square-golf-home-launch-monitor-review",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/square-golf/409693-square-golf-review",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/409887-first-sim-size-and-launchmonitor-dilemma",
+        "https://www.playbetter.com/products/square-golf-simulator-launch-monitor",
+        "https://rainorshinegolf.com/products/square-golf-launch-monitor",
+        "https://www.playbetter.com/blogs/golf-simulator-space/square-golf-launch-monitor-space-requirements",
+        "https://www.youtube.com/watch?v=ePyma6kFRW4",
+        "https://www.youtube.com/watch?v=AbUgF4G93Zg",
+        "https://www.youtube.com/watch?v=CF8kWeVf5Vk",
+        "https://www.youtube.com/watch?v=tZuTdUQXVzc",
+        "https://breakingeighty.com/best-indoor-golf-launch-monitors",
+        "https://simweekly1.substack.com/p/were-upgrading-our-sim"
+      ],
+      "price": {
+        "amount": 699,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://squaregolf.com/products/square-golf-he-launch-monitor"
+      },
+      "direct_url": "https://squaregolf.com/products/square-golf-he-launch-monitor",
+      "fallback_url": "https://rainorshinegolf.com/products/square-golf-launch-monitor",
+      "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/square-golf/409693-square-golf-review",
+      "specs": {
+        "technology": "Dual camera photometric, floor unit",
+        "placement": "beside the ball, 42 cm from the ball and 23 cm back toward the golfer with real clubs; 15 x 15 cm hitting zone",
+        "ball_flight_ft": 10,
+        "min_room_depth_ft": 10,
+        "indoor_outdoor": "indoor only; keep out of direct sun",
+        "club_data": "path, face, attack angle with shaft stickers; no club speed or smash on the Home edition",
+        "spin": "measured with Square marked balls, weaker with unmarked",
+        "connectivity": "Wi-Fi to iOS, Android, PC; free SQG GSPro Connect app; E6 and Awesome Golf",
+        "spec_sources": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/square-golf/409693-square-golf-review; https://www.playbetter.com/blogs/golf-simulator-space/square-golf-launch-monitor-space-requirements",
+        "subscription_note": "None: third-party sims carry no Square fee; native courses cost 1 credit per hole, 1,000 credits included, about $20 per 1,000 more"
+      },
+      "subscriptions": [
+        {
+          "name": "GSPro",
+          "amount": 250,
+          "period": "yearly",
+          "required_for": "GSPro",
+          "source_url": "https://northcourse.golf/articles/gspro-cost"
+        }
+      ],
+      "room_fit": "About 10 ft wide, 10 ft deep, 9 ft high; no lane behind the golfer. Lefties and righties cannot share without moving it.",
+      "who_its_for": "The tight-garage builder who wants GSPro for $699 plus the license and cares about chipping and putting.",
+      "pros": [
+        "No subscription and no GSPro connector fee",
+        "Putting and chipping are its strength",
+        "Fits a 10 ft deep room",
+        "Ball speed and launch angle very close to a GC3 (forum test)"
+      ],
+      "cons": [
+        "Marked balls needed for good spin; shaft stickers for club data",
+        "Spin axis and sidespin inconsistent, especially driver",
+        "Indoor only",
+        "No clubhead speed on the Home edition"
+      ],
+      "known_issues": [
+        "About 1 in 12 to 1 in 30 shots fail to register in reviews",
+        "Dynamic loft readings wildly off (PlayBetter)",
+        "Native course play is limited: 10 courses, stroke play, one tee"
+      ],
+      "why_people_choose_it": "It is the cheapest working path into GSPro in a 10 ft garage with no yearly fee from the maker. Buy the marked balls and treat the driver spin axis with suspicion.",
+      "image_url": ""
+    },
+    {
+      "brand": "Square Golf",
+      "name": "Omni Edition",
+      "subtype": "camera",
+      "tier": "core",
+      "mention_count": 10,
+      "mention_sources": [
+        "https://www.playbetter.com/blogs/golf-simulator-reviews/square-omni-indoor-outdoor-launch-monitor-review",
+        "https://friendlygolfer.com/square-golf-omni-review/",
+        "https://northcourse.golf/products/square-golf-omni",
+        "https://simlab.golf/reviews/square-golf-omni/",
+        "https://golfsimulatorsource.com/comparisons/skytrak-plus-vs-square-golf-omni/",
+        "https://www.garage.golf/articles/square-omni-review-gspro-impact-location",
+        "https://golfersauthority.com/square-omni-launch-monitor/",
+        "https://breakingeighty.com/best-indoor-golf-launch-monitors",
+        "https://www.independentgolfreviews.com/best-golf-launch-monitors/",
+        "https://www.playbetter.com/blogs/golf-tech-news/launch-monitors-and-simulators-2026-pga-show"
+      ],
+      "price": {
+        "amount": 1599,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://squaregolf.com/products/square-golf-oe-launch-monitor",
+        "note": "Preorder and backorder reported through September 2026."
+      },
+      "direct_url": "https://squaregolf.com/products/square-golf-oe-launch-monitor",
+      "fallback_url": "",
+      "read_url": "https://www.playbetter.com/blogs/golf-simulator-reviews/square-omni-indoor-outdoor-launch-monitor-review",
+      "specs": {
+        "technology": "Four-camera photometric with built-in display and replaceable battery",
+        "placement": "beside the ball (same family as the Home Edition; alignment stick calibration)",
+        "ball_flight_ft": 10,
+        "min_room_depth_ft": 10,
+        "indoor_outdoor": "both, including real grass",
+        "club_data": "about 21 metrics including club speed, smash, path, face, dynamic loft, impact location with club and shaft stickers",
+        "spin": "measured with any ball",
+        "connectivity": "Wi-Fi; GSPro at no Square fee, E6 Connect, Awesome Golf",
+        "spec_sources": "https://www.playbetter.com/blogs/golf-simulator-reviews/square-omni-indoor-outdoor-launch-monitor-review; https://northcourse.golf/products/square-golf-omni",
+        "subscription_note": "None: no Square fee for data, display or third-party sims; 1,000 native credits included"
+      },
+      "subscriptions": [
+        {
+          "name": "GSPro",
+          "amount": 250,
+          "period": "yearly",
+          "required_for": "GSPro",
+          "source_url": "https://northcourse.golf/articles/gspro-cost"
+        }
+      ],
+      "room_fit": "Side placement, about 10 ft deep indoors; also goes outside.",
+      "who_its_for": "The builder who wants full club data and no fees for under $2,000 and is willing to wait for stock.",
+      "pros": [
+        "Full club data and impact location",
+        "Any ball for spin",
+        "Indoor and outdoor",
+        "No subscription, free GSPro connection",
+        "Accuracy matched an EYE XO and GC3 in PlayBetter's test"
+      ],
+      "cons": [
+        "Backordered for most of 2026",
+        "Club sticker placement is fussy",
+        "No carry case",
+        "Packaging and manual typos reported"
+      ],
+      "known_issues": [
+        "Missed impact-location reads indoors when the face sticker sat too low",
+        "Stock limited at read date"
+      ],
+      "why_people_choose_it": "It is the SkyTrak ST MAX price with club data, outdoor use and zero yearly fee, which is why the forums list it as the one to watch and the retailers list it as backordered.",
+      "image_url": ""
+    },
+    {
+      "brand": "ProTee",
+      "name": "VX",
+      "subtype": "overhead",
+      "tier": "qualified",
+      "mention_count": 7,
+      "mention_sources": [
+        "https://golfsimulatorsource.com/protee-vx/",
+        "https://golfsimulatorvideos.com/2026/02/protee-vx-review-best-overhead-golf-simulator-full-setup-gspro-test/",
+        "https://friendlygolfer.com/protee-vx-review/",
+        "https://launchmonitorhq.com/guides/protee-vx-review/",
+        "https://www.parpercision.com/protee-vx-review",
+        "https://golfsimdepot.com/products/protee-vx-essential-golf-simulator-kit",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/409887-first-sim-size-and-launchmonitor-dilemma"
+      ],
+      "price": {
+        "amount": 6500,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://golfsimulatorsource.com/protee-vx/",
+        "note": "ProTee does not publish a price; dealers quote $6,500 for the unit and $8,499 for the Golf Sim Depot kit with GSPro and two cameras."
+      },
+      "direct_url": "https://proteegroup.com/the-power-of-vx/",
+      "fallback_url": "https://golfsimdepot.com/products/protee-vx-essential-golf-simulator-kit",
+      "read_url": "https://golfsimulatorvideos.com/2026/02/protee-vx-review-best-overhead-golf-simulator-full-setup-gspro-test/",
+      "specs": {
+        "technology": "Overhead camera unit with two 120 fps swing cameras",
+        "placement": "ceiling, about 3 ft 4 in in front of the ball at a 9 ft ceiling, 3 ft 7 in at 10 ft",
+        "ball_flight_ft": 10,
+        "min_room_depth_ft": 14,
+        "indoor_outdoor": "indoor",
+        "club_data": "yes without stickers; 25 x 21 in hitting zone",
+        "spin": "measured (dimple spin in beta at the February 2026 review)",
+        "connectivity": "Windows PC; GSPro native, E6 and TGC via connector",
+        "spec_sources": "https://golfsimulatorsource.com/protee-vx/; https://golfsimulatorvideos.com/2026/02/protee-vx-review-best-overhead-golf-simulator-full-setup-gspro-test/",
+        "subscription_note": "ProTee Labs: included perpetual license"
+      },
+      "subscriptions": [
+        {
+          "name": "GSPro",
+          "amount": 250,
+          "period": "yearly",
+          "required_for": "GSPro; no ProTee connector fee",
+          "source_url": "https://golfsimulatorsource.com/protee-vx/"
+        },
+        {
+          "name": "3rd Party Software Connector",
+          "amount": 295,
+          "period": "lifetime",
+          "required_for": "E6 Connect, E6 Apex, TGC 2019, Creative Golf 3D",
+          "source_url": "https://golfsimulatorsource.com/protee-vx/"
+        }
+      ],
+      "room_fit": "Needs a 9 to 10 ft ceiling; overhead so the floor is clear and both handers play. Two-person install.",
+      "who_its_for": "The finished-room builder who wants an overhead unit with no subscription and native GSPro for well under Uneekor XO2 money.",
+      "pros": [
+        "No subscription; Labs is perpetual",
+        "GSPro native with no connector fee",
+        "Large hitting zone",
+        "Accuracy within 1 to 2 percent of a GC3 in independent tests cited by Golf Simulator Source",
+        "Forum regular Bubba22 called it the best unit he has tested"
+      ],
+      "cons": [
+        "Price not published by ProTee",
+        "Camera frame rate undisclosed",
+        "Windows only",
+        "E6 and TGC need the $295 connector"
+      ],
+      "known_issues": [
+        "An enthusiast test found carry about 10 percent short of a Trackman 4",
+        "Unmarked balls unreliable",
+        "Static shock during setup in dry conditions"
+      ],
+      "why_people_choose_it": "Overhead, no stickers, no yearly fee, and GSPro just works. The forum's answer to 'what beats the XO2 for less'.",
+      "image_url": ""
+    },
+    {
+      "brand": "Trackman",
+      "name": "iO",
+      "subtype": "overhead",
+      "tier": "qualified",
+      "mention_count": 7,
+      "mention_sources": [
+        "https://www.launchhouse.golf/learn/trackman-io-review/",
+        "https://northcourse.golf/articles/trackman-4-vs-trackman-io",
+        "https://golfsimulatorsource.com/trackman-io/",
+        "https://golfstead.com/trackman-io-launch-monitor-review",
+        "https://best-golf-simulator.com/trackman-cost/",
+        "https://www.parpercision.com/trackman-io-review",
+        "https://shop.carlofet.com/trackman-io-launch-monitor"
+      ],
+      "price": {
+        "amount": 13995,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.trackman.com/golf/launch-monitors/trackman-io",
+        "note": "Home edition; Home Complete with full club delivery data is $23,495 (Golfstead)."
+      },
+      "direct_url": "https://www.trackman.com/golf/launch-monitors/trackman-io",
+      "fallback_url": "https://shop.carlofet.com/trackman-io-launch-monitor",
+      "read_url": "https://golfstead.com/trackman-io-launch-monitor-review",
+      "specs": {
+        "technology": "Ceiling-mounted optical tracking (OERT), indoor only",
+        "placement": "ceiling, 3.3 to 3.5 ft forward of the tee; mount height 9 ft 4 in to 10 ft 6 in (Low, Mid, High versions; drop pole above)",
+        "ball_flight_ft": 10,
+        "min_room_depth_ft": 15,
+        "indoor_outdoor": "indoor",
+        "club_data": "ball data on Home; full club delivery needs Home Complete",
+        "spin": "measured",
+        "connectivity": "Ethernet to a PC running Trackman Performance Studio; no GSPro or E6",
+        "spec_sources": "https://golfstead.com/trackman-io-launch-monitor-review; https://www.trackman.com/golf/launch-monitors/trackman-io"
+      },
+      "subscriptions": [
+        {
+          "name": "TPS Home",
+          "amount": 700,
+          "period": "yearly",
+          "required_for": "software after the first year",
+          "source_url": "https://golfstead.com/trackman-io-launch-monitor-review"
+        },
+        {
+          "name": "TPS Home Complete",
+          "amount": 1100,
+          "period": "yearly",
+          "required_for": "expanded software with club data on the $23,495 edition",
+          "source_url": "https://golfstead.com/trackman-io-launch-monitor-review"
+        }
+      ],
+      "room_fit": "Trackman says no minimum distance in front of or behind the ball; the DUO version fits bays 10 ft wide. Ceiling 9 ft 4 in or higher.",
+      "who_its_for": "The owner building to a Trackman standard who will live inside Trackman's software.",
+      "pros": [
+        "Golfstead scored accuracy 10 of 10",
+        "Ceiling mounted, hands free, both handers",
+        "No floor lane requirements",
+        "Trackman course library and tour data"
+      ],
+      "cons": [
+        "$14k plus $700 a year, or $23.5k plus $1,100 for club data",
+        "No GSPro, E6 or any third-party software",
+        "Golfstead scored value 6.9 and compatibility 5.8"
+      ],
+      "known_issues": [
+        "Baffled enclosures must leave at least a third of the screen visible to the camera",
+        "Home tier omits club delivery data"
+      ],
+      "why_people_choose_it": "You buy the name and the course library and you stop thinking about accuracy. You also give up GSPro, which is why it rarely wins on the builder forums.",
+      "image_url": "https://a.storyblok.com/f/117513/1200x630/b706d46511/trackman_io_launch_monitor_simulator.jpg"
+    },
+    {
+      "brand": "Full Swing",
+      "name": "KIT",
+      "subtype": "radar",
+      "tier": "core",
+      "mention_count": 11,
+      "mention_sources": [
+        "https://breakingeighty.com/full-swing-kit-review",
+        "https://mygolfspy.com/we-tried-it/full-swing-kit/",
+        "https://rainorshinegolf.com/products/full-swing-kit-launch-monitor",
+        "https://golfsimulatorsource.com/full-swing-kit/",
+        "https://www.opengolfer.co.uk/blogs/news/full-swing-kit-review-premium-home-golf-simulator-monitor-uk-2026",
+        "https://www.parpercision.com/full-swing-kit-review",
+        "https://topshelfgolf.com/products/full-swing-kit-launch-monitor-and-golf-simulator",
+        "https://thegolface.com/golf-accessories/full-swing-kit-review/",
+        "https://www.playbetter.com/blogs/golf-simulator-space/full-swing-kit-space-requirements",
+        "https://shopindoorgolf.com/collections/full-swing-kit-golf-simulators",
+        "https://www.independentgolfreviews.com/best-golf-launch-monitors/"
+      ],
+      "price": {
+        "amount": 4999,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.fullswinggolf.com/kit-launch-monitor/"
+      },
+      "direct_url": "https://www.fullswinggolf.com/kit-launch-monitor/",
+      "fallback_url": "https://rainorshinegolf.com/products/full-swing-kit-launch-monitor",
+      "read_url": "https://breakingeighty.com/full-swing-kit-review",
+      "specs": {
+        "technology": "24 GHz dual-mode Doppler radar with 4K camera and OLED screen",
+        "placement": "8 to 10 ft behind the ball indoors, 10 ft outdoors",
+        "ball_flight_ft": 8,
+        "min_room_depth_ft": 16,
+        "indoor_outdoor": "both",
+        "club_data": "16 data points unlocked, including path, face and attack angle",
+        "spin": "measured outdoors; limited indoors by short flight",
+        "connectivity": "iOS app; E6 Connect mobile (5 courses) included; GSPro on PC supported",
+        "spec_sources": "https://www.fullswinggolf.com/kit-launch-monitor/; https://www.playbetter.com/blogs/golf-simulator-space/full-swing-kit-space-requirements"
+      },
+      "subscriptions": [
+        {
+          "name": "Premium membership",
+          "amount": 99,
+          "period": "yearly",
+          "required_for": "optional video storage and history",
+          "source_url": "https://breakingeighty.com/full-swing-kit-review"
+        },
+        {
+          "name": "GSPro",
+          "amount": 250,
+          "period": "yearly",
+          "required_for": "GSPro; no Full Swing fee",
+          "source_url": "https://northcourse.golf/articles/gspro-cost"
+        },
+        {
+          "name": "Full Swing Studio software",
+          "amount": 500,
+          "period": "yearly",
+          "required_for": "Full Swing's own simulator, which needs a Studio package from about $12,000",
+          "source_url": "https://breakingeighty.com/full-swing-kit-review"
+        }
+      ],
+      "room_fit": "Radar lane: 8 to 10 ft behind plus 8 to 10 ft of flight, so 16 to 20 ft; Full Swing's own studio minimum is about 18 ft long.",
+      "who_its_for": "The range-first golfer who wants Tiger's radar with a screen on it and occasionally plays GSPro indoors.",
+      "pros": [
+        "Within about 1 percent of Trackman outdoors in Breaking Eighty's test",
+        "All metrics unlocked, no data subscription",
+        "Best-in-class OLED display and 4K video",
+        "Rugged case"
+      ],
+      "cons": [
+        "Indoor accuracy weaker, especially wedges under 40 yards",
+        "Longest radar lane in its class",
+        "Native sim needs a $12k Studio package",
+        "No PC app in the standard package"
+      ],
+      "known_issues": [
+        "Reader reports of inconsistent indoor data and large variance on long clubs",
+        "Early spin bugs admitted by Full Swing and patched",
+        "Two-second data delay because it tracks full flight"
+      ],
+      "why_people_choose_it": "It is the radar unit people buy for the range and then try to make work in a 16 ft garage; the forums say it is happier outdoors.",
+      "image_url": "https://cdn.omdevops.com/wp-content/uploads/2022/07/09135756/FS-KIT-On-Range.jpg"
+    },
+    {
+      "brand": "TruGolf",
+      "name": "APOGEE",
+      "subtype": "overhead",
+      "tier": "qualified",
+      "mention_count": 8,
+      "mention_sources": [
+        "https://rainorshinegolf.com/products/trugolf-apogee-launch-monitor-simulator",
+        "https://topshelfgolf.com/products/trugolf-apogee-launch-monitor-and-golf-simulator",
+        "https://mygaragegolf.com/blogs/buying-guides/trugolf-apogee-launch-monitor-in-depth-review",
+        "https://gratergolf.com/products/trugolf-apogee-launch-monitor",
+        "https://golfsimplanet.com/trugolf-launch-monitors/",
+        "https://www.parpercision.com/trugolf-apogee-review",
+        "https://golfsimulatoradvisor.com/trugolf-apogee-review/",
+        "https://www.playbetter.com/blogs/golf-tech-news/launch-monitors-and-simulators-2026-pga-show"
+      ],
+      "price": {
+        "amount": 7995,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://shop.trugolf.com/products/apogee-by-trugolf",
+        "note": "Sale from $9,000; shown sold out on TruGolf's shop at read date. Older reviews quote $11,495."
+      },
+      "direct_url": "https://shop.trugolf.com/products/apogee-by-trugolf",
+      "fallback_url": "https://rainorshinegolf.com/products/trugolf-apogee-launch-monitor-simulator",
+      "read_url": "https://mygaragegolf.com/blogs/buying-guides/trugolf-apogee-launch-monitor-in-depth-review",
+      "specs": {
+        "technology": "Ceiling-mounted stereoscopic camera with onboard processor and voice control",
+        "placement": "ceiling, 9 to 10 ft above the hitting surface, 21 to 25 in in front of the tee",
+        "ball_flight_ft": 10,
+        "min_room_depth_ft": 14,
+        "indoor_outdoor": "indoor",
+        "club_data": "yes, no marked balls or clubs",
+        "spin": "measured",
+        "connectivity": "Windows PC for E6; E6 ENJOY subscription included",
+        "spec_sources": "https://mygaragegolf.com/blogs/buying-guides/trugolf-apogee-launch-monitor-in-depth-review; https://shop.trugolf.com/products/apogee-by-trugolf",
+        "subscription_note": "E6 ENJOY: bundled tier; one review reports a one-time $1,000 upgrade for full course play"
+      },
+      "subscriptions": [
+        {
+          "name": "E6 Connect Expanded",
+          "amount": 600,
+          "period": "yearly",
+          "required_for": "90-course library if wanted",
+          "source_url": "https://northcourse.golf/articles/e6-connect-cost"
+        }
+      ],
+      "room_fit": "Needs a 9 to 10 ft ceiling (108 to 120 in) above the mat; overhead so no floor lane.",
+      "who_its_for": "The E6 household that wants an overhead unit with no special balls and hands-free operation.",
+      "pros": [
+        "No marked balls or club stickers",
+        "Voice commands and slow-motion impact video",
+        "Low latency onboard processing",
+        "Price cut from $11,495 to $7,995"
+      ],
+      "cons": [
+        "GSPro support not stated by TruGolf or the reviews read",
+        "Ceiling install",
+        "Sold out at read date",
+        "Included E6 tier is limited"
+      ],
+      "known_issues": [
+        "Bundled E6 tier differs by seller (ENJOY vs 1-year Expanded)"
+      ],
+      "why_people_choose_it": "It is the overhead unit for people already living in E6 who do not want stickers; GSPro buyers look at the VX or XR instead.",
+      "image_url": "https://shop.trugolf.com/cdn/shop/files/APOGEE_Laser_Indicator-1-1-square.webp?v=1775038626"
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/square-golf/409693-square-golf-review",
+      "type": "forum",
+      "title": "Square golf review (Bubba22 vs GC3)",
+      "date": "2024-11-07",
+      "what_it_says": "Ball speed and launch angle match a GC3; spin axis and sidespin weak; marked balls and shaft stickers needed; no fee for GSPro."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/rapsodo-mlm2pro/392390-mlm2pro-just-about-done-with-it",
+      "type": "forum",
+      "title": "MLM2Pro - Just about done with it",
+      "date": "2023-07-24",
+      "what_it_says": "Owner lists disconnects, no-reads and the subscription wall; others say direct Wi-Fi mode and later firmware help; GSPro was via screen-share connectors at the time."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/rapsodo-mlm2pro/391813-mlm2pro-subscription-and-rpt-balls",
+      "type": "forum",
+      "title": "MLM2Pro subscription and RPT balls",
+      "date": "2023-07",
+      "what_it_says": "Without premium you cannot play E6, Awesome Golf or GSPro courses and spin is hidden; RPT balls needed for measured spin."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/rapsodo-mlm2pro/410044-mlm2pro-still-a-huge-disappointment",
+      "type": "forum",
+      "title": "MLM2Pro - Still a huge disappointment",
+      "date": "2024-11-18",
+      "what_it_says": "Connectivity complaints through 2025; one owner's out-of-warranty replacement finally worked well."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/409887-first-sim-size-and-launchmonitor-dilemma",
+      "type": "forum",
+      "title": "First sim, size and launchmonitor dilemma",
+      "date": "2024-11-13",
+      "what_it_says": "22 x 13 ft room, $2k budget: Mevo+ for data, Square for fun, Eye Mini Lite as the compromise, VX as the dream; R50 judged too expensive."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/flightscope/376088-considering-mevo-space-concerns",
+      "type": "forum",
+      "title": "Considering Mevo+: space concerns",
+      "date": "2022-10-11",
+      "what_it_says": "8 ft behind and 8 ft of flight is workable for irons; driver data settles around 10 ft of flight; the radar needs to see at least one ball revolution."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/general-and-unlisted/409839-garmin-r50",
+      "type": "forum",
+      "title": "Garmin R50",
+      "date": "2024-11-12",
+      "what_it_says": "$4,999 judged high against the Eye Mini and BLP; screen on the floor is a complaint; no dynamic loft or impact location."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/garmin/354547-garmin-r10-getting-seriously-good",
+      "type": "forum",
+      "title": "Garmin R10 getting seriously good",
+      "date": "2022-01-02",
+      "what_it_says": "Irons within 5 yards of Trackman; driver 20 yards short; spin axis off at least half the time indoors; 14 ft is the practical minimum."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/356045-mevo-vs-garmin-approach-r10-which-one-is-better",
+      "type": "forum",
+      "title": "Mevo+ vs Garmin Approach R10",
+      "date": "2022",
+      "what_it_says": "Mevo+ more accurate but not worth the gap for many; both share radar's indoor sidespin limit."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/skytrak/391267-skytrak",
+      "type": "forum",
+      "title": "Skytrak+",
+      "date": "2023-06-21",
+      "what_it_says": "Owners report charging stalls and lockups after 10 to 30 shots alongside others with flawless units."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/403770-which-launch-monitor-for-me-gc3-not-cutting-it",
+      "type": "forum",
+      "title": "Which launch monitor for me? GC3 not cutting it",
+      "date": "2024-04-01",
+      "what_it_says": "Low GC3 spin traced to range balls; MLM2Pro recommended as a budget alternative with RPT balls."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/407152-best-launch-monitor-focus-on-practice",
+      "type": "forum",
+      "title": "Best launch monitor - focus on practice",
+      "date": "2024-07-29",
+      "what_it_says": "Under $4k: Eye Mini Lite at $2,750 fits, Eye Mini at $4,500 does not; Lite is wired and stationary."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/flightscope/371737-mevo-or-wait-for-uneekor-eye-mini",
+      "type": "forum",
+      "title": "Mevo+ or wait for Uneekor Eye Mini",
+      "date": "2022-07-15",
+      "what_it_says": "Mevo+ wants 10 ft of flight for usable spin, 15 ft to shine; camera units expected to beat it on spin and putting."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/golf-simulators/392170-used-launch-monitors",
+      "type": "forum",
+      "title": "Used launch monitors",
+      "date": "2023-07-17",
+      "what_it_says": "Used GC2 is the forum favourite; camera beats radar indoors on sidespin; ask for serial, usage and flash/battery history."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/skytrak/175342-distance-from-hitting-area-to-screen",
+      "type": "forum",
+      "title": "Distance from hitting area to screen",
+      "date": "2018",
+      "what_it_says": "Camera units have no real minimum distance spec, unlike radar."
+    },
+    {
+      "url": "https://mygolfspy.com/news-opinion/three-of-the-most-accurate-indoor-launch-monitors-and-one-to-avoid/",
+      "type": "review",
+      "title": "Three of the most accurate indoor launch monitors (and one to avoid)",
+      "date": "2026-02",
+      "what_it_says": "GCQuad-referenced indoor test; three personal units stay close to baseline and one lags (page blocks fetch, see search snippet)."
+    },
+    {
+      "url": "https://mygolfspy.com/news-opinion/why-the-new-bushnell-circle-b-launch-pro-series-has-me-confused/",
+      "type": "review",
+      "title": "Why the new Bushnell Circle B Launch Pro series has me confused",
+      "date": "2025",
+      "what_it_says": "Explains the Circle B tiers and why the subscription structure confuses buyers."
+    },
+    {
+      "url": "https://mygolfspy.com/news-opinion/the-new-rapsodo-mlm2x-pro-launch-monitor-isnt-perfect-but-at-899-it-doesnt-have-to-be/",
+      "type": "review",
+      "title": "The new Rapsodo MLM2X Pro isn't perfect but at $899 it doesn't have to be",
+      "date": "2026-10",
+      "what_it_says": "Launch coverage of the MLM2XPRO at $899.99 with putting and an on-unit screen."
+    },
+    {
+      "url": "https://www.playbetter.com/blogs/golf-tech-news/rapsodo-mlm2xpro-everything-you-need-to-know",
+      "type": "retailer",
+      "title": "Rapsodo MLM2XPRO: everything you need to know",
+      "date": "2026-10-09",
+      "what_it_says": "On sale 2026-10-15 at $899.99; Core $199.99 and Studios $399.99 a year; GSPro, E6, Awesome Golf supported."
+    },
+    {
+      "url": "https://golficity.com/first-look-rapsodo-mlm2xpro-adds-putting-faster-performance-more/",
+      "type": "review",
+      "title": "First look: Rapsodo MLM2XPRO",
+      "date": "2026-10-05",
+      "what_it_says": "Same sensors as MLM2PRO, faster processing, putting, Bag Mapping and Wedge Matrix; MLM2PRO stays on sale."
+    },
+    {
+      "url": "https://breakingeighty.com/best-indoor-golf-launch-monitors",
+      "type": "review",
+      "title": "The 14 best indoor golf launch monitors of 2026",
+      "date": "2026-07-03",
+      "what_it_says": "Price and verdict for 14 units; Mevo Gen2 needs 16 ft, MLM2PRO 7 to 8 ft behind, SC4 Pro about 5 ft behind; SkyTrak+ closeout at $1,795."
+    },
+    {
+      "url": "https://breakingeighty.com/uneekor-eye-mini-lite",
+      "type": "review",
+      "title": "The Uneekor Eye Mini Lite is perfect for a very specific person",
+      "date": "2026-10-05",
+      "what_it_says": "$1,999, gaming PC and Ethernet required, Pro $199 plus GSPro $250 a year, accurate against Trackman."
+    },
+    {
+      "url": "https://breakingeighty.com/foresight-gc3-review",
+      "type": "review",
+      "title": "Foresight GC3 review",
+      "date": "2026-06-22",
+      "what_it_says": "GC3 now one unlocked SKU with the X3 LINK rangefinder; nine years of Gold before a Launch Pro costs the same."
+    },
+    {
+      "url": "https://breakingeighty.com/full-swing-kit-review",
+      "type": "review",
+      "title": "Full Swing KIT review",
+      "date": "2026-03-07",
+      "what_it_says": "8 to 10 ft behind the ball; within 1 percent of Trackman outdoors; indoor accuracy weaker; Premium $99 a year optional."
+    },
+    {
+      "url": "https://www.playbetter.com/blogs/golf-simulator-reviews/garmin-approach-r50-review",
+      "type": "retailer",
+      "title": "Garmin Approach R50 review",
+      "date": "2026-04-16",
+      "what_it_says": "Side-of-ball camera unit within a yard or two of a GC3; needs Garmin's own club stickers; no PC required."
+    },
+    {
+      "url": "https://www.playbetter.com/blogs/golf-simulator-reviews/garmin-approach-r10-review-golf-launch-monitor-under-1000",
+      "type": "retailer",
+      "title": "Garmin Approach R10 review (2026)",
+      "date": "2026-04-15",
+      "what_it_says": "6 to 8 ft behind the ball; spin needs RCT balls indoors; carry often 10 to 15 yards off a GC3."
+    },
+    {
+      "url": "https://www.playbetter.com/blogs/golf-simulator-reviews/flightscope-mevo-gen2-review",
+      "type": "retailer",
+      "title": "FlightScope Mevo Gen2 review",
+      "date": "2025-11-16",
+      "what_it_says": "$1,299, 8 ft behind plus 8 ft of flight, Pro Package $1,000 and Face Impact $499 one-time, no subscription."
+    },
+    {
+      "url": "https://www.playbetter.com/blogs/golf-simulator-reviews/swing-caddie-sc4-pro-review",
+      "type": "retailer",
+      "title": "Swing Caddie SC4 Pro review",
+      "date": "2024-12-06",
+      "what_it_says": "5 ft behind and 8 ft in front; no subscription; about one in 15 shots reads wrong; E6 integration not working at test time."
+    },
+    {
+      "url": "https://www.playbetter.com/blogs/golf-simulator-reviews/square-golf-launch-monitor-review",
+      "type": "retailer",
+      "title": "Square Golf launch monitor review (Home Edition)",
+      "date": "2025-04-30",
+      "what_it_says": "$699.99, credits not subscription, GSPro and E6 with no fee, about one in twelve shots missed, dynamic loft unreliable."
+    },
+    {
+      "url": "https://www.playbetter.com/blogs/golf-simulator-reviews/square-omni-indoor-outdoor-launch-monitor-review",
+      "type": "retailer",
+      "title": "Square Golf Omni review",
+      "date": "2026-01-21",
+      "what_it_says": "$1,600, four cameras, full club data, any ball, outdoor on grass, no subscription; a few missed impact reads."
+    },
+    {
+      "url": "https://www.playbetter.com/blogs/golf-simulator-space/garmin-approach-r50-space-requirements",
+      "type": "retailer",
+      "title": "Garmin Approach R50 space requirements",
+      "date": "2025-10-02",
+      "what_it_says": "10 ft wide, 10 ft deep, 9 ft ceiling for comfortable use."
+    },
+    {
+      "url": "https://www.playbetter.com/blogs/golf-simulator-space/square-golf-launch-monitor-space-requirements",
+      "type": "retailer",
+      "title": "Square Golf space requirements",
+      "date": "2025-10-08",
+      "what_it_says": "10 ft deep, 10 ft wide, 9 ft ceiling."
+    },
+    {
+      "url": "https://www.playbetter.com/blogs/golf-simulator-space/bushnell-launch-pro-space-requirements-for-golf-simulator",
+      "type": "retailer",
+      "title": "Bushnell Launch Pro space requirements",
+      "date": "2025",
+      "what_it_says": "Side-of-ball unit about 2 ft from the ball; 12 ft deep minimum, 15 to 17 recommended."
+    },
+    {
+      "url": "https://www.playbetter.com/blogs/golf-tech-news/launch-monitors-and-simulators-2026-pga-show",
+      "type": "retailer",
+      "title": "Launch monitors that defined the 2026 PGA Show",
+      "date": "2026-01-23",
+      "what_it_says": "Square Omni $1,600, Blue Tees Rainmaker $599, Rapsodo CLMPRO overhead coming, TruGolf LaunchBox $2,299 and Apogee $9,000."
+    },
+    {
+      "url": "https://www.playbetter.com/blogs/golf-simulator-comparisons/what-is-the-best-golf-launch-monitor-under-1000",
+      "type": "retailer",
+      "title": "Best golf launch monitor under $1,000 in 2026",
+      "date": "2026",
+      "what_it_says": "MLM2PRO as the under-$1,000 pick; Square for indoor-only; R10 as the entry point."
+    },
+    {
+      "url": "https://www.carlofet.com/blog/how-to-choose-a-golf-simulator-launch-monitor",
+      "type": "retailer",
+      "title": "Golf simulator launch monitor: how to choose (Carl's Place)",
+      "date": "2026",
+      "what_it_says": "Radar: 8 to 10 ft behind and 10 ft in front, so 19 ft plus; overhead needs 9 to 10 ft ceilings; camera suits shallow rooms."
+    },
+    {
+      "url": "https://www.carlofet.com/blog/measuring-your-space-for-an-indoor-golf-simulator",
+      "type": "retailer",
+      "title": "Measuring your space for an indoor golf simulator (Carl's Place)",
+      "date": "2026",
+      "what_it_says": "Depth is the most debated topic; the monitor you choose dictates the dimensions."
+    },
+    {
+      "url": "https://shopindoorgolf.com/pages/how-much-space-do-you-need-for-a-golf-simulator-setup",
+      "type": "retailer",
+      "title": "Golf simulator room dimensions (Shop Indoor Golf)",
+      "date": "2026",
+      "what_it_says": "Radar 18 to 20 ft total depth; 10 ft ball to screen minimum; camera units from about 10 ft."
+    },
+    {
+      "url": "https://shopindoorgolf.com/blogs/helpful-articles-videos/skytrak-st-max-review-whats-actually-new",
+      "type": "retailer",
+      "title": "ST MAX review: what's actually new (Shop Indoor Golf)",
+      "date": "2025",
+      "what_it_says": "Speed training and dual USB-C are the changes; SkyTrak+ discontinued; third-party support winding down; tiers Essential to Elite."
+    },
+    {
+      "url": "https://golfsimulatorvideos.com/skytrak-membership-plans/",
+      "type": "review",
+      "title": "SkyTrak membership plans explained 2026",
+      "date": "2026-10-15",
+      "what_it_says": "Basic free, Essential $99.99, Core $299.99 or $349.99, Elite $599.99; no tier adds GSPro."
+    },
+    {
+      "url": "https://golfsimulatorvideos.com/skytrak-st-max-review/",
+      "type": "review",
+      "title": "SkyTrak ST MAX review (Jay)",
+      "date": "2026-10-15",
+      "what_it_says": "$1,695 sale with a free Core year; sits 15 in beside the ball; not on GSPro's official list; small shot delay."
+    },
+    {
+      "url": "https://golfsimulatorvideos.com/2026/02/protee-vx-review-best-overhead-golf-simulator-full-setup-gspro-test/",
+      "type": "review",
+      "title": "ProTee VX review: overhead setup plus GSPro test",
+      "date": "2026-02-03",
+      "what_it_says": "9 to 10 ft ceiling, 3 ft 4 in in front of the ball, Labs included, 21 x 25 in zone, two-person install."
+    },
+    {
+      "url": "https://golfsimulatorsource.com/protee-vx/",
+      "type": "review",
+      "title": "ProTee VX review 2026: $6,500 overhead monitor",
+      "date": "2026-08-15",
+      "what_it_says": "Labs perpetual, GSPro native with no fee, E6/TGC connector $295 to $300 one-time, Windows only."
+    },
+    {
+      "url": "https://golfsimulatorsource.com/foresight-gc3/",
+      "type": "review",
+      "title": "Foresight GC3 review 2026",
+      "date": "2026-10-01",
+      "what_it_says": "GSPro requires Foresight+ Gold $599 plus GSPro $250; 10 x 10 x 9 ft minimum room."
+    },
+    {
+      "url": "https://golfsimulatorsource.com/comparisons/skytrak-plus-vs-square-golf-omni/",
+      "type": "review",
+      "title": "SkyTrak+ vs Square Golf Omni",
+      "date": "2026",
+      "what_it_says": "SkyTrak+ needs the Essential tier before any connection works; Omni has no fees."
+    },
+    {
+      "url": "https://northcourse.golf/articles/gspro-cost",
+      "type": "review",
+      "title": "GSPro cost (2026)",
+      "date": "2026-10-18",
+      "what_it_says": "$250 a year, no lifetime; connector fees by maker: Foresight+ Gold $599, Uneekor Pro $199, Rapsodo Core $199.99; none for Square, Mevo Gen2, Garmin; SkyTrak unofficial; Trackman iO none."
+    },
+    {
+      "url": "https://northcourse.golf/articles/e6-connect-cost",
+      "type": "review",
+      "title": "E6 Connect cost (2026)",
+      "date": "2026",
+      "what_it_says": "Basic $300 a year, Expanded $600 a year, Home $1,000 perpetual."
+    },
+    {
+      "url": "https://northcourse.golf/articles/awesome-golf-cost",
+      "type": "review",
+      "title": "Awesome Golf cost (2026)",
+      "date": "2026",
+      "what_it_says": "$14.99 a month, $159.99 a year or $349.99 lifetime; not compatible with SkyTrak."
+    },
+    {
+      "url": "https://northcourse.golf/articles/trackman-4-vs-trackman-io",
+      "type": "review",
+      "title": "Trackman iO vs Trackman 4",
+      "date": "2026-10-18",
+      "what_it_says": "iO $13,995 with first year of TPS, then about $700 a year; Home Complete adds $10,000; mounts for 8 ft 10 in to 10 ft 6 in ceilings."
+    },
+    {
+      "url": "https://golfstead.com/trackman-io-launch-monitor-review",
+      "type": "review",
+      "title": "Trackman iO launch monitor review (Golfstead)",
+      "date": "2025-11-11",
+      "what_it_says": "Home $13,995 plus $700 a year; Home Complete $23,495 plus $1,100; no GSPro or E6; accuracy 10, value 6.9."
+    },
+    {
+      "url": "https://golfstead.com/uneekor-eye-xo2-launch-monitor-review",
+      "type": "review",
+      "title": "Uneekor EYE XO2 review (Golfstead)",
+      "date": "2025",
+      "what_it_says": "Overhead three-camera unit with the largest hitting zone; premium price."
+    },
+    {
+      "url": "https://golfstead.com/square-golf-home-launch-monitor-review",
+      "type": "review",
+      "title": "Square Golf Home launch monitor review (Golfstead)",
+      "date": "2025",
+      "what_it_says": "Budget powerhouse for putting and chipping; marked balls matter."
+    },
+    {
+      "url": "https://pluggedingolf.com/uneekor-eye-mini-launch-monitor-review/",
+      "type": "review",
+      "title": "Uneekor EYE MINI review (Plugged In Golf)",
+      "date": "2025-02-03",
+      "what_it_says": "Unit sits 15.75 in from the ball; near GCQuad through mid irons; Pro $199 for third-party software."
+    },
+    {
+      "url": "https://pluggedingolf.com/flightscope-mevo-gen2-launch-monitor-review/",
+      "type": "review",
+      "title": "FlightScope Mevo Gen2 review (Plugged In Golf)",
+      "date": "2025",
+      "what_it_says": "Fusion radar plus camera at $1,299 with no subscription."
+    },
+    {
+      "url": "https://www.independentgolfreviews.com/best-golf-launch-monitors/",
+      "type": "review",
+      "title": "The best golf launch monitors we've tested for 2026",
+      "date": "2026-10-02",
+      "what_it_says": "Prices as of October 2026: R50 $4,999.99, MLM2PRO $599.99, R10 $499.99, Mevo Gen2 $1,299, Launch Pro $2,999.99, ST MAX $1,695 sale, KIT $4,999, Omni $1,599.99."
+    },
+    {
+      "url": "https://golfsimulatoradvisor.com/launch-monitor-radar-vs-camera-vs-overhead-room-sizing/",
+      "type": "review",
+      "title": "Launch monitor room sizing by technology type",
+      "date": "2026-06-19",
+      "what_it_says": "Radar 16 to 21 ft, camera 10 to 15 ft, overhead 14 to 18 ft; Mevo Gen2 6 to 7 ft behind, R10 7 ft behind, GC3 best at 12 to 15 ft."
+    },
+    {
+      "url": "https://www.bushnellgolf.com/products/launch-pro",
+      "type": "brand",
+      "title": "Bushnell Launch Pro product page",
+      "date": "2026-10-19",
+      "what_it_says": "$2,999.99; Free, Silver $199, Gold $599 (third-party), Course Pass $295 and $595; GSPro $250 needs Gold."
+    },
+    {
+      "url": "https://rapsodo.com/pages/rapsodo-golf-memberships",
+      "type": "brand",
+      "title": "Rapsodo Golf memberships",
+      "date": "2026-10-19",
+      "what_it_says": "Core $199.99 and Studios $399.99 per 12 months; spin rate and axis only with RPT balls."
+    },
+    {
+      "url": "https://flightscope.com/blogs/blogs/how-to-set-up-your-mevo-gen2",
+      "type": "brand",
+      "title": "How to set up FlightScope Mevo Gen2",
+      "date": "2025",
+      "what_it_says": "8 ft directly behind the ball, 8 ft of flight indoors."
+    },
+    {
+      "url": "https://rapsodo.zendesk.com/hc/en-us/articles/43996709470995-MLM2PRO-and-MLM-Troubleshooting-Guide",
+      "type": "brand",
+      "title": "MLM2PRO troubleshooting guide",
+      "date": "2026",
+      "what_it_says": "6.5 to 8 ft behind the ball with at least 8 ft of flight to the net."
+    },
+    {
+      "url": "https://www8.garmin.com/manuals/webhelp/GUID-D31AA1A2-C026-46EB-9699-FA94F1E8AF0B/EN-US/Approach_R50_OM_EN-US.pdf",
+      "type": "brand",
+      "title": "Garmin Approach R50 owner's manual",
+      "date": "2025",
+      "what_it_says": "Place the unit about 1.5 ft to the side of the tee at tee height."
+    },
+    {
+      "url": "https://uneekor.com/en-us/products/eye-xo2-standalone",
+      "type": "brand",
+      "title": "Uneekor EYE XO2 product page",
+      "date": "2026-10-19",
+      "what_it_says": "$10,999; 10 ft mount height; 13 x 16 x 10 ft room; Pro $199 for the third-party connector."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=KZfgqnKDTiA",
+      "type": "video",
+      "title": "MLM2Pro vs Square vs Mevo Gen 2: budget launch monitors compared",
+      "date": "2025",
+      "what_it_says": "Three-way comparison of the sub-$1,500 units."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=CF8kWeVf5Vk",
+      "type": "video",
+      "title": "Square launch monitor review after 365 days",
+      "date": "2025",
+      "what_it_says": "Long-term owner review of the Square Home edition."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=o2kiWxh90ho",
+      "type": "video",
+      "title": "NEW Rapsodo MLM2XPRO launch monitor review",
+      "date": "2026-10",
+      "what_it_says": "Launch-week review of the MLM2XPRO and the 4K PC software."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=tZuTdUQXVzc",
+      "type": "video",
+      "title": "SkyTrak+ vs Square Golf launch monitor",
+      "date": "2025",
+      "what_it_says": "Which camera unit suits a home sim."
+    },
+    {
+      "url": "https://slickdeals.net/f/17658234-bushnell-launch-pro-golf-simulator-and-launch-monitor-with-club-data-2999-99-500-off",
+      "type": "forum",
+      "title": "Slickdeals: Bushnell Launch Pro $500 off",
+      "date": "2024",
+      "what_it_says": "Buyers call it a great unit except for the subscription that is tied to it."
+    },
+    {
+      "url": "https://slickdeals.net/f/18805774-uneekor-eye-mini-core-golf-launch-monitor-simulator-15-ball-data-points-near-zero-latency-easy-setup-works-with-gspro-tgc19-e6-pc-laptop-required-amazon-exclusive-999",
+      "type": "forum",
+      "title": "Slickdeals: Uneekor Eye Mini Core $999",
+      "date": "2025-11",
+      "what_it_says": "Core is the Lite without the high-speed camera; needs a gaming PC; a home sim realistically needs Pro plus GSPro."
+    },
+    {
+      "url": "https://simweekly1.substack.com/p/were-upgrading-our-sim",
+      "type": "review",
+      "title": "Sim Weekly: we're upgrading our sim",
+      "date": "2025",
+      "what_it_says": "Square within a few yards of Trackman carry; works with GSPro, E6 and Awesome Golf."
+    }
+  ],
+  "blog_outline": {
+    "title": "Which launch monitor fits your garage: a room-depth and budget guide (with the subscription costs nobody prints)",
+    "sections": [
+      "Start with a tape measure, not a budget: the three placements (behind the ball, beside the ball, on the ceiling) and what each one does to your room depth",
+      "The 10 ft rule: why every maker and forum agrees on 10 ft from ball to screen, and why radar units add 5 to 10 ft behind you on top",
+      "Under 16 ft deep: the camera and overhead shortlist (Square Home and Omni, SkyTrak ST MAX, Bushnell Launch Pro, GC3, Garmin R50, Uneekor EYE MINI LITE, ProTee VX, EYE XR and XO2, Trackman iO) with the placement distance for each",
+      "16 to 21 ft deep: when radar makes sense (Garmin R10, Rapsodo MLM2PRO and MLM2XPRO, Mevo Gen2, Full Swing KIT) and the one radar unit that fits 13 ft (SC4 Pro)",
+      "Ceiling height is the second wall: 9 ft for a driver, 9 ft 4 in to 10 ft for overhead units, and what the forums say about 7 ft 6 in rooms",
+      "Spin is the real difference between tiers: measured vs calculated, and why marked balls (RPT, Square, RCT) and metal stickers exist",
+      "The subscription table nobody prints: GSPro $250 a year plus Foresight+ Gold $599, Uneekor Pro $199, Rapsodo Core $199.99, SkyTrak Core $299.99, Trackman TPS $700; the units with no maker fee (Square, Mevo Gen2, Garmin, ProTee VX); E6 at $300 or $600 a year or $1,000 for life; Awesome Golf at $159.99 a year or $349.99 for life",
+      "Three-year cost of ownership by budget: $500, $1,000, $2,000, $3,000, $6,000 and $14,000 builds with hardware plus software added up",
+      "What the forums argue about: MLM2PRO disconnects, SkyTrak's closed ecosystem and the OpenSky bridge, the Launch Pro Gold tax, Square's driver spin axis, radar putting under 6 ft",
+      "What changed in 2026: GC3 at $3,999 on sale, EYE MINI cut to $2,999, ST MAX at $1,695, Mevo+ and SkyTrak+ discontinued, MLM2XPRO launched with putting, Square Omni backordered, Rapsodo's CLMPRO overhead on the way",
+      "Buying used: GC2 and Launch Pro refurbs, serial and battery questions, and which subscriptions follow the unit",
+      "The decision grid: room depth across the top, budget down the side, one or two units in each cell, and the enclosure that goes with it"
+    ]
+  }
+}
