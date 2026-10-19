@@ -514,6 +514,11 @@ export default function PublicBagView({
 
   const hasCover = Boolean(bag.cover_photo_url);
 
+  // Bag-level links: 'source' is the credit line under the description; the rest form a "Read" row
+  const bagLevelLinks = bag.links || [];
+  const sourceLinks = bagLevelLinks.filter((l) => l.kind === 'source');
+  const readLinks = bagLevelLinks.filter((l) => l.kind !== 'source');
+
   return (
     <PageContainer variant="cool">
       {/* Header Section with ambient background */}
@@ -606,6 +611,25 @@ export default function PublicBagView({
                   "{bag.description}"
                 </p>
               )}
+              {/* Bag-level source links: the credit line ("Source: u/handle on r/golfsimulator") */}
+              {sourceLinks.length > 0 && (
+                <div className="mt-2 space-y-0.5">
+                  {sourceLinks.map((link) => (
+                    <p key={link.id} className="text-sm text-[var(--text-secondary)]">
+                      <span className="text-[var(--text-tertiary)]">Source: </span>
+                      <a
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow"
+                        className="underline underline-offset-2 hover:text-[var(--text-primary)]"
+                      >
+                        {link.label || getLinkDomain(link.url)}
+                      </a>
+                      <span className="text-[var(--text-tertiary)]"> · {getLinkDomain(link.url)}</span>
+                    </p>
+                  ))}
+                </div>
+              )}
               <div className="flex items-center gap-3 text-sm mt-3">
                 <span className="inline-flex items-center px-2.5 py-1 bg-[var(--teed-green-2)] text-[var(--teed-green-11)] rounded-full text-xs font-medium">
                   {items.length} {items.length === 1 ? 'item' : 'items'}
@@ -672,6 +696,26 @@ export default function PublicBagView({
                     >
                       #{tag}
                     </Link>
+                  ))}
+                </div>
+              )}
+
+              {/* Other bag-level links: a quiet "Read" row */}
+              {readLinks.length > 0 && (
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mt-2 text-sm">
+                  <span className="text-[var(--text-tertiary)]">Read</span>
+                  {readLinks.map((link) => (
+                    <a
+                      key={link.id}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] underline underline-offset-2"
+                    >
+                      {link.label || getLinkDomain(link.url)}
+                      <span className="text-[var(--text-tertiary)] no-underline">· {getLinkDomain(link.url)}</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
                   ))}
                 </div>
               )}

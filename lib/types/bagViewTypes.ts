@@ -85,6 +85,8 @@ export interface BagViewBag {
   category?: string;
   // Optional grouping (bag_sections), ordered by sort_index
   sections?: BagViewSection[];
+  // Bag-level links (links.bag_id = bags.id): kind 'source' is the credit line
+  links?: ItemLink[];
   // Version history fields
   version_number?: number;
   update_count?: number;

@@ -202,6 +202,15 @@ export default async function UserBagPage({ params }: PageProps) {
   // Get cover photo URL if present
   const coverPhotoUrl = bag.cover_photo_id ? photoUrls[bag.cover_photo_id] || null : null;
 
+  // Bag-level links (links.bag_id, migration 001; kind 'source' = the credit line).
+  // A plain second query: `links` carries two FKs (bag_id -> bags, bag_item_id -> bag_items)
+  // and the nested embed above already resolves the item side.
+  const { data: bagLinks } = await supabase
+    .from('links')
+    .select('id, url, kind, label, metadata, is_auto_generated')
+    .eq('bag_id', bag.id)
+    .order('created_at', { ascending: true });
+
   // Affiliate disclosure strip: affiliate_links has no bag_item_id column and there
   // is no creator_settings table, so the old lookup always errored and the strip
   // could never show. Keep the rendering path; feed it an empty result until a
@@ -213,6 +222,7 @@ export default async function UserBagPage({ params }: PageProps) {
   const bagWithCover = {
     ...bag,
     cover_photo_url: coverPhotoUrl,
+    links: bagLinks || [],
   };
 
   // Generate structured data for SEO and AI discoverability
