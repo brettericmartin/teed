@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Compass, Package, Search, Filter, X, Heart, ChevronDown, User, Bookmark } from 'lucide-react';
 import Link from 'next/link';
@@ -125,6 +125,7 @@ const getPlaceholderColor = (index: number) => {
 
 export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
@@ -165,6 +166,21 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   useEffect(() => {
     fetchBags();
   }, [showFollowing, showSaved, selectedCategory, searchQuery, selectedTags, sortBy]);
+
+  // Mirror filter state into the URL so /discover?category=golf-sim is shareable and
+  // survives reload. Defaults are omitted; no scroll jump; nothing pushed onto history.
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (showFollowing) params.set('following', 'true');
+    if (showSaved) params.set('saved', 'true');
+    if (selectedCategory) params.set('category', selectedCategory);
+    if (selectedTags.length > 0) params.set('tags', selectedTags.join(','));
+    if (searchQuery) params.set('search', searchQuery);
+    if (sortBy && sortBy !== 'newest') params.set('sort', sortBy);
+    const next = params.toString();
+    if (next === searchParams.toString()) return;
+    router.replace(`${pathname}${next ? `?${next}` : ''}`, { scroll: false });
+  }, [showFollowing, showSaved, selectedCategory, selectedTags, searchQuery, sortBy, pathname, router, searchParams]);
 
   // Debounced autocomplete
   useEffect(() => {

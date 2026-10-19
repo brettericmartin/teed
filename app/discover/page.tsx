@@ -2,8 +2,18 @@ import { createServerSupabase } from '@/lib/serverSupabase';
 import Navigation from '@/components/Navigation';
 import DiscoverClient from './DiscoverClient';
 
-export default async function DiscoverPage() {
+type DiscoverPageProps = {
+  searchParams: Promise<{ category?: string; tags?: string }>;
+};
+
+export default async function DiscoverPage({ searchParams }: DiscoverPageProps) {
   const supabase = await createServerSupabase();
+
+  // Read the shareable filters so /discover?category=golf-sim paints right on first load
+  // (the client re-fetches on mount, but the first paint should already match the URL).
+  const { category, tags } = await searchParams;
+  const initialCategory = category?.trim() || null;
+  const initialTags = tags?.split(',').map((t) => t.trim()).filter(Boolean) || [];
 
   // Check if user is authenticated (optional for discover page)
   const {
@@ -20,8 +30,8 @@ export default async function DiscoverPage() {
     profile = data;
   }
 
-  // Fetch discover data (all public bags) directly from Supabase
-  const { data: bags } = await supabase
+  // Fetch discover data (public bags, filtered by the URL's category/tags) directly from Supabase
+  let bagsQuery = supabase
     .from('bags')
     .select(`
       *,
@@ -39,7 +49,12 @@ export default async function DiscoverPage() {
         avatar_url
       )
     `)
-    .eq('is_public', true)
+    .eq('is_public', true);
+  if (initialCategory) bagsQuery = bagsQuery.eq('category', initialCategory);
+  // Same semantics as /api/discover: any of the requested tags (overlaps)
+  if (initialTags.length > 0) bagsQuery = bagsQuery.overlaps('tags', initialTags);
+
+  const { data: bags } = await bagsQuery
     .order('updated_at', { ascending: false, nullsFirst: false })
     .limit(100);
 
