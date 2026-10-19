@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ExternalLink, Tag } from 'lucide-react';
 import type { BagViewItem } from '@/lib/types/bagViewTypes';
+import { ItemImage } from '@/components/ui/ItemImage';
 
 interface GridViewProps {
   items: BagViewItem[];
@@ -77,11 +78,11 @@ function GridCard({
           onClick={onItemClick}
         >
           {item.photo_url ? (
-            <img
+            <ItemImage
               src={item.photo_url}
               alt={item.custom_name || 'Item'}
+              fallbackLabel={item.brand || item.custom_name}
               className="w-full h-full object-contain group-hover:scale-[1.05] transition-transform duration-500"
-              loading="lazy"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-100 to-gray-200">

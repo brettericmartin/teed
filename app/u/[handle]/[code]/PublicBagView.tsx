@@ -157,6 +157,8 @@ export default function PublicBagView({
   // Sign-up modal + deferred action state
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState<PendingAction>('save');
+  // Signed-out save tip is shown on hover/focus of the bookmark, never auto-opened
+  const [isSaveTipOpen, setIsSaveTipOpen] = useState(false);
 
   // Helper to copy promo code
   const handleCopyPromo = async (itemId: string, code: string) => {
@@ -497,7 +499,13 @@ export default function PublicBagView({
                   {bag.title}
                 </h1>
                 {/* Save Button with tooltip anchor */}
-                <div className="relative">
+                <div
+                  className="relative"
+                  onMouseEnter={() => setIsSaveTipOpen(true)}
+                  onMouseLeave={() => setIsSaveTipOpen(false)}
+                  onFocus={() => setIsSaveTipOpen(true)}
+                  onBlur={() => setIsSaveTipOpen(false)}
+                >
                   <button
                     onClick={handleSaveToggle}
                     disabled={isSaveLoading}
@@ -525,6 +533,7 @@ export default function PublicBagView({
                       isMobile={false}
                       bagId={bag.id}
                       bagCode={bag.code}
+                      open={isSaveTipOpen}
                     />
                   )}
                 </div>
@@ -1228,6 +1237,7 @@ export default function PublicBagView({
           isMobile={true}
           bagId={bag.id}
           bagCode={bag.code}
+          open={isSaveTipOpen}
         />
       )}
 

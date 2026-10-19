@@ -2,6 +2,7 @@
 
 import { ExternalLink, Trophy, Tag } from 'lucide-react';
 import type { BagViewItem, ItemLink } from '@/lib/types/bagViewTypes';
+import { ItemImage } from '@/components/ui/ItemImage';
 
 interface ListViewItemProps {
   item: BagViewItem;
@@ -45,11 +46,11 @@ export default function ListViewItem({
       {/* Photo */}
       {item.photo_url ? (
         <div className="w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 bg-[var(--sky-2)] rounded-lg overflow-hidden">
-          <img
+          <ItemImage
             src={item.photo_url}
             alt={item.custom_name || 'Item photo'}
+            fallbackLabel={item.brand || item.custom_name}
             className="w-full h-full object-contain"
-            loading="lazy"
           />
         </div>
       ) : (

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ExternalLink, ChevronDown, ChevronUp, Tag } from 'lucide-react';
 import type { BagViewItem } from '@/lib/types/bagViewTypes';
+import { ItemImage } from '@/components/ui/ItemImage';
 
 interface MasonryViewProps {
   items: BagViewItem[];
@@ -63,11 +64,11 @@ function MasonryCard({
             className="relative cursor-pointer overflow-hidden bg-white/50"
             onClick={onItemClick}
           >
-            <img
+            <ItemImage
               src={item.photo_url}
               alt={item.custom_name || 'Item'}
+              fallbackLabel={item.brand || item.custom_name}
               className="w-full h-auto object-contain group-hover:scale-[1.03] transition-transform duration-500"
-              loading="lazy"
             />
 
             {/* Quantity badge */}

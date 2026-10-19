@@ -12,33 +12,53 @@ interface SaveTooltipProps {
   isMobile: boolean;
   bagId: string;
   bagCode: string;
+  /**
+   * Controlled visibility. When provided the tip never auto-opens; the parent
+   * shows it on hover/focus of the bookmark. When omitted, falls back to the
+   * legacy 4s auto-open.
+   */
+  open?: boolean;
 }
 
-export function SaveTooltip({ onSignUpClick, isMobile, bagId, bagCode }: SaveTooltipProps) {
-  const [isVisible, setIsVisible] = useState(false);
+function wasDismissed() {
+  try {
+    return typeof window !== 'undefined' && !!localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return false;
+  }
+}
+
+export function SaveTooltip({ onSignUpClick, isMobile, bagId, bagCode, open }: SaveTooltipProps) {
+  const [autoVisible, setAutoVisible] = useState(false);
+  const [dismissed, setDismissed] = useState(wasDismissed);
+  const controlled = open !== undefined;
+  const isVisible = controlled ? !!open && !dismissed : autoVisible;
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const dismissed = localStorage.getItem(STORAGE_KEY);
-    if (dismissed) return;
+    if (controlled || dismissed) return;
 
     const timer = setTimeout(() => {
-      setIsVisible(true);
+      setAutoVisible(true);
       analytics.saveTooltipShown(bagId, bagCode);
     }, 4000);
 
     return () => clearTimeout(timer);
-  }, [bagId, bagCode]);
+  }, [bagId, bagCode, controlled, dismissed]);
+
+  useEffect(() => {
+    if (controlled && isVisible) analytics.saveTooltipShown(bagId, bagCode);
+  }, [controlled, isVisible, bagId, bagCode]);
 
   const handleDismiss = () => {
-    setIsVisible(false);
+    setAutoVisible(false);
+    setDismissed(true);
     localStorage.setItem(STORAGE_KEY, 'true');
     analytics.saveTooltipDismissed(bagId, bagCode);
   };
 
   const handleClick = () => {
-    setIsVisible(false);
+    setAutoVisible(false);
+    setDismissed(true);
     localStorage.setItem(STORAGE_KEY, 'true');
     analytics.saveTooltipClicked(bagId, bagCode);
     onSignUpClick();
