@@ -50,6 +50,7 @@ import {
 } from '../lib/components';
 import { DISCLOSURE, isOwnedBrand } from '../lib/disclosure';
 import { STOWGOLF_ORIGIN, stowgolfUrl } from '../lib/outbound';
+import { urlIsLive } from '../lib/components/urlIsLive';
 
 dotenv.config({ path: '.env.local', quiet: true });
 dotenv.config({ quiet: true });
@@ -254,24 +255,6 @@ export function buildBag(file: ComponentCategoryFile): SeedBag {
 // =============================================================================
 // Image verification (network only; no DB)
 // =============================================================================
-
-async function urlIsLive(url: string): Promise<boolean> {
-  const attempt = async (method: 'HEAD' | 'GET') => {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 10_000);
-    try {
-      const res = await fetch(url, { method, redirect: 'follow', signal: controller.signal });
-      return res.status;
-    } catch {
-      return 0;
-    } finally {
-      clearTimeout(timer);
-    }
-  };
-  let status = await attempt('HEAD');
-  if (status === 405 || status === 403 || status === 0) status = await attempt('GET');
-  return status === 200;
-}
 
 async function verifyImages(bag: SeedBag): Promise<Record<string, string | null>> {
   const photos: Record<string, string | null> = {};
