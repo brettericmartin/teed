@@ -34,6 +34,9 @@ import { SupplementTimingBadges } from '@/components/item/SupplementTimingBadges
 import { PricingBadge } from '@/components/item/PricingBadge';
 import { SaveTooltip } from '@/components/prompts/SaveTooltip';
 import { SignUpModal } from '@/components/prompts/SignUpModal';
+import { computeTotals, formatBagTotalLine, formatMoney, type BagTotals } from '@/lib/bags/totals';
+import { getSectionTint } from '@/lib/sectionTints';
+import { DISCLOSURE, isOwnedBrand } from '@/lib/disclosure';
 
 type PendingAction = 'save' | 'clone' | 'follow' | 'add-to-bag';
 
@@ -43,7 +46,23 @@ type ItemGroup = {
   description: string | null;
   isSectioned: boolean;
   items: BagViewItem[];
+  /** Section subtotal: price paid, else list price; subscriptions per year. */
+  totals: BagTotals;
 };
+
+/** "$2,971" plus "from 2 of 3 priced" when any item lacks a price; subscriptions as "$450 a year". */
+function formatSectionSubtotal(t: BagTotals): { amount: string | null; suffix: string | null } {
+  const oneTime = t.pricedCount + t.unpricedCount;
+  if (t.pricedCount === 0 && t.subscriptionCount === 0) return { amount: null, suffix: null };
+  if (t.pricedCount === 0) {
+    return { amount: `${formatMoney(t.yearly)} a year`, suffix: null };
+  }
+  const amount = t.subscriptionCount > 0
+    ? `${formatMoney(t.paid)} + ${formatMoney(t.yearly)} a year`
+    : formatMoney(t.paid);
+  const suffix = t.unpricedCount > 0 ? `from ${t.pricedCount} of ${oneTime} priced` : null;
+  return { amount, suffix };
+}
 
 /**
  * Group items by bag section (ordered by section sort_index), with any
@@ -58,22 +77,33 @@ function groupItemsBySection(
   const ordered = [...(sections || [])].sort((a, b) => a.sort_index - b.sort_index);
   const hasAssigned = ordered.length > 0 && items.some((it) => it.section_id && ordered.some((s) => s.id === it.section_id));
   if (!hasAssigned) {
-    return [{ key: 'all', name: null, description: null, isSectioned: false, items }];
+    return [{ key: 'all', name: null, description: null, isSectioned: false, items, totals: computeTotals(items) }];
   }
   const groups: ItemGroup[] = ordered
-    .map((s) => ({
-      key: s.id,
-      name: s.name,
-      description: s.description,
-      isSectioned: true,
-      items: items.filter((it) => it.section_id === s.id),
-    }))
+    .map((s) => {
+      const sectionItems = items.filter((it) => it.section_id === s.id);
+      return {
+        key: s.id,
+        name: s.name,
+        description: s.description,
+        isSectioned: true,
+        items: sectionItems,
+        totals: computeTotals(sectionItems),
+      };
+    })
     .filter((g) => g.items.length > 0);
   const rest = items.filter((it) => !it.section_id || !ordered.some((s) => s.id === it.section_id));
   if (rest.length > 0) {
-    groups.push({ key: 'unsectioned', name: 'Everything else', description: null, isSectioned: true, items: rest });
+    groups.push({ key: 'unsectioned', name: 'Everything else', description: null, isSectioned: true, items: rest, totals: computeTotals(rest) });
   }
   return groups;
+}
+
+/** A bag renders as a parts list when it is a golf-sim setup or any item sits in a section. */
+function isSetupBag(bag: BagViewBag, items: BagViewItem[]): boolean {
+  if (bag.category === 'golf-sim') return true;
+  const sections = bag.sections || [];
+  return sections.length > 0 && items.some((it) => it.section_id && sections.some((s) => s.id === it.section_id));
 }
 
 // Re-export types for component props
@@ -113,11 +143,18 @@ export default function PublicBagView({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // View style from URL parameter (editorial default on mobile, flow/masonry on desktop)
+  // View style from URL parameter (editorial default on mobile, flow/masonry on desktop).
+  // Setup bags (golf-sim, or any sectioned bag) are parts lists: List on both breakpoints.
   const validStyles: ViewStyle[] = ['grid', 'masonry', 'editorial', 'list', 'carousel'];
   const styleParam = searchParams.get('style') as ViewStyle;
-  const defaultStyle: ViewStyle = isMobile ? 'editorial' : 'masonry';
+  const setupBag = isSetupBag(bag, items);
+  const isGolfSim = bag.category === 'golf-sim';
+  const defaultStyle: ViewStyle = setupBag ? 'list' : isMobile ? 'editorial' : 'masonry';
   const viewStyle: ViewStyle = validStyles.includes(styleParam) ? styleParam : defaultStyle;
+  // Price column, subtotals and the bag total only when some item carries a price
+  const bagTotals = computeTotals(items);
+  const showPrices = setupBag && (bagTotals.pricedCount > 0 || bagTotals.subscriptionCount > 0);
+  const bagTotalLine = showPrices ? formatBagTotalLine(bagTotals) : '';
 
   const handleViewStyleChange = (newStyle: ViewStyle) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -572,6 +609,11 @@ export default function PublicBagView({
                 <span className="inline-flex items-center px-2.5 py-1 bg-[var(--teed-green-2)] text-[var(--teed-green-11)] rounded-full text-xs font-medium">
                   {items.length} {items.length === 1 ? 'item' : 'items'}
                 </span>
+                {bagTotalLine && (
+                  <span className="text-sm tabular-nums text-[var(--text-primary)]" data-testid="bag-total">
+                    {bagTotalLine}
+                  </span>
+                )}
                 {/* Completion badge */}
                 {bag.is_complete && <CompletionBadge isComplete={true} />}
                 {/* Changelog badge for recent updates */}
@@ -713,15 +755,43 @@ export default function PublicBagView({
             >
               {/* Carousel is one continuous slideshow; every other view honours bag sections */}
               {(viewStyle === 'carousel'
-                ? [{ key: 'all', name: null, description: null, isSectioned: false, items } as ItemGroup]
+                ? [{ key: 'all', name: null, description: null, isSectioned: false, items, totals: bagTotals } as ItemGroup]
                 : groupItemsBySection(bag.sections, items)
-              ).map((group) => (
+              ).map((group) => {
+                const subtotal = showPrices ? formatSectionSubtotal(group.totals) : { amount: null, suffix: null };
+                const tint = setupBag ? getSectionTint(group.name) : null;
+                return (
                 <section
                   key={group.key}
                   className={group.isSectioned ? 'mb-10 last:mb-0' : undefined}
                   aria-label={group.name || undefined}
                 >
-                  {group.isSectioned && (
+                  {group.isSectioned && (setupBag ? (
+                    /* Setup-bag section header: one baseline row on a hairline, 3-px tint rule */
+                    <div className={`mb-3 pb-2 pl-3 border-b border-[var(--border-subtle)] ${tint?.rule ?? ''}`}>
+                      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                        <div className="flex items-baseline gap-x-2 min-w-0">
+                          <h2 className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--text-secondary)]">
+                            {group.name}
+                          </h2>
+                          <span className="text-xs text-[var(--text-tertiary)]">
+                            {group.items.length} {group.items.length === 1 ? 'item' : 'items'}
+                          </span>
+                        </div>
+                        {subtotal.amount && (
+                          <div className="flex items-baseline gap-x-2 tabular-nums">
+                            <span className="text-sm font-medium text-[var(--text-primary)]">{subtotal.amount}</span>
+                            {subtotal.suffix && (
+                              <span className="text-xs text-[var(--text-tertiary)]">{subtotal.suffix}</span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      {group.description && (
+                        <p className="mt-1 text-sm text-[var(--text-secondary)]">{group.description}</p>
+                      )}
+                    </div>
+                  ) : (
                     <div className="mb-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                       <h2 className="text-lg md:text-xl font-semibold text-[var(--text-primary)]">
                         {group.name}
@@ -733,15 +803,16 @@ export default function PublicBagView({
                         <p className="basis-full text-sm text-[var(--text-secondary)]">{group.description}</p>
                       )}
                     </div>
-                  )}
+                  ))}
                   {viewStyle === 'list' ? (
-                    /* List View */
-                    <div className="flex flex-col bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden">
+                    /* List View: hairline border, no shadow (hairlines over shadows) */
+                    <div className="flex flex-col bg-[var(--surface)] rounded-[var(--radius-xl)] border border-[var(--border-subtle)] overflow-hidden">
                       {group.items.map((item) => (
                         <ListViewItem
                           key={item.id}
                           item={item}
                           isHero={bag.hero_item_id === item.id}
+                          showPrice={showPrices}
                           onItemClick={() => handleItemClick(item)}
                           onLinkClick={trackLinkClick}
                           getLinkCTA={getLinkCTA}
@@ -784,7 +855,8 @@ export default function PublicBagView({
                     />
                   )}
                 </section>
-              ))}
+                );
+              })}
             </motion.div>
           </AnimatePresence>
         )}
