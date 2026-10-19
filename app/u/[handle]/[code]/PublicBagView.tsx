@@ -21,6 +21,7 @@ import { StickyActionBar } from '@/components/ui/StickyActionBar';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { CloneSuccessModal } from '@/components/modals/CloneSuccessModal';
 import { CuratorNote } from '@/components/ui/CuratorNote';
+import { Button } from '@/components/ui/Button';
 import { useCelebration } from '@/lib/celebrations';
 import { CompletionBadge } from '@/components/BagCompletionButton';
 import { PageContainer, ContentContainer } from '@/components/layout/PageContainer';
@@ -1008,14 +1009,20 @@ export default function PublicBagView({
               )}
 
               {/* Why I Chose This - Hero context field */}
-              {selectedItem.why_chosen && (
+              {selectedItem.why_chosen && (isGolfSim ? (
+                /* Setup bags: same 2-px evergreen rule as the List row, no gradient, no emoji */
+                <div className="border-l-2 border-[var(--evergreen-6)] pl-3">
+                  <h3 className="text-sm font-medium text-[var(--text-secondary)] mb-1">Why I chose this</h3>
+                  <p className="text-[var(--text-primary)] whitespace-pre-wrap">{selectedItem.why_chosen}</p>
+                </div>
+              ) : (
                 <div className="bg-gradient-to-r from-[var(--teed-green-1)] to-[var(--teed-green-2)] border border-[var(--teed-green-6)] rounded-lg p-4">
                   <h3 className="text-sm font-medium text-[var(--teed-green-11)] mb-2 flex items-center gap-2">
                     <span>💡</span> Why I Chose This
                   </h3>
                   <p className="text-[var(--text-primary)] whitespace-pre-wrap">{selectedItem.why_chosen}</p>
                 </div>
-              )}
+              ))}
 
               {/* Compared To / Replaced */}
               {selectedItem.compared_to && (
@@ -1095,6 +1102,11 @@ export default function PublicBagView({
                   <h3 className="text-sm font-medium text-[var(--text-primary)] mb-2">Notes</h3>
                   <p className="text-[var(--text-secondary)] whitespace-pre-wrap">{selectedItem.notes}</p>
                 </div>
+              )}
+
+              {/* Disclosure for brands the site owner also builds (one constant, every surface) */}
+              {isOwnedBrand(selectedItem.brand) && (
+                <p className="text-xs text-[var(--text-tertiary)]">{DISCLOSURE}</p>
               )}
 
               {/* Promo Code */}
@@ -1180,8 +1192,37 @@ export default function PublicBagView({
                 <p className="text-[var(--text-secondary)] text-center py-8">No additional details</p>
               )}
 
-              {/* Add to My Bag Action */}
-              {!isOwnBag && (
+              {/* Actions. Golf-sim bags: the retailer exit is the primary, "Add to My Bag" is outline.
+                  Every other category keeps the single primary "Add to My Bag". */}
+              {isGolfSim ? (() => {
+                const modalPrimary = getPrimaryLink(selectedItem.links);
+                if (!modalPrimary && isOwnBag) return null;
+                const verb = modalPrimary?.label?.trim() || (modalPrimary ? getLinkCTA(modalPrimary).replace(/\s+on$/i, '') : '');
+                return (
+                  <div className="border-t border-[var(--border-subtle)] pt-6 mt-6 space-y-3">
+                    {modalPrimary && (
+                      <a
+                        href={modalPrimary.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => trackLinkClick(modalPrimary.id, selectedItem.id, modalPrimary.url)}
+                        className="flex items-center justify-center gap-2 w-full px-4 py-3 min-h-[48px] bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] text-white font-medium rounded-lg transition-colors"
+                      >
+                        <span>{verb}</span>
+                        <span aria-hidden="true">·</span>
+                        <span>{getLinkDomain(modalPrimary.url)}</span>
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    )}
+                    {!isOwnBag && (
+                      <Button variant="outline" size="md" onClick={handleAddToBag} className="w-full gap-2">
+                        <Plus className="w-5 h-5" />
+                        Add to My Bag
+                      </Button>
+                    )}
+                  </div>
+                );
+              })() : !isOwnBag && (
                 <div className="border-t border-[var(--border-subtle)] pt-6 mt-6">
                   <button
                     onClick={handleAddToBag}
