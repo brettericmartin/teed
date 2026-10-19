@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/apiAuth';
+import { createServerSupabase } from '@/lib/serverSupabase';
 import { createClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
 
@@ -63,6 +65,10 @@ export interface VisualCorrectionResponse {
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse<VisualCorrectionResponse>> {
+  const authClient = await createServerSupabase();
+  const auth = await requireAuth(authClient);
+  if (auth.error) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+
   try {
     const body: VisualCorrectionRequest = await request.json();
     const { visualDescription, originalGuess, correction, category } = body;

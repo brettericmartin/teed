@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/apiAuth';
+import { createServerSupabase } from '@/lib/serverSupabase';
 import { openai } from '@/lib/openaiClient';
 import { validateAndCompressImage } from '@/lib/ai';
 import type {
@@ -17,6 +19,10 @@ import type {
  * Uses gpt-4o-mini for speed and cost efficiency (~$0.001/image)
  */
 export async function POST(request: NextRequest): Promise<NextResponse<DetectObjectsResponse>> {
+  const supabase = await createServerSupabase();
+  const auth = await requireAuth(supabase);
+  if (auth.error) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+
   const startTime = Date.now();
 
   try {

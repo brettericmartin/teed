@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/apiAuth';
+import { createServerSupabase } from '@/lib/serverSupabase';
 import { openai } from '@/lib/openaiClient';
 import { validateAndCompressImage } from '@/lib/ai';
 import type {
@@ -17,6 +19,10 @@ import type {
  * instead of "how confident is AI in its initial guess"
  */
 export async function POST(request: NextRequest): Promise<NextResponse<ValidateMatchResponse>> {
+  const supabase = await createServerSupabase();
+  const auth = await requireAuth(supabase);
+  if (auth.error) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+
   try {
     const body: ValidateMatchRequest = await request.json();
     const { sourceImage, enrichedProduct } = body;

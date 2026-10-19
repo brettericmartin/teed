@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/apiAuth';
+import { createServerSupabase } from '@/lib/serverSupabase';
+import { getAdminUser } from '@/lib/adminAuth';
 import { createClient } from '@supabase/supabase-js';
 import type { IdentificationEvent } from '@/lib/analytics/identificationTelemetry';
 
@@ -21,6 +24,10 @@ function getSupabaseAdmin() {
  * Called from client-side telemetry module.
  */
 export async function POST(request: NextRequest) {
+  const authClient = await createServerSupabase();
+  const auth = await requireAuth(authClient);
+  if (auth.error) return auth.error;
+
   try {
     const event: IdentificationEvent = await request.json();
 
@@ -84,6 +91,11 @@ export async function POST(request: NextRequest) {
  * Uses service role key - internal use only.
  */
 export async function GET(request: NextRequest) {
+  const adminUser = await getAdminUser();
+  if (!adminUser) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const supabase = getSupabaseAdmin();
     if (!supabase) {

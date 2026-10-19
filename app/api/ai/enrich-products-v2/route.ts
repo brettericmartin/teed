@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/apiAuth';
+import { createServerSupabase } from '@/lib/serverSupabase';
 import { openai } from '@/lib/openaiClient';
 import { fetchProductImage } from '@/lib/ai';
 import type {
@@ -16,6 +18,10 @@ import type {
  * Searches are year-aware when model year is provided.
  */
 export async function POST(request: NextRequest): Promise<NextResponse<EnrichProductsResponse>> {
+  const supabase = await createServerSupabase();
+  const auth = await requireAuth(supabase);
+  if (auth.error) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+
   try {
     const body: EnrichProductsRequest = await request.json();
     const { products, yearAware } = body;

@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/apiAuth';
+import { createServerSupabase } from '@/lib/serverSupabase';
 import { createClient } from '@supabase/supabase-js';
 import type {
   StoreCorrectionRequest,
@@ -20,6 +22,10 @@ const supabase = createClient(
 );
 
 export async function POST(request: NextRequest): Promise<NextResponse<StoreCorrectionResponse>> {
+  const authClient = await createServerSupabase();
+  const auth = await requireAuth(authClient);
+  if (auth.error) return NextResponse.json({ success: false, learned: false, error: 'Unauthorized' }, { status: 401 });
+
   try {
     const body: StoreCorrectionRequest = await request.json();
     const { correction, finalProduct, sourceImage } = body;

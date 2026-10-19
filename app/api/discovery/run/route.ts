@@ -6,12 +6,18 @@
  */
 
 import { NextResponse } from 'next/server';
+import { getAdminUser } from '@/lib/adminAuth';
 import { runDiscovery, isValidCategory, getAllCategories } from '@/lib/discovery';
 import type { DiscoveryCategory, DiscoveryRunConfig } from '@/lib/discovery';
 
 export const maxDuration = 300; // 5 minutes max for edge functions
 
 export async function POST(request: Request) {
+  const adminUser = await getAdminUser();
+  if (!adminUser) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     const { category, config } = body as {

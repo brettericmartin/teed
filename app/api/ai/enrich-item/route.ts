@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/apiAuth';
+import { createServerSupabase } from '@/lib/serverSupabase';
 import OpenAI from 'openai';
 import { generateBrandContext } from '@/lib/brandKnowledge';
 import { smartSearch, loadLibrary, getProductsByBrand } from '@/lib/productLibrary';
@@ -649,6 +651,10 @@ function libraryResultsToSuggestions(results: SearchResult[]): ProductSuggestion
 // =============================================================================
 
 export async function POST(request: NextRequest) {
+  const supabase = await createServerSupabase();
+  const auth = await requireAuth(supabase);
+  if (auth.error) return auth.error;
+
   try {
     const body: EnrichmentRequest = await request.json();
     const { userInput, bagContext, existingAnswers = {}, forceAI = false, categoryHint } = body;

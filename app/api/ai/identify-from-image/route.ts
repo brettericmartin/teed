@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/apiAuth';
+import { createServerSupabase } from '@/lib/serverSupabase';
 import OpenAI from 'openai';
 import { trackApiUsage } from '@/lib/apiUsageTracker';
 
@@ -58,6 +60,10 @@ function detectBrandFromHint(hint: string): string | null {
 }
 
 export async function POST(request: NextRequest) {
+  const supabase = await createServerSupabase();
+  const auth = await requireAuth(supabase);
+  if (auth.error) return auth.error;
+
   const startTime = Date.now();
   try {
     const { imageBase64, textHint, bagContext } = await request.json();

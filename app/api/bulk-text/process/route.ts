@@ -1,4 +1,6 @@
 import { NextRequest } from 'next/server';
+import { requireAuth } from '@/lib/apiAuth';
+import { createServerSupabase } from '@/lib/serverSupabase';
 import OpenAI from 'openai';
 import { parseText, buildSearchQuery } from '@/lib/textParsing';
 import { smartSearch } from '@/lib/productLibrary';
@@ -414,6 +416,10 @@ Return 1-3 suggestions, ordered by confidence. If you recognize the product, con
 // ============================================================
 
 export async function POST(request: NextRequest) {
+  const supabase = await createServerSupabase();
+  const auth = await requireAuth(supabase);
+  if (auth.error) return auth.error;
+
   try {
     const body = await request.json();
     const mode: 'identify' | 'enhance' = body.mode || 'identify';
