@@ -1,5 +1,6 @@
 import { getAllPosts } from './index';
 import type { BlogPostMeta } from './types';
+import { COMPONENT_CATEGORIES } from '../components';
 
 /**
  * Maps use-case page slugs to relevant blog post tags/slugs.
@@ -15,6 +16,19 @@ const useCaseToBlogTags: Record<string, string[]> = {
   tech: ['tech', 'tech gear'],
   musicians: ['music', 'music gear'],
   fitness: ['fitness', 'fitness gear'],
+};
+
+/**
+ * Direct blog slugs per use-case page, shown before the tag-scored fill.
+ *
+ * TODO(components): the six golf-simulator component guides go here. The slugs
+ * are already defined (lib/components COMPONENT_CATEGORIES[*].blogSlug:
+ * golf-simulator-hitting-mats, -turf, -projectors, -computers, -launch-monitors,
+ * -enclosures) but no post exists yet; a slug with no file is skipped, so this
+ * list is safe to leave in place until the posts land under content/blog/.
+ */
+const useCaseToBlogSlugs: Record<string, string[]> = {
+  'golf-simulators': Object.values(COMPONENT_CATEGORIES).map((meta) => meta.blogSlug),
 };
 
 /**
@@ -34,6 +48,12 @@ export function getPostsForUseCase(useCaseSlug: string, limit = 3): BlogPostMeta
   const tags = useCaseToBlogTags[useCaseSlug] || [];
   const allPosts = getAllPosts();
 
+  // Direct slugs first (only those that exist as posts), then the tag-scored fill.
+  const direct = (useCaseToBlogSlugs[useCaseSlug] || [])
+    .map((slug) => allPosts.find((p) => p.slug === slug))
+    .filter((p): p is BlogPostMeta => !!p);
+  if (direct.length >= limit) return direct.slice(0, limit);
+
   // Score posts by how many matching tags they have
   const scored = allPosts.map((post) => {
     let score = 0;
@@ -47,11 +67,13 @@ export function getPostsForUseCase(useCaseSlug: string, limit = 3): BlogPostMeta
     return { post, score };
   });
 
-  return scored
-    .filter((s) => s.score > 0)
+  const fill = scored
+    .filter((s) => s.score > 0 && !direct.some((d) => d.slug === s.post.slug))
     .sort((a, b) => b.score - a.score)
-    .slice(0, limit)
+    .slice(0, Math.max(0, limit - direct.length))
     .map((s) => s.post);
+
+  return [...direct, ...fill];
 }
 
 /**
