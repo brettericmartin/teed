@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { SITE_URL } from '@/lib/siteUrl';
 
 // Lazy-initialize Resend client to avoid build-time errors
 let resendClient: Resend | null = null;
@@ -14,7 +15,7 @@ function getResendClient(): Resend | null {
 }
 
 const FROM_EMAIL = process.env.EMAIL_FROM || 'Teed <hello@teed.club>';
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://teed.club';
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || SITE_URL;
 
 interface SendEmailResult {
   success: boolean;

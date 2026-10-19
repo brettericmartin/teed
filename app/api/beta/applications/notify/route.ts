@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { SITE_URL } from '@/lib/siteUrl';
 import { createClient } from '@supabase/supabase-js';
 import { sendScorecardResultEmail } from '@/lib/email';
 import { getPersonaById } from '@/lib/scorecard';
@@ -106,7 +107,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Build referral link
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://teed.club';
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || SITE_URL;
     const referralCode = application.custom_referral_code || applicationId;
     const referralLink = `${baseUrl}/apply?ref=${referralCode}`;
 

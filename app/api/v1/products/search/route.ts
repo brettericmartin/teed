@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { SITE_URL } from '@/lib/siteUrl';
 import { createClient } from '@supabase/supabase-js';
 import { checkRateLimit, v1Headers } from '@/lib/api/rateLimit';
 
@@ -103,12 +104,12 @@ export async function GET(request: NextRequest) {
           title: bag.title,
           category: bag.category,
           description: bag.description,
-          url: `https://teed.club/u/${profile.handle}/${bag.code}`,
+          url: `${SITE_URL}/u/${profile.handle}/${bag.code}`,
         },
         curator: {
           handle: profile.handle,
           display_name: profile.display_name,
-          profile_url: `https://teed.club/u/${profile.handle}`,
+          profile_url: `${SITE_URL}/u/${profile.handle}`,
         },
       };
     });

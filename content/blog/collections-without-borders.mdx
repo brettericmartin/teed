@@ -13,7 +13,7 @@ relatedSlugs: ["embed-your-collection-anywhere", "the-calm-internet", "mobile-fi
 
 Most platforms want your content to live on their platform and nowhere else. Post on Instagram, and the only way to share it is a link back to Instagram. Your content becomes bait to drive traffic to their app, their ads, their engagement metrics.
 
-That was never going to work for Teed. The entire point is that your curated collection should be useful wherever someone encounters it — in a blog post, a YouTube description, a newsletter, a Notion page, a forum thread. If your bag only works on teed.so, it's a walled garden with a nicer coat of paint.
+That was never going to work for Teed. The entire point is that your curated collection should be useful wherever someone encounters it — in a blog post, a YouTube description, a newsletter, a Notion page, a forum thread. If your bag only works on teed.club, it's a walled garden with a nicer coat of paint.
 
 So we built portability into everything.
 
@@ -47,7 +47,7 @@ Every user profile and every bag has an RSS feed. Subscribe to a profile and you
 
 RSS is old technology. It's also the most reliable content subscription mechanism ever built. No algorithm, no inbox competition, no platform risk. If someone uses an RSS reader, they'll see your updates. Period.
 
-Implementation-wise, it's simple — an API route that generates valid Atom XML from bag and profile data. The feed URLs follow a predictable pattern: `teed.so/u/handle/feed.xml` for profiles, `teed.so/u/handle/bag-code/feed.xml` for individual bags. We include `<link rel="alternate" type="application/atom+xml">` tags in the HTML head so feed readers auto-discover them.
+Implementation-wise, it's simple — an API route that generates valid Atom XML from bag and profile data. The feed URLs follow a predictable pattern: `teed.club/u/handle/feed.xml` for profiles, `teed.club/u/handle/bag-code/feed.xml` for individual bags. We include `<link rel="alternate" type="application/atom+xml">` tags in the HTML head so feed readers auto-discover them.
 
 ## oEmbed
 

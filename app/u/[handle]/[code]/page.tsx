@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { SITE_URL } from '@/lib/siteUrl';
 import { notFound } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 import type { Metadata } from 'next';
@@ -50,13 +51,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const title = `${bag.title} | Teed`;
   const description = bag.description || `${bag.title} by ${profile.display_name || handle}`;
-  const url = `https://teed.club/u/${handle}/${code}`;
+  const url = `${SITE_URL}/u/${handle}/${code}`;
 
   // Dynamic OG image - always use the generated image for rich previews
-  const ogImageUrl = `https://teed.club/api/og/bag/${handle}/${code}`;
+  const ogImageUrl = `${SITE_URL}/api/og/bag/${handle}/${code}`;
 
   // oEmbed discovery URL
-  const oembedUrl = `https://teed.club/api/oembed?url=${encodeURIComponent(url)}&format=json`;
+  const oembedUrl = `${SITE_URL}/api/oembed?url=${encodeURIComponent(url)}&format=json`;
 
   return {
     title,
@@ -217,7 +218,7 @@ export default async function UserBagPage({ params }: PageProps) {
   // Generate structured data for SEO and AI discoverability
   const authorInfo = {
     name: profile.display_name || profile.handle,
-    url: `https://teed.club/u/${profile.handle}`,
+    url: `${SITE_URL}/u/${profile.handle}`,
   };
 
   const bagJsonLd = generateBagJsonLd(
@@ -254,9 +255,9 @@ export default async function UserBagPage({ params }: PageProps) {
   );
 
   const breadcrumbJsonLd = generateBreadcrumbJsonLd([
-    { name: 'Teed.club', url: 'https://teed.club' },
-    { name: profile.display_name || profile.handle, url: `https://teed.club/u/${profile.handle}` },
-    { name: bag.title, url: `https://teed.club/u/${profile.handle}/${code}` },
+    { name: 'Teed.club', url: SITE_URL },
+    { name: profile.display_name || profile.handle, url: `${SITE_URL}/u/${profile.handle}` },
+    { name: bag.title, url: `${SITE_URL}/u/${profile.handle}/${code}` },
   ]);
 
   return (

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { SITE_URL } from '@/lib/siteUrl';
 import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
@@ -32,7 +33,7 @@ export async function GET(
     );
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://teed.club';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || SITE_URL;
   const referralCode = app.custom_referral_code || id;
   const referralLink = `${baseUrl}/apply?ref=${referralCode}`;
 
@@ -84,7 +85,7 @@ export async function POST(
     );
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://teed.club';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || SITE_URL;
 
   return NextResponse.json({
     success: true,

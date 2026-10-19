@@ -16,7 +16,7 @@ export async function GET() {
       <pubDate>${new Date(post.publishedAt).toUTCString()}</pubDate>
       <description><![CDATA[${post.description}]]></description>
       <category>${CATEGORY_LABELS[post.category]}</category>
-      <author>hello@teed.so (${post.author})</author>
+      <author>hello@teed.club (${post.author})</author>
     </item>`
     )
     .join('');
