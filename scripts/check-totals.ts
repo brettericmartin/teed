@@ -12,7 +12,7 @@ import {
   listedPrice,
   yearlyCost,
 } from '../lib/bags/totals';
-import { stowgolfUrl, teedRefCode } from '../lib/outbound';
+import { MAX_REF_LENGTH, stowgolfUrl, teedRefCode } from '../lib/outbound';
 import { DISCLOSURE, isOwnedBrand } from '../lib/disclosure';
 
 const items = [
@@ -54,9 +54,12 @@ assert.equal(formatBagTotalLine(t), 'Total listed $3,621 · 4 of 7 priced · $66
 const empty = computeTotals([]);
 assert.equal(formatBagTotalLine(empty), '');
 
-// Outbound helper
+// Outbound helper: the whole ref is at most 24 characters (stowgolf.com's sanitizeRef cap)
 assert.equal(teedRefCode('garage-sim-fall-2026'), 'TEED-GARAGE-SIM-FALL-202');
+assert.ok(teedRefCode('garage-sim-fall-2026').length <= MAX_REF_LENGTH);
 assert.equal(teedRefCode('abc_def!'), 'TEED-ABCDEF');
+assert.equal(teedRefCode('enclosures-compared-oct-2026'), 'TEED-ENCLOSURES-COMPARED'); // trailing hyphen trimmed
+assert.ok(teedRefCode('x'.repeat(60)).length <= MAX_REF_LENGTH);
 const u = new URL(stowgolfUrl('/finish-your-bay', 'garage-sim-fall-2026'));
 assert.equal(u.origin, 'https://stowgolf.com');
 assert.equal(u.pathname, '/finish-your-bay');
@@ -64,6 +67,11 @@ assert.equal(u.searchParams.get('utm_source'), 'teed');
 assert.equal(u.searchParams.get('utm_medium'), 'bag');
 assert.equal(u.searchParams.get('utm_campaign'), 'garage-sim-fall-2026');
 assert.equal(u.searchParams.get('ref'), 'TEED-GARAGE-SIM-FALL-202');
+assert.ok((u.searchParams.get('ref') || '').length <= MAX_REF_LENGTH);
+// Explicit short ref (what the seed passes)
+const e = new URL(stowgolfUrl('/', 'garage-sim-fall-2026', 'TEED-GARAGE-SIM'));
+assert.equal(e.searchParams.get('ref'), 'TEED-GARAGE-SIM');
+assert.equal(e.searchParams.get('utm_campaign'), 'garage-sim-fall-2026');
 assert.equal(new URL(stowgolfUrl('/', 'x')).pathname, '/');
 
 // Disclosure

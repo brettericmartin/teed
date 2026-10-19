@@ -27,6 +27,8 @@ import { DISCLOSURE } from '../lib/disclosure';
 
 const OWNER_HANDLE = process.env.OWNER_HANDLE || 'brett';
 const CODE = 'garage-sim-fall-2026';
+/** Explicit short ref for stowgolf.com (its sanitizeRef caps the whole ref at 24 chars). */
+const REF = 'TEED-GARAGE-SIM';
 const DRY_RUN = process.argv.includes('--dry-run');
 
 type SeedLink = { url: string; kind: string; label: string };
@@ -52,7 +54,7 @@ const bag = {
   tags: ['golf simulator', 'garage', 'fold-flat', 'gspro', 'mlm2pro', 'under-10k', 'keeps-the-car'],
   sourceLinks: [
     {
-      url: stowgolfUrl('/finish-your-bay', CODE),
+      url: stowgolfUrl('/finish-your-bay', CODE, REF),
       kind: 'source',
       label: 'How this bay was finished',
     },
@@ -88,8 +90,8 @@ const sections: SeedSection[] = [
           depth_ft: 5,
         },
         links: [
-          { url: stowgolfUrl('/', CODE), kind: 'product', label: 'See it' },
-          { url: stowgolfUrl('/finish-your-bay', CODE), kind: 'article', label: 'Finish your bay' },
+          { url: stowgolfUrl('/', CODE, REF), kind: 'product', label: 'See it' },
+          { url: stowgolfUrl('/finish-your-bay', CODE, REF), kind: 'article', label: 'Finish your bay' },
         ],
       },
       {

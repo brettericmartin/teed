@@ -218,7 +218,7 @@ Seed first: `set -a && source .env.local && set +a && npx tsx scripts/create-gar
 - [ ] Why-chosen sits under the specs with a 2-px evergreen left rule and no emoji; the StowGolf row shows "Disclosure: Brett Martin runs Teed and builds StowGolf." under it in 12-px grey; no other row shows it
 - [ ] "More" expands the notes inline without opening the modal; clicking anywhere else on the row opens the modal
 - [ ] Exit button reads "See it · stowgolf.com" on the StowGolf row and "Carl's Place · carlofet.com" style elsewhere (domain always shown); "+1 link" opens the modal
-- [ ] Every stowgolf.com link carries `utm_source=teed&utm_medium=bag&utm_campaign=garage-sim-fall-2026&ref=TEED-GARAGE-SIM-FALL-202`
+- [ ] Every stowgolf.com link carries `utm_source=teed&utm_medium=bag&utm_campaign=garage-sim-fall-2026&ref=TEED-GARAGE-SIM`
 - [ ] Hero item shows an outline "Centerpiece" chip; nothing amber anywhere
 - [ ] Modal on the StowGolf item: "Why I chose this" with the evergreen rule, the disclosure line under Notes, "See it · stowgolf.com" as the primary button and "Add to My Bag" as an outline button (signed in, not own bag). On a non-golf-sim bag the modal is unchanged
 - [ ] Under the bag description: "Source: How this bay was finished · stowgolf.com" (the bag-level `source` link); other bag-level links appear in a "Read" row under the tags

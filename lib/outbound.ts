@@ -10,21 +10,34 @@
 
 export const STOWGOLF_ORIGIN = 'https://stowgolf.com';
 
-/** `ref` is built for people: A-Z, 0-9 and hyphen only, uppercased, max 24 chars. */
+/** stowgolf.com's sanitizeRef caps the whole `ref` at 24 characters. */
+export const MAX_REF_LENGTH = 24;
+const REF_PREFIX = 'TEED-';
+
+/**
+ * `ref` is built for people: `TEED-` + the bag code uppercased, non [A-Z0-9-]
+ * stripped, cut to 19 characters with any trailing hyphen trimmed, so the whole
+ * ref is at most 24 characters. Prefer an explicit short ref in seeds.
+ */
 export function teedRefCode(bagCode: string): string {
-  const cleaned = bagCode.toUpperCase().replace(/[^A-Z0-9-]/g, '');
-  return `TEED-${cleaned}`.slice(0, 24);
+  const cleaned = bagCode
+    .toUpperCase()
+    .replace(/[^A-Z0-9-]/g, '')
+    .slice(0, MAX_REF_LENGTH - REF_PREFIX.length)
+    .replace(/-+$/, '');
+  return `${REF_PREFIX}${cleaned}`;
 }
 
 export function stowgolfUrl(
   path: string,
   bagCode: string,
+  ref?: string,
   medium: 'bag' | 'for-page' = 'bag'
 ): string {
   const url = new URL(path.startsWith('/') ? path : `/${path}`, STOWGOLF_ORIGIN);
   url.searchParams.set('utm_source', 'teed');
   url.searchParams.set('utm_medium', medium);
   url.searchParams.set('utm_campaign', bagCode);
-  url.searchParams.set('ref', teedRefCode(bagCode));
+  url.searchParams.set('ref', (ref || teedRefCode(bagCode)).slice(0, MAX_REF_LENGTH));
   return url.toString();
 }

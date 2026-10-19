@@ -1248,7 +1248,7 @@ export default function PublicBagView({
                       <a
                         href={modalPrimary.url}
                         target="_blank"
-                        rel="noopener noreferrer"
+                        rel={isOwnedBrand(selectedItem.brand) ? 'noopener' : 'noopener noreferrer'}
                         onClick={() => trackLinkClick(modalPrimary.id, selectedItem.id, modalPrimary.url)}
                         className="flex items-center justify-center gap-2 w-full px-4 py-3 min-h-[48px] bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] text-white font-medium rounded-lg transition-colors"
                       >

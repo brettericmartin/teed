@@ -187,7 +187,8 @@ export default function ListViewItem({
         <a
           href={primaryLink.url}
           target="_blank"
-          rel="noopener noreferrer"
+          // Owned brands keep the referrer so stowgolf.com sees the Teed visit; everything else stays noreferrer
+          rel={disclosure ? 'noopener' : 'noopener noreferrer'}
           onClick={(e) => {
             e.stopPropagation();
             onLinkClick(primaryLink.id, item.id, primaryLink.url);
