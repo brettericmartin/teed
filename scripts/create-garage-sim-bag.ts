@@ -18,18 +18,27 @@
  *   set -a && source .env.local && set +a && npx tsx scripts/create-garage-sim-bag.ts
  * Dry run (no env, no DB; prints the payload and exits):
  *   npx tsx scripts/create-garage-sim-bag.ts --dry-run
- * Optional: OWNER_HANDLE=teed to seed under the platform account instead.
+ * Emit SQL (no env, no DB; the keyless path, same shape as seed-components.ts --emit-sql):
+ *   npx tsx scripts/create-garage-sim-bag.ts --emit-sql --out docs/sql/garage-sim.sql
+ * The bag lives on the @teed house account at /u/teed/garage-sim. OWNER_HANDLE overrides
+ * the owner for the service-key path only; --emit-sql always targets the house account.
  */
 
-import { createClient } from '@supabase/supabase-js';
+import fs from 'fs';
+import path from 'path';
 import { stowgolfUrl } from '../lib/outbound';
 import { DISCLOSURE } from '../lib/disclosure';
 
-const OWNER_HANDLE = process.env.OWNER_HANDLE || 'brett';
-const CODE = 'garage-sim-fall-2026';
+const HOUSE_HANDLE = 'teed';
+const HOUSE_USER_ID = '2c3e503a-78ce-4a8d-ae37-60b4a16d916e';
+const OWNER_HANDLE = process.env.OWNER_HANDLE || HOUSE_HANDLE;
+const CODE = 'garage-sim';
 /** Explicit short ref for stowgolf.com (its sanitizeRef caps the whole ref at 24 chars). */
 const REF = 'TEED-GARAGE-SIM';
 const DRY_RUN = process.argv.includes('--dry-run');
+const EMIT_SQL = process.argv.includes('--emit-sql');
+const OUT_INDEX = process.argv.indexOf('--out');
+const OUT = OUT_INDEX >= 0 ? process.argv[OUT_INDEX + 1] : undefined;
 
 type SeedLink = { url: string; kind: string; label: string };
 type SeedItem = {
@@ -47,7 +56,7 @@ type SeedItem = {
 type SeedSection = { name: string; description?: string; items: SeedItem[] };
 
 const bag = {
-  title: "Brett's Garage Sim — Fall 2026",
+  title: "Brett's Garage Sim, Fall 2026",
   description:
     'A two-car garage in Tempe that still parks a car. The enclosure is the StowGolf factory sample (10 ft wide, 7 ft 6 in to the screen top, 5 ft deep) and folds flat against the wall when the session ends. Launch monitor on the floor beside the ball, projector on a cart, GSPro on an old gaming laptop. Every item lists what it cost and why it is here; the history below records each swap as the setup changes.',
   category: 'golf-sim',
@@ -212,8 +221,206 @@ const sections: SeedSection[] = [
   },
 ];
 
+// =============================================================================
+// SQL emitter (--emit-sql): the upsert path as one re-runnable PostgreSQL script
+// =============================================================================
+//
+// Same shape as scripts/seed-components.ts --emit-sql: owner by handle (asserted
+// against HOUSE_USER_ID), bag by (owner_id, code), sections by (bag_id, name),
+// items by (bag_id, custom_name), links deleted and re-inserted per seeded item,
+// hero_item_id set only when the bag has none, stale items reported and never
+// deleted. The bag-level source link (links.bag_id, no bag_item_id) is deleted
+// and re-inserted too. Unlike the component bags this one carries price_paid and
+// purchase_date, because the garage bag lists what Brett actually paid.
+
+function dollarTag(base: string, ...contents: string[]): string {
+  for (let n = 0; ; n++) {
+    const tag = `$${base}${n === 0 ? '' : n}$`;
+    if (!contents.some((c) => c.includes(tag))) return tag;
+  }
+}
+
+/** Text literal, dollar-quoted so nothing inside needs escaping; NULL for null. */
+function sqlText(value: string | null | undefined): string {
+  if (value === null || value === undefined) return 'NULL';
+  const tag = dollarTag('q', value);
+  return `${tag}${value}${tag}`;
+}
+
+function sqlJsonb(value: unknown): string {
+  const json = JSON.stringify(value);
+  const tag = dollarTag('j', json);
+  return `${tag}${json}${tag}::jsonb`;
+}
+
+function sqlNumber(value: number | null | undefined): string {
+  if (value === null || value === undefined) return 'NULL';
+  if (!Number.isFinite(value)) throw new Error(`not a finite number: ${value}`);
+  return String(value);
+}
+
+function sqlDate(value: string | null | undefined): string {
+  if (!value) return 'NULL';
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) throw new Error(`not a date: ${value}`);
+  return `'${value}'::date`;
+}
+
+function doBody(): string {
+  const lines: string[] = [];
+  const push = (s = '') => lines.push(s);
+  const items = sections.flatMap((s) => s.items.map((item) => ({ section: s.name, item })));
+
+  push('DECLARE');
+  push('  v_owner uuid;');
+  push('  v_bag uuid;');
+  push('  v_section uuid;');
+  push('  v_item uuid;');
+  push('  v_first_item uuid := NULL;');
+  push('  v_stale integer := 0;');
+  push('BEGIN');
+  push(`  -- 1. Owner: @${HOUSE_HANDLE} must resolve to the house account.`);
+  push(`  SELECT id INTO v_owner FROM profiles WHERE handle = ${sqlText(HOUSE_HANDLE)};`);
+  push('  IF v_owner IS NULL THEN');
+  push(`    RAISE EXCEPTION 'House account @${HOUSE_HANDLE} not found in profiles';`);
+  push('  END IF;');
+  push(`  IF v_owner <> '${HOUSE_USER_ID}'::uuid THEN`);
+  push(`    RAISE EXCEPTION '@${HOUSE_HANDLE} resolved to %, expected ${HOUSE_USER_ID}; refusing to seed under the wrong account', v_owner;`);
+  push('  END IF;');
+  push();
+  push(`  -- 2. Bag ${CODE} by (owner_id, code).`);
+  push(`  SELECT id INTO v_bag FROM bags WHERE owner_id = v_owner AND code = ${sqlText(CODE)};`);
+  push('  IF v_bag IS NULL THEN');
+  push('    INSERT INTO bags (owner_id, code, title, description, category, tags, is_public, updated_at)');
+  push(`    VALUES (v_owner, ${sqlText(CODE)}, ${sqlText(bag.title)}, ${sqlText(bag.description)}, ${sqlText(bag.category)}, ${sqlJsonb(bag.tags)}, true, now())`);
+  push('    RETURNING id INTO v_bag;');
+  push('  ELSE');
+  push('    UPDATE bags SET');
+  push(`      title = ${sqlText(bag.title)},`);
+  push(`      description = ${sqlText(bag.description)},`);
+  push(`      category = ${sqlText(bag.category)},`);
+  push(`      tags = ${sqlJsonb(bag.tags)},`);
+  push('      is_public = true,');
+  push('      updated_at = now()');
+  push('    WHERE id = v_bag;');
+  push('  END IF;');
+  push('  -- Bag-level source links: deleted and re-inserted.');
+  push('  DELETE FROM links WHERE bag_id = v_bag AND bag_item_id IS NULL;');
+  for (const l of bag.sourceLinks) {
+    push(`  INSERT INTO links (bag_id, kind, url, label) VALUES (v_bag, ${sqlText(l.kind)}, ${sqlText(l.url)}, ${sqlText(l.label)});`);
+  }
+  push();
+  push('  -- 3. Sections by (bag_id, name), sort_index in file order.');
+  for (const [index, section] of sections.entries()) {
+    push(`  SELECT id INTO v_section FROM bag_sections WHERE bag_id = v_bag AND name = ${sqlText(section.name)};`);
+    push('  IF v_section IS NULL THEN');
+    push(`    INSERT INTO bag_sections (bag_id, name, description, sort_index) VALUES (v_bag, ${sqlText(section.name)}, ${sqlText(section.description || null)}, ${index});`);
+    push('  ELSE');
+    push(`    UPDATE bag_sections SET description = ${sqlText(section.description || null)}, sort_index = ${index} WHERE id = v_section;`);
+    push('  END IF;');
+  }
+  push();
+  push("  -- 4. Items by (bag_id, custom_name); 5. each item's links deleted and re-inserted.");
+  for (const [index, { section, item }] of items.entries()) {
+    const itemType = item.itemType || 'physical_product';
+    const specs = item.specs || {};
+    push(`  -- item ${index + 1}: ${item.customName.replace(/[\r\n]+/g, ' ')}`);
+    push(`  SELECT id INTO v_section FROM bag_sections WHERE bag_id = v_bag AND name = ${sqlText(section)};`);
+    push(`  SELECT id INTO v_item FROM bag_items WHERE bag_id = v_bag AND custom_name = ${sqlText(item.customName)};`);
+    push('  IF v_item IS NULL THEN');
+    push('    INSERT INTO bag_items (bag_id, section_id, custom_name, brand, custom_description, why_chosen, notes, price_paid, purchase_date, item_type, specs, quantity, sort_index)');
+    push(
+      `    VALUES (v_bag, v_section, ${sqlText(item.customName)}, ${sqlText(item.brand)}, ${sqlText(item.customDescription)}, ${sqlText(item.whyChosen || null)}, ${sqlText(item.notes || null)}, ${sqlNumber(item.pricePaid)}, ${sqlDate(item.purchaseDate)}, ${sqlText(itemType)}, ${sqlJsonb(specs)}, 1, ${index + 1})`
+    );
+    push('    RETURNING id INTO v_item;');
+    push('  ELSE');
+    push('    UPDATE bag_items SET');
+    push('      section_id = v_section,');
+    push(`      brand = ${sqlText(item.brand)},`);
+    push(`      custom_description = ${sqlText(item.customDescription)},`);
+    push(`      why_chosen = ${sqlText(item.whyChosen || null)},`);
+    push(`      notes = ${sqlText(item.notes || null)},`);
+    push(`      price_paid = ${sqlNumber(item.pricePaid)},`);
+    push(`      purchase_date = ${sqlDate(item.purchaseDate)},`);
+    push(`      item_type = ${sqlText(itemType)},`);
+    push(`      specs = ${sqlJsonb(specs)},`);
+    push('      quantity = 1,');
+    push(`      sort_index = ${index + 1}`);
+    push('    WHERE id = v_item;');
+    push('  END IF;');
+    push('  IF v_first_item IS NULL THEN v_first_item := v_item; END IF;');
+    push('  DELETE FROM links WHERE bag_item_id = v_item;');
+    const links = item.links || [];
+    if (links.length) {
+      push('  INSERT INTO links (bag_item_id, kind, url, label) VALUES');
+      links.forEach((l, i) => {
+        const end = i === links.length - 1 ? ';' : ',';
+        push(`    (v_item, ${sqlText(l.kind)}, ${sqlText(l.url)}, ${sqlText(l.label)})${end}`);
+      });
+    }
+    push();
+  }
+  push('  -- Items in the bag that are not in this file are reported, never deleted.');
+  push('  SELECT count(*) INTO v_stale FROM bag_items');
+  push(`  WHERE bag_id = v_bag AND custom_name NOT IN (${items.map((i) => sqlText(i.item.customName)).join(', ')});`);
+  push('  IF v_stale > 0 THEN');
+  push(`    RAISE NOTICE '${CODE}: % item(s) in the bag are not in the file', v_stale;`);
+  push('  END IF;');
+  push();
+  push('  -- hero_item_id: the first item, only when the bag has none.');
+  push('  IF v_first_item IS NOT NULL THEN');
+  push('    UPDATE bags SET hero_item_id = v_first_item WHERE id = v_bag AND hero_item_id IS NULL;');
+  push('  END IF;');
+  push(`  RAISE NOTICE '${CODE}: bag %, ${sections.length} section(s), ${items.length} item(s) upserted', v_bag;`);
+  push('END');
+  return lines.join('\n');
+}
+
+function emitSql(): string {
+  const body = doBody();
+  const tag = dollarTag('seed', body);
+  const out: string[] = [];
+  out.push('-- Generated by scripts/create-garage-sim-bag.ts --emit-sql');
+  out.push(`-- Bag: ${CODE} on @${HOUSE_HANDLE} (${HOUSE_USER_ID}), served at /u/${HOUSE_HANDLE}/${CODE}`);
+  out.push('-- Idempotent: re-running updates in place (bag by owner_id + code, sections by bag_id + name,');
+  out.push("-- items by bag_id + custom_name; each seeded item's links are deleted and re-inserted). Nothing");
+  out.push('-- else is deleted. One transaction: any error rolls the whole file back.');
+  out.push('BEGIN;');
+  out.push('');
+  out.push(`-- ${CODE}: ${bag.title}`);
+  out.push(`DO ${tag}`);
+  out.push(body);
+  out.push(`${tag};`);
+  out.push('');
+  out.push('-- 6. Summary: one row.');
+  out.push('SELECT');
+  out.push('  b.code,');
+  out.push('  (SELECT count(*) FROM bag_sections s WHERE s.bag_id = b.id) AS sections,');
+  out.push('  (SELECT count(*) FROM bag_items i WHERE i.bag_id = b.id) AS items,');
+  out.push('  (SELECT count(*) FROM links l JOIN bag_items i ON i.id = l.bag_item_id WHERE i.bag_id = b.id) AS links');
+  out.push('FROM bags b');
+  out.push(`WHERE b.owner_id = '${HOUSE_USER_ID}'::uuid AND b.code = ${sqlText(CODE)};`);
+  out.push('');
+  out.push('COMMIT;');
+  out.push('');
+  return out.join('\n');
+}
+
 async function main() {
   const payload = { owner: OWNER_HANDLE, code: CODE, bag, sections };
+
+  if (EMIT_SQL) {
+    const sql = emitSql();
+    const itemCount = sections.reduce((n, s) => n + s.items.length, 0);
+    const linkCount = sections.reduce((n, s) => n + s.items.reduce((m, i) => m + (i.links?.length || 0), 0), 0);
+    if (OUT) {
+      fs.mkdirSync(path.dirname(path.resolve(OUT)), { recursive: true });
+      fs.writeFileSync(OUT, sql, 'utf-8');
+      console.log(`[emit-sql] wrote ${OUT}: 1 bag, ${sections.length} section(s), ${itemCount} item(s), ${linkCount} item link(s), ${bag.sourceLinks.length} bag link(s). No database call made.`);
+    } else {
+      process.stdout.write(sql);
+    }
+    return;
+  }
 
   if (DRY_RUN) {
     console.log(JSON.stringify(payload, null, 2));
@@ -227,6 +434,7 @@ async function main() {
   if (!supabaseUrl || !serviceKey) {
     throw new Error('NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required (source .env.local), or pass --dry-run.');
   }
+  const { createClient } = await import('@supabase/supabase-js');
   const supabase = createClient(supabaseUrl, serviceKey);
 
   const { data: profile, error: profileError } = await supabase
