@@ -13,8 +13,8 @@ const staticPages = [
   { path: '/manifesto', priority: 0.7, changeFrequency: 'monthly' as const },
   { path: '/join', priority: 0.8, changeFrequency: 'monthly' as const },
   { path: '/updates', priority: 0.6, changeFrequency: 'weekly' as const },
-  { path: '/legal/privacy', priority: 0.3, changeFrequency: 'yearly' as const },
-  { path: '/legal/terms', priority: 0.3, changeFrequency: 'yearly' as const },
+  { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' as const },
+  { path: '/terms', priority: 0.3, changeFrequency: 'yearly' as const },
 ];
 
 // Use case landing pages

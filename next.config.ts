@@ -18,6 +18,15 @@ const nextConfig: NextConfig = {
     ],
   },
 
+  // The sitemap advertised /legal/privacy and /legal/terms before the pages
+  // existed (2026-10-20); keep those URLs resolving.
+  async redirects() {
+    return [
+      { source: '/legal/privacy', destination: '/privacy', permanent: true },
+      { source: '/legal/terms', destination: '/terms', permanent: true },
+    ];
+  },
+
   // Security headers
   async headers() {
     return [

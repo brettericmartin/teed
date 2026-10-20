@@ -243,11 +243,11 @@ export default function GPTPrivacyPolicyPage() {
             Teed
           </Link>
           {' · '}
-          <Link href="/legal/terms" className="hover:text-[var(--text-secondary)]">
+          <Link href="/terms" className="hover:text-[var(--text-secondary)]">
             Terms of Service
           </Link>
           {' · '}
-          <Link href="/legal/privacy" className="hover:text-[var(--text-secondary)]">
+          <Link href="/privacy" className="hover:text-[var(--text-secondary)]">
             Main Privacy Policy
           </Link>
         </div>
