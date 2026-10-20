@@ -69,10 +69,11 @@ type DiscoverClientProps = {
   initialBags: Bag[];
 };
 
+// Doctrine: no urgency, no trending. The "🆕 New" sort is gone and the activity ranking
+// is labelled for what it is. ('newest' is still accepted from old URLs.)
 const SORT_OPTIONS: { value: string; label: string; icon?: string }[] = [
-  { value: 'newest', label: 'New', icon: '🆕' },
-  { value: 'hot', label: 'Trending' },
-  { value: 'most_items', label: 'Most Items', icon: '📦' },
+  { value: 'hot', label: 'Recently updated' },
+  { value: 'most_items', label: 'Most items' },
 ];
 
 // Hot ranking: combines recency of activity + item count
@@ -145,7 +146,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
   const [selectedTags, setSelectedTags] = useState<string[]>(searchParams.get('tags')?.split(',').filter(Boolean) || []);
-  const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'newest');
+  const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'hot');
   const [showSortMenu, setShowSortMenu] = useState(false);
 
   // Autocomplete states
@@ -604,14 +605,19 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                 className={`bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] ${bag.category ? 'border-2' : 'border border-[var(--border-subtle)]'} overflow-hidden hover:shadow-glow-teed transition-all duration-300 group`}
                 style={bag.category ? { borderColor: getCategoryColors(bag.category).border } : undefined}
               >
-                {/* Cover Image or Featured Items Grid - Flexible Hero Layout */}
+                {/* Cover Image or Featured Items Grid - Flexible Hero Layout.
+                    A real link (not a div onClick) so middle-click, long-press and URL preview work. */}
                 <div
-                  onClick={() => router.push(`/u/${bag.owner.handle}/${bag.code}`)}
-                  className={`h-[180px] bg-gradient-to-br ${getBagGradient(bag.id)} relative overflow-hidden cursor-pointer`}
+                  className={`h-[180px] bg-gradient-to-br ${getBagGradient(bag.id)} relative overflow-hidden`}
                 >
+                  <Link
+                    href={`/u/${bag.owner.handle}/${bag.code}`}
+                    aria-label={bag.title}
+                    className="absolute inset-0 z-[5]"
+                  />
                   {/* Category Badge Overlay */}
                   {bag.category && (
-                    <div className="absolute top-2 left-2 z-10">
+                    <div className="absolute top-2 left-2 z-10 pointer-events-none">
                       <span className={`px-2 py-1 rounded-full text-xs font-semibold shadow-sm ${getCategoryColor(bag.category).bg} ${getCategoryColor(bag.category).text}`}>
                         {CATEGORIES.find(c => c.value === bag.category)?.icon} {CATEGORIES.find(c => c.value === bag.category)?.label}
                       </span>
@@ -748,8 +754,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                   {/* Owner Badge (bottom-left) */}
                   <Link
                     href={`/u/${bag.owner.handle}`}
-                    onClick={(e) => e.stopPropagation()}
-                    className="absolute bottom-3 left-3 flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-full px-2.5 py-1.5 shadow-sm hover:bg-white transition-colors group/owner"
+                    className="absolute bottom-3 left-3 z-10 flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-full px-2.5 py-1.5 shadow-sm hover:bg-white transition-colors group/owner"
                   >
                     {bag.owner.avatar_url ? (
                       <img
@@ -770,11 +775,8 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
 
                 {/* Bag Info - Compressed */}
                 <div className="p-3">
-                  <h3
-                    onClick={() => router.push(`/u/${bag.owner.handle}/${bag.code}`)}
-                    className="text-base font-semibold text-[var(--text-primary)] group-hover:text-[var(--teed-green-9)] transition-colors line-clamp-1 cursor-pointer mb-1"
-                  >
-                    {bag.title}
+                  <h3 className="text-base font-semibold text-[var(--text-primary)] group-hover:text-[var(--teed-green-9)] transition-colors line-clamp-1 mb-1">
+                    <Link href={`/u/${bag.owner.handle}/${bag.code}`}>{bag.title}</Link>
                   </h3>
 
                   {/* Metadata row */}
