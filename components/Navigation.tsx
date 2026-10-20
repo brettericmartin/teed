@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { User, Settings, LogOut, ChevronDown, Compass, LayoutDashboard, Shield, Sparkles, MessageCircle, BookOpen } from 'lucide-react';
+import { User, Settings, LogOut, ChevronDown, Compass, LayoutDashboard, Shield, Sparkles, MessageCircle, BookOpen, Menu, X } from 'lucide-react';
 import { useFeatureDiscovery, FEATURE_RELEASES } from './ui/FeatureBadge';
 
 interface NavigationProps {
@@ -16,8 +16,11 @@ interface NavigationProps {
 
 export default function Navigation({ userHandle, displayName, avatarUrl, isAuthenticated, isAdmin }: NavigationProps) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  // Visitor menu below the sm breakpoint: Blog and Updates were simply hidden at 390 px
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [settingsPanelOpen, setSettingsPanelOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -39,20 +42,24 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsProfileOpen(false);
       }
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
     };
 
-    if (isProfileOpen) {
+    if (isProfileOpen || isMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isProfileOpen]);
+  }, [isProfileOpen, isMenuOpen]);
 
-  // Close dropdown on route change
+  // Close dropdowns on route change
   useEffect(() => {
     setIsProfileOpen(false);
+    setIsMenuOpen(false);
   }, [pathname]);
 
   const handleSignOut = async () => {
@@ -97,7 +104,7 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
                   Teed.club
                 </span>
                 <span className="text-[11px] text-[var(--text-tertiary)] leading-none mt-1 hidden lg:block">
-                  Curations, Made Shareable
+                  Bags, made shareable
                 </span>
               </div>
             </Link>
@@ -254,6 +261,13 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
                           <span className="ml-auto w-2 h-2 bg-[var(--teed-green-9)] rounded-full animate-pulse" />
                         )}
                       </Link>
+                      <Link
+                        href="/blog"
+                        className="flex items-center gap-3 px-4 py-3 min-h-[48px] text-sm text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors"
+                      >
+                        <BookOpen className="w-4 h-4 text-[var(--text-secondary)]" />
+                        Blog
+                      </Link>
                       {isAdmin && (
                         <Link
                           href="/admin"
@@ -301,17 +315,50 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
           {/* Navigation + CTA (when not authenticated) */}
           {!isAuthenticated && (
             <div className="flex items-center gap-2 sm:gap-4">
+              {/* Phone-size menu: the same links, labelled, instead of an unlabelled compass */}
+              <div className="relative sm:hidden" ref={menuRef}>
+                <button
+                  type="button"
+                  onClick={() => setIsMenuOpen((v) => !v)}
+                  aria-expanded={isMenuOpen}
+                  aria-haspopup="true"
+                  aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+                  className="p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors"
+                >
+                  {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                </button>
+                {isMenuOpen && (
+                  <div className="absolute left-0 mt-2 w-56 rounded-xl bg-[var(--modal-bg)] shadow-[var(--shadow-6)] border border-[var(--modal-border)] overflow-hidden py-1">
+                    {[
+                      { href: '/discover', label: 'Discover', Icon: Compass },
+                      { href: '/for/golf-simulators', label: 'Golf sim setups', Icon: LayoutDashboard },
+                      { href: '/blog', label: 'Blog', Icon: BookOpen },
+                      { href: '/updates', label: 'Updates', Icon: Sparkles },
+                    ].map(({ href, label, Icon }) => (
+                      <Link
+                        key={href}
+                        href={href}
+                        onClick={() => { if (href === '/updates') updatesDiscovery.markAsSeen(); setIsMenuOpen(false); }}
+                        className="flex items-center gap-3 px-4 py-3 min-h-[48px] text-sm text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors"
+                      >
+                        <Icon className="w-4 h-4 text-[var(--text-secondary)]" />
+                        {label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
               {/* Discover link for visitors */}
               <Link
                 href="/discover"
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   pathname === '/discover'
                     ? 'bg-[var(--surface-hover)] text-[var(--text-primary)]'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]'
                 }`}
               >
                 <Compass className="w-4 h-4" />
-                <span className="hidden sm:inline">Discover</span>
+                <span>Discover</span>
               </Link>
               <Link
                 href="/blog"
