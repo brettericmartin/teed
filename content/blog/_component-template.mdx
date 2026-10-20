@@ -1,0 +1,87 @@
+---
+# TEMPLATE for the six component guides. Files starting with "_" are skipped by
+# lib/blog (getAllPosts, getPostBySlug, sitemap, RSS). To start a post, copy this
+# file to content/blog/<blogSlug>.mdx (the slug from lib/components
+# COMPONENT_CATEGORIES, e.g. golf-simulator-launch-monitors), fill every
+# <angle-bracket> field, delete these comment lines, and remove `draft: true`.
+title: "<Category> for a home golf simulator: what people actually buy"
+description: "<One sentence: the sub-shapes, the products that keep coming up in build threads, what the forum argues about, and the costs the spec sheets leave out.>"
+publishedAt: "<YYYY-MM-DD>"
+author: "Teed.club"
+category: "guide"
+tags: ["golf simulator", "<category>"]
+keywords: ["golf simulator <category>", "<category> for golf simulator", "home golf sim <category>", "<sub-shape> <category>", "<brand> <product> golf simulator"]
+# The reference bag this guide embeds. Code = sim-<category> on the @teed house account
+# (seeded by scripts/seed-components.ts).
+showcaseBag: { handle: "teed", code: "sim-<category>" }
+relatedSlugs: ["golf-simulator-<other-category>", "golf-simulator-<other-category>", "how-to-share-your-golf-bag-online"]
+draft: true
+---
+
+{/*
+  House rules for this post (vault plan 2026-10-19, council canon 2026-10-18):
+  - No rankings, no "best", no urgency. Sub-shapes and price bands are the only ordering.
+  - Every product named here has at least 5 independent sources; say so in plain words when it
+    helps ("comes up in most of the threads we read"), never as a score.
+  - Prices carry the date read ("$699 list on October 19, 2026"). Specs carry the maker.
+  - StowGolf appears only where a freestanding fold-flat bay is relevant, never first, never
+    called the best, and always followed by the disclosure sentence from lib/disclosure.ts,
+    verbatim: "Disclosure: Brett Martin runs Teed and builds StowGolf."
+  - No em dashes in prose. Use a comma, a colon or a full stop.
+  - Cite the forum threads you drew on in "Sources" with the date you read them.
+*/}
+
+<Callout variant="info">
+Short version: <two sentences a builder can act on: which sub-shape fits which room, and the one cost people forget>.
+</Callout>
+
+## Who this is for
+
+<Who is deciding on this part right now, and what they already have: the room, the budget tier, the launch monitor they own. Two or three sentences. Name the reader's situation, not a persona label.>
+
+## The sub-shapes
+
+<One short paragraph per sub-shape from the data file's `subtypes`, in the file's order. For each: what it is, the room it suits, the price band it lands in, and the trade-off people accept. No product names yet; this section is the map.>
+
+### <Sub-shape 1>
+
+<...>
+
+### <Sub-shape 2>
+
+<...>
+
+## The products people actually buy
+
+The list below is the reference bag for this category: every product that kept coming up across the threads, reviews and videos we read, grouped by <sub-shape | price band>, with the list price and the date it was read, the maker's specs, and one thread worth reading before you buy. Open any item for the pros, cons and known issues people report.
+
+<BagEmbed handle="teed" code="sim-<category>" />
+
+<Optionally, one paragraph per section of the bag: what the entries in that section have in common and the one question that separates them. Link product names to the maker's own page first; Amazon only when there is no direct page.>
+
+## What the forum argues about
+
+<Three to five arguments that recur in the threads, each as a heading-free paragraph: state the two sides fairly, then what the people who have lived with it tend to say. Cite the thread. This is the section that earns search traffic from people typing the argument into Google.>
+
+## The costs nobody prints
+
+<The lines that build guides leave off the total for this category: subscriptions, mounts, cables, underlay, shipping, the second purchase after the first one is wrong. Give amounts with dates where you have them.>
+
+{/* Keep the next section only where a fold-away bay changes the decision (enclosures, projectors,
+    mats, turf). Delete it for launch monitors and computers unless there is a real room-depth point. */}
+## If the bay has to fold away
+
+<How this part changes when the simulator shares a room with a car or a living room: what has to move, what can stay, what people do about it. If StowGolf is the relevant example, state its published facts only (10 ft wide, 5 ft deep, 7 ft 6 in to the screen top, folds flat against the wall, list $2,495, first 25 at $2,295, $100 refundable reservation) alongside the other fold-away and net options, and follow it with the sentence below.>
+
+Disclosure: Brett Martin runs Teed and builds StowGolf.
+
+## Sources
+
+<The 20 to 25 sources from the data file, one line each: title, site, type (forum, Reddit, review, video, retailer), date read, and what it says in a few words. Forum threads first.>
+
+- <Title> · <site> · forum · read <YYYY-MM-DD> · <what it says>
+- <Title> · <site> · review · read <YYYY-MM-DD> · <what it says>
+
+---
+
+*Every product above is also in the reference bag so you can add it to your own setup with one click. If you have built a sim and want it on Teed, [add yours](/for/golf-simulators#setups).*

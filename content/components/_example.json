@@ -1,0 +1,109 @@
+{
+  "_comment": "FIXTURE ONLY. Fake products for testing the loader, seed and library scripts. Files starting with an underscore are never loaded in production. Nothing in here is a real product, price or source.",
+  "category": "computers",
+  "read_date": "2026-10-19",
+  "subtypes": ["gaming-laptop", "prebuilt-desktop", "mini-pc", "no-pc"],
+  "products": [
+    {
+      "brand": "Example Brand",
+      "name": "Fixture Laptop 15",
+      "subtype": "gaming-laptop",
+      "tier": "core",
+      "mention_count": 12,
+      "mention_sources": [
+        "https://example.com/forum/fixture-laptop-thread",
+        "https://example.com/review/fixture-laptop"
+      ],
+      "price": {
+        "amount": 1299,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://example.com/fixture-laptop-15"
+      },
+      "direct_url": "https://example.com/fixture-laptop-15",
+      "fallback_url": "https://www.amazon.com/dp/EXAMPLE0001",
+      "read_url": "https://example.com/forum/fixture-laptop-thread",
+      "specs": {
+        "gpu": "Example RTX 4060",
+        "cpu": "Example 8-core",
+        "ram_gb": 16,
+        "storage_gb": 1000,
+        "screen_in": 15.6
+      },
+      "room_fit": "Sits on a cart or shelf beside the bay; no desk needed.",
+      "who_its_for": "The builder who wants one machine for the sim and the office.",
+      "pros": ["Runs the fixture sim at 1080p high", "Fits on the projector cart"],
+      "cons": ["Fan noise under load", "Throttles on battery"],
+      "known_issues": ["Must be on wall power in performance mode or frame rate halves"],
+      "why_people_choose_it": "It is the fake laptop every fixture thread recommends because it costs less than a desktop and still runs the sim.",
+      "image_url": "http://example.com/not-https-so-the-seed-must-skip-it.png"
+    },
+    {
+      "brand": "Example Brand",
+      "name": "Fixture Tower G1",
+      "subtype": "prebuilt-desktop",
+      "tier": "qualified",
+      "mention_count": 6,
+      "mention_sources": [
+        "https://example.com/forum/fixture-tower-thread"
+      ],
+      "price": null,
+      "direct_url": "",
+      "fallback_url": "https://www.amazon.com/dp/EXAMPLE0002",
+      "specs": {
+        "gpu": "Example RTX 4070",
+        "ram_gb": 32
+      },
+      "pros": [],
+      "cons": ["No price on the maker's page on the read date"],
+      "known_issues": [],
+      "why_people_choose_it": "A fake tower that shows what an unpriced, no-direct-page entry looks like in the seed."
+    }
+  ],
+  "software": [
+    {
+      "brand": "Example Software",
+      "name": "Fixture Sim Pro",
+      "tier": "core",
+      "mention_count": 20,
+      "mention_sources": ["https://example.com/forum/fixture-sim-pro"],
+      "pricing_model": "subscription",
+      "price_period": "yearly",
+      "platform": "Windows",
+      "minimum_pc": "Example GTX 1060, 16 GB RAM",
+      "price": {
+        "amount": 250,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://example.com/fixture-sim-pro/subscribe"
+      },
+      "direct_url": "https://example.com/fixture-sim-pro",
+      "read_url": "https://example.com/forum/fixture-sim-pro",
+      "specs": {},
+      "pros": ["Course library people trust"],
+      "cons": ["Windows only"],
+      "known_issues": [],
+      "why_people_choose_it": "The fake simulator software the fixture community runs, listed yearly so the total is honest."
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://example.com/forum/fixture-laptop-thread",
+      "type": "forum",
+      "title": "Fixture laptop for a sim?",
+      "date": "2026-01-01",
+      "what_it_says": "A fake thread that exists only to test the loader."
+    },
+    {
+      "url": "https://example.com/review/fixture-laptop",
+      "type": "review",
+      "title": "Fixture Laptop 15 review",
+      "date": "2026-02-01",
+      "what_it_says": "A fake review that exists only to test the loader."
+    }
+  ],
+  "blog_outline": {
+    "title": "Fixture: computers that run a home sim",
+    "sections": ["Who this is for", "The sub-shapes", "The products people actually buy"]
+  }
+}

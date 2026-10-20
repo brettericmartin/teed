@@ -1,0 +1,2033 @@
+{
+  "category": "computers",
+  "read_date": "2026-10-19",
+  "subtypes": [
+    "gaming-laptop",
+    "prebuilt-desktop",
+    "mini-pc",
+    "no-pc"
+  ],
+  "notes": {
+    "qualification": "5+ independent sources (brand site excluded) = qualified; 10+ = core. Under 5 go in watchlist, not products.",
+    "verification": "Every URL below was curl-checked 2026-10-19 (see curl-results.txt). HP, Acer (connection fail) and MSI, iBUYPOWER (403 bot block) maker pages could not be verified from the sandbox and are flagged in direct_url_status.",
+    "web_search_budget": "Search budget ran out before Reddit-specific and YouTube-specific sweeps; Reddit evidence comes from search snippets and forum threads only."
+  },
+  "software": [
+    {
+      "brand": "GSPro",
+      "name": "GSPro",
+      "subtype": "software",
+      "tier": "core",
+      "mention_count": 25,
+      "mention_sources": [
+        "https://gsprogolf.com/",
+        "https://gspro.gitbook.io/gspro-knowledge-base/pc-requirements/what-specs-can-run-gspro",
+        "https://homeperformancelab.com/best-laptops-for-gspro/",
+        "https://golfsimulatorvideos.com/best-computer-for-golf-simulator-2026-guide/",
+        "https://golfsimulatorvideos.com/gaming-pc-for-gspro/",
+        "https://northcourse.golf/articles/best-mini-pc-for-golf-simulator",
+        "https://www.opengolfer.co.uk/blogs/news/golf-simulator-pc-computer-guide-uk-specs-builds-recommendations-2026",
+        "https://topshelfgolf.com/blogs/golf/do-you-really-need-a-golf-simulator-computer-heres-why-surfthing-is-built-for-the-job",
+        "https://www.carlofet.com/blog/ipad-golf-simulator-setup",
+        "https://www.golfsimulatornerd.com/blog/gspro-golf-simulator-software-setup-2026",
+        "https://golfersauthority.com/rapsodo-mlm2pro-system-requirements-device-guide/",
+        "https://www.playbetter.com/blogs/golf-simulator-reviews/garmin-approach-r10-review-golf-launch-monitor-under-1000",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/412034-systems-recommendations-for-gspro",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/396937-gspro-pc-spec",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/412818-gaming-pc-help",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/412210-gaming-laptop-recommendations-gspro",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/398311-can-my-computer-support-gspro",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/413539-gaming-laptop-gspro-4k-advice",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/399985-computer-check-for-gc3-fsx-play-gspro",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/rapsodo-mlm2pro/402733-gspro-connector-with-mlm2pro-ipad-pro",
+        "https://forum.mygolfspy.com/topic/67465-gaming-and-sim-computers-the-asus-rog-ally-and-lenovo-legion-go/",
+        "https://forum.mygolfspy.com/topic/69976-outdoor-simulator-gspro-build/",
+        "https://forums.golfwrx.com/topic/1977518-someone-help-me-build-a-gaming-pc-or-should-i-just-buy/",
+        "https://rainorshinegolf.com/products/golf-simulator-gaming-pc-katana",
+        "https://rapsodo.com/products/mlm2pro"
+      ],
+      "price": {
+        "amount": 250,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://gsprogolf.com/"
+      },
+      "pricing_model": "subscription",
+      "price_period": "yearly",
+      "platform": "Windows 10 or 11 only; no macOS or iOS",
+      "direct_url": "https://gsprogolf.com/",
+      "fallback_url": "",
+      "read_url": "",
+      "specs": {
+        "desktop_tiers": "{\"1080p\":{\"gpu\":\"RTX 3060, RTX 4060, RX 6600, RX 6700 XT\",\"cpu\":\"i5 / Ryzen 5\",\"ram_gb\":16,\"storage_gb\":10},\"1080p_ultra\":{\"gpu\":\"RTX 3060 Ti, RTX 4060 Ti, RTX 3070, RTX 3070 Ti, RTX 5060, RTX 5060 Ti, RX 6800\",\"cpu\":\"i5 / Ryzen 5 (i7 / Ryzen 7 if running other apps)\",\"ram_gb\":16,\"storage_gb\":20},\"4k_ultra\":{\"gpu\":\"RTX 3080, RTX 4070 and up, RTX 5070 and up, RX 6900 XT, RX 7900 XT\",\"cpu\":\"i7 / Ryzen 7 (i9 / Ryzen 9 if running other apps)\",\"ram_gb\":32,\"storage_gb\":20}}",
+        "laptop_tiers": "{\"1080p\":{\"gpu\":\"RTX 4060 Laptop, RTX 3070, RTX 3070 Ti, RTX 3080, RX 6700\",\"ram_gb\":16},\"1080p_ultra\":{\"gpu\":\"RTX 4070 Laptop, RTX 3080 Ti, RX 6750 XT\",\"ram_gb\":16},\"4k_ultra\":{\"gpu\":\"RTX 4080 Laptop, RTX 4090 Laptop, RTX 3090 Ti, RX 6950 XT\",\"ram_gb\":32}}",
+        "homepage_summary": "gsprogolf.com lists 1080p minimum as 'GTX 3060' (a card that does not exist) + 16GB, great 1080p as RTX 3070 / 3060 Ti + 16GB, great 4K as RTX 3080 or better + 32GB; no CPU listed",
+        "source_urls": "[\"https://gsprogolf.com/\",\"https://gspro.gitbook.io/gspro-knowledge-base/pc-requirements/what-specs-can-run-gspro\"]",
+        "notes": "Each course download is about 1GB. Integrated graphics are below the floor. The knowledge base is the only official place that gives a separate laptop table.",
+        "os": "Windows 10 or 11 only; no macOS or iOS"
+      },
+      "room_fit": "",
+      "who_its_for": "",
+      "pros": [],
+      "cons": [],
+      "known_issues": [],
+      "why_people_choose_it": "",
+      "image_url": ""
+    },
+    {
+      "brand": "TruGolf",
+      "name": "E6 Connect",
+      "subtype": "software",
+      "tier": "core",
+      "mention_count": 11,
+      "mention_sources": [
+        "https://trugolf.zohodesk.com/portal/en/kb/articles/e6-connect-pc-and-ios-required-minimum-spec",
+        "https://www.trugolf.com/software/e6-2026/",
+        "https://apps.apple.com/us/app/e6-connect/id1360027026",
+        "https://www.opengolfer.co.uk/blogs/news/golf-simulator-pc-computer-guide-uk-specs-builds-recommendations-2026",
+        "https://topshelfgolf.com/blogs/golf/do-you-really-need-a-golf-simulator-computer-heres-why-surfthing-is-built-for-the-job",
+        "https://www.playbetter.com/blogs/golf-simulator-reviews/garmin-approach-r10-review-golf-launch-monitor-under-1000",
+        "https://breakingeighty.com/garmin-approach-r10-review",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/garmin/343012-garmin-r10-projector-setup",
+        "https://rainorshinegolf.com/products/golf-simulator-gaming-pc-katana",
+        "https://rapsodo.com/products/mlm2pro",
+        "https://flightscope.com/products/mevo-plus/"
+      ],
+      "price": null,
+      "pricing_model": "free",
+      "platform": "Windows 10/11 64-bit; iOS (iPad Pro 1st gen+, iPad 5th gen+, iPad Air 3rd gen+, iPad mini 5th gen+, iPhone 8+)",
+      "direct_url": "",
+      "fallback_url": "",
+      "read_url": "",
+      "specs": {
+        "minimum": "{\"gpu\":\"NVIDIA GTX 1070 or equivalent, dedicated, DirectX 11\",\"cpu\":\"Intel i5\",\"ram_gb\":8,\"storage_gb\":25}",
+        "recommended": "{\"gpu\":\"Community target RTX 3060 for smooth 1080p; third-party guides list RTX 2080+ or RTX 4070 Ti for 4K\",\"ram_gb\":16}",
+        "source_urls": "[\"https://trugolf.zohodesk.com/portal/en/kb/articles/e6-connect-pc-and-ios-required-minimum-spec\",\"https://apps.apple.com/us/app/e6-connect/id1360027026\"]",
+        "notes": "iOS version renders in 4:3 and at lower detail than the PC version (forum reports). App Store listing warns it may not run well on iPad Air or iPad mini.",
+        "os": "Windows 10/11 64-bit; iOS (iPad Pro 1st gen+, iPad 5th gen+, iPad Air 3rd gen+, iPad mini 5th gen+, iPhone 8+)"
+      },
+      "room_fit": "",
+      "who_its_for": "",
+      "pros": [],
+      "cons": [],
+      "known_issues": [],
+      "why_people_choose_it": "",
+      "image_url": ""
+    },
+    {
+      "brand": "TruGolf",
+      "name": "E6 (2026)",
+      "subtype": "software",
+      "tier": "core",
+      "mention_count": 11,
+      "mention_sources": [
+        "https://trugolf.zohodesk.com/portal/en/kb/articles/e6-connect-pc-and-ios-required-minimum-spec",
+        "https://www.trugolf.com/software/e6-2026/",
+        "https://apps.apple.com/us/app/e6-connect/id1360027026",
+        "https://www.opengolfer.co.uk/blogs/news/golf-simulator-pc-computer-guide-uk-specs-builds-recommendations-2026",
+        "https://topshelfgolf.com/blogs/golf/do-you-really-need-a-golf-simulator-computer-heres-why-surfthing-is-built-for-the-job",
+        "https://www.playbetter.com/blogs/golf-simulator-reviews/garmin-approach-r10-review-golf-launch-monitor-under-1000",
+        "https://breakingeighty.com/garmin-approach-r10-review",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/garmin/343012-garmin-r10-projector-setup",
+        "https://rainorshinegolf.com/products/golf-simulator-gaming-pc-katana",
+        "https://rapsodo.com/products/mlm2pro",
+        "https://flightscope.com/products/mevo-plus/"
+      ],
+      "price": null,
+      "pricing_model": "free",
+      "platform": "Windows 10 64-bit minimum; PC only, no iPad",
+      "direct_url": "",
+      "fallback_url": "",
+      "read_url": "",
+      "specs": {
+        "minimum": "{\"gpu\":\"NVIDIA RTX 3060 with 12GB VRAM\",\"cpu\":\"Intel i7 10th gen or newer\",\"ram_gb\":24,\"storage\":\"NVMe SSD\"}",
+        "source_urls": "[\"https://www.trugolf.com/software/e6-2026/\"]",
+        "notes": "Listed alongside E6 Connect on trugolf.com; sold standard with TruGolf launch monitors. The 12GB VRAM floor rules out 8GB RTX 4060 / 5060 cards.",
+        "os": "Windows 10 64-bit minimum; PC only, no iPad"
+      },
+      "room_fit": "",
+      "who_its_for": "",
+      "pros": [],
+      "cons": [],
+      "known_issues": [],
+      "why_people_choose_it": "",
+      "image_url": ""
+    },
+    {
+      "brand": "HB Studios / ProTee distribution",
+      "name": "The Golf Club 2019 (TGC 2019)",
+      "subtype": "software",
+      "tier": "core",
+      "mention_count": 20,
+      "mention_sources": [
+        "https://uneekor.com/en-us/products/eye-xo-standalone",
+        "https://apps.apple.com/us/app/e6-connect/id1360027026",
+        "https://apps.apple.com/us/app/awesome-golf-simulator/id1487825763",
+        "https://www.opengolfer.co.uk/blogs/news/golf-simulator-pc-computer-guide-uk-specs-builds-recommendations-2026",
+        "https://practical-golf.com/computer-guide-for-home-golf-simulators",
+        "https://thehickorygolfhub.com/golf-equipment/best-laptop-for-golf-simulator/",
+        "https://www.thelascopress.com/2026/01/best-golf-simulator-pc-2026-surfthing-review/",
+        "https://topshelfgolf.com/blogs/golf/do-you-really-need-a-golf-simulator-computer-heres-why-surfthing-is-built-for-the-job",
+        "https://www.golfsimulatornerd.com/blog/gspro-golf-simulator-software-setup-2026",
+        "https://breakingeighty.com/garmin-approach-r10-review",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/412034-systems-recommendations-for-gspro",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/412210-gaming-laptop-recommendations-gspro",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/416294-what-gpu",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/417652-best-golf-simulator-computer-surfthing-rtx-5080-build-review",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/212830-which-laptop",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/garmin/343012-garmin-r10-projector-setup",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/316231-ipad-mevo-projector-getting-confused-and-hoping-someone-can-help",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/rapsodo-mlm2pro/402733-gspro-connector-with-mlm2pro-ipad-pro",
+        "https://forum.mygolfspy.com/topic/67465-gaming-and-sim-computers-the-asus-rog-ally-and-lenovo-legion-go/",
+        "https://www.youtube.com/watch?v=Fuz0-9cjBXg"
+      ],
+      "price": null,
+      "pricing_model": "free",
+      "platform": "Windows 7/8.1/10 64-bit (ProTee page: Windows 10 minimum, Windows 11 recommended)",
+      "direct_url": "",
+      "fallback_url": "",
+      "read_url": "",
+      "specs": {
+        "minimum": "{\"gpu\":\"GTX 650 / Radeon HD 5770 (1GB) per Steam; GTX 670 per ProTee\",\"cpu\":\"Intel i5-760 2.8GHz\",\"ram_gb\":4,\"storage_gb\":12}",
+        "recommended": "{\"gpu\":\"GTX 660 / HD 7850 (2GB) per Steam; GTX 1060 for 1080p and GTX 1080 for 4K per ProTee\",\"cpu\":\"i5-4670 (Steam) or i7 3.2GHz (ProTee)\",\"ram_gb\":8,\"storage_gb\":30}",
+        "source_urls": "[\"https://csc.protee-united.com/hc/en-us/articles/360019033493-The-Golf-Club-2019-Computer-Requirements\",\"https://mygolfsimulator.com/golf-simulator-system-requirements/\"]",
+        "notes": "Lightest of the course-play PC titles; a GTX 1650 class laptop runs it at max settings per 2021 forum advice.",
+        "os": "Windows 7/8.1/10 64-bit (ProTee page: Windows 10 minimum, Windows 11 recommended)"
+      },
+      "room_fit": "",
+      "who_its_for": "",
+      "pros": [],
+      "cons": [],
+      "known_issues": [],
+      "why_people_choose_it": "",
+      "image_url": ""
+    },
+    {
+      "brand": "Awesome Golf",
+      "name": "Awesome Golf Simulator",
+      "subtype": "software",
+      "tier": "qualified",
+      "mention_count": 6,
+      "mention_sources": [
+        "https://insights.awesome-golf.com/docs/reference/compatibility/host/windows",
+        "https://apps.apple.com/us/app/awesome-golf-simulator/id1487825763",
+        "https://northcourse.golf/articles/best-mini-pc-for-golf-simulator",
+        "https://www.playbetter.com/blogs/golf-simulator-reviews/garmin-approach-r10-review-golf-launch-monitor-under-1000",
+        "https://www.awesome-golf.com/connect/",
+        "https://rapsodo.com/products/mlm2pro"
+      ],
+      "price": {
+        "amount": 159.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://apps.apple.com/us/app/awesome-golf-simulator/id1487825763"
+      },
+      "pricing_model": "subscription",
+      "price_period": "yearly",
+      "platform": "Windows 10+, iPadOS/iOS 15+, Android for some monitors, Apple Silicon Mac",
+      "direct_url": "https://apps.apple.com/us/app/awesome-golf-simulator/id1487825763",
+      "fallback_url": "",
+      "read_url": "",
+      "specs": {
+        "minimum": "{\"gpu\":\"Integrated graphics\",\"cpu\":\"2.2 GHz dual core (7th gen 2017+ Intel i3/i5/i7 runs it smoothly)\",\"ram_gb\":4,\"storage_gb\":2}",
+        "source_urls": "[\"https://insights.awesome-golf.com/docs/reference/compatibility/host/windows\",\"https://apps.apple.com/us/app/awesome-golf-simulator/id1487825763\"]",
+        "notes": "The only major sim title whose published floor is integrated graphics. Supports Garmin R10/R50, Rapsodo MLM2PRO, Mevo Gen2/Mevo+, Bushnell Launch Pro, Foresight GC3/GCQuad, Square, Uneekor EYE MINI.",
+        "os": "Windows 10+, iPadOS/iOS 15+, Android for some monitors, Apple Silicon Mac"
+      },
+      "room_fit": "",
+      "who_its_for": "",
+      "pros": [],
+      "cons": [],
+      "known_issues": [],
+      "why_people_choose_it": "",
+      "image_url": ""
+    },
+    {
+      "brand": "Datacrea (sold via Carl's Place, Foresight, FlightScope)",
+      "name": "Creative Golf 3D",
+      "subtype": "software",
+      "tier": "qualified",
+      "mention_count": 1,
+      "mention_sources": [
+        "https://www.playbetter.com/blogs/golf-simulator-reviews/garmin-approach-r10-review-golf-launch-monitor-under-1000"
+      ],
+      "price": null,
+      "pricing_model": "free",
+      "platform": "Windows 7 to 11 64-bit",
+      "direct_url": "",
+      "fallback_url": "",
+      "read_url": "",
+      "specs": {
+        "minimum": "{\"gpu\":\"Dedicated GPU with 1GB VRAM (older versions); 4GB VRAM for the 2025 Advanced build\",\"cpu\":\"2.5 GHz / Intel i3 or better\",\"ram_gb\":2,\"storage_gb\":42}",
+        "recommended": "{\"gpu\":\"GTX 1070 class (Foresight listing); 8GB VRAM NVIDIA for the 2025 build\",\"cpu\":\"Intel i5\",\"ram_gb\":8,\"note\":\"2025 review lists 16GB minimum, 32GB optimum\"}",
+        "source_urls": "[\"https://shop.carlofet.com/creative-golf-3d-software\",\"https://www.foresightsports.com/products/creative-golf\",\"https://mygolfsimulator.com/golf-simulator-system-requirements/\"]",
+        "notes": "No single current official spec page found; figures differ between the 2021 manual, retailer tables, and the 2025 review.",
+        "os": "Windows 7 to 11 64-bit"
+      },
+      "room_fit": "",
+      "who_its_for": "",
+      "pros": [],
+      "cons": [],
+      "known_issues": [],
+      "why_people_choose_it": "",
+      "image_url": ""
+    },
+    {
+      "brand": "Foresight Sports",
+      "name": "FSX Play",
+      "subtype": "software",
+      "tier": "qualified",
+      "mention_count": 6,
+      "mention_sources": [
+        "https://support.foresightsports.com/fsx-play-download-and-installation",
+        "https://homeperformancelab.com/fsx-play-system-requirements/",
+        "https://golfsimulatorvideos.com/best-computer-for-golf-simulator-2026-guide/",
+        "https://northcourse.golf/articles/best-mini-pc-for-golf-simulator",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/416279-laptop-for-fsx-play",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/399985-computer-check-for-gc3-fsx-play-gspro"
+      ],
+      "price": null,
+      "pricing_model": "free",
+      "platform": "Windows 10 64-bit or later; no Mac, iPad, Android",
+      "direct_url": "",
+      "fallback_url": "",
+      "read_url": "",
+      "specs": {
+        "minimum": "{\"gpu\":\"NVIDIA RTX 3060 or better; AMD and Quadro not supported\",\"cpu\":\"Intel 7th gen or newer i5/i7/i9; AMD not recommended\",\"ram_gb\":8}",
+        "recommended": "{\"gpu\":\"RTX 3070 Ti, 3080, 3090 (40 and 50 series also work)\",\"cpu\":\"Intel i7/i9 10th gen+\",\"ram_gb\":16}",
+        "source_urls": "[\"https://support.foresightsports.com/fsx-play-download-and-installation\",\"https://homeperformancelab.com/fsx-play-system-requirements/\"]",
+        "notes": "Foresight says Foresight+ and Premier replace FSX; new FSX Play licenses are no longer issued and the title gets only critical fixes (per Foresight guidance summarized by Home Performance Lab and Northcourse, Sept 2026).",
+        "os": "Windows 10 64-bit or later; no Mac, iPad, Android"
+      },
+      "room_fit": "",
+      "who_its_for": "",
+      "pros": [],
+      "cons": [],
+      "known_issues": [],
+      "why_people_choose_it": "",
+      "image_url": ""
+    },
+    {
+      "brand": "Foresight Sports",
+      "name": "Foresight Premier",
+      "subtype": "software",
+      "tier": "qualified",
+      "mention_count": 3,
+      "mention_sources": [
+        "https://support.foresightsports.com/fsx-play-download-and-installation",
+        "https://premier.foresightsports.com/",
+        "https://northcourse.golf/articles/best-mini-pc-for-golf-simulator"
+      ],
+      "price": null,
+      "pricing_model": "free",
+      "platform": "Windows 10/11 64-bit",
+      "direct_url": "",
+      "fallback_url": "",
+      "read_url": "",
+      "specs": {
+        "minimum": "{\"gpu\":\"RTX 3060 Ti, RTX 4060 Ti, or RX 6600 XT (8GB) for 1080p Low\",\"cpu\":\"Core i5-12500 or Ryzen 5 5600\",\"ram_gb\":16,\"storage_gb\":20}",
+        "recommended": "{\"gpu\":\"RTX 4070, RTX 3080 12GB, or RX 7800 XT (12GB) for 1080p maxed or 4K Medium\",\"cpu\":\"i7-12700K or Ryzen 7 7700X\",\"ram_gb\":32}",
+        "ultra": "{\"gpu\":\"RTX 4080 or RX 7900 XTX (16GB) for 4K High\",\"ram_gb\":32}",
+        "source_urls": "[\"https://premier.foresightsports.com/\"]",
+        "notes": "Premier now lists AMD GPUs, which FSX Play never did. The Foresight help article (RTX 4060 8GB + i5-12500 + 16GB for Medium/High) could not be fetched (403) and conflicts slightly with the Premier page.",
+        "pricing_note": "Course Pass $295/yr (35 courses) or Course Pass Pro $595/yr (111 courses), both need a Foresight+ Silver or Gold membership",
+        "price_source_url": "https://premier.foresightsports.com/",
+        "os": "Windows 10/11 64-bit"
+      },
+      "room_fit": "",
+      "who_its_for": "",
+      "pros": [],
+      "cons": [],
+      "known_issues": [],
+      "why_people_choose_it": "",
+      "image_url": ""
+    },
+    {
+      "brand": "Uneekor",
+      "name": "Uneekor software (Refine / Refine+ / View, third-party at 4K)",
+      "subtype": "software",
+      "tier": "qualified",
+      "mention_count": 5,
+      "mention_sources": [
+        "https://uneekor.com/en-us/products/eye-xo-standalone",
+        "https://golfsimulatorvideos.com/best-computer-for-golf-simulator-2026-guide/",
+        "https://mygolfsimulator.com/golf-simulator-system-requirements/",
+        "https://topshelfgolf.com/blogs/golf/do-you-really-need-a-golf-simulator-computer-heres-why-surfthing-is-built-for-the-job",
+        "https://rainorshinegolf.com/products/golf-simulator-gaming-pc-katana"
+      ],
+      "price": null,
+      "pricing_model": "free",
+      "platform": "Windows 10 (1803+) / Windows 11; Ethernet port required (two for EYE XO)",
+      "direct_url": "",
+      "fallback_url": "",
+      "read_url": "",
+      "specs": {
+        "minimum": "{\"gpu\":\"GTX 1060\",\"cpu\":\"Intel i5-8400\",\"ram_gb\":8}",
+        "recommended": "{\"gpu\":\"RTX 4070 Ti or equivalent with 16GB (EYE XO page); RTX 3060 Ti on the AI Studio bundle page\",\"cpu\":\"i7 12th gen or Ryzen 7 5000\",\"ram_gb\":32}",
+        "source_urls": "[\"https://uneekor.com/en-us/products/eye-xo-standalone\",\"https://homeperformancelab.com/golf-simulator-pc-requirements/\"]",
+        "notes": "Wired launch monitor; wants a desktop with spare Ethernet ports.",
+        "os": "Windows 10 (1803+) / Windows 11; Ethernet port required (two for EYE XO)"
+      },
+      "room_fit": "",
+      "who_its_for": "",
+      "pros": [],
+      "cons": [],
+      "known_issues": [],
+      "why_people_choose_it": "",
+      "image_url": ""
+    }
+  ],
+  "products": [
+    {
+      "brand": "Lenovo",
+      "name": "Legion 5i / Legion Pro 5i / Legion Pro 7i gaming laptops (and LOQ 15 budget sibling)",
+      "subtype": "gaming-laptop",
+      "tier": "qualified",
+      "mention_count": 9,
+      "mention_sources": [
+        "https://homeperformancelab.com/best-laptops-for-gspro/",
+        "https://golfsimulatoradvisor.com/best-golf-simulator-laptop/",
+        "https://computeexpert.com/best-gaming-laptop-for-golf-simulator",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/412210-gaming-laptop-recommendations-gspro",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/398311-can-my-computer-support-gspro",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/416279-laptop-for-fsx-play",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/413539-gaming-laptop-gspro-4k-advice",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/408129-will-gs-pro-work-with-this-laptop",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/403640-hoping-to-purchase-a-gaming-laptop-today-advice-needed"
+      ],
+      "price": {
+        "amount": 1100,
+        "currency": "USD",
+        "read_on": "2025-11-15",
+        "source_url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/416279-laptop-for-fsx-play",
+        "note": "Legion 5i 16in, Core Ultra 9 275HX, RTX 5060, 32GB, 1TB. Home Performance Lab (2026) puts Legion 5i street at $1,200 to $1,700, Legion Pro 5i at $1,750 to $2,600, Legion Pro 7i from $3,439.99."
+      },
+      "direct_url": "https://www.lenovo.com/us/en/d/legion-laptops/",
+      "direct_url_status": "200 on 2026-10-19 (family page; lenovo.com blocks automated page reads)",
+      "fallback_url": "",
+      "read_url": "https://homeperformancelab.com/best-laptops-for-gspro/",
+      "specs": {
+        "gpu": "RTX 5060 Laptop 8GB (Legion 5i, 105W); RTX 5070 Ti Laptop 12GB (Pro 5i, up to 140W); RTX 5080 Laptop 16GB (Pro 7i, 175W)",
+        "cpu": "Intel Core Ultra 7 / Ultra 9 275HX; AMD Ryzen 7 7745HX on Legion 5 Pro",
+        "ram": "16 to 32GB DDR5 (32GB recommended by forum members)",
+        "storage": "512GB to 1TB NVMe (512GB base is tight with 1GB courses)",
+        "ports": "HDMI 2.1, Thunderbolt / USB-C DisplayPort, multiple USB-A, RJ-45 on most Legion models",
+        "screen": "15 to 16 inch, 2560x1600 165 to 240Hz",
+        "weight": "about 6 lb (Legion Pro 7i); Legion Pro 5i 5.6 lb per golfsimulatoradvisor"
+      },
+      "runs": [
+        {
+          "software": "GSPro",
+          "quality": "RTX 4060/5060 Laptop = official 1080p laptop tier; RTX 5070 Ti / 5080 Laptop = 4K Ultra class",
+          "source_url": "https://gspro.gitbook.io/gspro-knowledge-base/pc-requirements/what-specs-can-run-gspro"
+        },
+        {
+          "software": "FSX Play / Foresight Premier",
+          "quality": "Forum member said the $1,100 Legion 5i RTX 5060 'would work' for FSX Play at 1080p",
+          "source_url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/416279-laptop-for-fsx-play"
+        }
+      ],
+      "room_fit": "Lives on a laptop tray, cart shelf, or wall shelf beside the bay; one HDMI run to the projector. Fold-away bays like it because it packs away with the mat.",
+      "who_its_for": "The builder who wants one machine for the sim and the house, a garage bay that gets packed up, or lessons on the road.",
+      "pros": [
+        "Forum members single out Legion cooling as the reason to pick it over other laptops",
+        "HDMI 2.1 plus USB-C DisplayPort handles a 4K60 projector",
+        "Lowest-cost current laptop that clears the 12GB VRAM 4K threshold (Pro 5i)"
+      ],
+      "cons": [
+        "Laptop GPU of the same name is 20 to 30 percent slower than the desktop card",
+        "Cannot upgrade the GPU later",
+        "Loud under sustained load (Pro 7i)"
+      ],
+      "known_issues": [
+        "Must force the discrete GPU via MUX or dGPU-only mode or GSPro can land on integrated graphics at single-digit fps",
+        "Thin chassis throttle after 20 to 30 minutes; members report burnt-out gaming laptops running GSPro and FSX Play",
+        "Battery drains in a few holes if unplugged; keep it on the charger and cap charge around 80 percent"
+      ],
+      "why_people_choose_it": "It is the laptop forum regulars name first when someone asks, because the cooling holds up through a full round and the RTX 4060 or 5060 trim sits right on GSPro's official 1080p laptop line.",
+      "image_url": ""
+    },
+    {
+      "brand": "SurfThing",
+      "name": "SG3 series simulator desktops (SG3-5602, SG3-5702, SG3-5702Ti, SG3-5802) and M3H laptop",
+      "subtype": "prebuilt-desktop",
+      "tier": "core",
+      "mention_count": 12,
+      "mention_sources": [
+        "https://golfsimulatorvideos.com/best-computer-for-golf-simulator-2026-guide/",
+        "https://golfsimulatorvideos.com/gaming-pc-for-gspro/",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/417652-best-golf-simulator-computer-surfthing-rtx-5080-build-review",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/398311-can-my-computer-support-gspro",
+        "https://homeperformancelab.com/golf-simulator-pc-requirements/",
+        "https://homeperformancelab.com/best-laptops-for-gspro/",
+        "https://yardstickgolf.com/golf-simulator-computer/",
+        "https://www.thelascopress.com/2026/01/best-golf-simulator-pc-2026-surfthing-review/",
+        "https://topshelfgolf.com/blogs/golf/do-you-really-need-a-golf-simulator-computer-heres-why-surfthing-is-built-for-the-job",
+        "https://www.carlofet.com/blog/golf-simulator-computers",
+        "https://www.playbetter.com/products/surfthing-golf-simulator-and-gaming-computer",
+        "https://topshelfgolf.com/collections/surfthing-golf-simulator-computers"
+      ],
+      "price": {
+        "amount": 2249,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://surfthing.com/products/surfthing-sg3-5602-golf-simulator-and-gaming-computer",
+        "note": "SG3-5602 $2,249 (listed out of stock on surfthing.com 2026-10-19); SG3-5702 $3,199; SG3-5702Ti $3,799; SG3-5802 $4,699; M3H laptop $3,699 (Top Shelf Golf, checked 2026-10-16). Golf Simulator Videos says a $100 discount applies automatically."
+      },
+      "direct_url": "https://surfthing.com/pages/golf-simulator-computers",
+      "direct_url_status": "200 on 2026-10-19",
+      "fallback_url": "https://www.playbetter.com/products/surfthing-golf-simulator-and-gaming-computer",
+      "read_url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/417652-best-golf-simulator-computer-surfthing-rtx-5080-build-review",
+      "specs": {
+        "gpu": "RTX 5060 8GB (5602); RTX 5070 12GB (5702); RTX 5070 Ti 16GB (5702Ti); RTX 5080 16GB (5802); RTX 5070 Laptop 8GB (M3H)",
+        "cpu": "Intel Core Ultra 5 225F (5602 to 5702Ti); Core Ultra 7 265F liquid cooled (5802); Core Ultra 9 275HX (M3H)",
+        "ram": "16GB DDR5 4800 (5602); 32GB DDR5 6000 (others)",
+        "storage": "1TB NVMe Gen4 (5602); 2TB (others)",
+        "ports": "Rear: Thunderbolt 4 USB-C, 6x USB 3.2, 6x USB 2.0 (two with extra power for swing cameras), 2.5G LAN plus a second 1G Ethernet card in the one free slot (swappable for 4-port USB or PoE camera card), WiFi 6E, BT 5.3; HDMI/DisplayPort on the GPU",
+        "dimensions": "8.07 x 14.29 x 17.8 in (fits most sim cabinets per SurfThing)",
+        "screen": "M3H: 17.3 in 1920x1080 144Hz",
+        "weight": "not published"
+      },
+      "runs": [
+        {
+          "software": "GSPro",
+          "quality": "SurfThing's own tests: SG3-5602 105 fps at 1080p / 51 at 4K; SG3-5702 149 / 85; SG3-5702Ti 105 at 4K; SG3-5802 128 at 4K; M3H 103 at 1080p / 45 at 4K",
+          "source_url": "https://topshelfgolf.com/blogs/golf/do-you-really-need-a-golf-simulator-computer-heres-why-surfthing-is-built-for-the-job"
+        },
+        {
+          "software": "FSX Play, E6 Connect, TrackMan, Uneekor",
+          "quality": "Sold pre-activated for all four; SG3-5802 is the first model that fully matches Trackman and Uneekor's i7 / RTX 4070 Ti class lists",
+          "source_url": "https://golfsimulatorvideos.com/best-computer-for-golf-simulator-2026-guide/"
+        }
+      ],
+      "room_fit": "A mid tower; owners show it in a PC cabinet behind the golfer or on a low shelf. Too tall for a cart tray; fine on a cart base.",
+      "who_its_for": "The buyer who wants the PC to arrive with GSPro or FSX installed and activated, with golf-specific support and a 2-year warranty, and is willing to pay roughly $600 to $1,000 over an equivalent Amazon tower for it.",
+      "pros": [
+        "Software preinstalled and activated, setup help included",
+        "Two powered USB ports and a camera-card slot for swing cameras",
+        "Two Ethernet ports out of the box (one for a wired launch monitor, one for internet)"
+      ],
+      "cons": [
+        "Price premium over a comparable iBUYPOWER or CyberPowerPC tower",
+        "Only one free expansion slot: the GPU blocks the rest, so a camera card and an extra NIC cannot both go in without a riser",
+        "Core Ultra 5 in the 5702 and 5702Ti sits below E6 (2026)'s i7 10th gen+ line and below Trackman/Uneekor's i7 lists"
+      ],
+      "known_issues": [
+        "SG3-5602 shows out of stock on surfthing.com (2026-10-19)",
+        "Most reviews come from retailers or affiliate sites; the Golf Simulator Videos review is affiliate-linked"
+      ],
+      "why_people_choose_it": "Forum members who bought one say they paid about $3,300 all-in and 'could have done it for less', but got the courses loaded and someone to call. It is the turnkey answer for people who do not want to spec a PC.",
+      "image_url": "https://www.playbetter.com/cdn/shop/files/Surfthing-Golf-Sim-PC-1_700x700.jpg?v=1757354851"
+    },
+    {
+      "brand": "MSI",
+      "name": "Thin 15 / Katana 15 gaming laptops",
+      "subtype": "gaming-laptop",
+      "tier": "qualified",
+      "mention_count": 7,
+      "mention_sources": [
+        "https://www.funwithgolf.com/best-laptop-for-golf-simulator/",
+        "https://thehickorygolfhub.com/golf-equipment/best-laptop-for-golf-simulator/",
+        "https://golfsimspot.com/blog/golf-simulator-computer-requirements/",
+        "https://computeexpert.com/best-gaming-laptop-for-golf-simulator",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/403640-hoping-to-purchase-a-gaming-laptop-today-advice-needed",
+        "https://rainorshinegolf.com/products/golf-simulator-gaming-pc-katana",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/212830-which-laptop"
+      ],
+      "price": {
+        "amount": 1015,
+        "currency": "USD",
+        "read_on": "2026-08-01",
+        "source_url": "https://golfsimspot.com/blog/golf-simulator-computer-requirements/",
+        "note": "Thin 15, i5-13420H, RTX 4060, 16GB, 512GB on Amazon, August 2026. Rain or Shine sells a Katana (i7-10750H, RTX 2070) as its sim laptop at $1,750, read 2026-10-19."
+      },
+      "direct_url": "https://us.msi.com/Laptops/Products",
+      "direct_url_status": "403 to automated fetch on 2026-10-19; verify in a browser",
+      "fallback_url": "https://rainorshinegolf.com/products/golf-simulator-gaming-pc-katana",
+      "read_url": "https://www.funwithgolf.com/best-laptop-for-golf-simulator/",
+      "specs": {
+        "gpu": "RTX 2050 / 3050 / 4050 / 4060 (Thin 15 trims); RTX 4070 105W (Katana A15)",
+        "cpu": "Intel i5-13420H or i7 13th gen (Thin); Ryzen 9 8945HS (Katana A15)",
+        "ram": "16GB (Thin); 32GB upgradable to 64GB (Katana A15)",
+        "storage": "512GB NVMe",
+        "ports": "HDMI (4K60 on the Rain or Shine Katana), USB-C, USB-A, RJ-45 Ethernet",
+        "screen": "15.6 in FHD 144Hz (Thin); 15.6 in QHD 165Hz (Katana A15)",
+        "weight": "not published in sources"
+      },
+      "runs": [
+        {
+          "software": "GSPro",
+          "quality": "RTX 4060 trim meets the official 1080p laptop tier; RTX 2050 / 3050 trims are below it (forum advice: avoid x050 GPUs)",
+          "source_url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/408129-will-gs-pro-work-with-this-laptop"
+        },
+        {
+          "software": "Uneekor QED / EYE XO, E6 Connect, TGC 2019",
+          "quality": "Rain or Shine lists the Katana as validated for Uneekor and compatible with GSPro, E6, TGC",
+          "source_url": "https://rainorshinegolf.com/products/golf-simulator-gaming-pc-katana"
+        }
+      ],
+      "room_fit": "Backpack-size; lives on a cart tray or shelf, one HDMI run to the projector.",
+      "who_its_for": "The lowest-cost route into a dedicated GPU laptop; fine for E6, TGC 2019, Awesome Golf, and GSPro at 1080p if you buy the RTX 4060 trim, not the 2050 or 3050.",
+      "pros": [
+        "Cheapest name-brand laptop with a real GPU, about $1,000 for the RTX 4060 trim",
+        "Thin and light enough to carry to lessons",
+        "Retailers (Rain or Shine, Shop Indoor Golf) bundle MSI-class laptops as their sim laptop"
+      ],
+      "cons": [
+        "Thin chassis is the throttling profile Home Performance Lab warns about (under 22mm, 60 to 80W GPU)",
+        "RTX 2050 and 3050 trims that roundups push are below every GSPro tier",
+        "2019 owner: a few holes of TGC on battery, keep a second power brick in the sim room"
+      ],
+      "known_issues": [
+        "Roundups list four different Thin 15 GPUs under one name; check the exact SKU",
+        "Rain or Shine's Katana ships a 2020-era i7-10750H / RTX 2070"
+      ],
+      "why_people_choose_it": "Price. It is the laptop that shows up at $1,000 with an RTX 4060, and for a 1080p projector that is the whole requirement.",
+      "image_url": ""
+    },
+    {
+      "brand": "ASUS",
+      "name": "TUF Gaming A15 / F15 / TUF 16 and ROG Strix G16 / G18 gaming laptops",
+      "subtype": "gaming-laptop",
+      "tier": "qualified",
+      "mention_count": 9,
+      "mention_sources": [
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/345022-need-a-pc-or-laptop",
+        "https://practical-golf.com/computer-guide-for-home-golf-simulators",
+        "https://grandgoldman.com/blogs/gaming/best-pc-for-golf-simulator",
+        "https://walfosbrand.com/blogs/gaming/best-computer-for-golf-simulator",
+        "https://golfsimspot.com/blog/golf-simulator-computer-requirements/",
+        "https://golfsimulatoradvisor.com/best-golf-simulator-laptop/",
+        "https://computeexpert.com/best-gaming-laptop-for-golf-simulator",
+        "https://thehickorygolfhub.com/golf-equipment/best-laptop-for-golf-simulator/",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/212830-which-laptop"
+      ],
+      "price": {
+        "amount": 1539.99,
+        "currency": "USD",
+        "read_on": "2026-08-01",
+        "source_url": "https://golfsimspot.com/blog/golf-simulator-computer-requirements/",
+        "note": "ROG Strix G16 i7-13650HX RTX 4060 16GB on Amazon, August 2026; the 2025 RTX 5060 Strix G16 was $1,580.99. A 2021 forum post linked a TUF 17.3 RTX 3050 Ti under $800."
+      },
+      "direct_url": "https://www.asus.com/laptops/for-gaming/tuf-gaming/",
+      "direct_url_status": "200 on 2026-10-19 (ROG Strix: https://rog.asus.com/laptops/rog-strix-series/ also 200)",
+      "fallback_url": "",
+      "read_url": "https://golfsimspot.com/blog/golf-simulator-computer-requirements/",
+      "specs": {
+        "gpu": "TUF 16 (2026): up to RTX 5070 Laptop 85W; Strix G16/G18 (2026): RTX 5060 to RTX 5080 Laptop",
+        "cpu": "Intel i7-14650HX or Ryzen 7 260 (TUF 16); i7-13650HX (Strix G16 2024)",
+        "ram": "2x DDR5 SO-DIMM, user upgradeable to 64GB (TUF 16); one roundup notes a 16GB ceiling on the Strix G18",
+        "storage": "512GB to 1TB NVMe",
+        "ports": "HDMI 2.1 FRL, USB-C with DisplayPort 1.4 and 100W PD, USB-A, RJ-45 Ethernet (TUF 16 2026)",
+        "screen": "16 in 2560x1600 165 to 240Hz (TUF 16, Strix G16); 18 in on Strix G18",
+        "weight": "ROG Strix G16/G17 about 5.8 lb per golfsimulatoradvisor"
+      },
+      "runs": [
+        {
+          "software": "GSPro",
+          "quality": "RTX 4060/5060 trims meet the 1080p laptop tier; RTX 5070 Ti/5080 Strix trims reach the 4K laptop class",
+          "source_url": "https://gspro.gitbook.io/gspro-knowledge-base/pc-requirements/what-specs-can-run-gspro"
+        },
+        {
+          "software": "TGC 2019 / E6 Connect",
+          "quality": "2021 forum: a TUF with RTX 3050 Ti runs TGC 2019 or E6 well at max settings at 1080p",
+          "source_url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/345022-need-a-pc-or-laptop"
+        }
+      ],
+      "room_fit": "Cart tray or shelf; the RJ-45 port matters for wired launch monitors (Uneekor) so you are not on a USB dongle.",
+      "who_its_for": "Builders who want a durable, upgradeable-RAM laptop with a real Ethernet jack and a 2.5K screen for review sessions off the projector.",
+      "pros": [
+        "TUF line keeps RJ-45 Ethernet and user-upgradeable RAM",
+        "HDMI 2.1 plus USB-C DisplayPort for 4K60 projectors",
+        "Wide GPU ladder from RTX 5060 to 5080 in the same chassis family"
+      ],
+      "cons": [
+        "Zephyrus and thin Strix models run hot under heavy load per reviewers",
+        "TUF 16's RTX 5070 is an 85W part, well under a 140W Legion Pro 5i card of the same name",
+        "Some roundups still push the TUF F15 with an RTX 2050 and 8GB RAM, which is below every sim tier"
+      ],
+      "known_issues": [
+        "GPU wattage varies by SKU; compare sustained TGP, not the model name"
+      ],
+      "why_people_choose_it": "The TUF is the 'durable budget gaming laptop' that forum members link when someone needs a sub-$1,000 answer, and the Strix is the step up when they want 4K later.",
+      "image_url": "https://dlcdnwebimgs.asus.com/gain/572e7a4d-9581-4f36-9465-eb53fc8e561d/w800"
+    },
+    {
+      "brand": "Dell",
+      "name": "G15 / G16 gaming laptops (now succeeded by Alienware 15 / 16 Aurora)",
+      "subtype": "gaming-laptop",
+      "tier": "qualified",
+      "mention_count": 6,
+      "mention_sources": [
+        "https://www.funwithgolf.com/best-laptop-for-golf-simulator/",
+        "https://grandgoldman.com/blogs/gaming/best-pc-for-golf-simulator",
+        "https://walfosbrand.com/blogs/gaming/best-computer-for-golf-simulator",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/403640-hoping-to-purchase-a-gaming-laptop-today-advice-needed",
+        "https://thehickorygolfhub.com/golf-equipment/best-laptop-for-golf-simulator/",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/212830-which-laptop"
+      ],
+      "price": {
+        "amount": 1199.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.dell.com/en-us/shop/laptop-computers/scr/laptop/gaming",
+        "note": "Dell's gaming page no longer lists G15/G16; the successor Alienware 15 (AMD, up to RTX 5060, 15.3 in) starts at $1,199.99 and the Alienware 16 Aurora (up to RTX 5070) at $1,599.99. No current G15 price found."
+      },
+      "direct_url": "https://www.dell.com/en-us/shop/laptop-computers/scr/laptop/gaming",
+      "direct_url_status": "200 on 2026-10-19",
+      "fallback_url": "",
+      "read_url": "https://www.funwithgolf.com/best-laptop-for-golf-simulator/",
+      "specs": {
+        "gpu": "RTX 4060 (G15 trims cited); up to RTX 5060 (Alienware 15) / RTX 5070 (Alienware 16 Aurora)",
+        "cpu": "Ryzen 7 7840HS or 13th gen Intel (G15); Intel or AMD (Alienware 15)",
+        "ram": "16GB",
+        "storage": "512GB to 1TB",
+        "ports": "HDMI, USB-C, USB-A, RJ-45 on G15",
+        "screen": "15.6 in FHD 165Hz (G15); 15.3 in (Alienware 15); 16 in (Alienware 16)",
+        "weight": "described as heavy by Fun with Golf; not published"
+      },
+      "runs": [
+        {
+          "software": "GSPro",
+          "quality": "RTX 4060 trim meets the official 1080p laptop tier; forum member said GSPro 'would likely run on any of the three' (G15, Lenovo, Katana) at 1080p",
+          "source_url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/403640-hoping-to-purchase-a-gaming-laptop-today-advice-needed"
+        }
+      ],
+      "room_fit": "Cart tray or shelf; HDMI to projector.",
+      "who_its_for": "The 'affordable and dependable' laptop in most roundups; buy the RTX 4060 trim or the Alienware 15 successor, not a discounted older G15 with a weaker card.",
+      "pros": [
+        "Roundups rate it the best-value sim laptop at the RTX 4060 level",
+        "RJ-45 and HDMI on board",
+        "Dell refurbished and outlet stock keeps it cheap"
+      ],
+      "cons": [
+        "Heavy for a 15 inch",
+        "Product line has been folded into Alienware, so new-stock G15s are disappearing",
+        "16GB base RAM; forum members prefer 32GB for current course packs"
+      ],
+      "known_issues": [
+        "The forum poster weighing a G15 in 2024 ended up buying a desktop with 32GB after members warned about laptop heat"
+      ],
+      "why_people_choose_it": "It is the safe mid-price pick that review sites keep at the top of the list, and the RTX 4060 trim matches the GSPro laptop floor without paying for a 4K-class card.",
+      "image_url": "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/alienware-notebooks/ac16251/media-gallery/laptop-alienware-ac16251-blue-ff-gallery-1.psd?fmt=png-alpha&pscan=auto&scl=1&hei=804&wid=973&qlt=100,0&resMode=sharp2&size=973,804"
+    },
+    {
+      "brand": "HP",
+      "name": "OMEN 35L desktop and OMEN / Victus gaming laptops",
+      "subtype": "prebuilt-desktop",
+      "tier": "qualified",
+      "mention_count": 6,
+      "mention_sources": [
+        "https://grandgoldman.com/blogs/gaming/best-pc-for-golf-simulator",
+        "https://walfosbrand.com/blogs/gaming/best-computer-for-golf-simulator",
+        "https://forum.mygolfspy.com/topic/69976-outdoor-simulator-gspro-build/",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/212830-which-laptop",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/393341-is-this-pc-powerful-enough",
+        "https://practical-golf.com/computer-guide-for-home-golf-simulators"
+      ],
+      "price": {
+        "amount": 1779,
+        "currency": "USD",
+        "read_on": "2023-08-20",
+        "source_url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/393341-is-this-pc-powerful-enough",
+        "note": "HP laptop with RTX 4080 at Antonline, Aug 2023; no current OMEN 35L price captured because hp.com could not be reached from the sandbox."
+      },
+      "direct_url": "https://www.hp.com/us-en/shop/slp/omen",
+      "direct_url_status": "connection failed (000) from the sandbox on 2026-10-19; verify in a browser",
+      "fallback_url": "",
+      "read_url": "https://forum.mygolfspy.com/topic/69976-outdoor-simulator-gspro-build/",
+      "specs": {
+        "gpu": "OMEN 35L: RTX 3060 and up; owner build: OMEN with RTX 4070",
+        "cpu": "Intel or AMD, configurable",
+        "ram": "16 to 32GB",
+        "storage": "1TB NVMe typical",
+        "ports": "HDMI and DisplayPort on the GPU; USB front and rear",
+        "screen": "n/a (desktop); OMEN laptops 15 to 17 in",
+        "weight": "not published in sources"
+      },
+      "runs": [
+        {
+          "software": "GSPro",
+          "quality": "Owner of an OMEN with RTX 4070: 'runs great if you are just doing 1080p', expects 4K to be a little jittery",
+          "source_url": "https://forum.mygolfspy.com/topic/69976-outdoor-simulator-gspro-build/"
+        }
+      ],
+      "room_fit": "Mid tower; goes on a shelf or cart base behind the hitting area.",
+      "who_its_for": "Big-box shoppers (Best Buy, Costco) who want a mainstream tower with a 3060 to 4070 class card for 1080p and 1440p.",
+      "pros": [
+        "Widely stocked and often discounted at big-box retailers",
+        "RTX 4070 trim handles GSPro 1080p Ultra with headroom"
+      ],
+      "cons": [
+        "HP bloatware complaints go back years in the forum",
+        "No golf-specific reviews beyond one owner build and two affiliate roundups"
+      ],
+      "known_issues": [
+        "HP's store pages could not be verified from the sandbox"
+      ],
+      "why_people_choose_it": "It is the tower people already have or can buy on sale this weekend, and an RTX 4070 OMEN has been shown running GSPro outdoors at 1080p without fuss.",
+      "image_url": ""
+    },
+    {
+      "brand": "Acer",
+      "name": "Nitro V 15 / Nitro V 16 / Nitro 16 (and Predator Helios / Triton) gaming laptops",
+      "subtype": "gaming-laptop",
+      "tier": "qualified",
+      "mention_count": 5,
+      "mention_sources": [
+        "https://golfsimspot.com/blog/golf-simulator-computer-requirements/",
+        "https://thehickorygolfhub.com/golf-equipment/best-laptop-for-golf-simulator/",
+        "https://golfsimulatoradvisor.com/best-golf-simulator-laptop/",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/393341-is-this-pc-powerful-enough",
+        "https://www.funwithgolf.com/best-laptop-for-golf-simulator/"
+      ],
+      "price": {
+        "amount": 1449.99,
+        "currency": "USD",
+        "read_on": "2026-08-01",
+        "source_url": "https://golfsimspot.com/blog/golf-simulator-computer-requirements/",
+        "note": "Nitro V, Ryzen 7 260, RTX 5060, 16GB on Amazon, August 2026; Nitro 16 Ryzen 7 7840HS RTX 4060 was $1,399.99."
+      },
+      "direct_url": "https://www.acer.com/us-en/laptops/nitro",
+      "direct_url_status": "connection failed (000) from the sandbox on 2026-10-19; verify in a browser",
+      "fallback_url": "",
+      "read_url": "https://golfsimspot.com/blog/golf-simulator-computer-requirements/",
+      "specs": {
+        "gpu": "RTX 4050 / 4060 (Nitro V 15, Nitro 16); RTX 5060 (Nitro V 2025); RTX 3060 (Predator Helios 300)",
+        "cpu": "Ryzen 7 7840HS / Ryzen 7 260; i7-11800H on the older Helios",
+        "ram": "16GB DDR5",
+        "storage": "512GB to 1TB",
+        "ports": "HDMI 2.1, USB-C, USB-A, RJ-45 on Nitro 16",
+        "screen": "15.6 in FHD 144Hz (Nitro V 15); 16 in (Nitro 16)",
+        "weight": "Predator Helios 300 5.51 lb per golfsimulatoradvisor"
+      },
+      "runs": [
+        {
+          "software": "GSPro",
+          "quality": "RTX 4060 / 5060 trims meet the 1080p laptop tier; RTX 4050 trims do not",
+          "source_url": "https://gspro.gitbook.io/gspro-knowledge-base/pc-requirements/what-specs-can-run-gspro"
+        }
+      ],
+      "room_fit": "Cart tray or shelf.",
+      "who_its_for": "Budget-to-mid laptop buyers who find a Nitro with an RTX 4060 or 5060 on sale; the Nitro V is Acer's answer to the MSI Thin and Lenovo LOQ.",
+      "pros": [
+        "Frequent Amazon discounts into the $1,000 to $1,400 band with an RTX 4060/5060",
+        "144Hz screen for reviewing swings off the projector"
+      ],
+      "cons": [
+        "Reviewers note it 'can get quite hot during intense gaming sessions'",
+        "Mentions are thin outside affiliate roundups; one forum poster considered a Predator Triton but members steered to a desktop"
+      ],
+      "known_issues": [
+        "Acer store pages could not be verified from the sandbox"
+      ],
+      "why_people_choose_it": "It is the sale-price laptop that lands at the GSPro laptop floor, and for a packed-away garage bay that is enough.",
+      "image_url": ""
+    },
+    {
+      "brand": "Alienware (Dell)",
+      "name": "Aurora desktop and Alienware 15 / 16 / m15 / m18 laptops",
+      "subtype": "prebuilt-desktop",
+      "tier": "qualified",
+      "mention_count": 5,
+      "mention_sources": [
+        "https://grandgoldman.com/blogs/gaming/best-pc-for-golf-simulator",
+        "https://walfosbrand.com/blogs/gaming/best-computer-for-golf-simulator",
+        "https://golfsimulatoradvisor.com/best-golf-simulator-laptop/",
+        "https://practical-golf.com/computer-guide-for-home-golf-simulators",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/416294-what-gpu"
+      ],
+      "price": {
+        "amount": 2329.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.dell.com/en-us/shop/gaming-pcs/sr/gaming/alienware-desktops",
+        "note": "Aurora desktop (ACT1250) base configuration; up to RTX 5080. Alienware 15 laptop from $1,199.99, Alienware 16 Aurora from $1,599.99, read 2026-10-19."
+      },
+      "direct_url": "https://www.dell.com/en-us/shop/gaming-pcs/sr/gaming/alienware-desktops",
+      "direct_url_status": "200 on 2026-10-19",
+      "fallback_url": "",
+      "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/416294-what-gpu",
+      "specs": {
+        "gpu": "Aurora: up to RTX 5080 (450W GPU power budget); laptops up to RTX 5080 Laptop at 240 to 280W",
+        "cpu": "Intel Core Ultra (Aurora ACT1250)",
+        "ram": "16 to 64GB DDR5",
+        "storage": "1 to 2TB NVMe",
+        "ports": "HDMI and DisplayPort on the GPU; front USB",
+        "screen": "n/a (desktop); laptops 15.3, 16, 18 in",
+        "weight": "Alienware M18 laptop 9.32 lb per golfsimulatoradvisor"
+      },
+      "runs": [
+        {
+          "software": "GSPro",
+          "quality": "An Aurora R12 owner with an RTX 3080 and 32GB gets FPS warnings on Ultra and was told a 4K upgrade would need a new machine; forum calls the R12 'a couple of generations old'",
+          "source_url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/416294-what-gpu"
+        }
+      ],
+      "room_fit": "Large tower with a proprietary case; needs a cabinet or floor spot with airflow, not a cart tray.",
+      "who_its_for": "People who want a premium warranty-backed tower from a big brand and plan to run 4K, swing cameras, or multiple programs.",
+      "pros": [
+        "Big-brand support and financing",
+        "RTX 5080 configurations clear every 4K list including Trackman and Uneekor"
+      ],
+      "cons": [
+        "Proprietary case limits GPU upgrades (R12 owner could not fit a new card)",
+        "Price premium versus iBUYPOWER or CyberPowerPC at the same GPU"
+      ],
+      "known_issues": [
+        "Older Aurora R12 with RTX 3080 10GB throws GSPro FPS warnings on Ultra; VRAM is the suspected limit"
+      ],
+      "why_people_choose_it": "Brand comfort. It is what shows up at Best Buy and Dell with a payment plan, and the laptops are the premium pick in every roundup.",
+      "image_url": "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/desktops/alienware-aurora-r16-arl/media-gallery/240mm/desktop-alienware-act1250-240mm-bk-gallery-3.psd?fmt=png-alpha&pscan=auto&scl=1&hei=804&wid=855&qlt=100,0&resMode=sharp2&size=855,804"
+    },
+    {
+      "brand": "iBUYPOWER / CyberPowerPC / Skytech",
+      "name": "Costco and Amazon RTX 4060 to 5070 class towers (iBUYPOWER Slate Mesh and Element, CyberPowerPC Gamer Xtreme, Skytech Azure 3 and Blaze 3)",
+      "subtype": "prebuilt-desktop",
+      "tier": "qualified",
+      "mention_count": 9,
+      "mention_sources": [
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/398311-can-my-computer-support-gspro",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/345022-need-a-pc-or-laptop",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/399985-computer-check-for-gc3-fsx-play-gspro",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/400078-computer-check-for-system-upgrade%E2%80%A6",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/393341-is-this-pc-powerful-enough",
+        "https://canyougolf.com/vetted/14-best-gaming-pc-for-golf-simulator-in-2026/",
+        "https://golfsimspot.com/blog/golf-simulator-computer-requirements/",
+        "https://www.opengolfer.co.uk/blogs/news/golf-simulator-pc-computer-guide-uk-specs-builds-recommendations-2026",
+        "https://practical-golf.com/computer-guide-for-home-golf-simulators"
+      ],
+      "price": {
+        "amount": 899,
+        "currency": "USD",
+        "read_on": "2024-01-15",
+        "source_url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/400078-computer-check-for-system-upgrade%E2%80%A6",
+        "note": "Costco RTX 4060 desktop, Jan 2024 (members call it a 'decent deal' that 'works well at 1080p'). Aug 2026 Amazon: iBUYPOWER Slate MESH i7-14700F RTX 4060 32GB $1,499.99; iBUYPOWER Element Ryzen 9 7900X RTX 5070 $1,899.99; CyberPowerPC Gamer Xtreme i9-14900KF RTX 4070 Super $2,598. Skytech Azure 3 i5-14400F RTX 5060 Ti $1,399.99 on skytechgaming.com 2026-10-19."
+      },
+      "direct_url": "https://skytechgaming.com/",
+      "direct_url_status": "200 on 2026-10-19; cyberpowerpc.com/category/gaming-pcs/ 200; ibuypower.com 403 to automated fetch",
+      "fallback_url": "https://www.cyberpowerpc.com/category/gaming-pcs/",
+      "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/398311-can-my-computer-support-gspro",
+      "specs": {
+        "gpu": "RTX 4060 8GB (the Costco staple), RTX 4060 Ti, RTX 5060 / 5060 Ti, RTX 5070 12GB, RTX 4070 Super",
+        "cpu": "i5-13400F / i5-14400F, i7-13700F / 14700F, Ryzen 9 7700X / 7900X",
+        "ram": "16 to 32GB DDR5",
+        "storage": "1TB NVMe",
+        "ports": "HDMI and DisplayPort on the GPU, one onboard Ethernet, WiFi; add a USB or PCIe NIC for a wired launch monitor",
+        "screen": "n/a",
+        "weight": "not published in sources"
+      },
+      "runs": [
+        {
+          "software": "GSPro",
+          "quality": "Forum consensus: RTX 4060 desktop 'runs GSPro fine at 1080p'; RTX 3060 'adequate', 4060 'better', 4070 / 4070 Ti for 4K",
+          "source_url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/398311-can-my-computer-support-gspro"
+        },
+        {
+          "software": "FSX Play",
+          "quality": "'May be a struggle on a 60-series card'; members suggest 4060 Ti or 4070 for future proofing",
+          "source_url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/399985-computer-check-for-gc3-fsx-play-gspro"
+        }
+      ],
+      "room_fit": "Mid tower; shelf or cart base behind the hitting area, off the carpet, not in a closed cabinet.",
+      "who_its_for": "The builder who wants the best GPU per dollar from a store with an easy return policy, and does not need software preinstalled.",
+      "pros": [
+        "Cheapest path to a desktop RTX 4060 / 5060, often $900 to $1,500",
+        "Costco's return policy is cited as a reason to buy there",
+        "A forum member bought an iBUYPOWER Slatemesh at Costco after the seller confirmed GSPro 1080p"
+      ],
+      "cons": [
+        "Only one Ethernet port; wired monitors need an add-in NIC",
+        "RMA shipping on direct purchases can be costly (Slickdeals warning)",
+        "16GB base RAM on cheaper trims"
+      ],
+      "known_issues": [
+        "Spec sheets change weekly; the 'Costco PC' in a 2024 thread is not the one on the floor today"
+      ],
+      "why_people_choose_it": "'Costco has sometimes sold desktops with an RTX 4060 for about $899, which works well at 1080p' is the single most repeated piece of PC advice on the forum.",
+      "image_url": "https://skytechai.s3.us-west-002.backblazeb2.com/tswky6duocmjbdht4jclmpx8ubr4_azure3mainofficialwebwebpwebp.webp"
+    },
+    {
+      "brand": "Dell / generic",
+      "name": "Refurbished office tower plus a used GPU (Dell OptiPlex class, or a used gaming PC)",
+      "subtype": "prebuilt-desktop",
+      "tier": "qualified",
+      "mention_count": 6,
+      "mention_sources": [
+        "https://canyougolf.com/vetted/14-best-gaming-pc-for-golf-simulator-in-2026/",
+        "https://practical-golf.com/computer-guide-for-home-golf-simulators",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/396937-gspro-pc-spec",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/298216-graphics-card-for-tgc-2019",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/398311-can-my-computer-support-gspro",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/400078-computer-check-for-system-upgrade%E2%80%A6"
+      ],
+      "price": {
+        "amount": 400,
+        "currency": "USD",
+        "read_on": "2023-12-18",
+        "source_url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/398311-can-my-computer-support-gspro",
+        "note": "Used GPU about $400 inside a $1,400 build that runs GSPro at max 60fps with two cameras; refurbished OptiPlex towers with 8th/9th gen i7 and GT 1030/1050 run $378 to $398 at Walmart (search snippet); dellrefurbished.com lists OptiPlex 3000/5000 without a GPU at $689 to $1,019."
+      },
+      "direct_url": "https://www.dellrefurbished.com/desktop-computers",
+      "direct_url_status": "200 on 2026-10-19",
+      "fallback_url": "",
+      "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/396937-gspro-pc-spec",
+      "specs": {
+        "gpu": "Whatever you add: RTX 3060 12GB is the forum's used-card sweet spot; GT 1030 / 1050 that ships in 'gaming OptiPlex' listings is below every tier",
+        "cpu": "4th gen i5 was judged 'fine because GSPro does not use much CPU' (2023)",
+        "ram": "16 to 32GB",
+        "storage": "1TB SSD",
+        "ports": "Older OptiPlex often has no HDMI; may need an adapter or rely on the GPU outputs; check the power supply and slot clearance before buying a card",
+        "screen": "n/a",
+        "weight": "n/a"
+      },
+      "runs": [
+        {
+          "software": "GSPro",
+          "quality": "Refurb i5 4th gen + RTX 3060 + 32GB: 'will run most courses at ultra settings' at 1080p",
+          "source_url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/396937-gspro-pc-spec"
+        },
+        {
+          "software": "TGC 2019",
+          "quality": "A used PC with a GTX 1060 for about $500 was the 2020 forum answer",
+          "source_url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/298216-graphics-card-for-tgc-2019"
+        }
+      ],
+      "room_fit": "Small-form-factor OptiPlex fits a wall shelf; full towers go on the floor or a cart base.",
+      "who_its_for": "The under-$600 builder who is comfortable opening a case and sourcing a card on Facebook Marketplace.",
+      "pros": [
+        "Cheapest working GSPro machine on the forum",
+        "GSPro is GPU-bound, so an old CPU is tolerated",
+        "Easy to upgrade the GPU later"
+      ],
+      "cons": [
+        "Office power supplies and SFF cases limit which GPU fits",
+        "USB 2.0 and dongle WiFi on old refurbs",
+        "Amazon 'gaming OptiPlex' listings ship GT 1030 class cards that will not run GSPro"
+      ],
+      "known_issues": [
+        "Members warn against the GT 1030/1050 refurb bundles that roundups list as 'capable of running golf simulators'"
+      ],
+      "why_people_choose_it": "Because GSPro mostly needs a GPU, and a $400 used RTX 3060 in a $200 tower gets a budget bay to 1080p Ultra.",
+      "image_url": ""
+    },
+    {
+      "brand": "Garmin",
+      "name": "Approach R10 run from a phone or iPad (Garmin Golf app, Home Tee Hero, E6 Connect iOS, Awesome Golf)",
+      "subtype": "no-pc",
+      "tier": "core",
+      "mention_count": 12,
+      "mention_sources": [
+        "https://www.carlofet.com/blog/ipad-golf-simulator-setup",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/345022-need-a-pc-or-laptop",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/garmin/343012-garmin-r10-projector-setup",
+        "https://www.awesome-golf.com/connect/",
+        "https://apps.apple.com/us/app/e6-connect/id1360027026",
+        "https://breakingeighty.com/garmin-approach-r10-review",
+        "https://www.playbetter.com/blogs/golf-simulator-reviews/garmin-approach-r10-review-golf-launch-monitor-under-1000",
+        "https://golfersauthority.com/garmin-approach-r10-launch-monitor/",
+        "https://golfsimulatorsource.com/garmin-approach-r10/",
+        "https://t5golf.com/garmin-approach-r10-review/",
+        "https://www.birdiereport.com/blog/garmin-approach-r10-review/",
+        "https://sportsmonkie.com/garmin-approach-r10-launch-monitor/"
+      ],
+      "price": {
+        "amount": 599.99,
+        "currency": "USD",
+        "read_on": "2026-08-08",
+        "source_url": "https://www.playbetter.com/blogs/golf-simulator-reviews/garmin-approach-r10-review-golf-launch-monitor-under-1000",
+        "note": "List $599.99, 'often on sale for' $499.99; Garmin Golf membership $99/yr unlocks Home Tee Hero and third-party sims."
+      },
+      "direct_url": "https://www.garmin.com/en-US/p/695391",
+      "direct_url_status": "200 on 2026-10-19",
+      "fallback_url": "https://www.amazon.com/dp/B095QX1FSR",
+      "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/garmin/343012-garmin-r10-projector-setup",
+      "specs": {
+        "gpu": "none (phone or tablet renders)",
+        "cpu": "n/a",
+        "ram": "n/a",
+        "storage": "n/a",
+        "ports": "Display path: iPad Lightning or USB-C to HDMI adapter and a 10 ft HDMI run to the projector, or Apple TV AirPlay",
+        "screen": "n/a",
+        "weight": "n/a"
+      },
+      "runs": [
+        {
+          "software": "Garmin Golf app / Home Tee Hero",
+          "quality": "Portrait-only output on the Garmin app: image is taller than wide on a projector; stretch settings distort it",
+          "source_url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/garmin/343012-garmin-r10-projector-setup"
+        },
+        {
+          "software": "E6 Connect iOS",
+          "quality": "Five or six free courses with the R10; landscape works; lower detail than PC E6; iPad Air 2 stuttered and froze, iPad Pro 9.7 ran without stutter",
+          "source_url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/garmin/343012-garmin-r10-projector-setup"
+        },
+        {
+          "software": "GSPro",
+          "quality": "Needs a Windows PC; not possible on the no-PC path",
+          "source_url": "https://gsprogolf.com/"
+        }
+      ],
+      "room_fit": "Radar sits 6 to 8 ft behind the ball, so the bay needs depth behind the mat; the tablet mounts on a stand or the cart.",
+      "who_its_for": "The $3,000 whole-sim builder who will play E6 or Awesome Golf courses from an iPad and does not want a PC in the garage.",
+      "pros": [
+        "Full sim for about $3,000 all-in per Carl's Place",
+        "Garmin Golf app is free; E6 iOS courses included",
+        "Any radar-readable ball works (no marked balls)"
+      ],
+      "cons": [
+        "Garmin app will not output landscape",
+        "Most metrics are calculated, not measured; spin needs Titleist RCT balls",
+        "GSPro, TGC 2019 and Foresight Premier are PC only, so the upgrade path means buying a PC anyway"
+      ],
+      "known_issues": [
+        "Mirroring/AirPlay from older iPads stutters; wired adapter is the forum's recommendation",
+        "E6 iOS renders 4:3 and fills about 65 percent of a 16:9 screen unless the projector is set to stretch"
+      ],
+      "why_people_choose_it": "It is the cheapest honest simulator: R10, iPad, adapter, projector, done. Owners accept the dated app because the price is right.",
+      "image_url": ""
+    },
+    {
+      "brand": "FlightScope",
+      "name": "Mevo+ run from an iPad (FS Golf, E6 Connect iOS 12-course license, Awesome Golf)",
+      "subtype": "no-pc",
+      "tier": "qualified",
+      "mention_count": 7,
+      "mention_sources": [
+        "https://www.carlofet.com/blog/ipad-golf-simulator-setup",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/345022-need-a-pc-or-laptop",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/316231-ipad-mevo-projector-getting-confused-and-hoping-someone-can-help",
+        "https://golfsimulatorforum.com/forum/flightscope/334828-mevo-e6-connect-and-iphone-mirrored-on-macbook-pro",
+        "https://golfsimulatorforum.com/forum/flightscope/250283-mevo-projector-output-and-ios-limitations",
+        "https://www.awesome-golf.com/connect/",
+        "https://apps.apple.com/us/app/e6-connect/id1360027026"
+      ],
+      "price": {
+        "amount": 1099,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://flightscope.com/products/mevo-plus/",
+        "note": "Sale from $2,299, 'limited remaining stock'; Carl's Place puts a full Mevo+ iPad sim at $4,000 to $5,000."
+      },
+      "direct_url": "https://flightscope.com/products/mevo-plus/",
+      "direct_url_status": "200 on 2026-10-19",
+      "fallback_url": "",
+      "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/316231-ipad-mevo-projector-getting-confused-and-hoping-someone-can-help",
+      "specs": {
+        "gpu": "none on the no-PC path; FS Golf PC app also exists (Windows 10/11)",
+        "cpu": "n/a",
+        "ram": "n/a",
+        "storage": "n/a",
+        "ports": "iPad USB-C to HDMI (outputs 16:10 on iPad Air 4) or Apple TV AirPlay; iPad must join the Mevo+ WiFi, so internet comes via Ethernet dongle or phone tether",
+        "screen": "n/a",
+        "weight": "n/a"
+      },
+      "runs": [
+        {
+          "software": "E6 Connect iOS",
+          "quality": "'Delay is almost instant', 'no lag' over USB-C to HDMI; iPad outputs 4:3 which suits a 4:3 screen",
+          "source_url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/316231-ipad-mevo-projector-getting-confused-and-hoping-someone-can-help"
+        },
+        {
+          "software": "GSPro / FSX / Premier",
+          "quality": "PC only",
+          "source_url": "https://gsprogolf.com/"
+        }
+      ],
+      "room_fit": "Radar 7 to 8 ft behind the ball; iPad on a stand beside the mat.",
+      "who_its_for": "The iPad-first builder who wants better data than the R10 and the included E6 courses, and may add a PC later for GSPro.",
+      "pros": [
+        "12 E6 iOS courses included",
+        "iOS 17/18 requirement means recent iPads only, which also avoids the stutter older iPads showed",
+        "Clearance pricing in October 2026"
+      ],
+      "cons": [
+        "The Mevo+ WiFi network takes the iPad's internet, which breaks Apple TV prompts and online features",
+        "Price history: $2,299 list means the $1,099 clearance may not last",
+        "Still cannot run GSPro without a Windows PC"
+      ],
+      "known_issues": [
+        "Apple TV must also join the Mevo+ network and will warn about no internet; choose connect anyway",
+        "Apple-branded HDMI adapter produced a smaller 4:3 image than a generic one for some owners"
+      ],
+      "why_people_choose_it": "Owners say the iPad E6 path is 'pretty amazing for lag' and good enough that several never bought a PC.",
+      "image_url": "https://flightscope.com/cdn/shop/files/MevoPlus-Gray-Side-1.jpg?v=1759316726&width=1080"
+    },
+    {
+      "brand": "Rapsodo",
+      "name": "MLM2PRO run from a phone or iPad (Rapsodo app, Awesome Golf, E6 Apex/Connect); GSPro needs a PC",
+      "subtype": "no-pc",
+      "tier": "qualified",
+      "mention_count": 9,
+      "mention_sources": [
+        "https://apps.apple.com/us/app/awesome-golf-simulator/id1487825763",
+        "https://golfersauthority.com/rapsodo-mlm2pro-system-requirements-device-guide/",
+        "https://www.playbetter.com/blogs/golf-simulator-software/rapsodo-mlm2pro-software",
+        "https://topshelfgolf.com/blogs/golf/how-to-set-up-mlm2pro-with-gspro",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/rapsodo-mlm2pro/402733-gspro-connector-with-mlm2pro-ipad-pro",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/398311-can-my-computer-support-gspro",
+        "https://rainorshinegolf.com/products/rapsodo-mlm2pro-swingbay-golf-simulator-package",
+        "https://homegolfhero.com/guides/what-launch-monitors-work-with-gspro/",
+        "https://www.awesome-golf.com/connect/"
+      ],
+      "price": {
+        "amount": 549.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://rapsodo.com/products/mlm2pro",
+        "note": "Down from $699.99; Premium membership $199.99/yr or $599.99 lifetime is required for GSPro and spin (Top Shelf Golf guide), 45-day trial included."
+      },
+      "direct_url": "https://rapsodo.com/products/mlm2pro",
+      "direct_url_status": "200 on 2026-10-19",
+      "fallback_url": "",
+      "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/rapsodo-mlm2pro/402733-gspro-connector-with-mlm2pro-ipad-pro",
+      "specs": {
+        "gpu": "none for the Rapsodo app; the phone or tablet renders",
+        "cpu": "n/a",
+        "ram": "n/a",
+        "storage": "n/a",
+        "ports": "Phone or iPad to HDMI adapter, or the 'second device with a better display' Rapsodo describes; for GSPro the iPad runs the Rapsodo app and a Windows PC runs GSPro",
+        "screen": "iPhone 8+ (iOS 14+), iPad 2017+ with 1080p, Android 10+",
+        "weight": "n/a"
+      },
+      "runs": [
+        {
+          "software": "Awesome Golf iOS",
+          "quality": "Listed as a supported monitor; Awesome Golf Assistant app can bridge it",
+          "source_url": "https://apps.apple.com/us/app/awesome-golf-simulator/id1487825763"
+        },
+        {
+          "software": "GSPro",
+          "quality": "'GSPro is PC only'; the iPad runs the Rapsodo app and the PC runs GSPro; Premium membership and sign-in each session required",
+          "source_url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/rapsodo-mlm2pro/402733-gspro-connector-with-mlm2pro-ipad-pro"
+        }
+      ],
+      "room_fit": "Camera plus radar sits behind the ball like the R10; needs the same bay depth; phone mounts on the unit.",
+      "who_its_for": "The phone-first buyer who wants swing video and later wants GSPro; be clear that GSPro adds a PC and a $200/yr membership.",
+      "pros": [
+        "Cheaper than the R10 list price in October 2026",
+        "Officially integrated with GSPro (via PC) and Awesome Golf",
+        "Built-in cameras give swing video the R10 lacks"
+      ],
+      "cons": [
+        "Marked RPT balls needed for spin",
+        "Premium subscription required for GSPro and spin data",
+        "A member running it on an ASUS ZenBook (MX350) saw motion lag and was told to buy a real GPU"
+      ],
+      "known_issues": [
+        "Session must authenticate with Rapsodo each time GSPro is used",
+        "Two different iPad minimums are published on the same guide (2017+ vs iPad 9th gen+ on iOS 17.7)"
+      ],
+      "why_people_choose_it": "It is the launch monitor people buy for the range app and then discover they need a Windows PC for the sim they actually wanted.",
+      "image_url": "https://cdn.shopify.com/s/files/1/0597/7853/1477/files/mlm2pro-technology2_thumbnail.png?v=1776064199"
+    },
+    {
+      "brand": "Apple",
+      "name": "iPad plus Apple TV 4K (AirPlay) or a Lightning / USB-C to HDMI adapter as the no-PC display bridge",
+      "subtype": "no-pc",
+      "tier": "qualified",
+      "mention_count": 7,
+      "mention_sources": [
+        "https://www.carlofet.com/blog/ipad-golf-simulator-setup",
+        "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/garmin/343012-garmin-r10-projector-setup",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/316231-ipad-mevo-projector-getting-confused-and-hoping-someone-can-help",
+        "https://golfsimulatorforum.com/forum/flightscope/250283-mevo-projector-output-and-ios-limitations",
+        "https://golfsimulatorforum.com/forum/flightscope/334828-mevo-e6-connect-and-iphone-mirrored-on-macbook-pro",
+        "https://golfsimulatorforum.com/forum/trugolf/223819-e6-connect-ipad",
+        "https://apps.apple.com/us/app/e6-connect/id1360027026"
+      ],
+      "price": null,
+      "direct_url": "https://www.apple.com/apple-tv-4k/",
+      "direct_url_status": "200 on 2026-10-19",
+      "fallback_url": "",
+      "read_url": "https://www.carlofet.com/blog/ipad-golf-simulator-setup",
+      "specs": {
+        "gpu": "n/a (iPad renders; E6 wants iPad Pro 1st gen+ or iPad 5th gen+; SkyTrak course play wants M1 or newer)",
+        "cpu": "n/a",
+        "ram": "n/a",
+        "storage": "n/a",
+        "ports": "Apple TV HDMI to projector; or Lightning / USB-C to HDMI adapter with a 10 ft HDMI cable; Android tablets use Chromecast",
+        "screen": "iPad outputs 4:3 (E6) or 16:10 (iPad Air USB-C); 4:3 tablets in landscape pair with 4:3 screens",
+        "weight": "n/a",
+        "pricing_note": "apple.com shows a new Apple TV 4K on pre-order (available November 13) with no price displayed; older Apple TV 4K units are the ones forum owners use.",
+        "price_source_url": "https://www.apple.com/apple-tv-4k/"
+      },
+      "runs": [
+        {
+          "software": "E6 Connect iOS / FS Golf / Garmin Golf",
+          "quality": "Carl's Place calls Apple TV AirPlay the most seamless connection; forum reports split between 'pretty amazing for lag' (iPad Pro) and 'mirroring is slow' (older iPads)",
+          "source_url": "https://www.carlofet.com/blog/ipad-golf-simulator-setup"
+        }
+      ],
+      "room_fit": "Apple TV lives at the projector; the iPad stays on a stand at the mat. No cart, no tower, no fans.",
+      "who_its_for": "Anyone on the R10 / Mevo+ / SkyTrak / MLM2PRO iPad path who wants the screen filled without running a cable across the bay.",
+      "pros": [
+        "No PC, no noise, packs away with the mat",
+        "AirPlay carries audio to the projector or a soundbar",
+        "A $10 to $40 adapter is the wired alternative"
+      ],
+      "cons": [
+        "Launch monitors that host their own WiFi (Mevo+) force the Apple TV onto a network with no internet",
+        "Older iPads (Air 2) stutter and freeze in E6 regardless of wired or AirPlay",
+        "Aspect ratio mismatch: 4:3 app on a 16:9 screen leaves bars or stretches"
+      ],
+      "known_issues": [
+        "GSPro, TGC 2019, FSX Play and Foresight Premier are not available on this path at all"
+      ],
+      "why_people_choose_it": "Because a working sim on an iPad through an Apple TV costs less than a graphics card, and for E6 courses at 1080p it is good enough that many never add a PC.",
+      "image_url": "https://www.apple.com/v/apple-tv-4k/ao/images/overview/welcome/hero__fwxqo8gh62ye_large.jpg"
+    }
+  ],
+  "watchlist": [
+    {
+      "brand": "Lenovo",
+      "name": "Legion Tower 5i Gen 8 / Gen 10 desktop",
+      "subtype": "prebuilt-desktop",
+      "mention_count": 3,
+      "mention_sources": [
+        "https://golfsimspot.com/blog/golf-simulator-computer-requirements/",
+        "https://grandgoldman.com/blogs/gaming/best-pc-for-golf-simulator",
+        "https://walfosbrand.com/blogs/gaming/best-computer-for-golf-simulator"
+      ],
+      "price": {
+        "amount": 1588,
+        "currency": "USD",
+        "read_on": "2026-08-01",
+        "source_url": "https://golfsimspot.com/blog/golf-simulator-computer-requirements/",
+        "note": "Core Ultra 7 265F, RTX 5060, 32GB on Amazon; a Slickdeals post showed a Ryzen 7 7700X / RTX 5070 Tower 5 at $1,291"
+      },
+      "direct_url": "https://www.lenovo.com/us/en/d/gaming-desktops/",
+      "direct_url_status": "200 on 2026-10-19",
+      "why_watch": "Quiet, mainstream RTX 4060/5060/5070 tower; fits the $1,500 tier but only roundups mention it so far."
+    },
+    {
+      "brand": "Minisforum",
+      "name": "AtomMan G1 Pro mini PC (desktop RTX 5060 8GB, Ryzen 9 8945HX)",
+      "subtype": "mini-pc",
+      "mention_count": 2,
+      "mention_sources": [
+        "https://northcourse.golf/articles/best-mini-pc-for-golf-simulator",
+        "https://golfsimulatortalk.com/t/can-a-mini-pc-really-run-gspro-well/920"
+      ],
+      "price": {
+        "amount": 1719,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://store.minisforum.com/products/minisforum-g1-pro-gaming-pc",
+        "note": "32GB/1TB config on sale from $2,149; barebone $1,299 out of stock"
+      },
+      "direct_url": "https://store.minisforum.com/products/minisforum-g1-pro-gaming-pc",
+      "direct_url_status": "200 on 2026-10-19",
+      "specs": {
+        "gpu": "desktop RTX 5060 8GB GDDR7 at 145W",
+        "ports": "2x HDMI 2.1, 2x DisplayPort 2.1b, 1x DP 1.4a, 5G Ethernet, WiFi 7",
+        "dimensions": "215 x 57 x 315 mm, 3.81 kg"
+      },
+      "image_url": "https://store.minisforum.com/cdn/shop/files/Compressed_G1_Pro.png?v=1783865874&width=1946",
+      "why_watch": "The only mini PC class with a real desktop RTX card (meets GSPro 1080p Ultra on paper) and it is cart-shelf sized, but no golf owner reports yet and it costs more than an RTX 5060 tower."
+    },
+    {
+      "brand": "Beelink",
+      "name": "SER8 / SER9 Pro mini PC (Radeon 780M integrated)",
+      "subtype": "mini-pc",
+      "mention_count": 3,
+      "mention_sources": [
+        "https://northcourse.golf/articles/best-mini-pc-for-golf-simulator",
+        "https://forum.mygolfspy.com/topic/67465-gaming-and-sim-computers-the-asus-rog-ally-and-lenovo-legion-go/",
+        "https://golfsimulatortalk.com/t/can-a-mini-pc-really-run-gspro-well/920"
+      ],
+      "price": {
+        "amount": 859,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.bee-link.com/products/beelink-ser8-8745hs",
+        "note": "32GB/1TB; SER9 Pro about $629 and Minisforum UM890 Pro $463 to $989 in other listings"
+      },
+      "direct_url": "https://www.bee-link.com/products/beelink-ser8-8745hs",
+      "direct_url_status": "200 on 2026-10-19",
+      "specs": {
+        "gpu": "Radeon 780M integrated (about a third of an RTX 4060)",
+        "ports": "HDMI 2.1, DisplayPort 1.4, USB4, 2.5G LAN",
+        "dimensions": "0.814 L, 0.75 kg"
+      },
+      "image_url": "https://www.bee-link.com/cdn/shop/files/4_4ed865f2-0726-4555-8c22-9315566ac842_large.png",
+      "why_watch": "Runs Awesome Golf, SkyTrak, E6 Connect; GSPro only at 1080p low-to-medium with course-dependent frame rates. Below every published GSPro floor. A MyGolfSpy member's new mini PC 'really lags' in GSPro."
+    },
+    {
+      "brand": "STGAubron / MXZ / ViprTech / Cougar",
+      "name": "Amazon house-brand RTX 3060 / 4060 towers ($800 to $950)",
+      "subtype": "prebuilt-desktop",
+      "mention_count": 3,
+      "mention_sources": [
+        "https://canyougolf.com/vetted/14-best-gaming-pc-for-golf-simulator-in-2026/",
+        "https://yardstickgolf.com/golf-simulator-computer/",
+        "https://golfsimspot.com/blog/golf-simulator-computer-requirements/"
+      ],
+      "price": {
+        "amount": 939.99,
+        "currency": "USD",
+        "read_on": "2026-08-01",
+        "source_url": "https://golfsimspot.com/blog/golf-simulator-computer-requirements/",
+        "note": "ViprTech Ghost 3.0, Ryzen 7, RTX 4060, 16GB, 1TB"
+      },
+      "direct_url": "",
+      "direct_url_status": "no maker page captured",
+      "why_watch": "These are the real 'under $1,000' prebuilts, but only affiliate roundups name them and the spec sheets contradict their own text."
+    },
+    {
+      "brand": "MSI",
+      "name": "Codex R2 desktop (RTX 4060 or 5060 Ti)",
+      "subtype": "prebuilt-desktop",
+      "mention_count": 2,
+      "mention_sources": [
+        "https://golfsimspot.com/blog/golf-simulator-computer-requirements/",
+        "https://yardstickgolf.com/golf-simulator-computer/"
+      ],
+      "price": {
+        "amount": 1299.99,
+        "currency": "USD",
+        "read_on": "2026-08-01",
+        "source_url": "https://golfsimspot.com/blog/golf-simulator-computer-requirements/"
+      },
+      "direct_url": "",
+      "direct_url_status": "msi.com blocks automated fetch",
+      "why_watch": "A $1,300 name-brand RTX 4060 tower for the mid tier."
+    },
+    {
+      "brand": "XOTIC PC",
+      "name": "Launch Ready (RTX 5060, Core Ultra 5 225F, 16GB, 1TB)",
+      "subtype": "prebuilt-desktop",
+      "mention_count": 1,
+      "mention_sources": [
+        "https://homeperformancelab.com/golf-simulator-pc-requirements/"
+      ],
+      "price": {
+        "amount": 1100,
+        "currency": "USD",
+        "read_on": "2026-04-05",
+        "source_url": "https://homeperformancelab.com/golf-simulator-pc-requirements/"
+      },
+      "direct_url": "",
+      "direct_url_status": "not captured",
+      "why_watch": "Named as the budget 1080p prebuilt by one 2026 guide."
+    },
+    {
+      "brand": "Shop Indoor Golf / Rain or Shine",
+      "name": "Retailer-bundled sim laptops (SIG Tech Bundle i7-12700H RTX 4050 $2,199.99 to $2,319.99; RoS Katana RTX 2070 $1,750)",
+      "subtype": "gaming-laptop",
+      "mention_count": 4,
+      "mention_sources": [
+        "https://golfsimulatoradvisor.com/best-golf-simulator-laptop/",
+        "https://mygolfsimulator.com/golf-simulator-system-requirements/",
+        "https://practical-golf.com/computer-guide-for-home-golf-simulators",
+        "https://rainorshinegolf.com/products/golf-simulator-gaming-pc-katana"
+      ],
+      "price": {
+        "amount": 1750,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://rainorshinegolf.com/products/golf-simulator-gaming-pc-katana"
+      },
+      "direct_url": "https://rainorshinegolf.com/products/golf-simulator-gaming-pc-katana",
+      "direct_url_status": "200 on 2026-10-19",
+      "why_watch": "Convenient bundles (wireless display adapter, control box, cart) but the laptops inside are a generation or two old for the price."
+    },
+    {
+      "brand": "SkyTrak",
+      "name": "SkyTrak+ course play on an M1 or newer iPad",
+      "subtype": "no-pc",
+      "mention_count": 4,
+      "mention_sources": [
+        "https://www.carlofet.com/blog/ipad-golf-simulator-setup",
+        "https://mygolfsimulator.com/golf-simulator-system-requirements/",
+        "https://golfsimspot.com/blog/golf-simulator-computer-requirements/",
+        "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/345022-need-a-pc-or-laptop"
+      ],
+      "price": {
+        "amount": null,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.skytrakgolf.com/",
+        "note": "price not captured"
+      },
+      "direct_url": "https://www.skytrakgolf.com/",
+      "direct_url_status": "200 on 2026-10-19",
+      "why_watch": "Course play needs a paid membership and an M-series iPad; Windows app floor is GTX 1650."
+    },
+    {
+      "brand": "Garmin",
+      "name": "Approach R50 (built-in touchscreen, no phone needed)",
+      "subtype": "no-pc",
+      "mention_count": 2,
+      "mention_sources": [
+        "https://www.carlofet.com/blog/ipad-golf-simulator-setup",
+        "https://apps.apple.com/us/app/awesome-golf-simulator/id1487825763"
+      ],
+      "price": {
+        "amount": null,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "",
+        "note": "Garmin product page not located without search"
+      },
+      "direct_url": "",
+      "direct_url_status": "not captured",
+      "why_watch": "The one launch monitor that is its own computer; needs a dedicated read once search budget allows."
+    },
+    {
+      "brand": "ASUS / Lenovo",
+      "name": "ROG Ally and Legion Go handhelds running GSPro",
+      "subtype": "mini-pc",
+      "mention_count": 1,
+      "mention_sources": [
+        "https://forum.mygolfspy.com/topic/67465-gaming-and-sim-computers-the-asus-rog-ally-and-lenovo-legion-go/"
+      ],
+      "price": {
+        "amount": null,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "",
+        "note": ""
+      },
+      "direct_url": "",
+      "direct_url_status": "not captured",
+      "why_watch": "A MyGolfSpy member ran GSPro on a Legion Go in mouse mode at 1080p and was impressed; another runs the base ROG Ally at High. Graphics are RTX 1660 class, below the GSPro floor, so treat as a curiosity."
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://gsprogolf.com/",
+      "type": "brand",
+      "title": "GSPro home page, system requirements",
+      "date": "2026-10-19",
+      "what_it_says": "Windows only; 1080p 'GTX 3060' + 16GB, great 1080p RTX 3070 / 3060 Ti, 4K RTX 3080 + 32GB; $250/yr."
+    },
+    {
+      "url": "https://gspro.gitbook.io/gspro-knowledge-base/pc-requirements/what-specs-can-run-gspro",
+      "type": "brand",
+      "title": "GSPro knowledge base: What specs can run GSPro",
+      "date": "2026-10-19",
+      "what_it_says": "Three tiers for desktop and a separate laptop table (RTX 4060 Laptop = 1080p, RTX 4070 Laptop = 1080p Ultra, RTX 4080 Laptop = 4K Ultra); 1GB per course."
+    },
+    {
+      "url": "https://trugolf.zohodesk.com/portal/en/kb/articles/e6-connect-pc-and-ios-required-minimum-spec",
+      "type": "brand",
+      "title": "TruGolf KB: E6 Connect PC and iOS minimum spec",
+      "date": "2026-10-19",
+      "what_it_says": "i5, 8GB, GTX 1070, 25GB, Windows 10/11; iPad Pro 1st gen+, iPad 5th gen+, iPad Air 3+, iPad mini 5+, iPhone 8+."
+    },
+    {
+      "url": "https://www.trugolf.com/software/e6-2026/",
+      "type": "brand",
+      "title": "TruGolf E6 (2026) page",
+      "date": "2026-10-19",
+      "what_it_says": "RTX 3060 12GB, i7 10th gen+, 24GB RAM, NVMe, Windows 10 64-bit; PC only, no iPad."
+    },
+    {
+      "url": "https://support.foresightsports.com/fsx-play-download-and-installation",
+      "type": "brand",
+      "title": "Foresight FSX Play download and installation",
+      "date": "2026-10-19",
+      "what_it_says": "RTX 3060 minimum, RTX 3070 Ti/3080/3090 recommended, Intel 7th gen+, AMD not recommended, AMD and Quadro GPUs unsupported, 8 to 16GB."
+    },
+    {
+      "url": "https://premier.foresightsports.com/",
+      "type": "brand",
+      "title": "Foresight Premier",
+      "date": "2026-10-19",
+      "what_it_says": "Minimum RTX 3060 Ti / 4060 Ti / RX 6600 XT + i5-12500 + 16GB; recommended RTX 4070 class + 32GB; ultra RTX 4080 for 4K High; Course Pass $295 or $595 per year."
+    },
+    {
+      "url": "https://insights.awesome-golf.com/docs/reference/compatibility/host/windows",
+      "type": "brand",
+      "title": "Awesome Golf Windows compatibility",
+      "date": "2026-10-19",
+      "what_it_says": "2.2GHz dual core, 4GB, integrated graphics, 2GB storage; 2017+ Intel i3/i5/i7 runs smoothly."
+    },
+    {
+      "url": "https://csc.protee-united.com/hc/en-us/articles/360019033493-The-Golf-Club-2019-Computer-Requirements",
+      "type": "brand",
+      "title": "ProTee: TGC 2019 computer requirements",
+      "date": "2026-10-19",
+      "what_it_says": "Minimum GTX 670 / Windows 10 / 30GB; recommended i7 3.2GHz, GTX 1060, GTX 1080 for 4K (fetch blocked, figures via search summary)."
+    },
+    {
+      "url": "https://uneekor.com/en-us/products/eye-xo-standalone",
+      "type": "brand",
+      "title": "Uneekor EYE XO product page",
+      "date": "2026-10-19",
+      "what_it_says": "Windows 11, i7 12th gen or Ryzen 7 5000, 32GB, RTX 4070 Ti 16GB, two Ethernet ports."
+    },
+    {
+      "url": "https://apps.apple.com/us/app/e6-connect/id1360027026",
+      "type": "brand",
+      "title": "E6 Connect on the App Store",
+      "date": "2026-10-19",
+      "what_it_says": "iOS 13+, iPad Pro 1st gen+ or iPhone 8+; warns older iPad Air / mini may not run well; supports R10, R50, Mevo, MLM2PRO, SkyTrak; 2.6 star rating with freezing complaints."
+    },
+    {
+      "url": "https://apps.apple.com/us/app/awesome-golf-simulator/id1487825763",
+      "type": "brand",
+      "title": "Awesome Golf Simulator on the App Store",
+      "date": "2026-10-19",
+      "what_it_says": "iPadOS 15+, Apple Silicon Mac; $14.99/mo, $159.99/yr, $349.99 lifetime; supports R10, R50, MLM2PRO, Mevo+, Launch Pro, GC3, Square, EYE MINI."
+    },
+    {
+      "url": "https://homeperformancelab.com/golf-simulator-pc-requirements/",
+      "type": "review",
+      "title": "Golf Simulator PC Requirements (2026)",
+      "date": "2026-04-05",
+      "what_it_says": "Per-software table; laptops deliver 70 to 80 percent of desktop GPU; names XOTIC PC Launch Ready $1,100, SurfThing SG3-5802, Origin from $2,519."
+    },
+    {
+      "url": "https://homeperformancelab.com/best-laptops-for-gspro/",
+      "type": "review",
+      "title": "Best Laptops for GSPro: Minimum Specs to 4K (2026)",
+      "date": "2026",
+      "what_it_says": "SurfThing M3H $3,699, Legion Pro 5i $1,750 to $2,600, Legion Pro 7i from $3,439.99, Legion 5i $1,200 to $1,700; MUX switch, thin-chassis throttling, HDMI 2.1 for 4K60."
+    },
+    {
+      "url": "https://homeperformancelab.com/fsx-play-system-requirements/",
+      "type": "review",
+      "title": "FSX Play System Requirements (2026)",
+      "date": "2026-06-22",
+      "what_it_says": "Official FSX tiers; AMD CPUs run off-label; laptops throttle after 10 to 20 minutes; RTX 4070 mobile for 1080p, 4080 mobile for 4K; check 4K60 output port."
+    },
+    {
+      "url": "https://golfsimulatorvideos.com/best-computer-for-golf-simulator-2026-guide/",
+      "type": "review",
+      "title": "Best PC for Golf Simulator (2026 Guide)",
+      "date": "2026-10",
+      "what_it_says": "SurfThing SG3 line mapped against GSPro, FSX, Premier, Trackman, Uneekor lists; affiliate; desktop recommended for a permanent sim."
+    },
+    {
+      "url": "https://golfsimulatorvideos.com/gaming-pc-for-gspro/",
+      "type": "review",
+      "title": "Do You Need a Gaming PC for GSPro? (2026)",
+      "date": "2026-10",
+      "what_it_says": "GSPro's 'GTX 3060' is a card that does not exist; knowledge base starts 4K Ultra at RTX 5070; office PCs with integrated graphics are out."
+    },
+    {
+      "url": "https://northcourse.golf/articles/best-mini-pc-for-golf-simulator",
+      "type": "review",
+      "title": "Best Mini PC for a Golf Simulator (2026)",
+      "date": "2026-10-18",
+      "what_it_says": "Beelink SER9 Pro $629, Minisforum UM890 Pro $989, SER8; 780M only meets Awesome Golf; GSPro at 1080p reduced settings; Foresight Premier replaced FSX Play in September 2026."
+    },
+    {
+      "url": "https://golfsimulatoradvisor.com/best-golf-simulator-laptop/",
+      "type": "review",
+      "title": "11 Best Gaming Laptops for Your Golf Simulator",
+      "date": "2026-06-21",
+      "what_it_says": "Razer Blade 16, Zephyrus G15, Legion Pro 5i, Helios 300, Aorus 17X, Strix G16, Raider, Alienware M18, MacBook Pro; Shop Indoor Golf Tech Bundle $2,199.99 to $2,319.99 (RTX 4050 laptop)."
+    },
+    {
+      "url": "https://canyougolf.com/vetted/14-best-gaming-pc-for-golf-simulator-in-2026/",
+      "type": "review",
+      "title": "14 Best Gaming PC for Golf Simulator in 2026",
+      "date": "2026",
+      "what_it_says": "Amazon towers: MXZ, STGAubron, Skytech Azure 3, CyberPowerPC Gamer Xtreme VR (RTX 5060), iBUYPOWER Slate (RTX 5060), renewed OptiPlex with GT 1030."
+    },
+    {
+      "url": "https://mygolfsimulator.com/golf-simulator-system-requirements/",
+      "type": "review",
+      "title": "Golf Simulator System Requirements in 2025",
+      "date": "2025",
+      "what_it_says": "Big per-software table incl. Trackman, ProTee, SkyTrak, Uneekor; Shop Indoor Golf laptop i7-12700H RTX 3060 Ti."
+    },
+    {
+      "url": "https://www.opengolfer.co.uk/blogs/news/golf-simulator-pc-computer-guide-uk-specs-builds-recommendations-2026",
+      "type": "review",
+      "title": "Golf Simulator PC Guide UK 2026",
+      "date": "2026-04-30",
+      "what_it_says": "Cheap mini PCs with integrated graphics will not run GSPro or E6; put the PC behind the hitting area or in the next room; laptops cost 30 to 50 percent more."
+    },
+    {
+      "url": "https://golfsimspot.com/blog/golf-simulator-computer-requirements/",
+      "type": "review",
+      "title": "Best Computer for a Golf Simulator: 2026 Requirements Guide",
+      "date": "2026-08",
+      "what_it_says": "Amazon price table Aug 2026: ViprTech $939.99, MSI Codex R2 $1,299.99, iBUYPOWER Slate MESH $1,499.99, Legion Tower 5i $1,588, iBUYPOWER Element $1,899.99, CyberPowerPC $2,598; laptops MSI Thin 15 $1,015, Acer Nitro 16 $1,399.99, Nitro V $1,449.99, ROG Strix G16 $1,539.99 / $1,580.99; placement and cooling-pad advice."
+    },
+    {
+      "url": "https://practical-golf.com/computer-guide-for-home-golf-simulators",
+      "type": "review",
+      "title": "Computer Guide for Home Golf Simulators",
+      "date": "2026",
+      "what_it_says": "OptiPlex 3020 about $400 (no HDMI), Skytech Blaze 2, HP Pavilion Gaming 15 about $700, ASUS TUF, Alienware m15, SIG bundle under $1,800; double the minimums."
+    },
+    {
+      "url": "https://yardstickgolf.com/golf-simulator-computer/",
+      "type": "review",
+      "title": "Best Golf Simulator Computers: Buyer's Guide",
+      "date": "2026-10-13",
+      "what_it_says": "SurfThing SG3-5802 / 5702Ti / 5702 / 5602 / M3H, MSI Codex R2, Corsair i7500, MXZ, STGAubron, Cougar, GRI; M3H runs warm and loud under long sessions; 12GB VRAM minimum for 4K."
+    },
+    {
+      "url": "https://computeexpert.com/best-gaming-laptop-for-golf-simulator",
+      "type": "review",
+      "title": "3 Best Gaming Laptops for Golf Simulators in 2026",
+      "date": "2026",
+      "what_it_says": "Legion 5 Pro (RTX 4070 140W), Zephyrus G14 (RTX 4070 90W, runs hot), MSI Katana A15 (RTX 4070 105W, MUX)."
+    },
+    {
+      "url": "https://www.funwithgolf.com/best-laptop-for-golf-simulator/",
+      "type": "review",
+      "title": "Best Laptop For Golf Simulator 2026",
+      "date": "2026-09-05",
+      "what_it_says": "Dell G15 RTX 4060 top pick; MSI Thin 15 in RTX 2050 / 3050 / 4050 trims; warns integrated-graphics HP and Dell laptops are not for sims."
+    },
+    {
+      "url": "https://thehickorygolfhub.com/golf-equipment/best-laptop-for-golf-simulator/",
+      "type": "review",
+      "title": "Best Laptop For Golf Simulator: Budget Beasts",
+      "date": "2026-03-10",
+      "what_it_says": "MSI Thin 15, Acer Nitro V, ROG Strix G16; also pads the list with MacBook Airs."
+    },
+    {
+      "url": "https://grandgoldman.com/blogs/gaming/best-pc-for-golf-simulator",
+      "type": "review",
+      "title": "10 Best Gaming PC for Golf Simulator",
+      "date": "2026",
+      "what_it_says": "ASUS ROG Strix G15 desktop, Legion Tower 5i Gen 8 (i5-14400F RTX 4060), MSI GE76, Alienware m15 R7, TUF F15 (RTX 2050), IdeaPad Gaming 3, HP Omen 35L, Dell G15."
+    },
+    {
+      "url": "https://walfosbrand.com/blogs/gaming/best-computer-for-golf-simulator",
+      "type": "review",
+      "title": "10 Best Gaming Computers for Golf Simulators",
+      "date": "2026",
+      "what_it_says": "Same nine models as Grand Goldman; no prices."
+    },
+    {
+      "url": "https://www.golf-2-u.com/blogs/golf/what-kind-of-computer-do-i-need-for-a-golf-simulator",
+      "type": "review",
+      "title": "What Kind of Computer Do I Need for a Golf Simulator?",
+      "date": "2026-02-03",
+      "what_it_says": "RTX 3050 minimum, RTX 3060/4060 recommended, RTX 4070+ for 4K; gaming laptops throttle in long sessions."
+    },
+    {
+      "url": "https://www.thelascopress.com/2026/01/best-golf-simulator-pc-2026-surfthing-review/",
+      "type": "review",
+      "title": "Best Golf Simulator PC in 2026? SurfThing Computer Review",
+      "date": "2026-01-23",
+      "what_it_says": "Relays the Golf Simulator Videos RTX 5080 test: ultra settings without stutter; no numbers."
+    },
+    {
+      "url": "https://topshelfgolf.com/blogs/golf/do-you-really-need-a-golf-simulator-computer-heres-why-surfthing-is-built-for-the-job",
+      "type": "retailer",
+      "title": "Do You Really Need a Golf Simulator Computer? (Top Shelf Golf)",
+      "date": "2026-10-16",
+      "what_it_says": "SurfThing prices and SurfThing's own GSPro fps per model; E6 (2026), Premier, Uneekor, ProTee VX figures; 'buy for the heaviest software at your projector's resolution'."
+    },
+    {
+      "url": "https://www.carlofet.com/blog/golf-simulator-computers",
+      "type": "retailer",
+      "title": "Golf Simulator Computers (Carl's Place)",
+      "date": "2026",
+      "what_it_says": "Carl's sells SurfThing SG3-5702 / 5702Ti / 5802; Intel Ultra + RTX + 32GB + 2TB guidance."
+    },
+    {
+      "url": "https://www.carlofet.com/blog/ipad-golf-simulator-setup",
+      "type": "retailer",
+      "title": "How to Set Up a Golf Simulator with an iPad or Tablet (Carl's Place)",
+      "date": "2026",
+      "what_it_says": "Mevo+, SkyTrak, R10, R50 (built-in screen), Full Swing KIT on tablets; Apple TV AirPlay recommended; HDMI adapter alternative; aspect ratio notes; GSPro absent."
+    },
+    {
+      "url": "https://www.golfsimulatornerd.com/blog/gspro-golf-simulator-software-setup-2026",
+      "type": "review",
+      "title": "GSPro Setup 2026 (Golf Simulator Nerd)",
+      "date": "2026",
+      "what_it_says": "Courses 1 to 5GB each, keep 200GB free; Ethernet over WiFi; integrated GPUs cannot do it."
+    },
+    {
+      "url": "https://golfersauthority.com/rapsodo-mlm2pro-system-requirements-device-guide/",
+      "type": "review",
+      "title": "Rapsodo MLM2Pro System Requirements Device Guide 2026",
+      "date": "2026-02",
+      "what_it_says": "iPhone 8+/iOS 14, iPad 2017+ or 9th gen+ on iOS 17.7, Android 10+; GSPro needs a Windows PC with i5, 16GB, RTX 3060."
+    },
+    {
+      "url": "https://www.playbetter.com/blogs/golf-simulator-reviews/garmin-approach-r10-review-golf-launch-monitor-under-1000",
+      "type": "review",
+      "title": "Garmin Approach R10 Review (2026) (PlayBetter)",
+      "date": "2026-08-08",
+      "what_it_says": "$599.99 list, often $499.99; works with E6 Connect, E6 Apex, GSPro, Awesome Golf, TGC 2019, Creative Golf; $99/yr Garmin membership."
+    },
+    {
+      "url": "https://breakingeighty.com/garmin-approach-r10-review",
+      "type": "review",
+      "title": "Is the Garmin R10 Worth Buying in 2026?",
+      "date": "2026-04-15",
+      "what_it_says": "About $600; E6 Connect five free iOS courses; spin needs RCT balls; 10 to 15 yard deviations vs GC3."
+    },
+    {
+      "url": "https://www.awesome-golf.com/connect/",
+      "type": "brand",
+      "title": "Awesome Golf Connect",
+      "date": "2026-10-19",
+      "what_it_says": "Which monitors run on iPad, Android, Windows, Apple Silicon Mac; no Apple TV app."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/412034-systems-recommendations-for-gspro",
+      "type": "forum",
+      "title": "Systems recommendations for GSpro",
+      "date": "2025-01-25",
+      "what_it_says": "Club buyer told: i7-12700K, 32GB, 1TB M.2, RTX 4000 series, 750W; 'don't buy a laptop, even a gaming laptop, they overheat easily'."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/396937-gspro-pc-spec",
+      "type": "forum",
+      "title": "Gspro pc spec",
+      "date": "2023-11-11",
+      "what_it_says": "Refurb 4th gen i5 + RTX 3060 + 32GB: fine, GSPro does not use much CPU; 3060 runs most courses at ultra; 3060 Ti better."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/412818-gaming-pc-help",
+      "type": "forum",
+      "title": "Gaming PC help!",
+      "date": "2025-02-20",
+      "what_it_says": "Ryzen 5 5600X + RTX 3060 Ti + 32GB will run GSPro 1080p; quotes GSPro's RTX 3070 / 3060 Ti line."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/345022-need-a-pc-or-laptop",
+      "type": "forum",
+      "title": "Need a PC or laptop?",
+      "date": "2021-10-11",
+      "what_it_says": "SkyTrak, Mevo+, R10 all have mobile apps; phones/tablets output over HDMI; a desktop is cheaper and upgradeable; ASUS TUF RTX 3050 Ti under $800 linked; Origin / iBuyPower prebuilts suggested."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/412210-gaming-laptop-recommendations-gspro",
+      "type": "forum",
+      "title": "Gaming Laptop Recommendations GSPro",
+      "date": "2025-01-31",
+      "what_it_says": "RTX 4060 mobile works at 1080p; laptop GPU is about two generations behind the same desktop name; Lenovo Legion recommended for cooling; RTX 4070 laptops seen at $1,300."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/398311-can-my-computer-support-gspro",
+      "type": "forum",
+      "title": "Can my computer support GSPRO?",
+      "date": "2023-12-08",
+      "what_it_says": "ZenBook MX350 lags; laptop GPUs capped near 140W vs 300W desktop; Lenovo RTX 4060 laptops $1,000 to $1,200; iBUYPOWER Slatemesh i7-13700F RTX 4060 bought at Costco; CyberPowerPC Costco model $100 less; SurfThing custom about $3,300; $1,400 build with used $400 GPU runs max settings 60fps with two cameras."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/408129-will-gs-pro-work-with-this-laptop",
+      "type": "forum",
+      "title": "Will gs pro work with this laptop?",
+      "date": "2024-09-05",
+      "what_it_says": "Lenovo LOQ 15 RTX 4050 vs RTX 4060; laptop 4060 about 80 to 90 percent of a desktop 3060 Ti; avoid x050 GPUs; laptop GPUs wear out sooner under constant load."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/403640-hoping-to-purchase-a-gaming-laptop-today-advice-needed",
+      "type": "forum",
+      "title": "Hoping to Purchase a Gaming Laptop today",
+      "date": "2024-03-29",
+      "what_it_says": "Dell G15 vs Lenovo vs MSI Katana; 32GB over 16GB; laptop GPUs 10 percent slower at 4060 level, over 50 percent at 4080; poster bought a desktop instead."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/413539-gaming-laptop-gspro-4k-advice",
+      "type": "forum",
+      "title": "Gaming Laptop GSPro 4K Advice",
+      "date": "2025-03-21",
+      "what_it_says": "Legion Pro 7i Gen 10 RTX 5080 Laptop 32GB: 'no issues' expected at 4K."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/416279-laptop-for-fsx-play",
+      "type": "forum",
+      "title": "Laptop for FSX Play",
+      "date": "2025-11-15",
+      "what_it_says": "Legion 5i 16in Core Ultra 9 275HX RTX 5060 32GB 1TB at $1,100 'would work' for FSX Play 1080p."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/399985-computer-check-for-gc3-fsx-play-gspro",
+      "type": "forum",
+      "title": "Computer Check for GC3 / FSX Play / GSPro",
+      "date": "2024-01-13",
+      "what_it_says": "RTX 3060 laptop vs $899 Costco RTX 4060 desktop; desktop preferred; 4060 fine for GSPro 1080p, FSX Play may struggle on a 60-series card."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/gspro/416294-what-gpu",
+      "type": "forum",
+      "title": "What GPU?",
+      "date": "2025-11-17",
+      "what_it_says": "Alienware Aurora R12 with RTX 3080 10GB and 32GB gets FPS warnings on Ultra; 4K Ultra with a ProTee VX needs a new machine; RX 9070 XT would not fit the case."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/417652-best-golf-simulator-computer-surfthing-rtx-5080-build-review",
+      "type": "forum",
+      "title": "Best Golf Simulator Computer? SurfThing RTX 5080 Build Review!",
+      "date": "2026-02-22",
+      "what_it_says": "SG3-5802 has 12 USB-A (two powered for cameras), 2.5G plus 1G Ethernet; only one free expansion slot because the GPU blocks the rest; GolfPig 'very impressed'."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/212830-which-laptop",
+      "type": "forum",
+      "title": "Which Laptop",
+      "date": "2019-07-05",
+      "what_it_says": "MSI GL73 $1,199, HP Omen RTX 2060 $1,276, Dell G3 15 $879; battery lasts a few holes on the GPU; poster built a desktop for under $1,100 instead."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/393341-is-this-pc-powerful-enough",
+      "type": "forum",
+      "title": "Is this PC powerful enough?",
+      "date": "2023-08-20",
+      "what_it_says": "HP RTX 4080 laptop $1,779 vs Skytech Blaze 3 (i7-12700F, RTX 4060 Ti) at Costco; 40-series mobile plus a cooling pad; projectors cap at 60Hz so high fps is wasted."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/400078-computer-check-for-system-upgrade%E2%80%A6",
+      "type": "forum",
+      "title": "Computer check for system upgrade",
+      "date": "2024-01-15",
+      "what_it_says": "FUNYET mini PC with i7-9750H and GTX 1050 rejected; buy a used gaming PC; Costco RTX 4060 desktops about $899 work well at 1080p."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/garmin/343012-garmin-r10-projector-setup",
+      "type": "forum",
+      "title": "Garmin r10 projector setup",
+      "date": "2021-09-21",
+      "what_it_says": "iPad to HDMI adapter is the main answer; mirroring and AirPlay slow on older iPads; Garmin app is portrait only; E6 iOS does landscape at lower detail."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/316231-ipad-mevo-projector-getting-confused-and-hoping-someone-can-help",
+      "type": "forum",
+      "title": "iPad... Mevo+.... Projector...",
+      "date": "2021-02-03",
+      "what_it_says": "Apple TV AirPlay and USB-C to HDMI both work with near-instant delay; Apple TV must join the Mevo+ network; iPad outputs 4:3 (or 16:10 on Air)."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/rapsodo-mlm2pro/402733-gspro-connector-with-mlm2pro-ipad-pro",
+      "type": "forum",
+      "title": "GSPro Connector with MLM2Pro & iPad Pro",
+      "date": "2024-03-06",
+      "what_it_says": "GSPro is PC only; iPad runs the Rapsodo app, PC runs GSPro and reads the mirrored data."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/298216-graphics-card-for-tgc-2019",
+      "type": "forum",
+      "title": "graphics card for TGC 2019",
+      "date": "2020",
+      "what_it_says": "GTX 1060 over GTX 750; a used PC with a decent card about $500."
+    },
+    {
+      "url": "https://forum.mygolfspy.com/topic/67465-gaming-and-sim-computers-the-asus-rog-ally-and-lenovo-legion-go/",
+      "type": "forum",
+      "title": "Gaming and Sim Computers: the Asus ROG Ally and Lenovo Legion Go (MyGolfSpy)",
+      "date": "2026-02",
+      "what_it_says": "Legion Go ran GSPro at 1080p in mouse mode and impressed; a new mini PC lagged badly in GSPro and SkyTrak; handheld graphics compared to an RTX 1660 (403 to fetch; via search summary)."
+    },
+    {
+      "url": "https://forum.mygolfspy.com/topic/69976-outdoor-simulator-gspro-build/",
+      "type": "forum",
+      "title": "Outdoor Simulator GSPro Build (MyGolfSpy)",
+      "date": "2026",
+      "what_it_says": "HP Omen with RTX 4070 'runs great if you are just doing 1080p'; 4K expected a little jittery (403 to fetch; via search summary)."
+    },
+    {
+      "url": "https://forums.golfwrx.com/topic/1977518-someone-help-me-build-a-gaming-pc-or-should-i-just-buy/",
+      "type": "forum",
+      "title": "Someone Help Me Build a Gaming PC (or should I just buy) (GolfWRX)",
+      "date": "2024",
+      "what_it_says": "'Hardly any real difference between 4K and 1080p with GSPro unless you have a very good projector'; one poster runs 1080p Ultra on a budget machine (403 to fetch; via search summary)."
+    },
+    {
+      "url": "https://www.playbetter.com/products/surfthing-golf-simulator-and-gaming-computer",
+      "type": "retailer",
+      "title": "SurfThing SG3 Series (PlayBetter)",
+      "date": "2026-10-19",
+      "what_it_says": "SG3-5602 $2,249, 5702 $3,199, 5702Ti $3,799, 5802 $4,699 with full specs and image."
+    },
+    {
+      "url": "https://rainorshinegolf.com/products/golf-simulator-gaming-pc-katana",
+      "type": "retailer",
+      "title": "Golf Simulator Gaming Laptop, Katana (Rain or Shine Golf)",
+      "date": "2026-10-19",
+      "what_it_says": "$1,750; i7-10750H, RTX 2070 8GB, 16GB, HDMI 4K60 + mini DP, RJ-45; validated for Uneekor, compatible with GSPro, E6, TGC."
+    },
+    {
+      "url": "https://skytechgaming.com/",
+      "type": "brand",
+      "title": "Skytech Gaming",
+      "date": "2026-10-19",
+      "what_it_says": "Azure 3 from $1,399.99 (i5-14400F, RTX 5060 Ti 8GB) to $1,999.99 (Core Ultra 7 265K)."
+    },
+    {
+      "url": "https://www.cyberpowerpc.com/category/gaming-pcs/",
+      "type": "brand",
+      "title": "CyberPowerPC gaming PCs",
+      "date": "2026-10-19",
+      "what_it_says": "Gaming PC Master 8000 $1,909 (RTX 5060 Ti), Master 9000 $2,379 (RTX 5070), Master 9500 $3,505 (RTX 5080)."
+    },
+    {
+      "url": "https://www.dell.com/en-us/shop/gaming-pcs/sr/gaming/alienware-desktops",
+      "type": "brand",
+      "title": "Alienware desktops (Dell)",
+      "date": "2026-10-19",
+      "what_it_says": "Aurora from $2,329.99, up to RTX 5080."
+    },
+    {
+      "url": "https://www.dell.com/en-us/shop/laptop-computers/scr/laptop/gaming",
+      "type": "brand",
+      "title": "Dell gaming laptops",
+      "date": "2026-10-19",
+      "what_it_says": "No G15/G16 listed; Alienware 15 from $1,199.99 (up to RTX 5060), Alienware 16 Aurora from $1,599.99."
+    },
+    {
+      "url": "https://www.asus.com/laptops/for-gaming/tuf-gaming/asus-tuf-gaming-16-2026/",
+      "type": "brand",
+      "title": "ASUS TUF Gaming 16 (2026)",
+      "date": "2026-10-19",
+      "what_it_says": "Up to RTX 5070 Laptop 85W, i7-14650HX or Ryzen 7 260, 2x DDR5 slots, 16in 2560x1600 165Hz, HDMI 2.1 FRL, USB-C DP 1.4, RJ-45."
+    },
+    {
+      "url": "https://store.minisforum.com/products/minisforum-g1-pro-gaming-pc",
+      "type": "brand",
+      "title": "Minisforum AtomMan G1 Pro",
+      "date": "2026-10-19",
+      "what_it_says": "$1,719 (32GB/1TB), desktop RTX 5060 8GB 145W, Ryzen 9 8945HX, 2x HDMI 2.1, 2x DP 2.1b, 5G LAN, 3.81 kg."
+    },
+    {
+      "url": "https://www.bee-link.com/products/beelink-ser8-8745hs",
+      "type": "brand",
+      "title": "Beelink SER8 8745HS",
+      "date": "2026-10-19",
+      "what_it_says": "$859, Radeon 780M, 32GB/1TB, HDMI 2.1, DP 1.4, USB4, 2.5G LAN, 0.75 kg."
+    },
+    {
+      "url": "https://rapsodo.com/products/mlm2pro",
+      "type": "brand",
+      "title": "Rapsodo MLM2PRO",
+      "date": "2026-10-19",
+      "what_it_says": "$549.99 from $699.99; pairs with Android or Apple phone/tablet; GSPro, E6, Awesome Golf listed."
+    },
+    {
+      "url": "https://flightscope.com/products/mevo-plus/",
+      "type": "brand",
+      "title": "FlightScope Mevo+",
+      "date": "2026-10-19",
+      "what_it_says": "$1,099 from $2,299, limited stock; iOS 17/18, Android 14, Windows app; 12-course E6 license."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=Fuz0-9cjBXg",
+      "type": "video",
+      "title": "The BEST GS Pro Golf Simulator PC Build! (YouTube)",
+      "date": "",
+      "what_it_says": "Showcase custom build, reported by search as a $20,000 class build; description not readable from the sandbox."
+    }
+  ],
+  "blog_outline": {
+    "title": "The computer is the last thing you buy and the first thing you should decide: PCs, laptops and the no-PC path for a garage golf simulator (2026)",
+    "sections": [
+      "The software decides the PC: a one-table map of GSPro (RTX 3060 / 16GB at 1080p, RTX 3080 or 4070 / 32GB at 4K, Windows only), E6 Connect (GTX 1070 / 8GB, also iPad), E6 (2026) (RTX 3060 12GB / 24GB / i7, PC only), Foresight Premier (RTX 3060 Ti class minimum, replaces FSX Play), TGC 2019 (GTX 1060 class), Creative Golf 3D, and Awesome Golf (integrated graphics, iPad). Pick the heaviest title you will run at your projector's resolution, then buy one tier up.",
+      "1080p or 4K is the real fork: most garage bays run a 1080p projector, and a GolfWRX regular says there is hardly any difference in GSPro without a very good projector. 1080p means an RTX 4060 / 5060 desktop or an RTX 4060 laptop; 4K means 12GB of VRAM and 32GB of RAM and roughly doubles the budget.",
+      "The gaming-laptop path and its limits: GSPro's own laptop table (RTX 4060 Laptop for 1080p, 4070 for 1080p Ultra, 4080 for 4K), why a laptop card is 20 to 30 percent slower than the desktop card of the same name, MUX and dGPU-only mode, thin-chassis throttling after 20 to 30 minutes, the cooling pad, the 80 percent charge cap, and the burnt-out laptops in the forum. The models that keep coming up: Lenovo Legion 5i / Pro 5i, ASUS TUF and ROG Strix, Dell G15 (now Alienware 15), MSI Thin 15 and Katana, Acer Nitro V. Brett's own older gaming laptop as the worked example.",
+      "Prebuilts under $1,000 (as of the read date): a refurbished office tower plus a used RTX 3060, Amazon house-brand RTX 4060 towers (ViprTech, STGAubron, MXZ) at $800 to $950, and the Costco RTX 4060 tower that forum members call the best deal going. What to check: power supply, one free PCIe slot, an Ethernet port if the launch monitor is wired.",
+      "Prebuilts under $1,500: iBUYPOWER Slate Mesh, Skytech Azure 3, MSI Codex R2, Lenovo Legion Tower 5i; RTX 5060 / 5060 Ti class, 32GB if you can; the HP Omen 35L and Alienware 16 laptops from big-box stores.",
+      "Prebuilts under $2,500 and the turnkey option: iBUYPOWER Element RTX 5070, CyberPowerPC Master 8000 / 9000, Alienware Aurora from $2,329.99, and SurfThing SG3-5602 ($2,249) / SG3-5702 ($3,199) with the software preinstalled, two Ethernet ports and camera-powered USB. When the premium is worth it (you want someone to call) and when it is not (you can plug in a GPU).",
+      "Mini PCs: Beelink SER8 and Minisforum UM890 Pro (780M) run Awesome Golf, SkyTrak and E6 but sit under every GSPro floor; the Minisforum AtomMan G1 Pro puts a desktop RTX 5060 in a cart-shelf box at $1,719; handhelds (Legion Go, ROG Ally) are a curiosity.",
+      "The no-PC path: Garmin R10 ($499 to $599) or Mevo+ ($1,099 clearance) or Rapsodo MLM2PRO ($549.99) to an iPad, then Apple TV AirPlay or a $20 HDMI adapter to the projector. What you get (E6 iOS courses, Awesome Golf, FS Golf, Home Tee Hero), what you give up (GSPro, TGC, Premier, 4:3 output, older-iPad stutter), and the hidden costs (Garmin $99/yr, Rapsodo Premium $199.99/yr, E6 and Awesome Golf subscriptions).",
+      "What to put on a cart in a fold-away bay: a laptop or a mini tower on a two-shelf AV cart with the projector on top, one 25 ft HDMI 2.1 run, a USB Ethernet adapter for a wired launch monitor, a small UPS, and the PC off the carpet with its vents clear. Keep the tower out of a closed cabinet, keep the laptop on the charger, and dust the fans monthly.",
+      "Checklist before you click buy: Windows 11, the GPU on the right tier for your software and resolution, 32GB RAM if 4K or cameras, 1TB NVMe (courses are 1 to 5GB each), two Ethernet ports or a spare slot if wired, HDMI 2.1 or USB-C DisplayPort for 4K60, and a return policy.",
+      "Disclosure: Brett Martin runs Teed and builds StowGolf."
+    ]
+  }
+}

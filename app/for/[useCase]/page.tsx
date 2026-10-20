@@ -21,6 +21,8 @@ import { getPostsForUseCase } from '@/lib/blog/crosslinks';
 import { RelatedArticles } from '@/components/blog/RelatedArticles';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { SetupCard, type SetupCardProps } from '@/components/bag/SetupCard';
+import { ComponentCard } from '@/components/bag/ComponentCard';
+import { getComponentStripCards } from '@/lib/components/strip';
 import { computeTotals, formatBagTotalLine, type TotalsItem } from '@/lib/bags/totals';
 import { DISCLOSURE } from '@/lib/disclosure';
 import { SITE_URL } from '@/lib/siteUrl';
@@ -242,6 +244,8 @@ export default async function UseCasePage({ params }: PageProps) {
   // Real bags on the page (landing evaluation #2). Only when the use case has a category.
   const setups = useCase.discoverCategory ? await fetchSetups(useCase.discoverCategory) : [];
   const setupCount = setups.length;
+  // Components strip (golf-sim only): the six reference lists, or their guides until a list is seeded.
+  const componentCards = useCase.discoverCategory === 'golf-sim' ? await getComponentStripCards() : [];
   const noun = useCase.bagNoun || 'collection';
   const nounPlural = `${noun}s`;
 
@@ -362,6 +366,27 @@ export default async function UseCasePage({ params }: PageProps) {
                   </Link>
                 </p>
               )}
+            </div>
+          </section>
+        )}
+
+        {/* Components: one card per part category; a card links to the @teed reference bag when it
+            exists, else to the guide, and is hidden when neither exists yet. */}
+        {componentCards.length > 0 && (
+          <section id="components" className="scroll-mt-20 py-10 sm:py-14 px-4 sm:px-6 lg:px-8 border-t border-[var(--border-subtle)]">
+            <div className="max-w-6xl mx-auto">
+              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
+                <h2 className="text-2xl sm:text-[28px] font-bold text-[var(--text-primary)]">Components</h2>
+                <span className="text-sm text-[var(--text-tertiary)]">one list per part</span>
+              </div>
+              <p className="text-sm text-[var(--text-secondary)] mb-6 max-w-3xl">
+                What people actually buy for each part of a home sim, grouped by shape and price, with the list price, the date it was read and one thread worth reading. Not ranked.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {componentCards.map((card) => (
+                  <ComponentCard key={card.slug} {...card} />
+                ))}
+              </div>
             </div>
           </section>
         )}

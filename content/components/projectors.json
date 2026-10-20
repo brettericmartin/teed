@@ -1,0 +1,1497 @@
+{
+  "category": "projectors",
+  "read_date": "2026-10-19",
+  "subtypes": [
+    "short-throw",
+    "ultra-short-throw",
+    "standard-throw",
+    "off-center-capable"
+  ],
+  "notes": {
+    "qualification": "5+ independent sources = qualified, 10+ = core. Brand pages excluded from the count. Reddit counted via search snippets and the redditrecs aggregator because reddit.com cannot be fetched.",
+    "room_fit_math": "For a native 16:9 projector filling a 4:3 impact screen, the projector must throw an image 16/9 x screen height wide. A 10 ft x 7.5 ft (4:3) screen needs a 13.33 ft wide image, so distance = throw ratio x 13.33 ft. A 9 ft 6 in wide 4:3 screen (7 ft 1.5 in tall) needs a 12.67 ft wide image. Distances below are computed from each maker's throw ratio, not published by the maker, unless stated.",
+    "off_center_definition": "Off-center capable = optical lens shift on at least one axis, or a short enough throw plus enough keystone to sit beside the hitting line on a floor case or cart. Digital keystone discards pixels and softens the image; every source ranks it last after physical placement and lens shift.",
+    "search_budget": "WebSearch budget ran out mid-task; later model-specific Reddit queries could not be run. Counts for Reddit lean on the first wave of searches and the redditrecs pages."
+  },
+  "products": [
+    {
+      "brand": "BenQ",
+      "name": "AK700ST",
+      "subtype": "short-throw",
+      "tier": "core",
+      "mention_count": 16,
+      "mention_sources": [
+        "https://homeperformancelab.com/5-best-short-throw-projectors-for-golf-simulator/",
+        "https://homeperformancelab.com/best-benq-projector-for-golf-simulator/",
+        "https://www.carlofet.com/blog/choosing-a-projector-for-a-golf-simulator-setup",
+        "https://golfstead.com/best-golf-simulator-projectors",
+        "https://topshelfgolf.com/blogs/golf/best-golf-simulator-projectors-in-2026-benq-and-optoma-compared",
+        "https://topshelfgolf.com/pages/golf-simulator-projectors-guide",
+        "https://mygolfsimulator.com/where-to-mount-your-golf-simulator-projector/",
+        "https://mygolfsimulator.com/keystone-correction/",
+        "https://mygolfsimulator.com/best-golf-simulator-projectors/",
+        "https://www.projectorcentral.com/best-golf-projectors.htm",
+        "https://www.simgolfer.com/blogs/simulator-academy/best-golf-simulator-projectors-2026",
+        "https://homegolfhero.com/guides/best-projector-for-golf-simulator/",
+        "https://www.youtube.com/watch?v=VI45ROzcuJc",
+        "https://www.tomsguide.com/tvs/4k-tvs/projectors-arent-just-for-movies-and-gaming-this-one-improves-your-golf-game",
+        "https://shopindoorgolf.com/collections/projectors",
+        "https://forum.mygolfspy.com/topic/68781-7-best-golf-simulator-projectors-in-2026-for-home-golf-simulators/"
+      ],
+      "price": {
+        "amount": 2899,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.projectorcentral.com/benq-ak700st.htm"
+      },
+      "direct_url": "https://www.benq.com/en-us/projector/golf/ak700st.html",
+      "fallback_url": "https://shopindoorgolf.com/products/benq-ak700st-4k-laser-golf-simulator-projector",
+      "read_url": "https://www.youtube.com/watch?v=VI45ROzcuJc",
+      "specs": {
+        "throw_ratio": "0.69 to 0.83 (1.2x powered zoom)",
+        "lumens": "4,000 ANSI (maker); Home Performance Lab estimates 3,500 to 4,000 in accurate mode",
+        "resolution": "4K UHD 3840x2160 (XPR)",
+        "native_aspect": "16:9; Auto Screen Fit fills 16:10, 4:3 and 1:1 impact screens (needs 2.5 in black border)",
+        "lens_shift": "none",
+        "keystone": "digital H and V plus Corner Fit; Auto Screen Fit aligns to the screen automatically",
+        "input_lag": "33.4 ms at 4K/60 and 1080p/60; 16.7 ms at 1080p/120; 8.4 ms at 1080p/240 (BenQ page)",
+        "light_source": "laser phosphor, 20,000 h",
+        "noise": "32 dB normal, 29 dB eco (ProjectorCentral)",
+        "other": "IP5X sealed engine; Golf Mode color preset; powered focus; 7.5 lb",
+        "mount_positions": "ceiling behind the golfer (BenQ recommends behind the golfer using the low offset); floor case possible with a short-throw offset but not the common choice",
+        "spec_sources": "https://www.projectorcentral.com/benq-ak700st.htm; https://www.benq.com/en-us/projector/golf/ak700st.html; https://homeperformancelab.com/best-benq-projector-for-golf-simulator/"
+      },
+      "room_fit": "10 ft wide 16:9 image: 6.9 to 8.3 ft lens to screen. 10 ft x 7.5 ft 4:3 screen: 9.2 to 11.1 ft (Top Shelf Golf quotes 9 ft 2 in to 11 ft 1 in, above the golfer). 9 ft 6 in wide 4:3: 8.7 to 10.5 ft. Center ceiling mount above or just behind the ball. Off-center only via digital keystone, so a cart beside the mat is not what it is built for.",
+      "off_center": "keystone only (no lens shift)",
+      "who_its_for": "The builder with a 16 ft or deeper bay who wants the golf-specific feature set (Golf Mode, Auto Screen Fit, sealed engine) and 4K, and is willing to pay for it.",
+      "pros": [
+        "Auto Screen Fit squares a 4:3 or 1:1 impact screen without manual keystone",
+        "4,000 lumens laser with IP5X dust seal for garages",
+        "Motorized zoom and focus, so alignment is done from the remote",
+        "Named first by ProjectorCentral, Home Performance Lab, Home Golf Hero and Shop Indoor Golf's 2026 sales"
+      ],
+      "cons": [
+        "$2,899, roughly $700 to $900 more than the TK710STi with the same throw geometry",
+        "Input lag at 4K/60 is about double the TK710STi (33.4 ms vs 16.7 ms)",
+        "No optical lens shift"
+      ],
+      "known_issues": [
+        "ProjectorCentral's best-golf list labels it 'Lamp' in error; it is laser",
+        "Needs an RTX 3060 class GPU or better to actually run GSPro at 4K (Home Performance Lab)"
+      ],
+      "why_people_choose_it": "It is the first projector built for the impact screen rather than a living room: the Golf Mode and Auto Screen Fit mean a 4:3 screen fills itself. Reviewers say the cheaper models can do the job, but the brightness is what sells it in a lit garage.",
+      "image_url": "https://image.benq.com/is/image/benqco/ak700st-right30-1"
+    },
+    {
+      "brand": "BenQ",
+      "name": "AH700ST",
+      "subtype": "short-throw",
+      "tier": "core",
+      "mention_count": 15,
+      "mention_sources": [
+        "https://homeperformancelab.com/5-best-short-throw-projectors-for-golf-simulator/",
+        "https://homeperformancelab.com/best-benq-projector-for-golf-simulator/",
+        "https://www.carlofet.com/blog/choosing-a-projector-for-a-golf-simulator-setup",
+        "https://golfstead.com/best-golf-simulator-projectors",
+        "https://topshelfgolf.com/blogs/golf/best-golf-simulator-projectors-in-2026-benq-and-optoma-compared",
+        "https://topshelfgolf.com/pages/golf-simulator-projectors-guide",
+        "https://mygolfsimulator.com/where-to-mount-your-golf-simulator-projector/",
+        "https://mygolfsimulator.com/keystone-correction/",
+        "https://mygolfsimulator.com/best-golf-simulator-projectors/",
+        "https://www.projectorcentral.com/best-golf-projectors.htm",
+        "https://www.thesmarthomehookup.com/ultimate-golf-sim-projector-comparison-and-setup-guide-2024/",
+        "https://www.projectorreviews.com/benq/benq-ah700st-laser-golf-simulator-projector/",
+        "https://www.smarthomeperfected.com/projector-for-golf-simulator/",
+        "https://homegolfhero.com/guides/best-projector-for-golf-simulator/",
+        "https://rainorshinegolf.com/products/benq-ah700st-golf-simulator-projector"
+      ],
+      "price": {
+        "amount": 2299,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.projectorcentral.com/benq-ah700st.htm",
+        "note": "MSRP was $1,899 at the March 2025 launch (Projector Reviews); retailers moved to $2,299 by late 2025"
+      },
+      "direct_url": "https://www.benq.com/en-us/projector/golf/ah700st.html",
+      "fallback_url": "https://rainorshinegolf.com/products/benq-ah700st-golf-simulator-projector",
+      "read_url": "https://www.projectorreviews.com/benq/benq-ah700st-laser-golf-simulator-projector/",
+      "specs": {
+        "throw_ratio": "0.69 to 0.83 (1.2x powered zoom)",
+        "lumens": "4,000 ANSI rated; Projector Reviews measured 3,812 in Bright, about 2,287 in other presets; The Hook Up measured 2,200 in Golf mode",
+        "resolution": "1080p 1920x1080",
+        "native_aspect": "16:9; Auto Screen Fit for 16:10, 4:3, 1:1",
+        "lens_shift": "none (digital shift and shrink only)",
+        "keystone": "auto keystone plus manual H and V, Corner Fit",
+        "input_lag": "16.7 ms at 1080p/60",
+        "light_source": "laser phosphor, 20,000 h",
+        "noise": "33 dB normal, 29 dB eco (Projector Reviews)",
+        "other": "IP5X sealed; Golf Mode; 7.3 lb",
+        "mount_positions": "ceiling behind the golfer; floor case possible",
+        "spec_sources": "https://www.projectorcentral.com/benq-ah700st.htm; https://www.projectorreviews.com/benq/benq-ah700st-laser-golf-simulator-projector/"
+      },
+      "room_fit": "Same geometry as the AK700ST: 6.9 to 8.3 ft for a 10 ft wide 16:9 image, 9.2 to 11.1 ft to fill a 10 ft x 7.5 ft 4:3 screen, 8.7 to 10.5 ft for a 9 ft 6 in wide 4:3 screen. Smart Home Perfected calls it the fit for a standard garage bay with a 10 ft screen.",
+      "off_center": "keystone only (no lens shift)",
+      "who_its_for": "The builder who wants the AK700ST install experience (Auto Screen Fit, Golf Mode, sealed laser) and does not care about 4K on an impact screen.",
+      "pros": [
+        "Easiest install in the class thanks to Auto Screen Fit and auto focus",
+        "4,000 lumen rating and 95% Rec.709 color",
+        "Low 16.7 ms lag"
+      ],
+      "cons": [
+        "Usable brightness is far below the 4,000 rating once you leave Bright mode (2,200 measured in Golf mode by The Hook Up)",
+        "At $2,299 it now costs more than the 4K TK710STi",
+        "Mediocre black levels; no optical lens shift"
+      ],
+      "known_issues": [
+        "Rain or Shine's listing describes the light source as a 15K-hour lamp; BenQ, Projector Reviews and ProjectorCentral all say laser",
+        "Auto Screen Fit can miss slightly; Golfstead notes keystone and Corner Fit may still be needed"
+      ],
+      "why_people_choose_it": "They want the golf-specific setup tools without paying for 4K. The Hook Up and Home Performance Lab both say the TK710STi is the better buy at the current price, which is the argument to read before choosing it.",
+      "image_url": "https://image.benq.com/is/image/benqco/ah700st-right30-1"
+    },
+    {
+      "brand": "BenQ",
+      "name": "TK710STi",
+      "subtype": "short-throw",
+      "tier": "core",
+      "mention_count": 16,
+      "mention_sources": [
+        "https://homeperformancelab.com/5-best-short-throw-projectors-for-golf-simulator/",
+        "https://homeperformancelab.com/best-benq-projector-for-golf-simulator/",
+        "https://www.carlofet.com/blog/benq-tk710sti-review",
+        "https://www.carlofet.com/blog/choosing-a-projector-for-a-golf-simulator-setup",
+        "https://golfstead.com/best-golf-simulator-projectors",
+        "https://topshelfgolf.com/blogs/golf/best-golf-simulator-projectors-in-2026-benq-and-optoma-compared",
+        "https://topshelfgolf.com/pages/golf-simulator-projectors-guide",
+        "https://mygolfsimulator.com/where-to-mount-your-golf-simulator-projector/",
+        "https://mygolfsimulator.com/keystone-correction/",
+        "https://mygolfsimulator.com/best-golf-simulator-projectors/",
+        "https://www.thesmarthomehookup.com/ultimate-golf-sim-projector-comparison-and-setup-guide-2024/",
+        "https://redditrecs.com/home-projector/model/benq-tk710sti/",
+        "https://homegolfhero.com/guides/best-projector-for-golf-simulator/",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/407730-best-4k-projector-for-me",
+        "https://shopindoorgolf.com/collections/projectors",
+        "https://rainorshinegolf.com/collections/projectors"
+      ],
+      "price": {
+        "amount": 2132,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.projectorcentral.com/benq-tk710sti.htm",
+        "note": "MSRP $2,199; Top Shelf Golf lists $2,199, Home Performance Lab and Home Golf Hero quote $1,999"
+      },
+      "direct_url": "https://www.benq.com/en-us/projector/home-projectors/tk710sti.html",
+      "fallback_url": "https://shopindoorgolf.com/products/benq-tk710sti-golf-simulator-projector",
+      "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/407730-best-4k-projector-for-me",
+      "specs": {
+        "throw_ratio": "0.69 to 0.83 (1.2x manual zoom)",
+        "lumens": "3,200 ANSI rated; The Hook Up measured 2,448 in Living Room mode",
+        "resolution": "4K UHD 3840x2160 (0.65 in DLP, XPR)",
+        "native_aspect": "16:9; 4:3 selectable (owners on r/Golfsimulator say the aspect switch is a few remote clicks)",
+        "lens_shift": "none",
+        "keystone": "3D keystone: V, H and rotation, each +/-30 deg (Carl's Place); no Corner Fit",
+        "input_lag": "16.7 ms at 4K/60 and 1080p/60; 8.3 ms at 1080p/120; 4.2 ms at 1080p/240",
+        "light_source": "laser phosphor, 20,000 h (30,000 eco)",
+        "noise": "31 dB normal, 28 dB eco (ProjectorCentral); Home Performance Lab reports about 47 dB measured",
+        "other": "projection offset 102.5%; Android TV dongle; 6.8 lb",
+        "mount_positions": "ceiling above or just behind the ball; GSF owner mounts just behind a hitting area 10 ft from the screen",
+        "spec_sources": "https://www.projectorcentral.com/benq-tk710sti.htm; https://www.carlofet.com/blog/benq-tk710sti-review; https://www.thesmarthomehookup.com/ultimate-golf-sim-projector-comparison-and-setup-guide-2024/"
+      },
+      "room_fit": "6.9 to 8.3 ft for a 10 ft wide 16:9 image; 9.2 to 11.1 ft to fill a 10 ft x 7.5 ft 4:3 screen (GSF: 9 ft 4 in to 11 ft 3 in); 8.7 to 10.5 ft for a 9 ft 6 in wide 4:3 screen. Center ceiling mount. Off-center only with keystone.",
+      "off_center": "keystone only (3-axis digital, no lens shift)",
+      "who_its_for": "The most common 4K pick for a home bay under $2,200: dark or lights-off garage, 10 to 13 ft wide screens, GSPro at 1080p/240 for the lag.",
+      "pros": [
+        "Cheapest widely stocked 4K short throw with the BenQ 0.69 to 0.83 geometry",
+        "Lowest lag in the BenQ lineup at 1080p/240",
+        "Reddit owners report a 'night and day' step up from older BenQ AH units and easy 4:3 switching"
+      ],
+      "cons": [
+        "Measured brightness is around 2,450 lumens, so lights-on garages wash out (two r/Golfsimulator owners say exactly this)",
+        "No Golf Mode, no Auto Screen Fit, manual zoom and focus",
+        "Fan noise reported around 47 dB by Home Performance Lab"
+      ],
+      "known_issues": [
+        "Guides disagree on price ($1,999 vs $2,199) and spell it TK710ST, TK710STi and TK710st; check the exact SKU",
+        "One r/Golfsimulator owner says he would have paid for the LK936ST if starting over, purely for brightness"
+      ],
+      "why_people_choose_it": "Same throw as the AK700ST for a few hundred less; builders who control their light take the 4K and skip the golf extras. The GSF consensus in 2024 was that near $1,500 to $2,000 this is the only 4K short throw worth buying.",
+      "image_url": "https://image.benq.com/is/image/benqco/tk710sti-right30"
+    },
+    {
+      "brand": "BenQ",
+      "name": "TK700STi",
+      "subtype": "short-throw",
+      "tier": "core",
+      "mention_count": 12,
+      "mention_sources": [
+        "https://homeperformancelab.com/best-benq-projector-for-golf-simulator/",
+        "https://www.carlofet.com/blog/benq-tk710sti-review",
+        "https://mygolfsimulator.com/keystone-correction/",
+        "https://mygolfsimulator.com/best-golf-simulator-projectors/",
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/376703-benq-tk700sti-question",
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/373356-optoma-1080hdr-or-benq-tk700sti",
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/398201-where-are-the-new-4k-short-throw-projectors",
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/384163-benq-lk936st-not-worth-the-hype",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/407730-best-4k-projector-for-me",
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/357676-projector-location-w-eye-xo",
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/332344-i%E2%80%99m-lost-guys",
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/341338-is-it-worth-jumping-to-a-4k-projector-or-go-with-standard-1080-p-with-higher-lumens"
+      ],
+      "price": {
+        "amount": 1699,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.projectorcentral.com/benq-tk700sti.htm",
+        "note": "MSRP $1,599; discontinued April 2025, so this is remaining-stock and used pricing; Home Performance Lab quotes $900 to $1,200"
+      },
+      "direct_url": "https://www.benq.com/en-us/projector/gaming/tk700sti.html",
+      "fallback_url": "https://www.projectorcentral.com/benq-tk700sti.htm",
+      "read_url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/376703-benq-tk700sti-question",
+      "specs": {
+        "throw_ratio": "0.90 to 1.08 (1.2x manual zoom)",
+        "lumens": "3,000 ANSI",
+        "resolution": "4K UHD 3840x2160 (XPR)",
+        "native_aspect": "16:9; 4:3 selectable",
+        "lens_shift": "none",
+        "keystone": "digital H and V, about +/-30 deg (+/-40 per mygolfsimulator)",
+        "input_lag": "16.9 ms at 1080p/60; 8 ms at 1080p/120; 4 ms at 1080p/240",
+        "light_source": "240 W metal halide lamp, 4,000 h normal, 15,000 h eco",
+        "noise": "35 dB normal, 29 dB eco",
+        "other": "projector sits about 9 in above the top of the image when ceiling mounted (GSF)",
+        "mount_positions": "ceiling, well behind the golfer because of the long throw; one GSF member floor-mounts it 3 ft off-center in a low-light garage",
+        "spec_sources": "https://www.projectorcentral.com/benq-tk700sti.htm; https://golfsimulatorforum.com/forum/build-your-own/projectors/376703-benq-tk700sti-question"
+      },
+      "room_fit": "9.0 to 10.8 ft for a 10 ft wide 16:9 image; 12.0 to 14.4 ft to fill a 10 ft x 7.5 ft 4:3 screen (GSF members quote 13 ft 4 in to 14 ft 8 in); 11.4 to 13.7 ft for a 9 ft 6 in wide 4:3 screen. Needs a deep room; a GSF owner mounted it 16 ft back for a 13 ft wide screen. Shadow risk is the recurring complaint.",
+      "off_center": "keystone only",
+      "who_its_for": "The deep-room builder who finds one at the discontinued price and already has 14 ft or more of throw; otherwise the TK710STi replaced it for a reason.",
+      "pros": [
+        "4K at a used-market price",
+        "Very low lag at 1080p/240",
+        "Large GSF knowledge base on placement math"
+      ],
+      "cons": [
+        "Longest throw of the BenQ short throws, so it lives behind the golfer and casts shadows in tight bays",
+        "Lamp, not laser: dust and bulb replacement are the common forum complaints",
+        "Only 3,000 lumens at a long throw"
+      ],
+      "known_issues": [
+        "Discontinued April 2025 (ProjectorCentral)",
+        "GSF members repeatedly steered buyers to the Optoma UHD35STx (brighter, 8 ft throw) instead"
+      ],
+      "why_people_choose_it": "It was the entry 4K short throw from 2021 to 2024 and the forums are full of its placement threads. Buyers today choose it only when a deep room and a bargain line up.",
+      "image_url": "https://image.benq.com/is/image/benqco/tk700sti-3-1"
+    },
+    {
+      "brand": "BenQ",
+      "name": "TH671ST",
+      "subtype": "short-throw",
+      "tier": "core",
+      "mention_count": 16,
+      "mention_sources": [
+        "https://homeperformancelab.com/5-best-short-throw-projectors-for-golf-simulator/",
+        "https://homeperformancelab.com/golf-simulator-projector-placement/",
+        "https://www.carlofet.com/blog/choosing-a-projector-for-a-golf-simulator-setup",
+        "https://golfstead.com/best-golf-simulator-projectors",
+        "https://topshelfgolf.com/blogs/golf/best-golf-simulator-projectors-in-2026-benq-and-optoma-compared",
+        "https://topshelfgolf.com/pages/golf-simulator-projectors-guide",
+        "https://mygolfsimulator.com/where-to-mount-your-golf-simulator-projector/",
+        "https://mygolfsimulator.com/best-golf-simulator-projectors/",
+        "https://www.simgolfer.com/blogs/simulator-academy/best-golf-simulator-projectors-2026",
+        "https://homegolfhero.com/guides/best-projector-for-golf-simulator/",
+        "https://www.golfinfluence.com/gear/accessories/best-golf-simulator-projector/",
+        "https://www.smarthomeperfected.com/projector-for-golf-simulator/",
+        "https://www.tomsguide.com/tvs/4k-tvs/projectors-arent-just-for-movies-and-gaming-this-one-improves-your-golf-game",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/304377-floor-vs-ceiling-mount-projector",
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/332344-i%E2%80%99m-lost-guys",
+        "https://shopindoorgolf.com/collections/projectors"
+      ],
+      "price": {
+        "amount": 899,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.projectorcentral.com/benq-th671st.htm",
+        "note": "MSRP $949; Home Golf Hero shows $799; Home Performance Lab says $500 to $700 new on sale, $150 to $350 used"
+      },
+      "direct_url": "https://www.benq.com/en-us/projector/home-projectors/th671st.html",
+      "fallback_url": "https://shopindoorgolf.com/products/benq-th671st-golf-simulator-projector",
+      "read_url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/332344-i%E2%80%99m-lost-guys",
+      "specs": {
+        "throw_ratio": "0.69 to 0.83 (1.2x manual zoom)",
+        "lumens": "3,000 ANSI; Home Performance Lab estimates 2,000 to 2,500 real; GSF members say it looks brighter than rated",
+        "resolution": "1080p 1920x1080",
+        "native_aspect": "16:9; 4:3 selectable",
+        "lens_shift": "none",
+        "keystone": "vertical only, +/-40 deg",
+        "input_lag": "16.4 ms at 1080p/60; 8 ms at 1080p/120",
+        "light_source": "240 W metal halide lamp, 4,000 h normal, 15,000 h eco; replacement lamps $100 to $300 and getting scarce",
+        "noise": "33 dB normal, 29 dB eco",
+        "other": "offset 102.5%, so the lens sits just above the image top on a flush ceiling mount; 6.0 lb",
+        "mount_positions": "ceiling directly over the ball (GSF 'I'm lost' thread: about 9 ft back for a 9 ft wide 4:3 image); Golfstead reader Q&A suggests it for floor mounting",
+        "spec_sources": "https://www.projectorcentral.com/benq-th671st.htm; https://homeperformancelab.com/golf-simulator-projector-placement/; https://mygolfsimulator.com/best-golf-simulator-projectors/"
+      },
+      "room_fit": "6.9 to 8.3 ft for a 10 ft wide 16:9 image; 9.2 to 11.1 ft to fill a 10 ft x 7.5 ft 4:3 screen; 8.7 to 10.5 ft for a 9 ft 6 in wide 4:3 screen. Carl's Place: 79 to 95 in from the screen at its 115 in native width. Low offset makes it the flush-ceiling favorite under 9 ft ceilings. Vertical-only keystone means it cannot be squared from beside the mat.",
+      "off_center": "no (vertical keystone only)",
+      "who_its_for": "The starter bay on a budget with a dark, controlled room; the forums' default 'just get the 671' answer from 2019 to 2024.",
+      "pros": [
+        "Under $900 new, far less used, with the same throw geometry as the $2,900 BenQ golf models",
+        "Low offset and 1.2x zoom make placement forgiving",
+        "Years of forum setup threads to copy"
+      ],
+      "cons": [
+        "Lamp fades and needs replacement; dust gets in (not sealed)",
+        "3,000 lumens washes out in a lit garage (Smart Home Perfected, Home Golf Hero: dark rooms only)",
+        "Vertical keystone only"
+      ],
+      "known_issues": [
+        "Lamp replacements getting harder to find (Home Performance Lab 2026)",
+        "Slow warm up"
+      ],
+      "why_people_choose_it": "It is the proven cheap one. A GSF member summed it up: at 4:3 it mounts about 9 ft from the screen, right over the hitting spot, with only a couple of inches of offset, and blackout curtains fix the brightness.",
+      "image_url": "https://image.benq.com/is/image/benqco/th671st-right30"
+    },
+    {
+      "brand": "BenQ",
+      "name": "LK936ST",
+      "subtype": "off-center-capable",
+      "tier": "core",
+      "mention_count": 17,
+      "mention_sources": [
+        "https://homeperformancelab.com/5-best-short-throw-projectors-for-golf-simulator/",
+        "https://homeperformancelab.com/best-benq-projector-for-golf-simulator/",
+        "https://homeperformancelab.com/golf-simulator-projector-placement/",
+        "https://golfstead.com/best-golf-simulator-projectors",
+        "https://topshelfgolf.com/blogs/golf/best-golf-simulator-projectors-in-2026-benq-and-optoma-compared",
+        "https://topshelfgolf.com/pages/golf-simulator-projectors-guide",
+        "https://mygolfsimulator.com/where-to-mount-your-golf-simulator-projector/",
+        "https://mygolfsimulator.com/keystone-correction/",
+        "https://mygolfsimulator.com/best-golf-simulator-projectors/",
+        "https://www.projectorcentral.com/best-golf-projectors.htm",
+        "https://www.thesmarthomehookup.com/ultimate-golf-sim-projector-comparison-and-setup-guide-2024/",
+        "https://redditrecs.com/home-projector/model/benq-tk710sti/",
+        "https://homegolfhero.com/guides/best-projector-for-golf-simulator/",
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/384163-benq-lk936st-not-worth-the-hype",
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/398201-where-are-the-new-4k-short-throw-projectors",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/407730-best-4k-projector-for-me",
+        "https://shopindoorgolf.com/collections/projectors"
+      ],
+      "price": {
+        "amount": 4899,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.projectorcentral.com/benq-lk936st.htm",
+        "note": "Home Performance Lab quotes $3,799 street in March 2026"
+      },
+      "direct_url": "https://www.benq.com/en-us/projector/golf/lk936st.html",
+      "fallback_url": "https://shopindoorgolf.com/products/benq-lk936st-golf-simulator-projector",
+      "read_url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/384163-benq-lk936st-not-worth-the-hype",
+      "specs": {
+        "throw_ratio": "0.81 to 0.89 (1.1x manual zoom)",
+        "lumens": "5,100 ANSI",
+        "resolution": "4K UHD 3840x2160",
+        "native_aspect": "16:9 (Top Shelf Golf lists 16:9 native only; BenQ Golf Mode handles the impact screen)",
+        "lens_shift": "optical, vertical +/-60%, horizontal +/-23%",
+        "keystone": "3D keystone up to +/-40 deg plus rotation, Corner Fit, warping",
+        "input_lag": "about 33 to 34 ms at 1080p/60 and 4K/60",
+        "light_source": "laser phosphor, 20,000 h (30,000 eco)",
+        "noise": "40 dB normal, 33 dB eco (ProjectorCentral); Home Performance Lab measured 53.6 dB",
+        "other": "Golf Mode corrects purple fringing; 15.4 lb; effectively 0% native offset, uses lens shift instead",
+        "mount_positions": "ceiling center, ceiling off to one side, or beside a launch monitor, thanks to the shift range; too heavy and long-throw for a floor case in front of the mat",
+        "spec_sources": "https://www.projectorcentral.com/benq-lk936st.htm; https://homeperformancelab.com/golf-simulator-projector-placement/; https://mygolfsimulator.com/keystone-correction/"
+      },
+      "room_fit": "8.1 to 8.9 ft for a 10 ft wide 16:9 image; 10.8 to 11.9 ft to fill a 10 ft x 7.5 ft 4:3 screen (Top Shelf: 10 ft 10 in to 11 ft 10 in, above the golfer); 10.3 to 11.3 ft for a 9 ft 6 in wide 4:3 screen. The only mainstream home model that can be hung 2 ft off the centerline and still show a square, full-resolution image. Not a cart projector: 15 lb and a long throw.",
+      "off_center": "yes (optical H +/-23%, V +/-60%)",
+      "who_its_for": "The bright or dual-use room, the ductwork or launch-monitor conflict on the centerline, or the commercial bay. Overkill for a dark garage.",
+      "pros": [
+        "Real horizontal and vertical lens shift, the feature every off-center thread asks for",
+        "5,100 lumens for lights-on play",
+        "Golf Mode and warping"
+      ],
+      "cons": [
+        "$4,899",
+        "Loudest fan in the class (53.6 dB measured)",
+        "Highest lag of the BenQ golf set"
+      ],
+      "known_issues": [
+        "GSF 'not worth the hype' thread: an owner upgrading from a Panasonic VMZ50U saw a minor picture gain and found Golf Mode too dark; another owner reported random shutoffs and poor vendor support; a third called it a major upgrade over an Optoma EH200ST",
+        "Input lag not published by BenQ (mygolfsimulator)"
+      ],
+      "why_people_choose_it": "When the ceiling spot over the ball is taken, this is the one that lets you move the projector sideways and fix it optically. Several r/Golfsimulator owners of cheaper BenQs say they would step up to it for brightness alone.",
+      "image_url": "https://image.benq.com/is/image/benqco/lk936st-right30-1"
+    },
+    {
+      "brand": "BenQ",
+      "name": "AH500ST",
+      "subtype": "short-throw",
+      "tier": "qualified",
+      "mention_count": 8,
+      "mention_sources": [
+        "https://homeperformancelab.com/best-benq-projector-for-golf-simulator/",
+        "https://topshelfgolf.com/blogs/golf/best-golf-simulator-projectors-in-2026-benq-and-optoma-compared",
+        "https://topshelfgolf.com/pages/golf-simulator-projectors-guide",
+        "https://mygolfsimulator.com/where-to-mount-your-golf-simulator-projector/",
+        "https://mygolfsimulator.com/best-golf-simulator-projectors/",
+        "https://www.simgolfer.com/blogs/simulator-academy/best-golf-simulator-projectors-2026",
+        "https://homegolfhero.com/guides/best-projector-for-golf-simulator/",
+        "https://shopindoorgolf.com/collections/projectors"
+      ],
+      "price": {
+        "amount": 1999,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.projectorcentral.com/benq-ah500st.htm",
+        "note": "Home Performance Lab quotes $1,499"
+      },
+      "direct_url": "https://www.benq.com/en-us/projector/golf/ah500st.html",
+      "fallback_url": "https://shopindoorgolf.com/products/benq-ah500st-golf-simulator-projector",
+      "read_url": "https://homeperformancelab.com/best-benq-projector-for-golf-simulator/",
+      "specs": {
+        "throw_ratio": "0.499 fixed",
+        "lumens": "4,000 ANSI",
+        "resolution": "1080p",
+        "native_aspect": "16:9; Screen Fill for 16:10, 4:3, 1:1",
+        "lens_shift": "none",
+        "keystone": "digital H and V +/-30 deg",
+        "input_lag": "16.7 ms at 1080p/60; 8.3 ms at 1080p/120",
+        "light_source": "laser phosphor, 20,000 h (38,000 eco)",
+        "noise": "35 dB normal, 32 dB eco",
+        "other": "powered focus; 11.2 lb; released November 2024",
+        "mount_positions": "ceiling ahead of the golfer (about 6 ft 7 in from a 10 ft 4:3 screen per Top Shelf) or a floor case in front of the mat",
+        "spec_sources": "https://www.projectorcentral.com/benq-ah500st.htm; https://topshelfgolf.com/pages/golf-simulator-projectors-guide"
+      },
+      "room_fit": "5.0 ft for a 10 ft wide 16:9 image; 6.7 ft to fill a 10 ft x 7.5 ft 4:3 screen; 6.3 ft for 9 ft 6 in wide. Sits ahead of the golfer, so it suits bays under 14 to 16 ft deep and low ceilings; BenQ's comparison says it makes a 7.2 ft tall image from an 8 ft ceiling without tilt, versus 6.9 ft for the Optoma GT2100HDR.",
+      "off_center": "keystone only",
+      "who_its_for": "The shallow bay (under about 14 ft) that wants a sealed laser and Screen Fill rather than an Optoma.",
+      "pros": [
+        "0.5 throw with low offset for flush ceiling mounts in short rooms",
+        "4,000 lumen laser",
+        "Screen Fill aspect modes"
+      ],
+      "cons": [
+        "Heavier than the Optoma 0.5 units (11.2 lb vs 6.6 lb)",
+        "Priced above the GT2400HDR with similar numbers",
+        "No zoom per the spec table, so placement is one spot"
+      ],
+      "known_issues": [
+        "ProjectorCentral's page conflicts with itself on zoom (motorized zoom in highlights, fixed lens in the table)"
+      ],
+      "why_people_choose_it": "BenQ's answer to the Optoma GT line for rooms where the projector has to sit in front of the golfer; Home Performance Lab's budget pick for tight rooms.",
+      "image_url": "https://image.benq.com/is/image/benqco/ah500st-right30-1"
+    },
+    {
+      "brand": "BenQ",
+      "name": "LK830ST",
+      "subtype": "short-throw",
+      "tier": "qualified",
+      "mention_count": 6,
+      "mention_sources": [
+        "https://homeperformancelab.com/best-benq-projector-for-golf-simulator/",
+        "https://topshelfgolf.com/blogs/golf/best-golf-simulator-projectors-in-2026-benq-and-optoma-compared",
+        "https://topshelfgolf.com/pages/golf-simulator-projectors-guide",
+        "https://www.projectorcentral.com/best-golf-projectors.htm",
+        "https://homegolfhero.com/guides/best-projector-for-golf-simulator/",
+        "https://rainorshinegolf.com/products/benq-lk830st-golf-simulator-projector"
+      ],
+      "price": {
+        "amount": 2499,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.projectorcentral.com/benq-lk830st.htm"
+      },
+      "direct_url": "",
+      "direct_url_note": "BenQ US has no LK830ST page under /projector/golf (404 on 2026-10-19); the retailer link is primary until a maker page is found",
+      "fallback_url": "https://rainorshinegolf.com/products/benq-lk830st-golf-simulator-projector",
+      "read_url": "https://homeperformancelab.com/best-benq-projector-for-golf-simulator/",
+      "specs": {
+        "throw_ratio": "0.496 fixed",
+        "lumens": "4,000 ANSI (ProjectorCentral highlights say 4,500)",
+        "resolution": "4K UHD",
+        "native_aspect": "16:9; Screen Fill for 16:10, 4:3, 1:1, 5:4",
+        "lens_shift": "none",
+        "keystone": "digital H and V",
+        "input_lag": "16.7 ms at 1080p/60",
+        "light_source": "laser phosphor, 20,000 h (30,000 eco)",
+        "noise": "30 dB normal, 24 dB eco",
+        "other": "released September 2025; 7.9 lb; ProjectorCentral review 4 stars",
+        "mount_positions": "ceiling ahead of the golfer or floor case; same geometry as the Optoma 0.5 units",
+        "spec_sources": "https://www.projectorcentral.com/benq-lk830st.htm; https://homeperformancelab.com/best-benq-projector-for-golf-simulator/"
+      },
+      "room_fit": "5.0 ft for a 10 ft wide 16:9 image; 6.6 ft to fill a 10 ft x 7.5 ft 4:3 screen; 6.3 ft for 9 ft 6 in wide. Home Performance Lab: best BenQ for rooms under 16 ft deep; Home Golf Hero: rooms under about 14 ft.",
+      "off_center": "keystone only",
+      "who_its_for": "The short bay that wants 4K and BenQ's golf tooling without stepping to the LK936ST.",
+      "pros": [
+        "4K at a 0.5 throw, so the projector sits in front of the golfer in a 12 to 14 ft room",
+        "Quietest BenQ in the set on paper (30 dB)",
+        "Sealed laser"
+      ],
+      "cons": [
+        "New (Sept 2025) with little owner feedback yet",
+        "Fixed lens, one mounting spot",
+        "No lens shift"
+      ],
+      "known_issues": [
+        "ProjectorCentral page contradicts itself on throw ratio (0.5 in table, 0.8 in highlights) and lumens; trust the table"
+      ],
+      "why_people_choose_it": "BenQ finally offered the 0.5 throw plus 4K that Optoma had with the UHZ35ST; it is the pick in 2026 guides for garages too short for the 0.69 to 0.83 models.",
+      "image_url": "https://www.projectorcentral.com/images/projectors2/img12797.jpg"
+    },
+    {
+      "brand": "Optoma",
+      "name": "GT2000HDR",
+      "subtype": "short-throw",
+      "tier": "core",
+      "mention_count": 11,
+      "mention_sources": [
+        "https://topshelfgolf.com/blogs/golf/best-golf-simulator-projectors-in-2026-benq-and-optoma-compared",
+        "https://topshelfgolf.com/pages/golf-simulator-projectors-guide",
+        "https://topshelfgolf.com/blogs/golf/benq-vs-optoma-which-projector-fits-your-golf-simulator",
+        "https://mygolfsimulator.com/keystone-correction/",
+        "https://mygolfsimulator.com/best-golf-simulator-projectors/",
+        "https://www.projectorcentral.com/best-golf-projectors.htm",
+        "https://www.simgolfer.com/blogs/simulator-academy/best-golf-simulator-projectors-2026",
+        "https://homegolfhero.com/guides/best-projector-for-golf-simulator/",
+        "https://shopindoorgolf.com/collections/projectors",
+        "https://www.eneba.com/hub/gaming-gear/best-projector-for-golf-simulator/",
+        "https://homeperformancelab.com/best-projector-for-golf-simulator/"
+      ],
+      "price": {
+        "amount": 1199,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.projectorcentral.com/optoma-gt2000hdr.htm",
+        "note": "MSRP $1,799; Home Golf Hero sees $999 to $1,199"
+      },
+      "direct_url": "https://www.optomausa.com/product/gt2000hdr",
+      "fallback_url": "https://shopindoorgolf.com/products/optoma-gt2000hdr-short-throw-golf-simulator-projector",
+      "read_url": "https://topshelfgolf.com/blogs/golf/best-golf-simulator-projectors-in-2026-benq-and-optoma-compared",
+      "specs": {
+        "throw_ratio": "0.496 fixed (digital zoom only)",
+        "lumens": "3,500",
+        "resolution": "1080p; accepts 4K input",
+        "native_aspect": "16:9; compatible 4:3 and 16:10 (Optoma page)",
+        "lens_shift": "none",
+        "keystone": "H +/-15 deg, V +/-15 deg",
+        "input_lag": "8.6 ms at 1080p/120; 17 ms at 1080p/60",
+        "light_source": "DuraCore laser, 30,000 h",
+        "noise": "27 to 34 dB",
+        "other": "native offset 116%; IP6X dust rating; 360 deg projection; 6.6 lb",
+        "mount_positions": "ceiling ahead of the golfer (about 6 ft 7 in from a 10 ft 4:3 screen) or a floor case in front of the mat; 116% offset means it must be tilted or hung lower on flush ceilings",
+        "spec_sources": "https://www.optomausa.com/product/gt2000hdr; https://www.projectorcentral.com/optoma-gt2000hdr.htm"
+      },
+      "room_fit": "5.0 ft for a 10 ft wide 16:9 image; 6.6 ft to fill a 10 ft x 7.5 ft 4:3 screen; 6.3 ft for 9 ft 6 in wide. Rain or Shine: a 10 ft screen at 0.5 needs about 5 ft. The 116% offset is the catch on a flush 8 ft ceiling: BenQ's own comparison shows the Optoma making a 6.9 ft tall image from 8 ft up versus 7.2 ft for the AH500ST.",
+      "off_center": "limited (H and V keystone +/-15 deg only)",
+      "who_its_for": "The under-$1,200 laser buyer with a short bay; Top Shelf Golf's number one for most home simulators and Shop Indoor Golf's third best seller of 2026.",
+      "pros": [
+        "Cheapest laser short throw that the sim retailers all carry",
+        "IP6X sealed against garage dust",
+        "8.6 ms lag"
+      ],
+      "cons": [
+        "1080p only",
+        "High 116% offset complicates flush ceiling mounts",
+        "Fixed lens, +/-15 deg keystone, so placement must be exact"
+      ],
+      "known_issues": [
+        "Guides mix it up with the GT2100HDR and GT2400HDR; the three share the 0.496 lens and differ in lumens and HDR",
+        "No Golf Sim color mode on this SKU (Optoma page)"
+      ],
+      "why_people_choose_it": "It is the value laser the retailers push for tight garages: 30,000 hour light source, sealed, and it fills a 10 ft screen from about 5 ft so it hangs in front of the golfer where no shadow can reach.",
+      "image_url": "https://www.projectorcentral.com/images/projectors2/img12116.jpg"
+    },
+    {
+      "brand": "Optoma",
+      "name": "GT2100HDR",
+      "subtype": "short-throw",
+      "tier": "qualified",
+      "mention_count": 7,
+      "mention_sources": [
+        "https://homeperformancelab.com/5-best-short-throw-projectors-for-golf-simulator/",
+        "https://mygolfsimulator.com/keystone-correction/",
+        "https://homegolfhero.com/guides/best-projector-for-golf-simulator/",
+        "https://www.projectorcentral.com/optoma-gt2100hdr.htm",
+        "https://golfstead.com/best-golf-simulator-projectors",
+        "https://www.walmart.com/ip/Optoma-GT2100HDR-3D-Short-Throw-DLP-Projector-16-9-White/3103825546",
+        "https://topshelfgolf.com/blogs/golf/benq-vs-optoma-which-projector-fits-your-golf-simulator"
+      ],
+      "price": {
+        "amount": 1299,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.projectorcentral.com/optoma-gt2100hdr.htm",
+        "note": "MSRP $2,249; Home Performance Lab saw $1,071 to $1,200"
+      },
+      "direct_url": "https://www.optomausa.com/product/gt2100hdr",
+      "fallback_url": "https://www.projectorcentral.com/optoma-gt2100hdr.htm",
+      "read_url": "https://homeperformancelab.com/5-best-short-throw-projectors-for-golf-simulator/",
+      "specs": {
+        "throw_ratio": "0.496 fixed",
+        "lumens": "4,200 (Optoma); Home Performance Lab estimates 3,500 to 4,000 real",
+        "resolution": "1080p",
+        "native_aspect": "16:9; compatible 4:3, 16:10",
+        "lens_shift": "none",
+        "keystone": "H +/-15 deg, V +/-15 deg, auto keystone",
+        "input_lag": "8.6 ms (Optoma); 4.2 ms at 1080p/240 (ProjectorCentral)",
+        "light_source": "laser, 30,000 h",
+        "noise": "29 to 36 dB",
+        "other": "native offset 116%; IP6X; 6.6 lb",
+        "mount_positions": "ceiling ahead of the golfer or floor case",
+        "spec_sources": "https://www.optomausa.com/product/gt2100hdr; https://www.projectorcentral.com/optoma-gt2100hdr.htm"
+      },
+      "room_fit": "Same as GT2000HDR: 5.0 ft for 10 ft wide 16:9, 6.6 ft to fill a 10 ft x 7.5 ft 4:3 screen, 6.3 ft at 9 ft 6 in. Home Performance Lab names it the tight-room pick but flags the high offset for ceiling alignment.",
+      "off_center": "limited (H and V keystone +/-15 deg only)",
+      "who_its_for": "The GT2000HDR buyer who wants the extra 700 lumens for a lit garage.",
+      "pros": [
+        "Brightest sub-$1,300 laser short throw",
+        "Longest rated light life (30,000 h) and lowest lag in Home Performance Lab's five",
+        "Supports 16:9 and 4:3"
+      ],
+      "cons": [
+        "1080p",
+        "Fixed zoom and 116% offset",
+        "No golf modes or Auto Screen Fit"
+      ],
+      "known_issues": [
+        "Pages disagree on lumens (4,000 vs 4,200) and throw (0.49 vs 0.496 vs 0.5)",
+        "Being superseded by the GT2400HDR (March 2026) in retailer line-ups"
+      ],
+      "why_people_choose_it": "Same lens as the GT2000HDR with more light; Golfstead called it one of the most common projectors in golf sims before the GT2400HDR replaced it on their list.",
+      "image_url": "https://www.projectorcentral.com/images/projectors2/img12129.jpg"
+    },
+    {
+      "brand": "Optoma",
+      "name": "GT2400HDR",
+      "subtype": "short-throw",
+      "tier": "qualified",
+      "mention_count": 7,
+      "mention_sources": [
+        "https://golfstead.com/best-golf-simulator-projectors",
+        "https://topshelfgolf.com/blogs/golf/best-golf-simulator-projectors-in-2026-benq-and-optoma-compared",
+        "https://topshelfgolf.com/pages/golf-simulator-projectors-guide",
+        "https://www.projectorcentral.com/best-golf-projectors.htm",
+        "https://homegolfhero.com/guides/best-projector-for-golf-simulator/",
+        "https://shopindoorgolf.com/collections/projectors",
+        "https://rainorshinegolf.com/collections/projectors"
+      ],
+      "price": {
+        "amount": 1299,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.projectorcentral.com/optoma-gt2400hdr.htm"
+      },
+      "direct_url": "https://www.optomausa.com/product/gt2400hdr",
+      "fallback_url": "https://shopindoorgolf.com/products/optoma-gt2400hdr-golf-simulator-projector",
+      "read_url": "https://golfstead.com/best-golf-simulator-projectors",
+      "specs": {
+        "throw_ratio": "0.48 (ProjectorCentral) or 0.496 (retailers), fixed",
+        "lumens": "4,200 ISO",
+        "resolution": "1080p",
+        "native_aspect": "16:9; 4:3 and 16:10 compatible",
+        "lens_shift": "none",
+        "keystone": "digital H and V +/-15 deg",
+        "input_lag": "16.7 ms at 1080p/60 and 4K/60; 8.4 ms at 1080p/120; 4.2 ms at 1080p/240 (gaming mode)",
+        "light_source": "laser phosphor, 30,000 h",
+        "noise": "31 dB normal, 29 dB eco",
+        "other": "released March 2026; 6.6 lb; dust protection per Home Golf Hero",
+        "mount_positions": "ceiling ahead of the golfer or floor case",
+        "spec_sources": "https://www.projectorcentral.com/optoma-gt2400hdr.htm; https://golfstead.com/best-golf-simulator-projectors"
+      },
+      "room_fit": "4.8 to 5.0 ft for a 10 ft wide 16:9 image; 6.4 to 6.6 ft to fill a 10 ft x 7.5 ft 4:3 screen; about 6.2 ft at 9 ft 6 in.",
+      "off_center": "limited (H and V keystone +/-15 deg only)",
+      "who_its_for": "The 2026 buyer who would have bought the GT2100HDR; Golfstead's number one and Home Golf Hero's best value for the year.",
+      "pros": [
+        "Brightness per dollar leader in Top Shelf Golf's comparison",
+        "Gaming mode lag down to 4.2 ms",
+        "30,000 hour laser"
+      ],
+      "cons": [
+        "1080p",
+        "Fixed lens and small keystone range",
+        "Golfstead: not the most powerful projector out there"
+      ],
+      "known_issues": [
+        "New in March 2026, so forum owner reports are thin; counts here are guide and retailer mentions"
+      ],
+      "why_people_choose_it": "Same Optoma 0.5 lens the forums already trust, now at 4,200 lumens for $1,299.",
+      "image_url": "https://www.projectorcentral.com/images/projectors2/img12928.jpg"
+    },
+    {
+      "brand": "Optoma",
+      "name": "GT1090HDR",
+      "subtype": "short-throw",
+      "tier": "qualified",
+      "mention_count": 5,
+      "mention_sources": [
+        "https://golfstead.com/best-golf-simulator-projectors",
+        "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/304377-floor-vs-ceiling-mount-projector",
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/373356-optoma-1080hdr-or-benq-tk700sti",
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/332344-i%E2%80%99m-lost-guys",
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/295812-best-projector-with-horizontal-offset"
+      ],
+      "price": null,
+      "direct_url": "https://www.optomausa.com/product/gt1090hdr",
+      "fallback_url": "https://www.projectorcentral.com/optoma-gt1090hdr.htm",
+      "read_url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/373356-optoma-1080hdr-or-benq-tk700sti",
+      "specs": {
+        "throw_ratio": "0.50 fixed",
+        "lumens": "4,200 ANSI",
+        "resolution": "1080p; accepts 4K input",
+        "native_aspect": "16:9; 4:3 compatible",
+        "lens_shift": "none",
+        "keystone": "auto keystone, digital H and V",
+        "input_lag": "16.4 ms at 1080p/60",
+        "light_source": "DuraCore laser, 20,000 h (30,000 eco)",
+        "noise": "32 dB",
+        "other": "10.0 lb; released March 2020",
+        "mount_positions": "ceiling ahead of the golfer or floor case; GSF: image projects 12 to 14 in upward, so it must be aimed down on a ceiling",
+        "spec_sources": "https://www.projectorcentral.com/optoma-gt1090hdr.htm; https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/304377-floor-vs-ceiling-mount-projector",
+        "pricing_note": "Discontinued December 2022; no current street price listed. Used only.",
+        "price_source_url": "https://www.projectorcentral.com/optoma-gt1090hdr.htm"
+      },
+      "room_fit": "5.0 ft for a 10 ft wide 16:9 image; 6.7 ft to fill a 10 ft x 7.5 ft 4:3 screen. The 2020 to 2022 forum favorite for short bays; a GSF owner says it looks great even in bright light.",
+      "off_center": "limited (digital H and V keystone)",
+      "who_its_for": "The used-market buyer; it is the laser predecessor of the GT2000 series and still the model many forum threads mean by 'the 1090'.",
+      "pros": [
+        "4,200 lumen laser at used prices",
+        "Short 0.5 throw keeps it ahead of the swing",
+        "Large forum history"
+      ],
+      "cons": [
+        "Discontinued; warranty gone",
+        "High upward offset, so ceiling installs need tilt and keystone",
+        "1080p"
+      ],
+      "known_issues": [
+        "Forum members note Optoma offers only digital horizontal shift, which crops the image rather than shifting it optically"
+      ],
+      "why_people_choose_it": "Because the GSF threads from 2020 to 2022 recommended it over the TK700STi for brightness and throw, and used units keep circulating.",
+      "image_url": "https://www.projectorcentral.com/images/projectors2/img11179.jpg"
+    },
+    {
+      "brand": "Optoma",
+      "name": "UHD35STx",
+      "subtype": "short-throw",
+      "tier": "qualified",
+      "mention_count": 5,
+      "mention_sources": [
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/373356-optoma-1080hdr-or-benq-tk700sti",
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/398201-where-are-the-new-4k-short-throw-projectors",
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/376703-benq-tk700sti-question",
+        "https://www.projectorcentral.com/optoma-uhd35stx.htm",
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/341338-is-it-worth-jumping-to-a-4k-projector-or-go-with-standard-1080-p-with-higher-lumens"
+      ],
+      "price": {
+        "amount": 1424,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.projectorcentral.com/optoma-uhd35stx.htm",
+        "note": "MSRP $2,699"
+      },
+      "direct_url": "https://www.optomausa.com/product/uhd35stx",
+      "fallback_url": "https://www.projectorcentral.com/optoma-uhd35stx.htm",
+      "read_url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/376703-benq-tk700sti-question",
+      "specs": {
+        "throw_ratio": "0.50 fixed",
+        "lumens": "3,600 ANSI",
+        "resolution": "4K UHD 3840x2160",
+        "native_aspect": "16:9; 4:3 compatible",
+        "lens_shift": "none (vertical +0% per Optoma)",
+        "keystone": "H +/-40 deg, V +/-40 deg",
+        "input_lag": "16.9 ms at 4K/60; 4.2 ms at 1080p/240",
+        "light_source": "240 W lamp, 4,000 h bright, 15,000 h dynamic",
+        "noise": "24 to 28 dB",
+        "other": "native offset 116%; 7.7 lb",
+        "mount_positions": "ceiling about 8 ft from the screen, ahead of the golfer; floor case",
+        "spec_sources": "https://www.optomausa.com/product/uhd35stx; https://www.projectorcentral.com/optoma-uhd35stx.htm"
+      },
+      "room_fit": "5.0 ft for a 10 ft wide 16:9 image; 6.7 ft to fill a 10 ft x 7.5 ft 4:3 screen. GSF: mounts about 8 ft from the screen for a 14 ft wide image versus 14 ft for the TK700STi.",
+      "off_center": "limited (digital H and V keystone +/-40 deg)",
+      "who_its_for": "The forum's 2022 to 2023 alternative to the TK700STi: 4K, brighter, half the throw, lamp instead of laser.",
+      "pros": [
+        "4K at a 0.5 throw for about $1,400",
+        "600 more lumens than the TK700STi and quieter",
+        "Wide keystone range"
+      ],
+      "cons": [
+        "Lamp, not laser",
+        "116% offset",
+        "Thin written-review coverage; most mentions are forum threads"
+      ],
+      "known_issues": [
+        "A GSF member relayed Reddit reports of QA problems on Optoma UHD units (2022)"
+      ],
+      "why_people_choose_it": "A GSF regular talked a TK700STi buyer into it for the shorter throw and extra brightness; the buyer reported the trial image looked very good.",
+      "image_url": "https://www.projectorcentral.com/images/projectors2/img11926.jpg"
+    },
+    {
+      "brand": "Optoma",
+      "name": "ZW350ST",
+      "subtype": "short-throw",
+      "tier": "qualified",
+      "mention_count": 6,
+      "mention_sources": [
+        "https://topshelfgolf.com/blogs/golf/best-golf-simulator-projectors-in-2026-benq-and-optoma-compared",
+        "https://topshelfgolf.com/pages/golf-simulator-projectors-guide",
+        "https://mygolfsimulator.com/where-to-mount-your-golf-simulator-projector/",
+        "https://mygolfsimulator.com/best-golf-simulator-projectors/",
+        "https://shopindoorgolf.com/collections/projectors",
+        "https://rainorshinegolf.com/collections/projectors"
+      ],
+      "price": {
+        "amount": 799,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.projectorcentral.com/optoma-zw350st.htm",
+        "note": "MSRP $1,399; Top Shelf Golf lists $909"
+      },
+      "direct_url": "https://www.optomausa.com/product/zw350st",
+      "fallback_url": "https://shopindoorgolf.com/products/optoma-zw350st-golf-simulator-projector",
+      "read_url": "https://mygolfsimulator.com/best-golf-simulator-projectors/",
+      "specs": {
+        "throw_ratio": "0.52 fixed",
+        "lumens": "3,600 ISO",
+        "resolution": "WXGA 1280x800",
+        "native_aspect": "16:10; 16:9 and 4:3 selectable",
+        "lens_shift": "none",
+        "keystone": "vertical +/-15 deg per mygolfsimulator; ProjectorCentral lists digital H and V",
+        "input_lag": "not published",
+        "light_source": "laser phosphor, 30,000 h",
+        "noise": "34 dB normal, 32 dB eco",
+        "other": "6.6 lb; released April 2023",
+        "mount_positions": "ceiling ahead of the golfer (about 6 ft 3 in from a 10 ft 4:3 screen) or floor case",
+        "spec_sources": "https://www.projectorcentral.com/optoma-zw350st.htm; https://topshelfgolf.com/pages/golf-simulator-projectors-guide"
+      },
+      "room_fit": "5.2 ft for a 10 ft wide image; a 10 ft x 7.5 ft 4:3 screen on this 16:10 panel needs a 12 ft wide image, so about 6.2 ft.",
+      "off_center": "no to limited (keystone range disputed between sources)",
+      "who_its_for": "The sub-$1,000 laser buyer who accepts 1280x800; Shop Indoor Golf's best value and second best seller of 2026.",
+      "pros": [
+        "Cheapest laser short throw the sim retailers stock",
+        "3,600 lumens and 30,000 hours",
+        "16:10 native wastes less panel on a 4:3 screen"
+      ],
+      "cons": [
+        "WXGA resolution looks soft on a 10 ft screen",
+        "Keystone range small",
+        "No lag figure published"
+      ],
+      "known_issues": [
+        "Sources disagree on whether horizontal keystone exists"
+      ],
+      "why_people_choose_it": "It is what the retailers sell with a starter enclosure: laser life at a lamp price, and the softness matters less when you are 10 ft from the screen swinging a club.",
+      "image_url": "https://www.projectorcentral.com/images/projectors2/img12067.jpg"
+    },
+    {
+      "brand": "Panasonic",
+      "name": "PT-VMZ51",
+      "subtype": "off-center-capable",
+      "tier": "qualified",
+      "mention_count": 6,
+      "mention_sources": [
+        "https://golfstead.com/best-golf-simulator-projectors",
+        "https://mygolfsimulator.com/where-to-mount-your-golf-simulator-projector/",
+        "https://mygolfsimulator.com/best-golf-simulator-projectors/",
+        "https://shopindoorgolf.com/pages/best-golf-simulator-projectors",
+        "https://rainorshinegolf.com/collections/projectors",
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/384163-benq-lk936st-not-worth-the-hype"
+      ],
+      "price": {
+        "amount": 2708,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.projectorcentral.com/panasonic-pt-vmz51u.htm"
+      },
+      "direct_url": "",
+      "direct_url_note": "Panasonic's US site redirects the VMZ51 to the successor PT-VMZ71 page (connect.na.panasonic.com), so no maker page is recorded; retailer page is primary",
+      "fallback_url": "https://shopindoorgolf.com/products/panasonic-vmz51u-golf-simulator-projector",
+      "read_url": "https://golfstead.com/best-golf-simulator-projectors",
+      "specs": {
+        "throw_ratio": "1.09 to 1.77 (1.6x manual zoom), standard throw",
+        "lumens": "5,200 ISO",
+        "resolution": "WUXGA 1920x1200, 3LCD",
+        "native_aspect": "16:10; 16:9 and 4:3 selectable",
+        "lens_shift": "optical, horizontal +/-20%, vertical +44%",
+        "keystone": "digital H +/-35 deg, V +/-25 deg, corner correction",
+        "input_lag": "not published",
+        "light_source": "laser phosphor, 20,000 h (24,000 eco)",
+        "noise": "36 dB normal, 26 dB eco",
+        "other": "15.2 lb; quiet; Golfstead notes it is not short throw and needs about 10 ft of mounting distance",
+        "mount_positions": "ceiling well behind the golfer, or off to one side using the shift; the only sub-$3,000 lens-shift option in the sim guides",
+        "spec_sources": "https://www.projectorcentral.com/panasonic-pt-vmz51u.htm; https://mygolfsimulator.com/best-golf-simulator-projectors/"
+      },
+      "room_fit": "10.9 to 17.7 ft for a 10 ft wide 16:10 image; a 10 ft x 7.5 ft 4:3 screen needs a 12 ft wide image, so 13.1 to 21.2 ft. Only for deep rooms (18 ft plus) where the projector sits behind the golfer; the vertical shift then drops the image to the floor without tilt. The horizontal shift lets it hang beside a centerline obstruction.",
+      "off_center": "yes (optical H +/-20%, V +44%) but standard throw",
+      "who_its_for": "The deep, bright room that needs lens shift under $3,000, or a dual-use media room; Shop Indoor Golf's old best overall.",
+      "pros": [
+        "Real horizontal and vertical lens shift",
+        "5,200 lumens, 3LCD color",
+        "Quiet 26 dB eco"
+      ],
+      "cons": [
+        "Standard throw: needs 11 ft or more and casts shadows in shallow bays",
+        "WUXGA, not 4K",
+        "Heavy"
+      ],
+      "known_issues": [
+        "GSF: a VMZ50U owner who upgraded to the LK936ST saw little picture gain, which cuts both ways",
+        "Successor VMZ71 is replacing it on Panasonic's site"
+      ],
+      "why_people_choose_it": "Lens shift at a price the home builder can reach; the forums' Panasonic VZ580 loyalty carried over to the VMZ line.",
+      "image_url": "https://www.projectorcentral.com/images/projectors2/img11879.jpg"
+    },
+    {
+      "brand": "Epson",
+      "name": "EpiqVision Ultra LS800",
+      "subtype": "ultra-short-throw",
+      "tier": "qualified",
+      "mention_count": 7,
+      "mention_sources": [
+        "https://mygolfsimulator.com/keystone-correction/",
+        "https://www.rtings.com/projector/reviews/epson/epiqvision-ultra-ls800",
+        "https://redditrecs.com/home-projector/model/epson-epiqvision-ultra-ls800-ultra-short-throw-laser-projector/",
+        "https://www.avsforum.com/threads/screen-for-the-epson-ls800.3303377/",
+        "https://www.amazon.com/Epson-EpiqVision-Streaming-Projector-Speakers/dp/B0BCXT6BSP",
+        "https://www.projectorcentral.com/best-ultra-short-throw-projectors.htm",
+        "https://www.compareprojector.com/best-golf-simulator-projector"
+      ],
+      "price": {
+        "amount": 3799.99,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://epson.com/epiqvision-ultra-laser-projection-tv",
+        "note": "Epson list price from the search snippet; the LS800 product page is now marked discontinued, replaced by the Lifestudio Grand Plus. Street pricing on Amazon varies."
+      },
+      "direct_url": "https://epson.com/For-Home/Projectors/Laser-Projection-TV/EpiqVision-Ultra-LS800-4K-PRO-UHD-Ultra-Short-Throw-3-Chip-3LCD-Smart-Streaming-Laser-Projector/p/V11HA90120",
+      "fallback_url": "https://www.amazon.com/Epson-EpiqVision-Streaming-Projector-Speakers/dp/B0BCXT6BSP",
+      "read_url": "https://redditrecs.com/home-projector/model/epson-epiqvision-ultra-ls800-ultra-short-throw-laser-projector/",
+      "specs": {
+        "throw_ratio": "0.16 (Epson, via search snippet); sits inches from the screen",
+        "lumens": "4,000 color and white (ISO)",
+        "resolution": "4K PRO-UHD (pixel shift), 3LCD",
+        "native_aspect": "16:9",
+        "lens_shift": "none",
+        "keystone": "multi-point picture adjustment",
+        "input_lag": "not published; one HDMI port is gaming-dedicated at 1080p/120; Reddit owners call gaming performance subpar",
+        "light_source": "laser array",
+        "noise": "not published",
+        "other": "up to 150 in image; built-in Yamaha sound and Android TV",
+        "mount_positions": "floor or cabinet directly under the screen, which is the ball-landing zone of a golf sim",
+        "spec_sources": "https://epson.com/For-Home/Projectors/Laser-Projection-TV/EpiqVision-Ultra-LS800-4K-PRO-UHD-Ultra-Short-Throw-3-Chip-3LCD-Smart-Streaming-Laser-Projector/p/V11HA90120"
+      },
+      "room_fit": "Needs almost no throw (about 1.6 ft of lens-to-screen for 10 ft wide), which is the appeal for a 5 ft deep bay. The catch is the screen: UST optics exaggerate every ripple in a tensioned impact screen, the unit sits where balls land, and Reddit owners say a UST needs an ALR screen. ProjectorCentral's golf guide says UST projectors generally do not work with impact screens.",
+      "off_center": "no (must be centered under the screen)",
+      "who_its_for": "Honestly, the home theatre buyer; it appears in sim guides as the UST example rather than a recommendation. Worth listing because builders with very shallow bays keep asking about it.",
+      "pros": [
+        "4,000 lumen 3LCD laser with no shadow possible",
+        "Solves depth entirely"
+      ],
+      "cons": [
+        "Sits in the ball-landing area; needs a protective enclosure",
+        "Impact screens ripple and UST shows every wave; forum advice is a rigid ALR screen that can cost as much as the projector",
+        "Discontinued by Epson"
+      ],
+      "known_issues": [
+        "mygolfsimulator lists it only to note it lacks the keystone and shift of the ST models"
+      ],
+      "why_people_choose_it": "They do not, mostly; the forum verdict is that traditional short throws are still the way to go. It earns its place as the answer to 'can I use a UST?'",
+      "image_url": "https://mediaserver.goepson.com/adaptivemedia/rendition?id=d642ffa5ff92617ba59bbd6b0dc259c1a39b50e9&vid=d642ffa5ff92617ba59bbd6b0dc259c1a39b50e9&prid=1200Wx1200H&clid=SAPDAM&prclid=banner&assetDescr=LS800B_top-headon_pcmag-ec_690x460"
+    },
+    {
+      "brand": "ViewSonic",
+      "name": "PX701-4K",
+      "subtype": "standard-throw",
+      "tier": "qualified",
+      "mention_count": 8,
+      "mention_sources": [
+        "https://www.projectorcentral.com/ViewSonic-PX701-4K-Projector-Review.htm",
+        "https://golfsimulatorforum.com/forum/build-your-own/projectors/332344-i%E2%80%99m-lost-guys",
+        "https://www.golfinfluence.com/gear/accessories/best-golf-simulator-projector/",
+        "https://www.tvsbook.com/threads/viewsonic-px701-4k-projector-review-the-cheapest-4k-projector.4023/",
+        "https://www.mistermancave.com/best-4k-golf-simulator-projectors/",
+        "https://simulatorgolfpro.com/viewsonic-px701-4k-uhd-4k-projector-with-3200-lumens/",
+        "https://www.walmart.com/ip/388259167",
+        "https://slickdeals.net/f/16317655-viewsonic-px701-4k-4k-uhd-3200-lumens-240hz-4-2ms-home-theater-projector-776-39-f-s-amazon"
+      ],
+      "price": {
+        "amount": 980,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://www.projectorcentral.com/viewsonic-px701-4k.htm",
+        "note": "MSRP $979; sales as low as $776 (Slickdeals)"
+      },
+      "direct_url": "https://www.viewsonic.com/global/products/projectors/PX701-4K",
+      "fallback_url": "https://www.projectorcentral.com/viewsonic-px701-4k.htm",
+      "read_url": "https://www.projectorcentral.com/ViewSonic-PX701-4K-Projector-Review.htm",
+      "specs": {
+        "throw_ratio": "1.50 to 1.65 (1.1x zoom), standard throw",
+        "lumens": "3,200 rated; ProjectorCentral measured 2,582",
+        "resolution": "4K UHD (XPR pixel shift)",
+        "native_aspect": "16:9; 4:3 selectable",
+        "lens_shift": "none (lens offset only)",
+        "keystone": "H and V +/-40 deg, auto vertical, four-corner, warping",
+        "input_lag": "16.9 ms at 4K/60; 4.2 ms rated at 1080p/240",
+        "light_source": "203 W UHP lamp, 6,000 h (20,000 eco)",
+        "noise": "not listed",
+        "other": "6.2 lb; released February 2021",
+        "mount_positions": "ceiling 15 ft or more behind the golfer; GSF rules it out for enclosures under about 19 ft deep",
+        "spec_sources": "https://www.projectorcentral.com/viewsonic-px701-4k.htm; https://www.projectorcentral.com/ViewSonic-PX701-4K-Projector-Review.htm"
+      },
+      "room_fit": "15 to 16.5 ft for a 10 ft wide 16:9 image; 20 to 22 ft to fill a 10 ft x 7.5 ft 4:3 screen. GSF: about 19 ft for a 9 ft wide image. Only works in a long room with the projector far behind the golfer, where shadows are the next problem. A four-corner and +/-40 deg H keystone set makes it the rare budget unit that can be squared from a side shelf, at a sharpness cost.",
+      "off_center": "keystone only (H and V +/-40 deg plus four-corner)",
+      "who_its_for": "The long-room or dual-use media room buyer who wants 4K under $1,000 and has 15 ft plus of throw; not for a garage bay.",
+      "pros": [
+        "Cheapest 4K with 240 Hz low-lag mode",
+        "Wide keystone and four-corner adjustment",
+        "Designed for ambient light"
+      ],
+      "cons": [
+        "1.5 throw ratio: double the distance a sim bay has",
+        "Lamp dims; measured 80% of rated brightness",
+        "Golf-sim mentions are mostly affiliate roundups, not owner builds"
+      ],
+      "known_issues": [
+        "A firmware update produced a yellow tint that broke ProjectorCentral's published calibration",
+        "GSF: a member suggested it, another immediately pointed out it needs 19 ft"
+      ],
+      "why_people_choose_it": "It shows up in 'best 4K sim projector' lists on price alone; the forum thread where it was suggested ended with the TH671ST instead, which is the honest summary.",
+      "image_url": "https://www.projectorcentral.com/images/projectors2/img11405.jpg"
+    }
+  ],
+  "not_qualified": [
+    {
+      "brand": "BenQ",
+      "name": "TH690ST",
+      "reason": "Only the ProjectorCentral spec page; no sim-community mentions found. 1080p LED short throw, 0.69 to 0.83."
+    },
+    {
+      "brand": "BenQ",
+      "name": "LH730",
+      "reason": "Not named in any sim source; 1.13 to 1.46 business laser. BenQ US has no live page under the paths tried."
+    },
+    {
+      "brand": "Optoma",
+      "name": "UHZ50",
+      "reason": "Discontinued July 2024 (ProjectorCentral); 1.3x zoom, vertical +10% lens shift; sources are AV forums and retailers, not sim builds."
+    },
+    {
+      "brand": "Optoma",
+      "name": "ZH400ST / ZH450ST",
+      "reason": "ZH400ST has only a spec page; ZH450ST (0.496, 4,200 lm, +/-15 deg keystone) reaches four sources (Carl's, mygolfsimulator x2, Home Performance Lab placement). Watch list."
+    },
+    {
+      "brand": "Hisense",
+      "name": "PX3-Pro",
+      "reason": "UST 0.22, 3,000 lm RGB laser, $2,498 street; TechRadar and ProjectorCentral only; no sim-community discussion. Same UST caveats as the LS800."
+    },
+    {
+      "brand": "XGIMI",
+      "name": "Horizon Pro / Aura",
+      "reason": "Zero golf-sim mentions found."
+    },
+    {
+      "brand": "Epson",
+      "name": "Home Cinema 2250",
+      "reason": "Discontinued March 2023; 1.34 to 2.17 throw; one golf source (a 2022 GSF classified) plus AVS Forum home-theatre threads."
+    },
+    {
+      "brand": "ViewSonic",
+      "name": "X2-4K",
+      "reason": "0.69 to 0.82 LED short throw, 2,150 lm measured, $1,599; six reviews but only one sim roundup (Complete Golf Store)."
+    },
+    {
+      "brand": "Panasonic",
+      "name": "PT-VZ580",
+      "reason": "Five mentions (four GSF threads, Golfstead) but discontinued and vertical shift only (about -44%); the lens-shift ancestor of the VMZ51 in forum memory."
+    },
+    {
+      "brand": "Eiki",
+      "name": "EK-308U",
+      "reason": "Four mentions; Foresight used it on a stand to the golfer's right in Sim in a Box with about 7% shift. The historical off-center answer."
+    },
+    {
+      "brand": "LG",
+      "name": "ProBeam BU53RG",
+      "reason": "Four mentions; 4K 5,000 lm with H +/-20% V +/-50% shift at 0.94 to 1.14. Worth re-checking next pass; it would be the second off-center 4K."
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://homeperformancelab.com/5-best-short-throw-projectors-for-golf-simulator/",
+      "type": "review",
+      "title": "5 Best Short Throw Projectors for Golf Simulator (2026)",
+      "date": "2026-04-09",
+      "what_it_says": "Tested AK700ST, TK710STi, AH700ST, GT2100HDR, TH671ST, LK936ST; publishes measured lumens well under the ratings and 47 to 54 dB fan readings."
+    },
+    {
+      "url": "https://homeperformancelab.com/best-benq-projector-for-golf-simulator/",
+      "type": "review",
+      "title": "Best BenQ Projector for Golf Simulators (2026): Every Model Compared",
+      "date": "2026-06-17",
+      "what_it_says": "Nine BenQ models with lag, throw and room-depth verdicts; AK700ST for 16 ft plus bays, LK830ST under 16 ft, TK700ST not for permanent installs."
+    },
+    {
+      "url": "https://homeperformancelab.com/golf-simulator-projector-placement/",
+      "type": "review",
+      "title": "Golf Simulator Projector Placement Guide (2026)",
+      "date": "2026-04-05",
+      "what_it_says": "Throw ratio math, 100 to 110% offset target, ceiling vs floor vs side mounting, and why side mounting needs horizontal lens shift (names only the LK936ST)."
+    },
+    {
+      "url": "https://www.carlofet.com/blog/choosing-a-projector-for-a-golf-simulator-setup",
+      "type": "retailer",
+      "title": "Choosing a Golf Simulator Projector, Carl's Place",
+      "date": "2026",
+      "what_it_says": "Lumens by room, 0.5 to 0.9 ideal throw, 4:3 recalculation warning, floor mount needs a case and wedges; names TH671ST, ZH450ST, AH700ST, AK700ST."
+    },
+    {
+      "url": "https://www.carlofet.com/blog/benq-tk710sti-review",
+      "type": "retailer",
+      "title": "Reviewing the BenQ TK710STi, Carl's Place",
+      "date": "2026",
+      "what_it_says": "Spec-level review: 3,200 lm, 0.69 to 0.83, 3-axis keystone, no lens shift, offset 102.5%; 'knocked it out of the park'."
+    },
+    {
+      "url": "https://www.carlofet.com/blog/golf-simulator-projector-set-up",
+      "type": "retailer",
+      "title": "Mounting and Setting Up Your Golf Simulator Projector, Carl's Place",
+      "date": "2026",
+      "what_it_says": "Ceiling, frame, floor and cart mounts; carts discouraged (shadows, bumps, space); placement first, lens shift second, keystone last."
+    },
+    {
+      "url": "https://www.carlofet.com/screen-size-calculator",
+      "type": "retailer",
+      "title": "Screen Size Calculator, Carl's Place",
+      "date": "2026",
+      "what_it_says": "ProjectorCentral-powered image size, aspect and throw calculator."
+    },
+    {
+      "url": "https://rainorshinegolf.com/pages/golf-simulator-projector-buyer-guide",
+      "type": "retailer",
+      "title": "Golf Simulator Projector Buyers Guide, Rain or Shine Golf",
+      "date": "2026",
+      "what_it_says": "Lumens by room type (2,500 basement to 4,000 plus daylight), short throw 0.4 to 0.8 at 6 to 8 ft, keep keystone under 15 deg, lens shift only on higher-end models."
+    },
+    {
+      "url": "https://rainorshinegolf.com/pages/projector-throw-distance-calculator",
+      "type": "retailer",
+      "title": "Projector Throw Distance Calculator, Rain or Shine Golf",
+      "date": "2026",
+      "what_it_says": "Calculator fixed to a 4:3 screen, computed at each projector's native aspect."
+    },
+    {
+      "url": "https://golfstead.com/best-golf-simulator-projectors",
+      "type": "review",
+      "title": "8 Best Golf Simulator Projectors, Golfstead",
+      "date": "2026-10-18",
+      "what_it_says": "GT2400HDR first, then PT-VMZ51, AH700ST, LK936ST, BU53RG, ZK431ST, TK710STi; reader Q&A names TH671ST for floor mounting."
+    },
+    {
+      "url": "https://topshelfgolf.com/blogs/golf/best-golf-simulator-projectors-in-2026-benq-and-optoma-compared",
+      "type": "retailer",
+      "title": "Best Golf Simulator Projectors 2026: BenQ and Optoma, Top Shelf Golf",
+      "date": "2026-03-14",
+      "what_it_says": "25-model price and spec table; GT2000HDR 'number one for most home simulators'; lens shift on LK936ST, AK900ST, LU935ST and ProScene models only."
+    },
+    {
+      "url": "https://topshelfgolf.com/pages/golf-simulator-projectors-guide",
+      "type": "retailer",
+      "title": "Golf Simulator Projectors Guide 2026, Top Shelf Golf",
+      "date": "2026-10-15",
+      "what_it_says": "Per-model distance to a 10 ft x 7.5 ft 4:3 screen, aspect modes, lens shift yes/no, $99 ceiling mounts and the $349 ProGuard floor mount."
+    },
+    {
+      "url": "https://topshelfgolf.com/blogs/golf/benq-vs-optoma-which-projector-fits-your-golf-simulator",
+      "type": "retailer",
+      "title": "BenQ vs Optoma for Golf Simulators, Top Shelf Golf",
+      "date": "2025-10-03",
+      "what_it_says": "Optoma wins brightness per dollar, BenQ wins color (95% Rec.709) and golf modes."
+    },
+    {
+      "url": "https://mygolfsimulator.com/where-to-mount-your-golf-simulator-projector/",
+      "type": "review",
+      "title": "Where to Mount your Golf Simulator Projector, MyGolfSimulator",
+      "date": "2026",
+      "what_it_says": "Five positions incl. ceiling off-center and side-mounted; side mount needs horizontal keystone or lens shift; names 13 models and the SIMBR and Skyrail mounts."
+    },
+    {
+      "url": "https://mygolfsimulator.com/keystone-correction/",
+      "type": "review",
+      "title": "Keystone Correction for Golf Simulator Projectors, MyGolfSimulator",
+      "date": "2026-08",
+      "what_it_says": "Keystone ranges by model (BenQ +/-30, Optoma +/-15, GT1080HDR vertical only); only LK936ST and Epson L790SE have lens shift."
+    },
+    {
+      "url": "https://mygolfsimulator.com/best-golf-simulator-projectors/",
+      "type": "review",
+      "title": "Best Golf Simulator Projector 2025: 8 Step Buying Guide, MyGolfSimulator",
+      "date": "2025",
+      "what_it_says": "Spec table with lens shift for LK936ST, VMZ51, BU53RG, EK-308U; 4:3 for rooms under 13 ft wide; warns 16:9 on a narrow screen looks too short."
+    },
+    {
+      "url": "https://www.projectorcentral.com/best-golf-projectors.htm",
+      "type": "review",
+      "title": "Best Golf Projectors, ProjectorCentral",
+      "date": "2026-10-11",
+      "what_it_says": "Top ten: AK700ST, Epson L690SU, LK936ST, GT2000HDR, GT2400HDR, AK900ST, AH700ST, LK830ST, GT3900UHD, AK800ST."
+    },
+    {
+      "url": "https://www.projectorcentral.com/Picking-a-Projector-for-a-Golf-Simulator.htm",
+      "type": "review",
+      "title": "How to Choose a Projector for a Golf Simulator, ProjectorCentral",
+      "date": "2024-03-19",
+      "what_it_says": "4:3 throw formula (0.5625 x distance / height), multiply lumens by 1.33 for 4:3 letterbox, side carts hard to square, UST generally does not work with impact screens."
+    },
+    {
+      "url": "https://www.thesmarthomehookup.com/ultimate-golf-sim-projector-comparison-and-setup-guide-2024/",
+      "type": "review",
+      "title": "Ultimate Golf Sim Projector Comparison and Setup Guide 2024, The Hook Up",
+      "date": "2024-08-15",
+      "what_it_says": "Measured: TK710STi 2,448 lm usable, AH700ST 2,200 in Golf mode, ZK608TST 5,879; LK936ST ran nine months without issue; TK710STi preferred over AH700ST."
+    },
+    {
+      "url": "https://www.simgolfer.com/blogs/simulator-academy/best-golf-simulator-projectors-2026",
+      "type": "retailer",
+      "title": "Best Golf Simulator Projectors 2026, SimGolfer",
+      "date": "2026-05-19",
+      "what_it_says": "Seven picks TH671ST to ZK608TST; AH500ST for shallow bays, UHZ35ST for 4K on a budget."
+    },
+    {
+      "url": "https://homegolfhero.com/guides/best-projector-for-golf-simulator/",
+      "type": "review",
+      "title": "Best Golf Simulator Projector: 5 Tested (2026 Guide), Home Golf Hero",
+      "date": "2026-07-17",
+      "what_it_says": "17-model table with prices; GT2400HDR best value, AK700ST best 4K, TH671ST dark basements only."
+    },
+    {
+      "url": "https://www.smarthomeperfected.com/projector-for-golf-simulator/",
+      "type": "review",
+      "title": "Best Projector for Golf Simulator 2026: 5 Short Throw Picks, Smart Home Perfected",
+      "date": "2026-10-16",
+      "what_it_says": "AH700ST for a 10 ft garage bay at 6 to 7 ft; 3,000 lm for a dim bay, 4,000 plus with windows; TH671ST may wash out."
+    },
+    {
+      "url": "https://www.golfinfluence.com/gear/accessories/best-golf-simulator-projector/",
+      "type": "review",
+      "title": "Best Golf Simulator Projector 2026 (My Top 5 Picks), Golf Influence",
+      "date": "2026-03-18",
+      "what_it_says": "Affiliate roundup that still ranks standard-throw units (Epson HC3800, PX701-4K, HZ40HDR); useful only as a mention count."
+    },
+    {
+      "url": "https://shopindoorgolf.com/collections/projectors",
+      "type": "retailer",
+      "title": "Golf Simulator Projectors, Shop Indoor Golf",
+      "date": "2026",
+      "what_it_says": "AK700ST best seller of 2026, then ZW350ST and GT2000HDR; 3,000 lm and 1080p recommended, 4K optional."
+    },
+    {
+      "url": "https://redditrecs.com/home-projector/model/benq-tk710sti/",
+      "type": "reddit",
+      "title": "BenQ TK710STi, all Reddit reviews in one place",
+      "date": "2025-11",
+      "what_it_says": "Five r/Golfsimulator owners: awesome with garage lights off, washed out with lights on, 4:3 switching easy, one would pay up for the LK936ST."
+    },
+    {
+      "url": "https://redditrecs.com/home-projector/model/epson-epiqvision-ultra-ls800-ultra-short-throw-laser-projector/",
+      "type": "reddit",
+      "title": "Epson LS800, all Reddit reviews in one place",
+      "date": "2025",
+      "what_it_says": "UST needs an ALR screen; ceiling mounting a UST loses its advantage; gaming performance called subpar."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/295812-best-projector-with-horizontal-offset",
+      "type": "forum",
+      "title": "Best projector with horizontal offset",
+      "date": "2020-11-06",
+      "what_it_says": "Hunt for horizontal shift under $1,500: EH200ST has shift, EH460ST keystone degrades, Eiki EK-308U with 7% shift was Foresight's stand-mounted answer."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/318239-horizontal-lens-shift",
+      "type": "forum",
+      "title": "Horizontal lens shift",
+      "date": "2021-02-12",
+      "what_it_says": "Side mount in a 5 m x 3.5 m garage: no budget projector shifts 1 m; place it over the ball and angle plus keystone; VZ580 is vertical shift only."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/304377-floor-vs-ceiling-mount-projector",
+      "type": "forum",
+      "title": "Floor vs ceiling mount projector",
+      "date": "2020-12-17",
+      "what_it_says": "8 ft 8 in ceiling; owner floor-mounts an EH412ST in a case 12 in off the hitting line, 7.5 ft from the screen, keystone -6; Optoma images project 12 to 14 in upward."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/280691-not-much-love-for-floor-mounting",
+      "type": "forum",
+      "title": "Not Much Love for Floor Mounting?",
+      "date": "2020-07-24",
+      "what_it_says": "Floor units get in the follow-through and block putts; off-to-the-side floor placement works for one owner; ladder-held shadow test before drilling."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/384163-benq-lk936st-not-worth-the-hype",
+      "type": "forum",
+      "title": "Benq LK936ST not worth the hype",
+      "date": "2023-02-04",
+      "what_it_says": "Owner upgrading from a Panasonic VMZ50U saw a minor gain and dark Golf Mode; another reports shutoffs; a third calls it a big step over an EH200ST."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/373356-optoma-1080hdr-or-benq-tk700sti",
+      "type": "forum",
+      "title": "Optoma 1080hdr or benq tk700sti",
+      "date": "2022-08-20",
+      "what_it_says": "TK700STi needs 15 ft of throw and is a bulb; UHD35STx is brighter from 8 ft; a 1090HDR owner says it looks great in bright light."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/398201-where-are-the-new-4k-short-throw-projectors",
+      "type": "forum",
+      "title": "Where are the new 4K Short Throw Projectors?",
+      "date": "2023-12-06",
+      "what_it_says": "4K short-throw drought: only the LK936ST matched a 6,000 lm ZU606TST; LG BU53RG suggested."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/174679-panasonic-vz580-question",
+      "type": "forum",
+      "title": "Panasonic VZ580 question",
+      "date": "2018-12-17",
+      "what_it_says": "Vertical shift math to drop a 16:10 image to the floor from an 11 ft lens height without tilt; flop shots reach 55 deg so protect the ceiling unit."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/309387-eh412st-projector-floor-placement-positioning-for-120-x-91-screen",
+      "type": "forum",
+      "title": "EH412ST Projector, Floor Placement Positioning for 120 x 91 Screen",
+      "date": "2021-01-06",
+      "what_it_says": "Floor-mounted 0.5 unit, 4:3 at 1440x1080, 80 in from the screen; no lens shift means edge distortion off-center; advice to seek 2 to 3 in offset plus horizontal shift."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/376703-benq-tk700sti-question",
+      "type": "forum",
+      "title": "Benq TK700sti question",
+      "date": "2022-10-24",
+      "what_it_says": "Shadow math (golfer height over mount height times throw), buyer switches to the UHD35STx; one member plans a floor mount 3 ft off-center."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/332344-i%E2%80%99m-lost-guys",
+      "type": "forum",
+      "title": "I'm lost guys",
+      "date": "2021-05-04",
+      "what_it_says": "10 x 10 x 5 enclosure with a 9 x 9 screen: PX701-4K needs 19 ft, TH671ST at 4:3 mounts 9 ft back over the ball; blackout curtains."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/golf-simulator-forum/simulator-builds/407730-best-4k-projector-for-me",
+      "type": "forum",
+      "title": "Best 4k Projector for Me",
+      "date": "2024-08-19",
+      "what_it_says": "Under $1,500 4K: TK710STi is about the only option; off-center needs keystone and cheap units distort; LK936ST vs Epson L730U for lights-on play."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/build-your-own/projectors/357676-projector-location-w-eye-xo",
+      "type": "forum",
+      "title": "Projector location w/Eye XO?",
+      "date": "2022-01-25",
+      "what_it_says": "Stacking a TK700STi with an overhead launch monitor: lens 1 to 2 in below the Eye XO, 16 ft back for a 10 ft tall image; draw a side view to check shadows."
+    },
+    {
+      "url": "https://golfsimulatorforum.com/forum/classified-ads/home-golf-simulators/363968-epson-home-cinema-2250",
+      "type": "forum",
+      "title": "Epson Home Cinema 2250 (classified)",
+      "date": "2022",
+      "what_it_says": "Used HC2250 sold out of a sim: 'if you have the space in your simulator' it works; the only golf mention of the model."
+    },
+    {
+      "url": "https://www.projectorreviews.com/benq/benq-ah700st-laser-golf-simulator-projector/",
+      "type": "review",
+      "title": "BenQ AH700ST Laser Golf Simulator Projector review, Projector Reviews",
+      "date": "2025-03-23",
+      "what_it_says": "Measured 3,812 lm in Bright, 33 dB, 16 ms; pros brightness and Golf preset, cons gray blacks and no lens shift."
+    },
+    {
+      "url": "https://www.projectorcentral.com/ViewSonic-PX701-4K-Projector-Review.htm",
+      "type": "review",
+      "title": "ViewSonic PX701-4K Projector Review, ProjectorCentral",
+      "date": "2021-03-30",
+      "what_it_says": "Measured 2,582 lm, +/-40 deg H and V keystone with four-corner; a budget ambient-light 4K, not a short throw."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=VI45ROzcuJc",
+      "type": "video",
+      "title": "Best 4K Golf Simulator Projector for 2025? BenQ AK700ST Full Review!, Golf Simulator Videos",
+      "date": "2025-01-21",
+      "what_it_says": "Hands-on AK700ST review in a home bay; 20,700 views."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=wM-t9wsfO1I",
+      "type": "video",
+      "title": "Did BenQ Just Make EVERY Golf Sim Projector Obsolete?, Golfers Authority",
+      "date": "2026-02-18",
+      "what_it_says": "Reaction to BenQ's 2026 golf line (AK800ST/AK900ST era); 2,500 views."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=Q2uUsTjeH18",
+      "type": "video",
+      "title": "The PERFECT Projector for Indoor Golf Simulators, Harry Shaw Golf",
+      "date": "2025-09-02",
+      "what_it_says": "Creator pick for an indoor sim; 5,150 views. Description not readable from the fetch."
+    },
+    {
+      "url": "https://golfsimulatorstore.com/optoma-short-throw-golf-simulator-projectors-a-quick-review-of-all-the-popular-products/",
+      "type": "retailer",
+      "title": "Optoma Short Throw Golf Simulator Projectors: A Quick Review",
+      "date": "2021-06-08",
+      "what_it_says": "EH412ST, EH460ST (0.5, 4,200 lm) and ZH406ST (vertical shift, four-corner) as the Optoma sim trio of 2021."
+    },
+    {
+      "url": "https://www.tomsguide.com/tvs/4k-tvs/projectors-arent-just-for-movies-and-gaming-this-one-improves-your-golf-game",
+      "type": "review",
+      "title": "I replaced my TV with a 4K projector and it was the best thing for my golf swing, Tom's Guide",
+      "date": "2026",
+      "what_it_says": "Mainstream take: AK700ST 'will break the bank at $2,899' but worth it for brightness; TH671ST at $949 as the budget alternative."
+    },
+    {
+      "url": "https://forum.mygolfspy.com/topic/68781-7-best-golf-simulator-projectors-in-2026-for-home-golf-simulators/",
+      "type": "forum",
+      "title": "7 Best Golf Simulator Projectors in 2026, MyGolfSpy Forum",
+      "date": "2026",
+      "what_it_says": "Member roundup (403 to fetch; search snippet only): includes the Epson PowerLite L795SE at about $6,100 as a commercial-grade short throw."
+    },
+    {
+      "url": "https://www.benq.com/en-us/golf-simulator-projector/knowledge/measure-screen-size-and-distance.html",
+      "type": "brand",
+      "title": "Measure Ideal Screen Size and Distance, BenQ",
+      "date": "2026",
+      "what_it_says": "Throw ratio = (distance x 0.5625) / image height for a 16:9 unit on a 4:3 or 1:1 screen; 0.6277 for 16:10; mount 2 to 3 ft behind the hitting area."
+    },
+    {
+      "url": "https://www.benq.com/en-us/golf-simulator-projector/how-to-video/installation-flexibility.html",
+      "type": "brand",
+      "title": "Keystone and Lens Shift are Important on a Golf Sim Projector Setup, BenQ",
+      "date": "2026",
+      "what_it_says": "Brand explainer on why lens shift beats keystone for off-center mounts."
+    },
+    {
+      "url": "https://www.avforums.com/threads/new-optoma-projector-lens-issues-uhz50.2478119/",
+      "type": "forum",
+      "title": "New Optoma Projector lens issues UHZ50, AVForums",
+      "date": "2023",
+      "what_it_says": "UHZ50 owner with blurry edges and dust in the lens; model discontinued July 2024."
+    },
+    {
+      "url": "https://www.techradar.com/televisions/home-theater/projectors/hisense-px3-pro-review",
+      "type": "review",
+      "title": "Hisense PX3-Pro review, TechRadar",
+      "date": "2024",
+      "what_it_says": "3,000 lm UST at 0.22 with a 1080p/240 mode; home theatre and console review, no sim context."
+    }
+  ],
+  "blog_outline": {
+    "title": "The garage builder's projector guide: throw math, 4:3 screens, and what to do when the ceiling spot is taken",
+    "sections": [
+      "Start with the bay, not the projector: a 10 ft wide, 7 ft 6 in tall 4:3 screen, 10 to 11 ft from ball to screen, 8 to 9 ft ceiling (ProjectorCentral and Carl's Place room numbers)",
+      "Throw math for a 10 ft bay: throw distance = throw ratio x image width; a 16:9 projector must throw 13 ft 4 in wide to fill a 10 ft x 7 ft 6 in 4:3 screen, so 0.5 units sit about 6 ft 7 in out and 0.69 to 0.83 units sit 9 to 11 ft out (Top Shelf Golf table, BenQ formula)",
+      "4:3 vs 16:9 on an impact screen: why screens are 4:3 (ball clearance in a narrow bay), letterboxing a 16:9 projector costs 25% of the pixels and a third of the light (multiply lumens by 1.33, ProjectorCentral), and how Auto Screen Fit, Screen Fill and a 1440x1080 PC resolution handle it",
+      "Ceiling vs floor vs cart: ceiling behind the ball is the default (Carl's: about 4 ft behind the tee); floor cases in front of the mat for 0.5 units under 8 ft 6 in ceilings, offset 12 in from the hitting line (GSF); carts are discouraged (shadows, bumps, space) but work for a temporary bay",
+      "Off-center when the ceiling mount is impossible: order of operations is placement, then optical lens shift, then digital keystone (every guide); what +/-15 deg (Optoma) vs +/-30 deg (BenQ) vs +/-40 deg (ViewSonic, UHD35STx) actually buys you; the LK936ST (+/-23% H) and PT-VMZ51 (+/-20% H) as the two lens-shift options; the 'over the ball, angled in' trick from the GSF horizontal lens shift thread; the floor case beside the mat",
+      "Ultra-short-throw honesty section: the LS800 and PX3-Pro sit where balls land and show every ripple in a tensioned screen; forum verdict is traditional short throw",
+      "Lumens for a lit garage: rated vs measured (TK710STi 3,200 rated, 2,448 measured; AH700ST 2,200 in Golf mode), the 1.33 letterbox penalty, 3,000 for lights-off and 4,000 plus for a door-open garage (Rain or Shine, Smart Home Perfected), blackout curtains as the cheapest lumen upgrade",
+      "Lamp vs laser vs LED: 4,000 hour bulbs that dim and cost $150 to $300 (TH671ST, TK700STi, UHD35STx) vs 20,000 to 30,000 hour lasers; sealed IP5X and IP6X engines for dusty garages",
+      "What to spend: under $1,000 (TH671ST, ZW350ST), $1,200 to $1,500 (GT2000HDR, GT2400HDR, UHD35STx), $2,000 to $2,500 (TK710STi, AH500ST, LK830ST, AH700ST), $2,900 (AK700ST), $4,900 (LK936ST); price tiers, not rankings",
+      "Input lag and the GSPro rig: 16.7 ms at 4K/60 vs 4 ms at 1080p/240, why most builders run 1080p anyway, GPU needed for 4K",
+      "Before you drill: the ladder shadow test (GSF), draw a side view with your height (GSF Eye XO thread), use the Carl's or Rain or Shine calculator at the 4:3 setting, and pad the beam near the lens",
+      "Reference bag: the qualified projectors by price tier with their throw distance to a 10 ft screen, off-center capability and the forum thread to read"
+    ]
+  }
+}
