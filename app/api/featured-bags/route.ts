@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
+import { resolveItemPhoto } from '@/lib/items/photo';
 
 // Featured bag codes - hardcoded for easy updates
 const FEATURED_BAG_CODES = [
@@ -56,6 +57,7 @@ export async function GET() {
             brand,
             custom_description,
             custom_photo_id,
+            photo_url,
             is_featured,
             featured_position,
             sort_index
@@ -117,7 +119,8 @@ export async function GET() {
           custom_name: item.custom_name,
           brand: item.brand,
           custom_description: item.custom_description,
-          photo_url: item.custom_photo_id ? photoUrls[item.custom_photo_id] || null : null,
+          // Was custom_photo_id only; photo_url-only items showed no thumbnail in the featured strip
+          photo_url: resolveItemPhoto(item, photoUrls),
           is_featured: item.is_featured,
           featured_position: item.featured_position,
           sort_index: item.sort_index,

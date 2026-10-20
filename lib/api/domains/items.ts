@@ -62,8 +62,23 @@ export function deleteLink(linkId: string) {
   return api.del<void>(`/api/links/${linkId}`);
 }
 
+export interface LinkRecommendation {
+  url: string;
+  source: string;
+  reason: string;
+  label: string;
+  priority: number;
+  affiliatable: boolean;
+}
+
+/** SmartLinkFinder for one item: Google search ranked by AI, best pick in `primaryLink`. */
 export function findLink(id: string) {
-  return api.post<{ recommendations: Array<{ url: string; source: string; reason: string; label: string; priority: number; affiliatable: boolean }> }>(`/api/items/${id}/find-link`);
+  return api.post<{ recommendations: LinkRecommendation[]; primaryLink: LinkRecommendation | null; reasoning: string }>(`/api/items/${id}/find-link`);
+}
+
+/** Add an item to a bag from a pasted URL: identifies the product, picks an image, adds the link. */
+export function addFromUrl(bagCode: string, url: string) {
+  return api.post<any>(`/api/bags/${bagCode}/items/from-url`, { url });
 }
 
 // -- Batch operations --

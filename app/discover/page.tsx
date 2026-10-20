@@ -1,6 +1,7 @@
 import { createServerSupabase } from '@/lib/serverSupabase';
 import Navigation from '@/components/Navigation';
 import DiscoverClient from './DiscoverClient';
+import { resolveItemPhoto } from '@/lib/items/photo';
 
 type DiscoverPageProps = {
   searchParams: Promise<{ category?: string; tags?: string }>;
@@ -39,6 +40,7 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
         id,
         custom_name,
         custom_photo_id,
+        photo_url,
         is_featured,
         featured_position
       ),
@@ -90,12 +92,12 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
     }
   }
 
-  // Map photo URLs to items
+  // Map photo URLs to items. Was custom_photo_id only, which dropped every photo_url-only item.
   const bagsWithPhotos = bags?.map((bag: any) => ({
     ...bag,
     items: bag.items?.map((item: any) => ({
       ...item,
-      photo_url: item.custom_photo_id ? photoUrls[item.custom_photo_id] || null : null,
+      photo_url: resolveItemPhoto(item, photoUrls),
     })),
   })) || [];
 

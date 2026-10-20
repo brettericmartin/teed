@@ -45,7 +45,8 @@ export function enrichItem(data: {
   return api.post<EnrichItemResponse>('/api/ai/enrich-item', data, opts);
 }
 
-export function findProductImage(data: { query?: string; productName?: string; brandName?: string }) {
+/** Google image search. The route reads only `query` and returns `images`, never a product URL. */
+export function findProductImage(data: { query: string }) {
   return api.post<FindProductImageResponse>('/api/ai/find-product-image', data);
 }
 

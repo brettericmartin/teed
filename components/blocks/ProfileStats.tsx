@@ -35,7 +35,7 @@ export default function ProfileStats({
     {
       icon: Package,
       value: bagsCount,
-      label: bagsCount === 1 ? 'Collection' : 'Collections',
+      label: bagsCount === 1 ? 'Bag' : 'Bags',
       show: true,
     },
     {

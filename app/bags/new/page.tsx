@@ -1,20 +1,31 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Package, X, Loader2 } from 'lucide-react';
 import { useCelebration } from '@/lib/celebrations';
 import * as authApi from '@/lib/api/domains/auth';
 import * as bagsApi from '@/lib/api/domains/bags';
+import * as itemsApi from '@/lib/api/domains/items';
 
 /**
  * /bags/new - Quick bag creation page
  *
  * Provides a focused UI for creating a new bag.
  * After creation, redirects to the bag editor.
+ * Accepts ?url=<product url> (from the profile paste handler) and adds it as the first item.
  */
-export default function NewBagPage() {
+export default function NewBagPageWrapper() {
+  return (
+    <Suspense fallback={null}>
+      <NewBagPage />
+    </Suspense>
+  );
+}
+
+function NewBagPage() {
   const router = useRouter();
+  const pastedUrl = useSearchParams().get('url');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isPublic, setIsPublic] = useState(true);
@@ -77,6 +88,15 @@ export default function NewBagPage() {
         celebrateFirstBag();
       } else {
         celebrateBagCreated();
+      }
+
+      // A pasted product URL (profile paste -> "New bag") arrives as ?url=; it used to be ignored.
+      if (pastedUrl) {
+        try {
+          await itemsApi.addFromUrl(newBag.code, pastedUrl);
+        } catch (err) {
+          console.error('Failed to add pasted URL to the new bag:', err);
+        }
       }
 
       // Redirect to bag editor

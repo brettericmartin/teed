@@ -147,7 +147,7 @@ export default function FeaturedBagsBlock({
                 group
               "
             >
-              <span>Show all {totalBags} collections</span>
+              <span>Show all {totalBags} bags</span>
               <ChevronDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
             </button>
           </div>

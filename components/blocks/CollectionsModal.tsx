@@ -118,7 +118,7 @@ export default function CollectionsModal({
             id="collections-modal-title"
             className="text-lg font-semibold text-[var(--text-primary)]"
           >
-            All Collections ({totalBags})
+            All bags ({totalBags})
           </h2>
           <button
             onClick={onClose}

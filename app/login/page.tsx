@@ -56,7 +56,7 @@ export default function LoginPage() {
       <div className="bg-[var(--surface)] rounded-[var(--radius-2xl)] shadow-[var(--shadow-6)] border border-[var(--border-subtle)] max-w-md w-full p-8">
         <div className="text-center mb-8">
           <h1 className="text-[var(--font-size-9)] font-semibold text-[var(--text-primary)]">Teed</h1>
-          <p className="text-sm text-[var(--text-secondary)] mt-1">Curations, Made Shareable</p>
+          <p className="text-sm text-[var(--text-secondary)] mt-1">Bags, made shareable</p>
           <h2 className="mt-6 text-[var(--font-size-6)] font-semibold text-[var(--text-primary)]">
             Sign in to continue
           </h2>

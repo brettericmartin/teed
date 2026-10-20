@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
+import { resolveItemPhoto } from '@/lib/items/photo';
 
 // GET /api/discover - Get all public bags for discovery with filters
 export async function GET(request: NextRequest) {
@@ -77,6 +78,7 @@ export async function GET(request: NextRequest) {
           id,
           custom_name,
           custom_photo_id,
+          photo_url,
           is_featured,
           featured_position
         ),
@@ -169,13 +171,15 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Map photo URLs to items and add item_count
+    // Map photo URLs to items and add item_count.
+    // Was custom_photo_id only, so items whose only image is an external photo_url
+    // (every seeded component item) had no thumbnail here. Same precedence as the bag page.
     let bagsWithPhotos = bags?.map((bag: any) => ({
       ...bag,
       item_count: bag.items?.length || 0,
       items: bag.items?.map((item: any) => ({
         ...item,
-        photo_url: item.custom_photo_id ? photoUrls[item.custom_photo_id] || null : null,
+        photo_url: resolveItemPhoto(item, photoUrls),
       })),
     })) || [];
 

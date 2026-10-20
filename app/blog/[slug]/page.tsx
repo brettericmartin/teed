@@ -7,6 +7,7 @@ import { getMDXComponents } from '@/lib/blog/mdx-components';
 import { generateBreadcrumbJsonLd } from '@/lib/seo/structuredData';
 import PostHeader from '@/components/blog/PostHeader';
 import TableOfContents from '@/components/blog/TableOfContents';
+import BagSpringboard from '@/components/blog/BagSpringboard';
 import PostCard from '@/components/blog/PostCard';
 
 const BASE_URL = 'https://www.teed.club';
@@ -117,6 +118,12 @@ export default async function BlogPostPage({
             {/* Main content */}
             <article className="min-w-0 flex-1 max-w-3xl">
               <PostHeader meta={meta} />
+
+              {/* Springboard to the bag the guide is built on, then the phone-size map */}
+              {meta.showcaseBag && (
+                <BagSpringboard handle={meta.showcaseBag.handle} code={meta.showcaseBag.code} />
+              )}
+              <TableOfContents content={content} variant="inline" />
 
               {/* Hero image */}
               {meta.heroImage && (

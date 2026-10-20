@@ -10,15 +10,18 @@ interface TocItem {
 
 interface TableOfContentsProps {
   content: string;
+  /**
+   * `sidebar` (default): the sticky column at lg and up.
+   * `inline`: a collapsible "On this page" block for phones, rendered at the top of
+   * the article. The sidebar was the only map and it is hidden below lg, which left a
+   * 15,000 px guide with no map on a 390 px screen.
+   */
+  variant?: 'sidebar' | 'inline';
 }
 
-export default function TableOfContents({ content }: TableOfContentsProps) {
-  const [activeId, setActiveId] = useState<string>('');
-
-  // Parse headings from raw MDX content
+function parseHeadings(content: string): TocItem[] {
   const headings: TocItem[] = [];
-  const lines = content.split('\n');
-  for (const line of lines) {
+  for (const line of content.split('\n')) {
     const match = line.match(/^(#{2,3})\s+(.+)/);
     if (match) {
       const level = match[1].length;
@@ -30,9 +33,15 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
       headings.push({ id, text, level });
     }
   }
+  return headings;
+}
+
+export default function TableOfContents({ content, variant = 'sidebar' }: TableOfContentsProps) {
+  const [activeId, setActiveId] = useState<string>('');
+  const headings = parseHeadings(content);
 
   useEffect(() => {
-    if (headings.length === 0) return;
+    if (headings.length === 0 || variant !== 'sidebar') return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -56,27 +65,42 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
 
   if (headings.length < 3) return null;
 
+  const list = (
+    <ul className="space-y-1.5 text-sm">
+      {headings.map((h) => (
+        <li key={h.id} style={{ paddingLeft: h.level === 3 ? '0.75rem' : 0 }}>
+          <a
+            href={`#${h.id}`}
+            className={`block py-1 lg:py-0.5 transition-colors leading-snug ${
+              activeId === h.id
+                ? 'text-[var(--teed-green-9)] font-medium'
+                : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)]'
+            }`}
+          >
+            {h.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+
+  if (variant === 'inline') {
+    return (
+      <details className="lg:hidden mb-8 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface)]">
+        <summary className="cursor-pointer select-none px-4 py-3 min-h-[44px] flex items-center text-sm font-semibold text-[var(--text-primary)]">
+          On this page ({headings.length} sections)
+        </summary>
+        <div className="px-4 pb-4">{list}</div>
+      </details>
+    );
+  }
+
   return (
     <nav className="hidden lg:block sticky top-24 w-56 shrink-0">
       <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-tertiary)] mb-3">
         On this page
       </p>
-      <ul className="space-y-1.5 text-sm">
-        {headings.map((h) => (
-          <li key={h.id} style={{ paddingLeft: h.level === 3 ? '0.75rem' : 0 }}>
-            <a
-              href={`#${h.id}`}
-              className={`block py-0.5 transition-colors leading-snug ${
-                activeId === h.id
-                  ? 'text-[var(--teed-green-9)] font-medium'
-                  : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)]'
-              }`}
-            >
-              {h.text}
-            </a>
-          </li>
-        ))}
-      </ul>
+      {list}
     </nav>
   );
 }

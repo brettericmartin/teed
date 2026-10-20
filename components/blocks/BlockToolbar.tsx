@@ -9,7 +9,7 @@ const BLOCK_TYPE_LABELS: Record<BlockType, string> = {
   bio: 'Bio',
   social_links: 'Social Links',
   embed: 'Embed',
-  featured_bags: 'Curations',
+  featured_bags: 'Bags',
   custom_text: 'Text',
   spacer: 'Spacer',
   divider: 'Divider',

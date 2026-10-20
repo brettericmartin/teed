@@ -284,7 +284,7 @@ export default function PublicBagView({
             Teed
           </h2>
           <p className="text-sm text-[var(--text-secondary)] mt-2">
-            Curations, Made Shareable
+            Bags, made shareable
           </p>
         </div>
       </div>
