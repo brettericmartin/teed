@@ -6,6 +6,7 @@ import type { BagViewItem, ItemLink } from '@/lib/types/bagViewTypes';
 import { ItemImage } from '@/components/ui/ItemImage';
 import { DISCLOSURE, isOwnedBrand } from '@/lib/disclosure';
 import { formatMoney, listedPrice, yearlyCost } from '@/lib/bags/totals';
+import { thumbUrl } from '@/lib/items/photo';
 
 interface ListViewItemProps {
   item: BagViewItem;
@@ -85,7 +86,8 @@ export default function ListViewItem({
     <div className={`${sizeClass} flex-shrink-0 bg-[var(--sky-2)] rounded-lg overflow-hidden flex items-center justify-center`}>
       {item.photo_url ? (
         <ItemImage
-          src={item.photo_url}
+          // 56 px thumb: a resized copy, not the maker's 700 KB original (the modal keeps the original)
+          src={thumbUrl(item.photo_url, 160) || item.photo_url}
           alt={item.custom_name || 'Item photo'}
           fallbackLabel={item.brand || item.custom_name}
           className="w-full h-full object-contain"

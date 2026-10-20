@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get the image data
-    const imageBuffer = await response.arrayBuffer();
+    let imageBuffer: ArrayBuffer | Uint8Array = await response.arrayBuffer();
 
     // Verify we got actual image data (not a 1x1 pixel or empty response)
     if (imageBuffer.byteLength < 100) {
@@ -67,13 +67,37 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const contentType = response.headers.get('content-type') || 'image/jpeg';
+    let contentType = response.headers.get('content-type') || 'image/jpeg';
+
+    // This proxied any public URL as-is (an HTML page came back with status 200); only images now.
+    if (!contentType.startsWith('image/')) {
+      return NextResponse.json({ error: 'Not an image' }, { status: 415 });
+    }
+
+    // ?w=<px>: resize for a thumbnail slot. Makers' CDNs serve 700 to 900 KB originals
+    // that /for/golf-simulators and the list rows were loading into 56 to 400 px boxes.
+    const width = Math.min(1600, Math.max(0, parseInt(searchParams.get('w') || '0', 10) || 0));
+    if (width >= 16 && !contentType.includes('svg')) {
+      try {
+        const sharp = (await import('sharp')).default;
+        const resized = await sharp(Buffer.from(imageBuffer), { animated: false })
+          .rotate()
+          .resize({ width, withoutEnlargement: true, fit: 'inside' })
+          .webp({ quality: 78 })
+          .toBuffer();
+        imageBuffer = new Uint8Array(resized);
+        contentType = 'image/webp';
+      } catch (resizeError) {
+        console.error(`Proxy image resize failed for ${imageUrl}:`, resizeError);
+        // Fall through and serve the original
+      }
+    }
 
     // Return the image with appropriate headers
-    return new NextResponse(imageBuffer, {
+    return new NextResponse(imageBuffer as BodyInit, {
       headers: {
         'Content-Type': contentType,
-        'Cache-Control': 'public, max-age=86400', // Cache for 24 hours
+        'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400',
       },
     });
   } catch (error: any) {

@@ -26,6 +26,7 @@ import { getComponentStripCards } from '@/lib/components/strip';
 import { computeTotals, formatBagTotalLine, type TotalsItem } from '@/lib/bags/totals';
 import { DISCLOSURE } from '@/lib/disclosure';
 import { SITE_URL } from '@/lib/siteUrl';
+import { resolveItemPhoto, thumbUrl } from '@/lib/items/photo';
 
 type PageProps = {
   params: Promise<{ useCase: string }>;
@@ -202,9 +203,11 @@ async function fetchSetups(category: string): Promise<SetupCardProps[]> {
       const totals = computeTotals(
         items.map((it) => ({ price_paid: it.price_paid, specs: it.specs as TotalsItem['specs'] }))
       );
+      // Thumbnails go through /api/proxy-image?w=: the page was 3.1 MB because two makers'
+      // originals (913 KB and 800 KB) were loading into 200 px tiles.
       const itemPhotos = items
         .map((it) => ({
-          url: it.custom_photo_id ? photoUrls[it.custom_photo_id] || it.photo_url : it.photo_url,
+          url: thumbUrl(resolveItemPhoto(it, photoUrls), 320),
           label: it.brand || it.custom_name || 'Item',
         }))
         .filter((p): p is { url: string; label: string } => Boolean(p.url))
@@ -212,7 +215,7 @@ async function fetchSetups(category: string): Promise<SetupCardProps[]> {
       return {
         href: `/u/${bag.owner!.handle}/${bag.code}`,
         title: bag.title,
-        coverUrl: bag.cover_photo_id ? photoUrls[bag.cover_photo_id] || null : null,
+        coverUrl: thumbUrl(bag.cover_photo_id ? photoUrls[bag.cover_photo_id] || null : null, 800),
         itemPhotos,
         totalLine: formatBagTotalLine(totals),
         itemCount: items.length,
@@ -246,7 +249,7 @@ export default async function UseCasePage({ params }: PageProps) {
   const setupCount = setups.length;
   // Components strip (golf-sim only): the six reference lists, or their guides until a list is seeded.
   const componentCards = useCase.discoverCategory === 'golf-sim' ? await getComponentStripCards() : [];
-  const noun = useCase.bagNoun || 'collection';
+  const noun = useCase.bagNoun || 'bag';
   const nounPlural = `${noun}s`;
 
   // Hero CTAs: optional overrides with fallbacks so the other /for pages do not change
@@ -261,7 +264,7 @@ export default async function UseCasePage({ params }: PageProps) {
     : useCase.discoverCategory
       ? `/discover?category=${useCase.discoverCategory}`
       : '/discover';
-  const browseLabel = useCase.bagNoun ? `All ${nounPlural}` : 'Browse Collections';
+  const browseLabel = useCase.bagNoun ? `All ${nounPlural}` : 'Browse bags';
   const isSetupsPage = Boolean(useCase.primaryHref === '#setups');
 
   const buttonPrimary =

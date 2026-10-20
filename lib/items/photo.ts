@@ -8,6 +8,17 @@
  * `GET /api/bags/[code]` preferred it, so the same item could show a different
  * picture (or none) depending on the surface.
  */
+/**
+ * A resized copy of an image for a thumbnail slot. Makers' CDNs serve 700 to 900 KB
+ * originals; /api/proxy-image?w= resizes with sharp and serves webp, cached a day.
+ * Data URLs and already-proxied URLs pass through unchanged.
+ */
+export function thumbUrl(url: string | null | undefined, width: number): string | null {
+  if (!url) return null;
+  if (url.startsWith('/api/proxy-image') || url.startsWith('data:') || url.startsWith('/')) return url;
+  return `/api/proxy-image?url=${encodeURIComponent(url)}&w=${width}`;
+}
+
 export function resolveItemPhoto(
   item: { custom_photo_id?: string | null; photo_url?: string | null },
   mediaUrls: Record<string, string>
