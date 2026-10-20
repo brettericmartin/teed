@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import { classifyUrl } from '@/lib/links/classifyUrl';
+import { readProductPage, applyPageFactsToItem, isProductLinkKind } from '@/lib/items/enrichFromLink';
+
+// Reading a product page can take a few seconds (fetch, Firecrawl fallback, AI pass)
+export const maxDuration = 30;
 
 /**
  * POST /api/items/[id]/links
@@ -158,81 +162,49 @@ export async function POST(
       }
     }
 
-    if (kind === 'product') {
+    // A product link does the work on its own: read the page (Amazon lookup, JSON-LD, og
+    // tags, Firecrawl, AI) and fill the item's empty photo, brand, category and list price.
+    // The old path called a GPT page-reader that Amazon blocks and never set a photo.
+    if (!isEmbedUrl && isProductLinkKind(kind)) {
       try {
-        console.log(`[Link Add] Analyzing product URL: ${url}`);
+        console.log(`[Link Add] Reading product page: ${url}`);
+        const facts = await readProductPage(url.trim());
+        if (facts) {
+          const { data: currentItem } = await supabase
+            .from('bag_items')
+            .select('id, brand, category, photo_url, custom_photo_id, specs')
+            .eq('id', itemId)
+            .single();
 
-        // analyze-product-url requires the user's session; a server-to-server fetch carries no
-        // cookies, so this call always got 401 and enrichment never ran. Forward the caller's cookie.
-        const analyzeResponse = await fetch(
-          `${request.nextUrl.origin}/api/ai/analyze-product-url`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              cookie: request.headers.get('cookie') ?? '',
-            },
-            body: JSON.stringify({ url: url.trim() }),
-          }
-        );
+          const applied = currentItem
+            ? await applyPageFactsToItem(supabase, user.id, currentItem, facts)
+            : { updates: {}, filled: [] };
 
-        if (analyzeResponse.ok) {
-          const analysis = await analyzeResponse.json();
-
-          // Store AI analysis in metadata
           enrichedMetadata = {
             ...enrichedMetadata,
-            ai_analysis: {
-              brand: analysis.brand,
-              productName: analysis.productName,
-              category: analysis.category,
-              specs: analysis.specs,
-              price: analysis.price,
-              color: analysis.color,
-              confidence: analysis.confidence,
-              analyzed_at: analysis.extracted_at,
+            product: {
+              name: facts.name,
+              brand: facts.brand,
+              price: facts.price,
+              image: facts.imageUrl,
+              specifications: facts.specifications.slice(0, 20),
+              confidence: facts.confidence,
+              source: facts.source,
+              read_at: new Date().toISOString(),
             },
+            // What the editor should merge into its copy of the item, and the words to show
+            item_updates: applied.updates,
+            item_filled: applied.filled,
+            ...(typeof applied.updates.photo_url === 'string'
+              ? { item_photo_updated: true, item_new_photo_url: applied.updates.photo_url }
+              : {}),
           };
-
-          // Use AI-extracted product name as label if not provided
-          if (!enrichedLabel && analysis.productName) {
-            enrichedLabel = analysis.brand && analysis.productName
-              ? `${analysis.brand} ${analysis.productName}`
-              : analysis.productName;
-          }
-
-          console.log(`[Link Add] AI analysis complete (confidence: ${analysis.confidence})`);
-
-          // If the item is missing brand/category, update it with AI findings
-          if (analysis.confidence >= 0.7) {
-            const { data: currentItem } = await supabase
-              .from('bag_items')
-              .select('brand, category, custom_name')
-              .eq('id', itemId)
-              .single();
-
-            const updates: any = {};
-            if (!currentItem?.brand && analysis.brand) {
-              updates.brand = analysis.brand;
-            }
-            if (!currentItem?.category && analysis.category) {
-              updates.category = analysis.category;
-            }
-
-            if (Object.keys(updates).length > 0) {
-              await supabase
-                .from('bag_items')
-                .update(updates)
-                .eq('id', itemId);
-
-              console.log(`[Link Add] Updated item with AI data:`, updates);
-            }
-          }
+          console.log(`[Link Add] Page read from ${facts.domain}: filled ${applied.filled.join(', ') || 'nothing'}`);
         } else {
-          console.warn('[Link Add] AI analysis failed, continuing without enrichment');
+          console.warn('[Link Add] Nothing usable on the product page, link saved without enrichment');
         }
       } catch (error) {
-        console.error('[Link Add] AI enrichment error:', error);
+        console.error('[Link Add] Product page enrichment error:', error);
         // Continue without enrichment - don't fail the link creation
       }
     }

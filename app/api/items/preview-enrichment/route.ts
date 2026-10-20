@@ -3,6 +3,10 @@ import { createServerSupabase } from '@/lib/serverSupabase';
 import { findBestProductLinks, detectProductAge } from '@/lib/services/SmartLinkFinder';
 import { getOpenAI } from '@/lib/openaiClient';
 import { generateBrandContext, loadCategoryKnowledge } from '@/lib/brandKnowledge';
+import { readProductPage, pageFactsForPrompt, isProductLinkKind, type PageFacts } from '@/lib/items/enrichFromLink';
+
+// Items with a product link get that page read first (a few seconds each, in parallel)
+export const maxDuration = 60;
 
 /**
  * Detect likely categories from bag metadata and item names
@@ -113,7 +117,7 @@ export async function POST(request: NextRequest) {
     const itemIds = items.map(item => item.id);
     const { data: existingLinks } = await supabase
       .from('links')
-      .select('bag_item_id, is_auto_generated')
+      .select('bag_item_id, is_auto_generated, url, kind')
       .in('bag_item_id', itemIds);
 
     const itemsWithUserLinks = new Set(
@@ -123,6 +127,14 @@ export async function POST(request: NextRequest) {
     const itemsWithAutoLinks = new Set(
       existingLinks?.filter(link => link.is_auto_generated).map(link => link.bag_item_id) || []
     );
+
+    // The item's product link, when it has one: the page facts anchor the suggestions
+    const productLinkByItem = new Map<string, string>();
+    for (const link of existingLinks || []) {
+      if (link.url && isProductLinkKind(link.kind) && !productLinkByItem.has(link.bag_item_id)) {
+        productLinkByItem.set(link.bag_item_id, link.url);
+      }
+    }
 
     console.log(`[preview-enrichment] Processing ${items.length} items in parallel`);
 
@@ -144,6 +156,15 @@ export async function POST(request: NextRequest) {
         },
         suggested: {},
       };
+
+      // Read the linked product page first; the prompt below is told what it says.
+      // (Enhance details used to work from the name alone, so it came back generic.)
+      let facts: PageFacts | null = null;
+      const productUrl = productLinkByItem.get(item.id);
+      if (productUrl) {
+        facts = await readProductPage(productUrl);
+        if (facts?.brand && !item.brand) suggestion.suggested.brand = facts.brand;
+      }
 
       // Generate enrichment suggestions
       try {
@@ -170,7 +191,8 @@ Return ONLY valid JSON:
   "notes": "Interesting 2-3 sentence fun fact with product differentiation"
 }
 
-Always provide ALL fields with your best guess based on the product name.`,
+Always provide ALL fields with your best guess based on the product name.
+When facts from the product page are given, they are the truth: use the listed name, brand, price and specifications, and do not invent specifications the page does not state.`,
             },
             {
               role: 'user',
@@ -178,6 +200,7 @@ Always provide ALL fields with your best guess based on the product name.`,
 ${item.brand ? `Current brand: ${item.brand}` : ''}
 ${item.custom_description ? `Current description: ${item.custom_description}` : ''}
 ${item.notes ? `Current notes: ${item.notes}` : ''}
+${pageFactsForPrompt(facts)}
 
 Generate fresh, detailed information for all fields.`,
             },

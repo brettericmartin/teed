@@ -30,6 +30,8 @@ interface LinkManagerModalProps {
   links: Link[];
   onLinksChange: (links: Link[]) => void;
   onItemPhotoUpdated?: (newPhotoUrl: string) => void;
+  /** Fields the link route filled on the item (photo, brand, category, specs). */
+  onItemUpdated?: (updates: Record<string, unknown>) => void;
 }
 
 export default function LinkManagerModal({
@@ -40,8 +42,11 @@ export default function LinkManagerModal({
   links,
   onLinksChange,
   onItemPhotoUpdated,
+  onItemUpdated,
 }: LinkManagerModalProps) {
   const [newUrl, setNewUrl] = useState('');
+  const [addMessage, setAddMessage] = useState('');
+  const [readingUrl, setReadingUrl] = useState<string | null>(null);
   const [newKind, setNewKind] = useState('product');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -105,11 +110,7 @@ export default function LinkManagerModal({
     try {
       const newLink = await itemsApi.addLink(itemId, { url: normalizedUrl, kind: newKind }) as unknown as Link;
       onLinksChange([...links, newLink]);
-
-      // Check if the API auto-updated the item's photo (e.g., from video thumbnail)
-      if (newLink.metadata?.item_photo_updated && newLink.metadata?.item_new_photo_url) {
-        onItemPhotoUpdated?.(newLink.metadata.item_new_photo_url);
-      }
+      afterLinkAdded(newLink);
 
       setNewUrl('');
       setNewKind('product');
@@ -121,6 +122,59 @@ export default function LinkManagerModal({
       setError(err.message || 'Failed to add link');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  /**
+   * The link route reads a product page and fills the item's empty photo, brand, category
+   * and list price (metadata.item_updates); a video link sets the thumbnail. Push those
+   * into the card and say what happened, so nobody has to go back and press buttons.
+   */
+  const afterLinkAdded = (newLink: Link) => {
+    const meta = newLink.metadata || {};
+    const updates = meta.item_updates as Record<string, unknown> | undefined;
+    if (updates && Object.keys(updates).length > 0) {
+      onItemUpdated?.(updates);
+    } else if (meta.item_photo_updated && meta.item_new_photo_url) {
+      onItemPhotoUpdated?.(meta.item_new_photo_url);
+    }
+    const filled = meta.item_filled as string[] | undefined;
+    let domain = '';
+    try { domain = new URL(newLink.url).hostname.replace(/^www\./, ''); } catch {}
+    if (filled && filled.length > 0) {
+      setAddMessage(`Read ${domain}: filled ${filled.join(', ')}.`);
+    } else if (meta.product) {
+      setAddMessage(`Read ${domain}. Nothing was empty, so the item kept its own details.`);
+    } else if (meta.item_photo_updated) {
+      setAddMessage('Thumbnail set from the video.');
+    } else {
+      setAddMessage('');
+    }
+  };
+
+  /** "Pull details" on a link that is already attached: read the page now, photo replaced on purpose. */
+  const handleReadLink = async (link: Link) => {
+    setError('');
+    setAddMessage('');
+    setReadingUrl(link.url);
+    let domain = link.url;
+    try { domain = new URL(link.url).hostname.replace(/^www\./, ''); } catch {}
+    try {
+      const result = await itemsApi.readLink(itemId, { url: link.url, replacePhoto: true });
+      if (result.updates && Object.keys(result.updates).length > 0) {
+        onItemUpdated?.(result.updates);
+      }
+      if (result.filled.length > 0) {
+        setAddMessage(`Read ${domain}: filled ${result.filled.join(', ')}.`);
+      } else if (result.facts) {
+        setAddMessage(`Read ${domain}. Nothing was empty, so the item kept its own details.`);
+      } else {
+        setAddMessage(result.message || `Nothing usable could be read from ${domain}.`);
+      }
+    } catch (err: any) {
+      setError(err.message || `Could not read ${domain}`);
+    } finally {
+      setReadingUrl(null);
     }
   };
 
@@ -166,6 +220,7 @@ export default function LinkManagerModal({
     try {
       const newLink = await itemsApi.addLink(itemId, { url: foundLink.url, kind: 'product' }) as unknown as Link;
       onLinksChange([...links, newLink]);
+      afterLinkAdded(newLink);
 
       // Remove from found links list
       setFoundLinks(prev => prev.filter(l => l.url !== foundLink.url));
@@ -363,6 +418,16 @@ export default function LinkManagerModal({
                         </a>
                       </div>
                       <div className="flex gap-2 ml-4">
+                        {['product', 'purchase', 'shop', 'buy', 'affiliate'].includes(link.kind) && (
+                          <button
+                            onClick={() => handleReadLink(link)}
+                            disabled={readingUrl !== null}
+                            title="Read this page and fill the photo, brand, category and list price"
+                            className="text-sm text-[var(--teed-green-11)] hover:text-[var(--teed-green-12)] disabled:opacity-50 whitespace-nowrap"
+                          >
+                            {readingUrl === link.url ? 'Reading…' : 'Pull details'}
+                          </button>
+                        )}
                         <button
                           onClick={() => startEditing(link)}
                           className="text-sm text-gray-600 hover:text-gray-900"
@@ -401,6 +466,11 @@ export default function LinkManagerModal({
                 {isFindingLink ? 'Searching...' : 'Find Link'}
               </button>
             </div>
+            {addMessage && (
+              <div className="bg-[var(--teed-green-2)] border border-[var(--teed-green-6)] rounded-lg p-3">
+                <p className="text-sm text-[var(--teed-green-11)]">{addMessage}</p>
+              </div>
+            )}
             {findLinkMessage && foundLinks.length === 0 && (
               <div className="bg-[var(--teed-green-2)] border border-[var(--teed-green-6)] rounded-lg p-3">
                 <p className="text-sm text-[var(--teed-green-11)]">{findLinkMessage}</p>

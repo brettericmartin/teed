@@ -14,6 +14,8 @@ type ItemPhotoUploadProps = {
   itemName: string;
   itemBrand?: string | null;
   itemDescription?: string | null;
+  /** The item's product link, if any: "Find product image" reads that page before searching. */
+  productUrl?: string | null;
 };
 
 export default function ItemPhotoUpload({
@@ -25,6 +27,7 @@ export default function ItemPhotoUpload({
   itemName,
   itemBrand,
   itemDescription,
+  productUrl,
 }: ItemPhotoUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [isFindingImage, setIsFindingImage] = useState(false);
@@ -99,6 +102,27 @@ export default function ItemPhotoUpload({
     setImageSuggestions([]);
 
     try {
+      // The item's own product link first: the pictures on that page are the product.
+      // (Before, this searched Google by name and ignored the link, so an Amazon link on
+      // a projector produced unrelated pictures.)
+      if (productUrl) {
+        try {
+          const fromLink = await aiApi.extractProductImages({
+            url: productUrl,
+            productName: itemName,
+            brand: itemBrand || undefined,
+          });
+          if (fromLink.images && fromLink.images.length > 0) {
+            setImageSuggestions(fromLink.images);
+            setShowImagePicker(true);
+            return;
+          }
+          console.log('No images on the linked page, falling back to search');
+        } catch (linkErr) {
+          console.warn('Linked page could not be read, falling back to search:', linkErr);
+        }
+      }
+
       let searchQuery: string;
 
       // If we have a description, use AI to enhance it
