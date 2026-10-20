@@ -1,18 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { withAdminApi } from '@/lib/withAdmin';
 import type {
   ContentIdeasStats,
   ContentIdeaStatus,
   ContentVertical,
 } from '@/lib/types/contentIdeas';
-
-// Use service role for database operations
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
 
 /**
  * GET /api/admin/content-ideas/stats
@@ -27,7 +20,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get all content ideas for counting
-    const { data: allIdeas, error: fetchError } = await supabaseAdmin
+    const { data: allIdeas, error: fetchError } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('status, vertical, has_creator_affiliate, created_at');
 

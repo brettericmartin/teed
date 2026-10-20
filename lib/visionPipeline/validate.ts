@@ -1,4 +1,4 @@
-import { openai } from '@/lib/openaiClient';
+import { getOpenAI } from '@/lib/openaiClient';
 import { fetchProductImage } from '@/lib/ai';
 import { reidentifyItem } from './identify';
 import type { IdentifiedItem, ValidatedItem } from './types';
@@ -213,7 +213,7 @@ IMPORTANT:
 
 Return ONLY the JSON, no other text.`;
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: 'gpt-4o',
     messages: [
       {

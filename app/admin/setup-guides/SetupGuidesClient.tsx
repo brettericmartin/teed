@@ -84,10 +84,10 @@ export default function SetupGuidesClient() {
                 <div className="bg-[var(--amber-2)] border border-[var(--amber-6)] rounded-lg p-3 text-sm">
                   <p className="text-[var(--amber-11)] font-medium mb-1">💡 For "Website/Mobile App":</p>
                   <button
-                    onClick={() => copyToClipboard('https://teed.app', 'teed-url')}
+                    onClick={() => copyToClipboard('https://www.teed.club', 'teed-url')}
                     className="flex items-center gap-2 font-mono text-xs bg-white px-3 py-1.5 rounded hover:bg-gray-50 transition-colors"
                   >
-                    https://teed.app
+                    https://www.teed.club
                     {copiedField === 'teed-url' ? (
                       <CheckCircle2 className="w-3 h-3 text-green-600" />
                     ) : (
@@ -301,7 +301,7 @@ export default function SetupGuidesClient() {
               <div className="flex-1">
                 <h3 className="font-semibold text-[var(--text-primary)] mb-1">Add your website</h3>
                 <p className="text-sm text-[var(--text-secondary)]">
-                  Register https://teed.app as your promotional website
+                  Register https://www.teed.club as your promotional website
                 </p>
               </div>
             </div>

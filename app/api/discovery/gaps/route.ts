@@ -6,6 +6,7 @@
  */
 
 import { NextResponse } from 'next/server';
+import { getAdminUser } from '@/lib/adminAuth';
 import { createClient } from '@supabase/supabase-js';
 import { isValidCategory, getAllCategories } from '@/lib/discovery';
 import type { DiscoveryCategory } from '@/lib/discovery';
@@ -124,6 +125,11 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const adminUser = await getAdminUser();
+  if (!adminUser) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,

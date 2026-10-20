@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import { findBestProductLinks, detectProductAge } from '@/lib/services/SmartLinkFinder';
-import { openai } from '@/lib/openaiClient';
+import { getOpenAI } from '@/lib/openaiClient';
 import { generateBrandContext, loadCategoryKnowledge } from '@/lib/brandKnowledge';
 
 /**
@@ -147,7 +147,7 @@ export async function POST(request: NextRequest) {
 
       // Generate enrichment suggestions
       try {
-        const enrichResponse = await openai.chat.completions.create({
+        const enrichResponse = await getOpenAI().chat.completions.create({
           model: 'gpt-4o',
           messages: [
             {

@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { getOpenAI } from '@/lib/openaiClient';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import { generateBrandContext } from '@/lib/brandKnowledge';
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 /**
  * POST /api/ai/generate-why-chosen
@@ -61,7 +57,7 @@ export async function POST(request: NextRequest) {
       alternatives,
       price_paid,
       bag_id,
-      bags!inner(id, title, category, description, owner_id)
+      bags!bag_items_bag_id_fkey!inner(id, title, category, description, owner_id)
     `)
     .eq('id', itemId)
     .single();
@@ -142,7 +138,7 @@ ${siblingList.length > 0 ? `- This item is part of a collection that also includ
 ${brandContext ? `Brand Background: ${brandContext}` : ''}`;
 
   try {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
         { role: 'system', content: systemPrompt },

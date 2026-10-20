@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { SITE_URL } from '@/lib/siteUrl';
 import ApplyForm from './ApplyForm';
 
 interface PageProps {
@@ -16,7 +17,7 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
 
   // If there's a referral code, use dynamic OG image
   if (referralCode) {
-    const ogImageUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://teed.club'}/api/og/referral/${encodeURIComponent(referralCode)}`;
+    const ogImageUrl = `${process.env.NEXT_PUBLIC_APP_URL || SITE_URL}/api/og/referral/${encodeURIComponent(referralCode)}`;
 
     return {
       ...baseMetadata,

@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/apiAuth';
+import { createServerSupabase } from '@/lib/serverSupabase';
+import { getAdminUser } from '@/lib/adminAuth';
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 import type { IdentificationCorrection } from '@/lib/analytics/correctionTracking';
@@ -42,6 +45,10 @@ function normalizeUrl(url: string): string {
  * Store a user correction for learning.
  */
 export async function POST(request: NextRequest) {
+  const authClient = await createServerSupabase();
+  const auth = await requireAuth(authClient);
+  if (auth.error) return auth.error;
+
   try {
     const correction: IdentificationCorrection = await request.json();
 
@@ -106,6 +113,11 @@ export async function POST(request: NextRequest) {
  * Returns the most recent correction if found.
  */
 export async function GET(request: NextRequest) {
+  const adminUser = await getAdminUser();
+  if (!adminUser) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const inputType = searchParams.get('type') as 'url' | 'text' | null;

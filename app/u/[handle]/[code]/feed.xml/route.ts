@@ -1,10 +1,5 @@
 import { NextRequest } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { getSupabasePublic } from '@/lib/supabasePublic';
 
 /**
  * RSS Feed for a bag.
@@ -19,7 +14,7 @@ export async function GET(
   const { handle, code } = await params;
 
   // Fetch profile
-  const { data: profile } = await supabase
+  const { data: profile } = await getSupabasePublic()
     .from('profiles')
     .select('id, handle, display_name')
     .eq('handle', handle)
@@ -30,7 +25,7 @@ export async function GET(
   }
 
   // Fetch bag with items
-  const { data: bag } = await supabase
+  const { data: bag } = await getSupabasePublic()
     .from('bags')
     .select(`
       id,
@@ -38,7 +33,7 @@ export async function GET(
       title,
       description,
       updated_at,
-      items:bag_items(
+      items:bag_items!bag_items_bag_id_fkey(
         id,
         custom_name,
         brand,
@@ -67,7 +62,7 @@ export async function GET(
 
   let photoUrls: Record<string, string> = {};
   if (photoIds.length > 0) {
-    const { data: mediaAssets } = await supabase
+    const { data: mediaAssets } = await getSupabasePublic()
       .from('media_assets')
       .select('id, url')
       .in('id', photoIds);

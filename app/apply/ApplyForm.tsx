@@ -94,7 +94,8 @@ export default function ApplyForm() {
       .from('beta_applications')
       .select('id', { count: 'exact', head: true })
       .then(({ count }) => {
-        setApplicationNumber((count || 0) + 1);
+        // Hide the counter when the count is unavailable (e.g. anon SELECT is not permitted)
+        setApplicationNumber(count && count > 0 ? count + 1 : null);
       });
   }, []);
 

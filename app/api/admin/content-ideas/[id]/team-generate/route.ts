@@ -7,17 +7,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { withAdminApi } from '@/lib/withAdmin';
 import { runTeamGeneration, type BagData } from '@/lib/contentIdeas/agents/orchestrator';
 import type { StreamEvent, TeamGenerationOutput } from '@/lib/types/teamGeneration';
 import type { ContentIdea, ExtractedProduct } from '@/lib/types/contentIdeas';
-
-// Initialize Supabase client with service role for admin operations
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -54,7 +48,7 @@ export async function POST(request: NextRequest, context: RouteParams) {
   }
 
   // Fetch content idea
-  const { data: contentIdea, error: ideaError } = await supabase
+  const { data: contentIdea, error: ideaError } = await getSupabaseAdmin()
     .from('content_ideas')
     .select('*')
     .eq('id', id)
@@ -65,7 +59,7 @@ export async function POST(request: NextRequest, context: RouteParams) {
   }
 
   // Check if already running
-  const { data: existingRun } = await supabase
+  const { data: existingRun } = await getSupabaseAdmin()
     .from('team_generations')
     .select('id, status')
     .eq('content_idea_id', id)
@@ -85,14 +79,14 @@ export async function POST(request: NextRequest, context: RouteParams) {
   // Fetch linked bag if exists
   let bag: BagData | undefined;
   if (contentIdea.primary_bag_id) {
-    const { data: bagData } = await supabase
+    const { data: bagData } = await getSupabaseAdmin()
       .from('bags')
       .select(`
         id,
         code,
         name,
         cover_image_url,
-        items:bag_items(
+        items:bag_items!bag_items_bag_id_fkey(
           id,
           name,
           brand,
@@ -136,7 +130,7 @@ export async function POST(request: NextRequest, context: RouteParams) {
   }
 
   // Create generation record
-  const { data: generation, error: createError } = await supabase
+  const { data: generation, error: createError } = await getSupabaseAdmin()
     .from('team_generations')
     .insert({
       content_idea_id: id,
@@ -173,7 +167,7 @@ export async function POST(request: NextRequest, context: RouteParams) {
               // Update generation record with progress
               if (event.type === 'wave_complete') {
                 const waveKey = `wave${event.wave}_output` as const;
-                await supabase
+                await getSupabaseAdmin()
                   .from('team_generations')
                   .update({
                     current_wave: event.wave,
@@ -187,7 +181,7 @@ export async function POST(request: NextRequest, context: RouteParams) {
 
         if (result.success && result.output) {
           // Save final output to database
-          await supabase
+          await getSupabaseAdmin()
             .from('team_generations')
             .update({
               status: 'completed',
@@ -202,7 +196,7 @@ export async function POST(request: NextRequest, context: RouteParams) {
             .eq('id', generation.id);
 
           // Update content idea with team-generated content
-          await supabase
+          await getSupabaseAdmin()
             .from('content_ideas')
             .update({
               team_hooks: result.output.topHooks,
@@ -220,7 +214,7 @@ export async function POST(request: NextRequest, context: RouteParams) {
           });
         } else {
           // Generation failed
-          await supabase
+          await getSupabaseAdmin()
             .from('team_generations')
             .update({
               status: 'failed',
@@ -238,7 +232,7 @@ export async function POST(request: NextRequest, context: RouteParams) {
       } catch (error) {
         console.error('[TeamGenerate] Fatal error:', error);
 
-        await supabase
+        await getSupabaseAdmin()
           .from('team_generations')
           .update({
             status: 'failed',
@@ -278,7 +272,7 @@ export async function GET(request: NextRequest, context: RouteParams) {
   const { id } = await context.params;
 
   // Get latest generation for this content idea
-  const { data: generation, error } = await supabase
+  const { data: generation, error } = await getSupabaseAdmin()
     .from('team_generations')
     .select('*')
     .eq('content_idea_id', id)
@@ -322,7 +316,7 @@ async function handleApplyRecommendations(request: NextRequest, id: string) {
     }
 
     // Update the content idea
-    const { error } = await supabase
+    const { error } = await getSupabaseAdmin()
       .from('content_ideas')
       .update(updates)
       .eq('id', id);

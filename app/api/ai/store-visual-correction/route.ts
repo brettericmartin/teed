@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-import OpenAI from 'openai';
+import { requireAuth } from '@/lib/apiAuth';
+import { createServerSupabase } from '@/lib/serverSupabase';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
+import { getOpenAI } from '@/lib/openaiClient';
 
 /**
  * Store Visual Correction API
@@ -8,15 +10,6 @@ import OpenAI from 'openai';
  * Stores user corrections with full visual context for learning.
  * Also generates AI notes on what visual cues should distinguish the correction.
  */
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 export interface VisualCorrectionRequest {
   // Visual features from Stage 1
@@ -63,6 +56,10 @@ export interface VisualCorrectionResponse {
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse<VisualCorrectionResponse>> {
+  const authClient = await createServerSupabase();
+  const auth = await requireAuth(authClient);
+  if (auth.error) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+
   try {
     const body: VisualCorrectionRequest = await request.json();
     const { visualDescription, originalGuess, correction, category } = body;
@@ -121,8 +118,14 @@ export async function POST(request: NextRequest): Promise<NextResponse<VisualCor
     // Extract model keywords for searching
     const modelKeywords = extractModelKeywords(correction.name, originalGuess.name);
 
-    // Store in database
-    const { data, error: insertError } = await supabase
+    // Store in database. The ai_visual_corrections table does not exist in the
+    // current schema, so the write is skipped and the correction stays in logs only
+    // (the existing insertError branch below handles that). Set to false once the
+    // table is migrated.
+    const TABLE_MISSING = true;
+    const { data, error: insertError } = TABLE_MISSING
+      ? { data: null, error: { message: 'ai_visual_corrections table not provisioned' } }
+      : await getSupabaseAdmin()
       .from('ai_visual_corrections')
       .insert({
         object_type: visualDescription.objectType,
@@ -213,7 +216,7 @@ Generate a concise learning note focusing on:
 
 Example: "P-7TW irons have thinner toplines and less offset than P790. Look for the 'TW' marking on the cavity."`;
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
       {

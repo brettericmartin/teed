@@ -1,4 +1,4 @@
-# https://teed.club robots.txt
+# https://www.teed.club robots.txt
 
 User-agent: *
 Allow: /
@@ -58,4 +58,4 @@ Disallow: /api/gpt/
 Disallow: /api/admin/
 Disallow: /api/ai/
 
-Sitemap: https://teed.club/sitemap.xml
+Sitemap: https://www.teed.club/sitemap.xml

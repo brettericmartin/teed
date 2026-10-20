@@ -1,13 +1,8 @@
 import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabasePublic } from '@/lib/supabasePublic';
 
 export const runtime = 'edge';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 export async function GET(
   request: NextRequest,
@@ -17,7 +12,7 @@ export async function GET(
     const { handle, code } = await params;
 
     // Fetch profile
-    const { data: profile } = await supabase
+    const { data: profile } = await getSupabasePublic()
       .from('profiles')
       .select('id, display_name, avatar_url')
       .eq('handle', handle)
@@ -28,7 +23,7 @@ export async function GET(
     }
 
     // Fetch bag with items
-    const { data: bag } = await supabase
+    const { data: bag } = await getSupabasePublic()
       .from('bags')
       .select(`
         id,
@@ -36,7 +31,7 @@ export async function GET(
         description,
         cover_photo_id,
         updated_at,
-        items:bag_items(
+        items:bag_items!bag_items_bag_id_fkey(
           id,
           custom_name,
           brand,
@@ -62,7 +57,7 @@ export async function GET(
 
     let photoUrls: Record<string, string> = {};
     if (photoIds.length > 0) {
-      const { data: mediaAssets } = await supabase
+      const { data: mediaAssets } = await getSupabasePublic()
         .from('media_assets')
         .select('id, url')
         .in('id', photoIds);

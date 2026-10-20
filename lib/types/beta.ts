@@ -430,3 +430,15 @@ export interface ScorecardData {
   percentile: number;
   mode: ScorecardMode;
 }
+
+/**
+ * Row returned by the validate_invite_code(p_code) RPC. Flags only, never the
+ * beta_invite_codes row itself; the RPC returns zero rows for an unknown code.
+ */
+export interface InviteCodeValidation {
+  is_valid: boolean;
+  tier: string | null;
+  is_revoked: boolean;
+  is_claimed: boolean;
+  is_expired: boolean;
+}

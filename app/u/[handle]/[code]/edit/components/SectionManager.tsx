@@ -185,7 +185,7 @@ export default function SectionManager({
           return (
             <div key={section.id} className="border border-[var(--border-subtle)] rounded-lg overflow-hidden">
               <div
-                className={`flex items-center gap-2 px-3 py-2 bg-[var(--surface-alt)] cursor-pointer hover:bg-[var(--surface-hover)] transition-colors ${
+                className={`group flex items-center gap-2 px-3 py-2 bg-[var(--surface-alt)] cursor-pointer hover:bg-[var(--surface-hover)] transition-colors ${
                   sectionItems.length === 0 ? 'opacity-60' : ''
                 }`}
                 onClick={() => !isEditing && toggleSectionExpanded(section.id)}

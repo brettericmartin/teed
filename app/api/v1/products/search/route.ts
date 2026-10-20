@@ -1,12 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { SITE_URL } from '@/lib/siteUrl';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { checkRateLimit, v1Headers } from '@/lib/api/rateLimit';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
 
 /**
  * GET /api/v1/products/search?q=Sony+A7IV&limit=20
@@ -40,7 +35,7 @@ export async function GET(request: NextRequest) {
 
   try {
     // Search items in public bags
-    const { data: items, error } = await supabase
+    const { data: items, error } = await getSupabaseAdmin()
       .from('bag_items')
       .select(`
         id,
@@ -54,7 +49,7 @@ export async function GET(request: NextRequest) {
         price_paid,
         photo_url,
         bag_id,
-        bags!inner (
+        bags!bag_items_bag_id_fkey!inner (
           id,
           code,
           title,
@@ -103,12 +98,12 @@ export async function GET(request: NextRequest) {
           title: bag.title,
           category: bag.category,
           description: bag.description,
-          url: `https://teed.club/u/${profile.handle}/${bag.code}`,
+          url: `${SITE_URL}/u/${profile.handle}/${bag.code}`,
         },
         curator: {
           handle: profile.handle,
           display_name: profile.display_name,
-          profile_url: `https://teed.club/u/${profile.handle}`,
+          profile_url: `${SITE_URL}/u/${profile.handle}`,
         },
       };
     });

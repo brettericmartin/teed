@@ -9,7 +9,7 @@
  * 4. Generate improvement recommendations
  */
 
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import type { ContentVertical } from '@/lib/types/contentIdeas';
 
 // ═══════════════════════════════════════════════════════════════════
@@ -76,12 +76,6 @@ export interface ExtractionPromptEnhancements {
 // Database Client
 // ═══════════════════════════════════════════════════════════════════
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
-
 // ═══════════════════════════════════════════════════════════════════
 // Core Learning Functions
 // ═══════════════════════════════════════════════════════════════════
@@ -97,7 +91,7 @@ export async function getLearningInsights(
   startDate.setDate(startDate.getDate() - daysBack);
 
   // Build query
-  let query = supabaseAdmin
+  let query = getSupabaseAdmin()
     .from('extraction_feedback')
     .select('*')
     .gte('created_at', startDate.toISOString());
@@ -571,7 +565,7 @@ export async function getFeedbackStats(): Promise<{
   const week = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
   const month = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-  const { data: allFeedback } = await supabaseAdmin
+  const { data: allFeedback } = await getSupabaseAdmin()
     .from('extraction_feedback')
     .select('correction_type, vertical, created_at')
     .gte('created_at', month.toISOString());

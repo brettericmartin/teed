@@ -5,7 +5,7 @@ import { getAllPosts, getAllCategories } from '@/lib/blog';
 import { CATEGORY_LABELS } from '@/lib/blog/types';
 import PostCard from '@/components/blog/PostCard';
 
-const BASE_URL = 'https://teed.so';
+const BASE_URL = 'https://www.teed.club';
 
 export const metadata: Metadata = {
   title: 'Blog — Teed.club',

@@ -1,11 +1,6 @@
 import { notFound } from 'next/navigation';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabasePublic } from '@/lib/supabasePublic';
 import EmbedItemCard from '@/components/embed/EmbedItemCard';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -15,7 +10,7 @@ export default async function EmbedItemPage({ params }: PageProps) {
   const { id } = await params;
 
   // Fetch item with bag and owner info
-  const { data: item } = await supabase
+  const { data: item } = await getSupabasePublic()
     .from('bag_items')
     .select(`
       id,
@@ -59,7 +54,7 @@ export default async function EmbedItemPage({ params }: PageProps) {
   // Get photo URL
   let photoUrl = item.photo_url;
   if (item.custom_photo_id) {
-    const { data: media } = await supabase
+    const { data: media } = await getSupabasePublic()
       .from('media_assets')
       .select('url')
       .eq('id', item.custom_photo_id)

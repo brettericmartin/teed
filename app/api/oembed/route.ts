@@ -1,10 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { getSupabasePublic } from '@/lib/supabasePublic';
 
 interface OEmbedResponse {
   type: 'rich' | 'photo' | 'video' | 'link';
@@ -148,7 +143,7 @@ async function getBagOEmbed(
   maxheight: number
 ): Promise<OEmbedResponse | null> {
   // Fetch profile
-  const { data: profile } = await supabase
+  const { data: profile } = await getSupabasePublic()
     .from('profiles')
     .select('id, handle, display_name')
     .eq('handle', handle)
@@ -157,7 +152,7 @@ async function getBagOEmbed(
   if (!profile) return null;
 
   // Fetch bag with item count
-  const { data: bag } = await supabase
+  const { data: bag } = await getSupabasePublic()
     .from('bags')
     .select('id, code, title, description')
     .eq('owner_id', profile.id)
@@ -168,7 +163,7 @@ async function getBagOEmbed(
   if (!bag) return null;
 
   // Get item count
-  const { count: itemCount } = await supabase
+  const { count: itemCount } = await getSupabasePublic()
     .from('bag_items')
     .select('id', { count: 'exact', head: true })
     .eq('bag_id', bag.id);
@@ -206,7 +201,7 @@ async function getItemOEmbed(
   maxheight: number
 ): Promise<OEmbedResponse | null> {
   // Fetch item with bag and owner info
-  const { data: item } = await supabase
+  const { data: item } = await getSupabasePublic()
     .from('bag_items')
     .select(`
       id,
@@ -241,7 +236,7 @@ async function getItemOEmbed(
   // Get photo URL for thumbnail
   let photoUrl = item.photo_url;
   if (item.custom_photo_id) {
-    const { data: media } = await supabase
+    const { data: media } = await getSupabasePublic()
       .from('media_assets')
       .select('url')
       .eq('id', item.custom_photo_id)
@@ -284,7 +279,7 @@ async function getProfileOEmbed(
   maxheight: number
 ): Promise<OEmbedResponse | null> {
   // Fetch profile
-  const { data: profile } = await supabase
+  const { data: profile } = await getSupabasePublic()
     .from('profiles')
     .select('id, handle, display_name, bio')
     .eq('handle', handle)
@@ -293,7 +288,7 @@ async function getProfileOEmbed(
   if (!profile) return null;
 
   // Get public bag count
-  const { count: bagCount } = await supabase
+  const { count: bagCount } = await getSupabasePublic()
     .from('bags')
     .select('id', { count: 'exact', head: true })
     .eq('owner_id', profile.id)

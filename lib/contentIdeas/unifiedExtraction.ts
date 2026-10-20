@@ -4,7 +4,7 @@
  * for comprehensive product identification
  */
 
-import { openai } from '../openaiClient';
+import { getOpenAI } from '../openaiClient';
 import type { ContentVertical, ExtractedProduct, ExtractedLink } from '../types/contentIdeas';
 import {
   fetchYouTubeTranscript,
@@ -163,7 +163,7 @@ Return JSON:
 }`;
 
   const response = await retryWithBackoff(() =>
-    openai.chat.completions.create({
+    getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },
@@ -240,7 +240,7 @@ Return JSON:
 }`;
 
   const response = await retryWithBackoff(() =>
-    openai.chat.completions.create({
+    getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },
@@ -319,7 +319,7 @@ Return JSON:
 }`;
 
   const response = await retryWithBackoff(() =>
-    openai.chat.completions.create({
+    getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },

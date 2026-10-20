@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { SITE_URL } from '@/lib/siteUrl';
 import type { Metadata } from 'next';
 import UnifiedProfileView from './UnifiedProfileView';
 import { createServerSupabase } from '@/lib/serverSupabase';
@@ -7,13 +8,7 @@ import {
   generateProfileJsonLd,
   generateBreadcrumbJsonLd,
 } from '@/lib/seo/structuredData';
-import { createClient } from '@supabase/supabase-js';
-
-// Static supabase client for metadata generation (no auth)
-const supabaseStatic = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { getSupabasePublic } from '@/lib/supabasePublic';
 
 type PageProps = {
   params: Promise<{
@@ -29,7 +24,7 @@ type PageProps = {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { handle } = await params;
 
-  const { data: profile } = await supabaseStatic
+  const { data: profile } = await getSupabasePublic()
     .from('profiles')
     .select('id, display_name, bio, avatar_url')
     .eq('handle', handle)
@@ -42,7 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   // Get public bag count
-  const { count: bagCount } = await supabaseStatic
+  const { count: bagCount } = await getSupabasePublic()
     .from('bags')
     .select('id', { count: 'exact', head: true })
     .eq('owner_id', profile.id)
@@ -51,11 +46,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const displayName = profile.display_name || handle;
   const title = `${displayName} (@${handle}) | Teed`;
   const description = profile.bio || `${displayName}'s curated collections on Teed • ${bagCount || 0} collection${bagCount === 1 ? '' : 's'}`;
-  const url = `https://teed.club/u/${handle}`;
-  const ogImageUrl = `https://teed.club/api/og/profile/${handle}`;
+  const url = `${SITE_URL}/u/${handle}`;
+  const ogImageUrl = `${SITE_URL}/api/og/profile/${handle}`;
 
   // oEmbed discovery URL
-  const oembedUrl = `https://teed.club/api/oembed?url=${encodeURIComponent(url)}&format=json`;
+  const oembedUrl = `${SITE_URL}/api/oembed?url=${encodeURIComponent(url)}&format=json`;
 
   return {
     title,
@@ -271,8 +266,8 @@ export default async function UserProfilePage({ params, searchParams }: PageProp
   );
 
   const breadcrumbJsonLd = generateBreadcrumbJsonLd([
-    { name: 'Teed.club', url: 'https://teed.club' },
-    { name: profile.display_name || profile.handle, url: `https://teed.club/u/${profile.handle}` },
+    { name: 'Teed.club', url: SITE_URL },
+    { name: profile.display_name || profile.handle, url: `${SITE_URL}/u/${profile.handle}` },
   ]);
 
   // Always use the unified blocks view

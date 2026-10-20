@@ -1,18 +1,13 @@
 import { Suspense } from 'react';
+import { SITE_URL } from '@/lib/siteUrl';
 import { notFound } from 'next/navigation';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabasePublic } from '@/lib/supabasePublic';
 import type { Metadata } from 'next';
 import PublicBagView from './PublicBagView';
 import {
   generateBagJsonLd,
   generateBreadcrumbJsonLd,
 } from '@/lib/seo/structuredData';
-
-// Public Supabase client (no auth required for public bags)
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 interface PageProps {
   params: Promise<{ handle: string; code: string }>;
@@ -22,7 +17,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { handle, code } = await params;
 
   // Fetch bag info for metadata
-  const { data: profile } = await supabase
+  const { data: profile } = await getSupabasePublic()
     .from('profiles')
     .select('id, display_name')
     .eq('handle', handle)
@@ -34,7 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  const { data: bag } = await supabase
+  const { data: bag } = await getSupabasePublic()
     .from('bags')
     .select('title, description, cover_photo_id')
     .eq('owner_id', profile.id)
@@ -50,13 +45,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const title = `${bag.title} | Teed`;
   const description = bag.description || `${bag.title} by ${profile.display_name || handle}`;
-  const url = `https://teed.club/u/${handle}/${code}`;
+  const url = `${SITE_URL}/u/${handle}/${code}`;
 
   // Dynamic OG image - always use the generated image for rich previews
-  const ogImageUrl = `https://teed.club/api/og/bag/${handle}/${code}`;
+  const ogImageUrl = `${SITE_URL}/api/og/bag/${handle}/${code}`;
 
   // oEmbed discovery URL
-  const oembedUrl = `https://teed.club/api/oembed?url=${encodeURIComponent(url)}&format=json`;
+  const oembedUrl = `${SITE_URL}/api/oembed?url=${encodeURIComponent(url)}&format=json`;
 
   return {
     title,
@@ -95,7 +90,7 @@ export default async function UserBagPage({ params }: PageProps) {
   const { handle, code } = await params;
 
   // First, fetch the user profile to get owner_id
-  const { data: profile, error: profileError } = await supabase
+  const { data: profile, error: profileError } = await getSupabasePublic()
     .from('profiles')
     .select('id, handle, display_name')
     .eq('handle', handle)
@@ -107,7 +102,7 @@ export default async function UserBagPage({ params }: PageProps) {
   }
 
   // Fetch the bag with all items, links, and sections (scoped to this user)
-  const { data: bag, error } = await supabase
+  const { data: bag, error } = await getSupabasePublic()
     .from('bags')
     .select(`
       *,
@@ -174,7 +169,7 @@ export default async function UserBagPage({ params }: PageProps) {
   let photoUrls: Record<string, string> = {};
 
   if (photoIds.length > 0) {
-    const { data: mediaAssets, error: mediaError } = await supabase
+    const { data: mediaAssets, error: mediaError } = await getSupabasePublic()
       .from('media_assets')
       .select('id, url')
       .in('id', photoIds);
@@ -201,44 +196,33 @@ export default async function UserBagPage({ params }: PageProps) {
   // Get cover photo URL if present
   const coverPhotoUrl = bag.cover_photo_id ? photoUrls[bag.cover_photo_id] || null : null;
 
-  // Check if bag has affiliate links
-  const itemIds = bag.items?.map((item: any) => item.id) || [];
-  let hasAffiliateLinks = false;
-  let disclosureText = undefined;
+  // Bag-level links (links.bag_id, migration 001; kind 'source' = the credit line).
+  // A plain second query: `links` carries two FKs (bag_id -> bags, bag_item_id -> bag_items)
+  // and the nested embed above already resolves the item side.
+  const { data: bagLinks } = await getSupabasePublic()
+    .from('links')
+    .select('id, url, kind, label, metadata, is_auto_generated')
+    .eq('bag_id', bag.id)
+    .order('created_at', { ascending: true });
 
-  if (itemIds.length > 0) {
-    // Check for affiliate links
-    const { data: affiliateLinks } = await supabase
-      .from('affiliate_links')
-      .select('id')
-      .in('bag_item_id', itemIds)
-      .eq('is_active', true)
-      .limit(1);
-
-    hasAffiliateLinks = (affiliateLinks?.length || 0) > 0;
-
-    // If has affiliate links, fetch creator's disclosure settings
-    if (hasAffiliateLinks) {
-      const { data: creatorSettings } = await supabase
-        .from('creator_settings')
-        .select('custom_disclosure_text')
-        .eq('profile_id', profile.id)
-        .single();
-
-      disclosureText = creatorSettings?.custom_disclosure_text || undefined;
-    }
-  }
+  // Affiliate disclosure strip: affiliate_links has no bag_item_id column and there
+  // is no creator_settings table, so the old lookup always errored and the strip
+  // could never show. Keep the rendering path; feed it an empty result until a
+  // per-item affiliate model exists.
+  const hasAffiliateLinks = false;
+  const disclosureText: string | undefined = undefined;
 
   // Create bag object with cover photo URL
   const bagWithCover = {
     ...bag,
     cover_photo_url: coverPhotoUrl,
+    links: bagLinks || [],
   };
 
   // Generate structured data for SEO and AI discoverability
   const authorInfo = {
     name: profile.display_name || profile.handle,
-    url: `https://teed.club/u/${profile.handle}`,
+    url: `${SITE_URL}/u/${profile.handle}`,
   };
 
   const bagJsonLd = generateBagJsonLd(
@@ -275,9 +259,9 @@ export default async function UserBagPage({ params }: PageProps) {
   );
 
   const breadcrumbJsonLd = generateBreadcrumbJsonLd([
-    { name: 'Teed.club', url: 'https://teed.club' },
-    { name: profile.display_name || profile.handle, url: `https://teed.club/u/${profile.handle}` },
-    { name: bag.title, url: `https://teed.club/u/${profile.handle}/${code}` },
+    { name: 'Teed.club', url: SITE_URL },
+    { name: profile.display_name || profile.handle, url: `${SITE_URL}/u/${profile.handle}` },
+    { name: bag.title, url: `${SITE_URL}/u/${profile.handle}/${code}` },
   ]);
 
   return (

@@ -78,7 +78,6 @@ export default function ProfileGridLayout({
     const updateWidth = () => {
       if (containerRef.current) {
         const newWidth = containerRef.current.offsetWidth;
-        console.log('[ProfileGridLayout] Width updated:', newWidth);
         setWidth(newWidth);
       }
     };
@@ -135,27 +134,10 @@ export default function ProfileGridLayout({
   // Even if previewing at smaller breakpoints, we save the full-size coordinates
   const saveLayout = useCallback(
     (newLayout: Layout) => {
-      console.log('[ProfileGridLayout] saveLayout called', {
-        breakpoint,
-        isEditMode,
-        hasOnLayoutChange: !!onLayoutChange,
-        layoutLength: newLayout.length,
-        width,
-      });
       if (onLayoutChange && isEditMode) {
-        console.log('[ProfileGridLayout] Calling onLayoutChange with:', newLayout.map(item => ({
-          i: item.i,
-          x: item.x,
-          y: item.y,
-          w: item.w,
-          h: item.h,
-        })));
         // Convert readonly Layout to mutable array
         onLayoutChange(newLayout.map(item => ({ ...item })));
       } else {
-        console.log('[ProfileGridLayout] NOT saving:', {
-          reason: !onLayoutChange ? 'no onLayoutChange' : !isEditMode ? 'not in edit mode' : 'unknown',
-        });
       }
     },
     [onLayoutChange, isEditMode, breakpoint, width]
@@ -295,17 +277,6 @@ export default function ProfileGridLayout({
     enabled: isEditMode,
   };
 
-  // Log render state for debugging
-  console.log('[ProfileGridLayout] Rendering with react-grid-layout', {
-    width,
-    breakpoint,
-    cols,
-    layoutCount: layout.length,
-    blocksCount: sortedBlocks.length,
-    isEditMode,
-    dragEnabled: dragConfig.enabled,
-    resizeEnabled: resizeConfig.enabled,
-  });
 
   // Desktop: use react-grid-layout for BOTH edit and view modes
   // This ensures identical rendering - only difference is drag/resize enabled

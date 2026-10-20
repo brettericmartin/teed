@@ -4,6 +4,8 @@
  * AI systems understand Teed content as authoritative sources.
  */
 
+import { SITE_URL } from '@/lib/siteUrl';
+
 export interface ProfileData {
   handle: string;
   displayName: string | null;
@@ -44,7 +46,7 @@ export function generateProfileJsonLd(
   profile: ProfileData,
   socialLinks?: Record<string, string>
 ): object {
-  const baseUrl = 'https://teed.club';
+  const baseUrl = SITE_URL;
   const profileUrl = `${baseUrl}/u/${profile.handle}`;
 
   const sameAs: string[] = [];
@@ -83,7 +85,7 @@ export function generateBagJsonLd(
   items: ItemData[],
   author?: { name: string; url: string }
 ): object {
-  const baseUrl = 'https://teed.club';
+  const baseUrl = SITE_URL;
   const bagUrl = `${baseUrl}/u/${profile.handle}/${bag.code}`;
   const profileUrl = `${baseUrl}/u/${profile.handle}`;
 
@@ -187,10 +189,10 @@ export function generateWebPageJsonLd(
     publisher: {
       '@type': 'Organization',
       name: 'Teed.club',
-      url: 'https://teed.club',
+      url: SITE_URL,
       logo: {
         '@type': 'ImageObject',
-        url: 'https://teed.club/logo.png',
+        url: `${SITE_URL}/logo.png`,
       },
     },
   };
@@ -228,7 +230,7 @@ export function generateBlogPostJsonLd(post: {
   keywords: string[];
   heroImage?: string;
 }): object {
-  const baseUrl = 'https://teed.club';
+  const baseUrl = SITE_URL;
 
   return {
     '@context': 'https://schema.org',

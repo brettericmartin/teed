@@ -18,13 +18,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://teed.so/alternatives',
+    url: 'https://www.teed.club/alternatives',
     siteName: 'Teed.club',
     title: 'Best Tools for Sharing Gear Collections',
     description: 'Compare tools for creating and sharing gear collections.',
   },
   alternates: {
-    canonical: 'https://teed.so/alternatives',
+    canonical: 'https://www.teed.club/alternatives',
   },
 };
 
@@ -38,7 +38,7 @@ const jsonLd = {
       '@type': 'ListItem',
       position: 1,
       name: 'Teed.club',
-      url: 'https://teed.so',
+      url: 'https://www.teed.club',
       description: 'Purpose-built platform for creating and sharing curated gear collections',
     },
     {

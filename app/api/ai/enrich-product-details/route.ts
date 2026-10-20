@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { openai } from '@/lib/openaiClient';
+import { requireAuth } from '@/lib/apiAuth';
+import { createServerSupabase } from '@/lib/serverSupabase';
+import { getOpenAI } from '@/lib/openaiClient';
 import { trackApiUsage } from '@/lib/apiUsageTracker';
 
 /**
@@ -34,6 +36,10 @@ import { trackApiUsage } from '@/lib/apiUsageTracker';
  * }
  */
 export async function POST(request: NextRequest) {
+  const supabase = await createServerSupabase();
+  const auth = await requireAuth(supabase);
+  if (auth.error) return auth.error;
+
   const startTime = Date.now();
   try {
     const body = await request.json();
@@ -100,7 +106,7 @@ ${contextInfo}
 
 Provide brand, formatted specifications, product differentiation notes, and fun facts.`;
 
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o', // Use full model for better product knowledge
       messages: [
         { role: 'system', content: systemPrompt },

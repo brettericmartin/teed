@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { openai } from '@/lib/openaiClient';
+import { requireAuth } from '@/lib/apiAuth';
+import { createServerSupabase } from '@/lib/serverSupabase';
+import { getOpenAI } from '@/lib/openaiClient';
 import { fetchProductImage } from '@/lib/ai';
 import type {
   EnrichProductsRequest,
@@ -16,6 +18,10 @@ import type {
  * Searches are year-aware when model year is provided.
  */
 export async function POST(request: NextRequest): Promise<NextResponse<EnrichProductsResponse>> {
+  const supabase = await createServerSupabase();
+  const auth = await requireAuth(supabase);
+  if (auth.error) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+
   try {
     const body: EnrichProductsRequest = await request.json();
     const { products, yearAware } = body;
@@ -128,7 +134,7 @@ ${product.generation ? `Generation: ${product.generation}` : ''}
 ${product.specifications?.length ? `Known specs: ${product.specifications.join(', ')}` : ''}`;
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini', // Use mini for enrichment (faster, cheaper)
       messages: [
         { role: 'system', content: systemPrompt },

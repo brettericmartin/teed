@@ -1,18 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { withAdminApi } from '@/lib/withAdmin';
 import { logAdminAction } from '@/lib/adminAuth';
 import type {
   StrategicInitiative,
   UpdateInitiativeInput,
 } from '@/lib/types/strategicInitiatives';
-
-// Use service role for database operations
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
 
 interface RouteParams {
   params: Promise<{ slug: string }>;
@@ -32,7 +25,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     const { slug } = await params;
 
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await getSupabaseAdmin()
       .from('strategic_initiatives')
       .select('*')
       .eq('slug', slug)
@@ -70,7 +63,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     const body: UpdateInitiativeInput = await request.json();
 
     // Check if initiative exists
-    const { data: existing, error: findError } = await supabaseAdmin
+    const { data: existing, error: findError } = await getSupabaseAdmin()
       .from('strategic_initiatives')
       .select('id, version')
       .eq('slug', slug)
@@ -82,7 +75,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
     // If slug is being changed, check for conflicts
     if (body.slug && body.slug !== slug) {
-      const { data: conflict } = await supabaseAdmin
+      const { data: conflict } = await getSupabaseAdmin()
         .from('strategic_initiatives')
         .select('id')
         .eq('slug', body.slug)
@@ -136,7 +129,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       updateData.version = existing.version + 1;
     }
 
-    const { data: updated, error: updateError } = await supabaseAdmin
+    const { data: updated, error: updateError } = await getSupabaseAdmin()
       .from('strategic_initiatives')
       .update(updateData)
       .eq('id', existing.id)
@@ -178,7 +171,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     const { slug } = await params;
 
     // Find initiative
-    const { data: existing, error: findError } = await supabaseAdmin
+    const { data: existing, error: findError } = await getSupabaseAdmin()
       .from('strategic_initiatives')
       .select('id, title')
       .eq('slug', slug)
@@ -189,7 +182,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     // Delete initiative
-    const { error: deleteError } = await supabaseAdmin
+    const { error: deleteError } = await getSupabaseAdmin()
       .from('strategic_initiatives')
       .delete()
       .eq('id', existing.id);

@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { requireAuth } from '@/lib/apiAuth';
+import { createServerSupabase } from '@/lib/serverSupabase';
+import { getOpenAI } from '@/lib/openaiClient';
 import { trackApiUsage } from '@/lib/apiUsageTracker';
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 type ProductIdentification = {
   custom_name: string;
@@ -58,6 +56,10 @@ function detectBrandFromHint(hint: string): string | null {
 }
 
 export async function POST(request: NextRequest) {
+  const supabase = await createServerSupabase();
+  const auth = await requireAuth(supabase);
+  if (auth.error) return auth.error;
+
   const startTime = Date.now();
   try {
     const { imageBase64, textHint, bagContext } = await request.json();
@@ -104,7 +106,7 @@ ${bagContext ? `Context: This is for a "${bagContext}" collection.` : ''}`;
 ${bagContext ? `Context: This is for a "${bagContext}" collection.` : ''}`;
     }
 
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [
         {

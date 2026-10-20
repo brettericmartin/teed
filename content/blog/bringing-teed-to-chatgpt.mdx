@@ -35,7 +35,7 @@ The technical implementation is an OpenAPI spec that describes these endpoints, 
 
 Custom GPTs support OAuth flows, but we didn't want to require authentication. The whole point is answering questions about public collections. If someone asks ChatGPT about a public bag, the GPT shouldn't need the user to log in first.
 
-So the Teed GPT uses our public API endpoints only. It can read anything that's publicly visible on teed.so — the same data anyone can see by visiting the URL. No write access, no private data, no auth flow needed.
+So the Teed GPT uses our public API endpoints only. It can read anything that's publicly visible on teed.club — the same data anyone can see by visiting the URL. No write access, no private data, no auth flow needed.
 
 We did add rate limiting. ChatGPT can generate a lot of API calls quickly, especially if someone asks a broad question like "find me the best photography gear." Each action is rate-limited per IP with sensible defaults — enough for normal conversational use, but not enough to scrape our entire database.
 
@@ -45,7 +45,7 @@ The best interactions are specific questions about specific people's gear. "What
 
 Category browsing also works. "Show me some curated desk setups" returns a list of relevant bags with descriptions, and the GPT can summarize the common items across them. That's a genuinely useful answer that would take a human 20 minutes of browsing to compile.
 
-The GPT also includes links back to teed.so for every answer. This matters. The answer isn't just "they use a Sony A7IV" — it's "they use a Sony A7IV, and here's their full kit at teed.so/u/handle/camera-kit." The collection provides context that a bare product name doesn't.
+The GPT also includes links back to teed.club for every answer. This matters. The answer isn't just "they use a Sony A7IV" — it's "they use a Sony A7IV, and here's their full kit at teed.club/u/handle/camera-kit." The collection provides context that a bare product name doesn't.
 
 ## What's tricky
 

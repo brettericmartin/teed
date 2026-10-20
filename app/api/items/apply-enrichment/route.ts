@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
-import { openai } from '@/lib/openaiClient';
+import { getOpenAI } from '@/lib/openaiClient';
 
 // Predefined categorical tags (not brands, just categories/activities)
 const CATEGORICAL_TAGS = [
@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
 
         console.log(`Generating tags for bag with items: ${itemSummary}`);
 
-        const tagResponse = await openai.chat.completions.create({
+        const tagResponse = await getOpenAI().chat.completions.create({
           model: 'gpt-4o-mini',
           messages: [
             {

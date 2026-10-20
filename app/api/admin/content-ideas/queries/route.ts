@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { withAdminApi } from '@/lib/withAdmin';
 import { logAdminAction } from '@/lib/adminAuth';
 import type {
@@ -8,13 +8,6 @@ import type {
   SearchQueryType,
   CreateSearchQueryRequest,
 } from '@/lib/types/contentIdeas';
-
-// Use service role for database operations
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
 
 /**
  * GET /api/admin/content-ideas/queries
@@ -32,7 +25,7 @@ export async function GET(request: NextRequest) {
     const queryType = searchParams.get('type') as SearchQueryType | null;
     const activeOnly = searchParams.get('active') === 'true';
 
-    let query = supabaseAdmin
+    let query = getSupabaseAdmin()
       .from('content_search_queries')
       .select('*')
       .order('vertical', { ascending: true })
@@ -103,7 +96,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check for duplicate
-    const { data: existing } = await supabaseAdmin
+    const { data: existing } = await getSupabaseAdmin()
       .from('content_search_queries')
       .select('id')
       .eq('query', body.query)
@@ -117,7 +110,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await getSupabaseAdmin()
       .from('content_search_queries')
       .insert({
         query: body.query,

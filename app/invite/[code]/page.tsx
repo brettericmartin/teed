@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import InviteRedemption from './InviteRedemption';
+import type { InviteCodeValidation } from '@/lib/types/beta';
 
 export const metadata: Metadata = {
   title: 'Redeem Invite - Teed.club',
@@ -15,15 +16,15 @@ export default async function InvitePage({ params }: PageProps) {
   const { code } = await params;
   const supabase = await createServerSupabase();
 
-  // Check if the invite code is valid
-  const { data: invite } = await supabase
-    .from('beta_invite_codes')
-    .select('*')
-    .eq('code', code.toUpperCase())
-    .single();
+  // Check the invite code through the SECURITY DEFINER RPC. It returns flags
+  // and the tier only (never the row), and zero rows for an unknown code, so
+  // beta_invite_codes needs no public SELECT policy.
+  const { data } = await supabase
+    .rpc('validate_invite_code', { p_code: code })
+    .maybeSingle();
+  const invite = data as InviteCodeValidation | null;
 
-  const isValid = invite && !invite.claimed_at && !invite.is_revoked;
-  const isExpired = invite?.expires_at && new Date(invite.expires_at) < new Date();
+  const isExpired = Boolean(invite?.is_expired);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[var(--bg-page)] to-[var(--sky-2)] flex items-center justify-center p-4">
@@ -56,7 +57,7 @@ export default async function InvitePage({ params }: PageProps) {
               Apply for Access
             </a>
           </div>
-        ) : invite.claimed_at ? (
+        ) : invite.is_claimed ? (
           // Already claimed
           <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-lg p-8 text-center">
             <div className="w-16 h-16 bg-amber-100 dark:bg-amber-950 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -96,7 +97,7 @@ export default async function InvitePage({ params }: PageProps) {
           </div>
         ) : (
           // Valid - show redemption form
-          <InviteRedemption code={code.toUpperCase()} tier={invite.tier} invitedBy={invite.created_by} />
+          <InviteRedemption code={code.toUpperCase()} tier={invite.tier ?? 'standard'} invitedBy={null} />
         )}
       </div>
     </div>

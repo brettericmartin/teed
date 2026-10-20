@@ -16,7 +16,7 @@
  * than a generic "identify all products" prompt.
  */
 
-import { openai } from '../openaiClient';
+import { getOpenAI } from '../openaiClient';
 import { extractRealFrames, extractHighResFrames, type ExtractedFrame } from './youtubeStoryboard';
 import { extractProductMentionsFromTranscript } from '../contentIdeas/transcript';
 import type { TranscriptSegment } from '../contentIdeas/transcript';
@@ -300,7 +300,7 @@ Return JSON:
 }`;
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [{
         role: 'user',

@@ -188,7 +188,7 @@ This is a step-by-step guide for building the Teed MVP. Follow each step sequent
 
 **Step 25: Install & Test GPT-4 Vision**
 - Verify OpenAI client supports vision (already in package.json)
-- Test with sample image: POST to existing `/api/ai-test`
+- Test with sample image via the identify-from-image route (the old `/api/ai-test` debug route was removed 2026-10-18)
 - Verify image processing works
 - If fails: Check OpenAI API key, verify model access
 

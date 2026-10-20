@@ -1,15 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { withAdminApi } from '@/lib/withAdmin';
 import { logAdminAction } from '@/lib/adminAuth';
 import type { ScreenIdeasRequest, ScreenIdeasResponse } from '@/lib/types/contentIdeas';
-
-// Use service role for database operations
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
 
 /**
  * POST /api/admin/content-ideas/screen
@@ -41,7 +34,7 @@ export async function POST(request: NextRequest) {
     const now = new Date().toISOString();
 
     // Verify all ideas exist and are in a screenable state
-    const { data: ideas, error: fetchError } = await supabaseAdmin
+    const { data: ideas, error: fetchError } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('id, status')
       .in('id', ideaIds);
@@ -65,7 +58,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Update the ideas
-    const { error: updateError } = await supabaseAdmin
+    const { error: updateError } = await getSupabaseAdmin()
       .from('content_ideas')
       .update({
         status: newStatus,
@@ -123,7 +116,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20', 10);
 
     // Build query for discovered ideas
-    let query = supabaseAdmin
+    let query = getSupabaseAdmin()
       .from('content_ideas')
       .select(`
         id,
@@ -154,7 +147,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get counts by vertical
-    const { data: verticalCounts } = await supabaseAdmin
+    const { data: verticalCounts } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('vertical')
       .in('status', ['discovered', 'new']);
@@ -166,7 +159,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Get count of already selected
-    const { count: selectedCount } = await supabaseAdmin
+    const { count: selectedCount } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('id', { count: 'exact', head: true })
       .eq('status', 'selected');

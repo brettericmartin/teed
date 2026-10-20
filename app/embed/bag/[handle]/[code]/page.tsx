@@ -1,11 +1,6 @@
 import { notFound } from 'next/navigation';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabasePublic } from '@/lib/supabasePublic';
 import EmbedBagView from '@/components/embed/EmbedBagView';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 interface PageProps {
   params: Promise<{ handle: string; code: string }>;
@@ -15,7 +10,7 @@ export default async function EmbedBagPage({ params }: PageProps) {
   const { handle, code } = await params;
 
   // Fetch profile
-  const { data: profile } = await supabase
+  const { data: profile } = await getSupabasePublic()
     .from('profiles')
     .select('id, handle, display_name')
     .eq('handle', handle)
@@ -26,14 +21,14 @@ export default async function EmbedBagPage({ params }: PageProps) {
   }
 
   // Fetch bag with items
-  const { data: bag } = await supabase
+  const { data: bag } = await getSupabasePublic()
     .from('bags')
     .select(`
       id,
       code,
       title,
       description,
-      items:bag_items(
+      items:bag_items!bag_items_bag_id_fkey(
         id,
         custom_name,
         brand,
@@ -58,7 +53,7 @@ export default async function EmbedBagPage({ params }: PageProps) {
 
   let photoUrls: Record<string, string> = {};
   if (photoIds.length > 0) {
-    const { data: mediaAssets } = await supabase
+    const { data: mediaAssets } = await getSupabasePublic()
       .from('media_assets')
       .select('id, url')
       .in('id', photoIds);

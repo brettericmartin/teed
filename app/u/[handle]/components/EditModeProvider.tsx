@@ -157,7 +157,6 @@ export function EditModeProvider({
   }, []);
 
   const updateBlockLayout = useCallback((id: string, layout: GridLayout) => {
-    console.log('[EditModeProvider] updateBlockLayout called', { id, layout });
     setBlocks(prev =>
       prev.map(block =>
         block.id === id
@@ -166,7 +165,6 @@ export function EditModeProvider({
       )
     );
     setIsDirty(true);
-    console.log('[EditModeProvider] isDirty set to true');
   }, []);
 
   const deleteBlock = useCallback((id: string) => {
@@ -235,21 +233,12 @@ export function EditModeProvider({
   }, []);
 
   const saveBlocks = useCallback(async () => {
-    console.log('[EditModeProvider] saveBlocks called', { isDirty, blocksCount: blocks.length });
     if (!isDirty) {
-      console.log('[EditModeProvider] Not dirty, skipping save');
       return;
     }
 
     setIsSaving(true);
     try {
-      console.log('[EditModeProvider] Sending blocks to API:', blocks.map(b => ({
-        id: b.id,
-        gridX: b.gridX,
-        gridY: b.gridY,
-        gridW: b.gridW,
-        gridH: b.gridH,
-      })));
       const response = await fetch('/api/profile/blocks', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -265,7 +254,6 @@ export function EditModeProvider({
         throw new Error('Failed to save blocks');
       }
 
-      console.log('[EditModeProvider] Save successful!');
       setIsDirty(false);
     } catch (error) {
       console.error('Error saving blocks:', error);
@@ -279,10 +267,8 @@ export function EditModeProvider({
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    console.log('[EditModeProvider] Auto-save effect triggered', { isDirty, isSaving });
     // Only auto-save if dirty and not already saving
     if (!isDirty || isSaving) {
-      console.log('[EditModeProvider] Skipping auto-save:', { isDirty, isSaving });
       return;
     }
 
@@ -291,10 +277,8 @@ export function EditModeProvider({
       clearTimeout(saveTimeoutRef.current);
     }
 
-    console.log('[EditModeProvider] Scheduling auto-save in 1.5s');
     // Set new timeout for auto-save
     saveTimeoutRef.current = setTimeout(() => {
-      console.log('[EditModeProvider] Auto-save timeout fired, calling saveBlocks');
       saveBlocks().catch(() => {
         // Error already logged in saveBlocks
       });

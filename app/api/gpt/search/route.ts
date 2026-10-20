@@ -104,7 +104,7 @@ export async function GET(request: NextRequest) {
           custom_description,
           brand,
           bag_id,
-          bags!inner (
+          bags!bag_items_bag_id_fkey!inner (
             id,
             code,
             title,

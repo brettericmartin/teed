@@ -6,7 +6,7 @@
  */
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { openai } from '../openaiClient';
+import { getOpenAI } from '../openaiClient';
 import type {
   BagAnalysisInput,
   BagAnalysisResult,
@@ -138,7 +138,7 @@ async function fetchBagData(
       is_public,
       created_at,
       updated_at,
-      bag_items (
+      bag_items!bag_items_bag_id_fkey (
         id,
         name,
         brand,
@@ -663,7 +663,7 @@ async function suggestMissingItems(bag: BagData): Promise<MissingItem[]> {
   const itemNames = bag.items.map((i) => i.name).join(', ');
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
         {

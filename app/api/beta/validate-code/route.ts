@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
-import type { CodeClaimResult } from '@/lib/types/beta';
+import type { CodeClaimResult, InviteCodeValidation } from '@/lib/types/beta';
 
 /**
  * POST /api/beta/validate-code
@@ -24,12 +24,13 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createServerSupabase();
 
-    // Look up the code (case-insensitive)
-    const { data: codeRecord, error } = await supabase
-      .from('beta_invite_codes')
-      .select('*')
-      .ilike('code', code.trim())
-      .single();
+    // Validate through the SECURITY DEFINER RPC (exact, case-insensitive match).
+    // It returns flags + tier only, never the row, so beta_invite_codes needs
+    // no public SELECT policy. Zero rows = unknown code.
+    const { data, error } = await supabase
+      .rpc('validate_invite_code', { p_code: code.trim() })
+      .maybeSingle();
+    const codeRecord = data as InviteCodeValidation | null;
 
     if (error || !codeRecord) {
       return NextResponse.json({
@@ -47,15 +48,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if expired
-    if (codeRecord.expires_at && new Date(codeRecord.expires_at) < new Date()) {
+    if (codeRecord.is_expired) {
       return NextResponse.json({
         valid: false,
         error: 'This invite code has expired',
       });
     }
 
-    // Check if maxed out
-    if (codeRecord.current_uses >= codeRecord.max_uses) {
+    // Check if maxed out / already claimed
+    if (codeRecord.is_claimed) {
       return NextResponse.json({
         valid: false,
         error: 'This invite code has reached its maximum uses',
@@ -66,7 +67,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       valid: true,
       tier: codeRecord.tier,
-      remaining_uses: codeRecord.max_uses - codeRecord.current_uses,
     });
   } catch (error) {
     console.error('Error validating code:', error);

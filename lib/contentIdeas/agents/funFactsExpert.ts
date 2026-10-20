@@ -6,7 +6,7 @@
  * that can make content more engaging and shareable.
  */
 
-import { openai } from '@/lib/openaiClient';
+import { getOpenAI } from '@/lib/openaiClient';
 import type { FunFactsExpertOutput } from '@/lib/types/teamGeneration';
 import type {
   BaseAgent,
@@ -142,7 +142,7 @@ Return JSON:
     const startTime = Date.now();
 
     try {
-      const response = await openai.chat.completions.create({
+      const response = await getOpenAI().chat.completions.create({
         model: this.config.model,
         messages: [
           { role: 'system', content: this.getSystemPrompt() },

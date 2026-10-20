@@ -1,12 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { checkRateLimit, v1Headers } from '@/lib/api/rateLimit';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
 
 /**
  * GET /api/v1/brands
@@ -26,12 +20,12 @@ export async function GET(request: NextRequest) {
 
   try {
     // Get all items from public bags with brand info
-    const { data: items, error } = await supabase
+    const { data: items, error } = await getSupabaseAdmin()
       .from('bag_items')
       .select(`
         brand,
         why_chosen,
-        bags!inner (
+        bags!bag_items_bag_id_fkey!inner (
           is_public
         )
       `)

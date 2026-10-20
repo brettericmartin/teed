@@ -18,6 +18,23 @@ export const roundupCategories: RoundupCategory[] = [
       "See how golfers organize and share their setups. These are real bags from Teed users — not sponsored lists, just honest gear choices.",
   },
   {
+    slug: 'golf-simulator-setups',
+    name: 'Golf Simulator Setups',
+    description:
+      'Complete home golf simulator setups on Teed — enclosure, launch monitor, projector, computer, mat and software, with what each piece cost and why it was chosen.',
+    supabaseCategory: 'golf-sim',
+    keywords: [
+      'golf simulator setup',
+      'home golf simulator',
+      'garage golf simulator',
+      'golf simulator build',
+      'launch monitor setup',
+      'golf sim equipment list',
+    ],
+    intro:
+      'Real home simulator builds, part by part. Each setup lists every component with the price paid and the reason it was picked, and keeps its history as the owner upgrades. Use them to price a build at your budget and room size.',
+  },
+  {
     slug: 'photography-gear',
     name: 'Photography Gear',
     description: 'Curated photography gear collections — cameras, lenses, and kits from photographers.',

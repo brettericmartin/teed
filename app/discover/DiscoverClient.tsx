@@ -1,12 +1,13 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Compass, Package, Search, Filter, X, Heart, ChevronDown, User, Bookmark } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { staggerContainer, cardVariants } from '@/lib/animations';
 import { SkeletonBagGrid } from '@/components/ui/Skeleton';
+import { ItemImage } from '@/components/ui/ItemImage';
 import { PageContainer, PageHeader, ContentContainer } from '@/components/layout/PageContainer';
 import { CATEGORIES, getCategoryColors } from '@/lib/categories';
 import { analytics } from '@/lib/analytics';
@@ -68,9 +69,9 @@ type DiscoverClientProps = {
   initialBags: Bag[];
 };
 
-const SORT_OPTIONS = [
-  { value: 'hot', label: 'Hot', icon: '🔥' },
-  { value: 'newest', label: 'Newest', icon: '🆕' },
+const SORT_OPTIONS: { value: string; label: string; icon?: string }[] = [
+  { value: 'newest', label: 'New', icon: '🆕' },
+  { value: 'hot', label: 'Trending' },
   { value: 'most_items', label: 'Most Items', icon: '📦' },
 ];
 
@@ -124,12 +125,15 @@ const getPlaceholderColor = (index: number) => {
 
 export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
   const [bags, setBags] = useState<Bag[]>(() =>
-    [...initialBags].sort((a, b) => getHotScore(b) - getHotScore(a))
+    searchParams.get('sort') === 'hot'
+      ? [...initialBags].sort((a, b) => getHotScore(b) - getHotScore(a))
+      : [...initialBags]
   );
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -141,7 +145,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
   const [selectedTags, setSelectedTags] = useState<string[]>(searchParams.get('tags')?.split(',').filter(Boolean) || []);
-  const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'hot');
+  const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'newest');
   const [showSortMenu, setShowSortMenu] = useState(false);
 
   // Autocomplete states
@@ -162,6 +166,21 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   useEffect(() => {
     fetchBags();
   }, [showFollowing, showSaved, selectedCategory, searchQuery, selectedTags, sortBy]);
+
+  // Mirror filter state into the URL so /discover?category=golf-sim is shareable and
+  // survives reload. Defaults are omitted; no scroll jump; nothing pushed onto history.
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (showFollowing) params.set('following', 'true');
+    if (showSaved) params.set('saved', 'true');
+    if (selectedCategory) params.set('category', selectedCategory);
+    if (selectedTags.length > 0) params.set('tags', selectedTags.join(','));
+    if (searchQuery) params.set('search', searchQuery);
+    if (sortBy && sortBy !== 'newest') params.set('sort', sortBy);
+    const next = params.toString();
+    if (next === searchParams.toString()) return;
+    router.replace(`${pathname}${next ? `?${next}` : ''}`, { scroll: false });
+  }, [showFollowing, showSaved, selectedCategory, selectedTags, searchQuery, sortBy, pathname, router, searchParams]);
 
   // Debounced autocomplete
   useEffect(() => {
@@ -283,7 +302,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
     setSearchQuery('');
     setSearchInput('');
     setSelectedTags([]);
-    setSortBy('hot');
+    setSortBy('newest');
   };
 
   const toggleTag = (tag: string) => {
@@ -294,7 +313,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
     );
   };
 
-  const hasActiveFilters = showFollowing || showSaved || selectedCategory || searchQuery || selectedTags.length > 0 || sortBy !== 'hot';
+  const hasActiveFilters = showFollowing || showSaved || selectedCategory || searchQuery || selectedTags.length > 0 || sortBy !== 'newest';
 
   const hasSuggestions = suggestions && (
     suggestions.bags.length > 0 ||
@@ -438,7 +457,9 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                     onClick={() => setShowSortMenu(!showSortMenu)}
                     className="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] hover:bg-[var(--surface-hover)] transition-all whitespace-nowrap"
                   >
-                    <span>{SORT_OPTIONS.find(o => o.value === sortBy)?.icon}</span>
+                    {SORT_OPTIONS.find(o => o.value === sortBy)?.icon && (
+                      <span>{SORT_OPTIONS.find(o => o.value === sortBy)?.icon}</span>
+                    )}
                     <span className="hidden sm:inline">{SORT_OPTIONS.find(o => o.value === sortBy)?.label}</span>
                     <ChevronDown className={`w-4 h-4 transition-transform ${showSortMenu ? 'rotate-180' : ''}`} />
                   </button>
@@ -456,7 +477,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                             sortBy === option.value ? 'bg-[var(--sky-2)] text-[var(--sky-11)]' : 'text-[var(--text-primary)]'
                           }`}
                         >
-                          <span>{option.icon}</span>
+                          {option.icon && <span>{option.icon}</span>}
                           <span>{option.label}</span>
                         </button>
                       ))}
@@ -629,11 +650,11 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                             {/* Item photos (6 smaller tiles) */}
                             {itemsToShow.map((item) => (
                               <div key={item.id} className="relative bg-white rounded overflow-hidden shadow-sm">
-                                <img
+                                <ItemImage
                                   src={item.photo_url!}
                                   alt={item.custom_name || 'Item'}
+                                  fallbackLabel={item.custom_name}
                                   className="w-full h-full object-contain"
-                                  loading="lazy"
                                 />
                               </div>
                             ))}
@@ -665,11 +686,11 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                           <div className="grid grid-cols-4 gap-1.5 p-2 h-full">
                             {itemsToShow.map((item) => (
                               <div key={item.id} className="relative bg-white rounded overflow-hidden shadow-sm">
-                                <img
+                                <ItemImage
                                   src={item.photo_url!}
                                   alt={item.custom_name || 'Item'}
+                                  fallbackLabel={item.custom_name}
                                   className="w-full h-full object-contain"
-                                  loading="lazy"
                                 />
                               </div>
                             ))}

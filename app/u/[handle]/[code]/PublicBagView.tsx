@@ -21,6 +21,7 @@ import { StickyActionBar } from '@/components/ui/StickyActionBar';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { CloneSuccessModal } from '@/components/modals/CloneSuccessModal';
 import { CuratorNote } from '@/components/ui/CuratorNote';
+import { Button } from '@/components/ui/Button';
 import { useCelebration } from '@/lib/celebrations';
 import { CompletionBadge } from '@/components/BagCompletionButton';
 import { PageContainer, ContentContainer } from '@/components/layout/PageContainer';
@@ -34,8 +35,77 @@ import { SupplementTimingBadges } from '@/components/item/SupplementTimingBadges
 import { PricingBadge } from '@/components/item/PricingBadge';
 import { SaveTooltip } from '@/components/prompts/SaveTooltip';
 import { SignUpModal } from '@/components/prompts/SignUpModal';
+import { computeTotals, formatBagTotalLine, formatMoney, type BagTotals } from '@/lib/bags/totals';
+import { getSectionTint } from '@/lib/sectionTints';
+import { DISCLOSURE, isOwnedBrand } from '@/lib/disclosure';
 
 type PendingAction = 'save' | 'clone' | 'follow' | 'add-to-bag';
+
+type ItemGroup = {
+  key: string;
+  name: string | null;
+  description: string | null;
+  isSectioned: boolean;
+  items: BagViewItem[];
+  /** Section subtotal: price paid, else list price; subscriptions per year. */
+  totals: BagTotals;
+};
+
+/** "$2,971" plus "from 2 of 3 priced" when any item lacks a price; subscriptions as "$450 a year". */
+function formatSectionSubtotal(t: BagTotals): { amount: string | null; suffix: string | null } {
+  const oneTime = t.pricedCount + t.unpricedCount;
+  if (t.pricedCount === 0 && t.subscriptionCount === 0) return { amount: null, suffix: null };
+  if (t.pricedCount === 0) {
+    return { amount: `${formatMoney(t.yearly)} a year`, suffix: null };
+  }
+  const amount = t.subscriptionCount > 0
+    ? `${formatMoney(t.paid)} + ${formatMoney(t.yearly)} a year`
+    : formatMoney(t.paid);
+  const suffix = t.unpricedCount > 0 ? `from ${t.pricedCount} of ${oneTime} priced` : null;
+  return { amount, suffix };
+}
+
+/**
+ * Group items by bag section (ordered by section sort_index), with any
+ * unsectioned items in a trailing "Everything else" group. When the bag has
+ * no sections, or no item is assigned to one, returns a single flat group so
+ * the existing views render exactly as before.
+ */
+function groupItemsBySection(
+  sections: BagViewBag['sections'] | undefined,
+  items: BagViewItem[]
+): ItemGroup[] {
+  const ordered = [...(sections || [])].sort((a, b) => a.sort_index - b.sort_index);
+  const hasAssigned = ordered.length > 0 && items.some((it) => it.section_id && ordered.some((s) => s.id === it.section_id));
+  if (!hasAssigned) {
+    return [{ key: 'all', name: null, description: null, isSectioned: false, items, totals: computeTotals(items) }];
+  }
+  const groups: ItemGroup[] = ordered
+    .map((s) => {
+      const sectionItems = items.filter((it) => it.section_id === s.id);
+      return {
+        key: s.id,
+        name: s.name,
+        description: s.description,
+        isSectioned: true,
+        items: sectionItems,
+        totals: computeTotals(sectionItems),
+      };
+    })
+    .filter((g) => g.items.length > 0);
+  const rest = items.filter((it) => !it.section_id || !ordered.some((s) => s.id === it.section_id));
+  if (rest.length > 0) {
+    groups.push({ key: 'unsectioned', name: 'Everything else', description: null, isSectioned: true, items: rest, totals: computeTotals(rest) });
+  }
+  return groups;
+}
+
+/** A bag renders as a parts list when it is a golf-sim setup or any item sits in a section. */
+function isSetupBag(bag: BagViewBag, items: BagViewItem[]): boolean {
+  if (bag.category === 'golf-sim') return true;
+  const sections = bag.sections || [];
+  return sections.length > 0 && items.some((it) => it.section_id && sections.some((s) => s.id === it.section_id));
+}
 
 // Re-export types for component props
 type Item = BagViewItem;
@@ -74,11 +144,18 @@ export default function PublicBagView({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // View style from URL parameter (editorial default on mobile, flow/masonry on desktop)
+  // View style from URL parameter (editorial default on mobile, flow/masonry on desktop).
+  // Setup bags (golf-sim, or any sectioned bag) are parts lists: List on both breakpoints.
   const validStyles: ViewStyle[] = ['grid', 'masonry', 'editorial', 'list', 'carousel'];
   const styleParam = searchParams.get('style') as ViewStyle;
-  const defaultStyle: ViewStyle = isMobile ? 'editorial' : 'masonry';
+  const setupBag = isSetupBag(bag, items);
+  const isGolfSim = bag.category === 'golf-sim';
+  const defaultStyle: ViewStyle = setupBag ? 'list' : isMobile ? 'editorial' : 'masonry';
   const viewStyle: ViewStyle = validStyles.includes(styleParam) ? styleParam : defaultStyle;
+  // Price column, subtotals and the bag total only when some item carries a price
+  const bagTotals = computeTotals(items);
+  const showPrices = setupBag && (bagTotals.pricedCount > 0 || bagTotals.subscriptionCount > 0);
+  const bagTotalLine = showPrices ? formatBagTotalLine(bagTotals) : '';
 
   const handleViewStyleChange = (newStyle: ViewStyle) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -118,6 +195,8 @@ export default function PublicBagView({
   // Sign-up modal + deferred action state
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState<PendingAction>('save');
+  // Signed-out save tip is shown on hover/focus of the bookmark, never auto-opened
+  const [isSaveTipOpen, setIsSaveTipOpen] = useState(false);
 
   // Helper to copy promo code
   const handleCopyPromo = async (itemId: string, code: string) => {
@@ -435,6 +514,11 @@ export default function PublicBagView({
 
   const hasCover = Boolean(bag.cover_photo_url);
 
+  // Bag-level links: 'source' is the credit line under the description; the rest form a "Read" row
+  const bagLevelLinks = bag.links || [];
+  const sourceLinks = bagLevelLinks.filter((l) => l.kind === 'source');
+  const readLinks = bagLevelLinks.filter((l) => l.kind !== 'source');
+
   return (
     <PageContainer variant="cool">
       {/* Header Section with ambient background */}
@@ -458,7 +542,13 @@ export default function PublicBagView({
                   {bag.title}
                 </h1>
                 {/* Save Button with tooltip anchor */}
-                <div className="relative">
+                <div
+                  className="relative"
+                  onMouseEnter={() => setIsSaveTipOpen(true)}
+                  onMouseLeave={() => setIsSaveTipOpen(false)}
+                  onFocus={() => setIsSaveTipOpen(true)}
+                  onBlur={() => setIsSaveTipOpen(false)}
+                >
                   <button
                     onClick={handleSaveToggle}
                     disabled={isSaveLoading}
@@ -486,6 +576,7 @@ export default function PublicBagView({
                       isMobile={false}
                       bagId={bag.id}
                       bagCode={bag.code}
+                      open={isSaveTipOpen}
                     />
                   )}
                 </div>
@@ -520,10 +611,34 @@ export default function PublicBagView({
                   "{bag.description}"
                 </p>
               )}
+              {/* Bag-level source links: the credit line ("Source: u/handle on r/golfsimulator") */}
+              {sourceLinks.length > 0 && (
+                <div className="mt-2 space-y-0.5">
+                  {sourceLinks.map((link) => (
+                    <p key={link.id} className="text-sm text-[var(--text-secondary)]">
+                      <span className="text-[var(--text-tertiary)]">Source: </span>
+                      <a
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow"
+                        className="underline underline-offset-2 hover:text-[var(--text-primary)]"
+                      >
+                        {link.label || getLinkDomain(link.url)}
+                      </a>
+                      <span className="text-[var(--text-tertiary)]"> · {getLinkDomain(link.url)}</span>
+                    </p>
+                  ))}
+                </div>
+              )}
               <div className="flex items-center gap-3 text-sm mt-3">
                 <span className="inline-flex items-center px-2.5 py-1 bg-[var(--teed-green-2)] text-[var(--teed-green-11)] rounded-full text-xs font-medium">
                   {items.length} {items.length === 1 ? 'item' : 'items'}
                 </span>
+                {bagTotalLine && (
+                  <span className="text-sm tabular-nums text-[var(--text-primary)]" data-testid="bag-total">
+                    {bagTotalLine}
+                  </span>
+                )}
                 {/* Completion badge */}
                 {bag.is_complete && <CompletionBadge isComplete={true} />}
                 {/* Changelog badge for recent updates */}
@@ -581,6 +696,26 @@ export default function PublicBagView({
                     >
                       #{tag}
                     </Link>
+                  ))}
+                </div>
+              )}
+
+              {/* Other bag-level links: a quiet "Read" row */}
+              {readLinks.length > 0 && (
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mt-2 text-sm">
+                  <span className="text-[var(--text-tertiary)]">Read</span>
+                  {readLinks.map((link) => (
+                    <a
+                      key={link.id}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] underline underline-offset-2"
+                    >
+                      {link.label || getLinkDomain(link.url)}
+                      <span className="text-[var(--text-tertiary)] no-underline">· {getLinkDomain(link.url)}</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
                   ))}
                 </div>
               )}
@@ -663,55 +798,110 @@ export default function PublicBagView({
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
             >
-              {viewStyle === 'list' ? (
-                /* List View */
-                <div className="flex flex-col bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] overflow-hidden">
-                  {items.map((item) => (
-                    <ListViewItem
-                      key={item.id}
-                      item={item}
-                      isHero={bag.hero_item_id === item.id}
-                      onItemClick={() => handleItemClick(item)}
-                      onLinkClick={trackLinkClick}
-                      getLinkCTA={getLinkCTA}
-                      getLinkDomain={getLinkDomain}
-                    />
+              {/* Carousel is one continuous slideshow; every other view honours bag sections */}
+              {(viewStyle === 'carousel'
+                ? [{ key: 'all', name: null, description: null, isSectioned: false, items, totals: bagTotals } as ItemGroup]
+                : groupItemsBySection(bag.sections, items)
+              ).map((group) => {
+                const subtotal = showPrices ? formatSectionSubtotal(group.totals) : { amount: null, suffix: null };
+                const tint = setupBag ? getSectionTint(group.name) : null;
+                return (
+                <section
+                  key={group.key}
+                  className={group.isSectioned ? 'mb-10 last:mb-0' : undefined}
+                  aria-label={group.name || undefined}
+                >
+                  {group.isSectioned && (setupBag ? (
+                    /* Setup-bag section header: one baseline row on a hairline, 3-px tint rule */
+                    <div className={`mb-3 pb-2 pl-3 border-b border-[var(--border-subtle)] ${tint?.rule ?? ''}`}>
+                      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                        <div className="flex items-baseline gap-x-2 min-w-0">
+                          <h2 className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--text-secondary)]">
+                            {group.name}
+                          </h2>
+                          <span className="text-xs text-[var(--text-tertiary)]">
+                            {group.items.length} {group.items.length === 1 ? 'item' : 'items'}
+                          </span>
+                        </div>
+                        {subtotal.amount && (
+                          <div className="flex items-baseline gap-x-2 tabular-nums">
+                            <span className="text-sm font-medium text-[var(--text-primary)]">{subtotal.amount}</span>
+                            {subtotal.suffix && (
+                              <span className="text-xs text-[var(--text-tertiary)]">{subtotal.suffix}</span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      {group.description && (
+                        <p className="mt-1 text-sm text-[var(--text-secondary)]">{group.description}</p>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="mb-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                      <h2 className="text-lg md:text-xl font-semibold text-[var(--text-primary)]">
+                        {group.name}
+                      </h2>
+                      <span className="text-xs text-[var(--text-tertiary)]">
+                        {group.items.length} {group.items.length === 1 ? 'item' : 'items'}
+                      </span>
+                      {group.description && (
+                        <p className="basis-full text-sm text-[var(--text-secondary)]">{group.description}</p>
+                      )}
+                    </div>
                   ))}
-                </div>
-              ) : viewStyle === 'masonry' ? (
-                /* Masonry Flow View */
-                <MasonryView
-                  items={items}
-                  heroItemId={bag.hero_item_id}
-                  onItemClick={handleItemClick}
-                  onLinkClick={trackLinkClick}
-                />
-              ) : viewStyle === 'editorial' ? (
-                /* Editorial Magazine View */
-                <EditorialView
-                  items={items}
-                  heroItemId={bag.hero_item_id}
-                  onItemClick={handleItemClick}
-                  onLinkClick={trackLinkClick}
-                />
-              ) : viewStyle === 'carousel' ? (
-                /* Carousel Slideshow View */
-                <CarouselView
-                  items={items}
-                  heroItemId={bag.hero_item_id}
-                  bagTitle={bag.title}
-                  onItemClick={handleItemClick}
-                  onLinkClick={trackLinkClick}
-                />
-              ) : (
-                /* Grid View (default) */
-                <GridView
-                  items={items}
-                  heroItemId={bag.hero_item_id}
-                  onItemClick={handleItemClick}
-                  onLinkClick={trackLinkClick}
-                />
-              )}
+                  {viewStyle === 'list' ? (
+                    /* List View: hairline border, no shadow (hairlines over shadows) */
+                    <div className="flex flex-col bg-[var(--surface)] rounded-[var(--radius-xl)] border border-[var(--border-subtle)] overflow-hidden">
+                      {group.items.map((item) => (
+                        <ListViewItem
+                          key={item.id}
+                          item={item}
+                          isHero={bag.hero_item_id === item.id}
+                          showPrice={showPrices}
+                          onItemClick={() => handleItemClick(item)}
+                          onLinkClick={trackLinkClick}
+                          getLinkCTA={getLinkCTA}
+                          getLinkDomain={getLinkDomain}
+                        />
+                      ))}
+                    </div>
+                  ) : viewStyle === 'masonry' ? (
+                    /* Masonry Flow View */
+                    <MasonryView
+                      items={group.items}
+                      heroItemId={bag.hero_item_id}
+                      onItemClick={handleItemClick}
+                      onLinkClick={trackLinkClick}
+                    />
+                  ) : viewStyle === 'editorial' ? (
+                    /* Editorial Magazine View */
+                    <EditorialView
+                      items={group.items}
+                      heroItemId={bag.hero_item_id}
+                      onItemClick={handleItemClick}
+                      onLinkClick={trackLinkClick}
+                    />
+                  ) : viewStyle === 'carousel' ? (
+                    /* Carousel Slideshow View */
+                    <CarouselView
+                      items={group.items}
+                      heroItemId={bag.hero_item_id}
+                      bagTitle={bag.title}
+                      onItemClick={handleItemClick}
+                      onLinkClick={trackLinkClick}
+                    />
+                  ) : (
+                    /* Grid View (default) */
+                    <GridView
+                      items={group.items}
+                      heroItemId={bag.hero_item_id}
+                      onItemClick={handleItemClick}
+                      onLinkClick={trackLinkClick}
+                    />
+                  )}
+                </section>
+                );
+              })}
             </motion.div>
           </AnimatePresence>
         )}
@@ -863,14 +1053,20 @@ export default function PublicBagView({
               )}
 
               {/* Why I Chose This - Hero context field */}
-              {selectedItem.why_chosen && (
+              {selectedItem.why_chosen && (isGolfSim ? (
+                /* Setup bags: same 2-px evergreen rule as the List row, no gradient, no emoji */
+                <div className="border-l-2 border-[var(--evergreen-6)] pl-3">
+                  <h3 className="text-sm font-medium text-[var(--text-secondary)] mb-1">Why I chose this</h3>
+                  <p className="text-[var(--text-primary)] whitespace-pre-wrap">{selectedItem.why_chosen}</p>
+                </div>
+              ) : (
                 <div className="bg-gradient-to-r from-[var(--teed-green-1)] to-[var(--teed-green-2)] border border-[var(--teed-green-6)] rounded-lg p-4">
                   <h3 className="text-sm font-medium text-[var(--teed-green-11)] mb-2 flex items-center gap-2">
                     <span>💡</span> Why I Chose This
                   </h3>
                   <p className="text-[var(--text-primary)] whitespace-pre-wrap">{selectedItem.why_chosen}</p>
                 </div>
-              )}
+              ))}
 
               {/* Compared To / Replaced */}
               {selectedItem.compared_to && (
@@ -950,6 +1146,11 @@ export default function PublicBagView({
                   <h3 className="text-sm font-medium text-[var(--text-primary)] mb-2">Notes</h3>
                   <p className="text-[var(--text-secondary)] whitespace-pre-wrap">{selectedItem.notes}</p>
                 </div>
+              )}
+
+              {/* Disclosure for brands the site owner also builds (one constant, every surface) */}
+              {isOwnedBrand(selectedItem.brand) && (
+                <p className="text-xs text-[var(--text-tertiary)]">{DISCLOSURE}</p>
               )}
 
               {/* Promo Code */}
@@ -1035,8 +1236,37 @@ export default function PublicBagView({
                 <p className="text-[var(--text-secondary)] text-center py-8">No additional details</p>
               )}
 
-              {/* Add to My Bag Action */}
-              {!isOwnBag && (
+              {/* Actions. Golf-sim bags: the retailer exit is the primary, "Add to My Bag" is outline.
+                  Every other category keeps the single primary "Add to My Bag". */}
+              {isGolfSim ? (() => {
+                const modalPrimary = getPrimaryLink(selectedItem.links);
+                if (!modalPrimary && isOwnBag) return null;
+                const verb = modalPrimary?.label?.trim() || (modalPrimary ? getLinkCTA(modalPrimary).replace(/\s+on$/i, '') : '');
+                return (
+                  <div className="border-t border-[var(--border-subtle)] pt-6 mt-6 space-y-3">
+                    {modalPrimary && (
+                      <a
+                        href={modalPrimary.url}
+                        target="_blank"
+                        rel={isOwnedBrand(selectedItem.brand) ? 'noopener' : 'noopener noreferrer'}
+                        onClick={() => trackLinkClick(modalPrimary.id, selectedItem.id, modalPrimary.url)}
+                        className="flex items-center justify-center gap-2 w-full px-4 py-3 min-h-[48px] bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] text-white font-medium rounded-lg transition-colors"
+                      >
+                        <span>{verb}</span>
+                        <span aria-hidden="true">·</span>
+                        <span>{getLinkDomain(modalPrimary.url)}</span>
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    )}
+                    {!isOwnBag && (
+                      <Button variant="outline" size="md" onClick={handleAddToBag} className="w-full gap-2">
+                        <Plus className="w-5 h-5" />
+                        Add to My Bag
+                      </Button>
+                    )}
+                  </div>
+                );
+              })() : !isOwnBag && (
                 <div className="border-t border-[var(--border-subtle)] pt-6 mt-6">
                   <button
                     onClick={handleAddToBag}
@@ -1164,6 +1394,7 @@ export default function PublicBagView({
           isMobile={true}
           bagId={bag.id}
           bagCode={bag.code}
+          open={isSaveTipOpen}
         />
       )}
 

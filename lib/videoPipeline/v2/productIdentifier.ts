@@ -8,7 +8,7 @@
  * Cost: ~$0.50 for 100 clusters.
  */
 
-import { openai } from '../../openaiClient';
+import { getOpenAI } from '../../openaiClient';
 import type { FrameStore } from './frameStore';
 import type { ProductCluster, V2IdentifiedProduct } from './types';
 import { fixGarbledBrand, fuzzyMatchBrand } from './fuzzyBrandMatcher';
@@ -100,7 +100,7 @@ Return JSON:
 Only include products you can identify. Omit clusters where no product is visible.`;
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [{
         role: 'user',

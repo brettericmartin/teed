@@ -55,7 +55,17 @@ export interface BagViewItem {
   alternatives: string[] | null;
   price_paid: number | null;
   purchase_date: string | null;
+  // Optional grouping (bag_sections)
+  section_id?: string | null;
   links: ItemLink[];
+}
+
+export interface BagViewSection {
+  id: string;
+  name: string;
+  description: string | null;
+  sort_index: number;
+  collapsed_by_default?: boolean;
 }
 
 export interface BagViewBag {
@@ -73,6 +83,10 @@ export interface BagViewBag {
   created_at: string;
   tags?: string[];
   category?: string;
+  // Optional grouping (bag_sections), ordered by sort_index
+  sections?: BagViewSection[];
+  // Bag-level links (links.bag_id = bags.id): kind 'source' is the credit line
+  links?: ItemLink[];
   // Version history fields
   version_number?: number;
   update_count?: number;

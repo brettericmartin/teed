@@ -1,11 +1,5 @@
 import { notFound, redirect } from 'next/navigation';
-import { createClient } from '@supabase/supabase-js';
-
-// Public Supabase client (no auth required for public bags)
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { getSupabasePublic } from '@/lib/supabasePublic';
 
 interface PageProps {
   params: Promise<{ code: string }>;
@@ -24,7 +18,7 @@ export default async function LegacyPublicBagPage({ params }: PageProps) {
   const { code } = await params;
 
   // Fetch the bag to get owner's handle
-  const { data: bag, error } = await supabase
+  const { data: bag, error } = await getSupabasePublic()
     .from('bags')
     .select(`
       code,

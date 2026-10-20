@@ -135,7 +135,7 @@ export async function GET(request: NextRequest) {
         notes,
         created_at,
         bag_id,
-        bags!inner (
+        bags!bag_items_bag_id_fkey!inner (
           id,
           code,
           title,
@@ -221,7 +221,7 @@ export async function GET(request: NextRequest) {
         brand,
         photo_url,
         bag_id,
-        bags!inner (
+        bags!bag_items_bag_id_fkey!inner (
           id,
           code,
           title,

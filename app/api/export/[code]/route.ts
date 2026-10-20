@@ -1,10 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { getSupabasePublic } from '@/lib/supabasePublic';
 
 type ExportFormat = 'youtube' | 'newsletter' | 'markdown' | 'text';
 
@@ -22,7 +17,7 @@ export async function GET(
   const format = (searchParams.get('format') || 'text') as ExportFormat;
 
   // Fetch bag with owner and items
-  const { data: bag } = await supabase
+  const { data: bag } = await getSupabasePublic()
     .from('bags')
     .select(`
       id,
@@ -33,7 +28,7 @@ export async function GET(
         handle,
         display_name
       ),
-      items:bag_items(
+      items:bag_items!bag_items_bag_id_fkey(
         id,
         custom_name,
         brand,

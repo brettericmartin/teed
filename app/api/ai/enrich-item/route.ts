@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { requireAuth } from '@/lib/apiAuth';
+import { createServerSupabase } from '@/lib/serverSupabase';
+import { getOpenAI } from '@/lib/openaiClient';
 import { generateBrandContext } from '@/lib/brandKnowledge';
 import { smartSearch, loadLibrary, getProductsByBrand } from '@/lib/productLibrary';
 import { learnProduct, searchLearnedProducts } from '@/lib/productLibrary/learner';
@@ -56,10 +58,6 @@ async function getPreviousCorrection(inputValue: string): Promise<{
     return null;
   }
 }
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 type EnrichmentRequest = {
   userInput: string;
@@ -489,7 +487,7 @@ ${shouldAskClarification ? 'The input seems generic - consider asking a clarific
 
   try {
     const startTime = Date.now();
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [
         { role: 'system', content: systemPrompt },
@@ -649,6 +647,10 @@ function libraryResultsToSuggestions(results: SearchResult[]): ProductSuggestion
 // =============================================================================
 
 export async function POST(request: NextRequest) {
+  const supabase = await createServerSupabase();
+  const auth = await requireAuth(supabase);
+  if (auth.error) return auth.error;
+
   try {
     const body: EnrichmentRequest = await request.json();
     const { userInput, bagContext, existingAnswers = {}, forceAI = false, categoryHint } = body;

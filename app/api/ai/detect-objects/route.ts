@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { openai } from '@/lib/openaiClient';
+import { requireAuth } from '@/lib/apiAuth';
+import { createServerSupabase } from '@/lib/serverSupabase';
+import { getOpenAI } from '@/lib/openaiClient';
 import { validateAndCompressImage } from '@/lib/ai';
 import type {
   DetectObjectsRequest,
@@ -17,6 +19,10 @@ import type {
  * Uses gpt-4o-mini for speed and cost efficiency (~$0.001/image)
  */
 export async function POST(request: NextRequest): Promise<NextResponse<DetectObjectsResponse>> {
+  const supabase = await createServerSupabase();
+  const auth = await requireAuth(supabase);
+  if (auth.error) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+
   const startTime = Date.now();
 
   try {
@@ -93,7 +99,7 @@ Rules:
       userPrompt += `\n\nUser hint: "${textHint}" - use this context but still identify ALL objects you see.`;
     }
 
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini', // Fast and cheap for object detection
       messages: [
         { role: 'system', content: systemPrompt },

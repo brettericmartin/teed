@@ -9,7 +9,7 @@ import PostHeader from '@/components/blog/PostHeader';
 import TableOfContents from '@/components/blog/TableOfContents';
 import PostCard from '@/components/blog/PostCard';
 
-const BASE_URL = 'https://teed.so';
+const BASE_URL = 'https://www.teed.club';
 
 export async function generateStaticParams() {
   return getAllPosts().map((post) => ({ slug: post.slug }));

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { withAdminApi } from '@/lib/withAdmin';
 import { logAdminAction } from '@/lib/adminAuth';
 import {
@@ -14,13 +14,6 @@ import type {
   RefreshWeeklyIdeasRequest,
   RefreshWeeklyIdeasResponse,
 } from '@/lib/types/contentIdeas';
-
-// Use service role for database operations
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
 
 // Default verticals to process
 const DEFAULT_VERTICALS: ContentVertical[] = ['golf', 'camera', 'desk'];
@@ -86,7 +79,7 @@ export async function POST(request: NextRequest) {
           try {
             // Check if video already exists
             if (skipExisting) {
-              const { data: existing } = await supabaseAdmin
+              const { data: existing } = await getSupabaseAdmin()
                 .from('content_ideas')
                 .select('id')
                 .eq('source_url', videoUrl)
@@ -123,7 +116,7 @@ export async function POST(request: NextRequest) {
             );
 
             // Insert content idea
-            const { data: newIdea, error: insertError } = await supabaseAdmin
+            const { data: newIdea, error: insertError } = await getSupabaseAdmin()
               .from('content_ideas')
               .insert({
                 source_platform: 'youtube',
@@ -173,7 +166,7 @@ export async function POST(request: NextRequest) {
 
                 // Note: We're not associating these links to a bag yet
                 // That will happen when an admin creates a bag from the idea
-                await supabaseAdmin.from('links').insert(linkInserts);
+                await getSupabaseAdmin().from('links').insert(linkInserts);
               }
 
               console.log(`Created idea: ${generationResult.ideaOutput.idea_title}`);
@@ -230,10 +223,10 @@ export async function GET(request: NextRequest) {
     }
 
     // Get counts by status
-    const { data: statusCounts } = await supabaseAdmin.rpc('count_content_ideas_by_status');
+    const { data: statusCounts } = await getSupabaseAdmin().rpc('count_content_ideas_by_status');
 
     // Get counts by vertical
-    const { data: verticalCounts } = await supabaseAdmin
+    const { data: verticalCounts } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('vertical')
       .then(res => {
@@ -246,7 +239,7 @@ export async function GET(request: NextRequest) {
       });
 
     // Get recent ideas
-    const { data: recentIdeas } = await supabaseAdmin
+    const { data: recentIdeas } = await getSupabaseAdmin()
       .from('content_ideas')
       .select('id, idea_title, vertical, status, created_at')
       .order('created_at', { ascending: false })

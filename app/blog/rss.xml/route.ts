@@ -1,7 +1,7 @@
 import { getAllPosts } from '@/lib/blog';
 import { CATEGORY_LABELS } from '@/lib/blog/types';
 
-const BASE_URL = 'https://teed.so';
+const BASE_URL = 'https://www.teed.club';
 
 export async function GET() {
   const posts = getAllPosts();
@@ -16,7 +16,7 @@ export async function GET() {
       <pubDate>${new Date(post.publishedAt).toUTCString()}</pubDate>
       <description><![CDATA[${post.description}]]></description>
       <category>${CATEGORY_LABELS[post.category]}</category>
-      <author>hello@teed.so (${post.author})</author>
+      <author>hello@teed.club (${post.author})</author>
     </item>`
     )
     .join('');

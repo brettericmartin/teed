@@ -15,13 +15,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://teed.so/about',
+    url: 'https://www.teed.club/about',
     siteName: 'Teed.club',
     title: 'About Teed - The Gear Collection Platform',
     description: 'Learn about Teed, the platform for creating and sharing curated gear collections.',
   },
   alternates: {
-    canonical: 'https://teed.so/about',
+    canonical: 'https://www.teed.club/about',
   },
 };
 
@@ -31,7 +31,7 @@ const jsonLd = {
   mainEntity: {
     '@type': 'Organization',
     name: 'Teed.club',
-    url: 'https://teed.so',
+    url: 'https://www.teed.club',
     description: 'Platform for creating and sharing curated gear collections',
     foundingDate: '2024',
   },
@@ -131,7 +131,7 @@ export default function AboutPage() {
                 {
                   step: 4,
                   title: 'Share your unique URL',
-                  desc: 'Get a clean link like teed.so/u/yourname/mybag to share anywhere.',
+                  desc: 'Get a clean link like teed.club/u/yourname/mybag to share anywhere.',
                 },
               ].map((item) => (
                 <div

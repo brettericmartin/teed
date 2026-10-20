@@ -7,7 +7,7 @@
  * Only runs if a bag is linked to the content idea.
  */
 
-import { openai } from '@/lib/openaiClient';
+import { getOpenAI } from '@/lib/openaiClient';
 import type { BagQAOutput } from '@/lib/types/teamGeneration';
 import type {
   BaseAgent,
@@ -216,7 +216,7 @@ Return JSON:
     }
 
     try {
-      const response = await openai.chat.completions.create({
+      const response = await getOpenAI().chat.completions.create({
         model: this.config.model,
         messages: [
           { role: 'system', content: this.getSystemPrompt() },

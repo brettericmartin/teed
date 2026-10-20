@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-import OpenAI from 'openai';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
+import { getOpenAI } from '@/lib/openaiClient';
 import { withAdminApi } from '@/lib/withAdmin';
 import { logAdminAction } from '@/lib/adminAuth';
 import type {
@@ -8,15 +8,6 @@ import type {
   TrendSuggestion,
   SuggestTrendsResponse,
 } from '@/lib/types/contentIdeas';
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-// Use service role for database operations
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
 
 const DEFAULT_VERTICALS: ContentVertical[] = ['golf', 'camera', 'desk', 'tech'];
 
@@ -43,7 +34,7 @@ export async function POST(request: NextRequest) {
     const verticals = body.verticals || DEFAULT_VERTICALS;
 
     // Get existing queries to avoid duplicates
-    const { data: existingQueries } = await supabaseAdmin
+    const { data: existingQueries } = await getSupabaseAdmin()
       .from('content_search_queries')
       .select('query, vertical')
       .in('vertical', verticals);
@@ -105,7 +96,7 @@ For each query, provide:
 Respond with a JSON array of suggestions.`;
 
       try {
-        const response = await openai.chat.completions.create({
+        const response = await getOpenAI().chat.completions.create({
           model: 'gpt-4o-mini',
           messages: [
             { role: 'system', content: 'You are an expert in gear/equipment content across various hobbies and industries. Respond only with valid JSON.' },

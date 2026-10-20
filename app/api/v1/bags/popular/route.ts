@@ -1,12 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { SITE_URL } from '@/lib/siteUrl';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { checkRateLimit, v1Headers } from '@/lib/api/rateLimit';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
 
 /**
  * GET /api/v1/bags/popular?category=golf&limit=10
@@ -28,7 +23,7 @@ export async function GET(request: NextRequest) {
   const limit = Math.min(50, Math.max(1, parseInt(searchParams.get('limit') || '10')));
 
   try {
-    let query = supabase
+    let query = getSupabaseAdmin()
       .from('bags')
       .select(`
         id,
@@ -41,7 +36,7 @@ export async function GET(request: NextRequest) {
           handle,
           display_name
         ),
-        bag_items (
+        bag_items!bag_items_bag_id_fkey (
           id,
           custom_name,
           brand,
@@ -62,7 +57,11 @@ export async function GET(request: NextRequest) {
     if (error) {
       console.error('Popular bags error:', error);
       return NextResponse.json(
-        { error: 'Query failed' },
+        {
+          error: 'Query failed',
+          // Surface the PostgREST message outside production so embed/FK issues are debuggable
+          ...(process.env.NODE_ENV !== 'production' ? { detail: error.message, code: error.code } : {}),
+        },
         { status: 500, headers: v1Headers() }
       );
     }
@@ -82,7 +81,7 @@ export async function GET(request: NextRequest) {
           title: bag.title,
           description: bag.description,
           category: bag.category,
-          url: `https://teed.club/u/${profile.handle}/${bag.code}`,
+          url: `${SITE_URL}/u/${profile.handle}/${bag.code}`,
           curator: {
             handle: profile.handle,
             display_name: profile.display_name,

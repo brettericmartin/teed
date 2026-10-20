@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { requireAuth } from '@/lib/apiAuth';
+import { createServerSupabase } from '@/lib/serverSupabase';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import type {
   StoreCorrectionRequest,
   StoreCorrectionResponse,
@@ -14,12 +16,11 @@ import type {
  * Implements quality filtering before learning.
  */
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
 export async function POST(request: NextRequest): Promise<NextResponse<StoreCorrectionResponse>> {
+  const authClient = await createServerSupabase();
+  const auth = await requireAuth(authClient);
+  if (auth.error) return NextResponse.json({ success: false, learned: false, error: 'Unauthorized' }, { status: 401 });
+
   try {
     const body: StoreCorrectionRequest = await request.json();
     const { correction, finalProduct, sourceImage } = body;
@@ -107,7 +108,7 @@ async function storeCorrection(
 ): Promise<void> {
   try {
     // Check if we have the corrections table
-    const { error: insertError } = await supabase
+    const { error: insertError } = await getSupabaseAdmin()
       .from('ai_corrections')
       .insert({
         correction_type: correction.correctionType,
