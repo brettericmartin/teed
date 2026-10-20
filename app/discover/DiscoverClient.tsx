@@ -8,6 +8,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { staggerContainer, cardVariants } from '@/lib/animations';
 import { SkeletonBagGrid } from '@/components/ui/Skeleton';
 import { ItemImage } from '@/components/ui/ItemImage';
+import { thumbUrl } from '@/lib/items/photo';
 import { PageContainer, PageHeader, ContentContainer } from '@/components/layout/PageContainer';
 import { CATEGORIES, getCategoryColors } from '@/lib/categories';
 import { analytics } from '@/lib/analytics';
@@ -657,7 +658,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                             {itemsToShow.map((item) => (
                               <div key={item.id} className="relative bg-white rounded overflow-hidden shadow-sm">
                                 <ItemImage
-                                  src={item.photo_url!}
+                                  src={thumbUrl(item.photo_url, 240) || item.photo_url!}
                                   alt={item.custom_name || 'Item'}
                                   fallbackLabel={item.custom_name}
                                   className="w-full h-full object-contain"
@@ -693,7 +694,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                             {itemsToShow.map((item) => (
                               <div key={item.id} className="relative bg-white rounded overflow-hidden shadow-sm">
                                 <ItemImage
-                                  src={item.photo_url!}
+                                  src={thumbUrl(item.photo_url, 240) || item.photo_url!}
                                   alt={item.custom_name || 'Item'}
                                   fallbackLabel={item.custom_name}
                                   className="w-full h-full object-contain"
