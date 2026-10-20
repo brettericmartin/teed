@@ -153,13 +153,13 @@ function exitUrl(url: string, bagCode: string): string {
 function buildLinks(p: ComponentProduct | ComponentSoftware, bagCode: string): SeedLink[] {
   const links: SeedLink[] = [];
   if (p.direct_url) {
-    links.push({ url: exitUrl(p.direct_url, bagCode), kind: 'product', label: `See it · ${domainOf(p.direct_url)}` });
+    links.push({ url: exitUrl(p.direct_url, bagCode), kind: 'product', label: "Maker's page" });
   }
   if (p.fallback_url) {
-    links.push({ url: exitUrl(p.fallback_url, bagCode), kind: 'purchase', label: `Also at ${domainOf(p.fallback_url)}` });
+    links.push({ url: exitUrl(p.fallback_url, bagCode), kind: 'purchase', label: 'Also sold here' });
   }
   if (p.read_url) {
-    links.push({ url: p.read_url, kind: 'review', label: `Read · ${domainOf(p.read_url)}` });
+    links.push({ url: p.read_url, kind: 'review', label: 'Read the thread' });
   }
   return links;
 }
@@ -216,20 +216,36 @@ function buildSpecs(p: ComponentProduct | ComponentSoftware, section: string): R
     specs.price_read_on = p.price.read_on;
     if (p.price.currency && p.price.currency !== 'USD') specs.price_currency = p.price.currency;
   }
-  specs.subtype = 'subtype' in p && p.subtype ? p.subtype : 'software';
-  specs.tier = p.tier;
-  specs.mention_count = p.mention_count;
-  if (section !== specs.subtype) specs.section = section;
+  // The row and the modal print every spec, so only buyer-facing keys go in: no tier, no
+  // mention count, no section (the bag already groups by it). The research keeps those.
+  void section;
   return specs;
+}
+
+/** The row prints brand and name separately, so the name must not repeat the brand. */
+function nameWithoutBrand(brand: string, name: string): string {
+  const n = name.trim().replace(/\s+/g, ' ');
+  const b = brand.trim();
+  return b && n.toLowerCase().startsWith(b.toLowerCase() + ' ') ? n.slice(b.length + 1) : n;
+}
+
+/** Section names come from the data as slugs; the public page prints them as headings. */
+function sectionLabel(section: string): string {
+  if (/\$|^[A-Z]/.test(section)) return section;
+  return section
+    .split('-')
+    .map((w) => (w === 'diy' ? 'DIY' : w === 'ust' ? 'UST' : w === 'pc' ? 'PC' : w))
+    .join(' ')
+    .replace(/^./, (c) => c.toUpperCase());
 }
 
 function buildItem(p: ComponentProduct | ComponentSoftware, meta: ComponentCategoryMeta): SeedItem {
   const section = sectionFor(meta, p);
   const image = p.image_url && /^https:\/\//i.test(p.image_url) ? p.image_url : null;
   return {
-    customName: `${p.brand} ${p.name}`.trim().replace(/\s+/g, ' '),
+    customName: nameWithoutBrand(p.brand, p.name),
     brand: p.brand,
-    section,
+    section: sectionLabel(section),
     customDescription: p.who_its_for || null,
     whyChosen: p.why_people_choose_it || null,
     notes: buildNotes(p),
@@ -261,7 +277,7 @@ export function buildBag(file: ComponentCategoryFile): SeedBag {
     title: meta.title,
     description: `${meta.description} Prices and links were read on ${readDateLabel(file.read_date)}.`,
     tags: [`component:${file.category}`, BAG_CATEGORY, 'reference'],
-    sections,
+    sections: sections.map(sectionLabel),
     items,
   };
 }
