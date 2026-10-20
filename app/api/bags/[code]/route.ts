@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import { CATEGORIES } from '@/lib/categories';
+import { resolveItemPhoto } from '@/lib/items/photo';
 
 /**
  * GET /api/bags/[code]
@@ -126,9 +127,9 @@ export async function GET(
 
     // Organize links by item and include photo URL
     const itemsWithLinks = (items || []).map((item: any) => {
-      // Use item's direct photo_url first (e.g., YouTube thumbnails),
-      // then fall back to custom_photo_id (uploaded photos)
-      const photoUrl = item.photo_url || (item.custom_photo_id ? photoUrls[item.custom_photo_id] || null : null);
+      // Was photo_url first ("YouTube thumbnails first"), the one place that disagreed with the
+      // bag page, editor, embed and OG image. One rule everywhere: uploaded photo, then photo_url.
+      const photoUrl = resolveItemPhoto(item, photoUrls);
 
       return {
         ...item,
