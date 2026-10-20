@@ -234,7 +234,7 @@ function sectionLabel(section: string): string {
   if (/\$|^[A-Z]/.test(section)) return section;
   return section
     .split('-')
-    .map((w) => (w === 'diy' ? 'DIY' : w === 'ust' ? 'UST' : w))
+    .map((w) => (w === 'diy' ? 'DIY' : w === 'ust' ? 'UST' : w === 'pc' ? 'PC' : w))
     .join(' ')
     .replace(/^./, (c) => c.toUpperCase());
 }
