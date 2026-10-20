@@ -56,11 +56,13 @@ export default function Navigation({ userHandle, displayName, avatarUrl, isAuthe
     };
   }, [isProfileOpen, isMenuOpen]);
 
-  // Close dropdowns on route change
-  useEffect(() => {
+  // Close dropdowns on route change (state adjusted during render, not in an effect)
+  const [lastPathname, setLastPathname] = useState(pathname);
+  if (pathname !== lastPathname) {
+    setLastPathname(pathname);
     setIsProfileOpen(false);
     setIsMenuOpen(false);
-  }, [pathname]);
+  }
 
   const handleSignOut = async () => {
     try {
