@@ -22,7 +22,7 @@ interface BlockContainerProps {
 const DEFAULT_TITLES: Partial<Record<BlockType, string>> = {
   bio: 'About',
   social_links: 'Connect',
-  featured_bags: 'Collections',
+  featured_bags: 'Bags',
   embed: 'Featured',
   destinations: 'Destinations',
   custom_text: '',

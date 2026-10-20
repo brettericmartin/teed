@@ -227,7 +227,7 @@ export function BagCard({
             `}
             title={isOwner && onToggleFeatured
               ? (isFeaturedOnProfile ? 'Remove from featured' : 'Add to featured')
-              : 'Featured collection'
+              : 'Featured bag'
             }
           >
             <Star

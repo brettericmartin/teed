@@ -646,9 +646,9 @@ export default function BlockSettingsPanel({
           </label>
           <input
             type="text"
-            value={bagsConfig.title ?? 'Collections'}
+            value={bagsConfig.title ?? 'Bags'}
             onChange={(e) => updateConfig('title', e.target.value)}
-            placeholder="Collections"
+            placeholder="Bags"
             className="w-full px-3 py-2 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--teed-green-7)]"
           />
         </div>

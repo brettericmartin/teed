@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const displayName = profile.display_name || handle;
   const title = `${displayName} (@${handle}) | Teed`;
-  const description = profile.bio || `${displayName}'s curated collections on Teed • ${bagCount || 0} collection${bagCount === 1 ? '' : 's'}`;
+  const description = profile.bio || `${displayName}'s bags on Teed: ${bagCount || 0} ${bagCount === 1 ? 'bag' : 'bags'}, each a list of the things they use with a link to where each one came from.`;
   const url = `${SITE_URL}/u/${handle}`;
   const ogImageUrl = `${SITE_URL}/api/og/profile/${handle}`;
 
