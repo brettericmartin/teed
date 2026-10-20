@@ -600,7 +600,7 @@ export default function PublicBagView({
           <div className="flex flex-col md:flex-row items-start justify-between gap-4 mt-3">
             <div className="flex-1 max-w-2xl">
               <div className="flex items-start gap-3 mb-1">
-                <h1 className="text-xl md:text-2xl font-semibold text-[var(--text-primary)] leading-snug">
+                <h1 className="text-2xl! md:text-[28px]! font-semibold text-[var(--text-primary)] leading-tight">
                   {bag.title}
                 </h1>
                 {/* Save Button with tooltip anchor */}
