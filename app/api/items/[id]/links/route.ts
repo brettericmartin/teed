@@ -162,11 +162,16 @@ export async function POST(
       try {
         console.log(`[Link Add] Analyzing product URL: ${url}`);
 
+        // analyze-product-url requires the user's session; a server-to-server fetch carries no
+        // cookies, so this call always got 401 and enrichment never ran. Forward the caller's cookie.
         const analyzeResponse = await fetch(
           `${request.nextUrl.origin}/api/ai/analyze-product-url`,
           {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              cookie: request.headers.get('cookie') ?? '',
+            },
             body: JSON.stringify({ url: url.trim() }),
           }
         );
