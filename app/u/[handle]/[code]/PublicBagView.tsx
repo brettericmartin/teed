@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Share2, ExternalLink, User, X, Package, Trophy, Copy, CheckCheck, ChevronDown, Tag, Bookmark, UserPlus, UserCheck, LayoutGrid, List, Plus, GitFork, BookOpen } from 'lucide-react';
+import { Share2, ExternalLink, User, X, Package, Trophy, Copy, CheckCheck, ChevronDown, Tag, Bookmark, UserPlus, UserCheck, LayoutGrid, List, Plus, GitFork, BookOpen, Link2 } from 'lucide-react';
+import { itemSlug, findItemBySlug } from '@/lib/items/slug';
 import StoryTimeline from '@/components/story/StoryTimeline';
 import { GolfLoader } from '@/components/ui/GolfLoader';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -26,8 +27,6 @@ import { useCelebration } from '@/lib/celebrations';
 import { CompletionBadge } from '@/components/BagCompletionButton';
 import { PageContainer, ContentContainer } from '@/components/layout/PageContainer';
 import { analytics } from '@/lib/analytics';
-import { ChangelogBadge } from '@/components/changelog';
-import type { BagWithVersioning } from '@/lib/types/versionHistory';
 import type { TimingPeriod, PricingModel, PricingPeriod } from '@/lib/types/itemTypes';
 import type { BagViewItem, BagViewBag, ItemLink } from '@/lib/types/bagViewTypes';
 import { ItemTypeBadge } from '@/components/item/ItemTypeSelector';
@@ -35,7 +34,7 @@ import { SupplementTimingBadges } from '@/components/item/SupplementTimingBadges
 import { PricingBadge } from '@/components/item/PricingBadge';
 import { SaveTooltip } from '@/components/prompts/SaveTooltip';
 import { SignUpModal } from '@/components/prompts/SignUpModal';
-import { computeTotals, formatBagTotalLine, formatMoney, type BagTotals } from '@/lib/bags/totals';
+import { computeTotals, formatMoney, type BagTotals } from '@/lib/bags/totals';
 import { getSectionTint } from '@/lib/sectionTints';
 import { DISCLOSURE, isOwnedBrand } from '@/lib/disclosure';
 
@@ -155,7 +154,26 @@ export default function PublicBagView({
   // Price column, subtotals and the bag total only when some item carries a price
   const bagTotals = computeTotals(items);
   const showPrices = setupBag && (bagTotals.pricedCount > 0 || bagTotals.subscriptionCount > 0);
-  const bagTotalLine = showPrices ? formatBagTotalLine(bagTotals) : '';
+  // One plain summary line under the title: "25 items · $118,827 listed · prices read Oct 19, 2026 · every link goes to the maker"
+  const priceReadOn = (() => {
+    const dates = items
+      .map((it) => it.specs?.price_read_on)
+      .filter((d): d is string => typeof d === 'string' && d.length > 0)
+      .sort();
+    return dates.length > 0 ? dates[dates.length - 1] : null;
+  })();
+  const summaryLine = (() => {
+    const parts = [`${items.length} ${items.length === 1 ? 'item' : 'items'}`];
+    if (showPrices && bagTotals.pricedCount > 0) parts.push(`${formatMoney(bagTotals.paid)} listed`);
+    if (showPrices && bagTotals.subscriptionCount > 0) parts.push(`${formatMoney(bagTotals.yearly)} a year`);
+    if (priceReadOn) {
+      const d = new Date(`${priceReadOn}T00:00:00`);
+      parts.push(`prices read ${Number.isNaN(d.getTime()) ? priceReadOn : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`);
+    }
+    if (isGolfSim) parts.push('every link goes to the maker');
+    return parts.join(' · ');
+  })();
+  const [descriptionOpen, setDescriptionOpen] = useState(false);
 
   const handleViewStyleChange = (newStyle: ViewStyle) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -169,7 +187,51 @@ export default function PublicBagView({
     router.replace(`${pathname}${queryString ? `?${queryString}` : ''}`, { scroll: false });
   };
 
-  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  // An item has an address: ?item=<slug> opens its modal, is pushed to history, and can be copied.
+  const itemParam = searchParams.get('item');
+  const [selectedItem, setSelectedItem] = useState<Item | null>(() => (itemParam ? findItemBySlug(items, itemParam) : null));
+  const pushedItemRef = useRef(false);
+  const [copiedItemLink, setCopiedItemLink] = useState(false);
+
+  const itemHref = (item: Item) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set('item', itemSlug(item, items));
+    return `${pathname}?${params.toString()}`;
+  };
+  const openItem = (item: Item) => {
+    setSelectedItem(item);
+    setCopiedItemLink(false);
+    window.history.pushState(null, '', itemHref(item));
+    pushedItemRef.current = true;
+  };
+  const closeItem = () => {
+    setSelectedItem(null);
+    if (pushedItemRef.current) {
+      pushedItemRef.current = false;
+      window.history.back();
+    } else {
+      const params = new URLSearchParams(window.location.search);
+      params.delete('item');
+      const query = params.toString();
+      window.history.replaceState(null, '', `${pathname}${query ? `?${query}` : ''}`);
+    }
+  };
+  useEffect(() => {
+    const onPopState = () => {
+      const slug = new URLSearchParams(window.location.search).get('item');
+      setSelectedItem(slug ? findItemBySlug(items, slug) : null);
+      if (!slug) pushedItemRef.current = false;
+    };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, [items]);
+  const copyItemLink = async () => {
+    if (!selectedItem) return;
+    await navigator.clipboard.writeText(`${window.location.origin}${pathname}?item=${itemSlug(selectedItem, items)}`);
+    setCopiedItemLink(true);
+    setTimeout(() => setCopiedItemLink(false), 2000);
+  };
+
   const [copiedPromoId, setCopiedPromoId] = useState<string | null>(null);
   const [expandedLinks, setExpandedLinks] = useState<Set<string>>(new Set());
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -498,7 +560,7 @@ export default function PublicBagView({
   // Track item view when modal is opened
   const handleItemClick = (item: Item) => {
     analytics.itemViewed(item.id, item.custom_name, bag.id, bag.code);
-    setSelectedItem(item);
+    openItem(item);
   };
 
   const getLinkTypeColor = (kind: string) => {
@@ -538,7 +600,7 @@ export default function PublicBagView({
           <div className="flex flex-col md:flex-row items-start justify-between gap-4 mt-3">
             <div className="flex-1 max-w-2xl">
               <div className="flex items-start gap-3 mb-1">
-                <h1 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] leading-tight">
+                <h1 className="text-xl md:text-2xl font-semibold text-[var(--text-primary)] leading-snug">
                   {bag.title}
                 </h1>
                 {/* Save Button with tooltip anchor */}
@@ -606,10 +668,23 @@ export default function PublicBagView({
                   </button>
                 )}
               </div>
+              {/* Plain description, three lines, "More" to open: the italic quotation took a screen on a phone */}
               {bag.description && (
-                <p className="mt-2 text-base max-w-xl text-editorial">
-                  "{bag.description}"
-                </p>
+                <div className="mt-2 max-w-xl">
+                  <p className={`text-sm md:text-base text-[var(--text-secondary)] leading-relaxed ${descriptionOpen ? '' : 'line-clamp-3'}`}>
+                    {bag.description}
+                  </p>
+                  {bag.description.length > 180 && (
+                    <button
+                      type="button"
+                      onClick={() => setDescriptionOpen((v) => !v)}
+                      aria-expanded={descriptionOpen}
+                      className="mt-0.5 text-sm text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] underline-offset-2 hover:underline min-h-[32px]"
+                    >
+                      {descriptionOpen ? 'Less' : 'More'}
+                    </button>
+                  )}
+                </div>
               )}
               {/* Bag-level source links: the credit line ("Source: u/handle on r/golfsimulator") */}
               {sourceLinks.length > 0 && (
@@ -630,30 +705,14 @@ export default function PublicBagView({
                   ))}
                 </div>
               )}
-              <div className="flex items-center gap-3 text-sm mt-3">
-                <span className="inline-flex items-center px-2.5 py-1 bg-[var(--teed-green-2)] text-[var(--teed-green-11)] rounded-full text-xs font-medium">
-                  {items.length} {items.length === 1 ? 'item' : 'items'}
-                </span>
-                {bagTotalLine && (
-                  <span className="text-sm tabular-nums text-[var(--text-primary)]" data-testid="bag-total">
-                    {bagTotalLine}
-                  </span>
-                )}
-                {/* Completion badge */}
+              {/* One plain summary line; the "New" changelog badge is gone (doctrine: no urgency) */}
+              <p className="mt-3 text-sm text-[var(--text-primary)] tabular-nums" data-testid="bag-total">
+                {summaryLine}
+              </p>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm mt-1">
                 {bag.is_complete && <CompletionBadge isComplete={true} />}
-                {/* Changelog badge for recent updates */}
-                <ChangelogBadge
-                  bag={{
-                    ...bag,
-                    version_number: bag.version_number || 1,
-                    update_count: bag.update_count || 0,
-                    last_major_update: bag.last_major_update || null,
-                    updated_at: bag.last_major_update || null,
-                  } as BagWithVersioning}
-                />
                 <span className="text-[var(--text-secondary)]">
-                  <span className="text-editorial">curated by</span>
-                  {' '}
+                  by{' '}
                   <Link
                     href={`/u/${ownerHandle}`}
                     className="font-semibold text-[var(--text-primary)] hover:text-[var(--teed-green-9)] transition-colors"
@@ -685,19 +744,19 @@ export default function PublicBagView({
                 )}
               </div>
 
-              {/* Tags */}
+              {/* Tags, collapsed to one quiet line */}
               {bag.tags && bag.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-2">
+                <p className="flex flex-wrap gap-x-2 gap-y-0.5 mt-1 text-xs text-[var(--text-tertiary)]">
                   {bag.tags.map((tag) => (
                     <Link
                       key={tag}
                       href={`/discover?tags=${encodeURIComponent(tag)}`}
-                      className="px-3 py-1 bg-[var(--sky-2)] text-[var(--sky-11)] text-sm rounded-full hover:bg-[var(--sky-3)] transition-colors"
+                      className="hover:text-[var(--text-secondary)] hover:underline underline-offset-2"
                     >
                       #{tag}
                     </Link>
                   ))}
-                </div>
+                </p>
               )}
 
               {/* Other bag-level links: a quiet "Read" row */}
@@ -911,7 +970,7 @@ export default function PublicBagView({
       {selectedItem && (
         <div
           className="fixed inset-0 bg-[var(--overlay-bg)] flex items-center justify-center p-4 z-50 backdrop-blur-sm modal-backdrop-enter"
-          onClick={() => setSelectedItem(null)}
+          onClick={closeItem}
         >
           <div
             className="bg-[var(--modal-bg)] rounded-[var(--radius-2xl)] shadow-[var(--shadow-6)] border border-[var(--modal-border)] max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4 modal-content-enter"
@@ -943,13 +1002,26 @@ export default function PublicBagView({
                   <p className="mt-2 text-[var(--text-secondary)]">{selectedItem.custom_description}</p>
                 )}
               </div>
-              <button
-                onClick={() => setSelectedItem(null)}
-                className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors ml-4 rounded-lg p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-[var(--surface-hover)]"
-                aria-label="Close"
-              >
-                <X className="w-6 h-6" />
-              </button>
+              <div className="flex items-start gap-1 ml-3 flex-shrink-0">
+                {/* The item's address: copy "?item=<slug>" for a shortlist, a note, a comment */}
+                <button
+                  type="button"
+                  onClick={copyItemLink}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-2 min-h-[44px] rounded-lg text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors whitespace-nowrap"
+                  aria-label="Copy a link to this item"
+                  data-testid="copy-item-link"
+                >
+                  {copiedItemLink ? <CheckCheck className="w-4 h-4" /> : <Link2 className="w-4 h-4" />}
+                  <span className="hidden sm:inline">{copiedItemLink ? 'Copied' : 'Copy link'}</span>
+                </button>
+                <button
+                  onClick={closeItem}
+                  className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors rounded-lg p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-[var(--surface-hover)]"
+                  aria-label="Close"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
             </div>
 
             {/* Modal Content */}
@@ -1321,13 +1393,13 @@ export default function PublicBagView({
               </h2>
             </Link>
             <p className="text-sm text-[var(--text-secondary)] mt-2 mb-8 font-serif italic">
-              Curations, Made Shareable
+              Bags, made shareable
             </p>
 
             {/* CTA for visitors */}
             <div className="bg-gradient-to-br from-[var(--teed-green-2)] via-[var(--sky-2)] to-[var(--sand-2)] rounded-2xl p-8 max-w-md mx-auto border border-[var(--teed-green-6)] shadow-[var(--shadow-3)]">
               <p className="text-[var(--text-primary)] font-medium mb-4 text-lg">
-                Want to create your own curated bags?
+                Want to make your own bag?
               </p>
               <Link
                 href="/signup"
@@ -1365,7 +1437,7 @@ export default function PublicBagView({
         onSuccess={(bagTitle) => {
           showSuccess(`Item added to ${bagTitle}`);
           setIsAddToBagModalOpen(false);
-          setSelectedItem(null);
+          closeItem();
         }}
       />
 
