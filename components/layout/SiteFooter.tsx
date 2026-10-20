@@ -4,7 +4,7 @@ import Link from 'next/link';
  * The site footer, extracted from HomeClient so marketing pages (/for/*) carry
  * the same links. Server-renderable: no client hooks.
  *
- * Privacy and Terms links are deliberately absent until those pages exist.
+ * Privacy and Terms live at /privacy and /terms (added 2026-10-20).
  */
 export function SiteFooter() {
   return (
@@ -48,6 +48,12 @@ export function SiteFooter() {
           </Link>
           <Link href="/for/tech" className="hover:text-[var(--text-primary)] transition-colors">
             Tech
+          </Link>
+          <Link href="/privacy" className="hover:text-[var(--text-primary)] transition-colors">
+            Privacy
+          </Link>
+          <Link href="/terms" className="hover:text-[var(--text-primary)] transition-colors">
+            Terms
           </Link>
         </nav>
         <p className="mt-8 text-xs text-[var(--text-tertiary)]">
