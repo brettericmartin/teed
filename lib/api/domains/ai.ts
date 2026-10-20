@@ -50,6 +50,11 @@ export function findProductImage(data: { query: string }) {
   return api.post<FindProductImageResponse>('/api/ai/find-product-image', data);
 }
 
+/** Images from a product page (og/meta/JSON-LD), Google only when the page has none. */
+export function extractProductImages(data: { url: string; productName?: string; brand?: string }) {
+  return api.post<{ images: string[]; source: 'og' | 'meta' | 'google' }>('/api/ai/extract-product-images', data);
+}
+
 export function enhanceSearchQuery(data: { description: string; productName?: string; brand?: string }) {
   return api.post<{ query: string }>('/api/ai/enhance-search-query', data);
 }

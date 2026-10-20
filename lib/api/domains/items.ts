@@ -76,6 +76,11 @@ export function findLink(id: string) {
   return api.post<{ recommendations: LinkRecommendation[]; primaryLink: LinkRecommendation | null; reasoning: string }>(`/api/items/${id}/find-link`);
 }
 
+/** Read one of the item's product links and fill the item from the page (photo, brand, category, list price). */
+export function readLink(id: string, data: { url: string; replacePhoto?: boolean }) {
+  return api.post<{ facts: any; updates: Record<string, unknown>; filled: string[]; message?: string }>(`/api/items/${id}/links/read`, data);
+}
+
 /** Add an item to a bag from a pasted URL: identifies the product, picks an image, adds the link. */
 export function addFromUrl(bagCode: string, url: string) {
   return api.post<any>(`/api/bags/${bagCode}/items/from-url`, { url });

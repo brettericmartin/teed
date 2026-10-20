@@ -710,6 +710,7 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
               itemName={item.custom_name || 'Item'}
               itemBrand={item.brand}
               itemDescription={item.custom_description}
+              productUrl={itemLinks.find((l) => ['product', 'purchase', 'shop', 'buy', 'affiliate'].includes(l.kind))?.url || null}
             />
           </div>
 
@@ -850,6 +851,10 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
         onItemPhotoUpdated={(newPhotoUrl) => {
           // Update the item's photo in the parent state when a video thumbnail is auto-set
           onUpdate(item.id, { photo_url: newPhotoUrl });
+        }}
+        onItemUpdated={(updates) => {
+          // Photo, brand, category or list price the product page filled in
+          onUpdate(item.id, updates as Partial<Omit<Item, 'id' | 'bag_id' | 'links'>>);
         }}
       />
 
