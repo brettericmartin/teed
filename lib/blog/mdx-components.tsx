@@ -30,16 +30,16 @@ function BagEmbed({ handle, code }: { handle: string; code: string }) {
     <div className="my-6 rounded-xl border border-[var(--border-default)] bg-[var(--surface-elevated)] overflow-hidden">
       <div className="p-4 flex items-center justify-between">
         <div>
-          <p className="text-sm text-[var(--text-secondary)] mb-1">Featured bag</p>
+          <p className="text-sm text-[var(--text-secondary)] mb-1">The bag</p>
           <p className="text-base font-semibold text-[var(--text-primary)]">
             @{handle}/{code}
           </p>
         </div>
         <Link
           href={`/u/${handle}/${code}`}
-          className="px-4 py-2 text-sm font-medium text-white bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] rounded-lg transition-colors"
+          className="px-4 py-2.5 min-h-[44px] inline-flex items-center text-sm font-medium text-white bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] rounded-lg transition-colors"
         >
-          View Bag
+          View the bag
         </Link>
       </div>
     </div>
@@ -82,12 +82,17 @@ export function getMDXComponents(): MDXComponents {
     p: (props) => (
       <p className="text-base text-[var(--text-secondary)] leading-relaxed mb-4" {...props} />
     ),
-    a: (props) => (
-      <a
-        className="text-[var(--teed-green-9)] hover:text-[var(--teed-green-10)] underline underline-offset-2 transition-colors"
-        {...props}
-      />
-    ),
+    a: (props) => {
+      // External links open in a new tab, as the bags' exits do; internal ones stay in place
+      const external = typeof props.href === 'string' && /^https?:\/\//.test(props.href);
+      return (
+        <a
+          className="text-[var(--teed-green-9)] hover:text-[var(--teed-green-10)] underline underline-offset-2 transition-colors"
+          {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          {...props}
+        />
+      );
+    },
     ul: (props) => (
       <ul className="list-disc pl-6 mb-4 space-y-1 text-[var(--text-secondary)]" {...props} />
     ),
