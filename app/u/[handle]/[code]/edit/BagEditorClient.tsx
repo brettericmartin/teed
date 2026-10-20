@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Share2, Trash2, Camera, ChevronLeft, Package, Images, Link, Sparkles, Upload, Image, X, Eye, Loader2, BookOpen } from 'lucide-react';
 import { GolfLoader } from '@/components/ui/GolfLoader';
@@ -173,6 +173,8 @@ type BagEditorClientProps = {
 
 export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorClientProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const toast = useToast();
   const confirm = useConfirm();
   const { celebrateItemAdded, celebrateMilestone } = useCelebration();
@@ -233,6 +235,14 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [capturedPhotoBase64, setCapturedPhotoBase64] = useState<string | null>(null);
   const [capturedPhotosArray, setCapturedPhotosArray] = useState<string[]>([]); // For bulk photo uploads
   const [showPhotoUpload, setShowPhotoUpload] = useState(false);
+  // The dashboard's "Add Item > Take a photo" lands here as ?action=photo; nothing read it before.
+  useEffect(() => {
+    if (searchParams.get('action') === 'photo') {
+      setShowPhotoUpload(true);
+      router.replace(pathname, { scroll: false });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [pipelineStats, setPipelineStats] = useState<{
     totalDetected: number;
     totalIdentified: number;
@@ -481,37 +491,8 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         }));
       }
 
-      // Also try to find and add a product link
-      try {
-        const linkSearchQuery = `${topSuggestion.brand || ''} ${itemName}`.trim();
-        const linkResult = await aiApi.findProductImage({
-          productName: linkSearchQuery,
-          brandName: topSuggestion.brand,
-        });
-
-        // If we found a product URL, add it as a link
-        if ((linkResult as any).productUrl) {
-          const newLink = await itemsApi.addLink(itemId, {
-            url: (linkResult as any).productUrl,
-            kind: 'shop',
-            is_auto_generated: true,
-          }) as any as Link;
-
-          console.log(`[auto-enrich] Added link for "${itemName}":`, (linkResult as any).productUrl);
-
-          // Update local state with new link
-          setBag((prev) => ({
-            ...prev,
-            items: prev.items.map((item) =>
-              item.id === itemId
-                ? { ...item, links: [...item.links, newLink] }
-                : item
-            ),
-          }));
-        }
-      } catch (linkError) {
-        console.log(`[auto-enrich] Link search failed for "${itemName}":`, linkError);
-      }
+      // Also try to find and add a product link (same helper the photo-scan path uses)
+      await autoFindProductLink(itemId, itemName, topSuggestion.brand);
 
       console.log(`[auto-enrich] Completed for "${itemName}"`);
     } catch (error) {
@@ -525,21 +506,22 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
     try {
       console.log(`[auto-link] Starting for "${itemName}" (${itemId})`);
 
-      const searchQuery = `${brand || ''} ${itemName}`.trim();
-      const linkResult = await aiApi.findProductImage({
-        productName: searchQuery,
-        brandName: brand || undefined,
-      });
+      // Was: aiApi.findProductImage({ productName, brandName }) and reading `productUrl` from it.
+      // That route is an image search that only reads `query`, so it 400'd and never returned a URL.
+      // The item's find-link route (SmartLinkFinder) is the function that finds a product page.
+      void brand;
+      const linkResult = await itemsApi.findLink(itemId);
+      const productUrl = linkResult.primaryLink?.url || linkResult.recommendations?.[0]?.url;
 
       // If we found a product URL, add it as a link
-      if ((linkResult as any).productUrl) {
+      if (productUrl) {
         const newLink = await itemsApi.addLink(itemId, {
-          url: (linkResult as any).productUrl,
-          kind: 'shop',
+          url: productUrl,
+          kind: 'product',
           is_auto_generated: true,
         }) as any as Link;
 
-        console.log(`[auto-link] Added link for "${itemName}":`, (linkResult as any).productUrl);
+        console.log(`[auto-link] Added link for "${itemName}":`, productUrl);
 
         // Update local state with new link
         setBag((prev) => ({
