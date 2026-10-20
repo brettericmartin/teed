@@ -7,7 +7,7 @@ import type { ClassifiedUrl } from '@/lib/linkIntelligence/types';
 import { LinkProcessorModal } from './LinkProcessorModal';
 import { useCelebration } from '@/lib/celebrations';
 import * as bagsApi from '@/lib/api/domains/bags';
-import * as universalLinksApi from '@/lib/api/domains/universal-links';
+import * as itemsApi from '@/lib/api/domains/items';
 import { analytics } from '@/lib/analytics';
 
 interface Bag {
@@ -128,23 +128,16 @@ export function GlobalPasteHandler({
         router.push(`/bags/new?url=${encodeURIComponent(classification.normalizedUrl)}`);
         handleDismiss();
       } else {
-        // Add item to existing bag via API
-        await universalLinksApi.save({
-          url: classification.normalizedUrl,
-          destination: {
-            type: 'bag',
-            bagId,
-          },
-        });
+        // Was: universalLinksApi.save({ url, destination }) — that route needs
+        // { profileId, embeds, socialLinks, products } and 403'd on every paste.
+        // The bag's own from-url route identifies the product, picks an image and adds the link.
+        const bag = userBags.find(b => b.id === bagId);
+        if (!bag) throw new Error('Bag not found');
+        await itemsApi.addFromUrl(bag.code, classification.normalizedUrl);
 
         celebrateItemAdded();
         handleDismiss();
-
-        // Find bag code and redirect to edit
-        const bag = userBags.find(b => b.id === bagId);
-        if (bag) {
-          router.push(`/u/${profileHandle}/${bag.code}/edit`);
-        }
+        router.push(`/u/${profileHandle}/${bag.code}/edit`);
       }
     } catch (error) {
       console.error('Failed to add to bag:', error);
