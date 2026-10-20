@@ -234,13 +234,11 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   } | null>(null);
   const [capturedPhotoBase64, setCapturedPhotoBase64] = useState<string | null>(null);
   const [capturedPhotosArray, setCapturedPhotosArray] = useState<string[]>([]); // For bulk photo uploads
-  const [showPhotoUpload, setShowPhotoUpload] = useState(false);
   // The dashboard's "Add Item > Take a photo" lands here as ?action=photo; nothing read it before.
+  const openedFromPhotoAction = searchParams.get('action') === 'photo';
+  const [showPhotoUpload, setShowPhotoUpload] = useState(openedFromPhotoAction);
   useEffect(() => {
-    if (searchParams.get('action') === 'photo') {
-      setShowPhotoUpload(true);
-      router.replace(pathname, { scroll: false });
-    }
+    if (openedFromPhotoAction) router.replace(pathname, { scroll: false });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [pipelineStats, setPipelineStats] = useState<{
