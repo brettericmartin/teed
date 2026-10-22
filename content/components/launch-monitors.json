@@ -120,11 +120,11 @@
       "price": {
         "amount": 899.99,
         "currency": "USD",
-        "read_on": "2026-10-19",
-        "source_url": "https://www.playbetter.com/blogs/golf-tech-news/rapsodo-mlm2xpro-everything-you-need-to-know",
-        "note": "On sale from 2026-10-15; includes 12 RPT balls and a 21-day Core trial."
+        "read_on": "2026-10-22",
+        "source_url": "https://rapsodo.com/products/mlm2xpro-golf-launch-monitor-simulator",
+        "note": "Rapsodo's page; 21-day Core trial in the box, Core renews at $199.99 a year."
       },
-      "direct_url": "",
+      "direct_url": "https://rapsodo.com/products/mlm2xpro-golf-launch-monitor-simulator",
       "fallback_url": "",
       "read_url": "https://golficity.com/first-look-rapsodo-mlm2xpro-adds-putting-faster-performance-more/",
       "specs": {
@@ -294,8 +294,8 @@
         "source_url": "https://www.independentgolfreviews.com/best-golf-launch-monitors/",
         "note": "List price; retailers showed $4,499.99 sale pricing in 2026."
       },
-      "direct_url": "https://shopindoorgolf.com/products/garmin-approach-r50-launch-monitor-golf-simulator",
-      "fallback_url": "https://topshelfgolf.com/products/garmin-approach-r50-launch-monitor-and-golf-simulator",
+      "direct_url": "https://www.garmin.com/en-US/p/736810/",
+      "fallback_url": "https://shopindoorgolf.com/products/garmin-approach-r50-launch-monitor-golf-simulator",
       "read_url": "https://golfsimulatorforum.com/forum/golf-simulator-brands-and-types/general-and-unlisted/409839-garmin-r50",
       "specs": {
         "technology": "Three-camera photometric with built-in 10 in touchscreen and onboard simulator",

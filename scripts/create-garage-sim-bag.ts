@@ -111,13 +111,15 @@ const sections: SeedSection[] = [
         whyChosen:
           "Carl's Preferred, $476, bought before I had a factory screen to test. It's the screen in every photo of the sample so far. When the production screen replaces it, this line stays in the bag history so you can see what I started with.",
         pricePaid: 476,
-        links: [{ url: 'https://www.carlofet.com/', kind: 'product', label: "Carl's Place" }],
+        links: [{ url: 'https://shop.carlofet.com/preferred-golf-impact-screens', kind: 'product', label: "Carl's Place" }],
       },
       {
         customName: 'Ball bungees (about 90 per set)',
         brand: 'Generic',
         customDescription:
           'Roughly 27 on the screen, 36 on the side panels, 22 on the canopy, 4 to stow the crossbar. Counted off the prototype on October 15.',
+        whyChosen:
+          'They hold the screen and the panels to the frame, and they are the part you will lose under the car. Any 9 in ball bungee works; production sets ship 100 so there are spares.',
         notes: 'Production sets will ship 100 so there are spares.',
       },
     ],
@@ -134,7 +136,7 @@ const sections: SeedSection[] = [
         whyChosen:
           "I owned it before the enclosure existed, and with the Premium plan ($199.99 a year) it was my cheapest honest way into GSPro. It's a behind-the-ball radar, so it wants 6.5 to 8.5 ft behind the ball; the bay is 5 ft deep and I stand outside it, and room depth is the thing to check before you copy this.",
         pricePaid: 599.99,
-        links: [{ url: 'https://rapsodo.com/products/mlm2pro', kind: 'product', label: 'Rapsodo MLM2PRO' }],
+        links: [{ url: 'https://rapsodo.com/products/mlm2pro-mobile-launch-monitor-golf-simulator', kind: 'product', label: 'Rapsodo MLM2PRO' }],
       },
       {
         customName: 'Rapsodo Premium membership',
@@ -147,7 +149,7 @@ const sections: SeedSection[] = [
         itemType: 'software',
         specs: { pricing_model: 'subscription', price_amount: 199.99, price_period: 'yearly' },
         notes: 'Yearly.',
-        links: [{ url: 'https://rapsodo.com/products/mlm2pro', kind: 'product', label: 'Rapsodo MLM2PRO (plans)' }],
+        links: [{ url: 'https://rapsodo.com/products/mlm2pro-mobile-launch-monitor-golf-simulator', kind: 'product', label: 'Rapsodo MLM2PRO (plans)' }],
       },
     ],
   },
@@ -163,7 +165,7 @@ const sections: SeedSection[] = [
         whyChosen:
           'Short throw, because the projector lives on a $50 rolling cart inside the bay and rolls out when the bay folds. A ceiling mount would have undone the whole point of an enclosure that gets out of the way.',
         pricePaid: null, // not yet confirmed by Brett
-        links: [{ url: 'https://www.benq.com/en-us/', kind: 'product', label: 'BenQ' }],
+        links: [{ url: 'https://www.benq.com/en-us/projector/home-projectors/tk710sti.html', kind: 'product', label: 'BenQ' }],
       },
       {
         customName: 'Projector cart',

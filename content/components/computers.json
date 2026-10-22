@@ -93,10 +93,16 @@
         "https://rapsodo.com/products/mlm2pro",
         "https://flightscope.com/products/mevo-plus/"
       ],
-      "price": null,
-      "pricing_model": "free",
+      "price": {
+        "amount": 300,
+        "currency": "USD",
+        "read_on": "2026-10-19",
+        "source_url": "https://northcourse.golf/articles/e6-connect-cost",
+        "note": "Basic tier; Expanded $600 a year; Home $1,000 perpetual (Northcourse, read 2026-10-19)."
+      },
+      "pricing_model": "subscription",
       "platform": "Windows 10/11 64-bit; iOS (iPad Pro 1st gen+, iPad 5th gen+, iPad Air 3rd gen+, iPad mini 5th gen+, iPhone 8+)",
-      "direct_url": "",
+      "direct_url": "https://e6golf.com/",
       "fallback_url": "",
       "read_url": "",
       "specs": {
@@ -112,7 +118,8 @@
       "cons": [],
       "known_issues": [],
       "why_people_choose_it": "",
-      "image_url": ""
+      "image_url": "",
+      "price_period": "yearly"
     },
     {
       "brand": "TruGolf",
@@ -254,7 +261,7 @@
       "price": null,
       "pricing_model": "free",
       "platform": "Windows 7 to 11 64-bit",
-      "direct_url": "",
+      "direct_url": "https://creativegolf.com/",
       "fallback_url": "",
       "read_url": "",
       "specs": {
@@ -289,7 +296,7 @@
       "price": null,
       "pricing_model": "free",
       "platform": "Windows 10 64-bit or later; no Mac, iPad, Android",
-      "direct_url": "",
+      "direct_url": "https://www.foresightsports.com/pages/fsx-play",
       "fallback_url": "",
       "read_url": "",
       "specs": {
@@ -732,7 +739,7 @@
         "source_url": "https://golfsimulatorforum.com/forum/build-your-own/computer-systems/393341-is-this-pc-powerful-enough",
         "note": "HP laptop with RTX 4080 at Antonline, Aug 2023; no current OMEN 35L price captured because hp.com could not be reached from the sandbox."
       },
-      "direct_url": "https://www.hp.com/us-en/shop/slp/omen",
+      "direct_url": "https://www.hp.com/us-en/gaming-pc.html",
       "direct_url_status": "connection failed (000) from the sandbox on 2026-10-19; verify in a browser",
       "fallback_url": "",
       "read_url": "https://forum.mygolfspy.com/topic/69976-outdoor-simulator-gspro-build/",

@@ -134,21 +134,21 @@ List $2,495; the first 25 at the founders price of $2,295; a $100 refundable res
   IF v_first_item IS NULL THEN v_first_item := v_item; END IF;
   DELETE FROM links WHERE bag_item_id = v_item;
   INSERT INTO links (bag_item_id, kind, url, label) VALUES
-    (v_item, $q$product$q$, $q$https://www.carlofet.com/$q$, $q$Carl's Place$q$);
+    (v_item, $q$product$q$, $q$https://shop.carlofet.com/preferred-golf-impact-screens$q$, $q$Carl's Place$q$);
 
   -- item 3: Ball bungees (about 90 per set)
   SELECT id INTO v_section FROM bag_sections WHERE bag_id = v_bag AND name = $q$Enclosure & screen$q$;
   SELECT id INTO v_item FROM bag_items WHERE bag_id = v_bag AND custom_name = $q$Ball bungees (about 90 per set)$q$;
   IF v_item IS NULL THEN
     INSERT INTO bag_items (bag_id, section_id, custom_name, brand, custom_description, why_chosen, notes, price_paid, purchase_date, item_type, specs, quantity, sort_index)
-    VALUES (v_bag, v_section, $q$Ball bungees (about 90 per set)$q$, $q$Generic$q$, $q$Roughly 27 on the screen, 36 on the side panels, 22 on the canopy, 4 to stow the crossbar. Counted off the prototype on October 15.$q$, NULL, $q$Production sets will ship 100 so there are spares.$q$, NULL, NULL, $q$physical_product$q$, $j${}$j$::jsonb, 1, 3)
+    VALUES (v_bag, v_section, $q$Ball bungees (about 90 per set)$q$, $q$Generic$q$, $q$Roughly 27 on the screen, 36 on the side panels, 22 on the canopy, 4 to stow the crossbar. Counted off the prototype on October 15.$q$, $q$They hold the screen and the panels to the frame, and they are the part you will lose under the car. Any 9 in ball bungee works; production sets ship 100 so there are spares.$q$, $q$Production sets will ship 100 so there are spares.$q$, NULL, NULL, $q$physical_product$q$, $j${}$j$::jsonb, 1, 3)
     RETURNING id INTO v_item;
   ELSE
     UPDATE bag_items SET
       section_id = v_section,
       brand = $q$Generic$q$,
       custom_description = $q$Roughly 27 on the screen, 36 on the side panels, 22 on the canopy, 4 to stow the crossbar. Counted off the prototype on October 15.$q$,
-      why_chosen = NULL,
+      why_chosen = $q$They hold the screen and the panels to the frame, and they are the part you will lose under the car. Any 9 in ball bungee works; production sets ship 100 so there are spares.$q$,
       notes = $q$Production sets will ship 100 so there are spares.$q$,
       price_paid = NULL,
       purchase_date = NULL,
@@ -186,7 +186,7 @@ List $2,495; the first 25 at the founders price of $2,295; a $100 refundable res
   IF v_first_item IS NULL THEN v_first_item := v_item; END IF;
   DELETE FROM links WHERE bag_item_id = v_item;
   INSERT INTO links (bag_item_id, kind, url, label) VALUES
-    (v_item, $q$product$q$, $q$https://rapsodo.com/products/mlm2pro$q$, $q$Rapsodo MLM2PRO$q$);
+    (v_item, $q$product$q$, $q$https://rapsodo.com/products/mlm2pro-mobile-launch-monitor-golf-simulator$q$, $q$Rapsodo MLM2PRO$q$);
 
   -- item 5: Rapsodo Premium membership
   SELECT id INTO v_section FROM bag_sections WHERE bag_id = v_bag AND name = $q$Launch monitor$q$;
@@ -213,7 +213,7 @@ List $2,495; the first 25 at the founders price of $2,295; a $100 refundable res
   IF v_first_item IS NULL THEN v_first_item := v_item; END IF;
   DELETE FROM links WHERE bag_item_id = v_item;
   INSERT INTO links (bag_item_id, kind, url, label) VALUES
-    (v_item, $q$product$q$, $q$https://rapsodo.com/products/mlm2pro$q$, $q$Rapsodo MLM2PRO (plans)$q$);
+    (v_item, $q$product$q$, $q$https://rapsodo.com/products/mlm2pro-mobile-launch-monitor-golf-simulator$q$, $q$Rapsodo MLM2PRO (plans)$q$);
 
   -- item 6: BenQ TK710STi
   SELECT id INTO v_section FROM bag_sections WHERE bag_id = v_bag AND name = $q$Projector$q$;
@@ -240,7 +240,7 @@ List $2,495; the first 25 at the founders price of $2,295; a $100 refundable res
   IF v_first_item IS NULL THEN v_first_item := v_item; END IF;
   DELETE FROM links WHERE bag_item_id = v_item;
   INSERT INTO links (bag_item_id, kind, url, label) VALUES
-    (v_item, $q$product$q$, $q$https://www.benq.com/en-us/$q$, $q$BenQ$q$);
+    (v_item, $q$product$q$, $q$https://www.benq.com/en-us/projector/home-projectors/tk710sti.html$q$, $q$BenQ$q$);
 
   -- item 7: Projector cart
   SELECT id INTO v_section FROM bag_sections WHERE bag_id = v_bag AND name = $q$Projector$q$;
