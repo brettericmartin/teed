@@ -140,7 +140,7 @@
         "currency": "USD",
         "read_on": "2026-10-19",
         "source_url": "https://stowgolf.com/facts",
-        "note": "List $2,495. The first 25 at $2,295. $100 refundable reservation. First 25 ship January 2027 (estimate)."
+        "note": "List $2,495. The first 25 at $2,295, offered to a free email list first. The first 25 arrive in December."
       },
       "direct_url": "https://stowgolf.com/?utm_source=teed&utm_medium=component&utm_campaign=enclosures",
       "fallback_url": "",
@@ -167,7 +167,7 @@
         "540 gsm 3-layer impact screen included"
       ],
       "cons": [
-        "not yet shipping; first 25 estimated January 2027",
+        "not yet shipping; the first 25 arrive in December",
         "no owner reviews yet"
       ],
       "known_issues": [],
@@ -2138,7 +2138,7 @@
       "type": "brand",
       "title": "StowGolf facts",
       "date": "2026-10-19",
-      "what_it_says": "10 x 5 x 7 ft 6 in; folds flat; nothing drilled; two cartons; $2,495 list, $2,295 first 25, $100 refundable hold; first 25 January 2027 estimate."
+      "what_it_says": "10 x 5 x 7 ft 6 in; folds flat; nothing drilled; two cartons; $2,495 list, $2,295 first 25, offered to a free email list; first 25 arrive in December."
     }
   ],
   "blog_outline": {

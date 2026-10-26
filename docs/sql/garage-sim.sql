@@ -82,19 +82,19 @@ BEGIN
   SELECT id INTO v_item FROM bag_items WHERE bag_id = v_bag AND custom_name = $q$StowGolf fold-flat enclosure (factory sample)$q$;
   IF v_item IS NULL THEN
     INSERT INTO bag_items (bag_id, section_id, custom_name, brand, custom_description, why_chosen, notes, price_paid, purchase_date, item_type, specs, quantity, sort_index)
-    VALUES (v_bag, v_section, $q$StowGolf fold-flat enclosure (factory sample)$q$, $q$StowGolf$q$, $q$10 ft × 7 ft 6 in × 5 ft freestanding bay: aluminum folding frame, three black 600D shell panels, impact screen hung on ball bungees. Folds flat against the garage wall so the car backs in after the session.$q$, $q$Disclosure: Brett Martin runs Teed and builds StowGolf. This is the factory sample, 10 ft wide, 5 ft deep, 7 ft 6 in to the screen top, and it folds flat against the garage wall so the car backs in when I'm done. List is $2,495; the first 25 are $2,295, and a $100 refundable reservation holds a numbered slot.$q$, $q$Disclosure: Brett Martin runs Teed and builds StowGolf.
+    VALUES (v_bag, v_section, $q$StowGolf fold-flat enclosure (factory sample)$q$, $q$StowGolf$q$, $q$10 ft × 7 ft 6 in × 5 ft freestanding bay: aluminum folding frame, three black 600D shell panels, impact screen hung on ball bungees. Folds flat against the garage wall so the car backs in after the session.$q$, $q$Disclosure: Brett Martin runs Teed and builds StowGolf. This is the factory sample, 10 ft wide, 5 ft deep, 7 ft 6 in to the screen top, and it folds flat against the garage wall so the car backs in when I'm done. List is $2,495; the first 25 are $2,295 and arrive in December, offered first to a free email list.$q$, $q$Disclosure: Brett Martin runs Teed and builds StowGolf.
 10 ft wide, 5 ft deep, 7 ft 6 in to the screen top; freestanding, nothing drilled; folds flat against the wall so the car parks back in.
-List $2,495; the first 25 at the founders price of $2,295; a $100 refundable reservation holds a numbered slot.$q$, NULL, '2026-10-08'::date, $q$physical_product$q$, $j${"list_price":2495,"founders_price":2295,"width_ft":10,"height_in":90,"depth_ft":5}$j$::jsonb, 1, 1)
+List $2,495; the first 25 at the founders price of $2,295, arriving in December.$q$, NULL, '2026-10-08'::date, $q$physical_product$q$, $j${"list_price":2495,"founders_price":2295,"width_ft":10,"height_in":90,"depth_ft":5}$j$::jsonb, 1, 1)
     RETURNING id INTO v_item;
   ELSE
     UPDATE bag_items SET
       section_id = v_section,
       brand = $q$StowGolf$q$,
       custom_description = $q$10 ft × 7 ft 6 in × 5 ft freestanding bay: aluminum folding frame, three black 600D shell panels, impact screen hung on ball bungees. Folds flat against the garage wall so the car backs in after the session.$q$,
-      why_chosen = $q$Disclosure: Brett Martin runs Teed and builds StowGolf. This is the factory sample, 10 ft wide, 5 ft deep, 7 ft 6 in to the screen top, and it folds flat against the garage wall so the car backs in when I'm done. List is $2,495; the first 25 are $2,295, and a $100 refundable reservation holds a numbered slot.$q$,
+      why_chosen = $q$Disclosure: Brett Martin runs Teed and builds StowGolf. This is the factory sample, 10 ft wide, 5 ft deep, 7 ft 6 in to the screen top, and it folds flat against the garage wall so the car backs in when I'm done. List is $2,495; the first 25 are $2,295 and arrive in December, offered first to a free email list.$q$,
       notes = $q$Disclosure: Brett Martin runs Teed and builds StowGolf.
 10 ft wide, 5 ft deep, 7 ft 6 in to the screen top; freestanding, nothing drilled; folds flat against the wall so the car parks back in.
-List $2,495; the first 25 at the founders price of $2,295; a $100 refundable reservation holds a numbered slot.$q$,
+List $2,495; the first 25 at the founders price of $2,295, arriving in December.$q$,
       price_paid = NULL,
       purchase_date = '2026-10-08'::date,
       item_type = $q$physical_product$q$,

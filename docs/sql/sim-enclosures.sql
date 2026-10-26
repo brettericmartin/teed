@@ -171,7 +171,7 @@ Discussed in 5 independent sources$q$,
     INSERT INTO bag_items (bag_id, section_id, custom_name, brand, custom_description, why_chosen, notes, price_paid, item_type, specs, photo_url, quantity, sort_index)
     VALUES (v_bag, v_section, $q$fold-flat enclosure$q$, $q$StowGolf$q$, $q$The shared-garage golfer who needs the bay to disappear between sessions and will not drill the house.$q$, $q$It is the one freestanding bay on this list that folds flat against the wall when the session ends: 10 ft wide, 5 ft deep, 7 ft 6 in to the screen top, $2,495 list. If the garage still has to park a car, this is the shape that allows it; if the room is dedicated, a fixed frame above costs less.$q$, $q$Disclosure: Brett Martin runs Teed and builds StowGolf.
 Pros: freestanding, nothing drilled; folds flat against the wall; 10 ft wide, 5 ft deep, 7 ft 6 in to the screen top; 540 gsm 3-layer impact screen included
-Cons: not yet shipping; first 25 estimated January 2027; no owner reviews yet
+Cons: not yet shipping; the first 25 arrive in December; no owner reviews yet
 Room fit: 7 ft 6 in to the screen top, 5 ft deep when open; folds flat against the wall when the car comes back.
 Price read 2026-10-19 from stowgolf.com$q$, NULL, $q$physical_product$q$, $j${"width_ft":10,"depth_ft":5,"height_ft":7.5,"height_note":"7 ft 6 in to the top of the impact screen","frame_material":"","screen_included":"yes, 540 gsm 3-layer impact screen","screen_layers":"3","mount_type":"freestanding; nothing drilled","folds_or_retracts":"folds flat against the wall","shipping":"ships in two cartons","assembly_time_claimed":"","list_price":2495,"price_read_on":"2026-10-19"}$j$::jsonb, $q$https://stowgolf.com/opengraph-image?f9d3fca63d889012$q$, 1, 3)
     RETURNING id INTO v_item;
@@ -183,7 +183,7 @@ Price read 2026-10-19 from stowgolf.com$q$, NULL, $q$physical_product$q$, $j${"w
       why_chosen = $q$It is the one freestanding bay on this list that folds flat against the wall when the session ends: 10 ft wide, 5 ft deep, 7 ft 6 in to the screen top, $2,495 list. If the garage still has to park a car, this is the shape that allows it; if the room is dedicated, a fixed frame above costs less.$q$,
       notes = $q$Disclosure: Brett Martin runs Teed and builds StowGolf.
 Pros: freestanding, nothing drilled; folds flat against the wall; 10 ft wide, 5 ft deep, 7 ft 6 in to the screen top; 540 gsm 3-layer impact screen included
-Cons: not yet shipping; first 25 estimated January 2027; no owner reviews yet
+Cons: not yet shipping; the first 25 arrive in December; no owner reviews yet
 Room fit: 7 ft 6 in to the screen top, 5 ft deep when open; folds flat against the wall when the car comes back.
 Price read 2026-10-19 from stowgolf.com$q$,
       price_paid = NULL,

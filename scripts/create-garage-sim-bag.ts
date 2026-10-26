@@ -82,12 +82,12 @@ const sections: SeedSection[] = [
           '10 ft × 7 ft 6 in × 5 ft freestanding bay: aluminum folding frame, three black 600D shell panels, impact screen hung on ball bungees. Folds flat against the garage wall so the car backs in after the session.',
         // T3, first person. The disclosure sentence is the DISCLOSURE constant so it never drifts.
         whyChosen:
-          `${DISCLOSURE} This is the factory sample, 10 ft wide, 5 ft deep, 7 ft 6 in to the screen top, and it folds flat against the garage wall so the car backs in when I'm done. List is $2,495; the first 25 are $2,295, and a $100 refundable reservation holds a numbered slot.`,
+          `${DISCLOSURE} This is the factory sample, 10 ft wide, 5 ft deep, 7 ft 6 in to the screen top, and it folds flat against the garage wall so the car backs in when I'm done. List is $2,495; the first 25 are $2,295 and arrive in December, offered first to a free email list.`,
         // T1: the three fixed lines, same in every bag.
         notes: [
           DISCLOSURE,
           '10 ft wide, 5 ft deep, 7 ft 6 in to the screen top; freestanding, nothing drilled; folds flat against the wall so the car parks back in.',
-          'List $2,495; the first 25 at the founders price of $2,295; a $100 refundable reservation holds a numbered slot.',
+          'List $2,495; the first 25 at the founders price of $2,295, arriving in December.',
         ].join('\n'),
         pricePaid: null, // factory sample, not bought; the money line rides in the note
         purchaseDate: '2026-10-08',
