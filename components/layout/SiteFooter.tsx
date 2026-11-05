@@ -59,6 +59,7 @@ export function SiteFooter() {
         <p className="mt-8 text-xs text-[var(--text-tertiary)]">
           &copy; 2026 Teed. Made with care for organizers everywhere.
         </p>
+        <p className="mt-2 text-xs text-[var(--text-tertiary)]">Build check 2026-11-02 · auto-pickup OK</p>
       </div>
     </footer>
   );
