@@ -89,7 +89,10 @@ export async function scrapeWithFirecrawl(url: string): Promise<FirecrawlResult>
   }
 
   try {
-    const response = await fetch('https://api.firecrawl.dev/v1/scrape', {
+    // Firecrawl v1 is retired on Dec 10, 2026 (returns HTTP 410). v2 keeps the same
+    // request fields used here and the same { success, data: { markdown, metadata } } shape.
+    // v2 serves a cached copy up to 2 days old by default (maxAge), which is fine for product pages.
+    const response = await fetch('https://api.firecrawl.dev/v2/scrape', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
