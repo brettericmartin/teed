@@ -391,7 +391,8 @@ function composeSuggestion(
 async function processUrl(
   url: string,
   index: number,
-  onProgress?: (stage: ProcessingStage) => void
+  onProgress?: (stage: ProcessingStage) => void,
+  hint?: string | null
 ): Promise<ProcessedLinkResult> {
   console.log(`[bulk-links] Processing ${index + 1}: ${url}`);
 
@@ -452,6 +453,7 @@ async function processUrl(
     const identification = await identifyProduct(url, {
       fetchTimeout: 5000, // Reduced for faster failures
       earlyExitConfidence: 0.85,
+      hint,
     });
 
     // Emit analyzing stage after identification (which includes AI)
@@ -647,6 +649,13 @@ export async function POST(
     // Parse request body
     const body = await request.json();
     const { urls: rawUrls } = body;
+    // Optional titles that came with each link (from share-sheet text), keyed by link
+    const hints: Record<string, string> = {};
+    if (body.hints && typeof body.hints === 'object') {
+      for (const [k, v] of Object.entries(body.hints as Record<string, unknown>)) {
+        if (typeof v === 'string' && v.trim()) hints[k] = v.trim().slice(0, 200);
+      }
+    }
 
     if (!Array.isArray(rawUrls) || rawUrls.length === 0) {
       return NextResponse.json(
@@ -715,7 +724,7 @@ export async function POST(
                   index: globalIdx,
                   stage,
                 });
-              });
+              }, hints[url] || null);
             });
 
             const batchResults = await Promise.all(batchPromises);

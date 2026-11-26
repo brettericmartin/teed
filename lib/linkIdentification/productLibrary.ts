@@ -254,3 +254,65 @@ export async function getLibraryStats(): Promise<{
     return null;
   }
 }
+
+/**
+ * Find a product someone already added to a public Teed bag with the same
+ * Amazon product ID. Only public, visible bags count, and only photos hosted
+ * outside Teed (never a person's own upload) are reused.
+ */
+export async function lookupTeedItemByAsin(
+  asin: string
+): Promise<{ name: string; brand: string | null; photoUrl: string | null; agreeing: number } | null> {
+  const supabase = getSupabaseAdmin();
+  if (!supabase || !/^[A-Z0-9]{10}$/i.test(asin)) return null;
+  try {
+    const { data: links } = await supabase
+      .from('links')
+      .select('url, bag_item_id')
+      .ilike('url', `%${asin}%`)
+      .not('bag_item_id', 'is', null)
+      .limit(25);
+    const matching = (links || []).filter((l) =>
+      new RegExp(`(?:^|[/=])${asin}(?=[/?#&]|$)`, 'i').test(l.url as string)
+    );
+    if (!matching.length) return null;
+
+    const { data: allItems } = await supabase
+      .from('bag_items')
+      .select('bag_id, custom_name, brand, photo_url')
+      .in('id', Array.from(new Set(matching.map((l) => l.bag_item_id as string))));
+    if (!allItems?.length) return null;
+
+    const bagIds = Array.from(new Set(allItems.map((i) => i.bag_id as string)));
+    const { data: bags } = await supabase
+      .from('bags')
+      .select('id')
+      .in('id', bagIds)
+      .eq('is_public', true)
+      .eq('is_hidden', false);
+    const publicBags = new Set((bags || []).map((b) => b.id as string));
+    const items = allItems.filter((i) => publicBags.has(i.bag_id as string));
+    const named = (items || []).filter((i) => i.custom_name && !isJunkTitle(i.custom_name as string));
+    if (!named.length) return null;
+
+    // The name most people used
+    const counts = new Map<string, { n: number; item: (typeof named)[number] }>();
+    for (const i of named) {
+      const key = String(i.custom_name).trim().toLowerCase();
+      const c = counts.get(key);
+      counts.set(key, { n: (c?.n || 0) + 1, item: c?.item || i });
+    }
+    const top = [...counts.values()].sort((a, b) => b.n - a.n)[0];
+    const best = top.item;
+    const photo = (best.photo_url as string | null) || null;
+    const ownUpload = !!photo && /supabase\.co\/storage|\/storage\/v1\/object/i.test(photo);
+    return {
+      name: String(best.custom_name).trim(),
+      brand: (best.brand as string | null) || null,
+      photoUrl: photo && !ownUpload ? photo : null,
+      agreeing: top.n,
+    };
+  } catch {
+    return null;
+  }
+}

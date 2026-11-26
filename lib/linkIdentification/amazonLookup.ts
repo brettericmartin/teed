@@ -45,7 +45,7 @@ async function tryAmazonMobile(asin: string, host: string): Promise<AmazonProduc
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
 
     const response = await fetch(mobileUrl, {
       signal: controller.signal,

@@ -216,6 +216,11 @@ export function extractAmazonBrand(markdown: string | null | undefined): string 
   return null;
 }
 
+const IMAGE_STOPWORDS = new Set([
+  'the', 'and', 'for', 'with', 'from', 'your', 'you', 'our', 'more', 'new', 'all', 'this', 'that',
+  'are', 'can', 'into', 'out', 'off', 'now', 'top', 'best', 'set', 'pack', 'size', 'amazon', 'com',
+]);
+
 /**
  * The product's own photo on an Amazon page read as markdown. Ads on the page
  * ("Shop ...") come first in the markdown, so the first image is not the product.
@@ -225,9 +230,10 @@ export function extractAmazonBrand(markdown: string | null | undefined): string 
 export function pickAmazonImage(markdown: string | null | undefined, title: string | null): string | null {
   if (!markdown) return null;
   const re = /!\[([^\]]{0,200})\]\((https:\/\/m\.media-amazon\.com\/images\/I\/[^)\s]+)\)/g;
-  const titleWords = new Set(
-    (title || '').toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length > 2)
-  );
+  // Common words like "for" and "the" are in nearly every title and banner, so only real words count
+  const words = (s: string) =>
+    s.toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length > 2 && !IMAGE_STOPWORDS.has(w));
+  const titleWords = new Set(words(title || ''));
   const fullSize = (u: string) => u.replace(/\/I\/([^./]+)\.[^/]*\.(jpg|jpeg|png|webp)$/i, '/I/$1.$2');
   let gallery: string | null = null;
   let m: RegExpExecArray | null;
@@ -236,9 +242,11 @@ export function pickAmazonImage(markdown: string | null | undefined, title: stri
     const url = m[2];
     if (/play-icon|_PKdp|\bSS40_/i.test(url)) continue;
     if (alt && /^(shop|visit|sponsored|ad)\b/i.test(alt)) continue;
+    // Banners, ads and other products are links; the product's own photos are not
+    if (markdown[m.index - 1] === '[') continue;
     if (alt) {
-      const shared = alt.toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length > 2 && titleWords.has(w));
-      if (shared.length >= 2) return fullSize(url);
+      const shared = new Set(words(alt).filter((w) => titleWords.has(w)));
+      if (shared.size >= 2) return fullSize(url);
     } else if (!gallery && /_AC_US\d+_|_SS\d+_|_AC_SR\d+/.test(url)) {
       gallery = fullSize(url);
     }

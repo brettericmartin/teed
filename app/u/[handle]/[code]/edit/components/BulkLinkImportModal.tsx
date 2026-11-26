@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { parseLinks } from '@/lib/bulkLinks/parseLinks';
+import { parseLinks, shareHintsByLink } from '@/lib/bulkLinks/parseLinks';
 import { X, Check, Loader2, Link as LinkIcon, ChevronDown, ChevronUp, ExternalLink, AlertCircle, Image as ImageIcon, Sparkles } from 'lucide-react';
 import { BulkLinkProcessingView } from './BulkLinkProcessingView';
 import ItemPreview from './ItemPreview';
@@ -363,7 +363,8 @@ export default function BulkLinkImportModal({
           'Content-Type': 'application/json',
           'Accept': 'text/event-stream',
         },
-        body: JSON.stringify({ urls: parsedUrls }),
+        // The title a share sheet puts before each link helps when the page can't be read
+        body: JSON.stringify({ urls: parsedUrls, hints: shareHintsByLink(inputText) }),
       });
 
       if (!response.ok) {
@@ -539,6 +540,50 @@ export default function BulkLinkImportModal({
         i === index ? { ...r, editedName: value, isSelected: value.trim().length > 0 } : r
       )
     );
+  };
+
+  // Try one failed link again (a robot check or a slow page often passes a minute later)
+  const [retryingIndex, setRetryingIndex] = useState<number | null>(null);
+  const retryLink = async (index: number) => {
+    const row = results[index];
+    if (!row || retryingIndex !== null) return;
+    setRetryingIndex(index);
+    try {
+      const hint = shareHintsByLink(inputText)[row.originalUrl];
+      const response = await fetch(`/api/bags/${bagCode}/bulk-links`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream' },
+        body: JSON.stringify({ urls: [row.originalUrl], hints: hint ? { [row.originalUrl]: hint } : {} }),
+      });
+      const text = response.ok ? await response.text() : '';
+      let fresh: StreamedLinkResult | null = null;
+      for (const line of text.split('\n')) {
+        if (!line.startsWith('data: ')) continue;
+        try {
+          const event: BulkLinkStreamEvent = JSON.parse(line.slice(6));
+          if (event.type === 'url_completed') fresh = event.result;
+        } catch { /* ignore a partial line */ }
+      }
+      setResults(prev =>
+        prev.map((r, i) => {
+          if (i !== index) return r;
+          if (!fresh) return { ...r, error: 'Still couldn’t read this link. Type the product name to add it anyway.' };
+          const typed = r.editedName && r.editedName !== 'Unknown Product' ? r.editedName : '';
+          const primary = fresh.photoOptions.findIndex(p => p.isPrimary);
+          return {
+            ...fresh,
+            index: r.index,
+            isSelected: fresh.status !== 'failed' || typed.length > 0,
+            editedName: fresh.status === 'failed' && typed ? typed : fresh.suggestedItem.custom_name,
+            editedBrand: fresh.suggestedItem.brand,
+            editedDescription: fresh.suggestedItem.custom_description,
+            selectedPhotoIndex: primary >= 0 ? primary : 0,
+          };
+        })
+      );
+    } finally {
+      setRetryingIndex(null);
+    }
   };
 
   const updatePhotoSelection = (index: number, photoIndex: number) => {
@@ -916,6 +961,20 @@ export default function BulkLinkImportModal({
                               aria-label="Product name"
                               className="mt-2 w-full px-3 py-2 text-sm border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-[var(--teed-green-6)] focus:border-transparent"
                             />
+                          )}
+                          {result.status === 'failed' && (
+                            <button
+                              type="button"
+                              onClick={() => retryLink(index)}
+                              disabled={retryingIndex !== null}
+                              className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-gray-700 underline hover:text-gray-900 disabled:opacity-50"
+                            >
+                              {retryingIndex === index ? (
+                                <><Loader2 className="w-3 h-3 animate-spin" /> Trying again…</>
+                              ) : (
+                                'Try again'
+                              )}
+                            </button>
                           )}
                         </div>
 
