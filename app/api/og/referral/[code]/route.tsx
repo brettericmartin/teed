@@ -107,7 +107,7 @@ export async function GET(
                 lineHeight: 1.1,
               }}
             >
-              {referrerName} invited you to join Teed
+              {`${referrerName} invited you to join Teed`}
             </h1>
 
             <p
@@ -142,7 +142,7 @@ export async function GET(
             >
               <span style={{ fontSize: '14px', color: '#666666' }}>Founding Cohort</span>
               <span style={{ fontSize: '14px', fontWeight: 600, color: '#166534' }}>
-                {totalSpots - spotsRemaining}/{totalSpots} filled
+                {`${totalSpots - spotsRemaining}/${totalSpots} filled`}
               </span>
             </div>
             <div
