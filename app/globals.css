@@ -1,4 +1,4 @@
-/* Inter (body) and Cormorant Garamond (subtitles) are self-hosted via next/font in app/layout.tsx */
+/* Inter (body) and Cormorant Garamond (subtitles) load from Google Fonts via <link> tags in app/layout.tsx */
 
 @import "tailwindcss";
 
@@ -246,8 +246,8 @@
 
   /* Font Families */
   --font-heading: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-  --font-body: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-serif: var(--font-cormorant), 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
 
   /* Font Sizes */
   --font-size-1: 12px;  /* 0.75rem */

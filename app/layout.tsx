@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import FeedbackWidget from "@/components/FeedbackWidget";
@@ -10,21 +9,6 @@ export const metadata: Metadata = {
   title: "Teed.club - Bags, made shareable",
   description: "Create and share curated collections of your favorite gear, kits, and loadouts.",
 };
-
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  display: "swap",
-  variable: "--font-inter",
-});
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-  display: "swap",
-  variable: "--font-cormorant",
-});
 
 export const viewport = {
   width: 'device-width',
@@ -65,7 +49,16 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en" className={`${inter.variable} ${cormorant.variable}`}>
+    <html lang="en">
+      <head>
+        {/* Linked here rather than @import in CSS so the browser finds the fonts sooner */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap"
+        />
+      </head>
       <body className="antialiased bg-[var(--base-background)]">
         <Providers>
           <Navigation
