@@ -510,7 +510,10 @@ async function processUrl(
 
     // Stage 5: Find photos
     onProgress?.('imaging');
-    let photoOptions = await findProductImages(url, scraped, analysis);
+    // No photo search for a product we couldn't name: it would only find unrelated photos
+    let photoOptions = identification.confidence >= 0.4
+      ? await findProductImages(url, scraped, analysis)
+      : [];
 
     // Check if identification image is a problematic Amazon widget URL
     // These return tracking pixels instead of actual images - skip them entirely
@@ -555,8 +558,15 @@ async function processUrl(
     return {
       index,
       originalUrl: url,
-      resolvedUrl: identification.fetchResult?.finalUrl || url,
+      resolvedUrl: identification.resolvedUrl || identification.fetchResult?.finalUrl || url,
       status,
+      ...(status === 'failed'
+        ? {
+            error:
+              identification.failureReason ||
+              "We couldn't read this page. Type the product name, or try the link again in a minute.",
+          }
+        : {}),
       scraped,
       analysis,
       photoOptions,

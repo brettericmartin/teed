@@ -7,6 +7,7 @@
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
+import { isJunkTitle } from './amazon';
 
 export interface ProductLibraryEntry {
   id: string;
@@ -102,6 +103,11 @@ export async function lookupInLibrary(url: string, minConfidence = 0.7): Promise
       return null;
     }
 
+    // Error and robot-check pages were cached as products in the past; never serve them
+    if (isJunkTitle(data.full_name || data.product_name)) {
+      return null;
+    }
+
     // Update hit count and last_hit_at (fire-and-forget)
     (async () => {
       try {
@@ -139,6 +145,11 @@ export async function saveToLibrary(params: SaveToLibraryParams): Promise<boolea
   // Only save high-confidence results
   if (params.confidence < 0.7) {
     console.log(`[ProductLibrary] Skipping low-confidence result (${params.confidence})`);
+    return false;
+  }
+
+  if (isJunkTitle(params.fullName || params.productName)) {
+    console.log(`[ProductLibrary] Skipping error-page title for ${params.domain}`);
     return false;
   }
 

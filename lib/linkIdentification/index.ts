@@ -11,8 +11,18 @@ import { analyzeUrlWithAI, quickAIAnalysis, type AIProductAnalysis } from './aiS
 import { getBrandFromDomain } from './domainBrands';
 import { trackUnrecognizedDomain } from './trackUnrecognizedDomain';
 import { fetchViaJinaReader, extractAmazonProductInfo } from './jinaReader';
-import { lookupAmazonProduct } from './amazonLookup';
-import { scrapeWithFirecrawl } from './firecrawl';
+import { lookupAmazonProduct, extractBrandFromTitle } from './amazonLookup';
+import {
+  isAmazonUrl,
+  isAmazonShortHost,
+  extractAsin,
+  canonicalAmazonUrl,
+  resolveAmazonShortLink,
+  cleanAmazonTitle,
+  isJunkTitle,
+  searchAmazonTitleByAsin,
+} from './amazon';
+import { scrapeWithFirecrawl, type FirecrawlResult } from './firecrawl';
 import { searchGoogleImages, buildProductSearchQuery } from './googleImageSearch';
 import { lookupInLibrary, saveToLibrary } from './productLibrary';
 
@@ -38,6 +48,11 @@ export interface ProductIdentificationResult {
   // Debug info
   urlParsed: ParsedProductUrl;
   fetchResult: LightweightFetchResult | null;
+
+  // Where a short link led, when it was followed
+  resolvedUrl?: string | null;
+  // Plain words for the person when nothing could be read
+  failureReason?: string | null;
 }
 
 export interface IdentificationOptions {
@@ -52,6 +67,12 @@ export interface IdentificationOptions {
 
   // Minimum confidence to return early
   earlyExitConfidence?: number;
+
+  // Skip the paid Firecrawl scraper (tests, or to save credits)
+  skipFirecrawl?: boolean;
+
+  // Skip the product library cache (tests)
+  skipLibrary?: boolean;
 }
 
 /**
@@ -72,13 +93,15 @@ export async function identifyProduct(
     skipAI = false,
     fetchTimeout = 5000, // Reduced from 8s for faster failures
     earlyExitConfidence = 0.85,
+    skipFirecrawl = false,
+    skipLibrary = false,
   } = options;
 
   // ========================================
   // STAGE 0: Check Product Library FIRST
   // ========================================
   // This saves API calls if we've scraped this URL before
-  const libraryEntry = await lookupInLibrary(url);
+  const libraryEntry = skipLibrary ? null : await lookupInLibrary(url);
   if (libraryEntry) {
     sources.push('product_library');
     const parsedUrlForLibrary = parseProductUrl(url);
@@ -97,6 +120,14 @@ export async function identifyProduct(
       fetchResult: null,
       startTime,
     });
+  }
+
+  // ========================================
+  // AMAZON: its own path. Amazon refuses most reads, and the general path
+  // used to end with the AI guessing a product from the bare ASIN.
+  // ========================================
+  if (isAmazonUrl(url) && !urlOnly) {
+    return identifyAmazonProduct(url, { skipFirecrawl, skipLibrary, sources, startTime });
   }
 
   // ========================================
@@ -288,83 +319,21 @@ export async function identifyProduct(
     });
   }
 
-  // ========================================
-  // STAGE 2.5: Amazon-Specific Lookup (HIGH PRIORITY)
-  // ========================================
-  // Detect Amazon including short URL domains (a.co, amzn.to, amzn.com)
-  const AMAZON_SHORT_DOMAINS = ['a.co', 'amzn.to', 'amzn.com'];
-  const isAmazonShortUrl = AMAZON_SHORT_DOMAINS.some(d => parsedUrl.domain === d || parsedUrl.domain.endsWith('.' + d));
-  let isAmazon = parsedUrl.domain.includes('amazon') || isAmazonShortUrl;
-  let asin = parsedUrl.modelNumber;
-
-  // If this was a short URL that redirected to Amazon, re-parse the final URL for ASIN
-  if (isAmazonShortUrl && fetchResult.finalUrl) {
-    const resolvedParsed = parseProductUrl(fetchResult.finalUrl);
-    if (resolvedParsed.domain.includes('amazon')) {
-      isAmazon = true;
-      asin = resolvedParsed.modelNumber || asin;
-      // Use the resolved URL's product info if better
-      if (resolvedParsed.humanizedName && !parsedUrl.humanizedName) {
-        parsedUrl.humanizedName = resolvedParsed.humanizedName;
-        parsedUrl.productSlug = resolvedParsed.productSlug;
-        parsedUrl.brand = resolvedParsed.brand || parsedUrl.brand;
-      }
-      console.log(`[linkIdentification] Resolved ${parsedUrl.domain} → ${resolvedParsed.domain}, ASIN: ${asin}`);
-    }
-  }
-
-  if (isAmazon && asin) {
-    sources.push('amazon_lookup');
-
-    // Try direct Amazon lookup first
-    const amazonResult = await lookupAmazonProduct(asin);
-
-    if (amazonResult.success && amazonResult.title) {
-      const brand = amazonResult.brand;
-      let productName = amazonResult.title;
-
-      // Remove brand from product name if present at start
-      if (brand && productName.toLowerCase().startsWith(brand.toLowerCase())) {
-        productName = productName.slice(brand.length).replace(/^[-–—|:\s]+/, '').trim();
-      }
-
-      const fullName = brand ? `${brand} ${productName}` : productName;
-
-      return buildResult({
-        brand,
-        productName,
-        fullName,
-        category: parsedUrl.category,
-        specifications: [],
-        price: amazonResult.price,
-        // Only use the image from Amazon if it's a real CDN URL, not the widget URL
-        imageUrl: amazonResult.image && !amazonResult.image.includes('amazon-adsystem.com') ? amazonResult.image : null,
-        confidence: 0.90, // High confidence - we got real data
-        primarySource: 'amazon_lookup',
-        sources,
-        parsedUrl,
-        fetchResult,
-        startTime,
-      });
-    }
-    // Note: We no longer fall back to getAmazonImageUrl() as those widget URLs are unreliable
-    // Google Images fallback will be used instead if needed
-  }
-
+  // Amazon links never reach this point (see identifyAmazonProduct)
   // ========================================
   // STAGE 2.6: Firecrawl Fallback (for blocked sites like Amazon)
   // ========================================
   // Note: Library was already checked in STAGE 0, so we go straight to Firecrawl
   // Also trigger for Amazon when the direct lookup failed (Amazon blocks most scraping)
   const needsFirecrawl = fetchResult.blocked ||
-    (!fetchResult.success && parsedUrl.isRetailer) ||
-    (isAmazon && !fetchResult.data?.jsonLd?.name);
+    (!fetchResult.success && parsedUrl.isRetailer);
   if (needsFirecrawl) {
-    sources.push('firecrawl');
-
     // For short URLs, use the resolved URL so Firecrawl scrapes the real page
     const firecrawlUrl = fetchResult.finalUrl || url;
-    const firecrawlResult = await scrapeWithFirecrawl(firecrawlUrl);
+    if (!skipFirecrawl) sources.push('firecrawl');
+    const firecrawlResult: FirecrawlResult = skipFirecrawl
+      ? { success: false, title: null, brand: null, description: null, price: null, image: null, markdown: null }
+      : await scrapeWithFirecrawl(firecrawlUrl);
 
     if (firecrawlResult.success && firecrawlResult.title) {
       // Validate Firecrawl result - check if it's actually product content
@@ -377,7 +346,8 @@ export async function identifyProduct(
                                 titleLower.includes('page not found') ||
                                 titleLower.includes('not found') ||
                                 titleLower === '404' ||
-                                titleLower.includes('error page');
+                                titleLower.includes('error page') ||
+                                isJunkTitle(firecrawlResult.title);
 
       // If URL parsing found a specific product but Firecrawl returned generic content, skip Firecrawl
       const urlHasGoodData = parsedUrl.brand && parsedUrl.humanizedName;
@@ -435,57 +405,7 @@ export async function identifyProduct(
     const jinaUrl = fetchResult.finalUrl || url;
     const jinaResult = await fetchViaJinaReader(jinaUrl);
 
-    if (jinaResult.success && jinaResult.title) {
-      // For Amazon specifically, extract structured info
-      if (isAmazon && jinaResult.content) {
-        const amazonInfo = extractAmazonProductInfo(jinaResult.content);
-
-        if (amazonInfo.title) {
-          const brand = amazonInfo.brand;
-          let productName = amazonInfo.title;
-
-          // Remove brand from product name if present at start
-          if (brand && productName.toLowerCase().startsWith(brand.toLowerCase())) {
-            productName = productName.slice(brand.length).replace(/^[-–—|:\s]+/, '').trim();
-          }
-
-          const fullName = brand ? `${brand} ${productName}` : productName;
-
-          // Save to product library (non-blocking)
-          saveToLibrary({
-            url,
-            domain: parsedUrl.domain,
-            brand,
-            productName,
-            fullName,
-            category: parsedUrl.category,
-            description: null,
-            price: amazonInfo.price,
-            imageUrl: null,
-            specifications: amazonInfo.features,
-            confidence: 0.85,
-            source: 'jina_amazon',
-          }).catch(() => {});
-
-          return buildResult({
-            brand,
-            productName,
-            fullName,
-            category: parsedUrl.category,
-            specifications: amazonInfo.features,
-            price: amazonInfo.price,
-            // Don't use Amazon widget URLs - they're unreliable. Google Images will be used instead.
-            imageUrl: null,
-            confidence: 0.85,
-            primarySource: 'jina_amazon',
-            sources,
-            parsedUrl,
-            fetchResult,
-            startTime,
-          });
-        }
-      }
-
+    if (jinaResult.success && jinaResult.title && !isJunkTitle(jinaResult.title)) {
       // Generic Jina result
       const productName = jinaResult.title;
       const fullNameJina = parsedUrl.brand ? `${parsedUrl.brand} ${productName}` : productName;
@@ -613,6 +533,224 @@ export async function identifyProduct(
 }
 
 /**
+ * Amazon links: follow a short link, read the ASIN, then try the free product
+ * page, Firecrawl, Jina and a web search for the ASIN, in that order. When none
+ * of them can read the page, use the name in the link if there is one, and
+ * otherwise say plainly that it couldn't be read. The AI never guesses a
+ * product from the ASIN alone, because that invented unrelated products.
+ */
+async function identifyAmazonProduct(
+  url: string,
+  ctx: { skipFirecrawl: boolean; skipLibrary: boolean; sources: string[]; startTime: number }
+): Promise<ProductIdentificationResult> {
+  const { sources, startTime } = ctx;
+  sources.push('amazon');
+
+  let resolved: string | null = url;
+  try {
+    if (isAmazonShortHost(new URL(url).hostname)) {
+      sources.push('amazon_short_link');
+      resolved = await resolveAmazonShortLink(url);
+    }
+  } catch {
+    resolved = null;
+  }
+
+  const target = resolved || url;
+  const parsedUrl = parseProductUrl(target);
+  const asin = resolved ? extractAsin(resolved) : null;
+  const canonical = asin ? canonicalAmazonUrl(resolved as string, asin) : null;
+  const host = canonical ? new URL(canonical).hostname : 'www.amazon.com';
+
+  const finish = (r: {
+    brand: string | null;
+    title: string;
+    price?: string | null;
+    imageUrl?: string | null;
+    specifications?: string[];
+    confidence: number;
+    source: string;
+    save?: boolean;
+  }): ProductIdentificationResult => {
+    const brand = r.brand || extractBrandFromTitle(r.title);
+    let productName = r.title;
+    if (brand && productName.toLowerCase().startsWith(brand.toLowerCase())) {
+      productName = productName.slice(brand.length).replace(/^[-–—|:,\s]+/, '').trim() || r.title;
+    }
+    const fullName = brand && !r.title.toLowerCase().startsWith(brand.toLowerCase())
+      ? `${brand} ${r.title}`
+      : r.title;
+    if (r.save && r.confidence >= 0.7) {
+      const entry = {
+        domain: host.replace(/^www\./, ''),
+        brand,
+        productName,
+        fullName,
+        category: parsedUrl.category,
+        description: null,
+        price: r.price ?? null,
+        imageUrl: r.imageUrl ?? null,
+        specifications: r.specifications || [],
+        confidence: r.confidence,
+        source: r.source,
+      };
+      const urls = Array.from(new Set([canonical, url].filter(Boolean) as string[]));
+      for (const u of urls) saveToLibrary({ ...entry, url: u }).catch(() => {});
+    }
+    sources.push(r.source);
+    return buildResult({
+      brand,
+      productName,
+      fullName,
+      category: parsedUrl.category,
+      specifications: r.specifications || [],
+      price: r.price ?? null,
+      imageUrl: r.imageUrl && !r.imageUrl.includes('amazon-adsystem.com') ? r.imageUrl : null,
+      confidence: r.confidence,
+      primarySource: r.source,
+      sources,
+      parsedUrl,
+      fetchResult: null,
+      startTime,
+      resolvedUrl: canonical || resolved,
+    });
+  };
+
+  if (asin && canonical) {
+    // Cache, keyed by the one canonical address for this product
+    if (!ctx.skipLibrary) {
+      const cached = await lookupInLibrary(canonical);
+      if (cached && !isJunkTitle(cached.product_name) && !isJunkTitle(cached.full_name)) {
+        sources.push('product_library');
+        return buildResult({
+          brand: cached.brand,
+          productName: cached.product_name || cached.full_name || 'Unknown Product',
+          fullName: cached.full_name || cached.product_name || 'Unknown Product',
+          category: cached.category || parsedUrl.category,
+          specifications: cached.specifications || [],
+          price: cached.price,
+          imageUrl: cached.image_url,
+          confidence: cached.confidence,
+          primarySource: 'product_library',
+          sources,
+          parsedUrl,
+          fetchResult: null,
+          startTime,
+          resolvedUrl: canonical,
+        });
+      }
+    }
+
+    // 1. Amazon's own page (free)
+    const page = await lookupAmazonProduct(asin, host);
+    if (page.success && page.title && !isJunkTitle(page.title)) {
+      return finish({
+        brand: page.brand,
+        title: page.title,
+        price: page.price,
+        imageUrl: page.image,
+        confidence: 0.9,
+        source: 'amazon_lookup',
+        save: true,
+      });
+    }
+
+    // 2. Firecrawl (paid, cached for 30 days per address)
+    if (!ctx.skipFirecrawl) {
+      sources.push('firecrawl');
+      const fc = await scrapeWithFirecrawl(canonical);
+      const title = fc.success ? cleanAmazonTitle(fc.title) : null;
+      if (title && !isJunkTitle(title)) {
+        return finish({
+          brand: fc.brand,
+          title,
+          price: fc.price,
+          imageUrl: fc.image,
+          specifications: fc.description ? [fc.description] : [],
+          confidence: 0.9,
+          source: 'firecrawl',
+          save: true,
+        });
+      }
+    }
+
+    // 3. Jina Reader (free)
+    sources.push('jina_reader');
+    const jina = await fetchViaJinaReader(canonical, 12000);
+    if (jina.success && jina.content) {
+      const info = extractAmazonProductInfo(jina.content);
+      const title = cleanAmazonTitle(info.title || jina.title);
+      if (title && !isJunkTitle(title)) {
+        return finish({
+          brand: info.brand,
+          title,
+          price: info.price,
+          specifications: info.features || [],
+          confidence: 0.85,
+          source: 'jina_amazon',
+          save: true,
+        });
+      }
+    }
+
+    // 4. Web search for the ASIN
+    sources.push('asin_search');
+    const found = await searchAmazonTitleByAsin(asin);
+    if (found) {
+      return finish({
+        brand: null,
+        title: found.title,
+        imageUrl: found.image,
+        confidence: 0.75,
+        source: 'asin_search',
+        save: true,
+      });
+    }
+  }
+
+  // 5. The product name written in the link itself, if any
+  const slugName = parsedUrl.humanizedName?.trim() || '';
+  const slugWords = slugName.split(/\s+/).filter(Boolean);
+  const slugLooksLikeName =
+    slugWords.length >= 2 &&
+    !/^(gp|dp|product|d|aw|exec)$/i.test(slugWords[0]) &&
+    !(asin && slugName.toUpperCase().replace(/\s+/g, '').includes(asin));
+  if (slugLooksLikeName) {
+    const brand = parsedUrl.brand;
+    const name = slugName;
+    const images = await searchGoogleImages(buildProductSearchQuery(brand || '', name), 3);
+    return finish({
+      brand,
+      title: brand && !name.toLowerCase().startsWith(brand.toLowerCase()) ? `${brand} ${name}` : name,
+      imageUrl: images[0] || null,
+      confidence: 0.55,
+      source: 'url_slug',
+    });
+  }
+
+  // Nothing could read it. Say so rather than guess.
+  return buildResult({
+    brand: null,
+    productName: 'Unknown Product',
+    fullName: 'Unknown Product',
+    category: null,
+    specifications: [],
+    confidence: 0.1,
+    primarySource: 'amazon_unreadable',
+    sources,
+    parsedUrl,
+    fetchResult: null,
+    startTime,
+    resolvedUrl: canonical || resolved,
+    failureReason: !resolved
+      ? "This Amazon short link didn't open. Paste the full amazon.com link, or type the product name."
+      : !asin
+        ? "This Amazon link doesn't point to a product page. Paste the product's own link, or type the product name."
+        : "Amazon wouldn't show us this product right now. Try again in a minute, or type the product name.",
+  });
+}
+
+/**
  * Build the final result object
  */
 function buildResult(params: {
@@ -630,6 +768,8 @@ function buildResult(params: {
   parsedUrl: ParsedProductUrl;
   fetchResult: LightweightFetchResult | null;
   startTime: number;
+  resolvedUrl?: string | null;
+  failureReason?: string | null;
 }): ProductIdentificationResult {
   return {
     brand: params.brand,
@@ -646,6 +786,8 @@ function buildResult(params: {
     processingTimeMs: Date.now() - params.startTime,
     urlParsed: params.parsedUrl,
     fetchResult: params.fetchResult,
+    resolvedUrl: params.resolvedUrl ?? null,
+    failureReason: params.failureReason ?? null,
   };
 }
 

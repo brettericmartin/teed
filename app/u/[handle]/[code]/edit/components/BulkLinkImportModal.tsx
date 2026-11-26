@@ -172,6 +172,11 @@ function PhotoGrid({
 // MAIN COMPONENT
 // ============================================================
 
+function hasTypedName(r: { status: string; editedName: string }): boolean {
+  const name = r.editedName.trim();
+  return r.status === 'failed' && name.length > 0 && name !== 'Unknown Product';
+}
+
 export default function BulkLinkImportModal({
   isOpen,
   onClose,
@@ -542,7 +547,7 @@ export default function BulkLinkImportModal({
 
   const selectAll = () => {
     setResults(prev =>
-      prev.map(r => ({ ...r, isSelected: r.status !== 'failed' }))
+      prev.map(r => ({ ...r, isSelected: r.status !== 'failed' || hasTypedName(r) }))
     );
   };
 
@@ -554,6 +559,15 @@ export default function BulkLinkImportModal({
     setResults(prev =>
       prev.map((r, i) =>
         i === index ? { ...r, [field]: value } : r
+      )
+    );
+  };
+
+  // A link we couldn't read can still be added once the person types its name
+  const updateFailedName = (index: number, value: string) => {
+    setResults(prev =>
+      prev.map((r, i) =>
+        i === index ? { ...r, editedName: value, isSelected: value.trim().length > 0 } : r
       )
     );
   };
@@ -875,9 +889,9 @@ export default function BulkLinkImportModal({
                         {/* Checkbox */}
                         <button
                           onClick={() => toggleSelection(index)}
-                          disabled={result.status === 'failed'}
+                          disabled={result.status === 'failed' && !hasTypedName(result)}
                           className={`flex-shrink-0 w-6 h-6 rounded-md border-2 flex items-center justify-center transition-colors ${
-                            result.status === 'failed'
+                            result.status === 'failed' && !hasTypedName(result)
                               ? 'border-gray-300 bg-gray-100 cursor-not-allowed'
                               : result.isSelected
                               ? 'border-[var(--teed-green-9)] bg-[var(--teed-green-9)]'
@@ -920,9 +934,19 @@ export default function BulkLinkImportModal({
                           </p>
                           {result.status === 'failed' && result.error && (
                             <p className="text-xs text-red-600 mt-1 flex items-center gap-1">
-                              <AlertCircle className="w-3 h-3" />
+                              <AlertCircle className="w-3 h-3 flex-shrink-0" />
                               {result.error}
                             </p>
+                          )}
+                          {result.status === 'failed' && (
+                            <input
+                              type="text"
+                              value={result.editedName === 'Unknown Product' ? '' : result.editedName}
+                              onChange={(e) => updateFailedName(index, e.target.value)}
+                              placeholder="Type the product name to add it anyway"
+                              aria-label="Product name"
+                              className="mt-2 w-full px-3 py-2 text-sm border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-[var(--teed-green-6)] focus:border-transparent"
+                            />
                           )}
                         </div>
 

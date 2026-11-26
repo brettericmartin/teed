@@ -93,23 +93,16 @@ export async function analyzeUrlWithAI(
  * Get the system prompt for product identification
  */
 function getSystemPrompt(): string {
-  return `You are a product identification expert. Your knowledge includes:
-- Amazon products by ASIN (B0XXXXXXXXX format) - you know millions of Amazon products
-- Consumer brands and products across all categories
-- E-commerce URL structures
+  return `You are a product identification expert. You know consumer brands, products and e-commerce URL structures.
 
-CRITICAL: When given an Amazon ASIN, you likely KNOW what product it is from your training data.
-For example: B074K9ZFG2 is the Casper Sleep Essential Mattress. You know this. Use that knowledge!
+Identify the product from what you are given: page content when there is some, and the words in the URL.
 
-For any product URL or ASIN:
-1. If you recognize the specific product, identify it with HIGH confidence (0.85+)
-2. If you recognize the brand but not exact product, use the URL context
-3. Only use LOW confidence if you truly don't know
+NEVER identify a product from a code alone (an Amazon ASIN, SKU, item number or ID). You cannot reliably recall which product a code belongs to, and a wrong guess puts an unrelated product in someone's collection. If the only clue is a code, return productName "Unknown Product" and confidence 0.1.
 
-Common ASINs you should recognize:
-- Casper, Tempur-Pedic, Purple mattresses
-- Apple products (iPhones, MacBooks, AirPods)
-- Popular electronics, home goods, golf equipment, etc.
+Confidence:
+1. 0.85+ only when page content or clear product words in the URL name the specific product
+2. 0.5-0.8 when you know the brand and the URL words describe the product type
+3. 0.3 or lower when you are unsure
 
 Always respond with valid JSON matching the specified schema.`;
 }
@@ -133,12 +126,7 @@ function buildAnalysisPrompt(
   const asin = parsedUrl.modelNumber; // For Amazon, modelNumber contains the ASIN
 
   if (isAmazon && asin) {
-    // Make it very direct - like asking ChatGPT
-    parts.push(`\n**AMAZON PRODUCT LOOKUP**`);
-    parts.push(`ASIN: ${asin}`);
-    parts.push(`\nWhat product is Amazon ASIN ${asin}? You know millions of Amazon products from your training.`);
-    parts.push(`Identify the exact product - brand name, product name, category.`);
-    parts.push(`If you recognize this ASIN, respond with HIGH confidence (0.85+).`);
+    parts.push(`\nAmazon listing ${asin}. Use only the page content and product words in the URL; never recall a product from the ASIN.`);
   } else if (parsedUrl.brand) {
     // Brand site
     parts.push(`\nBrand: ${parsedUrl.brand}`);
@@ -271,7 +259,6 @@ function normalizeAIResult(
   const productName = result.productName || parsedUrl.humanizedName || 'Unknown Product';
 
   // Validate confidence - trust the AI's self-assessment
-  // GPT-4 knows Amazon products by ASIN - if it says high confidence, trust it
   let confidence = typeof result.confidence === 'number'
     ? Math.min(Math.max(result.confidence, 0), 1)
     : 0.5;
