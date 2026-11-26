@@ -210,12 +210,12 @@ export default function CompleteProfilePage() {
             )}
             {handleAvailability.available && (
               <p className="mt-1 text-xs text-[var(--teed-green-9)]">
-                teed.co/@{cleanHandle} is yours!
+                teed.club/u/{cleanHandle} is yours!
               </p>
             )}
             {!handleAvailability.available && !handleAvailability.error && cleanHandle.length === 0 && (
               <p className="mt-1 text-xs text-[var(--text-secondary)]">
-                Your profile lives at teed.co/@you
+                Your profile lives at teed.club/u/you
               </p>
             )}
           </div>

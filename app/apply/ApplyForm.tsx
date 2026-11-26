@@ -385,7 +385,7 @@ export default function ApplyForm() {
                 <p className="mt-1 text-xs text-[var(--teed-green-9)]">Handle is available!</p>
               )}
               <p className="mt-1 text-xs text-gray-400">
-                Your unique URL: teed.co/@{formData.handle || 'you'}
+                Your unique URL: teed.club/u/{formData.handle || 'you'}
               </p>
             </div>
           </div>

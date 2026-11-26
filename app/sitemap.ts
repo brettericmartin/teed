@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import { getSupabasePublic } from '@/lib/supabasePublic';
 import { getAllPosts } from '@/lib/blog';
-import { getAllRoundupSlugs } from '@/lib/blog/categories';
+import { getAllRoundupSlugs, getRoundupCategory } from '@/lib/blog/categories';
 import { getAllProductSlugs } from '@/lib/products/resolveProduct';
 
 const BASE_URL = 'https://www.teed.club';
@@ -105,8 +105,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  // Blog roundup pages
-  const roundupEntries: MetadataRoute.Sitemap = getAllRoundupSlugs().map((slug) => ({
+  // Blog roundup pages: only categories that have public bags, so empty pages stay out
+  let roundupSlugs = getAllRoundupSlugs();
+  try {
+    const { data: catRows } = await getSupabasePublic()
+      .from('bags')
+      .select('category')
+      .eq('is_public', true)
+      .eq('is_hidden', false)
+      .not('category', 'is', null)
+      .limit(5000);
+    const withBags = new Set((catRows || []).map((r) => r.category as string));
+    roundupSlugs = roundupSlugs.filter((slug) => {
+      const cat = getRoundupCategory(slug);
+      return cat ? withBags.has(cat.supabaseCategory) : false;
+    });
+  } catch {
+    // keep the full list if the lookup fails
+  }
+  const roundupEntries: MetadataRoute.Sitemap = roundupSlugs.map((slug) => ({
     url: `${BASE_URL}/blog/best/${slug}`,
     lastModified: now,
     changeFrequency: 'weekly' as const,
@@ -157,7 +174,7 @@ async function fetchDatabaseEntries(now: Date): Promise<DatabaseEntries> {
         code,
         updated_at,
         owner_id,
-        profiles!inner(handle)
+        profiles!bags_owner_id_fkey!inner(handle)
       `)
       .eq('is_public', true)
       .eq('is_hidden', false)

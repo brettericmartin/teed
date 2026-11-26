@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { getSupabasePublic } from '@/lib/supabasePublic';
 import type { Metadata } from 'next';
 import PublicBagView from './PublicBagView';
+import { isAffiliateUrl } from '@/lib/affiliate/detect';
 import {
   generateBagJsonLd,
   generateBreadcrumbJsonLd,
@@ -205,11 +206,15 @@ export default async function UserBagPage({ params }: PageProps) {
     .eq('bag_id', bag.id)
     .order('created_at', { ascending: true });
 
-  // Affiliate disclosure strip: affiliate_links has no bag_item_id column and there
-  // is no creator_settings table, so the old lookup always errored and the strip
-  // could never show. Keep the rendering path; feed it an empty result until a
-  // per-item affiliate model exists.
-  const hasAffiliateLinks = false;
+  // Affiliate disclosure strip: shown when any item or bag link is a commission link
+  // (shorteners, affiliate networks, Amazon tag=), so the page discloses it before the links.
+  const allLinkUrls: string[] = [
+    ...((bag.items || []) as Array<{ links?: Array<{ url: string }> | null }>).flatMap(
+      (item) => (item.links || []).map((l) => l.url)
+    ),
+    ...((bagLinks || []) as Array<{ url: string }>).map((l) => l.url),
+  ];
+  const hasAffiliateLinks = allLinkUrls.some((u) => isAffiliateUrl(u));
   const disclosureText: string | undefined = undefined;
 
   // Create bag object with cover photo URL
