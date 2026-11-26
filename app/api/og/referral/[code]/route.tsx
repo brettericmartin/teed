@@ -1,6 +1,7 @@
 import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
+import { isSafeCode } from '@/lib/supabase/safeFilter';
 
 export const runtime = 'edge';
 
@@ -15,11 +16,20 @@ export async function GET(
     const supabase = await createServerSupabase();
 
     // Look up the application by custom code or ID
-    const { data: application } = await supabase
-      .from('beta_applications')
-      .select('id, name, full_name, custom_referral_code')
-      .or(`custom_referral_code.eq.${code},id.eq.${code}`)
-      .single();
+    // Only letters, digits, dash and underscore can reach the filter.
+    const { data: application } = isSafeCode(code)
+      ? await supabase
+          .from('beta_applications')
+          .select('id, name, full_name, custom_referral_code')
+          // id is a uuid, so only compare it when the code looks like one;
+          // otherwise Postgres rejects the whole query and custom codes never match.
+          .or(
+            /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(code)
+              ? `custom_referral_code.eq.${code},id.eq.${code}`
+              : `custom_referral_code.eq.${code}`
+          )
+          .single()
+      : { data: null };
 
     // Get capacity info
     const { data: capacity } = await supabase.rpc('get_beta_capacity');

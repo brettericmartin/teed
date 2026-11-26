@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { safeFilterTerm } from '@/lib/supabase/safeFilter';
 
 /**
  * MCP HTTP Transport Endpoint
@@ -236,7 +237,7 @@ async function searchBags(
     .limit(limit);
 
   if (query) {
-    dbQuery = dbQuery.or(`title.ilike.%${query}%,description.ilike.%${query}%`);
+    dbQuery = dbQuery.or(`title.ilike.%${safeFilterTerm(query)}%,description.ilike.%${safeFilterTerm(query)}%`);
   }
   if (category) {
     dbQuery = dbQuery.eq('category', category);
@@ -282,7 +283,7 @@ async function searchItems(
       bags!bag_items_bag_id_fkey!inner(code, title, category, is_public, profiles!bags_owner_id_fkey(handle))
     `)
     .eq('bags.is_public', true)
-    .or(`custom_name.ilike.%${query}%,brand.ilike.%${query}%`)
+    .or(`custom_name.ilike.%${safeFilterTerm(query)}%,brand.ilike.%${safeFilterTerm(query)}%`)
     .limit(limit);
 
   if (error) {

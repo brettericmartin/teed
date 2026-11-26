@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { withAdminApi } from '@/lib/withAdmin';
 import { logAdminAction } from '@/lib/adminAuth';
+import { safeFilterTerm } from '@/lib/supabase/safeFilter';
 
 export const dynamic = 'force-dynamic';
 
@@ -57,7 +58,7 @@ export async function GET(request: NextRequest) {
   }
   if (search) {
     // Search in subject and message (or title/description if those are the actual columns)
-    query = query.or(`subject.ilike.%${search}%,message.ilike.%${search}%`);
+    query = query.or(`subject.ilike.%${safeFilterTerm(search)}%,message.ilike.%${safeFilterTerm(search)}%`);
   }
 
   query = query.range(offset, offset + limit - 1);

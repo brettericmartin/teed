@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { withAdminApi } from '@/lib/withAdmin';
+import { safeFilterTerm } from '@/lib/supabase/safeFilter';
 
 export const dynamic = 'force-dynamic';
 
@@ -53,7 +54,7 @@ export async function GET(request: NextRequest) {
 
   // Search by name or email
   if (search) {
-    query = query.or(`email.ilike.%${search}%,name.ilike.%${search}%`);
+    query = query.or(`email.ilike.%${safeFilterTerm(search)}%,name.ilike.%${safeFilterTerm(search)}%`);
   }
 
   // Sort
