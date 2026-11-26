@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Inter, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import FeedbackWidget from "@/components/FeedbackWidget";
@@ -9,6 +10,21 @@ export const metadata: Metadata = {
   title: "Teed.club - Bags, made shareable",
   description: "Create and share curated collections of your favorite gear, kits, and loadouts.",
 };
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+  variable: "--font-inter",
+});
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-cormorant",
+});
 
 export const viewport = {
   width: 'device-width',
@@ -49,7 +65,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${cormorant.variable}`}>
       <body className="antialiased bg-[var(--base-background)]">
         <Providers>
           <Navigation
