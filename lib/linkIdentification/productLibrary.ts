@@ -268,7 +268,7 @@ export async function lookupTeedItemByAsin(
   try {
     const { data: links } = await supabase
       .from('links')
-      .select('url, bag_id, bag_item_id')
+      .select('url, bag_item_id')
       .ilike('url', `%${asin}%`)
       .not('bag_item_id', 'is', null)
       .limit(25);
@@ -277,7 +277,13 @@ export async function lookupTeedItemByAsin(
     );
     if (!matching.length) return null;
 
-    const bagIds = Array.from(new Set(matching.map((l) => l.bag_id as string)));
+    const { data: allItems } = await supabase
+      .from('bag_items')
+      .select('bag_id, custom_name, brand, photo_url')
+      .in('id', Array.from(new Set(matching.map((l) => l.bag_item_id as string))));
+    if (!allItems?.length) return null;
+
+    const bagIds = Array.from(new Set(allItems.map((i) => i.bag_id as string)));
     const { data: bags } = await supabase
       .from('bags')
       .select('id')
@@ -285,13 +291,7 @@ export async function lookupTeedItemByAsin(
       .eq('is_public', true)
       .eq('is_hidden', false);
     const publicBags = new Set((bags || []).map((b) => b.id as string));
-    const itemIds = matching.filter((l) => publicBags.has(l.bag_id as string)).map((l) => l.bag_item_id as string);
-    if (!itemIds.length) return null;
-
-    const { data: items } = await supabase
-      .from('bag_items')
-      .select('custom_name, brand, photo_url')
-      .in('id', itemIds);
+    const items = allItems.filter((i) => publicBags.has(i.bag_id as string));
     const named = (items || []).filter((i) => i.custom_name && !isJunkTitle(i.custom_name as string));
     if (!named.length) return null;
 
