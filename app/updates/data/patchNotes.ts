@@ -55,6 +55,7 @@ export const PATCH_NOTES: PatchNote[] = [
       { text: 'Replacing an item photo no longer leaves a broken image behind', category: 'bugfix' },
       { text: 'Saving a big batch of links no longer times out; photos are added a few at a time', category: 'improvement' },
       { text: 'Fixed broken links on Best Of pages and in the sitemap', category: 'bugfix' },
+      { text: 'Pages load their fonts sooner', category: 'improvement' },
       { text: 'Search engines now see one clean address per bag and profile, and skip empty ones', category: 'improvement' },
       { text: 'A round of security hardening behind the scenes', category: 'improvement' },
     ]
