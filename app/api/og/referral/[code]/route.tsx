@@ -147,6 +147,7 @@ export async function GET(
             </div>
             <div
               style={{
+                display: 'flex',
                 width: '100%',
                 height: '12px',
                 backgroundColor: '#E5E7EB',
