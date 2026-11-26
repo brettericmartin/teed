@@ -161,7 +161,10 @@ export async function POST(request: NextRequest) {
       // (Enhance details used to work from the name alone, so it came back generic.)
       let facts: PageFacts | null = null;
       const productUrl = productLinkByItem.get(item.id);
-      if (productUrl) {
+      // Only read the page when the item is missing facts it could supply; an item
+      // that already has its brand and specs costs no page read (Firecrawl credits).
+      const missingFacts = !item.brand || !item.custom_description;
+      if (productUrl && missingFacts) {
         facts = await readProductPage(productUrl);
         if (facts?.brand && !item.brand) suggestion.suggested.brand = facts.brand;
       }
