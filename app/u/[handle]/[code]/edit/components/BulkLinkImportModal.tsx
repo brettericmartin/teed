@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { parseLinks } from '@/lib/bulkLinks/parseLinks';
 import { X, Check, Loader2, Link as LinkIcon, ChevronDown, ChevronUp, ExternalLink, AlertCircle, Image as ImageIcon, Sparkles } from 'lucide-react';
 import { BulkLinkProcessingView } from './BulkLinkProcessingView';
 import ItemPreview from './ItemPreview';
@@ -328,40 +329,8 @@ export default function BulkLinkImportModal({
     }
   }, [isOpen, initialUrl, bagCode]);
 
-  // Parse URLs from input text
-  const parseInput = useCallback((text: string) => {
-    // First, split on http(s):// boundaries so pasted-together URLs get separated
-    // e.g. "https://a.comhttps://b.com" → ["https://a.com", "https://b.com"]
-    const tokens = text
-      .split(/(?=https?:\/\/)/)
-      .flatMap(chunk => chunk.split(/[\n,\s]+/))
-      .filter(Boolean);
-
-    const validUrls: string[] = [];
-    const seen = new Set<string>();
-
-    for (const token of tokens) {
-      let url = token.trim();
-      if (!url) continue;
-
-      // Add https:// if missing
-      if (!url.startsWith('http://') && !url.startsWith('https://')) {
-        url = 'https://' + url;
-      }
-
-      try {
-        const parsed = new URL(url);
-        if (['http:', 'https:'].includes(parsed.protocol) && !seen.has(url)) {
-          seen.add(url);
-          validUrls.push(url);
-        }
-      } catch {
-        // Invalid URL, skip
-      }
-    }
-
-    return validUrls.slice(0, 25);
-  }, []);
+  // Parse URLs from input text (share-sheet text like "Product title https://a.co/…" works too)
+  const parseInput = useCallback((text: string) => parseLinks(text, 25), []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value;

@@ -108,9 +108,12 @@ export async function identifyProduct(
   if (libraryEntry) {
     sources.push('product_library');
     const parsedUrlForLibrary = parseProductUrl(url);
+    const libraryName = libraryEntry.product_name || libraryEntry.full_name;
     return buildResult({
       brand: libraryEntry.brand,
-      productName: libraryEntry.product_name || 'Unknown Product',
+      productName:
+        (isAmazonUrl(url) ? shortenAmazonTitle(cleanAmazonTitle(libraryName) || '') : libraryName) ||
+        'Unknown Product',
       fullName: libraryEntry.full_name || libraryEntry.product_name || 'Unknown Product',
       category: libraryEntry.category || parsedUrlForLibrary.category,
       specifications: libraryEntry.specifications || [],
@@ -632,7 +635,8 @@ async function identifyAmazonProduct(
         sources.push('product_library');
         return buildResult({
           brand: cached.brand,
-          productName: cleanAmazonTitle(cached.product_name || cached.full_name) || 'Unknown Product',
+          productName:
+            shortenAmazonTitle(cleanAmazonTitle(cached.product_name || cached.full_name) || '') || 'Unknown Product',
           fullName: cleanAmazonTitle(cached.full_name || cached.product_name) || 'Unknown Product',
           category: cached.category || parsedUrl.category,
           specifications: cached.specifications || [],
