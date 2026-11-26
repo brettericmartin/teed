@@ -51,7 +51,7 @@ const TIER_BENEFITS: Record<string, { title: string; perks: string[] }> = {
   },
 };
 
-export default function InviteRedemption({ code, tier, invitedBy }: InviteRedemptionProps) {
+export default function InviteRedemption({ code, tier }: InviteRedemptionProps) {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -83,7 +83,7 @@ export default function InviteRedemption({ code, tier, invitedBy }: InviteRedemp
       if (signUpError) throw signUpError;
       if (!authData.user) throw new Error('Failed to create account');
 
-      // 2. Claim the invite code
+      // 2. Claim the invite code (also sets the beta tier on the profile)
       const { error: claimError } = await supabase.rpc('claim_invite_code', {
         invite_code: code,
         claiming_user_id: authData.user.id,
@@ -94,19 +94,8 @@ export default function InviteRedemption({ code, tier, invitedBy }: InviteRedemp
         // Don't fail the whole flow if claim fails - user is already created
       }
 
-      // 3. Update profile with beta tier
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .update({
-          beta_tier: tier,
-          beta_approved_at: new Date().toISOString(),
-          invited_by_id: invitedBy,
-        })
-        .eq('id', authData.user.id);
-
-      if (profileError) {
-        console.error('Profile update error:', profileError);
-      }
+      // The tier, approval time and inviter are set server-side by
+      // claim_invite_code from the code itself; the browser can't write them.
 
       // Redirect to dashboard
       router.push('/dashboard?welcome=true');

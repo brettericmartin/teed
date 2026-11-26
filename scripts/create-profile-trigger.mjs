@@ -2,8 +2,13 @@ import pg from 'pg';
 
 const { Client } = pg;
 
+if (!process.env.DATABASE_URL) {
+  console.error('Set DATABASE_URL to run this script.');
+  process.exit(1);
+}
+
 const client = new Client({
-  connectionString: 'postgresql://postgres:Crimsonblue1201!@db.jvljmfdroozexzodqupg.supabase.co:5432/postgres'
+  connectionString: process.env.DATABASE_URL
 });
 
 async function createTrigger() {
