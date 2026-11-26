@@ -49,6 +49,10 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
     website: profile.social_links?.website || '',
   });
   const [isSaving, setIsSaving] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [error, setError] = useState('');
 
@@ -299,6 +303,24 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
       setAvatarPreview(profile.avatar_url);
     } finally {
       setIsUploadingAvatar(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    setIsDeleting(true);
+    setDeleteError('');
+    try {
+      const res = await fetch('/api/account/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ confirmHandle: deleteConfirm }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Could not delete your account');
+      window.location.href = '/?accountDeleted=1';
+    } catch (err: any) {
+      setDeleteError(err.message || 'Could not delete your account');
+      setIsDeleting(false);
     }
   };
 
@@ -670,10 +692,61 @@ export default function SettingsClient({ initialProfile, userEmail }: SettingsCl
                   rel="noopener noreferrer"
                   className="text-[var(--teed-green-9)] hover:text-[var(--teed-green-10)] font-medium hover:underline"
                 >
-                  teed.com/u/{profile.handle}
+                  teed.club/u/{profile.handle}
                 </a>
               </div>
             </div>
+          </div>
+
+          {/* Delete Account */}
+          <div className="bg-[var(--surface)] rounded-[var(--radius-xl)] shadow-[var(--shadow-2)] border border-[var(--border-subtle)] p-6">
+            <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-2">Delete account</h2>
+            <p className="text-sm text-[var(--text-secondary)] mb-4">
+              Permanently deletes your profile, every bag and item in it, your photos, follows and saved bags. This can’t be undone.
+            </p>
+            {!showDelete ? (
+              <button
+                type="button"
+                onClick={() => setShowDelete(true)}
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-red-300 text-red-700 hover:bg-red-50"
+              >
+                <Trash2 className="w-4 h-4" />
+                Delete my account
+              </button>
+            ) : (
+              <div className="space-y-3">
+                <label htmlFor="delete-confirm" className="block text-sm text-[var(--text-primary)]">
+                  Type your handle <span className="font-semibold">{profile.handle}</span> to confirm
+                </label>
+                <input
+                  id="delete-confirm"
+                  type="text"
+                  autoComplete="off"
+                  value={deleteConfirm}
+                  onChange={(e) => setDeleteConfirm(e.target.value)}
+                  className="w-full px-3 py-2 text-sm border border-red-300 rounded-lg bg-white focus:ring-2 focus:ring-red-300 focus:border-transparent"
+                />
+                {deleteError && <p className="text-sm text-red-700">{deleteError}</p>}
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    disabled={isDeleting || deleteConfirm.trim().replace(/^@/, '').toLowerCase() !== profile.handle.toLowerCase()}
+                    onClick={handleDeleteAccount}
+                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isDeleting ? 'Deleting…' : 'Permanently delete'}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={isDeleting}
+                    onClick={() => { setShowDelete(false); setDeleteConfirm(''); setDeleteError(''); }}
+                    className="px-4 py-2 text-sm font-medium rounded-lg border border-[var(--border-subtle)] text-[var(--text-primary)]"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </main>
