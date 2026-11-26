@@ -4,6 +4,7 @@ import { findBestProductLinks, detectProductAge } from '@/lib/services/SmartLink
 import { getOpenAI } from '@/lib/openaiClient';
 import { generateBrandContext, loadCategoryKnowledge } from '@/lib/brandKnowledge';
 import { readProductPage, pageFactsForPrompt, isProductLinkKind, type PageFacts } from '@/lib/items/enrichFromLink';
+import { searchProductImages } from '@/lib/images/searchProductImages';
 
 // Items with a product link get that page read first (a few seconds each, in parallel)
 export const maxDuration = 60;
@@ -81,7 +82,7 @@ export async function POST(request: NextRequest) {
     // Get items (filtered by itemIds if provided)
     let itemsQuery = supabase
       .from('bag_items')
-      .select('id, custom_name, brand, custom_description, notes')
+      .select('id, custom_name, brand, custom_description, notes, photo_url')
       .eq('bag_id', bagId);
 
     // Filter to specific items if selectedItemIds provided
@@ -152,6 +153,7 @@ export async function POST(request: NextRequest) {
           brand: item.brand,
           description: item.custom_description,
           notes: item.notes,
+          photoUrl: item.photo_url || null,
           hasLink: itemsWithUserLinks.has(item.id) || itemsWithAutoLinks.has(item.id),
         },
         suggested: {},
@@ -168,6 +170,13 @@ export async function POST(request: NextRequest) {
         facts = await readProductPage(productUrl);
         if (facts?.brand && !item.brand) suggestion.suggested.brand = facts.brand;
       }
+
+      // Photo choices, found while the text is written: the product page's own photo
+      // when the page was read above (no extra read for it), then a few image results.
+      const photoSearch = searchProductImages(
+        [item.brand || facts?.brand, item.custom_name].filter(Boolean).join(' '),
+        6
+      );
 
       // Generate enrichment suggestions
       try {
@@ -226,6 +235,22 @@ Generate fresh, detailed information for all fields.`,
         }
       } catch (error) {
         console.error(`Failed to enrich item ${item.id}:`, error);
+      }
+
+      const photoCandidates: Array<{ url: string; source: 'product_page' | 'search' }> = [];
+      const seenPhotos = new Set<string>();
+      if (facts?.imageUrl && /^https:\/\//.test(facts.imageUrl)) {
+        photoCandidates.push({ url: facts.imageUrl, source: 'product_page' });
+        seenPhotos.add(facts.imageUrl);
+      }
+      for (const url of await photoSearch) {
+        if (photoCandidates.length >= 6) break;
+        if (seenPhotos.has(url) || url === item.photo_url) continue;
+        seenPhotos.add(url);
+        photoCandidates.push({ url, source: 'search' });
+      }
+      if (photoCandidates.length > 0) {
+        suggestion.suggested.photoCandidates = photoCandidates;
       }
 
       // Always generate link suggestion (even if item has links)

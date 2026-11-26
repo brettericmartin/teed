@@ -77,10 +77,11 @@ type ItemListProps = {
   onItemMoved?: (itemId: string, targetBagTitle: string) => void;
   onEnrichItem?: (itemId: string) => void;
   enrichingItemId?: string | null;
+  onSmartPhotoMatch?: (itemId: string) => void;
   sections?: Section[];
 };
 
-export default function ItemList({ items, onDelete, onUpdate, onReorder, bagCode, heroItemId, onToggleHero, onItemMoved, onEnrichItem, enrichingItemId, sections = [] }: ItemListProps) {
+export default function ItemList({ items, onDelete, onUpdate, onReorder, bagCode, heroItemId, onToggleHero, onItemMoved, onEnrichItem, enrichingItemId, onSmartPhotoMatch, sections = [] }: ItemListProps) {
   // Sort items by sort_index
   const [sortedItems, setSortedItems] = useState([...items].sort((a, b) => a.sort_index - b.sort_index));
   const [isMounted, setIsMounted] = useState(false);
@@ -164,6 +165,7 @@ export default function ItemList({ items, onDelete, onUpdate, onReorder, bagCode
               onToggleHero={onToggleHero}
               onItemMoved={onItemMoved}
               onEnrichItem={onEnrichItem}
+              onSmartPhotoMatch={onSmartPhotoMatch}
               isEnrichingItem={enrichingItemId === item.id}
               sections={sections}
             />
@@ -188,6 +190,7 @@ export default function ItemList({ items, onDelete, onUpdate, onReorder, bagCode
               onToggleHero={onToggleHero}
               onItemMoved={onItemMoved}
               onEnrichItem={onEnrichItem}
+              onSmartPhotoMatch={onSmartPhotoMatch}
               isEnrichingItem={enrichingItemId === item.id}
               sections={sections}
             />

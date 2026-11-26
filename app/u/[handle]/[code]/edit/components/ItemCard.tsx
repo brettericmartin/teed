@@ -61,11 +61,12 @@ type ItemCardProps = {
   onToggleHero?: (itemId: string) => void;
   onItemMoved?: (itemId: string, targetBagTitle: string) => void;
   onEnrichItem?: (itemId: string) => void;
+  onSmartPhotoMatch?: (itemId: string) => void;
   isEnrichingItem?: boolean;
   sections?: Section[];
 };
 
-export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = false, onToggleHero, onItemMoved, onEnrichItem, isEnrichingItem, sections = [] }: ItemCardProps) {
+export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = false, onToggleHero, onItemMoved, onEnrichItem, onSmartPhotoMatch, isEnrichingItem, sections = [] }: ItemCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isMoveModalOpen, setIsMoveModalOpen] = useState(false);
@@ -700,7 +701,19 @@ export default function ItemCard({ item, onDelete, onUpdate, bagCode, isHero = f
 
           {/* Photo Upload/Display */}
           <div>
-            <h4 className="text-sm font-medium text-[var(--text-primary)] mb-2">Photo</h4>
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-sm font-medium text-[var(--text-primary)]">Photo</h4>
+              {onSmartPhotoMatch && item.photo_url && (
+                <button
+                  type="button"
+                  onClick={() => onSmartPhotoMatch(item.id)}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 min-h-[36px] text-xs font-medium text-[var(--sky-11)] bg-[var(--sky-3)] hover:bg-[var(--sky-4)] border border-[var(--sky-6)] rounded-lg transition-colors"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Smart Photo Match
+                </button>
+              )}
+            </div>
             <ItemPhotoUpload
               itemId={item.id}
               currentPhotoUrl={item.photo_url}
