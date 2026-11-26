@@ -135,12 +135,14 @@ export async function POST(request: NextRequest) {
       await step('photos used elsewhere', () => others);
     }
 
-    // Bags go before the sign-in: their delete trigger writes to the profile's history,
+    // Bags and profile blocks go before the sign-in: their delete triggers writes to the profile's history,
     // which needs the profile to still exist. Items, links and saves cascade.
     if (bagIds.length) {
       await step('own bag parents', () => admin.from('bags').update({ parent_bag_id: null }).eq('owner_id', userId));
       await step('bags', () => admin.from('bags').delete().eq('owner_id', userId));
     }
+    // Profile blocks have the same kind of history trigger
+    await step('profile blocks', () => admin.from('profile_blocks').delete().eq('profile_id', userId));
 
     // 2. Photos in storage (every path starts with the person's id)
     for (const bucket of BUCKETS) {
