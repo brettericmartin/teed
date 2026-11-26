@@ -120,6 +120,8 @@ export function isJunkTitle(title: string | null | undefined): boolean {
   if (!title) return true;
   const t = title.trim().toLowerCase();
   if (t.length < 4) return true;
+  // A bare store name is the site's own page, not a product
+  if (/^amazon(\.[a-z.]+)?$/.test(t)) return true;
   return [
     'page not found',
     'not found',
@@ -132,8 +134,6 @@ export function isJunkTitle(title: string | null | undefined): boolean {
     'are you a human',
     'just a moment',
     'service unavailable',
-    'amazon.com',
-    'amazon.co.uk',
     'amazon sign-in',
     '404',
     'error page',

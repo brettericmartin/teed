@@ -632,8 +632,8 @@ async function identifyAmazonProduct(
         sources.push('product_library');
         return buildResult({
           brand: cached.brand,
-          productName: cached.product_name || cached.full_name || 'Unknown Product',
-          fullName: cached.full_name || cached.product_name || 'Unknown Product',
+          productName: cleanAmazonTitle(cached.product_name || cached.full_name) || 'Unknown Product',
+          fullName: cleanAmazonTitle(cached.full_name || cached.product_name) || 'Unknown Product',
           category: cached.category || parsedUrl.category,
           specifications: cached.specifications || [],
           price: cached.price,
