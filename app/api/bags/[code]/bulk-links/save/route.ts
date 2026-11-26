@@ -254,12 +254,6 @@ export async function POST(
         const photoUploaded = false;
         let linkId: string | undefined;
 
-        // Step 2: Queue the photo; photos are fetched in parallel after the loop
-        // so a batch of slow image hosts can't run past the time limit.
-        if (selection.selectedPhotoUrl) {
-          photoJobs.push({ createdIndex: createdItems.length, itemId: item.id, selection });
-        }
-
         // Step 3: Add purchase link if provided
         if (selection.purchaseUrl) {
           try {
@@ -290,6 +284,12 @@ export async function POST(
           linkId,
           photoUploaded,
         });
+
+        // Step 2: Queue the photo; photos are fetched in parallel after the loop
+        // so a batch of slow image hosts can't run past the time limit.
+        if (selection.selectedPhotoUrl) {
+          photoJobs.push({ createdIndex: createdItems.length - 1, itemId: item.id, selection });
+        }
 
         console.log(`[bulk-links/save] Created item ${item.id} (photo queued: ${!!selection.selectedPhotoUrl}, link: ${!!linkId})`);
       } catch (error) {
