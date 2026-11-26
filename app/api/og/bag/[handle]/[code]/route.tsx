@@ -4,6 +4,33 @@ import { getSupabasePublic } from '@/lib/supabasePublic';
 
 export const runtime = 'edge';
 
+// Satori (the share-image renderer) only draws PNG, JPEG and GIF. Many
+// item photos are WebP or AVIF, which made the whole image fail. Fetch each
+// photo once, keep only formats Satori can draw, and fall back to the
+// placeholder for anything else.
+const RENDERABLE = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
+const MAX_IMAGE_BYTES = 3 * 1024 * 1024;
+
+async function toRenderableImage(url: string | null | undefined): Promise<string | null> {
+  if (!url || !/^https:\/\//i.test(url)) return null;
+  try {
+    const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
+    if (!res.ok) return null;
+    const type = (res.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
+    if (!RENDERABLE.includes(type)) return null;
+    const buf = await res.arrayBuffer();
+    if (buf.byteLength === 0 || buf.byteLength > MAX_IMAGE_BYTES) return null;
+    const bytes = new Uint8Array(buf);
+    let binary = '';
+    for (let i = 0; i < bytes.length; i += 0x8000) {
+      binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+    }
+    return `data:${type};base64,${btoa(binary)}`;
+  } catch {
+    return null;
+  }
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ handle: string; code: string }> }
@@ -71,10 +98,15 @@ export async function GET(
     }
 
     // Get up to 3 item preview URLs
-    const previewItems = items.slice(0, 3).map((item: any) => ({
-      name: item.custom_name || item.brand || 'Item',
-      photoUrl: item.custom_photo_id ? photoUrls[item.custom_photo_id] : item.photo_url,
-    }));
+    const previewItems = await Promise.all(
+      items.slice(0, 3).map(async (item: any) => ({
+        name: item.custom_name || item.brand || 'Item',
+        photoUrl: await toRenderableImage(
+          item.custom_photo_id ? photoUrls[item.custom_photo_id] : item.photo_url
+        ),
+      }))
+    );
+    const avatarUrl = await toRenderableImage(profile.avatar_url);
 
     const displayName = profile.display_name || handle;
     const itemCount = items.length;
@@ -104,9 +136,9 @@ export async function GET(
             }}
           >
             {/* Avatar */}
-            {profile.avatar_url ? (
+            {avatarUrl ? (
               <img
-                src={profile.avatar_url}
+                src={avatarUrl}
                 width={56}
                 height={56}
                 style={{
