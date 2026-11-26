@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
 import { encryptAuthCode, isSecretConfigured, type AuthCodeData } from '@/lib/oauthCrypto';
+import { isAllowedRedirectUri } from '@/lib/oauthRedirect';
 
 /**
  * POST /api/auth/oauth/approve
@@ -111,6 +112,12 @@ export async function POST(request: NextRequest) {
   cookieStore.delete('oauth_request');
 
   // Build the redirect URL with the auth code
+  if (!isAllowedRedirectUri(oauthRequest.redirect_uri)) {
+    return NextResponse.json(
+      { error: 'redirect_uri is not allowed' },
+      { status: 400 }
+    );
+  }
   const redirectUrl = new URL(oauthRequest.redirect_uri);
   redirectUrl.searchParams.set('code', authCode);
   if (oauthRequest.state) {
