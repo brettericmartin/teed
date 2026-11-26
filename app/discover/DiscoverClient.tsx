@@ -133,7 +133,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
   const [bags, setBags] = useState<Bag[]>(() =>
-    searchParams.get('sort') === 'hot'
+    (searchParams.get('sort') || 'hot') === 'hot'
       ? [...initialBags].sort((a, b) => getHotScore(b) - getHotScore(a))
       : [...initialBags]
   );
@@ -155,17 +155,21 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
 
-  // Popular tags state
-  const [popularTags, setPopularTags] = useState<Array<{ tag: string; count: number }>>([]);
-
   useEffect(() => {
     checkAuth();
-    fetchPopularTags();
 
     analytics.pageViewed('discover');
   }, []);
 
+  // The server already rendered public bags for the URL's category and tags, so the
+  // first run only needs a fetch for filters the server doesn't apply. Re-fetching
+  // here used to blank the grid behind a skeleton on every visit.
+  const isFirstFetch = useRef(true);
   useEffect(() => {
+    if (isFirstFetch.current) {
+      isFirstFetch.current = false;
+      if (!showFollowing && !showSaved && !searchQuery) return;
+    }
     fetchBags();
   }, [showFollowing, showSaved, selectedCategory, searchQuery, selectedTags, sortBy]);
 
@@ -178,7 +182,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
     if (selectedCategory) params.set('category', selectedCategory);
     if (selectedTags.length > 0) params.set('tags', selectedTags.join(','));
     if (searchQuery) params.set('search', searchQuery);
-    if (sortBy && sortBy !== 'newest') params.set('sort', sortBy);
+    if (sortBy && sortBy !== 'hot') params.set('sort', sortBy);
     const next = params.toString();
     if (next === searchParams.toString()) return;
     router.replace(`${pathname}${next ? `?${next}` : ''}`, { scroll: false });
@@ -240,18 +244,6 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
     }
   };
 
-  const fetchPopularTags = async () => {
-    try {
-      const response = await fetch('/api/discover/tags?limit=15');
-      if (response.ok) {
-        const data = await response.json();
-        setPopularTags(data.tags || []);
-      }
-    } catch (error) {
-      console.error('Error fetching popular tags:', error);
-    }
-  };
-
   const fetchBags = async () => {
     setIsLoading(true);
     try {
@@ -304,7 +296,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
     setSearchQuery('');
     setSearchInput('');
     setSelectedTags([]);
-    setSortBy('newest');
+    setSortBy('hot');
   };
 
   const toggleTag = (tag: string) => {
@@ -315,7 +307,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
     );
   };
 
-  const hasActiveFilters = showFollowing || showSaved || selectedCategory || searchQuery || selectedTags.length > 0 || sortBy !== 'newest';
+  const hasActiveFilters = showFollowing || showSaved || selectedCategory || searchQuery || selectedTags.length > 0 || sortBy !== 'hot';
 
   const hasSuggestions = suggestions && (
     suggestions.bags.length > 0 ||
@@ -347,13 +339,19 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
       <PageHeader className="pt-12">
         <ContentContainer className="pb-4">
           <div className="flex flex-col gap-3">
+            <div>
+              <h1 className="text-xl sm:text-2xl font-semibold text-[var(--text-primary)]">Discover bags</h1>
+              <p className="text-sm text-[var(--text-secondary)]">
+                Real gear from real people, with every item and why it made the cut.
+              </p>
+            </div>
 
             {/* Filters */}
             <div className="flex flex-col gap-3">
               {/* Search, Sort, and Following */}
-              <div className="flex flex-col sm:flex-row gap-2">
+              <div className="flex flex-wrap sm:flex-nowrap gap-2">
                 {/* Search Bar with Autocomplete */}
-                <form onSubmit={handleSearchSubmit} className="flex-1 relative">
+                <form onSubmit={handleSearchSubmit} className="basis-full sm:basis-auto sm:flex-1 relative">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-tertiary)]" />
                     <input
@@ -457,12 +455,14 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                 <div className="relative">
                   <button
                     onClick={() => setShowSortMenu(!showSortMenu)}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] hover:bg-[var(--surface-hover)] transition-all whitespace-nowrap"
+                    aria-label={`Sort: ${SORT_OPTIONS.find(o => o.value === sortBy)?.label ?? ''}`}
+                    aria-expanded={showSortMenu}
+                    className="flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-lg font-medium bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] hover:bg-[var(--surface-hover)] transition-all whitespace-nowrap"
                   >
                     {SORT_OPTIONS.find(o => o.value === sortBy)?.icon && (
                       <span>{SORT_OPTIONS.find(o => o.value === sortBy)?.icon}</span>
                     )}
-                    <span className="hidden sm:inline">{SORT_OPTIONS.find(o => o.value === sortBy)?.label}</span>
+                    <span>{SORT_OPTIONS.find(o => o.value === sortBy)?.label}</span>
                     <ChevronDown className={`w-4 h-4 transition-transform ${showSortMenu ? 'rotate-180' : ''}`} />
                   </button>
 
@@ -491,7 +491,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                 {isAuthenticated && (
                   <button
                     onClick={() => setShowFollowing(!showFollowing)}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all whitespace-nowrap ${
+                    className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-lg font-medium transition-all whitespace-nowrap ${
                       showFollowing
                         ? 'bg-[var(--sky-6)] text-white'
                         : 'bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] hover:bg-[var(--surface-hover)]'
@@ -506,7 +506,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                 {isAuthenticated && (
                   <button
                     onClick={() => setShowSaved(!showSaved)}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all whitespace-nowrap ${
+                    className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-lg font-medium transition-all whitespace-nowrap ${
                       showSaved
                         ? 'bg-[var(--amber-9)] text-white'
                         : 'bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border-subtle)] hover:bg-[var(--surface-hover)]'
@@ -521,7 +521,8 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                 {hasActiveFilters && (
                   <button
                     onClick={clearFilters}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-[var(--copper-9)] hover:text-[var(--copper-10)] hover:bg-[var(--copper-2)] transition-all whitespace-nowrap"
+                    aria-label="Clear filters"
+                    className="flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-lg font-medium text-[var(--copper-9)] hover:text-[var(--copper-10)] hover:bg-[var(--copper-2)] transition-all whitespace-nowrap"
                   >
                     <X className="w-4 h-4" />
                     <span className="hidden sm:inline">Clear</span>
@@ -529,8 +530,8 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                 )}
               </div>
 
-              {/* Category Filters */}
-              <div className="flex flex-wrap gap-2">
+              {/* Category Filters: one swipeable row on phones, wrapped on larger screens */}
+              <div className="flex gap-2 overflow-x-auto -mx-4 px-4 pb-1 sm:mx-0 sm:px-0 sm:pb-0 sm:flex-wrap sm:overflow-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {CATEGORIES.map((category) => {
                   const colors = getCategoryColor(category.value);
                   const isSelected = selectedCategory === category.value;
@@ -540,7 +541,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
                       onClick={() => setSelectedCategory(
                         selectedCategory === category.value ? null : category.value
                       )}
-                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                      className={`shrink-0 whitespace-nowrap px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                         isSelected
                           ? `${colors.bg} ${colors.text} shadow-sm`
                           : 'bg-[var(--surface-elevated)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)]'
@@ -560,7 +561,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
       {/* Main Content */}
       <ContentContainer className="py-6">
         {/* Loading State */}
-        {isLoading && (
+        {isLoading && bags.length === 0 && (
           <SkeletonBagGrid count={6} />
         )}
 
@@ -590,13 +591,15 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
               </button>
             )}
           </div>
-        ) : !isLoading && (
-          // Bags Grid with stagger animation
+        ) : bags.length > 0 && (
+          // Bags Grid. initial={false}: server-rendered cards show at once instead of
+          // starting invisible and waiting for JavaScript to fade them in.
           <motion.div
             variants={staggerContainer}
-            initial="hidden"
+            initial={false}
             animate="visible"
-            className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+            aria-busy={isLoading}
+            className={`grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 transition-opacity ${isLoading ? 'opacity-60' : ''}`}
           >
             {bags.map((bag) => (
               <motion.div

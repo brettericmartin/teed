@@ -76,9 +76,11 @@ export default function HeroSection({ previewBag }: HeroSectionProps) {
       <div className="relative max-w-7xl mx-auto">
         <div className="lg:grid lg:grid-cols-2 lg:gap-12 lg:items-center">
           {/* Left: Copy + CTA */}
+          {/* initial={false}: the headline and button paint with the server HTML
+              instead of waiting for JavaScript to fade them in. */}
           <motion.div
             variants={heroStagger}
-            initial="hidden"
+            initial={false}
             animate="visible"
             className="text-center lg:text-left mb-12 lg:mb-0"
           >
