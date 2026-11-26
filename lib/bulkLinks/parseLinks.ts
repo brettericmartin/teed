@@ -48,3 +48,49 @@ export function parseLinks(text: string | string[], max = 25): string[] {
   }
   return out.slice(0, max);
 }
+
+// Words a share sheet puts around the product title
+const SHARE_BOILERPLATE = [
+  /check out this (?:deal|item|product)?\s*(?:on amazon)?\s*[:!-]?/gi,
+  /i found this on amazon\s*[:!-]?/gi,
+  /\bamazon\.[a-z.]+\s*[:|]/gi,
+  /\bvia @?amazon\b/gi,
+  /\bshared from\b.*$/gim,
+];
+
+/** Clean share-sheet text down to a product title, or null if it doesn't look like one. */
+export function cleanShareHint(raw: string): string | null {
+  let t = raw;
+  for (const re of SHARE_BOILERPLATE) t = t.replace(re, ' ');
+  t = t.replace(/\s+/g, ' ').replace(/^[\s:|,.\-–—]+|[\s:|,\-–—]+$/g, '').trim();
+  if (t.length < 6) return null;
+  const words = t.split(' ').filter((w) => /[a-z]/i.test(w));
+  if (words.length < 2) return null;
+  return t.slice(0, 200);
+}
+
+/**
+ * Like parseLinks, but also keeps the text that came just before each link
+ * on the same line(s), which a share sheet fills with the product title.
+ * Returns a map from link to that title.
+ */
+export function shareHintsByLink(text: string, max = 25): Record<string, string> {
+  const hints: Record<string, string> = {};
+  const parts = text.split(/(https?:\/\/\S+)/i);
+  let pending = '';
+  for (const part of parts) {
+    if (/^https?:\/\//i.test(part)) {
+      const [url] = parseLinks(part, 1);
+      const hint = cleanShareHint(pending);
+      if (url && hint && !hints[url]) hints[url] = hint;
+      pending = '';
+      if (Object.keys(hints).length >= max) break;
+    } else {
+      // Only the last line before the link counts, so one link's title
+      // never bleeds into the next
+      const lines = part.split(/\n+/).map((l) => l.trim()).filter(Boolean);
+      pending = lines.length ? lines[lines.length - 1] : '';
+    }
+  }
+  return hints;
+}

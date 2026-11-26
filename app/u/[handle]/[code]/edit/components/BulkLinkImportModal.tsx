@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { parseLinks } from '@/lib/bulkLinks/parseLinks';
+import { parseLinks, shareHintsByLink } from '@/lib/bulkLinks/parseLinks';
 import { X, Check, Loader2, Link as LinkIcon, ChevronDown, ChevronUp, ExternalLink, AlertCircle, Image as ImageIcon, Sparkles } from 'lucide-react';
 import { BulkLinkProcessingView } from './BulkLinkProcessingView';
 import ItemPreview from './ItemPreview';
@@ -363,7 +363,8 @@ export default function BulkLinkImportModal({
           'Content-Type': 'application/json',
           'Accept': 'text/event-stream',
         },
-        body: JSON.stringify({ urls: parsedUrls }),
+        // The title a share sheet puts before each link helps when the page can't be read
+        body: JSON.stringify({ urls: parsedUrls, hints: shareHintsByLink(inputText) }),
       });
 
       if (!response.ok) {

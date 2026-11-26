@@ -27,7 +27,7 @@ import {
 } from './amazon';
 import { scrapeWithFirecrawl, type FirecrawlResult } from './firecrawl';
 import { searchGoogleImages, buildProductSearchQuery } from './googleImageSearch';
-import { lookupInLibrary, saveToLibrary } from './productLibrary';
+import { lookupInLibrary, saveToLibrary, lookupTeedItemByAsin } from './productLibrary';
 
 export interface ProductIdentificationResult {
   // Core product info
@@ -76,6 +76,10 @@ export interface IdentificationOptions {
 
   // Skip the product library cache (tests)
   skipLibrary?: boolean;
+
+  // Text that came with the link, like the title a phone's share sheet adds.
+  // Used only when the page itself can't be read.
+  hint?: string | null;
 }
 
 /**
@@ -98,6 +102,7 @@ export async function identifyProduct(
     earlyExitConfidence = 0.85,
     skipFirecrawl = false,
     skipLibrary = false,
+    hint = null,
   } = options;
 
   // ========================================
@@ -133,7 +138,7 @@ export async function identifyProduct(
   // used to end with the AI guessing a product from the bare ASIN.
   // ========================================
   if (isAmazonUrl(url) && !urlOnly) {
-    return identifyAmazonProduct(url, { skipFirecrawl, skipLibrary, sources, startTime });
+    return identifyAmazonProduct(url, { skipFirecrawl, skipLibrary, hint, sources, startTime });
   }
 
   // ========================================
@@ -547,7 +552,7 @@ export async function identifyProduct(
  */
 async function identifyAmazonProduct(
   url: string,
-  ctx: { skipFirecrawl: boolean; skipLibrary: boolean; sources: string[]; startTime: number }
+  ctx: { skipFirecrawl: boolean; skipLibrary: boolean; hint: string | null; sources: string[]; startTime: number }
 ): Promise<ProductIdentificationResult> {
   const { sources, startTime } = ctx;
   sources.push('amazon');
@@ -653,6 +658,17 @@ async function identifyAmazonProduct(
       }
     }
 
+    // Someone already added this product to a public bag (free, no fetch).
+    // Trusted up front when two or more people named it the same way;
+    // a single person's name is kept as a fallback below.
+    const known = ctx.skipLibrary ? null : await lookupTeedItemByAsin(asin);
+    const fromKnown = () => {
+      const k = known!;
+      const title = k.brand && !k.name.toLowerCase().startsWith(k.brand.toLowerCase()) ? `${k.brand} ${k.name}` : k.name;
+      return finish({ brand: k.brand, title, imageUrl: k.photoUrl, confidence: 0.8, source: 'teed_items' });
+    };
+    if (known && known.agreeing >= 2) return fromKnown();
+
     // 1. Amazon's own page (free)
     const page = await lookupAmazonProduct(asin, host);
     if (page.success && page.title && !isJunkTitle(page.title)) {
@@ -691,7 +707,7 @@ async function identifyAmazonProduct(
 
     // 3. Jina Reader (free)
     sources.push('jina_reader');
-    const jina = await fetchViaJinaReader(canonical, 12000);
+    const jina = await fetchViaJinaReader(canonical, 8000);
     if (jina.success && jina.content) {
       const info = extractAmazonProductInfo(jina.content);
       const title = cleanAmazonTitle(info.title || jina.title);
@@ -721,6 +737,21 @@ async function identifyAmazonProduct(
         save: true,
       });
     }
+
+    if (known) return fromKnown();
+  }
+
+  // The title that came with the link when it was shared, if any
+  const hintTitle = ctx.hint ? cleanAmazonTitle(ctx.hint) : null;
+  if (hintTitle && !isJunkTitle(hintTitle)) {
+    const images = await searchGoogleImages(buildProductSearchQuery('', hintTitle), 3);
+    return finish({
+      brand: null,
+      title: hintTitle,
+      imageUrl: images[0] || null,
+      confidence: 0.6,
+      source: 'share_text',
+    });
   }
 
   // 5. The product name written in the link itself, if any
