@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
+import { safeFilterTerm } from '@/lib/supabase/safeFilter';
 
 // GET /api/discover/suggestions - Get search suggestions for autocomplete
 export async function GET(request: NextRequest) {
@@ -38,7 +39,7 @@ export async function GET(request: NextRequest) {
     const { data: users, error: usersError } = await supabase
       .from('profiles')
       .select('id, handle, display_name, avatar_url')
-      .or(`handle.ilike.%${query}%,display_name.ilike.%${query}%`)
+      .or(`handle.ilike.%${safeFilterTerm(query)}%,display_name.ilike.%${safeFilterTerm(query)}%`)
       .limit(3);
 
     if (usersError) {

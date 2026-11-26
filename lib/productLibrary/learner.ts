@@ -10,6 +10,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 import type { Category } from './schema';
+import { safeFilterTerm } from '@/lib/supabase/safeFilter';
 
 // Minimum confidence for AI results to be added to library
 const MIN_CONFIDENCE_FOR_LEARNING = 0.75;
@@ -328,7 +329,7 @@ export async function searchLearnedProducts(
     const searchTerms = query.toLowerCase().split(/\s+/);
     for (const term of searchTerms) {
       if (term.length >= 2) {
-        queryBuilder = queryBuilder.or(`brand.ilike.%${term}%,name.ilike.%${term}%,search_keywords.cs.{${term}}`);
+        queryBuilder = queryBuilder.or(`brand.ilike.%${safeFilterTerm(term)}%,name.ilike.%${safeFilterTerm(term)}%,search_keywords.cs.{${safeFilterTerm(term)}}`);
       }
     }
 

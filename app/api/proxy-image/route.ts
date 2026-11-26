@@ -36,16 +36,32 @@ export async function GET(request: NextRequest) {
       ? 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
       : 'Mozilla/5.0 (compatible; TeedBot/1.0)';
 
-    // Fetch the image with appropriate headers
-    const response = await fetch(imageUrl, {
-      redirect: 'follow',
-      headers: {
-        'User-Agent': userAgent,
-        'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Referer': isAmazonUrl ? 'https://www.amazon.com/' : '',
-      },
-    });
+    // Fetch the image, following redirects by hand so every hop is checked
+    // (redirect: 'follow' let a public URL bounce to an internal address).
+    let currentUrl = imageUrl;
+    let response: Response | null = null;
+    for (let hop = 0; hop < 5; hop++) {
+      response = await fetch(currentUrl, {
+        redirect: 'manual',
+        headers: {
+          'User-Agent': userAgent,
+          'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Referer': isAmazonUrl ? 'https://www.amazon.com/' : '',
+        },
+      });
+      const location = response.status >= 300 && response.status < 400 ? response.headers.get('location') : null;
+      if (!location) break;
+      const nextUrl = new URL(location, currentUrl).toString();
+      if (validateExternalUrl(nextUrl)) {
+        return NextResponse.json({ error: 'Invalid image URL' }, { status: 400 });
+      }
+      currentUrl = nextUrl;
+      response = null;
+    }
+    if (!response) {
+      return NextResponse.json({ error: 'Too many redirects' }, { status: 502 });
+    }
 
     if (!response.ok) {
       console.error(`Proxy image failed for ${imageUrl}: HTTP ${response.status}`);
@@ -98,6 +114,9 @@ export async function GET(request: NextRequest) {
       headers: {
         'Content-Type': contentType,
         'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400',
+        // Served from our own origin, so an SVG must not be able to run script here.
+        'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+        'X-Content-Type-Options': 'nosniff',
       },
     });
   } catch (error: any) {

@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { withAdminApi } from '@/lib/withAdmin';
 import { logAdminAction } from '@/lib/adminAuth';
 import type { ProposalCreateRequest } from '@/lib/types/proposal';
+import { safeFilterTerm } from '@/lib/supabase/safeFilter';
 
 export const dynamic = 'force-dynamic';
 
@@ -52,7 +53,7 @@ export async function GET(request: NextRequest) {
     query = query.eq('category', category);
   }
   if (search) {
-    query = query.or(`title.ilike.%${search}%,summary.ilike.%${search}%,content.ilike.%${search}%`);
+    query = query.or(`title.ilike.%${safeFilterTerm(search)}%,summary.ilike.%${safeFilterTerm(search)}%,content.ilike.%${safeFilterTerm(search)}%`);
   }
 
   query = query.range(offset, offset + limit - 1);

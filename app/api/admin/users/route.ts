@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { withAdminApi } from '@/lib/withAdmin';
+import { safeFilterTerm } from '@/lib/supabase/safeFilter';
 
 export const dynamic = 'force-dynamic';
 
@@ -46,7 +47,7 @@ export async function GET(request: NextRequest) {
 
   // Search by handle or display name
   if (search) {
-    query = query.or(`handle.ilike.%${search}%,display_name.ilike.%${search}%`);
+    query = query.or(`handle.ilike.%${safeFilterTerm(search)}%,display_name.ilike.%${safeFilterTerm(search)}%`);
   }
 
   const { data: profiles, error: profilesError } = await query.limit(100);

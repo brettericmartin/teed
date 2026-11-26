@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { safeFilterTerm } from '@/lib/supabase/safeFilter';
 
 /**
  * GET /api/gpt/search
@@ -52,7 +53,7 @@ export async function GET(request: NextRequest) {
           )
         `)
         .eq('is_public', true)
-        .or(`title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`)
+        .or(`title.ilike.%${safeFilterTerm(searchTerm)}%,description.ilike.%${safeFilterTerm(searchTerm)}%`)
         .limit(limit);
 
       if (bagsError) {
@@ -116,7 +117,7 @@ export async function GET(request: NextRequest) {
             )
           )
         `)
-        .or(`custom_name.ilike.%${searchTerm}%,brand.ilike.%${searchTerm}%,custom_description.ilike.%${searchTerm}%`)
+        .or(`custom_name.ilike.%${safeFilterTerm(searchTerm)}%,brand.ilike.%${safeFilterTerm(searchTerm)}%,custom_description.ilike.%${safeFilterTerm(searchTerm)}%`)
         .limit(limit);
 
       if (itemsError) {

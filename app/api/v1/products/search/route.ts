@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { SITE_URL } from '@/lib/siteUrl';
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { checkRateLimit, v1Headers } from '@/lib/api/rateLimit';
+import { safeFilterTerm } from '@/lib/supabase/safeFilter';
 
 /**
  * GET /api/v1/products/search?q=Sony+A7IV&limit=20
@@ -63,7 +64,7 @@ export async function GET(request: NextRequest) {
         )
       `)
       .eq('bags.is_public', true)
-      .or(`custom_name.ilike.%${searchTerm}%,brand.ilike.%${searchTerm}%`)
+      .or(`custom_name.ilike.%${safeFilterTerm(searchTerm)}%,brand.ilike.%${safeFilterTerm(searchTerm)}%`)
       .limit(limit);
 
     if (error) {

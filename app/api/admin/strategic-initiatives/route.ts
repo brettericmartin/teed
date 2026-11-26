@@ -9,6 +9,7 @@ import type {
   InitiativeCategory,
   CreateInitiativeInput,
 } from '@/lib/types/strategicInitiatives';
+import { safeFilterTerm } from '@/lib/supabase/safeFilter';
 
 /**
  * GET /api/admin/strategic-initiatives
@@ -57,7 +58,7 @@ export async function GET(request: NextRequest) {
       query = query.eq('category', category);
     }
     if (search) {
-      query = query.or(`title.ilike.%${search}%,tagline.ilike.%${search}%`);
+      query = query.or(`title.ilike.%${safeFilterTerm(search)}%,tagline.ilike.%${safeFilterTerm(search)}%`);
     }
 
     const { data, error } = await query;
