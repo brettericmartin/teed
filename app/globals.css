@@ -1,5 +1,4 @@
-/* Import Google Fonts - Inter for body, Cormorant Garamond for subtitles/descriptions */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap');
+/* Inter (body) and Cormorant Garamond (subtitles) load from Google Fonts via <link> tags in app/layout.tsx */
 
 @import "tailwindcss";
 
