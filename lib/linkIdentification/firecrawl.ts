@@ -11,6 +11,7 @@
  * failing one by one on every link.
  */
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
+import { isAmazonHost, pickAmazonImage, extractAmazonBrand } from './amazon';
 
 const firecrawlCache = new Map<string, { result: FirecrawlResult; timestamp: number }>();
 const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
@@ -117,6 +118,8 @@ export interface FirecrawlResult {
   image: string | null;
   markdown: string | null;
   error?: string;
+  // True when the image was picked as the product's own photo (Amazon pages)
+  imageVerified?: boolean;
 }
 
 interface FirecrawlMetadata {
@@ -256,9 +259,15 @@ export async function scrapeWithFirecrawl(url: string): Promise<FirecrawlResult>
     const rawTitle = metadata.ogTitle || metadata.title || extractTitleFromMarkdown(markdown);
     const title = rawTitle ? cleanTitle(rawTitle) : null;
     const description = metadata.ogDescription || metadata.description || null;
-    const image = metadata.ogImage || extractImageFromMarkdown(markdown);
+    // Amazon pages put ads before the product, so their first image is often an ad
+    let isAmazonPage = false;
+    try {
+      isAmazonPage = isAmazonHost(new URL(url).hostname);
+    } catch {}
+    const amazonImage = isAmazonPage ? pickAmazonImage(markdown, title) : null;
+    const image = isAmazonPage ? amazonImage : metadata.ogImage || extractImageFromMarkdown(markdown);
     const price = extractPriceFromMarkdown(markdown);
-    const brand = extractBrandFromTitle(title);
+    const brand = (isAmazonPage ? extractAmazonBrand(markdown) : null) || extractBrandFromTitle(title);
 
     const successResult: FirecrawlResult = {
       success: true,
@@ -268,6 +277,7 @@ export async function scrapeWithFirecrawl(url: string): Promise<FirecrawlResult>
       price,
       image,
       markdown: markdown.slice(0, 15000), // Limit size for AI
+      ...(isAmazonPage ? { imageVerified: !!amazonImage } : {}),
     };
 
     // Cache successful results, here and for every instance for 30 days

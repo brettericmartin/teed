@@ -11,7 +11,7 @@ import { analyzeUrlWithAI, quickAIAnalysis, type AIProductAnalysis } from './aiS
 import { getBrandFromDomain } from './domainBrands';
 import { trackUnrecognizedDomain } from './trackUnrecognizedDomain';
 import { fetchViaJinaReader, extractAmazonProductInfo } from './jinaReader';
-import { lookupAmazonProduct, extractBrandFromTitle } from './amazonLookup';
+import { lookupAmazonProduct } from './amazonLookup';
 import {
   isAmazonUrl,
   isAmazonShortHost,
@@ -21,6 +21,9 @@ import {
   cleanAmazonTitle,
   isJunkTitle,
   searchAmazonTitleByAsin,
+  shortenAmazonTitle,
+  extractAmazonBrand,
+  pickAmazonImage,
 } from './amazon';
 import { scrapeWithFirecrawl, type FirecrawlResult } from './firecrawl';
 import { searchGoogleImages, buildProductSearchQuery } from './googleImageSearch';
@@ -562,6 +565,7 @@ async function identifyAmazonProduct(
   const canonical = asin ? canonicalAmazonUrl(resolved as string, asin) : null;
   const host = canonical ? new URL(canonical).hostname : 'www.amazon.com';
 
+  let listingGone = false;
   const finish = (r: {
     brand: string | null;
     title: string;
@@ -572,7 +576,11 @@ async function identifyAmazonProduct(
     source: string;
     save?: boolean;
   }): ProductIdentificationResult => {
-    const brand = r.brand || extractBrandFromTitle(r.title);
+    const brand = r.brand?.trim() || null;
+    const shortTitle = shortenAmazonTitle(r.title);
+    const specifications = [...(r.specifications || [])];
+    if (shortTitle !== r.title) specifications.unshift(r.title);
+    r = { ...r, title: shortTitle, specifications };
     let productName = r.title;
     if (brand && productName.toLowerCase().startsWith(brand.toLowerCase())) {
       productName = productName.slice(brand.length).replace(/^[-–—|:,\s]+/, '').trim() || r.title;
@@ -660,12 +668,15 @@ async function identifyAmazonProduct(
       sources.push('firecrawl');
       const fc = await scrapeWithFirecrawl(canonical);
       const title = fc.success ? cleanAmazonTitle(fc.title) : null;
+      if (fc.success && /page not found|looking for something/i.test(fc.title || '')) listingGone = true;
       if (title && !isJunkTitle(title)) {
+        // Older cached reads picked the first image on the page, often an ad
+        const trusted = fc.imageVerified !== undefined;
         return finish({
-          brand: fc.brand,
+          brand: extractAmazonBrand(fc.markdown) || (trusted ? fc.brand : null),
           title,
           price: fc.price,
-          imageUrl: fc.image,
+          imageUrl: trusted && fc.image ? fc.image : pickAmazonImage(fc.markdown, title),
           specifications: fc.description ? [fc.description] : [],
           confidence: 0.9,
           source: 'firecrawl',
@@ -746,7 +757,9 @@ async function identifyAmazonProduct(
       ? "This Amazon short link didn't open. Paste the full amazon.com link, or type the product name."
       : !asin
         ? "This Amazon link doesn't point to a product page. Paste the product's own link, or type the product name."
-        : "Amazon wouldn't show us this product right now. Try again in a minute, or type the product name.",
+        : listingGone
+          ? 'This Amazon listing no longer exists. Type the product name to add it anyway.'
+          : "Amazon wouldn't show us this product right now. Try again in a minute, or type the product name.",
   });
 }
 
