@@ -116,13 +116,34 @@ export async function POST(request: NextRequest) {
 
     // Download image from URL (server-side, bypasses CORS)
     console.log('Downloading image from URL:', imageUrl);
-    const imageResponse = await fetch(imageUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; TeedBot/1.0)',
-      },
-    });
+    // Follow redirects by hand so every hop passes the same address check,
+    // and give up after 10 seconds.
+    const signal = AbortSignal.timeout(10_000);
+    let currentUrl: string = imageUrl;
+    let imageResponse: Response | null = null;
+    for (let hop = 0; hop <= 5; hop++) {
+      if (validateExternalUrl(currentUrl)) {
+        return NextResponse.json(
+          { error: 'Invalid image URL' },
+          { status: 400 }
+        );
+      }
+      const res = await fetch(currentUrl, {
+        redirect: 'manual',
+        signal,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; TeedBot/1.0)',
+        },
+      });
+      const location = res.status >= 300 && res.status < 400 ? res.headers.get('location') : null;
+      if (!location) {
+        imageResponse = res;
+        break;
+      }
+      currentUrl = new URL(location, currentUrl).toString();
+    }
 
-    if (!imageResponse.ok) {
+    if (!imageResponse || !imageResponse.ok) {
       return NextResponse.json(
         { error: 'Failed to download image from URL' },
         { status: 400 }
