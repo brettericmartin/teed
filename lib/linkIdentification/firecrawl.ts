@@ -3,12 +3,21 @@
  *
  * Uses Firecrawl API for scraping sites that block direct requests (Amazon, etc.)
  * Firecrawl handles JavaScript rendering, bot protection bypass, and returns clean data.
+ *
+ * Every scrape costs a credit, so reads are remembered:
+ * - in memory for 10 minutes (same serverless instance, retries), and
+ * - in the firecrawl_cache table for 30 days (every instance, repeat clicks).
+ * After Firecrawl answers 402 (out of credits) calls pause for an hour instead of
+ * failing one by one on every link.
  */
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 
-// Simple in-memory cache for Firecrawl results (prevents duplicate API calls on retries)
-// Cache entries expire after 10 minutes
 const firecrawlCache = new Map<string, { result: FirecrawlResult; timestamp: number }>();
 const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+const PERSISTED_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
+const PAUSE_AFTER_402_MS = 60 * 60 * 1000; // 1 hour
+const PAUSE_KEY = '__paused_402__';
+let pausedUntil = 0; // this instance's copy of the pause
 
 function getCachedResult(url: string): FirecrawlResult | null {
   const cached = firecrawlCache.get(url);
@@ -29,6 +38,41 @@ function setCachedResult(url: string, result: FirecrawlResult): void {
     const firstKey = firecrawlCache.keys().next().value;
     if (firstKey) firecrawlCache.delete(firstKey);
   }
+}
+
+/** Reads the stored copy of this URL and the shared 402 pause in one query. Never throws. */
+async function readPersisted(url: string): Promise<{ result: FirecrawlResult | null; paused: boolean }> {
+  try {
+    const { data } = await getSupabaseAdmin()
+      .from('firecrawl_cache')
+      .select('key, result, fetched_at')
+      .in('key', [url, PAUSE_KEY]);
+    let result: FirecrawlResult | null = null;
+    let paused = false;
+    for (const row of data || []) {
+      const age = Date.now() - new Date(row.fetched_at as string).getTime();
+      if (row.key === PAUSE_KEY) paused = age < PAUSE_AFTER_402_MS;
+      else if (age < PERSISTED_TTL_MS) result = row.result as FirecrawlResult;
+    }
+    return { result, paused };
+  } catch (error) {
+    console.error('[Firecrawl] cache read failed:', error);
+    return { result: null, paused: false };
+  }
+}
+
+async function writePersisted(key: string, result: FirecrawlResult | Record<string, unknown>): Promise<void> {
+  try {
+    await getSupabaseAdmin()
+      .from('firecrawl_cache')
+      .upsert({ key, result, fetched_at: new Date().toISOString() });
+  } catch (error) {
+    console.error('[Firecrawl] cache write failed:', error);
+  }
+}
+
+function failure(error: string): FirecrawlResult {
+  return { success: false, title: null, description: null, brand: null, price: null, image: null, markdown: null, error };
 }
 
 export interface FirecrawlResult {
@@ -76,16 +120,22 @@ export async function scrapeWithFirecrawl(url: string): Promise<FirecrawlResult>
   const apiKey = process.env.FIRECRAWL_API_KEY;
 
   if (!apiKey) {
-    return {
-      success: false,
-      title: null,
-      description: null,
-      brand: null,
-      price: null,
-      image: null,
-      markdown: null,
-      error: 'FIRECRAWL_API_KEY not configured',
-    };
+    return failure('FIRECRAWL_API_KEY not configured');
+  }
+
+  if (Date.now() < pausedUntil) {
+    return failure('Firecrawl paused after running out of credits');
+  }
+
+  const persisted = await readPersisted(url);
+  if (persisted.result) {
+    console.log(`[Firecrawl] Stored copy used for ${new URL(url).hostname}`);
+    setCachedResult(url, persisted.result);
+    return persisted.result;
+  }
+  if (persisted.paused) {
+    pausedUntil = Date.now() + 5 * 60 * 1000; // re-check the shared pause in 5 minutes
+    return failure('Firecrawl paused after running out of credits');
   }
 
   try {
@@ -109,6 +159,11 @@ export async function scrapeWithFirecrawl(url: string): Promise<FirecrawlResult>
     if (!response.ok) {
       const errorText = await response.text();
       console.error('[Firecrawl] API error:', response.status, errorText);
+      if (response.status === 402) {
+        // Out of credits: stop calling for an hour on every instance.
+        pausedUntil = Date.now() + PAUSE_AFTER_402_MS;
+        await writePersisted(PAUSE_KEY, { status: 402 });
+      }
       return {
         success: false,
         title: null,
@@ -171,8 +226,9 @@ export async function scrapeWithFirecrawl(url: string): Promise<FirecrawlResult>
       markdown: markdown.slice(0, 15000), // Limit size for AI
     };
 
-    // Cache successful results
+    // Cache successful results, here and for every instance for 30 days
     setCachedResult(url, successResult);
+    await writePersisted(url, successResult);
     return successResult;
 
   } catch (error: any) {
