@@ -33,7 +33,7 @@ async function fetchRoundupBags(supabaseCategory: string): Promise<RoundupBagRow
       `
       id, code, title, description, updated_at,
       profiles!bags_owner_id_fkey!inner(handle, display_name, avatar_url),
-      bag_items(id, custom_name, brand, photo_url)
+      bag_items!bag_items_bag_id_fkey(id, custom_name, brand, photo_url)
     `
     )
     .eq('is_public', true)
