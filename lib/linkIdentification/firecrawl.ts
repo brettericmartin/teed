@@ -71,6 +71,39 @@ async function writePersisted(key: string, result: FirecrawlResult | Record<stri
   }
 }
 
+/**
+ * Keeps a per-day tally of real Firecrawl calls in firecrawl_cache under
+ * __calls_YYYY-MM-DD__, with the last outcome and status, so anyone can see
+ * whether calls are being made and whether they succeed. Counts are approximate
+ * under concurrent calls. Never throws and never stores the API key.
+ */
+async function recordCall(outcome: 'ok' | 'failed', status: number | null, host: string): Promise<void> {
+  try {
+    const key = `__calls_${new Date().toISOString().slice(0, 10)}__`;
+    const db = getSupabaseAdmin();
+    const { data } = await db.from('firecrawl_cache').select('result').eq('key', key).maybeSingle();
+    const prev = (data?.result || {}) as Record<string, any>;
+    const byStatus = { ...(prev.by_status || {}) };
+    const statusKey = String(status ?? 'none');
+    byStatus[statusKey] = (byStatus[statusKey] || 0) + 1;
+    await db.from('firecrawl_cache').upsert({
+      key,
+      result: {
+        ok: (prev.ok || 0) + (outcome === 'ok' ? 1 : 0),
+        failed: (prev.failed || 0) + (outcome === 'failed' ? 1 : 0),
+        by_status: byStatus,
+        last_outcome: outcome,
+        last_status: status,
+        last_host: host,
+        last_at: new Date().toISOString(),
+      },
+      fetched_at: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error('[Firecrawl] call record failed:', error);
+  }
+}
+
 function failure(error: string): FirecrawlResult {
   return { success: false, title: null, description: null, brand: null, price: null, image: null, markdown: null, error };
 }
@@ -120,6 +153,7 @@ export async function scrapeWithFirecrawl(url: string): Promise<FirecrawlResult>
   const apiKey = process.env.FIRECRAWL_API_KEY;
 
   if (!apiKey) {
+    console.error('[Firecrawl] FIRECRAWL_API_KEY is not set; skipping page read');
     return failure('FIRECRAWL_API_KEY not configured');
   }
 
@@ -137,6 +171,11 @@ export async function scrapeWithFirecrawl(url: string): Promise<FirecrawlResult>
     pausedUntil = Date.now() + 5 * 60 * 1000; // re-check the shared pause in 5 minutes
     return failure('Firecrawl paused after running out of credits');
   }
+
+  let host = 'unknown';
+  try {
+    host = new URL(url).hostname;
+  } catch {}
 
   try {
     // Firecrawl v1 is retired on Dec 10, 2026 (returns HTTP 410). v2 keeps the same
@@ -158,7 +197,8 @@ export async function scrapeWithFirecrawl(url: string): Promise<FirecrawlResult>
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('[Firecrawl] API error:', response.status, errorText);
+      console.error('[Firecrawl] API error:', response.status, host, errorText.slice(0, 300));
+      await recordCall('failed', response.status, host);
       if (response.status === 402) {
         // Out of credits: stop calling for an hour on every instance.
         pausedUntil = Date.now() + PAUSE_AFTER_402_MS;
@@ -179,6 +219,8 @@ export async function scrapeWithFirecrawl(url: string): Promise<FirecrawlResult>
     const result: FirecrawlResponse = await response.json();
 
     if (!result.success || !result.data) {
+      console.error('[Firecrawl] no data returned for', host);
+      await recordCall('failed', response.status, host);
       return {
         success: false,
         title: null,
@@ -196,6 +238,8 @@ export async function scrapeWithFirecrawl(url: string): Promise<FirecrawlResult>
 
     // Check if we got a bot page even through Firecrawl
     if (isBotPage(markdown)) {
+      console.error('[Firecrawl] bot page returned for', host);
+      await recordCall('failed', response.status, host);
       return {
         success: false,
         title: null,
@@ -228,11 +272,12 @@ export async function scrapeWithFirecrawl(url: string): Promise<FirecrawlResult>
 
     // Cache successful results, here and for every instance for 30 days
     setCachedResult(url, successResult);
-    await writePersisted(url, successResult);
+    await Promise.all([writePersisted(url, successResult), recordCall('ok', response.status, host)]);
     return successResult;
 
   } catch (error: any) {
-    console.error('[Firecrawl] Error:', error);
+    console.error('[Firecrawl] Error:', host, error?.message || error);
+    await recordCall('failed', null, host);
     return {
       success: false,
       title: null,
