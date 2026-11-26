@@ -22,6 +22,12 @@ Allow: /api/v1/
 Disallow: /api/gpt/
 Disallow: /api/admin/
 Disallow: /api/ai/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /settings/
+Disallow: /auth/
+Disallow: /login
+Disallow: /signup
 
 User-agent: ChatGPT-User
 Allow: /
@@ -29,6 +35,12 @@ Allow: /api/v1/
 Disallow: /api/gpt/
 Disallow: /api/admin/
 Disallow: /api/ai/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /settings/
+Disallow: /auth/
+Disallow: /login
+Disallow: /signup
 
 User-agent: ClaudeBot
 Allow: /
@@ -36,6 +48,12 @@ Allow: /api/v1/
 Disallow: /api/gpt/
 Disallow: /api/admin/
 Disallow: /api/ai/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /settings/
+Disallow: /auth/
+Disallow: /login
+Disallow: /signup
 
 User-agent: PerplexityBot
 Allow: /
@@ -43,6 +61,12 @@ Allow: /api/v1/
 Disallow: /api/gpt/
 Disallow: /api/admin/
 Disallow: /api/ai/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /settings/
+Disallow: /auth/
+Disallow: /login
+Disallow: /signup
 
 User-agent: Google-Extended
 Allow: /
@@ -50,6 +74,12 @@ Allow: /api/v1/
 Disallow: /api/gpt/
 Disallow: /api/admin/
 Disallow: /api/ai/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /settings/
+Disallow: /auth/
+Disallow: /login
+Disallow: /signup
 
 User-agent: Googlebot
 Allow: /
@@ -57,5 +87,11 @@ Allow: /api/v1/
 Disallow: /api/gpt/
 Disallow: /api/admin/
 Disallow: /api/ai/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /settings/
+Disallow: /auth/
+Disallow: /login
+Disallow: /signup
 
 Sitemap: https://www.teed.club/sitemap.xml

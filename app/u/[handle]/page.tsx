@@ -55,6 +55,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    // A profile with no public bags has nothing for search engines to show yet.
+    ...(!bagCount ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       title: displayName,
       description,
@@ -77,6 +79,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       images: [ogImageUrl],
     },
     alternates: {
+      canonical: url,
       // oEmbed discovery for platforms like Notion, Slack, etc.
       types: {
         'application/json+oembed': oembedUrl,

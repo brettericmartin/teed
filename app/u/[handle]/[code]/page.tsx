@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const { data: bag } = await getSupabasePublic()
     .from('bags')
-    .select('title, description, cover_photo_id')
+    .select('id, title, description, cover_photo_id')
     .eq('owner_id', profile.id)
     .eq('code', code)
     .eq('is_public', true)
@@ -43,6 +43,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: 'Bag Not Found | Teed.club',
     };
   }
+
+  // An empty bag has nothing for search engines to show yet.
+  const { count: itemCount } = await getSupabasePublic()
+    .from('bag_items')
+    .select('id', { count: 'exact', head: true })
+    .eq('bag_id', bag.id);
 
   const title = `${bag.title} | Teed`;
   const description = bag.description || `${bag.title} by ${profile.display_name || handle}`;
@@ -57,6 +63,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    ...(!itemCount ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       title: bag.title,
       description,
@@ -79,6 +86,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       images: [ogImageUrl],
     },
     alternates: {
+      canonical: url,
       // oEmbed discovery for platforms like Notion, Slack, etc.
       types: {
         'application/json+oembed': oembedUrl,

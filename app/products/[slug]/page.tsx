@@ -3,6 +3,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { resolveProduct } from '@/lib/products/resolveProduct';
 import { generateBreadcrumbJsonLd } from '@/lib/seo/structuredData';
+import { SITE_URL } from '@/lib/siteUrl';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title: displayName,
       description,
-      url: `https://teed.club/products/${slug}`,
+      url: `${SITE_URL}/products/${slug}`,
       siteName: 'Teed.club',
       type: 'website',
     },
@@ -38,6 +39,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: displayName,
       description,
     },
+    alternates: { canonical: `${SITE_URL}/products/${slug}` },
   };
 }
 

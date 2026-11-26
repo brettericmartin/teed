@@ -1266,7 +1266,7 @@ export default function PublicBagView({
                         key={link.id}
                         href={link.url}
                         target="_blank"
-                        rel="noopener noreferrer"
+                        rel="noopener noreferrer sponsored"
                         onClick={() => trackLinkClick(link.id, selectedItem.id, link.url)}
                         className="block p-4 border border-[var(--border-subtle)] rounded-[var(--radius-md)] hover:border-[var(--teed-green-8)] hover:bg-[var(--surface-hover)] transition-all group"
                       >
@@ -1320,7 +1320,7 @@ export default function PublicBagView({
                       <a
                         href={modalPrimary.url}
                         target="_blank"
-                        rel={isOwnedBrand(selectedItem.brand) ? 'noopener' : 'noopener noreferrer'}
+                        rel={isOwnedBrand(selectedItem.brand) ? 'noopener sponsored' : 'noopener noreferrer sponsored'}
                         onClick={() => trackLinkClick(modalPrimary.id, selectedItem.id, modalPrimary.url)}
                         className="flex items-center justify-center gap-2 w-full px-4 py-3 min-h-[48px] bg-[var(--teed-green-9)] hover:bg-[var(--teed-green-10)] text-white font-medium rounded-lg transition-colors"
                       >
