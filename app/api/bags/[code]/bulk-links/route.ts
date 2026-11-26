@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { parseLinks } from '@/lib/bulkLinks/parseLinks';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import * as cheerio from 'cheerio';
 import { getOpenAI } from '@/lib/openaiClient';
@@ -97,40 +98,8 @@ function extractBrandFromDomain(url: string): string | null {
   }
 }
 
-function isValidUrl(url: string): boolean {
-  try {
-    const parsed = new URL(url);
-    return ['http:', 'https:'].includes(parsed.protocol);
-  } catch {
-    return false;
-  }
-}
-
 function parseUrls(input: string[]): string[] {
-  const urls: string[] = [];
-  const seen = new Set<string>();
-
-  for (const item of input) {
-    // Skip empty strings
-    if (!item || !item.trim()) continue;
-
-    const trimmed = item.trim();
-
-    // Handle common URL formats
-    let url = trimmed;
-
-    // Add https:// if no protocol
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-      url = 'https://' + url;
-    }
-
-    if (isValidUrl(url) && !seen.has(url)) {
-      seen.add(url);
-      urls.push(url);
-    }
-  }
-
-  return urls.slice(0, MAX_URLS);
+  return parseLinks(input.filter((i) => typeof i === 'string'), MAX_URLS);
 }
 
 async function resolveRedirects(url: string): Promise<string> {
@@ -510,7 +479,10 @@ async function processUrl(
 
     // Stage 5: Find photos
     onProgress?.('imaging');
-    let photoOptions = await findProductImages(url, scraped, analysis);
+    // No photo search for a product we couldn't name: it would only find unrelated photos
+    let photoOptions = identification.confidence >= 0.4
+      ? await findProductImages(url, scraped, analysis)
+      : [];
 
     // Check if identification image is a problematic Amazon widget URL
     // These return tracking pixels instead of actual images - skip them entirely
@@ -555,8 +527,15 @@ async function processUrl(
     return {
       index,
       originalUrl: url,
-      resolvedUrl: identification.fetchResult?.finalUrl || url,
+      resolvedUrl: identification.resolvedUrl || identification.fetchResult?.finalUrl || url,
       status,
+      ...(status === 'failed'
+        ? {
+            error:
+              identification.failureReason ||
+              "We couldn't read this page. Type the product name, or try the link again in a minute.",
+          }
+        : {}),
       scraped,
       analysis,
       photoOptions,

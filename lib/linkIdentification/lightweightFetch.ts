@@ -183,6 +183,7 @@ export async function lightweightFetch(
           data: null,
           html: null,
           fetchTimeMs: Date.now() - startTime,
+          finalUrl: (response.redirected && response.url) ? response.url : undefined,
         };
       }
 
