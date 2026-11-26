@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import crypto from 'crypto';
 import { createServerClient } from '@supabase/ssr';
+import { isAllowedRedirectUri } from '@/lib/oauthRedirect';
 
 /**
  * Generate a random code verifier for PKCE
@@ -53,6 +54,16 @@ export async function GET(request: NextRequest) {
   if (!clientId || !redirectUri || !responseType) {
     return NextResponse.json(
       { error: 'invalid_request', error_description: 'Missing required parameters' },
+      { status: 400 }
+    );
+  }
+
+  if (!isAllowedRedirectUri(redirectUri)) {
+    console.error('OAuth authorize: redirect_uri not allowed', {
+      host: (() => { try { return new URL(redirectUri).hostname; } catch { return 'invalid'; } })(),
+    });
+    return NextResponse.json(
+      { error: 'invalid_request', error_description: 'redirect_uri is not allowed' },
       { status: 400 }
     );
   }
