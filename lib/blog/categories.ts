@@ -65,7 +65,7 @@ export const roundupCategories: RoundupCategory[] = [
     slug: 'outdoor-gear',
     name: 'Outdoor Gear',
     description: 'Outdoor and adventure gear collections — hiking, camping, climbing, and more.',
-    supabaseCategory: 'outdoors',
+    supabaseCategory: 'outdoor',
     keywords: ['outdoor gear', 'hiking gear', 'camping gear', 'adventure kit'],
     intro:
       'Outdoor enthusiasts sharing their adventure kits. From weekend hikes to multi-day expeditions.',

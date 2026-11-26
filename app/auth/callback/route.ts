@@ -50,7 +50,9 @@ export async function GET(request: Request) {
   }
 
   // Determine where to redirect after auth
-  const redirectTo = requestUrl.searchParams.get('redirect_to') || requestUrl.searchParams.get('next') || '/dashboard';
+  const requested = requestUrl.searchParams.get('redirect_to') || requestUrl.searchParams.get('next') || '/dashboard';
+  // Only same-site paths: an absolute or protocol-relative value would send people off-site.
+  const redirectTo = requested.startsWith('/') && !requested.startsWith('//') && !requested.startsWith('/\\') ? requested : '/dashboard';
 
   return NextResponse.redirect(new URL(redirectTo, request.url));
 }

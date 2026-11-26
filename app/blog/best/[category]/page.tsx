@@ -9,6 +9,42 @@ const BASE_URL = 'https://www.teed.club';
 
 export const revalidate = 3600; // ISR: revalidate every hour
 
+type RoundupBagRow = {
+  id: string;
+  code: string;
+  title: string;
+  description: string | null;
+  updated_at: string;
+  profiles: unknown;
+  bag_items: Array<{ id: string; custom_name: string | null; brand: string | null; photo_url: string | null }> | null;
+};
+
+// bags has two foreign keys to profiles (owner_id and derived_from_owner_id), so the
+// embed names the owner key; without it PostgREST refuses the query and the page was
+// always empty. Items live in bag_items.
+async function fetchRoundupBags(supabaseCategory: string): Promise<RoundupBagRow[]> {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+  const { data, error } = await supabase
+    .from('bags')
+    .select(
+      `
+      id, code, title, description, updated_at,
+      profiles!bags_owner_id_fkey!inner(handle, display_name, avatar_url),
+      bag_items(id, custom_name, brand, photo_url)
+    `
+    )
+    .eq('is_public', true)
+    .eq('is_hidden', false)
+    .eq('category', supabaseCategory)
+    .order('updated_at', { ascending: false })
+    .limit(20);
+  if (error) console.error('Roundup bags query failed:', error.message);
+  return (data as RoundupBagRow[] | null) || [];
+}
+
 export async function generateStaticParams() {
   return getAllRoundupSlugs().map((category) => ({ category }));
 }
@@ -24,6 +60,8 @@ export async function generateMetadata({
 
   const url = `${BASE_URL}/blog/best/${cat.slug}`;
   const title = `Best ${cat.name} Collections — Teed`;
+  // An empty roundup is a thin page: keep it out of search until it has bags.
+  const hasBags = (await fetchRoundupBags(cat.supabaseCategory)).length > 0;
 
   return {
     title,
@@ -42,6 +80,7 @@ export async function generateMetadata({
       description: cat.description,
     },
     alternates: { canonical: url },
+    ...(hasBags ? {} : { robots: { index: false, follow: true } }),
   };
 }
 
@@ -54,31 +93,17 @@ export default async function RoundupPage({
   const cat = getRoundupCategory(slug);
   if (!cat) notFound();
 
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-
-  // Fetch public bags in this category
-  const { data: bags } = await supabase
-    .from('bags')
-    .select(
-      `
-      id, code, title, description, updated_at,
-      profiles!inner(handle, display_name, avatar_url),
-      items(id, name, brand, photo_url)
-    `
-    )
-    .eq('is_public', true)
-    .eq('is_hidden', false)
-    .eq('category', cat.supabaseCategory)
-    .order('updated_at', { ascending: false })
-    .limit(20);
+  const bags = await fetchRoundupBags(cat.supabaseCategory);
 
   const sortedBags = (bags || [])
     .map((bag) => ({
       ...bag,
-      items: bag.items || [],
+      items: (bag.bag_items || []).map((item) => ({
+        id: item.id,
+        name: item.custom_name || item.brand || 'Item',
+        brand: item.brand,
+        photo_url: item.photo_url,
+      })),
       profile: bag.profiles as unknown as {
         handle: string;
         display_name: string | null;

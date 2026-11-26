@@ -163,7 +163,7 @@ export default function SignupForm() {
           </div>
           <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
             <UserCircle className="w-4 h-4 text-[var(--teed-green-9)] shrink-0" />
-            <span>Claim teed.co/@you</span>
+            <span>Claim teed.club/u/you</span>
           </div>
           <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
             <Copy className="w-4 h-4 text-[var(--teed-green-9)] shrink-0" />
@@ -260,12 +260,12 @@ export default function SignupForm() {
             )}
             {handleAvailability.available && (
               <p className="mt-1 text-xs text-[var(--teed-green-9)]">
-                teed.co/@{cleanHandle} is yours!
+                teed.club/u/{cleanHandle} is yours!
               </p>
             )}
             {!handleAvailability.available && !handleAvailability.error && cleanHandle.length === 0 && (
               <p className="mt-1 text-xs text-gray-400">
-                Your profile lives at teed.co/@you
+                Your profile lives at teed.club/u/you
               </p>
             )}
           </div>
