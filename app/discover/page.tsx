@@ -1,7 +1,20 @@
+import type { Metadata } from 'next';
 import { createServerSupabase } from '@/lib/serverSupabase';
-import Navigation from '@/components/Navigation';
+import { anyTagOrFilter } from '@/lib/discover/tagFilter';
 import DiscoverClient from './DiscoverClient';
 import { resolveItemPhoto } from '@/lib/items/photo';
+
+export const metadata: Metadata = {
+  title: 'Discover bags | Teed.club',
+  description:
+    'Browse curated gear bags from real people: golf bags, golf sim setups, EDC, travel, camera and tech kits, with every item and why it made the cut.',
+  alternates: { canonical: '/discover' },
+  openGraph: {
+    title: 'Discover bags on Teed.club',
+    description: 'Curated gear bags from real people, with every item and why it made the cut.',
+    url: '/discover',
+  },
+};
 
 type DiscoverPageProps = {
   searchParams: Promise<{ category?: string; tags?: string }>;
@@ -15,21 +28,6 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
   const { category, tags } = await searchParams;
   const initialCategory = category?.trim() || null;
   const initialTags = tags?.split(',').map((t) => t.trim()).filter(Boolean) || [];
-
-  // Check if user is authenticated (optional for discover page)
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  let profile = null;
-  if (user) {
-    const { data } = await supabase
-      .from('profiles')
-      .select('handle, display_name')
-      .eq('id', user.id)
-      .single();
-    profile = data;
-  }
 
   // Fetch discover data (public bags, filtered by the URL's category/tags) directly from Supabase
   let bagsQuery = supabase
@@ -51,10 +49,11 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
         avatar_url
       )
     `)
-    .eq('is_public', true);
+    .eq('is_public', true)
+    .eq('is_hidden', false);
   if (initialCategory) bagsQuery = bagsQuery.eq('category', initialCategory);
-  // Same semantics as /api/discover: any of the requested tags (overlaps)
-  if (initialTags.length > 0) bagsQuery = bagsQuery.overlaps('tags', initialTags);
+  // Same semantics as /api/discover: any of the requested tags
+  if (initialTags.length > 0) bagsQuery = bagsQuery.or(anyTagOrFilter(initialTags));
 
   const { data: bags } = await bagsQuery
     .order('updated_at', { ascending: false, nullsFirst: false })
@@ -101,14 +100,6 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
     })),
   })) || [];
 
-  return (
-    <>
-      <Navigation
-        userHandle={profile?.handle || ''}
-        displayName={profile?.display_name || ''}
-        isAuthenticated={!!user}
-      />
-      <DiscoverClient initialBags={bagsWithPhotos} />
-    </>
-  );
+  // The site-wide Navigation comes from app/layout.tsx; rendering it here too drew it twice.
+  return <DiscoverClient initialBags={bagsWithPhotos} />;
 }

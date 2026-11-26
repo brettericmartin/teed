@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import { resolveItemPhoto } from '@/lib/items/photo';
+import { anyTagOrFilter } from '@/lib/discover/tagFilter';
 
 // GET /api/discover - Get all public bags for discovery with filters
 export async function GET(request: NextRequest) {
@@ -89,7 +90,8 @@ export async function GET(request: NextRequest) {
           avatar_url
         )
       `)
-      .eq('is_public', true);
+      .eq('is_public', true)
+      .eq('is_hidden', false);
 
     // Apply filters
     if (following && followingIds.length > 0) {
@@ -104,15 +106,15 @@ export async function GET(request: NextRequest) {
       query = query.eq('category', category);
     }
 
-    if (search) {
-      query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
+    // Strip characters that would break or widen the PostgREST filter
+    const safeSearch = search?.replace(/[,()"\\%*]/g, ' ').trim();
+    if (safeSearch) {
+      query = query.or(`title.ilike.%${safeSearch}%,description.ilike.%${safeSearch}%`);
     }
 
-    // Tag filtering using jsonb operator
-    // For each tag, filter bags that contain that tag
+    // Any of the requested tags (tags is jsonb, so .overlaps() can't be used)
     if (tags && tags.length > 0) {
-      // Use overlaps operator (&&) to check if any of the requested tags exist in the bag's tags
-      query = query.overlaps('tags', tags);
+      query = query.or(anyTagOrFilter(tags));
     }
 
     // Apply sorting
