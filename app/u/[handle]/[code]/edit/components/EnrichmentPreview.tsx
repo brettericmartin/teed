@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Check, X, ChevronLeft, ChevronRight, Edit2, ExternalLink, Loader2, Sparkles } from 'lucide-react';
+import { Check, X, ChevronLeft, ChevronRight, Edit2, ExternalLink, Image as ImageIcon, Loader2, Sparkles } from 'lucide-react';
 
 type EnrichmentSuggestion = {
   itemId: string;
@@ -10,6 +10,7 @@ type EnrichmentSuggestion = {
     brand?: string;
     description?: string;
     notes?: string;
+    photoUrl?: string | null;
     hasLink: boolean;
   };
   suggested: {
@@ -22,12 +23,16 @@ type EnrichmentSuggestion = {
       source: string;
       reason: string;
     };
+    photoCandidates?: Array<{ url: string; source: 'product_page' | 'search' }>;
   };
 };
 
+/** itemId -> the photo URL the owner picked; items left on "Keep current" are absent. */
+export type PhotoSelections = Record<string, string>;
+
 type EnrichmentPreviewProps = {
   suggestions: EnrichmentSuggestion[];
-  onApprove: (approvedItems: string[], editedValues: Record<string, any>) => Promise<void>;
+  onApprove: (approvedItems: string[], editedValues: Record<string, any>, photoSelections: PhotoSelections) => Promise<void>;
   onCancel: () => void;
 };
 
@@ -43,6 +48,17 @@ export default function EnrichmentPreview({
   const [isApplying, setIsApplying] = useState(false);
   const [editedSuggestions, setEditedSuggestions] = useState<Record<string, any>>({});
   const [editingFields, setEditingFields] = useState<Record<string, boolean>>({});
+  // An item with no photo starts on its own product page's photo, when there is one;
+  // everything else starts on "Keep current" until the owner taps a photo.
+  const [photoChoice, setPhotoChoice] = useState<PhotoSelections>(() => {
+    const initial: PhotoSelections = {};
+    for (const s of suggestions) {
+      const fromPage = s.suggested.photoCandidates?.find(c => c.source === 'product_page');
+      if (!s.current.photoUrl && fromPage) initial[s.itemId] = fromPage.url;
+    }
+    return initial;
+  });
+  const [brokenPhotos, setBrokenPhotos] = useState<Set<string>>(new Set());
 
   const currentSuggestion = suggestions[currentIndex];
   const isSelected = selectedItems.has(currentSuggestion.itemId);
@@ -101,7 +117,11 @@ export default function EnrichmentPreview({
   const handleApproveAll = async () => {
     setIsApplying(true);
     try {
-      await onApprove(Array.from(selectedItems), editedSuggestions);
+      const photos: PhotoSelections = {};
+      for (const [itemId, url] of Object.entries(photoChoice)) {
+        if (selectedItems.has(itemId) && !brokenPhotos.has(url)) photos[itemId] = url;
+      }
+      await onApprove(Array.from(selectedItems), editedSuggestions, photos);
     } catch (error) {
       console.error('Error applying enrichments:', error);
     } finally {
@@ -112,6 +132,16 @@ export default function EnrichmentPreview({
   const selectedCount = selectedItems.size;
   const isSingleItem = suggestions.length === 1;
   const fieldKey = (field: string) => `${currentSuggestion.itemId}-${field}`;
+  const candidates = (currentSuggestion.suggested.photoCandidates || []).filter(c => !brokenPhotos.has(c.url));
+  const chosenPhoto = photoChoice[currentSuggestion.itemId];
+  const choosePhoto = (url: string | null) => {
+    setPhotoChoice(prev => {
+      const next = { ...prev };
+      if (url) next[currentSuggestion.itemId] = url;
+      else delete next[currentSuggestion.itemId];
+      return next;
+    });
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-white md:bg-black/50 md:items-center md:justify-center md:p-4">
@@ -209,6 +239,90 @@ export default function EnrichmentPreview({
                 {currentSuggestion.itemName}
               </h3>
             </div>
+
+            {/* Photo */}
+            {candidates.length > 0 && (
+              <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-100">
+                  <div className="flex items-center gap-2">
+                    <ImageIcon className="w-4 h-4 text-gray-500" />
+                    <span className="text-sm font-medium text-gray-700">Photo</span>
+                    {chosenPhoto && (
+                      <span className="text-xs px-2 py-0.5 bg-[var(--sky-3)] text-[var(--sky-11)] rounded-full font-medium">
+                        New
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-xs text-gray-500">Tap one to use it</span>
+                </div>
+                <div className="p-3 grid grid-cols-3 sm:grid-cols-4 gap-2">
+                  {/* Keep the current photo (or none) */}
+                  <button
+                    type="button"
+                    onClick={() => choosePhoto(null)}
+                    className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                      !chosenPhoto ? 'border-[var(--sky-9)] ring-2 ring-[var(--sky-4)]' : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                    aria-pressed={!chosenPhoto}
+                  >
+                    {currentSuggestion.current.photoUrl ? (
+                      <img
+                        src={currentSuggestion.current.photoUrl}
+                        alt="Current photo"
+                        className="w-full h-full object-contain bg-gray-50"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-50">
+                        <ImageIcon className="w-6 h-6 text-gray-300" />
+                      </div>
+                    )}
+                    <span className="absolute bottom-0 inset-x-0 bg-black/55 text-white text-[11px] font-medium py-0.5 text-center">
+                      {currentSuggestion.current.photoUrl ? 'Keep current' : 'No photo'}
+                    </span>
+                    {!chosenPhoto && (
+                      <span className="absolute top-1 right-1 w-5 h-5 rounded-full bg-[var(--sky-9)] flex items-center justify-center">
+                        <Check className="w-3 h-3 text-white" />
+                      </span>
+                    )}
+                  </button>
+                  {candidates.map((candidate) => {
+                    const isChosen = chosenPhoto === candidate.url;
+                    return (
+                      <button
+                        key={candidate.url}
+                        type="button"
+                        onClick={() => choosePhoto(candidate.url)}
+                        className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                          isChosen ? 'border-[var(--sky-9)] ring-2 ring-[var(--sky-4)]' : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                        aria-pressed={isChosen}
+                      >
+                        <img
+                          src={`/api/proxy-image?url=${encodeURIComponent(candidate.url)}`}
+                          alt={candidate.source === 'product_page' ? 'Photo from the product page' : 'Photo option'}
+                          loading="lazy"
+                          className="w-full h-full object-contain bg-white"
+                          onError={() => {
+                            setBrokenPhotos(prev => new Set(prev).add(candidate.url));
+                            if (isChosen) choosePhoto(null);
+                          }}
+                        />
+                        {candidate.source === 'product_page' && (
+                          <span className="absolute bottom-0 inset-x-0 bg-black/55 text-white text-[11px] font-medium py-0.5 text-center">
+                            Product page
+                          </span>
+                        )}
+                        {isChosen && (
+                          <span className="absolute top-1 right-1 w-5 h-5 rounded-full bg-[var(--sky-9)] flex items-center justify-center">
+                            <Check className="w-3 h-3 text-white" />
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Brand */}
             {currentSuggestion.suggested.brand && (

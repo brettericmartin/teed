@@ -15,11 +15,12 @@ type SortableItemCardProps = {
   onToggleHero?: (itemId: string) => void;
   onItemMoved?: (itemId: string, targetBagTitle: string) => void;
   onEnrichItem?: (itemId: string) => void;
+  onSmartPhotoMatch?: (itemId: string) => void;
   isEnrichingItem?: boolean;
   sections?: { id: string; name: string }[];
 };
 
-export default function SortableItemCard({ item, onDelete, onUpdate, bagCode, isHero, onToggleHero, onItemMoved, onEnrichItem, isEnrichingItem, sections }: SortableItemCardProps) {
+export default function SortableItemCard({ item, onDelete, onUpdate, bagCode, isHero, onToggleHero, onItemMoved, onEnrichItem, onSmartPhotoMatch, isEnrichingItem, sections }: SortableItemCardProps) {
   const {
     attributes,
     listeners,
@@ -60,6 +61,7 @@ export default function SortableItemCard({ item, onDelete, onUpdate, bagCode, is
         onToggleHero={onToggleHero}
         onItemMoved={onItemMoved}
         onEnrichItem={onEnrichItem}
+        onSmartPhotoMatch={onSmartPhotoMatch}
         isEnrichingItem={isEnrichingItem}
         sections={sections}
       />

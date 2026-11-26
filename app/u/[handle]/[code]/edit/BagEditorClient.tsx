@@ -255,6 +255,22 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   const [enrichingItemId, setEnrichingItemId] = useState<string | null>(null);
   const [isGeneratingDescription, setIsGeneratingDescription] = useState(false);
 
+  // Smart Photo Match for one item: from an item's photo section, or from the item
+  // window on the bag page, which links here as ?photoMatch=<item id>.
+  const openSmartPhotoMatch = (itemId: string) => {
+    const item = bag.items.find((i) => i.id === itemId);
+    if (!item) return;
+    setSelectedItemsForPhotos([item]);
+    setShowBatchPhotoSelector(true);
+  };
+  const photoMatchItemId = searchParams.get('photoMatch');
+  useEffect(() => {
+    if (!photoMatchItemId) return;
+    openSmartPhotoMatch(photoMatchItemId);
+    router.replace(pathname, { scroll: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleGenerateDescription = async () => {
     setIsGeneratingDescription(true);
     try {
@@ -984,7 +1000,11 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   };
 
   // Apply approved enrichments
-  const handleApproveEnrichments = async (approvedItemIds: string[], editedValues: Record<string, any>) => {
+  const handleApproveEnrichments = async (
+    approvedItemIds: string[],
+    editedValues: Record<string, any>,
+    photoSelections: Record<string, string> = {}
+  ) => {
     try {
       // Build approved suggestions with edited values
       const approvedSuggestions = enrichmentSuggestions
@@ -1004,6 +1024,18 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         bagId: bag.id,
         approvedSuggestions,
       });
+
+      // Photos the owner picked in the preview (items left on "Keep current" aren't here)
+      let photosAdded = 0;
+      let photosFailed = 0;
+      const photoPicks = Object.entries(photoSelections)
+        .filter(([itemId]) => approvedItemIds.includes(itemId))
+        .map(([itemId, imageUrl]) => ({ itemId, imageUrl }));
+      if (photoPicks.length > 0) {
+        const photoResult = await applyPhotoSelections(photoPicks);
+        photosAdded = photoResult.succeeded;
+        photosFailed = photoResult.failed;
+      }
 
       // Refresh bag
       try {
@@ -1025,6 +1057,12 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
       if (result.linksAdded > 0) {
         messages.push(`🔗 Added ${result.linksAdded} link${result.linksAdded > 1 ? 's' : ''}`);
       }
+      if (photosAdded > 0) {
+        messages.push(`🖼️ Updated ${photosAdded} photo${photosAdded > 1 ? 's' : ''}`);
+      }
+      if (photosFailed > 0) {
+        toast.showInfo(`${photosFailed} photo${photosFailed > 1 ? 's' : ''} couldn't be saved. Try Smart Photo Match for ${photosFailed > 1 ? 'those items' : 'that item'}.`);
+      }
       if (messages.length > 0) {
         toast.showAI(`${messages.join(' • ')} — Bag updated!`);
       }
@@ -1035,7 +1073,8 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
   };
 
   // Batch photo application handler - handles partial failures gracefully
-  const handleApplyBatchPhotos = async (selections: Array<{ itemId: string; imageUrl: string }>) => {
+  // Saves each chosen photo to its item; returns how many worked, without any toast.
+  const applyPhotoSelections = async (selections: Array<{ itemId: string; imageUrl: string }>) => {
     console.log('[BatchPhotos] Applying photos:', selections);
 
     // Use Promise.allSettled to handle partial failures
@@ -1079,6 +1118,12 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
         console.error(`[BatchPhotos] Failed for item ${selections[index].itemId}:`, result.reason);
       }
     });
+
+    return { succeeded, failed };
+  };
+
+  const handleApplyBatchPhotos = async (selections: Array<{ itemId: string; imageUrl: string }>) => {
+    const { succeeded, failed } = await applyPhotoSelections(selections);
 
     // Show appropriate message
     if (failed === 0) {
@@ -1549,6 +1594,7 @@ export default function BagEditorClient({ initialBag, ownerHandle }: BagEditorCl
             onItemMoved={handleItemMoved}
             onEnrichItem={handleEnrichSingleItem}
             enrichingItemId={enrichingItemId}
+            onSmartPhotoMatch={openSmartPhotoMatch}
           />
         ) : (
           <motion.div

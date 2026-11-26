@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Share2, ExternalLink, User, X, Package, Trophy, Copy, CheckCheck, ChevronDown, Tag, Bookmark, UserPlus, UserCheck, LayoutGrid, List, Plus, GitFork, BookOpen, Link2 } from 'lucide-react';
+import { Share2, ExternalLink, User, X, Package, Trophy, Copy, CheckCheck, ChevronDown, Tag, Bookmark, UserPlus, UserCheck, LayoutGrid, List, Plus, GitFork, BookOpen, Link2, Sparkles } from 'lucide-react';
 import { itemSlug, findItemBySlug } from '@/lib/items/slug';
 import StoryTimeline from '@/components/story/StoryTimeline';
 import { GolfLoader } from '@/components/ui/GolfLoader';
@@ -1036,6 +1036,20 @@ export default function PublicBagView({
                       className="w-full h-auto object-contain max-h-[50vh] sm:max-h-[60vh]"
                     />
                   </div>
+                </div>
+              )}
+
+              {/* Owner only: swap or find this item's photo with Smart Photo Match in the editor */}
+              {isOwnBag && (
+                <div className="flex justify-center -mt-3">
+                  <Link
+                    href={`/u/${ownerHandle}/${bag.code}/edit?photoMatch=${selectedItem.id}`}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[44px] text-sm font-medium text-[var(--sky-11)] bg-[var(--sky-3)] hover:bg-[var(--sky-4)] border border-[var(--sky-6)] rounded-lg transition-colors"
+                    data-testid="item-smart-photo-match"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    {selectedItem.photo_url ? 'Smart Photo Match' : 'Find a photo'}
+                  </Link>
                 </div>
               )}
 
