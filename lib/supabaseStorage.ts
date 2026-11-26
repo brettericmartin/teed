@@ -165,44 +165,53 @@ export async function createMediaAsset(
 }
 
 /**
- * Delete media_assets record and associated storage file
+ * Delete a media_assets record and its storage file.
+ *
+ * Only the owner's assets are touched. The record is deleted first and the
+ * file only after that succeeds, so a photo that is still used by an item
+ * (the foreign key blocks the delete) keeps its file instead of turning into
+ * a broken image.
  *
  * @param mediaAssetId - ID of media asset to delete
+ * @param ownerId - ID of the user who must own the asset
  */
-export async function deleteMediaAsset(mediaAssetId: string): Promise<void> {
+export async function deleteMediaAsset(mediaAssetId: string, ownerId: string): Promise<void> {
   const supabase = getSupabaseAdmin();
 
-  // First, get the media asset to find the storage path
   const { data: mediaAsset, error: fetchError } = await supabase
     .from('media_assets')
-    .select('url')
+    .select('url, owner_id')
     .eq('id', mediaAssetId)
     .single();
 
-  if (fetchError) {
-    console.error('Failed to fetch media asset:', fetchError);
-    throw new Error(`Failed to find media asset: ${fetchError.message}`);
+  if (fetchError || !mediaAsset) {
+    throw new Error(`Failed to find media asset: ${fetchError?.message || 'not found'}`);
+  }
+
+  if (mediaAsset.owner_id !== ownerId) {
+    throw new Error('Media asset belongs to another user');
+  }
+
+  const { error: deleteError } = await supabase
+    .from('media_assets')
+    .delete()
+    .eq('id', mediaAssetId)
+    .eq('owner_id', ownerId);
+
+  if (deleteError) {
+    if (deleteError.code === '23503') {
+      // Still used by an item: keep the record and the file.
+      throw new Error('Media asset is still in use');
+    }
+    console.error('Failed to delete media asset record:', deleteError);
+    throw new Error(`Failed to delete media asset: ${deleteError.message}`);
   }
 
   // Extract path from URL (last part after bucket name)
   // URL format: https://.../storage/v1/object/public/item-photos/path/to/file.jpg
-  const urlParts = mediaAsset.url.split(`/${BUCKET_NAME}/`);
-  const storagePath = urlParts[1];
-
-  // Delete from storage
+  const storagePath = mediaAsset.url.split(`/${BUCKET_NAME}/`)[1];
   if (storagePath) {
     await deleteItemPhoto(storagePath);
-  }
-
-  // Delete media_assets record
-  const { error: deleteError } = await supabase
-    .from('media_assets')
-    .delete()
-    .eq('id', mediaAssetId);
-
-  if (deleteError) {
-    console.error('Failed to delete media asset record:', deleteError);
-    throw new Error(`Failed to delete media asset: ${deleteError.message}`);
   }
 }
 

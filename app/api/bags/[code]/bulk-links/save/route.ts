@@ -1,3 +1,4 @@
+import { validateExternalUrl } from '@/lib/urlValidation';
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/serverSupabase';
 import { uploadItemPhoto, createMediaAsset } from '@/lib/supabaseStorage';
@@ -36,6 +37,9 @@ interface SaveFailure {
 // HELPER FUNCTIONS
 // ============================================================
 
+const MAX_IMAGE_BYTES = 15 * 1024 * 1024;
+const PHOTO_CONCURRENCY = 4;
+
 async function downloadImage(imageUrl: string): Promise<Blob | null> {
   try {
     // Detect which site we're fetching from
@@ -51,23 +55,50 @@ async function downloadImage(imageUrl: string): Promise<Blob | null> {
       ? 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
       : 'Mozilla/5.0 (compatible; TeedBot/1.0)';
 
-    const response = await fetch(imageUrl, {
-      redirect: 'follow',
-      headers: {
-        'User-Agent': userAgent,
-        'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Referer': isAmazonUrl ? 'https://www.amazon.com/' :
-                   isRetailerUrl ? `https://${new URL(imageUrl).hostname}/` : '',
-      },
-    });
+    // Follow redirects by hand so every hop passes the same address check,
+    // and give up after 10 seconds so one slow site can't stall the save.
+    const signal = AbortSignal.timeout(10_000);
+    let currentUrl = imageUrl;
+    let response: Response | null = null;
+    for (let hop = 0; hop <= 5; hop++) {
+      const urlError = validateExternalUrl(currentUrl);
+      if (urlError) throw new Error(`Blocked image URL: ${urlError}`);
+      const res = await fetch(currentUrl, {
+        redirect: 'manual',
+        signal,
+        headers: {
+          'User-Agent': userAgent,
+          'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Referer': isAmazonUrl ? 'https://www.amazon.com/' :
+                     isRetailerUrl ? `https://${new URL(imageUrl).hostname}/` : '',
+        },
+      });
+      const location = res.status >= 300 && res.status < 400 ? res.headers.get('location') : null;
+      if (!location) {
+        response = res;
+        break;
+      }
+      currentUrl = new URL(location, currentUrl).toString();
+    }
+    if (!response) {
+      throw new Error('Too many redirects');
+    }
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
 
+    const declaredSize = Number(response.headers.get('content-length') || 0);
+    if (declaredSize > MAX_IMAGE_BYTES) {
+      throw new Error(`Image too large (${declaredSize} bytes)`);
+    }
+
     // Verify we got actual image data (not a tiny blocked response)
     const blob = await response.blob();
+    if (blob.size > MAX_IMAGE_BYTES) {
+      throw new Error(`Image too large (${blob.size} bytes)`);
+    }
     if (blob.size < 100) {
       throw new Error(`Image too small (${blob.size} bytes) - likely blocked`);
     }
@@ -81,6 +112,43 @@ async function downloadImage(imageUrl: string): Promise<Blob | null> {
   } catch (error) {
     console.error(`[bulk-links/save] Failed to download image from ${imageUrl}:`, error);
     return null;
+  }
+}
+
+async function attachPhoto(
+  supabase: any,
+  userId: string,
+  itemId: string,
+  selection: LinkSelection
+): Promise<boolean> {
+  try {
+    const imageBlob = await downloadImage(selection.selectedPhotoUrl as string);
+    if (!imageBlob) return false;
+
+    // Determine file extension from content type
+    const contentType = imageBlob.type;
+    let ext = 'jpg';
+    if (contentType.includes('png')) ext = 'png';
+    else if (contentType.includes('webp')) ext = 'webp';
+    else if (contentType.includes('gif')) ext = 'gif';
+
+    const file = new File([imageBlob], `product.${ext}`, { type: contentType });
+    const uploadResult = await uploadItemPhoto(file, userId, itemId);
+    if (!uploadResult) return false;
+
+    const mediaAssetId = await createMediaAsset(uploadResult.url, userId, {
+      alt: selection.item.custom_name,
+    });
+    if (!mediaAssetId) return false;
+
+    await supabase
+      .from('bag_items')
+      .update({ custom_photo_id: mediaAssetId, photo_url: uploadResult.url })
+      .eq('id', itemId);
+    return true;
+  } catch (photoError) {
+    console.error(`[bulk-links/save] Photo upload failed for item ${itemId}:`, photoError);
+    return false;
   }
 }
 
@@ -155,6 +223,7 @@ export async function POST(
 
     const createdItems: CreatedItem[] = [];
     const failures: SaveFailure[] = [];
+    const photoJobs: { createdIndex: number; itemId: string; selection: LinkSelection }[] = [];
 
     // Process each selection sequentially to maintain sort order
     for (const selection of selections as LinkSelection[]) {
@@ -182,54 +251,13 @@ export async function POST(
           throw new Error(`Failed to create item: ${createError?.message}`);
         }
 
-        let photoUploaded = false;
+        const photoUploaded = false;
         let linkId: string | undefined;
 
-        // Step 2: Upload photo if provided
+        // Step 2: Queue the photo; photos are fetched in parallel after the loop
+        // so a batch of slow image hosts can't run past the time limit.
         if (selection.selectedPhotoUrl) {
-          try {
-            const imageBlob = await downloadImage(selection.selectedPhotoUrl);
-
-            if (imageBlob) {
-              // Determine file extension from content type
-              const contentType = imageBlob.type;
-              let ext = 'jpg';
-              if (contentType.includes('png')) ext = 'png';
-              else if (contentType.includes('webp')) ext = 'webp';
-              else if (contentType.includes('gif')) ext = 'gif';
-
-              // Create a File object from the blob
-              const file = new File([imageBlob], `product.${ext}`, { type: contentType });
-
-              // Upload to Supabase storage (file, userId, itemId)
-              const uploadResult = await uploadItemPhoto(file, user.id, item.id);
-
-              if (uploadResult) {
-                // Create media asset record (url, ownerId, metadata)
-                const mediaAssetId = await createMediaAsset(
-                  uploadResult.url,
-                  user.id,
-                  { alt: selection.item.custom_name }
-                );
-
-                if (mediaAssetId) {
-                  // Update item with photo
-                  await supabase
-                    .from('bag_items')
-                    .update({
-                      custom_photo_id: mediaAssetId,
-                      photo_url: uploadResult.url,
-                    })
-                    .eq('id', item.id);
-
-                  photoUploaded = true;
-                }
-              }
-            }
-          } catch (photoError) {
-            console.error(`[bulk-links/save] Photo upload failed for item ${item.id}:`, photoError);
-            // Continue without photo - don't fail the entire item
-          }
+          photoJobs.push({ createdIndex: createdItems.length, itemId: item.id, selection });
         }
 
         // Step 3: Add purchase link if provided
@@ -263,7 +291,7 @@ export async function POST(
           photoUploaded,
         });
 
-        console.log(`[bulk-links/save] Created item ${item.id} (photo: ${photoUploaded}, link: ${!!linkId})`);
+        console.log(`[bulk-links/save] Created item ${item.id} (photo queued: ${!!selection.selectedPhotoUrl}, link: ${!!linkId})`);
       } catch (error) {
         console.error(`[bulk-links/save] Failed to save selection ${selection.resultIndex}:`, error);
         failures.push({
@@ -271,6 +299,17 @@ export async function POST(
           error: error instanceof Error ? error.message : 'Unknown error',
         });
       }
+    }
+
+    // Fetch and attach photos, a few at a time
+    for (let i = 0; i < photoJobs.length; i += PHOTO_CONCURRENCY) {
+      const batch = photoJobs.slice(i, i + PHOTO_CONCURRENCY);
+      const results = await Promise.all(
+        batch.map((job) => attachPhoto(supabase, user.id, job.itemId, job.selection))
+      );
+      batch.forEach((job, k) => {
+        createdItems[job.createdIndex].photoUploaded = results[k];
+      });
     }
 
     // Update bag's updated_at timestamp

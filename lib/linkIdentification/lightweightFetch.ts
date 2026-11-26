@@ -439,18 +439,32 @@ export function getPrice(data: StructuredProductData): { amount: string | null; 
  * Extract image from structured data
  */
 export function getImage(data: StructuredProductData): string | null {
-  // Try JSON-LD first
-  if (data.jsonLd?.image) {
-    if (typeof data.jsonLd.image === 'string') {
-      return data.jsonLd.image;
-    }
-    if (Array.isArray(data.jsonLd.image) && data.jsonLd.image.length > 0) {
-      return data.jsonLd.image[0];
-    }
-  }
+  // Try JSON-LD first. Its image can be a string, an ImageObject ({ url }),
+  // or an array of either, so always reduce it to a URL string.
+  const fromLd = imageUrlFrom(data.jsonLd?.image as unknown);
+  if (fromLd) return fromLd;
 
   // Fall back to OG image
-  return data.ogImage || null;
+  return typeof data.ogImage === 'string' && data.ogImage ? data.ogImage : null;
+}
+
+function imageUrlFrom(value: unknown): string | null {
+  if (!value) return null;
+  if (typeof value === 'string') return value;
+  if (Array.isArray(value)) {
+    for (const entry of value) {
+      const url = imageUrlFrom(entry);
+      if (url) return url;
+    }
+    return null;
+  }
+  if (typeof value === 'object') {
+    const obj = value as Record<string, unknown>;
+    if (typeof obj.url === 'string') return obj.url;
+    if (typeof obj.contentUrl === 'string') return obj.contentUrl;
+    if (typeof obj['@id'] === 'string' && /^https?:\/\//.test(obj['@id'] as string)) return obj['@id'] as string;
+  }
+  return null;
 }
 
 /**

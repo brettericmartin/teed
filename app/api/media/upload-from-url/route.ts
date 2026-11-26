@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
     if (existingMediaAssetId) {
       try {
         console.log('[upload-from-url] Deleting existing media asset:', existingMediaAssetId);
-        await deleteMediaAsset(existingMediaAssetId);
+        await deleteMediaAsset(existingMediaAssetId, user.id);
         console.log('[upload-from-url] Successfully deleted existing media asset');
       } catch (deleteError: any) {
         // Log but don't fail - the old asset may already be deleted or invalid
