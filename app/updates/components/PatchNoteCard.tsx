@@ -12,7 +12,9 @@ function formatDate(dateString: string): string {
   return date.toLocaleDateString('en-US', {
     month: 'long',
     day: 'numeric',
-    year: 'numeric'
+    year: 'numeric',
+    // Dates are plain YYYY-MM-DD; read them as UTC so US browsers don't show the day before
+    timeZone: 'UTC'
   });
 }
 

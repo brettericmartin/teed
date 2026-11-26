@@ -43,11 +43,109 @@ export const CATEGORY_META: Record<CategoryType, {
 
 export const PATCH_NOTES: PatchNote[] = [
   {
+    version: '2.17.0',
+    releaseDate: '2026-11-26',
+    title: 'Faster Discover & Better Share Previews',
+    summary: 'Discover loads much faster, shared bag and invite links show proper preview images again, and a round of behind-the-scenes fixes makes Teed sturdier.',
+    isLatest: true,
+    changes: [
+      { text: 'Discover loads much faster, especially on phones', category: 'improvement' },
+      { text: 'Shared bag links show a preview with the bag\'s photos again, including WebP and AVIF photos', category: 'bugfix' },
+      { text: 'Invite link previews show your progress bar and name again instead of a blank card', category: 'bugfix' },
+      { text: 'Replacing an item photo no longer leaves a broken image behind', category: 'bugfix' },
+      { text: 'Saving a big batch of links no longer times out; photos are added a few at a time', category: 'improvement' },
+      { text: 'Fixed broken links on Best Of pages and in the sitemap', category: 'bugfix' },
+      { text: 'Pages load their fonts sooner', category: 'improvement' },
+      { text: 'Search engines now see one clean address per bag and profile, and skip empty ones', category: 'improvement' },
+      { text: 'A round of security hardening behind the scenes', category: 'improvement' },
+    ]
+  },
+  {
+    version: '2.16.0',
+    releaseDate: '2026-11-23',
+    title: 'Privacy, Terms & a Sturdier Teed',
+    summary: 'Plain-English Privacy and Terms pages, tighter rules on who can change a bag, and embeds, RSS, share previews and exports working again.',
+    isLatest: false,
+    changes: [
+      { text: 'Plain-English Privacy and Terms pages', category: 'feature' },
+      { text: 'AI tools now require sign-in, and only a bag\'s owner can change it', category: 'improvement' },
+      { text: 'Embeds, RSS feeds, share previews and exports work again', category: 'bugfix' },
+    ]
+  },
+  {
+    version: '2.15.0',
+    releaseDate: '2026-10-20',
+    title: 'Faster, Calmer Bag Pages',
+    summary: 'Every item gets its own link, thumbnails are resized so pages load lighter, and the bag header and phone menu are cleaner.',
+    isLatest: false,
+    changes: [
+      { text: 'Every item has its own link, with a Copy link button', category: 'feature' },
+      { text: 'Resized thumbnails make bag pages, Discover and the golf sim page much lighter', category: 'improvement' },
+      { text: 'Quieter bag header', category: 'improvement' },
+      { text: 'New phone menu with Discover, Golf sim setups, Blog and Updates', category: 'feature' },
+    ]
+  },
+  {
+    version: '2.14.0',
+    releaseDate: '2026-10-20',
+    title: 'Paste a Link, Get the Item',
+    summary: 'Paste a product link and Teed fills in the photo, brand, category and list price from the page.',
+    isLatest: false,
+    changes: [
+      { text: 'A product link fills in photo, brand, category and list price from the page', category: 'feature' },
+      { text: 'Pull details refreshes any item from its link', category: 'feature' },
+      { text: 'Find image and Enhance details read the product page first', category: 'improvement' },
+      { text: 'Four ways of adding items that had quietly stopped working are fixed', category: 'bugfix' },
+      { text: 'Deleting an item works again', category: 'bugfix' },
+    ]
+  },
+  {
+    version: '2.13.0',
+    releaseDate: '2026-10-19',
+    title: 'Setups: Sections, Tags & Honest Totals',
+    summary: 'Group items under headings, see subtotals and a bag total, and try the new List layout.',
+    isLatest: false,
+    changes: [
+      { text: 'Group items under section headings like Screen, Mat and PC', category: 'feature' },
+      { text: 'Section subtotals and a bag total; subscriptions count per year', category: 'feature' },
+      { text: 'New List layout with price, specs and why-I-chose-this on one row', category: 'feature' },
+      { text: 'Tags are back', category: 'improvement' },
+      { text: 'New Golf Sim category, a golf sim setups page and six buyer\'s guides', category: 'feature' },
+    ]
+  },
+  {
+    version: '2.12.0',
+    releaseDate: '2026-02-20',
+    title: 'Sign in with Google & Open Doors',
+    summary: 'Sign in with Google, no invite needed, and sign up right from a bag you like.',
+    isLatest: false,
+    changes: [
+      { text: 'Sign in with Google on login and signup; new accounts pick their @handle in one short step', category: 'feature' },
+      { text: 'Teed is open to everyone: no invite needed to make, copy or follow bags', category: 'feature' },
+      { text: 'Sign up from inside a bag; your save, copy or follow finishes once you\'re in', category: 'feature' },
+      { text: 'Simpler signup with a show-password toggle and a Claim @handle button', category: 'improvement' },
+    ]
+  },
+  {
+    version: '2.11.0',
+    releaseDate: '2026-02-18',
+    title: 'Links That Just Work',
+    summary: 'Smarter link buttons, links from TikTok and Amazon that resolve correctly, and faster single-link adds.',
+    isLatest: false,
+    changes: [
+      { text: 'Video links show Watch Now and articles show Read Now instead of Shop Now', category: 'improvement' },
+      { text: 'TikTok share links, mobile links and Amazon short links resolve correctly', category: 'bugfix' },
+      { text: 'Adding a single link is several seconds faster, with a small progress pill', category: 'improvement' },
+      { text: 'Promo codes show as a badge on every layout', category: 'improvement' },
+      { text: 'New EDC category', category: 'feature' },
+    ]
+  },
+  {
     version: '2.10.0',
     releaseDate: '2026-03-01',
     title: 'Vision Pipeline V2 & Editor Polish',
     summary: 'Photo identification upgraded to a 5-stage pipeline with reverse image search. Fuzzy matching is smarter about false positives, parsed preview chips are dismissible, and "Why I Chose This" now generates 3 options.',
-    isLatest: true,
+    isLatest: false,
     changes: [
       { text: 'Vision pipeline upgraded from 4 to 5 stages — new Cloud Vision web detection stage uses reverse image search to feed brand/product hints to GPT-4o', category: 'feature' },
       { text: 'Validation stage now prefers free web detection images over paid Google Custom Search for reference comparison', category: 'improvement' },
