@@ -690,13 +690,13 @@ async function identifyAmazonProduct(
       const title = fc.success ? cleanAmazonTitle(fc.title) : null;
       if (fc.success && /page not found|looking for something/i.test(fc.title || '')) listingGone = true;
       if (title && !isJunkTitle(title)) {
-        // Older cached reads picked the first image on the page, often an ad
+        // Re-pick from the saved page, so a fix to the picker also fixes older cached reads
         const trusted = fc.imageVerified !== undefined;
         return finish({
           brand: extractAmazonBrand(fc.markdown) || (trusted ? fc.brand : null),
           title,
           price: fc.price,
-          imageUrl: trusted && fc.image ? fc.image : pickAmazonImage(fc.markdown, title),
+          imageUrl: pickAmazonImage(fc.markdown, title) || (trusted ? fc.image : null),
           specifications: fc.description ? [fc.description] : [],
           confidence: 0.9,
           source: 'firecrawl',
