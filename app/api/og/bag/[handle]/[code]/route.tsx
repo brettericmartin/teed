@@ -4,23 +4,30 @@ import { getSupabasePublic } from '@/lib/supabasePublic';
 
 export const runtime = 'edge';
 
-// Satori (the share-image renderer) only draws PNG, JPEG and GIF. Many
-// item photos are WebP or AVIF, which made the whole image fail. Fetch each
-// photo once, keep only formats Satori can draw, and fall back to the
-// placeholder for anything else.
-const RENDERABLE = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
+// Satori (the share-image renderer) only draws PNG, JPEG and GIF. Many item
+// photos are WebP or AVIF (some even saved with a .jpg name), and one such
+// photo made the whole share image fail. Fetch each photo once, check its
+// actual bytes, keep only formats Satori can draw (as data URIs), and show
+// the placeholder for anything else.
 const MAX_IMAGE_BYTES = 3 * 1024 * 1024;
+
+function sniffImageType(b: Uint8Array): string | null {
+  if (b.length >= 8 && b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4e && b[3] === 0x47) return 'image/png';
+  if (b.length >= 3 && b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff) return 'image/jpeg';
+  if (b.length >= 6 && b[0] === 0x47 && b[1] === 0x49 && b[2] === 0x46 && b[3] === 0x38) return 'image/gif';
+  return null;
+}
 
 async function toRenderableImage(url: string | null | undefined): Promise<string | null> {
   if (!url || !/^https:\/\//i.test(url)) return null;
   try {
     const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
     if (!res.ok) return null;
-    const type = (res.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
-    if (!RENDERABLE.includes(type)) return null;
     const buf = await res.arrayBuffer();
     if (buf.byteLength === 0 || buf.byteLength > MAX_IMAGE_BYTES) return null;
     const bytes = new Uint8Array(buf);
+    const type = sniffImageType(bytes);
+    if (!type) return null;
     let binary = '';
     for (let i = 0; i < bytes.length; i += 0x8000) {
       binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
