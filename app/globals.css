@@ -853,6 +853,24 @@ button, a, input, textarea, select {
   font-size: max(16px, 1rem);
 }
 
+/* Phones zoom in on any field under 16px when it's tapped, and iOS doesn't zoom back
+   out. Most fields use 14px text, so lift every field to 16px on touch screens.
+   Unlayered, so it wins over Tailwind's text-xs / text-sm utilities. */
+@media (pointer: coarse) {
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
+  textarea,
+  select {
+    font-size: max(16px, 1em);
+  }
+}
+
+/* Anything wider than the screen lets the page pan sideways and look zoomed in.
+   clip (not hidden) keeps sticky headers working. */
+html,
+body {
+  overflow-x: clip;
+}
+
 /* Active/Touch Feedback - Visual feedback for mobile interactions */
 .active-scale {
   transition: transform var(--transition-fast) var(--transition-timing);
