@@ -91,6 +91,18 @@ const getHotScore = (bag: Bag) => {
   return recencyScore * itemBonus;
 };
 
+// The first screenful should look full: lead with bags that have plenty of photos,
+// then everything else in the usual order. Thin bags stay on the page, just lower.
+const LEAD_SLOTS = 10;
+const LEAD_MIN_PHOTOS = 6;
+const photoCount = (bag: Bag) => bag.items?.filter((item) => item.photo_url).length || 0;
+const rankHot = (list: Bag[]) => {
+  const sorted = [...list].sort((a, b) => getHotScore(b) - getHotScore(a));
+  const lead = sorted.filter((bag) => photoCount(bag) >= LEAD_MIN_PHOTOS).slice(0, LEAD_SLOTS);
+  const leadIds = new Set(lead.map((bag) => bag.id));
+  return [...lead, ...sorted.filter((bag) => !leadIds.has(bag.id))];
+};
+
 // Use getCategoryColors from shared lib/categories.ts
 const getCategoryColor = (categoryValue: string) => getCategoryColors(categoryValue);
 
@@ -134,7 +146,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
 
   const [bags, setBags] = useState<Bag[]>(() =>
     (searchParams.get('sort') || 'hot') === 'hot'
-      ? [...initialBags].sort((a, b) => getHotScore(b) - getHotScore(a))
+      ? rankHot(initialBags)
       : [...initialBags]
   );
   const [isLoading, setIsLoading] = useState(false);
@@ -260,7 +272,7 @@ export default function DiscoverClient({ initialBags }: DiscoverClientProps) {
         const data = await response.json();
         let fetchedBags = data.bags || [];
         if (sortBy === 'hot') {
-          fetchedBags = [...fetchedBags].sort((a: Bag, b: Bag) => getHotScore(b) - getHotScore(a));
+          fetchedBags = rankHot(fetchedBags);
         }
         setBags(fetchedBags);
       }
